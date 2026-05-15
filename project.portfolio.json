@@ -1,0 +1,63 @@
+{
+  "title": "MarketPulse",
+  "slug": "market-pulse",
+  "summary": "Türk distribütörleri için bayi izleme, lead yönetimi ve rakip analiz SaaS platformu. Scraper destekli otomatik sinyal üretimi.",
+  "description": "Plastik enjeksiyon, otomotiv ve benzeri sektörlerdeki distribütörler için rakip/bayi takip, churn riski hesaplama, lead pipeline ve pazar sinyali yönetimi. Copy-deploy modeli ile her müşteri için bağımsız kurulum. Scraper-service ile site değişikliği, fiyat farkı ve sosyal aktivite sinyalleri otomatik üretilir.",
+  "category": "SAAS PLATFORM",
+  "services": [
+    "SaaS Product Development",
+    "Frontend Development",
+    "Backend Development",
+    "Data Scraping",
+    "Market Intelligence"
+  ],
+  "techs": [
+    "Next.js 16",
+    "React 19",
+    "TypeScript",
+    "Tailwind CSS v4",
+    "Shadcn UI",
+    "Fastify",
+    "Drizzle ORM",
+    "MySQL",
+    "Bun",
+    "Cloudinary",
+    "Docker"
+  ],
+  "features": [
+    "Hedef firma takibi (rakip, bayi, distribütör, ortak)",
+    "Otomatik churn risk skoru (sinyal + aktivite + ERP verisi)",
+    "Lead pipeline (Yeni → Görüşmede → Dönüştürüldü akışı)",
+    "Pazar sinyalleri (site değişikliği, fiyat, sosyal aktivite, yorum)",
+    "Manuel ve scraper kaynaklı sinyal yönetimi",
+    "Lead Machine: Amazon satıcı tarama + AI review analizi",
+    "Lead Machine: B2B dizin tarama + ICP eşleştirme + pain point tespiti",
+    "Lead Machine: Fuar exhibitor tarama + 10times intent verisi",
+    "Enrichment: Apollo.io ile email + karar verici bulma",
+    "AI outreach e-posta taslağı üretimi (human-in-the-loop)",
+    "Haftalık PDF raporu + SMTP e-posta gönderimi",
+    "Paspas ERP cross-DB entegrasyonu (müşteri/sipariş okuma)",
+    "Paspas müşteri otomatik senkronizasyonu — POST /admin/market/sync-paspas (idempotent upsert)",
+    "Copy-deploy: her müşteri bağımsız kurulum"
+  ],
+  "designHighlights": [
+    "Sinyal öncelik renk kodlaması (Kritik/Yüksek/Orta/Düşük)",
+    "Lead pipeline kanban-tablo hibrit görünüm",
+    "Churn risk renk skalası"
+  ],
+  "featured": false,
+  "displayOrder": 99,
+  "clientName": "Promat (Paspas Müşterisi)",
+  "status": "active",
+  "startDate": "2026-05-07",
+  "completeDate": null,
+  "completionTimeLabel": "Pilot aşama",
+  "repoUrl": null,
+  "websiteUrl": null,
+  "demoUrl": null,
+  "featuredImage": "/assets/imgs/work/market-pulse-cover.png",
+  "featuredImageAlt": "MarketPulse - Bayi ve rakip izleme SaaS",
+  "resumeTitle": "MarketPulse",
+  "resumeSubtitle": "SAAS PLATFORM",
+  "excludeFromPortfolio": false
+}

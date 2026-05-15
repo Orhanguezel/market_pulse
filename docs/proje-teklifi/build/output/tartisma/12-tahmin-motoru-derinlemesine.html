@@ -1,0 +1,818 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>12 — Tahmin Motoru: Derinlemesine Teknik Tasarım (Faz 2) — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>12 — Tahmin Motoru: Derinlemesine Teknik Tasarım (Faz 2)</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="tahmin-motoru-derinlemesine-teknik-tasarım-faz-2">12 — Tahmin Motoru: Derinlemesine Teknik Tasarım (Faz 2)</h1>
+<blockquote>
+<p><strong>Felsefe:</strong> Önce istatistik, sonra AI. Sayılarla açıklanabilir bir model olmadan, “Claude öneriyor” diye karar vermek itibar zedeler. AI, modelin <strong>yanına</strong> gelir; <strong>yerine</strong> geçmez.</p>
+</blockquote>
+<hr />
+<h2 id="sipariş-tahmin-motoru-ne-çözüyor">1. Sipariş Tahmin Motoru ne çözüyor?</h2>
+<h3 id="soru">1.1 Soru</h3>
+<blockquote>
+<p>“Bayi X, önümüzdeki 30 gün içinde Y ürününden ne kadar sipariş verecek?”</p>
+</blockquote>
+<p>Çıktı şu kararlara temel olur: - <strong>Üretim planlaması</strong> — gelmemiş ama gelmesi muhtemel siparişe stok hazırla - <strong>Hammadde satınalma</strong> — kalıp hazırlık + reçete üzerinden ham madde miktarı - <strong>Bayi mesaj zamanlaması</strong> — “siparişiniz vermeniz gereken döneme yaklaşıyorsunuz” hatırlatması - <strong>Stok tahsis</strong> — kıt ürünlerde önceliklendirme</p>
+<h3 id="çıktı-yapısı">1.2 Çıktı yapısı</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> TahminCiktisi <span class="op">=</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  bayi_id<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  urun_id<span class="op">:</span> <span class="dt">string</span><span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  donem<span class="op">:</span> { baslangic<span class="op">:</span> <span class="bu">Date</span><span class="op">;</span> bitis<span class="op">:</span> <span class="bu">Date</span> }<span class="op">;</span>  <span class="co">// ör. 2026-05-01 → 2026-05-30</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  tahmini_adet<span class="op">:</span> <span class="dt">number</span><span class="op">;</span>                      <span class="co">// beklenen değer</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  guven_araligi<span class="op">:</span> { alt<span class="op">:</span> <span class="dt">number</span><span class="op">;</span> ust<span class="op">:</span> <span class="dt">number</span><span class="op">;</span> ihtimal<span class="op">:</span> <span class="fl">0.80</span> <span class="op">|</span> <span class="fl">0.95</span> }<span class="op">;</span>  <span class="co">// 80% veya 95%</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  guven_skoru<span class="op">:</span> <span class="dt">number</span><span class="op">;</span>                       <span class="co">// 0.0 - 1.0 (modelin kendine güveni)</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  metod<span class="op">:</span> <span class="st">&#39;naive&#39;</span> <span class="op">|</span> <span class="st">&#39;mevsimsel_ortalama&#39;</span> <span class="op">|</span> <span class="st">&#39;lineer_regresyon&#39;</span> <span class="op">|</span> <span class="st">&#39;arima&#39;</span> <span class="op">|</span> <span class="st">&#39;prophet&#39;</span> <span class="op">|</span> <span class="st">&#39;xgboost&#39;</span> <span class="op">|</span> <span class="st">&#39;lstm&#39;</span><span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  sinyaller<span class="op">:</span> {</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    tarihsel_ortalama<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    ay_ici_artis<span class="op">:</span> <span class="dt">number</span><span class="op">;</span>       <span class="co">// bu ay diğer aylara göre +%</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    yil_onceki_ay<span class="op">:</span> <span class="dt">number</span><span class="op">;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    son_3_ay_trend<span class="op">:</span> <span class="st">&#39;azalan&#39;</span> <span class="op">|</span> <span class="st">&#39;sabit&#39;</span> <span class="op">|</span> <span class="st">&#39;artan&#39;</span><span class="op">;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    benzer_bayi_ortalamasi<span class="op">?:</span> <span class="dt">number</span><span class="op">;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>    drf<span class="op">?:</span> <span class="dt">number</span><span class="op">;</span>                <span class="co">// demand-residual factor (model dışı sapma)</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  uyari_bayraklari<span class="op">:</span> <span class="dt">string</span>[]<span class="op">;</span>   <span class="co">// ör. &quot;yeterli veri yok&quot;, &quot;outlier tespit edildi&quot;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<hr />
+<h2 id="algoritma-seçimi-kademeli-model-paketi">2. Algoritma Seçimi — kademeli model paketi</h2>
+<p>Tek algoritma yok. <strong>Veri yeterliliğine göre artan karmaşıklık.</strong> Her bayi/ürün için en basit yeterli olanı kullan.</p>
+<h3 id="karar-matrisi">2.1 Karar matrisi</h3>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 29%" />
+<col style="width: 33%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Veri yaşı</th>
+<th>Kayıt sayısı</th>
+<th>Önerilen metod</th>
+<th>Neden</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>&lt; 3 ay</td>
+<td>&lt; 10 sipariş</td>
+<td><strong>Naive</strong> (son ay × 1) + manuel onay</td>
+<td>Veri yetersiz, AI bile güvenilmez</td>
+</tr>
+<tr class="even">
+<td>3-6 ay</td>
+<td>10-30 sipariş</td>
+<td><strong>Mevsimsel ortalama</strong> (aynı dönem geçen yılın son 3 ayı)</td>
+<td>Trend yok ama dönemsellik tahmin edilir</td>
+</tr>
+<tr class="odd">
+<td>6-12 ay</td>
+<td>30-100 sipariş</td>
+<td><strong>Lineer regresyon</strong> (zaman + dönem)</td>
+<td>Doğrusal trend yakalanır, açıklanabilir</td>
+</tr>
+<tr class="even">
+<td>12-24 ay</td>
+<td>100-500 sipariş</td>
+<td><strong>Prophet</strong> (Facebook) veya <strong>ARIMA</strong></td>
+<td>Mevsimsellik + trend + tatil etkisi</td>
+</tr>
+<tr class="odd">
+<td>&gt; 24 ay</td>
+<td>&gt; 500 sipariş</td>
+<td><strong>XGBoost</strong> (gradient boosting)</td>
+<td>Çok değişkenli (fiyat, kampanya, hava, kur)</td>
+</tr>
+<tr class="even">
+<td>&gt; 36 ay</td>
+<td>&gt; 2000 sipariş</td>
+<td><strong>LSTM</strong> veya <strong>Transformer</strong></td>
+<td>Karmaşık desen, dönem dışı sinyal</td>
+</tr>
+</tbody>
+</table>
+<h3 id="her-algoritmanın-görevi">2.2 Her algoritmanın görevi</h3>
+<h4 id="naive-taban-model"><strong>Naive (taban model)</strong></h4>
+<pre><code>tahmin = son_ay_sipariş_adedi</code></pre>
+<ul>
+<li>Fallback. Hiçbir model çalışmazsa bu çalışır.</li>
+<li>Tüm modellerin doğruluğunu ölçmek için <strong>baseline</strong> olarak kullanılır.</li>
+</ul>
+<h4 id="mevsimsel-ortalama"><strong>Mevsimsel ortalama</strong></h4>
+<pre><code>tahmin = (geçen_yıl_aynı_ay + 2 yıl önce aynı ay) / 2</code></pre>
+<ul>
+<li>Mevsimselliği basitçe yakalar. Kategori: tekstil/inşaat gibi mevsimsel sektörler.</li>
+</ul>
+<h4 id="lineer-regresyon-statsmodels-veya-scikit-learn"><strong>Lineer regresyon (statsmodels veya scikit-learn)</strong></h4>
+<div class="sourceCode" id="cb4"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>features <span class="op">=</span> [</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;gun_sayisi_baslangictan&#39;</span>,  <span class="co"># zaman trend</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;ay_no&#39;</span>,                     <span class="co"># 1-12 (one-hot)</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;haftaici_haftasonu&#39;</span>,</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;tatil_mi&#39;</span>,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;son_30_gun_ortalama&#39;</span>,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>target <span class="op">=</span> <span class="st">&#39;siparis_adet&#39;</span></span></code></pre></div>
+<ul>
+<li>Açıklanabilir. Hangi faktörün etkili olduğunu söyleyebilir.</li>
+<li>Doğrusal olmayan ilişkiler için yetersiz.</li>
+</ul>
+<h4 id="prophet-facebook"><strong>Prophet (Facebook)</strong></h4>
+<ul>
+<li>Otomatik mevsimsellik (haftalık + yıllık)</li>
+<li>Türk tatil takvimi (Ramazan, Kurban, milli bayramlar) elle eklenir</li>
+<li>Out-of-the-box çalışır, az tuning ister</li>
+<li>Python: <code>prophet</code> paketi</li>
+<li><strong>Bu motorun varsayılanı.</strong> İlk tam ürünü ile çıkarken Prophet kullanılacak.</li>
+</ul>
+<h4 id="arima-autoregressive-integrated-moving-average"><strong>ARIMA (AutoRegressive Integrated Moving Average)</strong></h4>
+<ul>
+<li>Geleneksel zaman serisi modeli</li>
+<li>Stationarity gerektirir (ön işleme)</li>
+<li>Prophet ile karşılaştırma için tutulur, varsayılan değil</li>
+</ul>
+<h4 id="xgboost"><strong>XGBoost</strong></h4>
+<ul>
+<li>Tabular veri kralı</li>
+<li>Feature engineering ağır: kur, kampanya, hava, geçen ay siparişi vs.</li>
+<li>Doğruluk en yüksek ama açıklanması zor (SHAP gerek)</li>
+</ul>
+<h4 id="lstm-transformer"><strong>LSTM / Transformer</strong></h4>
+<ul>
+<li>Çok bayili + çok ürünlü ortamda <strong>tek model</strong> ile ortak desen öğrenir</li>
+<li>Faz 7 hedefi. Faz 2’de <strong>gerek yok</strong>.</li>
+</ul>
+<h3 id="algoritma-seçim-mantığı-kod-sahte-kodu">2.3 Algoritma seçim mantığı (kod sahte kodu)</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">tahminMetoduSec</span>(bayi<span class="op">:</span> Bayi<span class="op">,</span> urun<span class="op">:</span> Urun)<span class="op">:</span> Metod {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> veri <span class="op">=</span> <span class="fu">veriOzeti</span>(bayi<span class="op">.</span><span class="at">id</span><span class="op">,</span> urun<span class="op">.</span><span class="at">id</span>)<span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (veri<span class="op">.</span><span class="at">toplamSiparis</span> <span class="op">&lt;</span> <span class="dv">10</span>) <span class="cf">return</span> <span class="st">&#39;naive&#39;</span><span class="op">;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (veri<span class="op">.</span><span class="at">aySayisi</span> <span class="op">&lt;</span> <span class="dv">6</span>) <span class="cf">return</span> <span class="st">&#39;mevsimsel_ortalama&#39;</span><span class="op">;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (veri<span class="op">.</span><span class="at">aySayisi</span> <span class="op">&lt;</span> <span class="dv">12</span>) <span class="cf">return</span> <span class="st">&#39;lineer_regresyon&#39;</span><span class="op">;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (veri<span class="op">.</span><span class="at">aySayisi</span> <span class="op">&lt;</span> <span class="dv">24</span>) <span class="cf">return</span> <span class="st">&#39;prophet&#39;</span><span class="op">;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (veri<span class="op">.</span><span class="at">aySayisi</span> <span class="op">&gt;=</span> <span class="dv">24</span> <span class="op">&amp;&amp;</span> veri<span class="op">.</span><span class="at">feature_count</span> <span class="op">&gt;=</span> <span class="dv">10</span>) <span class="cf">return</span> <span class="st">&#39;xgboost&#39;</span><span class="op">;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="st">&#39;prophet&#39;</span><span class="op">;</span>  <span class="co">// güvenli varsayılan</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<hr />
+<h2 id="eğitim-verisi-minimum-gereksinimler">3. Eğitim Verisi — minimum gereksinimler</h2>
+<h3 id="tablo-bazlı">3.1 Tablo bazlı</h3>
+<table>
+<colgroup>
+<col style="width: 35%" />
+<col style="width: 21%" />
+<col style="width: 24%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Veri kalemi</th>
+<th>Kaynak</th>
+<th>Minimum</th>
+<th>İdeal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Geçmiş siparişler</td>
+<td><code>satis_siparisleri</code> + <code>siparis_kalemleri</code></td>
+<td>6 ay</td>
+<td>2 yıl</td>
+</tr>
+<tr class="even">
+<td>Bayi metadata</td>
+<td><code>musteriler</code> (sektör, bölge, çalışan sayısı)</td>
+<td>1 satır</td>
+<td>Tam doldurulmuş</td>
+</tr>
+<tr class="odd">
+<td>Ürün metadata</td>
+<td><code>urunler</code> (kategori, fiyat, sezonluk_mu)</td>
+<td>1 satır</td>
+<td>Tam doldurulmuş</td>
+</tr>
+<tr class="even">
+<td>Tatil takvimi</td>
+<td>Sabit JSON</td>
+<td>TR resmi tatiller</td>
+<td>+ dini tatiller</td>
+</tr>
+<tr class="odd">
+<td>Kur kuru</td>
+<td>TCMB API</td>
+<td>6 ay</td>
+<td>Günlük 5 yıl</td>
+</tr>
+<tr class="even">
+<td>Kampanya geçmişi</td>
+<td><code>kampanyalar</code> (yeni tablo)</td>
+<td>Yok da olur</td>
+<td>Olgunlaşınca</td>
+</tr>
+<tr class="odd">
+<td>Hava durumu</td>
+<td>OpenWeather geçmiş API</td>
+<td>Sezonsal sektörler için</td>
+<td>Tüm bayiler</td>
+</tr>
+</tbody>
+</table>
+<h3 id="veri-yetersizliği-davranışı">3.2 Veri yetersizliği davranışı</h3>
+<table>
+<colgroup>
+<col style="width: 43%" />
+<col style="width: 56%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Durum</th>
+<th>Aksiyon</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bayi 0-3 ay yeni</td>
+<td>Tahmin yapma. UI’da “yeterli veri yok” göster, manuel öneri kabul et.</td>
+</tr>
+<tr class="even">
+<td>3-6 ay</td>
+<td>Sektör ortalamasını öneri olarak göster, “bayi-spesifik tahmin için 6 ay gerekiyor” uyarısı</td>
+</tr>
+<tr class="odd">
+<td>6-12 ay</td>
+<td>Tahmin yap ama güven aralığını <strong>geniş</strong> tut (95% interval &gt; %50 fark)</td>
+</tr>
+<tr class="even">
+<td>&gt; 12 ay</td>
+<td>Tam tahmin</td>
+</tr>
+</tbody>
+</table>
+<h3 id="verinin-kalite-kontrolü-eğitim-öncesi">3.3 Verinin <strong>kalite</strong> kontrolü (eğitim öncesi)</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> kaliteKontroller <span class="op">=</span> [</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  { ad<span class="op">:</span> <span class="st">&#39;eksik_donem&#39;</span><span class="op">,</span> kural<span class="op">:</span> <span class="st">&#39;aylık veri en fazla 1 ay boş olabilir&#39;</span> }<span class="op">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  { ad<span class="op">:</span> <span class="st">&#39;outlier&#39;</span><span class="op">,</span> kural<span class="op">:</span> <span class="st">&#39;IQR × 3 üstü değerler işaretlenir, modele girmez&#39;</span> }<span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  { ad<span class="op">:</span> <span class="st">&#39;tek_seferlik&#39;</span><span class="op">,</span> kural<span class="op">:</span> <span class="st">&#39;tek seferlik 10× büyük sipariş ayrı işaretlenir&#39;</span> }<span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  { ad<span class="op">:</span> <span class="st">&#39;duplicate&#39;</span><span class="op">,</span> kural<span class="op">:</span> <span class="st">&#39;aynı gün/aynı tutar siparişler birleştirilir&#39;</span> }<span class="op">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  { ad<span class="op">:</span> <span class="st">&#39;iade&#39;</span><span class="op">,</span> kural<span class="op">:</span> <span class="st">&#39;iade edilen siparişler net hesabı düşürür&#39;</span> }<span class="op">,</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>]<span class="op">;</span></span></code></pre></div>
+<p><strong>Bayrak:</strong> Eğitim verisinin %20’si bu kontrollerden geçemiyorsa, model eğitimi durur ve yöneticiye uyarı gider.</p>
+<hr />
+<h2 id="bayi-spesifik-mi-genel-model-mi">4. Bayi-spesifik mi, genel model mi?</h2>
+<h3 id="üç-katmanlı-strateji">4.1 Üç katmanlı strateji</h3>
+<pre><code>                    ┌─────────────────────┐
+                    │   GENEL MODEL       │  ← tüm bayilerden öğrenen
+                    │   (LSTM / XGBoost)  │
+                    └──────────┬──────────┘
+                               ↓ tabanlık eder
+                    ┌──────────┴──────────┐
+                    │  SEGMENT MODELİ     │  ← bayi grubu (sektör, ölçek)
+                    │  (Prophet)          │
+                    └──────────┬──────────┘
+                               ↓ ince ayar
+                    ┌──────────┴──────────┐
+                    │  BAYİ-ÜRÜN MODELİ   │  ← spesifik bayi + spesifik ürün
+                    │  (Prophet)          │
+                    └─────────────────────┘</code></pre>
+<h3 id="hangi-durumda-hangisi">4.2 Hangi durumda hangisi?</h3>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 70%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Durum</th>
+<th>Kullanılan model</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bayi yeni (&lt; 6 ay)</td>
+<td><strong>Genel model</strong> + sektör segment modeli</td>
+</tr>
+<tr class="even">
+<td>Bayi olgun (&gt; 12 ay) + ürün popüler</td>
+<td><strong>Bayi-ürün modeli</strong></td>
+</tr>
+<tr class="odd">
+<td>Bayi olgun + ürün nadir</td>
+<td><strong>Bayi modeli</strong> (ürün bazında değil, kategori bazında)</td>
+</tr>
+<tr class="even">
+<td>Tüm bayilerde yeni ürün lansmanı</td>
+<td><strong>Genel model</strong> + benzer ürün analojisi</td>
+</tr>
+</tbody>
+</table>
+<h3 id="model-sayısı-tahmini">4.3 Model sayısı tahmini</h3>
+<pre><code>Ortalama: 50 bayi × 200 ürün = 10.000 olası model
+Pratik: ~500 bayi-ürün modeli + 20 segment modeli + 1 genel model</code></pre>
+<p>10.000 ayrı model <strong>eğitilmez</strong>. Sadece <strong>aktif</strong> olanlar (son 90 günde sipariş gelen) eğitilir. Diğerleri segment/genel modele düşer.</p>
+<h3 id="model-storage">4.4 Model storage</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> tahmin_modelleri (</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">scope</span> ENUM(<span class="st">&#39;genel&#39;</span>,<span class="st">&#39;segment&#39;</span>,<span class="st">&#39;bayi&#39;</span>,<span class="st">&#39;bayi_urun&#39;</span>),</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  scope_value <span class="dt">varchar</span>(<span class="dv">255</span>),         <span class="co">-- &#39;bayi:abc-123:urun:xyz-456&#39; veya &#39;segment:tekstil-orta&#39;</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  algoritma <span class="dt">varchar</span>(<span class="dv">64</span>),            <span class="co">-- &#39;prophet&#39;, &#39;xgboost&#39; vs.</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  egitim_tarihi datetime,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  egitim_verisi_baslangic <span class="dt">date</span>,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  egitim_verisi_bitis <span class="dt">date</span>,</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  egitim_kayit_sayisi <span class="dt">int</span>,</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  dogruluk_metrikleri JSON,         <span class="co">-- { mape: 0.18, rmse: 12.4, mae: 8.2 }</span></span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  hyperparametreler JSON,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  model_dosyasi_yolu text,          <span class="co">-- s3:// veya disk yolu</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  aktif tinyint,</span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  notlar text</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<hr />
+<h2 id="mevsimsellik-hangi-desenler-yakalanır">5. Mevsimsellik — hangi desenler yakalanır?</h2>
+<h3 id="katman-mevsimsellik">5.1 4 katman mevsimsellik</h3>
+<table>
+<colgroup>
+<col style="width: 33%" />
+<col style="width: 37%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Katman</th>
+<th>Periyot</th>
+<th>Örnek</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Haftalık</td>
+<td>7 gün</td>
+<td>Pazartesi yüksek, Cumartesi düşük</td>
+</tr>
+<tr class="even">
+<td>Aylık</td>
+<td>30 gün</td>
+<td>Ay başı/sonu sipariş yığılması (maaş, fatura döngüsü)</td>
+</tr>
+<tr class="odd">
+<td>Mevsimsel</td>
+<td>3 ay</td>
+<td>Yaz tekstil, kış inşaat</td>
+</tr>
+<tr class="even">
+<td>Yıllık</td>
+<td>365 gün</td>
+<td>Bayram öncesi yığılma, vergi dönemi</td>
+</tr>
+</tbody>
+</table>
+<h3 id="tatil-etkisi-türk-takvimi">5.2 Tatil etkisi (Türk takvimi)</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>turk_tatilleri <span class="op">=</span> {</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;ramazan_bayrami&#39;</span>: {<span class="st">&#39;tarih&#39;</span>: <span class="st">&#39;2026-03-20&#39;</span>, <span class="st">&#39;oncesi_etkisi_gun&#39;</span>: <span class="dv">14</span>, <span class="st">&#39;etki&#39;</span>: <span class="fl">1.4</span>},</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;kurban_bayrami&#39;</span>: {<span class="st">&#39;tarih&#39;</span>: <span class="st">&#39;2026-05-27&#39;</span>, <span class="st">&#39;oncesi_etkisi_gun&#39;</span>: <span class="dv">10</span>, <span class="st">&#39;etki&#39;</span>: <span class="fl">1.3</span>},</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;cumhuriyet&#39;</span>: {<span class="st">&#39;tarih&#39;</span>: <span class="st">&#39;2026-10-29&#39;</span>, <span class="st">&#39;oncesi_etkisi_gun&#39;</span>: <span class="dv">3</span>, <span class="st">&#39;etki&#39;</span>: <span class="fl">0.7</span>},</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;yilbasi&#39;</span>: {<span class="st">&#39;tarih&#39;</span>: <span class="st">&#39;2026-12-31&#39;</span>, <span class="st">&#39;oncesi_etkisi_gun&#39;</span>: <span class="dv">7</span>, <span class="st">&#39;etki&#39;</span>: <span class="fl">1.2</span>},</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Etki</strong>: tatilden N gün önce siparişlerin normal değerine <strong>çarpan</strong> uygulanır.</p>
+<h3 id="sektör-spesifik-özel-günler">5.3 Sektör-spesifik özel günler</h3>
+<p>Bayinin sektörüne göre ek özel günler: - <strong>Tarım:</strong> ekim/hasat dönemi - <strong>İnşaat:</strong> ilkbahar açılış (Mart), kış kapanış (Kasım) - <strong>Tekstil:</strong> sezon değişimi (Mart, Eylül) - <strong>Otomotiv:</strong> model yılı geçişi (Ekim-Kasım)</p>
+<hr />
+<h2 id="excel-girdi-formatı-kullanıcı-veri-yüklemesi">6. Excel Girdi Formatı — kullanıcı veri yüklemesi</h2>
+<h3 id="iki-giriş-yolu">6.1 İki giriş yolu</h3>
+<ol type="1">
+<li><strong>DB üzerinden</strong> (Paspas içi siparişlerden otomatik) — varsayılan</li>
+<li><strong>Excel/CSV upload</strong> (geçmiş veriler, başka sistemden ihraç) — opsiyonel</li>
+</ol>
+<h3 id="excel-şablonu-siparis_gecmisi_v1.xlsx">6.2 Excel şablonu — <code>siparis_gecmisi_v1.xlsx</code></h3>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 13%" />
+<col style="width: 23%" />
+<col style="width: 26%" />
+<col style="width: 18%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Kolon</th>
+<th>Tip</th>
+<th>Zorunlu</th>
+<th>Açıklama</th>
+<th>Örnek</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>tarih</code></td>
+<td>date</td>
+<td>✅</td>
+<td>Sipariş tarihi (YYYY-MM-DD)</td>
+<td>2025-08-15</td>
+</tr>
+<tr class="even">
+<td><code>bayi_kod</code></td>
+<td>string</td>
+<td>✅</td>
+<td>Bayi kodu (Paspas’ta tanımlı olmalı)</td>
+<td>BAY-042</td>
+</tr>
+<tr class="odd">
+<td><code>urun_kod</code></td>
+<td>string</td>
+<td>✅</td>
+<td>Ürün kodu (Paspas’ta tanımlı olmalı)</td>
+<td>URN-STAR-SIYAH-100</td>
+</tr>
+<tr class="even">
+<td><code>adet</code></td>
+<td>int</td>
+<td>✅</td>
+<td>Sipariş adedi</td>
+<td>250</td>
+</tr>
+<tr class="odd">
+<td><code>birim_fiyat</code></td>
+<td>decimal</td>
+<td>⚠️</td>
+<td>TL cinsinden</td>
+<td>18.50</td>
+</tr>
+<tr class="even">
+<td><code>iskonto_yuzde</code></td>
+<td>decimal</td>
+<td>—</td>
+<td>%5 = 5.00 (Paspas formatı)</td>
+<td>5.00</td>
+</tr>
+<tr class="odd">
+<td><code>kampanya_kodu</code></td>
+<td>string</td>
+<td>—</td>
+<td>Kampanya varsa</td>
+<td>YAZ2025</td>
+</tr>
+<tr class="even">
+<td><code>iade_mi</code></td>
+<td>bool</td>
+<td>—</td>
+<td>İade siparişi mi?</td>
+<td>false</td>
+</tr>
+<tr class="odd">
+<td><code>notlar</code></td>
+<td>text</td>
+<td>—</td>
+<td>Serbest not</td>
+<td>“yıllık çerçeve sözleşme”</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yükleme-akışı">6.3 Yükleme akışı</h3>
+<pre><code>1. Kullanıcı Excel yükler → /admin/tahmin-motoru/yukle
+2. Backend doğrulama:
+   - kolon kontrolü
+   - bayi_kod / urun_kod Paspas&#39;ta var mı?
+   - tarih formatı?
+   - adet &gt; 0?
+3. UI&#39;da preview:
+   &quot;150 satır okundu. 142 geçerli, 8 hata. İlk 5 hata: ...&quot;
+4. Kullanıcı onayla → DB&#39;ye yaz (siparis_gecmisi_yuklenen tablosuna)
+5. &quot;Modeli yeniden eğit&quot; butonu aktif olur
+6. Eğitim arka planda — 30 dakika sonra tamamlanma e-postası</code></pre>
+<h3 id="hata-düzeltme">6.4 Hata düzeltme</h3>
+<p>Hatalı satırlar <strong>inline editor</strong> ile düzeltilebilir: - “Bayi kodu BAY-XYZ bulunamadı” → dropdown’dan seç veya yeni bayi oluştur - “Tarih formatı geçersiz” → tarih seçici göster</p>
+<hr />
+<h2 id="doğruluk-hedefleri-ve-metrikler">7. Doğruluk hedefleri ve metrikler</h2>
+<h3 id="metrikler">7.1 Metrikler</h3>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 40%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metrik</th>
+<th>Açıklama</th>
+<th>Hedef</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>MAPE</strong> (Mean Absolute Percentage Error)</td>
+<td>Ortalama yüzde sapma</td>
+<td>&lt; %20 (olgun), &lt; %35 (başlangıç)</td>
+</tr>
+<tr class="even">
+<td><strong>RMSE</strong> (Root Mean Squared Error)</td>
+<td>Büyük sapmaları cezalandırır</td>
+<td>Bayi-ürün özel hedef</td>
+</tr>
+<tr class="odd">
+<td><strong>MAE</strong> (Mean Absolute Error)</td>
+<td>Mutlak ortalama sapma</td>
+<td>Yorumlaması kolay</td>
+</tr>
+<tr class="even">
+<td><strong>Bias</strong></td>
+<td>Sistematik aşma/eksilme</td>
+<td>Sıfıra yakın olmalı (±%5)</td>
+</tr>
+<tr class="odd">
+<td><strong>Coverage</strong></td>
+<td>%95 güven aralığı içine düşen gerçek değer oranı</td>
+<td>&gt; %90</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hedef-aşamalı">7.2 Hedef aşamalı</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Dönem</th>
+<th>MAPE hedefi</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>İlk 3 ay (canlıda)</td>
+<td>&lt; %50</td>
+<td>Naive üzerinde olsun yeter</td>
+</tr>
+<tr class="even">
+<td>6 ay</td>
+<td>&lt; %35</td>
+<td>Prophet baseline</td>
+</tr>
+<tr class="odd">
+<td>12 ay</td>
+<td>&lt; %25</td>
+<td>Bayi-ürün modeller olgun</td>
+</tr>
+<tr class="even">
+<td>24 ay</td>
+<td>&lt; %20</td>
+<td>XGBoost + multivariate</td>
+</tr>
+<tr class="odd">
+<td>36 ay</td>
+<td>&lt; %15</td>
+<td>“İyi” sektör seviyesi (Forecasting Pro Society)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="karşılaştırma-naive-baseline">7.3 Karşılaştırma — naive baseline</h3>
+<p>Her tahmin için <strong>mutlaka</strong> naive baseline ile karşılaştırma yapılır.</p>
+<pre><code>iyilik_orani = (naive_mape - model_mape) / naive_mape
+
+Eğer iyilik_orani &lt; 0.10 (model naive&#39;den %10 daha iyi değil)
+→ Model değerli değil, naive kullan, eğitim israfını engelle</code></pre>
+<h3 id="otomatik-model-seçimi-championchallenger">7.4 Otomatik model seçimi (champion/challenger)</h3>
+<ul>
+<li>Her hafta 5 model paralel eğitilir: naive, mevsimsel, lineer, prophet, xgboost</li>
+<li>Test setinde MAPE en düşük olan <strong>champion</strong> olur</li>
+<li>Kullanılan model değişirse yöneticiye email</li>
+<li>Champion 2 hafta üst üste yenilenmedi → “değişiklik gerek yok, sistem stabil”</li>
+</ul>
+<hr />
+<h2 id="model-güncelleme-ne-sıklıkla">8. Model güncelleme — ne sıklıkla?</h2>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 48%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Olay</th>
+<th>Tetikleyici</th>
+<th>Sıklık</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Inkremental</strong></td>
+<td>Yeni sipariş geldi</td>
+<td>Anlık (model state’i günceller, tam re-train değil)</td>
+</tr>
+<tr class="even">
+<td><strong>Haftalık</strong></td>
+<td>Cron pazartesi 03:00</td>
+<td>Tüm aktif bayi-ürün modelleri yeniden eğitilir</td>
+</tr>
+<tr class="odd">
+<td><strong>Aylık</strong></td>
+<td>Ayın 1’i</td>
+<td>Hyperparameter optimization (Optuna)</td>
+</tr>
+<tr class="even">
+<td><strong>Tetikli</strong></td>
+<td>MAPE eşik üstü</td>
+<td>Anında re-train</td>
+</tr>
+<tr class="odd">
+<td><strong>Manuel</strong></td>
+<td>“Yeniden eğit” butonu</td>
+<td>UI’dan yönetici tetikler</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="açıklanabilirlik-neden-bu-tahmin">9. Açıklanabilirlik — “neden bu tahmin?”</h2>
+<h3 id="kullanıcı-sorduğunda">9.1 Kullanıcı sorduğunda</h3>
+<pre><code>KULLANICI: &quot;BAY-042 için 250 adet diyor, neden?&quot;
+
+SİSTEM:
+  Tahmin: 250 adet (güven aralığı: 220-285, %95)
+  Yöntem: Prophet
+  Etki sıralı sinyaller:
+    1. Geçen yıl aynı ay: 240 adet (+10 etki)
+    2. Son 3 ay trend: artış (+15 etki)
+    3. Mayıs ay-içi yüksek (sektör ortalaması): +5 etki
+    4. Bayi 30 gün siparişsiz (-10 etki)
+
+  Uyarılar:
+    ⚠ Geçen ay outlier (kampanya); modelden çıkarıldı
+    ⚠ Bayi son 3 ayda %20 azalma — ileri trend kırılma riski</code></pre>
+<h3 id="shap-xgboost-için">9.2 SHAP (XGBoost için)</h3>
+<p>XGBoost modeli kullanılınca her tahmin için SHAP değerleri saklanır → “hangi özellik tahmini ne kadar etkiledi” görselleştirilir.</p>
+<hr />
+<h2 id="tablolar-db-şeması">10. Tablolar — DB şeması</h2>
+<div class="sourceCode" id="cb14"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> tahmin_calistirma (</span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>  bayi_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a>  urun_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a>  donem_baslangic <span class="dt">date</span>,</span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>  donem_bitis <span class="dt">date</span>,</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a>  tahmini_adet <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb14-8"><a href="#cb14-8" aria-hidden="true" tabindex="-1"></a>  guven_alt <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb14-9"><a href="#cb14-9" aria-hidden="true" tabindex="-1"></a>  guven_ust <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb14-10"><a href="#cb14-10" aria-hidden="true" tabindex="-1"></a>  guven_yuzdesi <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),     <span class="co">-- 0.80, 0.95</span></span>
+<span id="cb14-11"><a href="#cb14-11" aria-hidden="true" tabindex="-1"></a>  guven_skoru <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb14-12"><a href="#cb14-12" aria-hidden="true" tabindex="-1"></a>  metod <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb14-13"><a href="#cb14-13" aria-hidden="true" tabindex="-1"></a>  model_id <span class="dt">char</span>(<span class="dv">36</span>),                <span class="co">-- tahmin_modelleri.id</span></span>
+<span id="cb14-14"><a href="#cb14-14" aria-hidden="true" tabindex="-1"></a>  sinyaller JSON,</span>
+<span id="cb14-15"><a href="#cb14-15" aria-hidden="true" tabindex="-1"></a>  uyari_bayraklari JSON,</span>
+<span id="cb14-16"><a href="#cb14-16" aria-hidden="true" tabindex="-1"></a>  calistirma_zamani datetime,</span>
+<span id="cb14-17"><a href="#cb14-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (bayi_id, urun_id, donem_baslangic)</span>
+<span id="cb14-18"><a href="#cb14-18" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb14-19"><a href="#cb14-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-20"><a href="#cb14-20" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> tahmin_dogruluk (</span>
+<span id="cb14-21"><a href="#cb14-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb14-22"><a href="#cb14-22" aria-hidden="true" tabindex="-1"></a>  tahmin_id <span class="dt">char</span>(<span class="dv">36</span>),               <span class="co">-- tahmin_calistirma.id</span></span>
+<span id="cb14-23"><a href="#cb14-23" aria-hidden="true" tabindex="-1"></a>  gercek_adet <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),        <span class="co">-- gerçekleşen sipariş</span></span>
+<span id="cb14-24"><a href="#cb14-24" aria-hidden="true" tabindex="-1"></a>  mape <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">4</span>),</span>
+<span id="cb14-25"><a href="#cb14-25" aria-hidden="true" tabindex="-1"></a>  rmse <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">4</span>),</span>
+<span id="cb14-26"><a href="#cb14-26" aria-hidden="true" tabindex="-1"></a>  bias <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">4</span>),</span>
+<span id="cb14-27"><a href="#cb14-27" aria-hidden="true" tabindex="-1"></a>  hesaplandi_at datetime,</span>
+<span id="cb14-28"><a href="#cb14-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (tahmin_id)</span>
+<span id="cb14-29"><a href="#cb14-29" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb14-30"><a href="#cb14-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-31"><a href="#cb14-31" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> siparis_gecmisi_yuklenen (</span>
+<span id="cb14-32"><a href="#cb14-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb14-33"><a href="#cb14-33" aria-hidden="true" tabindex="-1"></a>  yukleyen_user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb14-34"><a href="#cb14-34" aria-hidden="true" tabindex="-1"></a>  dosya_adi <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb14-35"><a href="#cb14-35" aria-hidden="true" tabindex="-1"></a>  satir_sayisi <span class="dt">int</span>,</span>
+<span id="cb14-36"><a href="#cb14-36" aria-hidden="true" tabindex="-1"></a>  basarili <span class="dt">int</span>,</span>
+<span id="cb14-37"><a href="#cb14-37" aria-hidden="true" tabindex="-1"></a>  hata <span class="dt">int</span>,</span>
+<span id="cb14-38"><a href="#cb14-38" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;yuklendi&#39;</span>,<span class="st">&#39;isleniyor&#39;</span>,<span class="st">&#39;tamamlandi&#39;</span>,<span class="st">&#39;hatali&#39;</span>),</span>
+<span id="cb14-39"><a href="#cb14-39" aria-hidden="true" tabindex="-1"></a>  hata_log JSON,</span>
+<span id="cb14-40"><a href="#cb14-40" aria-hidden="true" tabindex="-1"></a>  yuklendi_at datetime</span>
+<span id="cb14-41"><a href="#cb14-41" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<hr />
+<h2 id="ui-admintahmin-motoru">11. UI — <code>/admin/tahmin-motoru</code></h2>
+<h3 id="ana-sayfa">11.1 Ana sayfa</h3>
+<ul>
+<li>Aktif bayiler tablosu: bayi adı, son 30 gün ciro, sonraki 30 gün tahmini</li>
+<li>Heatmap: bayi × ay → tahmini sipariş hacmi</li>
+<li>Top 5 yükselen, Top 5 düşen bayi</li>
+</ul>
+<h3 id="bayi-detay">11.2 Bayi-detay</h3>
+<ul>
+<li>Bayi sipariş geçmişi grafiği</li>
+<li>Tahmin grafiği (tarihsel + 30 gün ileri)</li>
+<li>“Hangi ürün, ne kadar, ne zaman” tablosu</li>
+<li>Açıklayıcı sinyal listesi</li>
+</ul>
+<h3 id="model-laboratuvarı-admin-only">11.3 Model laboratuvarı (admin only)</h3>
+<ul>
+<li>Eğitim çalıştır / durdur</li>
+<li>Algoritma karşılaştırma: 5 model yan yana metrikler</li>
+<li>Hyperparameter tuning (Optuna)</li>
+<li>Model versiyonu rollback</li>
+</ul>
+<h3 id="excel-yükleme">11.4 Excel yükleme</h3>
+<ul>
+<li>Drag-drop alanı</li>
+<li>Şablon indir butonu (<code>siparis_gecmisi_v1.xlsx</code>)</li>
+<li>Preview tablosu (validasyon sonucu)</li>
+<li>Hata düzeltme inline</li>
+</ul>
+<hr />
+<h2 id="açık-karar-noktaları-faz-2">12. Açık karar noktaları (Faz 2)</h2>
+<ol type="1">
+<li><strong>Varsayılan algoritma:</strong> Prophet mu, ARIMA mı? (Önerim: Prophet)</li>
+<li><strong>Tatil takvimi:</strong> sabit JSON mu, kullanıcı yönetebilsin mi?</li>
+<li><strong>Excel upload:</strong> zorunlu mu, opsiyonel mi? (Önerim: opsiyonel — DB içi veriden başla)</li>
+<li><strong>Model storage:</strong> disk mi, S3 mü? (Önerim: ilk faz disk; ölçek olunca S3)</li>
+<li><strong>MAPE açıklama UI:</strong> SHAP plot mu, basit liste mi? (Önerim: basit liste; SHAP advanced mode)</li>
+<li><strong>Re-train sıklığı:</strong> haftalık mı, günlük mü?</li>
+<li><strong>Naive baseline aşama:</strong> sadece test set mi, üretimde de paralel koşsun mu?</li>
+</ol>
+<hr />
+<h2 id="faz-2-çıktı-listesi-kabul-kriterleri">13. Faz 2 çıktı listesi (kabul kriterleri)</h2>
+<p>✅ DB tabloları oluşturuldu ✅ <code>siparis_gecmisi_yuklenen</code> Excel upload UI çalışıyor ✅ Naive + Mevsimsel + Lineer Regresyon + Prophet 4 algoritma implement edildi ✅ Champion/challenger seçimi otomatik ✅ Tahmin sonucu UI’da gösteriliyor (bayi-ürün heatmap) ✅ Açıklanabilirlik (sinyal listesi) çalışıyor ✅ MAPE % 35 altı en az 10 bayide ✅ Yönetici “manuel re-train” yapabiliyor ✅ Audit log: her tahmin saklanır, gerçekleşen ile karşılaştırılır</p>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("12 — Tahmin Motoru: Derinlemesine Teknik Tasarım (Faz 2)").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

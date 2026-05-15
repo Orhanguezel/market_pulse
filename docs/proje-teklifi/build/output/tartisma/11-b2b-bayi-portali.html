@@ -1,0 +1,731 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11 — B2B Bayi Portalı (Paspas Mimarisine Uyarlanmış) — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>11 — B2B Bayi Portalı (Paspas Mimarisine Uyarlanmış)</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="b2b-bayi-portalı-paspas-mimarisine-uyarlanmış">11 — B2B Bayi Portalı (Paspas Mimarisine Uyarlanmış)</h1>
+<blockquote>
+<p><strong>Bağlam (v1.1):</strong> Bu doküman <strong>Faz 6 — B2B Bayi Portalı</strong>’nın detaylı tasarımıdır. 10 alt modül, DB şeması, mimari karar (Postgres-tabanlı pasted örnek vs Paspas MySQL stack uyumlandırılması). Üst düzey faz haritası: <a href="../proje-teklifi/02-cozum-genel-bakis.md#faz-6--b2b-bayi-portalı-matportal"><code>proje-teklifi/02-cozum-genel-bakis.md</code></a>. Özellik listesi: <a href="../proje-teklifi/05-fonksiyonel-kapsam.md#faz-6--b2b-bayi-portalı-76-özellik"><code>proje-teklifi/05-fonksiyonel-kapsam.md</code></a> (76 özellik, MVP/Genişleme).</p>
+</blockquote>
+<h2 id="strateji-değişimi-neden-bu-doküman-var">Strateji değişimi — neden bu doküman var</h2>
+<p>Daha önceki <a href="./02-musteri-kesif.md">02-musteri-kesif.md</a> “yeni müşteri keşfi”ni öne aldı. Müşteri tabanı analizi sonrası strateji değişti:</p>
+<blockquote>
+<p><strong>Yeni müşteri kazanmak, mevcut müşteriyi elinde tutmaktan ve daha çok satmaktan 5-7 kat daha pahalı.</strong></p>
+</blockquote>
+<p>Mevcut <strong>35 aktif müşteri</strong> (DB’de doğrulandı). İskonto dağılımı %0-45.60, ortalama %17.7 — yani:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 45%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>İskonto</th>
+<th>Tahmini segment</th>
+<th>Davranış</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>%0-7</td>
+<td><strong>Stratejik toptancılar/distribütörler</strong></td>
+<td>Yüksek hacim, düşük marj, düzenli tekrar siparişi</td>
+</tr>
+<tr class="even">
+<td>%8-25</td>
+<td>Orta segment otomotiv firmaları</td>
+<td>Periyodik sipariş</td>
+</tr>
+<tr class="odd">
+<td>%26-45</td>
+<td>Tek seferlik / küçük otomotiv</td>
+<td>Düşük tekrar</td>
+</tr>
+</tbody>
+</table>
+<p>Bu 35 müşterinin %70’inde iletişim verisi eksik (görsel analizinden). <strong>Önce mevcut müşteriyi düzene sok, sonra portal kur, sonra yeni müşteri ara.</strong></p>
+<h2 id="doğru-sıralama">Doğru sıralama</h2>
+<pre><code>[1] Mevcut müşteri enrichment (1-2 hafta)
+       Eksik telefon/email/web doldur, segmentasyon çıkar
+       ↓
+[2] B2B Bayi Portalı v1 — read-only (3-4 hafta)
+       Bayi login, katalog, sipariş geçmişi, cari hesap
+       ↓
+[3] B2B Bayi Portalı v2 — sipariş açma (2 hafta)
+       Sepet + kredi limit + transaction&#39;lı sipariş + audit
+       ↓
+[4] 5 pilot bayi onboarding + feedback (1 hafta)
+       İstanbul Oto, Ankara Oto Market, Ege Oto, Güney, Karadeniz
+       ↓
+[5] Tam yayılım + yeni müşteri keşfi (Faz 3 ve sonrası)</code></pre>
+<h2 id="önemli-mimari-uyarı-yapıştırılan-stratejideki-hatalar">Önemli mimari uyarı — yapıştırılan stratejideki hatalar</h2>
+<p>Yapıştırılan analiz metni doğru iş mantığına sahip ama <strong>Paspas stack’ini bilmediği için yanlış teknolojiler önerdi</strong>. Düzeltme:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 12%" />
+<col style="width: 39%" />
+<col style="width: 33%" />
+<col style="width: 14%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Konu</th>
+<th>Yapıştırılan öneri</th>
+<th>Paspas gerçeği</th>
+<th>Karar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>DB</td>
+<td>PostgreSQL</td>
+<td><strong>MySQL 8</strong></td>
+<td>MySQL kullan; kod örneklerini <code>mysql-core</code>’a uyarla</td>
+</tr>
+<tr class="even">
+<td>ORM</td>
+<td>Drizzle pg-core</td>
+<td><strong>Drizzle mysql-core</strong> (zaten kurulu)</td>
+<td>mysql-core kullan</td>
+</tr>
+<tr class="odd">
+<td>Backend framework</td>
+<td>Next.js Server Actions</td>
+<td><strong>Fastify 5 + Bun</strong> (mevcut)</td>
+<td>Mevcut Fastify’a yeni route’lar ekle</td>
+</tr>
+<tr class="even">
+<td>Auth</td>
+<td>Auth.js v5 (NextAuth)</td>
+<td><strong>Fastify JWT + httpOnly cookie</strong> (mevcut)</td>
+<td>Mevcut <code>auth/</code> modülünü genişlet — yeni <code>dealer</code> rolü</td>
+</tr>
+<tr class="odd">
+<td>ID</td>
+<td>int auto-increment</td>
+<td><strong>char(36) UUID</strong> (<code>randomUUID()</code>)</td>
+<td>UUID kullan, mevcut convention</td>
+</tr>
+<tr class="even">
+<td>Tablo isimleri</td>
+<td><code>customers</code>, <code>products</code>, <code>orders</code></td>
+<td><strong><code>musteriler</code>, <code>urunler</code>, <code>satis_siparisleri</code></strong> (Türkçe)</td>
+<td>Türkçe konvansiyon</td>
+</tr>
+<tr class="odd">
+<td><code>iskonto</code> formatı</td>
+<td><code>0.05</code> (oran)</td>
+<td><strong><code>5.00</code></strong> (yüzde, decimal(5,2))</td>
+<td>Yüzde — <code>final = list * (1 - iskonto/100)</code></td>
+</tr>
+<tr class="even">
+<td>Monorepo</td>
+<td>Turborepo + pnpm workspaces</td>
+<td>İki ayrı klasör (admin_panel, backend)</td>
+<td><strong>Üçüncü klasör ekle:</strong> <code>dealer_portal/</code></td>
+</tr>
+<tr class="odd">
+<td>Job queue</td>
+<td>BullMQ + Redis</td>
+<td><code>setInterval</code> (P3 Madde 5’te kullanılan pattern)</td>
+<td>Aynı pattern; gerek olursa BullMQ sonra</td>
+</tr>
+<tr class="even">
+<td>Email</td>
+<td>Resend</td>
+<td>Backend’de <code>mail/</code> modülü (Nodemailer/SMTP)</td>
+<td>Mevcut modülü kullan, dış servis gerekirse Brevo</td>
+</tr>
+<tr class="odd">
+<td>ERP “drafts” tablosu</td>
+<td><code>portal_order_drafts</code> → ERP sync</td>
+<td>Direkt <code>satis_siparisleri/repository.ts:repoCreate</code></td>
+<td><strong>Drafts katmanı gereksiz</strong> — Paspas backend zaten Fastify, portal direkt API çağırır</td>
+</tr>
+<tr class="even">
+<td><code>vehicleCompat</code></td>
+<td>Tablo zaten varmış varsayılır</td>
+<td><strong>Yok</strong> — sıfırdan kurulması gerek</td>
+<td>Yeni tablo: <code>urun_arac_uyumlulugu</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="paspas-uyumlu-mimari">Paspas-uyumlu mimari</h2>
+<pre><code>                    ┌──────────────────────────────┐
+                    │ paspas/dealer_portal/        │
+                    │ (yeni Next.js 16 projesi)    │
+                    │ Bayi UI: login, katalog,     │
+                    │ sepet, sipariş, cari         │
+                    └─────────────┬────────────────┘
+                                  │
+                                  │  HTTPS / REST + cookie auth
+                                  ▼
+                    ┌──────────────────────────────┐
+                    │ paspas/backend/              │
+                    │ (mevcut Fastify 5)           │
+                    │                              │
+                    │ Yeni route prefix: /portal/  │
+                    │ • POST /portal/auth/login    │
+                    │ • GET  /portal/catalog       │
+                    │ • POST /portal/cart          │
+                    │ • POST /portal/orders        │
+                    │ • GET  /portal/orders        │
+                    │ • GET  /portal/cari          │
+                    └─────────────┬────────────────┘
+                                  │
+                                  │  Drizzle ORM (mevcut)
+                                  ▼
+                    ┌──────────────────────────────┐
+                    │ MySQL (mevcut promats_erp)   │
+                    │                              │
+                    │ Mevcut: musteriler, urunler, │
+                    │ satis_siparisleri,           │
+                    │ siparis_kalemleri, hareketler│
+                    │                              │
+                    │ YENI:                        │
+                    │ • portal_kullanicilari       │
+                    │ • portal_oturumlari          │
+                    │ • portal_sepet               │
+                    │ • portal_sepet_kalemleri     │
+                    │ • portal_audit               │
+                    │ • urun_arac_uyumlulugu       │
+                    │ • arac_modelleri             │
+                    └──────────────────────────────┘</code></pre>
+<p><strong>Tek doğruluk kaynağı:</strong> mevcut <code>promats_erp</code> MySQL’i. Portal kendi tabloları <code>portal_*</code> prefix’iyle ayrılır. Sipariş yazımı ortak — <code>repoCreate</code> (satis_siparisleri) reuse.</p>
+<h2 id="yeni-db-şeması-paspas-konvansiyonu">Yeni DB Şeması (Paspas konvansiyonu)</h2>
+<div class="sourceCode" id="cb3"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">// backend/src/modules/portal/schema.ts (yeni modül)</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { sql } <span class="im">from</span> <span class="st">&#39;drizzle-orm&#39;</span><span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { char<span class="op">,</span> datetime<span class="op">,</span> decimal<span class="op">,</span> int<span class="op">,</span> json<span class="op">,</span> mysqlTable<span class="op">,</span> text<span class="op">,</span> tinyint<span class="op">,</span> varchar } <span class="im">from</span> <span class="st">&#39;drizzle-orm/mysql-core&#39;</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> portalKullanicilari <span class="op">=</span> <span class="fu">mysqlTable</span>(<span class="st">&#39;portal_kullanicilari&#39;</span><span class="op">,</span> {</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">primaryKey</span>()<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  musteri_id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;musteri_id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  email<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;email&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">255</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">unique</span>()<span class="op">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  password_hash<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;password_hash&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">255</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  rol<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;rol&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">32</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="st">&#39;dealer&#39;</span>)<span class="op">,</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  is_active<span class="op">:</span> <span class="fu">tinyint</span>(<span class="st">&#39;is_active&#39;</span><span class="op">,</span> { unsigned<span class="op">:</span> <span class="kw">true</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="dv">1</span>)<span class="op">,</span></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  must_change_pw<span class="op">:</span> <span class="fu">tinyint</span>(<span class="st">&#39;must_change_pw&#39;</span><span class="op">,</span> { unsigned<span class="op">:</span> <span class="kw">true</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="dv">1</span>)<span class="op">,</span></span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  last_login_at<span class="op">:</span> <span class="fu">datetime</span>(<span class="st">&#39;last_login_at&#39;</span>)<span class="op">,</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  created_at<span class="op">:</span> <span class="fu">datetime</span>(<span class="st">&#39;created_at&#39;</span>)<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="fu">sql</span><span class="vs">`CURRENT_TIMESTAMP`</span>)<span class="op">,</span></span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  updated_at<span class="op">:</span> <span class="fu">datetime</span>(<span class="st">&#39;updated_at&#39;</span>)<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="fu">sql</span><span class="vs">`CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`</span>)<span class="op">,</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> portalSepet <span class="op">=</span> <span class="fu">mysqlTable</span>(<span class="st">&#39;portal_sepet&#39;</span><span class="op">,</span> {</span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">primaryKey</span>()<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  kullanici_id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;kullanici_id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  musteri_id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;musteri_id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  durum<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;durum&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">32</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="st">&#39;aktif&#39;</span>)<span class="op">,</span></span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  <span class="co">// aktif | siparise_donustu | terk_edildi</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  created_at<span class="op">:</span> <span class="fu">datetime</span>(<span class="st">&#39;created_at&#39;</span>)<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="fu">sql</span><span class="vs">`CURRENT_TIMESTAMP`</span>)<span class="op">,</span></span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  updated_at<span class="op">:</span> <span class="fu">datetime</span>(<span class="st">&#39;updated_at&#39;</span>)<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="fu">sql</span><span class="vs">`CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`</span>)<span class="op">,</span></span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> portalSepetKalemleri <span class="op">=</span> <span class="fu">mysqlTable</span>(<span class="st">&#39;portal_sepet_kalemleri&#39;</span><span class="op">,</span> {</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a>  id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">primaryKey</span>()<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a>  sepet_id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;sepet_id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  urun_id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;urun_id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  arac_marka<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;arac_marka&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">64</span> })<span class="op">,</span></span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  arac_model<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;arac_model&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">128</span> })<span class="op">,</span></span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  arac_yili<span class="op">:</span> <span class="fu">int</span>(<span class="st">&#39;arac_yili&#39;</span><span class="op">,</span> { unsigned<span class="op">:</span> <span class="kw">true</span> })<span class="op">,</span></span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  miktar<span class="op">:</span> <span class="fu">decimal</span>(<span class="st">&#39;miktar&#39;</span><span class="op">,</span> { precision<span class="op">:</span> <span class="dv">12</span><span class="op">,</span> scale<span class="op">:</span> <span class="dv">4</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  birim_fiyat<span class="op">:</span> <span class="fu">decimal</span>(<span class="st">&#39;birim_fiyat&#39;</span><span class="op">,</span> { precision<span class="op">:</span> <span class="dv">12</span><span class="op">,</span> scale<span class="op">:</span> <span class="dv">2</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span>  <span class="co">// iskonto sonrası</span></span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  liste_fiyat<span class="op">:</span> <span class="fu">decimal</span>(<span class="st">&#39;liste_fiyat&#39;</span><span class="op">,</span> { precision<span class="op">:</span> <span class="dv">12</span><span class="op">,</span> scale<span class="op">:</span> <span class="dv">2</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span>  <span class="co">// iskonto öncesi</span></span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  iskonto_yuzde<span class="op">:</span> <span class="fu">decimal</span>(<span class="st">&#39;iskonto_yuzde&#39;</span><span class="op">,</span> { precision<span class="op">:</span> <span class="dv">5</span><span class="op">,</span> scale<span class="op">:</span> <span class="dv">2</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>  created_at<span class="op">:</span> <span class="fu">datetime</span>(<span class="st">&#39;created_at&#39;</span>)<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="fu">sql</span><span class="vs">`CURRENT_TIMESTAMP`</span>)<span class="op">,</span></span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> portalAudit <span class="op">=</span> <span class="fu">mysqlTable</span>(<span class="st">&#39;portal_audit&#39;</span><span class="op">,</span> {</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">primaryKey</span>()<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  kullanici_id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;kullanici_id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">,</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  musteri_id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;musteri_id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">,</span></span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>  aksiyon<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;aksiyon&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">64</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  <span class="co">// login_basarili, login_hatali, logout, sepete_ekle, siparis_olustur, fiyat_goster</span></span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  entity_tipi<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;entity_tipi&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">64</span> })<span class="op">,</span></span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>  entity_id<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;entity_id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">128</span> })<span class="op">,</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>  metadata<span class="op">:</span> <span class="fu">json</span>(<span class="st">&#39;metadata&#39;</span>)<span class="op">,</span></span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>  ip_adresi<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;ip_adresi&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">45</span> })<span class="op">,</span></span>
+<span id="cb3-52"><a href="#cb3-52" aria-hidden="true" tabindex="-1"></a>  created_at<span class="op">:</span> <span class="fu">datetime</span>(<span class="st">&#39;created_at&#39;</span>)<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="fu">sql</span><span class="vs">`CURRENT_TIMESTAMP`</span>)<span class="op">,</span></span>
+<span id="cb3-53"><a href="#cb3-53" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb3-54"><a href="#cb3-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-55"><a href="#cb3-55" aria-hidden="true" tabindex="-1"></a><span class="co">// Araç katalog — sıfırdan</span></span>
+<span id="cb3-56"><a href="#cb3-56" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> aracModelleri <span class="op">=</span> <span class="fu">mysqlTable</span>(<span class="st">&#39;arac_modelleri&#39;</span><span class="op">,</span> {</span>
+<span id="cb3-57"><a href="#cb3-57" aria-hidden="true" tabindex="-1"></a>  id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">primaryKey</span>()<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-58"><a href="#cb3-58" aria-hidden="true" tabindex="-1"></a>  marka<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;marka&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">64</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-59"><a href="#cb3-59" aria-hidden="true" tabindex="-1"></a>  model<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;model&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">128</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-60"><a href="#cb3-60" aria-hidden="true" tabindex="-1"></a>  govde_tipi<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;govde_tipi&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">32</span> })<span class="op">,</span>  <span class="co">// sedan, hatchback, suv, station</span></span>
+<span id="cb3-61"><a href="#cb3-61" aria-hidden="true" tabindex="-1"></a>  yil_baslangic<span class="op">:</span> <span class="fu">int</span>(<span class="st">&#39;yil_baslangic&#39;</span><span class="op">,</span> { unsigned<span class="op">:</span> <span class="kw">true</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-62"><a href="#cb3-62" aria-hidden="true" tabindex="-1"></a>  yil_bitis<span class="op">:</span> <span class="fu">int</span>(<span class="st">&#39;yil_bitis&#39;</span><span class="op">,</span> { unsigned<span class="op">:</span> <span class="kw">true</span> })<span class="op">,</span></span>
+<span id="cb3-63"><a href="#cb3-63" aria-hidden="true" tabindex="-1"></a>  notlar<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;notlar&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">500</span> })<span class="op">,</span></span>
+<span id="cb3-64"><a href="#cb3-64" aria-hidden="true" tabindex="-1"></a>  is_active<span class="op">:</span> <span class="fu">tinyint</span>(<span class="st">&#39;is_active&#39;</span><span class="op">,</span> { unsigned<span class="op">:</span> <span class="kw">true</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="dv">1</span>)<span class="op">,</span></span>
+<span id="cb3-65"><a href="#cb3-65" aria-hidden="true" tabindex="-1"></a>  created_at<span class="op">:</span> <span class="fu">datetime</span>(<span class="st">&#39;created_at&#39;</span>)<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="fu">sql</span><span class="vs">`CURRENT_TIMESTAMP`</span>)<span class="op">,</span></span>
+<span id="cb3-66"><a href="#cb3-66" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span>
+<span id="cb3-67"><a href="#cb3-67" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-68"><a href="#cb3-68" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> urunAracUyumlulugu <span class="op">=</span> <span class="fu">mysqlTable</span>(<span class="st">&#39;urun_arac_uyumlulugu&#39;</span><span class="op">,</span> {</span>
+<span id="cb3-69"><a href="#cb3-69" aria-hidden="true" tabindex="-1"></a>  id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">primaryKey</span>()<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-70"><a href="#cb3-70" aria-hidden="true" tabindex="-1"></a>  urun_id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;urun_id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-71"><a href="#cb3-71" aria-hidden="true" tabindex="-1"></a>  arac_model_id<span class="op">:</span> <span class="fu">char</span>(<span class="st">&#39;arac_model_id&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">36</span> })<span class="op">.</span><span class="fu">notNull</span>()<span class="op">,</span></span>
+<span id="cb3-72"><a href="#cb3-72" aria-hidden="true" tabindex="-1"></a>  notlar<span class="op">:</span> <span class="fu">varchar</span>(<span class="st">&#39;notlar&#39;</span><span class="op">,</span> { length<span class="op">:</span> <span class="dv">500</span> })<span class="op">,</span></span>
+<span id="cb3-73"><a href="#cb3-73" aria-hidden="true" tabindex="-1"></a>  created_at<span class="op">:</span> <span class="fu">datetime</span>(<span class="st">&#39;created_at&#39;</span>)<span class="op">.</span><span class="fu">notNull</span>()<span class="op">.</span><span class="fu">default</span>(<span class="fu">sql</span><span class="vs">`CURRENT_TIMESTAMP`</span>)<span class="op">,</span></span>
+<span id="cb3-74"><a href="#cb3-74" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p><strong>Önemli:</strong> <code>iskonto</code> field’ı <code>musteriler</code> tablosunda <strong>yüzde olarak saklanıyor</strong> (5.00 = %5, 0.05 değil). Hesaplama:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> iskontoOrani <span class="op">=</span> <span class="bu">Number</span>(musteri<span class="op">.</span><span class="at">iskonto</span>) <span class="op">/</span> <span class="dv">100</span><span class="op">;</span> <span class="co">// 5.00 → 0.05</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> finalFiyat <span class="op">=</span> <span class="bu">Number</span>(urun<span class="op">.</span><span class="at">birim_fiyat</span>) <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> iskontoOrani)<span class="op">;</span></span></code></pre></div>
+<h2 id="sipariş-akışı-drafts-katmanı-gereksiz">Sipariş akışı — drafts katmanı gereksiz</h2>
+<p>Yapıştırılan strateji “portal_order_drafts → ERP sync” katmanı önerdi. Paspas için <strong>gereksiz</strong>:</p>
+<pre><code>Müşteri portal&#39;a sipariş yazar
+  ↓
+POST /portal/orders (Fastify route)
+  ↓
+Paspas backend transaction:
+  1. Sepet kalemlerini doğrula
+  2. Stok kontrol (stok_takip_aktif olanlar için)
+  3. Kredi limit kontrol (musteriler.kredi_limit — yeni alan)
+  4. satis_siparisleri/repository.ts:repoCreate çağır
+  5. portal_audit&#39;e yaz
+  6. Sepet durumu → &#39;siparise_donustu&#39;
+  ↓
+Sipariş gerçekten DB&#39;de oluşur (SS-2026-XXXX)
+  ↓
+Geri rapor: müşteriye onay numarası + termin</code></pre>
+<p><code>repoCreate</code> zaten transaction kullanıyor, kalemler oluşturuyor. Drafts katmanı eklemek lüzumsuz katman olur.</p>
+<h2 id="auth-mevcut-auth-modülünü-genişlet">Auth — mevcut <code>auth/</code> modülünü genişlet</h2>
+<p>Yapıştırılan stratejideki Auth.js v5 gereksiz. Paspas zaten Fastify JWT + cookie kullanıyor (<code>access_token</code>):</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode typescript"><code class="sourceCode typescript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="co">// backend/src/modules/portal/auth.controller.ts (yeni)</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> bcrypt <span class="im">from</span> <span class="st">&#39;bcryptjs&#39;</span><span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> <span class="im">type</span> { RouteHandler } <span class="im">from</span> <span class="st">&#39;fastify&#39;</span><span class="op">;</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { db } <span class="im">from</span> <span class="st">&#39;@/db/client&#39;</span><span class="op">;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { portalKullanicilari<span class="op">,</span> portalAudit } <span class="im">from</span> <span class="st">&#39;./schema&#39;</span><span class="op">;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { musteriler } <span class="im">from</span> <span class="st">&#39;@/modules/musteriler/schema&#39;</span><span class="op">;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { eq<span class="op">,</span> and } <span class="im">from</span> <span class="st">&#39;drizzle-orm&#39;</span><span class="op">;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> dealerLogin<span class="op">:</span> RouteHandler<span class="op">&lt;</span>{ Body<span class="op">:</span> { email<span class="op">:</span> <span class="dt">string</span><span class="op">;</span> password<span class="op">:</span> <span class="dt">string</span> } }<span class="op">&gt;</span> <span class="op">=</span> <span class="kw">async</span> (req<span class="op">,</span> reply) <span class="kw">=&gt;</span> {</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> { email<span class="op">,</span> password } <span class="op">=</span> req<span class="op">.</span><span class="at">body</span><span class="op">;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> ip <span class="op">=</span> req<span class="op">.</span><span class="at">ip</span><span class="op">;</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> [user] <span class="op">=</span> <span class="cf">await</span> db</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">select</span>()</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">from</span>(portalKullanicilari)</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">where</span>(<span class="fu">and</span>(<span class="fu">eq</span>(portalKullanicilari<span class="op">.</span><span class="at">email</span><span class="op">,</span> email<span class="op">.</span><span class="fu">toLowerCase</span>())<span class="op">,</span> <span class="fu">eq</span>(portalKullanicilari<span class="op">.</span><span class="at">is_active</span><span class="op">,</span> <span class="dv">1</span>)))</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">limit</span>(<span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>user) {</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> bcrypt<span class="op">.</span><span class="fu">compare</span>(password<span class="op">,</span> <span class="st">&#39;$2a$10$dummyhash&#39;</span>)<span class="op">;</span> <span class="co">// timing attack koruma</span></span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> reply<span class="op">.</span><span class="fu">code</span>(<span class="dv">401</span>)<span class="op">.</span><span class="fu">send</span>({ error<span class="op">:</span> { message<span class="op">:</span> <span class="st">&#39;invalid_credentials&#39;</span> } })<span class="op">;</span></span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> ok <span class="op">=</span> <span class="cf">await</span> bcrypt<span class="op">.</span><span class="fu">compare</span>(password<span class="op">,</span> user<span class="op">.</span><span class="at">password_hash</span>)<span class="op">;</span></span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>ok) {</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>    <span class="cf">await</span> db<span class="op">.</span><span class="fu">insert</span>(portalAudit)<span class="op">.</span><span class="fu">values</span>({ id<span class="op">:</span> <span class="fu">randomUUID</span>()<span class="op">,</span> kullanici_id<span class="op">:</span> user<span class="op">.</span><span class="at">id</span><span class="op">,</span> aksiyon<span class="op">:</span> <span class="st">&#39;login_hatali&#39;</span><span class="op">,</span> ip_adresi<span class="op">:</span> ip })<span class="op">;</span></span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> reply<span class="op">.</span><span class="fu">code</span>(<span class="dv">401</span>)<span class="op">.</span><span class="fu">send</span>({ error<span class="op">:</span> { message<span class="op">:</span> <span class="st">&#39;invalid_credentials&#39;</span> } })<span class="op">;</span></span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Müşteri aktif mi?</span></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> [musteri] <span class="op">=</span> <span class="cf">await</span> db<span class="op">.</span><span class="fu">select</span>()<span class="op">.</span><span class="fu">from</span>(musteriler)<span class="op">.</span><span class="fu">where</span>(<span class="fu">eq</span>(musteriler<span class="op">.</span><span class="at">id</span><span class="op">,</span> user<span class="op">.</span><span class="at">musteri_id</span>))<span class="op">.</span><span class="fu">limit</span>(<span class="dv">1</span>)<span class="op">;</span></span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (<span class="op">!</span>musteri <span class="op">||</span> musteri<span class="op">.</span><span class="at">is_active</span> <span class="op">!==</span> <span class="dv">1</span>) {</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> reply<span class="op">.</span><span class="fu">code</span>(<span class="dv">403</span>)<span class="op">.</span><span class="fu">send</span>({ error<span class="op">:</span> { message<span class="op">:</span> <span class="st">&#39;musteri_pasif&#39;</span> } })<span class="op">;</span></span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  <span class="co">// Mevcut Fastify JWT plugin&#39;ini kullan</span></span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> token <span class="op">=</span> req<span class="op">.</span><span class="at">server</span><span class="op">.</span><span class="at">jwt</span><span class="op">.</span><span class="fu">sign</span>({</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>    sub<span class="op">:</span> user<span class="op">.</span><span class="at">id</span><span class="op">,</span></span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>    musteri_id<span class="op">:</span> user<span class="op">.</span><span class="at">musteri_id</span><span class="op">,</span></span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>    role<span class="op">:</span> <span class="st">&#39;dealer&#39;</span><span class="op">,</span></span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>    email<span class="op">:</span> user<span class="op">.</span><span class="at">email</span><span class="op">,</span></span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a>  }<span class="op">,</span> { expiresIn<span class="op">:</span> <span class="st">&#39;7d&#39;</span> })<span class="op">;</span></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  reply<span class="op">.</span><span class="fu">setCookie</span>(<span class="st">&#39;access_token&#39;</span><span class="op">,</span> token<span class="op">,</span> {</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>    httpOnly<span class="op">:</span> <span class="kw">true</span><span class="op">,</span></span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>    secure<span class="op">:</span> <span class="bu">process</span><span class="op">.</span><span class="at">env</span><span class="op">.</span><span class="at">NODE_ENV</span> <span class="op">===</span> <span class="st">&#39;production&#39;</span><span class="op">,</span></span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>    sameSite<span class="op">:</span> <span class="st">&#39;lax&#39;</span><span class="op">,</span></span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>    path<span class="op">:</span> <span class="st">&#39;/&#39;</span><span class="op">,</span></span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>    maxAge<span class="op">:</span> <span class="dv">7</span> <span class="op">*</span> <span class="dv">24</span> <span class="op">*</span> <span class="dv">60</span> <span class="op">*</span> <span class="dv">60</span><span class="op">,</span></span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> db<span class="op">.</span><span class="fu">insert</span>(portalAudit)<span class="op">.</span><span class="fu">values</span>({ id<span class="op">:</span> <span class="fu">randomUUID</span>()<span class="op">,</span> kullanici_id<span class="op">:</span> user<span class="op">.</span><span class="at">id</span><span class="op">,</span> musteri_id<span class="op">:</span> user<span class="op">.</span><span class="at">musteri_id</span><span class="op">,</span> aksiyon<span class="op">:</span> <span class="st">&#39;login_basarili&#39;</span><span class="op">,</span> ip_adresi<span class="op">:</span> ip })<span class="op">;</span></span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> db<span class="op">.</span><span class="fu">update</span>(portalKullanicilari)<span class="op">.</span><span class="fu">set</span>({ last_login_at<span class="op">:</span> <span class="kw">new</span> <span class="bu">Date</span>() })<span class="op">.</span><span class="fu">where</span>(<span class="fu">eq</span>(portalKullanicilari<span class="op">.</span><span class="at">id</span><span class="op">,</span> user<span class="op">.</span><span class="at">id</span>))<span class="op">;</span></span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> reply<span class="op">.</span><span class="fu">send</span>({ ok<span class="op">:</span> <span class="kw">true</span><span class="op">,</span> must_change_pw<span class="op">:</span> user<span class="op">.</span><span class="at">must_change_pw</span> <span class="op">===</span> <span class="dv">1</span> })<span class="op">;</span></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p><code>requireAuth</code> middleware’i zaten var (mevcut <code>authPlugin</code>). Yeni middleware: <code>requireDealerRole</code> — token’da <code>role === 'dealer'</code> kontrol eder, müşterinin sadece kendi verisine erişimini sağlar.</p>
+<h2 id="frontend-dealer_portal-yeni-klasör">Frontend — <code>dealer_portal/</code> yeni klasör</h2>
+<p>Mevcut <code>admin_panel/</code> ile <strong>aynı seviyede</strong> üçüncü bir Next.js 16 projesi:</p>
+<pre><code>paspas/
+├── admin_panel/          (mevcut, yönetici UI)
+├── backend/              (mevcut, Fastify)
+├── dealer_portal/        (YENİ, bayi UI)
+│   ├── package.json
+│   ├── next.config.js
+│   ├── src/
+│   │   ├── app/
+│   │   │   ├── login/page.tsx
+│   │   │   ├── (dealer)/
+│   │   │   │   ├── dashboard/page.tsx
+│   │   │   │   ├── katalog/page.tsx
+│   │   │   │   ├── sepet/page.tsx
+│   │   │   │   ├── siparisler/page.tsx
+│   │   │   │   └── cari/page.tsx
+│   │   ├── integrations/
+│   │   │   └── portal-api.ts (RTK Query — admin_panel pattern&#39;iyle aynı)
+│   │   └── components/
+│   └── tailwind.config.js (admin_panel&#39;den kopyala)
+└── docs/</code></pre>
+<p><strong>Tech stack (admin_panel ile uyumlu):</strong> - Next.js 16 + React 19 + Tailwind 4 - Redux Toolkit + RTK Query (admin_panel’deki gibi, Server Actions değil) - shadcn/UI (mevcut bileşenler kopyalanır) - Auth: <code>access_token</code> cookie + Fastify JWT - API çağrıları: <code>http://localhost:8078/portal/*</code></p>
+<h2 id="haftalık-sprint-planı">4 haftalık sprint planı</h2>
+<h3 id="hafta-0-mevcut-müşteri-enrichment-1-hafta">Hafta 0 — Mevcut müşteri enrichment (1 hafta) ⚡</h3>
+<p>Önce 35 mevcut müşterinin verisini doldur:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gün</th>
+<th>İş</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1-2</td>
+<td>Google Places API setup + script: <code>scripts/enrich-musteriler.ts</code></td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>Pattern analizi (mevcut email formatları, telefon prefix’leri)</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Hunter.io domain search ile eksik email’leri çek</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Manuel doğrulama: yöneticiye 35 müşteri için “AI önerisi” panosu, tıkla onayla</td>
+</tr>
+<tr class="odd">
+<td>6-7</td>
+<td>Segment otomasyonu: %0-7 → toptancı, %8-25 → otomotiv, %26+ → küçük</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Çıktı:</strong> 35 müşterinin %90+ verisi tamam, segmentleri belirli.</p>
+<h3 id="hafta-1-portal-backend-db">Hafta 1 — Portal backend + DB</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gün</th>
+<th>İş</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>DB migration (<code>195_v1_portal_tablolari.sql</code>) — 7 yeni tablo</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><code>backend/src/modules/portal/</code> modülü iskeleti (schema, repository, controller, router)</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Auth: dealer login + JWT cookie + middleware (<code>requireDealerRole</code>)</td>
+</tr>
+<tr class="even">
+<td>4-5</td>
+<td>Catalog endpoint: <code>/portal/catalog</code> filtre + iskonto uygulama (server-side)</td>
+</tr>
+<tr class="odd">
+<td>6-7</td>
+<td>Sepet endpoints: <code>POST /portal/cart/items</code>, <code>DELETE /portal/cart/items/:id</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="hafta-2-portal-frontend-sipariş">Hafta 2 — Portal frontend + sipariş</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gün</th>
+<th>İş</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8-9</td>
+<td><code>dealer_portal/</code> Next.js 16 setup, login sayfası, dashboard skeleton</td>
+</tr>
+<tr class="even">
+<td>10-11</td>
+<td>Katalog sayfası: marka/model/yıl filtreleri + ürün listesi (RTK Query)</td>
+</tr>
+<tr class="odd">
+<td>12</td>
+<td>Sepet sayfası: ekle/sil/güncelle</td>
+</tr>
+<tr class="even">
+<td>13-14</td>
+<td>Checkout: kredi limit kontrol + <code>repoCreate</code> çağrısı + audit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hafta-3-cari-sipariş-geçmişi-polish">Hafta 3 — Cari, sipariş geçmişi, polish</h3>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gün</th>
+<th>İş</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>15</td>
+<td>Cari hesap sayfası: bakiye, vade, ekstre</td>
+</tr>
+<tr class="even">
+<td>16</td>
+<td>Sipariş geçmişi + detay sayfası</td>
+</tr>
+<tr class="odd">
+<td>17</td>
+<td>Yeniden sipariş özelliği (en çok aldığı 5 ürün)</td>
+</tr>
+<tr class="even">
+<td>18</td>
+<td>Email bildirim (sipariş alındı) — mevcut <code>mail/</code> modülü</td>
+</tr>
+<tr class="odd">
+<td>19</td>
+<td>Admin panel: <code>/admin/portal-kullanicilari</code> — yöneticinin bayi şifre yaratması</td>
+</tr>
+<tr class="even">
+<td>20-21</td>
+<td>E2E test (Playwright — mevcut altyapı), güvenlik kontrolü, deploy</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hafta-4-pilot-bayi-onboarding">Hafta 4 — Pilot bayi onboarding</h3>
+<p>5 stratejik müşteri seçimi (DB’den iskonto %0-7 olanlar): - Yöneticinin elle seçim listesi - Her birine WhatsApp ile login bilgisi - 1 hafta feedback toplama - Düzeltmeler sonrası tüm bayilere açma</p>
+<h2 id="ürün-araç-uyumluluk-verisi-kritik">Ürün-araç uyumluluk verisi — kritik</h2>
+<p>Yeni tablo <code>arac_modelleri</code> boş başlar. Doldurma stratejisi:</p>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 23%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Yöntem</th>
+<th>Hız</th>
+<th>Kalite</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Manuel (yönetici)</td>
+<td>Yavaş, 200-500 satır</td>
+<td>Yüksek</td>
+</tr>
+<tr class="even">
+<td>Excel import (mevcut paspas üretimden)</td>
+<td>Hızlı</td>
+<td>Orta (validation gerek)</td>
+</tr>
+<tr class="odd">
+<td>AI destekli (Claude/OpenAI) — “Toyota Corolla 2018 hangi paspas tipleri uyumlu”</td>
+<td>Orta</td>
+<td>Doğrulama gerek</td>
+</tr>
+<tr class="even">
+<td>Türkiye TUİK araç tescil verisi (public)</td>
+<td>Yavaş ama tam</td>
+<td>Yüksek</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pragmatik plan:</strong> İlk 30-40 araç modeli (en çok satan) manuel/Excel ile doldur — pazarın %80’i. Long-tail sonra.</p>
+<h2 id="multi-channel-sequence-faz-2-sonrası">Multi-channel sequence (Faz 2 sonrası)</h2>
+<p>Yapıştırılan stratejinin önerdiği toptancı sequence’i:</p>
+<pre><code>Gün 0:  Email + WhatsApp (paralel)
+Gün 3:  WhatsApp follow-up + numune teklifi
+Gün 7:  Telefon (manuel — satış temsilcisi)
+Gün 14: Email — kampanya/fırsat
+Gün 30: Aylık katalog/fiyat listesi</code></pre>
+<p>Bu Faz 4’e (yurt dışı + outreach) bağlanır. Şu an portal MVP odaklı.</p>
+<h2 id="açık-sorular">Açık sorular</h2>
+<ol type="1">
+<li><strong><code>musteri.iskonto</code> formatı:</strong> Şu an decimal(5,2) yüzde. UI’da 5.00 mu yoksa “%5” mi gösterilecek? Backend hesabı net.</li>
+<li><strong>Kredi limit alanı:</strong> <code>musteriler</code> tablosunda yok. Yeni alan ekleyelim mi (<code>kredi_limit decimal(12,2)</code>, <code>mevcut_bakiye decimal(12,2)</code>)?</li>
+<li><strong>Pilot 5 bayi seçimi:</strong> İskonto %0-7 olanlar otomatik mi seçilsin yoksa elle mi?</li>
+<li><strong>Araç katalog veri kaynağı:</strong> Excel export mevcut mu? Yoksa manuel + AI destekli mi başlanır?</li>
+<li><strong>B2B portal subdomain:</strong> <code>portal.paspas.com</code> mu, <code>bayi.paspas.com</code> mu? SSL setup?</li>
+<li><strong>Şifre sıfırlama:</strong> Email-based reset link, 24 saatlik token? Mail modülü hazır.</li>
+<li><strong>Stok görünürlüğü:</strong> Müşteri “5 adet kaldı” görsün mü, yoksa sadece “stokta var/yok”? B2B’de tam sayı yaygın.</li>
+</ol>
+<h2 id="bağımlılıklar">Bağımlılıklar</h2>
+<ul>
+<li>✅ <code>musteriler</code>, <code>urunler</code>, <code>satis_siparisleri/repoCreate</code> mevcut</li>
+<li>✅ Drizzle MySQL, Fastify JWT, Next.js 16 admin_panel pattern</li>
+<li>✅ Playwright e2e altyapısı (P3 Madde 3)</li>
+<li>⚠️ Mevcut müşteri enrichment scripti yok</li>
+<li>⚠️ Araç katalog tablosu yok</li>
+<li>⚠️ Kredi limit alanı <code>musteriler</code>’de yok</li>
+<li>⚠️ Bayi şifre yönetim UI’ı admin panelde yok</li>
+</ul>
+<h2 id="toplam-tahmini-süre">Toplam tahmini süre</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Hafta</th>
+<th>İçerik</th>
+<th>Süre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>Müşteri enrichment</td>
+<td>1 hafta</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>Portal backend + auth + catalog</td>
+<td>1 hafta</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>Frontend + sipariş akışı</td>
+<td>1 hafta</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>Cari + geçmiş + admin tarafı + test</td>
+<td>1 hafta</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Pilot onboarding</td>
+<td>1 hafta</td>
+</tr>
+<tr class="even">
+<td><strong>Toplam</strong></td>
+<td><strong>MVP</strong></td>
+<td><strong>5 hafta</strong></td>
+</tr>
+</tbody>
+</table>
+<p><a href="./06-yol-haritasi.md">06-yol-haritasi.md</a>’de bu, <strong>Faz 1.5 (enrichment) + Faz 2 (portal)</strong> olarak yer alır. Eski Faz 2 (talep AI) Faz 2.5’e kayar.</p>
+<h2 id="bir-sonraki-adım">Bir sonraki adım</h2>
+<ol type="1">
+<li>Bu doküman onaylanır mı?</li>
+<li>Onaylanırsa: <code>06-yol-haritasi.md</code> güncellenir (B2B portal Faz 2 olarak kayar, lead discovery Faz 3’e iter)</li>
+<li>Üstteki <strong>7 açık soruya</strong> cevap → Hafta 0 başlar</li>
+</ol>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("11 — B2B Bayi Portalı (Paspas Mimarisine Uyarlanmış)").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,90 @@
+{
+  "tr": {
+    "eyebrow": "Neden {{appName}}?",
+    "title": "Amazon kararlarında <em>veri</em> kazanır.",
+    "features": [
+      {
+        "num": "— I —",
+        "title": "5 Boyutlu <em>Risk Analizi</em>",
+        "body": "Kategori riski, SKU kaos, fiyat savaşı, marka güvenilirliği ve operasyonel risk — tek bir composite skor ile özetlenir.",
+        "meta": ["Kategori riski", "SKU kaos", "Fiyat savaşı"],
+        "settingKey": "ui_feature_risk_image",
+        "imageFallback": "/banners/slim_premium.svg",
+        "overlayLabel": "Risk skoru",
+        "imageAlt": "5 boyutlu risk analizi"
+      },
+      {
+        "num": "— II —",
+        "title": "Keepa <em>Fiyat Geçmişi</em>",
+        "body": "Gerçek zamanlı Keepa verisiyle fiyat trendi, buy box volatilite ve rakip hareketlerini izleyin.",
+        "meta": ["Fiyat trendi", "Buy box", "Rakip"],
+        "settingKey": "ui_feature_keepa_image",
+        "imageFallback": "/banners/slim_premium.svg",
+        "overlayLabel": "Keepa verisi",
+        "imageAlt": "Keepa fiyat geçmişi grafiği"
+      },
+      {
+        "num": "— III —",
+        "title": "AI Destekli <em>Karar Etiketi</em>",
+        "body": "GÜVENLİ · DİKKATLİ OL · GİRME — her keyword için net, gerekçeli bir öneri alın.",
+        "meta": ["GÜVENLİ", "DİKKATLİ OL", "GİRME"],
+        "settingKey": "ui_feature_decision_image",
+        "imageFallback": "/banners/slim_premium.svg",
+        "overlayLabel": "Karar etiketi",
+        "imageAlt": "AI karar etiketi"
+      }
+    ]
+  },
+  "en": {
+    "eyebrow": "Why {{appName}}?",
+    "title": "In Amazon decisions, <em>data</em> wins.",
+    "features": [
+      {
+        "num": "— I —",
+        "title": "5-Dimensional <em>Risk Analysis</em>",
+        "body": "Category risk, SKU chaos, price war, brand reliability and operational risk — summarized into one composite score.",
+        "meta": ["Category risk", "SKU chaos", "Price war"],
+        "settingKey": "ui_feature_risk_image",
+        "imageFallback": "/banners/slim_premium.svg",
+        "overlayLabel": "Risk score",
+        "imageAlt": "5-dimensional risk analysis"
+      },
+      {
+        "num": "— II —",
+        "title": "Keepa <em>Price History</em>",
+        "body": "Track price trends, buy box volatility and competitor moves with real-time Keepa data.",
+        "meta": ["Price trend", "Buy box", "Competitor"],
+        "settingKey": "ui_feature_keepa_image",
+        "imageFallback": "/banners/slim_premium.svg",
+        "overlayLabel": "Keepa data",
+        "imageAlt": "Keepa price history chart"
+      },
+      {
+        "num": "— III —",
+        "title": "AI-Powered <em>Decision Label</em>",
+        "body": "SAFE · PROCEED WITH CAUTION · DO NOT ENTER — get a clear, reasoned recommendation for every keyword.",
+        "meta": ["SAFE", "CAUTION", "DO NOT ENTER"],
+        "settingKey": "ui_feature_decision_image",
+        "imageFallback": "/banners/slim_premium.svg",
+        "overlayLabel": "Decision label",
+        "imageAlt": "AI decision label"
+      }
+    ]
+  },
+  "de": {
+    "eyebrow": "Warum {{appName}}?",
+    "title": "Bei Amazon-Entscheidungen gewinnen <em>Daten</em>.",
+    "features": [
+      {
+        "num": "— I —",
+        "title": "5-dimensionale <em>Risikoanalyse</em>",
+        "body": "Kategorierisiko, SKU-Chaos, Preiskampf, Markenzuverlässigkeit und operatives Risiko — in einem Composite Score zusammengefasst.",
+        "meta": ["Kategorierisiko", "SKU-Chaos", "Preiskampf"],
+        "settingKey": "ui_feature_risk_image",
+        "imageFallback": "/banners/slim_premium.svg",
+        "overlayLabel": "Risikoscore",
+        "imageAlt": "5-dimensionale Risikoanalyse"
+      }
+    ]
+  }
+}

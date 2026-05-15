@@ -1,0 +1,47 @@
+{
+  "name": "site-backend",
+  "version": "0.1.0",
+  "type": "module",
+  "scripts": {
+    "dev": "bun --hot src/index.ts",
+    "build": "bun x tsc -p tsconfig.json && bun x tsc-alias -p tsconfig.json",
+    "test": "bun test",
+    "start:bun": "bun dist/index.js",
+    "db:seed": "bun src/db/seed/index.ts",
+    "db:seed:nodrop": "bun src/db/seed/index.ts --no-drop"
+  },
+  "dependencies": {
+    "@fastify/cookie": "^11",
+    "@fastify/cors": "^11",
+    "@fastify/jwt": "^10",
+    "@fastify/multipart": "^9",
+    "@fastify/mysql": "^5.0.2",
+    "@fastify/rate-limit": "^10.3.0",
+    "@fastify/static": "^8.3.0",
+    "@fastify/swagger": "^9.7.0",
+    "@fastify/swagger-ui": "^5.2.5",
+    "@sentry/node": "^10.45.0",
+    "argon2": "^0.41.1",
+    "bcryptjs": "^3.0.2",
+    "cloudinary": "^2.6.1",
+    "dotenv": "^16.6.1",
+    "drizzle-orm": "^0.44.6",
+    "fastify": "^5",
+    "fastify-plugin": "^5.0.1",
+    "geoip-lite": "^1.4.10",
+    "google-auth-library": "^10.5.0",
+    "mysql2": "^3.15.3",
+    "nodemailer": "^8.0.7",
+    "sharp": "^0.34.5",
+    "zod": "^3.25.76",
+    "zod-to-json-schema": "^3.24.6"
+  },
+  "devDependencies": {
+    "@types/node": "20",
+    "@types/nodemailer": "^8.0.0",
+    "bun-types": "^1.3.1",
+    "pino-pretty": "^13.1.3",
+    "tsc-alias": "^1.8.16",
+    "typescript": "5"
+  }
+}

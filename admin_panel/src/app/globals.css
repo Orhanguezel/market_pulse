@@ -1,0 +1,331 @@
+/* src/app/globals.css */
+
+@import "tailwindcss";
+@import "tw-animate-css";
+
+/* Theme preset styles: these override CSS variables based on the selected data-theme-preset */
+@import "../styles/presets/brutalist.css";
+@import "../styles/presets/soft-pop.css";
+@import "../styles/presets/tangerine.css";
+
+/* Brand colors */
+:root {
+  /* Logo Primary Colors */
+  --logo-coral-light: #F4BDB3;      /* Highlights, light bg text */
+  --logo-coral: #E8A598;            /* Main brand color */
+  --logo-coral-medium: #D88D7E;     /* Default logo on light */
+  --logo-coral-dark: #C77665;       /* Logo on very light bg */
+  --logo-coral-darkest: #A6604F;    /* Text, details */
+  
+  /* Background Colors for Logo */
+  --logo-bg-light: #FDFCFB;         /* Light mode primary */
+  --logo-bg-white: #FFFFFF;         /* Pure white */
+  --logo-bg-dark: #1A1512;          /* Dark mode */
+  --logo-bg-black: #0A0806;         /* Pure black */
+  
+  /* Logo Accents */
+  --logo-gold: #E8C57A;             /* Accent touch */
+  --logo-shadow: rgba(232, 165, 152, 0.15);  /* Soft glow */
+}
+
+@custom-variant dark (&:is(.dark *));
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --radius-2xl: calc(var(--radius) + 8px);
+  --radius-3xl: calc(var(--radius) + 12px);
+  --radius-4xl: calc(var(--radius) + 16px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
+  --color-chart-5: var(--chart-5);
+  --color-sidebar: var(--sidebar);
+  --color-sidebar-foreground: var(--sidebar-foreground);
+  --color-sidebar-primary: var(--sidebar-primary);
+  --color-sidebar-primary-foreground: var(--sidebar-primary-foreground);
+  --color-sidebar-accent: var(--sidebar-accent);
+  --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
+  --color-sidebar-border: var(--sidebar-border);
+  --color-sidebar-ring: var(--sidebar-ring);
+
+  /* Brand Colors */
+  --color-logo-coral-light: var(--logo-coral-light);
+  --color-logo-coral: var(--logo-coral);
+  --color-logo-coral-medium: var(--logo-coral-medium);
+  --color-logo-coral-dark: var(--logo-coral-dark);
+  --color-logo-coral-darkest: var(--logo-coral-darkest);
+  --color-logo-bg-light: var(--logo-bg-light);
+  --color-logo-bg-white: var(--logo-bg-white);
+  --color-logo-bg-dark: var(--logo-bg-dark);
+  --color-logo-bg-black: var(--logo-bg-black);
+  --color-logo-gold: var(--logo-gold);
+
+  /* MarketPulse / admin accent (yesil) */
+  --color-brand-gold: var(--brand-gold);
+  --color-brand-gold-strong: var(--brand-gold-strong);
+  --color-brand-gold-soft: var(--brand-gold-soft);
+  --color-brand-gold-border: var(--brand-gold-border);
+  --color-brand-ink: var(--brand-ink);
+  --color-brand-cream: var(--brand-cream);
+
+  /* Risk severity tokens */
+  --color-risk-safe: oklch(0.63 0.195 155);
+  --color-risk-warn: oklch(0.78 0.165 90);
+  --color-risk-high: oklch(0.60 0.24 30);
+
+  /* Semantic status tokens (success / warning / error) */
+  --color-gm-success: oklch(0.63 0.195 155);
+  --color-gm-warning: oklch(0.78 0.165 90);
+  --color-gm-error: oklch(0.60 0.24 30);
+  --color-gm-gold: var(--brand-gold);
+
+  /* Aliases for cleaner code */
+  --color-gm-primary: var(--brand-gold);
+  --color-gm-primary-dark: var(--brand-gold-strong);
+  --color-gm-surface: var(--brand-cream);
+  --color-gm-bg: var(--brand-cream);
+  --color-gm-bg-deep: var(--background);
+  --color-gm-text: var(--brand-ink);
+  --color-gm-text-dim: oklch(0.45 0.012 50);
+  --color-gm-muted: var(--muted-foreground);
+  --color-gm-border-soft: var(--brand-gold-border);
+  --shadow-glow-primary: 0 0 20px rgba(22, 163, 74, 0.22);
+}
+
+/* Default theme styles (used when no data-theme-preset is set or when 'default' is selected).
+These serve as the fallback; there is no separate default.css file. */
+:root {
+  --radius: 0.625rem;
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.141 0.005 285.823);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.141 0.005 285.823);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.141 0.005 285.823);
+  /* Primary */
+  --primary: var(--logo-coral);
+  --primary-foreground: oklch(0.985 0 0); /* Light text on coral */
+  --secondary: oklch(0.967 0.001 286.375);
+  --secondary-foreground: oklch(0.21 0.006 285.885);
+  --muted: oklch(0.967 0.001 286.375);
+  --muted-foreground: oklch(0.552 0.016 285.938);
+  --accent: oklch(0.967 0.001 286.375);
+  --accent-foreground: oklch(0.21 0.006 285.885);
+  --destructive: oklch(0.577 0.245 27.325);
+  --border: oklch(0.92 0.004 286.32);
+  --input: oklch(0.92 0.004 286.32);
+  --ring: oklch(0.708 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  /* Sidebar — açık zemin, yeşil vurgu */
+  --sidebar: oklch(0.97 0.02 145);
+  --sidebar-foreground: oklch(0.28 0.06 145);
+  --sidebar-primary: oklch(0.55 0.17 145);
+  --sidebar-primary-foreground: oklch(0.98 0.01 145);
+  --sidebar-accent: oklch(0.94 0.04 145);
+  --sidebar-accent-foreground: oklch(0.28 0.06 145);
+  --sidebar-border: oklch(0.88 0.04 145 / 0.5);
+  --sidebar-ring: oklch(0.55 0.17 145);
+
+  --brand-gold: #22c55e;
+  --brand-gold-strong: #15803d;
+  --brand-gold-soft: rgba(22, 163, 74, 0.08);
+  --brand-gold-border: rgba(22, 101, 52, 0.22);
+  --brand-ink: #14532d;
+  --brand-cream: #f7fee7;
+
+  /* fonts */
+  --font-sans: var(--font-inter);
+  --font-mono: var(--font-geist-mono);
+}
+
+.dark {
+  --background: oklch(0.141 0.005 285.823);
+  --foreground: oklch(0.985 0 0);
+  --card: oklch(0.21 0.006 285.885);
+  --card-foreground: oklch(0.985 0 0);
+  --popover: oklch(0.21 0.006 285.885);
+  --popover-foreground: oklch(0.985 0 0);
+  /* Primary Dark: Coral Light or Medium */
+  --primary: var(--logo-coral-medium);
+  --primary-foreground: oklch(0.141 0.005 285.823); /* Dark text on light coral */
+  --secondary: oklch(0.274 0.006 286.033);
+  --secondary-foreground: oklch(0.985 0 0);
+  --muted: oklch(0.274 0.006 286.033);
+  --muted-foreground: oklch(0.705 0.015 286.067);
+  --accent: oklch(0.274 0.006 286.033);
+  --accent-foreground: oklch(0.985 0 0);
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+  --chart-1: oklch(0.809 0.105 251.813);
+  --chart-2: oklch(0.623 0.214 259.815);
+  --chart-3: oklch(0.546 0.245 262.881);
+  --chart-4: oklch(0.488 0.243 264.376);
+  --chart-5: oklch(0.424 0.199 265.638);
+  /* Sidebar — dark mode: diğer temalarla aynı yaklaşım (siyah zemin + beyaz text) */
+  --sidebar: oklch(0 0 0);
+  --sidebar-foreground: oklch(1 0 0);
+  --sidebar-primary: oklch(0.68 0.18 145);
+  --sidebar-primary-foreground: oklch(0 0 0);
+  --sidebar-accent: oklch(0.60 0.20 145);
+  --sidebar-accent-foreground: oklch(0 0 0);
+  --sidebar-border: oklch(1 0 0 / 0.1);
+  --sidebar-ring: oklch(0.68 0.18 145);
+
+  --brand-gold: #4ade80;
+  --brand-gold-strong: #22c55e;
+  --brand-gold-soft: rgba(74, 222, 128, 0.1);
+  --brand-gold-border: rgba(167, 243, 208, 0.2);
+  --brand-ink: #f7fee7;
+  --brand-cream: #052e16;
+}
+
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: var(--font-sans), system-ui, sans-serif;
+  }
+}
+
+@layer utilities {
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-2xs {
+    box-shadow: var(--shadow-2xs);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-xs {
+    box-shadow: var(--shadow-xs);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-sm {
+    box-shadow: var(--shadow-sm);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow {
+    box-shadow: var(--shadow);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-md {
+    box-shadow: var(--shadow-md);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-lg {
+    box-shadow: var(--shadow-lg);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-xl {
+    box-shadow: var(--shadow-xl);
+  }
+
+  [data-theme-preset]:not([data-theme-preset="default"]) .shadow-2xl {
+    box-shadow: var(--shadow-2xl);
+  }
+
+  html[data-font="inter"] body {
+    --font-sans: var(--font-inter);
+  }
+  html[data-font="roboto"] body {
+    --font-sans: var(--font-roboto);
+  }
+  html[data-font="poppins"] body {
+    --font-sans: var(--font-poppins);
+  }
+  html[data-font="geist"] body {
+    --font-sans: var(--font-geist);
+  }
+  html[data-font="geistMono"] body {
+    --font-sans: var(--font-geist-mono);
+  }
+  html[data-font="jakarta"] body {
+    --font-sans: var(--font-jakarta);
+  }
+  html[data-font="nunito"] body {
+    --font-sans: var(--font-nunito);
+  }
+  html[data-font="gabriela"] body {
+    --font-sans: var(--font-gabriela);
+  }
+  html[data-font="outfit"] body {
+    --font-sans: var(--font-outfit);
+  }
+  html[data-font="manrope"] body {
+    --font-sans: var(--font-manrope);
+  }
+  html[data-font="dmSans"] body {
+    --font-sans: var(--font-dm-sans);
+  }
+  html[data-font="greatVibes"] body {
+    --font-sans: var(--font-great-vibes);
+  }
+}
+
+html {
+  overscroll-behavior: none;
+}
+
+.disable-transitions * {
+  transition: none !important;
+}
+
+@media print {
+  /* Sadece içerik alanı yazdırılsın */
+  [data-sidebar],
+  [data-slot="sidebar"],
+  nav,
+  header,
+  footer,
+  .print\:hidden {
+    display: none !important;
+  }
+
+  body,
+  html {
+    background: white !important;
+    color: black !important;
+  }
+
+  /* Sidebar genişliğini sıfırla, içerik tam sayfa olsun */
+  [data-slot="sidebar-inset"] {
+    margin-left: 0 !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+
+  /* Kartların kenarlıklarını ve arka planını düz tut */
+  .rounded-\[28px\],
+  .rounded-\[2rem\],
+  .rounded-\[2\.5rem\] {
+    border-radius: 0 !important;
+    box-shadow: none !important;
+  }
+}

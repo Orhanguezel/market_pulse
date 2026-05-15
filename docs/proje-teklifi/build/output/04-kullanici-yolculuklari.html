@@ -1,0 +1,845 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>04 — Kullanıcı Yolculukları — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="tartisma/index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="tartisma/12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="tartisma/13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="tartisma/14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="tartisma/15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>04 — Kullanıcı Yolculukları</strong></div>
+  <div class="actions">
+    <a href="index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="kullanıcı-yolculukları">04 — Kullanıcı Yolculukları</h1>
+<p>Bu doküman MatPortal’ın <strong>gerçek kullanıcı senaryolarını</strong> uçtan uca anlatır. Hangi kullanıcı, hangi ekrana, hangi sıra ile gider; sistem ne yapar, ne göstermez. Wireframe yerine <strong>akış metni + ekran ekran karar noktaları</strong> kullanılır.</p>
+<h2 id="kullanıcı-tipleri">Kullanıcı Tipleri</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 20%" />
+<col style="width: 58%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tip</th>
+<th>Rol</th>
+<th>Ana modüller</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>B-1</strong></td>
+<td>Bayi Admin (yetkili)</td>
+<td>Faz 6 (tümü)</td>
+</tr>
+<tr class="even">
+<td><strong>B-2</strong></td>
+<td>Bayi Operator</td>
+<td>Faz 6 (sınırlı — sipariş ver)</td>
+</tr>
+<tr class="odd">
+<td><strong>B-3</strong></td>
+<td>Bayi Görüntüleyici</td>
+<td>Faz 6 (read-only)</td>
+</tr>
+<tr class="even">
+<td><strong>Y-1</strong></td>
+<td>Yönetici (sistem admin)</td>
+<td>Hepsi</td>
+</tr>
+<tr class="odd">
+<td><strong>Y-2</strong></td>
+<td>Satış sorumlusu</td>
+<td>Faz 1, 3, 5, 6 (yönetim)</td>
+</tr>
+<tr class="even">
+<td><strong>Y-3</strong></td>
+<td>Üretim planlama</td>
+<td>Faz 2, 4</td>
+</tr>
+<tr class="odd">
+<td><strong>Y-4</strong></td>
+<td>Saha satış elemanı</td>
+<td>Faz 9 (mobil) + Faz 5 (radar) + Faz 3 (lead)</td>
+</tr>
+<tr class="even">
+<td><strong>Y-5</strong></td>
+<td>Muhasebeci</td>
+<td>Paspas mevcut + Faz 6 cari onay</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="yolculuk-1-bayi-ilk-sipariş-verme-b-1">Yolculuk #1 — Bayi: İlk Sipariş Verme (B-1)</h2>
+<p><strong>Aktör:</strong> Bayi admin Mehmet — İstanbul Oto Aksesuar <strong>Senaryo:</strong> Mehmet portal’ı ilk kez kullanıyor, Toyota Corolla 2018 paspasları için sipariş verecek.</p>
+<h3 id="adım-1-davet-emaili">Adım 1 — Davet email’i</h3>
+<pre><code>[Mehmet&#39;in inbox&#39;ı]
+Konu: Promats Bayi Portalı — Erişim Bilgileriniz
+
+Sayın Mehmet Bey,
+İstanbul Oto Aksesuar adına Promats Bayi Portalı hesabınız oluşturulmuştur.
+
+Giriş için: portal.promats.com.tr
+Email: mehmet@iao.com.tr
+Geçici şifre: Tx9$kpL2
+
+İlk girişte şifre değişikliği zorunludur.
+Sorularınız için yöneticimiz Ali Bey: 0532-XXX-XXXX</code></pre>
+<h3 id="adım-2-ilk-giriş">Adım 2 — İlk giriş</h3>
+<pre><code>URL: portal.promats.com.tr
+─────────────────────────────────
+[Ekran: Login formu]
+  • Email
+  • Şifre
+  • [Giriş Yap]
+  • [Şifremi unuttum]
+
+→ Mehmet email + geçici şifre girer
+→ Sistem doğrulama: ✓
+→ &quot;İlk girişte şifre değiştirin&quot; zorunlu yönlendirme
+─────────────────────────────────
+[Ekran: Şifre değiştirme]
+  • Yeni şifre (min 10 karakter, complexity)
+  • Yeni şifre tekrar
+  • [Değiştir]
+
+→ Audit log: &quot;İlk giriş, şifre değişti&quot;
+→ Dashboard&#39;a yönlendirme</code></pre>
+<h3 id="adım-3-dashboard">Adım 3 — Dashboard</h3>
+<pre><code>[Ekran: Dashboard]
+┌─────────────────────────────────────────────────┐
+│ Hoş geldiniz, Mehmet                            │
+├─────────────────────────────────────────────────┤
+│ 💰 Cari bakiye: 0₺                              │
+│    Vade: yok (yeni hesap)                       │
+├─────────────────────────────────────────────────┤
+│ 🚗 Hızlı katalog: [Markaya göre ara →]          │
+├─────────────────────────────────────────────────┤
+│ 📢 Kampanya: 3D Paspas Yaz İndirimi %15         │
+│    [İncele →]                                   │
+├─────────────────────────────────────────────────┤
+│ 📋 Son siparişler: henüz sipariş yok            │
+└─────────────────────────────────────────────────┘</code></pre>
+<h3 id="adım-4-katalog-ve-araç-eşleştirme">Adım 4 — Katalog ve araç eşleştirme</h3>
+<pre><code>→ Mehmet &quot;Hızlı katalog&quot;a tıklar
+─────────────────────────────────
+[Ekran: Araç seçimi]
+  Marka: [Toyota ▼]
+  Model: [Corolla ▼]      ← seçtikten sonra
+  Yıl:   [2018 ▼]
+  Gövde: [Sedan ▼]
+
+  [Uyumlu ürünleri göster →]
+
+→ Sistem `urun_arac_uyumlulugu` join
+→ İlgili paspas listesi gelir
+─────────────────────────────────
+[Ekran: Uyumlu ürünler]
+┌─────────────────────────────────────────────────┐
+│ 🔵 Star Siyah Kauçuk Havuz                      │
+│    SKU: STR-SIY-COR18  •  Stok: 245 adet ✓      │
+│    Fiyat: 285₺ (size özel %5 iskonto)           │
+│    [Sepete ekle]  [Detay →]                     │
+├─────────────────────────────────────────────────┤
+│ 🔵 Premium 3D Mat                               │
+│    SKU: P3D-COR18  •  Stok: 18 adet ⚠ az kaldı  │
+│    Fiyat: 420₺                                  │
+│    [Sepete ekle]  [Detay →]                     │
+├─────────────────────────────────────────────────┤
+│ 🔵 Halı Klasik                                  │
+│    SKU: HAL-COR18  •  Stokta yok ✗              │
+│    [Numune talep et]                            │
+└─────────────────────────────────────────────────┘</code></pre>
+<h3 id="adım-5-sepete-ekleme-checkout">Adım 5 — Sepete ekleme + checkout</h3>
+<pre><code>→ Mehmet &quot;Star Siyah&quot; 50 adet, &quot;Premium 3D&quot; 10 adet sepete ekler
+─────────────────────────────────
+[Ekran: Sepet]
+┌─────────────────────────────────────────────────┐
+│ Star Siyah Kauçuk    50 × 285₺ = 14.250₺        │
+│ Premium 3D Mat       10 × 420₺ = 4.200₺         │
+├─────────────────────────────────────────────────┤
+│ Ara toplam:                       18.450₺       │
+│ KDV (%20):                         3.690₺       │
+│ Genel toplam:                     22.140₺       │
+├─────────────────────────────────────────────────┤
+│         [Devam et →]                            │
+└─────────────────────────────────────────────────┘
+
+→ &quot;Devam et&quot; → Adres + ödeme
+─────────────────────────────────
+[Ekran: Adres + ödeme]
+  Sevkiyat adresi:
+  [İstanbul Oto Aksesuar — Mecidiyeköy Şubesi ▼]
+
+  Ödeme tipi:
+  ○ Vadeli (yeni hesap, vade yok)
+  ● Havale / EFT
+  ○ Kart ile öde (yakında)
+
+  [Devam →]
+
+→ Yeni hesap, vade yok → vadeli pasif
+→ Havale seçilir
+─────────────────────────────────
+[Ekran: Onay]
+  Sevkiyat: İstanbul Oto Aksesuar — Mecidiyeköy
+  Tahmini teslim: 3-5 iş günü
+  Toplam: 22.140₺
+  Ödeme: Havale (sipariş onayında IBAN gönderilecek)
+
+  [Siparişi onayla]</code></pre>
+<h3 id="adım-6-sipariş-onayı-sonraki">Adım 6 — Sipariş onayı + sonraki</h3>
+<pre><code>→ Onay tıklanır
+→ Backend: `repoCreate(satis_siparisleri)` — Paspas akışına düşer
+→ `siparis_kalemleri` oluşturulur
+→ Stok rezervasyonu (transaction)
+→ Email: &quot;Siparişiniz alındı: SS-2026-0125&quot;
+→ Portal bildirimi
+─────────────────────────────────
+[Ekran: Sipariş başarılı]
+  ✓ Siparişiniz alındı
+  Numara: SS-2026-0125
+  Tutar: 22.140₺
+
+  Yapılacaklar:
+  • Bu emailde gönderilen IBAN&#39;a havale yapın
+  • Havale dekontunu satış@promats.com.tr&#39;ye gönderin
+  • Ödemenin görülmesiyle üretime aktarılacak
+
+  [Siparişlerime git →]</code></pre>
+<p><strong>Toplam süre:</strong> ~5 dakika (bayi alıştığında <strong>2-3 dakika</strong>).</p>
+<hr />
+<h2 id="yolculuk-2-bayi-tekrar-sipariş-cari-sorgu-b-1">Yolculuk #2 — Bayi: Tekrar Sipariş + Cari Sorgu (B-1)</h2>
+<p><strong>Senaryo:</strong> Mehmet 2 ay sonra portal’a giriyor. Hem geçen ayki siparişin durumunu görmek hem yeni sipariş vermek istiyor.</p>
+<h3 id="adım-1-login-dashboard">Adım 1 — Login + dashboard</h3>
+<pre><code>→ Login (alışkanlık: 30 saniye)
+─────────────────────────────────
+[Ekran: Dashboard]
+┌─────────────────────────────────────────────────┐
+│ 💰 Cari bakiye: 22.140₺ (vadeli)                │
+│    ⚠ Son ödeme tarihi: 15 Mayıs (3 gün kaldı!) │
+├─────────────────────────────────────────────────┤
+│ 📦 Aktif sipariş: 1                             │
+│    SS-2026-0142 • Üretimde • ETA: 12 Mayıs      │
+├─────────────────────────────────────────────────┤
+│ 🔄 Son aldıklarım: [Tek tıkla yeniden sipariş→] │
+│    • Star Siyah Corolla 2018 (50 adet)          │
+│    • Premium 3D Mat (10 adet)                   │
+└─────────────────────────────────────────────────┘</code></pre>
+<h3 id="adım-2-sipariş-takibi">Adım 2 — Sipariş takibi</h3>
+<pre><code>→ &quot;SS-2026-0142&quot; tıklanır
+─────────────────────────────────
+[Ekran: Sipariş detay]
+  Sipariş: SS-2026-0142
+  Tarih: 8 Mayıs 2026
+  Tutar: 18.420₺
+
+  Statü zinciri:
+  ✓ Onaylandı (8 May 14:23)
+  ✓ Üretime alındı (9 May 09:15)
+  ◉ Üretimde — Makine M-04 (45/100 adet tamamlandı)
+  ○ Tamamlandı
+  ○ Kargoda
+  ○ Teslim
+
+  Tahmini teslim: 12 Mayıs 2026
+
+  [Sipariş kalemlerini gör] [Yeniden sipariş et]</code></pre>
+<h3 id="adım-3-cari-ekstre">Adım 3 — Cari ekstre</h3>
+<pre><code>→ Üst menüden &quot;Cari Hesap&quot; tıklanır
+─────────────────────────────────
+[Ekran: Cari hesap]
+  Bakiye: 22.140₺ vadeli (15 May ödeme)
+
+  Vadeli faturalar:
+  • F-2026-3421 — 22.140₺ — Vade: 15 May 2026
+    [PDF indir] [Mutabakat formu]
+
+  Yaklaşan ödemeler (30 gün):
+  • 15 Mayıs: 22.140₺
+
+  Ekstre:
+  [Tarih aralığı seç] [Göster]</code></pre>
+<p><strong>Toplam süre:</strong> ~2 dakika.</p>
+<hr />
+<h2 id="yolculuk-3-yönetici-yeni-bayi-onboarding-y-1">Yolculuk #3 — Yönetici: Yeni Bayi Onboarding (Y-1)</h2>
+<p><strong>Aktör:</strong> Promats yöneticisi Ayşe <strong>Senaryo:</strong> Yeni bir bayi (Ankara Oto Market) Promats ile sözleşme imzaladı. Ayşe portal hesabını oluşturacak.</p>
+<h3 id="adım-1-müşteri-kaydı-kontrolü">Adım 1 — Müşteri kaydı kontrolü</h3>
+<pre><code>→ Ayşe Paspas admin panel &quot;Müşteriler&quot; sayfasına gider
+→ &quot;Ankara Oto Market&quot; mevcutsa devam, yoksa yeni müşteri kaydı
+→ Bu adım Paspas&#39;ta zaten var (mevcut akış)</code></pre>
+<h3 id="adım-2-bayi-portal-hesabı-oluşturma">Adım 2 — Bayi portal hesabı oluşturma</h3>
+<pre><code>→ Sidebar &gt; &quot;Bayi Portalı&quot; &gt; &quot;Bayi Yönetimi&quot;
+─────────────────────────────────
+[Ekran: Bayi yönetimi]
+  Aktif bayiler: 35
+
+  [+ Yeni bayi hesabı oluştur]
+
+→ Tıklar
+─────────────────────────────────
+[Ekran: Yeni bayi hesabı]
+  Müşteri: [Ankara Oto Market ▼]   ← `musteriler` tablosundan
+  Bayi yöneticisi:
+    Ad: Selim Bey
+    Email: selim@aom.com.tr
+    Telefon: 0532-XXX-XXXX
+    Rol: Bayi Admin
+
+  İskonto: %5 (varsayılan, segment B&#39;ye göre)
+  Kredi limiti: 50.000₺
+  Vade: 30 gün
+
+  [Hesabı oluştur ve email gönder]
+
+→ Backend:
+  - portal_kullanicilari kayıt
+  - Geçici şifre üretimi
+  - Email gönderimi (Brevo)
+  - Audit log: &quot;Yeni bayi hesabı oluşturuldu&quot;</code></pre>
+<h3 id="adım-3-sonrası">Adım 3 — Sonrası</h3>
+<pre><code>→ Ayşe bayi listesine döner
+→ &quot;Selim Bey&quot; yeni eklenmiş, &quot;İlk giriş bekliyor&quot; durumu
+→ 3 gün içinde Selim giriş yapmazsa hatırlatma email otomatik</code></pre>
+<p><strong>Toplam süre:</strong> ~3 dakika.</p>
+<hr />
+<h2 id="yolculuk-4-yönetici-tahmin-motoru-sonucu-incele-y-3">Yolculuk #4 — Yönetici: Tahmin Motoru Sonucu İncele (Y-3)</h2>
+<p><strong>Aktör:</strong> Üretim planlama sorumlusu Hakan <strong>Senaryo:</strong> Pazartesi sabah, önümüzdeki 30 gün için sipariş tahminini görüp üretim planı yapacak.</p>
+<h3 id="adım-1-tahmin-dashboardu">Adım 1 — Tahmin dashboard’u</h3>
+<pre><code>→ Sidebar &gt; &quot;Tahmin Motoru&quot;
+─────────────────────────────────
+[Ekran: Tahmin dashboard]
+  Önümüzdeki 30 gün toplam tahmin:
+  ▼ 4.250 adet (geçen aya göre +%8)
+
+  Heatmap (bayi × hafta):
+  [INTERAKTIF GRİ-KOYU GRADİENT TABLOSU]
+  Y: 50 bayi
+  X: hafta 1, 2, 3, 4
+
+  Top yükselen 5 bayi:
+  1. İstanbul Oto Aksesuar  +%35 (400 adet ↑)
+  2. Ege Oto Paspas         +%22 (180 adet ↑)
+  ...
+
+  Top düşen 5 bayi:
+  1. Karadeniz Oto Malzeme  -%40 (geçen ay 200 → bu ay 120)
+     ⚠ Churn skoru: 65 (yüksek risk) → [Bayi Radarı]
+  ...
+
+  [Tüm bayi tablosu] [Excel&#39;e aktar]</code></pre>
+<h3 id="adım-2-bir-bayinin-detayı">Adım 2 — Bir bayinin detayı</h3>
+<pre><code>→ &quot;İstanbul Oto Aksesuar&quot; satırı tıklanır
+─────────────────────────────────
+[Ekran: Bayi tahmin detay]
+  Bayi: İstanbul Oto Aksesuar
+
+  Sipariş geçmişi (son 12 ay):
+  [GRAFİK: aylık sipariş trend]
+
+  Tahmin (30 gün):
+  • Star Siyah Corolla:  120 adet (95 - 145, %95 güven)
+  • Star Siyah Megane:    80 adet (65 - 95)
+  • Premium 3D Civic:     45 adet (30 - 60)
+  Toplam: 245 adet
+
+  Neden bu tahmin? (sinyal listesi)
+  ✓ Geçen yıl Mayıs: 230 adet (+40 etki)
+  ✓ Son 30 gün ortalama: yüksek (+25)
+  ✓ Mayıs sektör ay-içi: yüksek (+15)
+  ⚠ USD/TRY artış: hafif düşüş (-5)
+  ⚠ Kampanya aktif: belirgin etki (+10)
+
+  Yöntem: Prophet  •  Güven: 0.92  •  MAPE 90gün: %18</code></pre>
+<h3 id="adım-3-hakanın-aksiyonu">Adım 3 — Hakan’ın aksiyonu</h3>
+<pre><code>→ &quot;Üretim Planı&#39;na aktar&quot; butonu (Faz 2 v2)
+→ Otomatik üretim emri taslağı oluşur
+→ Hakan onaylar / düzenler
+→ Üretim planlamaya düşer</code></pre>
+<p><strong>Toplam süre:</strong> ~10 dakika (alışkanlık: 5 dk).</p>
+<hr />
+<h2 id="yolculuk-5-yönetici-churn-alarm-aksiyon-y-2">Yolculuk #5 — Yönetici: Churn Alarm + Aksiyon (Y-2)</h2>
+<p><strong>Aktör:</strong> Satış sorumlusu Burcu <strong>Senaryo:</strong> Pazartesi sabah email gelir: “3 bayi kritik churn riskinde”. Burcu inceler, aksiyon alır.</p>
+<h3 id="adım-1-email-dashboard">Adım 1 — Email + dashboard</h3>
+<pre><code>[Email]
+Konu: ⚠ Bayi Radarı — 3 kritik risk
+
+3 bayide kritik churn riski tespit edildi:
+1. Karadeniz Oto Malzeme — Skor: 78
+2. Bursa Aksesuar Center — Skor: 72
+3. Adana Otomotiv         — Skor: 70
+
+Detaylar için: portal.promats.com.tr/admin/bayi-radari
+─────────────────────────────────
+→ Burcu link tıklar, login sonrası
+─────────────────────────────────
+[Ekran: Bayi Radarı]
+  Top 3 kritik:
+
+  🔴 Karadeniz Oto Malzeme  • Skor 78
+     Sinyaller:
+     • Web sitesinde yeni rakip marka belirdi (+30)
+     • Instagram 67 gün post yok (+20)
+     • Son 60 gün sipariş %40 düşük (+15)
+     • Yorum sayısı %50 azaldı (+13)
+
+     Önerilen aksiyon (LLM):
+     1️⃣ Telefon araması + %5 ek iskonto (etki: 78→50)
+     2️⃣ Saha ziyareti + ürün eğitimi (78→35)
+     3️⃣ Özel kampanya (78→60)
+
+     [Aksiyon ata →]
+
+  🔴 Bursa Aksesuar Center • Skor 72
+  ...</code></pre>
+<h3 id="adım-2-aksiyon-atama">Adım 2 — Aksiyon atama</h3>
+<pre><code>→ Burcu &quot;Karadeniz Oto&quot; için &quot;Saha ziyareti&quot; seçer
+→ Saha ekibi atama
+─────────────────────────────────
+[Ekran: Aksiyon atama]
+  Bayi: Karadeniz Oto Malzeme
+  Aksiyon: Saha ziyareti + ürün eğitimi
+  Atanacak: [Saha ekibi → Mert Bey ▼]
+  Hedef tarih: [Bu Cuma]
+  Bütçe: 0₺ (ulaşım ekipte)
+  Notlar: [Boş]
+
+  [Ata ve bildir]
+
+→ Mert mobile push: &quot;Yeni saha ziyareti atandı: Karadeniz Oto&quot;
+→ Audit log: &quot;Burcu → Mert: aksiyon atadı&quot;
+→ Skor takibi başlar (önce/sonra)</code></pre>
+<h3 id="adım-3-saha-ziyareti-mert">Adım 3 — Saha ziyareti (Mert)</h3>
+<pre><code>[Mert&#39;in saha mobil app&#39;i — Yolculuk #6&#39;ya bağlanır]</code></pre>
+<p><strong>Toplam süre:</strong> ~5 dakika (Burcu için).</p>
+<hr />
+<h2 id="yolculuk-6-saha-satış-bayi-ziyareti-y-4">Yolculuk #6 — Saha satış: Bayi Ziyareti (Y-4)</h2>
+<p><strong>Aktör:</strong> Saha satış elemanı Mert <strong>Senaryo:</strong> Karadeniz Oto Malzeme’yi ziyaret edecek, mobil app’ten ziyaret kaydı tutar.</p>
+<h3 id="adım-1-sabah-görev-listesi">Adım 1 — Sabah görev listesi</h3>
+<pre><code>[Mobil ekran: Bugünkü görevler]
+  📍 Saha ziyareti — Karadeniz Oto Malzeme
+     Adres: Trabzon ...
+     Skor: 78 (kritik)
+     Atayan: Burcu
+     Tarih: Bugün
+
+  📍 Rutin ziyaret — Trabzon Aksesuar
+     Skor: 25 (stabil)
+
+  [Rotayı haritada göster]</code></pre>
+<h3 id="adım-2-ziyaret-esnasında">Adım 2 — Ziyaret esnasında</h3>
+<pre><code>→ Mert dükkana varır, ziyaret butonuna basar
+─────────────────────────────────
+[Mobil: Ziyaret formu]
+  Bayi: Karadeniz Oto Malzeme
+  Konum: ✓ doğrulandı (GPS)
+  Saat: 14:30
+
+  Ziyaret tipi: [Saha satış / Şikayet / Rutin ▼]
+  Katılımcılar: [Bayi sahibi: Recep Bey ▼]
+
+  Ses kaydı: [● Kayıt başlat]
+  → Mert konuşmayı kaydeder (10 dk)
+  → Whisper API: ses → metin
+  → LLM özet: &quot;Recep Bey rakip markaya geçmeyi düşünüyor,
+    sebep: bizim teslimat gecikmeleri. Daha iyi vade istiyor.&quot;
+
+  Foto: [Çek] (3 foto: dükkan, raf, rakip ürün)
+
+  Sonuç:
+  ☑ Bayi memnun değil
+  ☑ Rakip teklif var
+  ☐ Yeni sipariş alındı
+  ☑ Aksiyon gerekli
+
+  Sonraki adım: &quot;Burcu&#39;ya rapor + müdür görüşmesi öner&quot;
+
+  [Kaydet ve bitir]</code></pre>
+<h3 id="adım-3-sonrası-1">Adım 3 — Sonrası</h3>
+<pre><code>→ Backend: ziyaret_kayitlari yazılır
+→ LLM: &quot;kritik bilgi var&quot; işaretler
+→ Faz 5: bayi_sinyalleri&#39;ne otomatik feed-in (rakip teklif var → +50 puan)
+→ Burcu&#39;ya bildirim: &quot;Mert ziyaret tamamlandı, kritik bilgi&quot;
+→ Burcu görev güncelleme: &quot;müdür görüşmesi planla&quot;</code></pre>
+<p><strong>Toplam süre:</strong> ~30 dakika (ziyaret + 5 dk kayıt).</p>
+<hr />
+<h2 id="yolculuk-7-yönetici-excel-ile-geçmiş-veri-yükleme-y-3">Yolculuk #7 — Yönetici: Excel ile Geçmiş Veri Yükleme (Y-3)</h2>
+<p><strong>Aktör:</strong> Hakan <strong>Senaryo:</strong> Promats’ın 2 yıl önce başka bir sistemde tuttuğu sipariş verisi var. Excel olarak ihraç etti, MatPortal’a yükleyip tahmin modelini zenginleştirecek.</p>
+<h3 id="adım-1-şablon-indirme">Adım 1 — Şablon indirme</h3>
+<pre><code>→ Sidebar &gt; &quot;ML Laboratuvarı&quot; &gt; &quot;Veri Yükleme&quot;
+─────────────────────────────────
+[Ekran: Excel yükleme]
+  Veri tipi: [Sipariş geçmişi ▼]
+
+  📥 Şablonu indir: siparis_gecmisi_v1.xlsx
+
+  Şablon kolonları:
+  - tarih (zorunlu)
+  - bayi_kod (zorunlu)
+  - urun_kod (zorunlu)
+  - adet (zorunlu)
+  - birim_fiyat
+  - iskonto_yuzde (5 = %5)
+  - kampanya_kodu
+  - notlar</code></pre>
+<h3 id="adım-2-yükleme">Adım 2 — Yükleme</h3>
+<pre><code>→ Hakan eski Excel&#39;i template&#39;e uyumlu hale getirir
+→ Drag-drop yükler
+─────────────────────────────────
+[Ekran: Yükleme preview]
+  Dosya: 2024_2025_siparis_gecmis.xlsx
+  Boyut: 1.2 MB
+  Satır: 1.847
+
+  Doğrulama:
+  ✓ 1.792 geçerli satır
+  ⚠ 55 hatalı satır
+    - 30: bayi_kod bulunamadı
+    - 15: tarih formatı geçersiz
+    - 10: ürün_kod bulunamadı
+
+  [Hatalı satırları düzelt] [Hataları atlayarak devam]</code></pre>
+<h3 id="adım-3-hata-düzeltme">Adım 3 — Hata düzeltme</h3>
+<pre><code>→ &quot;Hatalı satırları düzelt&quot; tıklanır
+─────────────────────────────────
+[Ekran: Hata düzeltme]
+  Satır 42: bayi_kod &quot;BAY-XYZ&quot; bulunamadı
+    Excel değeri: &quot;Karadeniz Oto&quot;
+    Çözüm: [Karadeniz Oto Malzeme ▼] (BAY-007)
+    Veya: [Yeni bayi olarak oluştur]
+    Veya: [Bu satırı atla]
+
+  → Hakan eşleştirir veya atlar
+  → Tüm hatalar çözülür
+  → 1.847 / 1.847 geçerli</code></pre>
+<h3 id="adım-4-yükleme-onayı-model-re-train">Adım 4 — Yükleme onayı + model re-train</h3>
+<pre><code>→ &quot;Geçerlileri kaydet&quot; tıklanır
+→ Backend: siparis_gecmisi_yuklenen + siparis_kalemleri (geçmiş tag&#39;li)
+→ Audit log
+─────────────────────────────────
+[Ekran: Başarılı]
+  ✓ 1.847 satır kaydedildi
+  ✓ Modeli yeniden eğitmek ister misiniz?
+
+  [Hayır, sonra]  [Evet, şimdi eğit]
+
+→ &quot;Evet&quot; → eğitim kuyruğuna girer
+→ &quot;Eğitim 30 dk içinde tamamlanacak, email gönderilecek&quot;
+─────────────────────────────────
+[30 dk sonra email]
+  ✓ Model eğitimi tamamlandı
+  Eski MAPE: %32 → Yeni MAPE: %22 (-31% iyileşme)
+  Champion: prophet-bayi-007-urun-star-siyah-v1.4
+
+  [Sonuç dashboard&#39;u]</code></pre>
+<p><strong>Toplam süre:</strong> ~20 dakika (hata düzeltme dahil).</p>
+<hr />
+<h2 id="yolculuk-8-yönetici-konversasyonel-sohbet-y-1">Yolculuk #8 — Yönetici: Konversasyonel Sohbet (Y-1)</h2>
+<p><strong>Aktör:</strong> Ayşe (Faz 8 sonrası) <strong>Senaryo:</strong> Hızlıca bilgi almak istiyor; admin panelden gezinmek yerine sohbet kullanır.</p>
+<pre><code>→ Sağ alt köşede sohbet ikonu, tıklar
+─────────────────────────────────
+[Sohbet penceresi]
+  AI: Merhaba Ayşe. Nasıl yardımcı olabilirim?
+
+  Ayşe: İstanbul Oto Aksesuar bu ay kaç sipariş verdi?
+
+  AI: 🔍 İstanbul Oto Aksesuar — Mayıs 2026:
+      • 4 sipariş
+      • Toplam: 87.450₺
+      • Son sipariş: 15 Mayıs (Star Siyah 80 adet)
+      Geçen aya göre +%22 büyüme.
+      Detay görmek ister misin?
+      [Bayi sayfası] [Sipariş listesi]
+
+  Ayşe: Karadeniz Oto&#39;ya bu hafta sevkiyat var mı?
+
+  AI: 🚚 Karadeniz Oto Malzeme — sevkiyat:
+      • SS-2026-0098 — kargoda (Yurtiçi, takip: ABC123)
+      • Tahmini teslim: 5 Mayıs Salı
+
+  Ayşe: 50 adet star siyah corolla 2018&#39;den
+        Ankara Oto Market&#39;e sipariş aç
+
+  AI: ⚠ Onayınız gerekiyor.
+      Sipariş özeti:
+      • Bayi: Ankara Oto Market
+      • Ürün: Star Siyah Corolla 2018
+      • Adet: 50
+      • Fiyat: 50 × 271₺ (size %5 iskonto) = 13.550₺
+      • Teslim: 8 Mayıs (tahmini)
+
+      Risk skoru: 9 (orta) — onay gerekiyor
+      Güven: 0.95
+
+      [Onayla] [Düzenle] [İptal]
+
+  Ayşe: [Onayla]
+
+  AI: ✓ Sipariş açıldı: SS-2026-0156
+      Üretim emrine bağlandı.
+      Bildirim Selim Bey&#39;e (Ankara Oto) gitti.
+      [Sipariş detay]</code></pre>
+<p><strong>Toplam süre:</strong> ~2 dakika (admin paneli açıp form doldurmaya göre 5x hızlı).</p>
+<hr />
+<h2 id="yolculuk-9-sistem-aksiyon-akışı-otomatik-stok-sipariş-y-3">Yolculuk #9 — Sistem Aksiyon Akışı: Otomatik Stok Sipariş (Y-3)</h2>
+<p><strong>Senaryo:</strong> Faz 4 stok otomasyonu ham madde ROP altına düştüğünde tedarikçiye taslak PO oluşturur.</p>
+<h3 id="otomatik-akış">Otomatik akış</h3>
+<pre><code>[Cron — günlük 08:00]
+1. Stok tüketim hızı analizi
+2. Her hammadde için ROP kontrolü
+3. PE Granül 5 ton altında, ortalama tüketim 2 ton/hafta
+   → Lead time 5 gün → şimdi sipariş gerek
+4. Tedarikçi performans skor sıralı: A-Tedarikçi (en iyi)
+5. PO taslağı oluşturulur:
+   • Tedarikçi: A-Tedarikçi
+   • Ürün: PE Granül HD
+   • Miktar: 10 ton
+   • Tahmini fiyat: 280K TL
+   • Tahmini teslim: 6 Mayıs
+
+[Risk değerlendirmesi]
+   risk_skoru = geri_al(2) + tutar(4) + dış_görünüm(3) + veri(1) = 10 (Yüksek)
+   → Otomatik onay yok, Hakan onayı zorunlu
+
+[Hakan&#39;a bildirim]
+   📧 Email: &quot;PO taslağı hazır — onay bekleniyor&quot;
+   🔔 Portal: &quot;PO-TASLAK-0042 — onay gerekli&quot;</code></pre>
+<h3 id="hakanın-aksiyonu">Hakan’ın aksiyonu</h3>
+<pre><code>→ Hakan portal&#39;a girer, PO taslağını inceler
+─────────────────────────────────
+[Ekran: PO Taslağı]
+  Tedarikçi: A-Tedarikçi (skor 4.5/5)
+  Alternatifler: B-Tedarikçi (4.1), C-Tedarikçi (3.8)
+
+  Kalemler:
+  • PE Granül HD — 10 ton — 28 TL/kg = 280.000₺
+
+  AI gerekçesi:
+  &quot;Stok kritik: 5 ton kalmış, haftalık tüketim 2 ton.
+   Lead time 5 gün, güvenli rezerv için 2 hafta&#39;lık alım.
+   A-Tedarikçi: son 6 sipariş %100 zamanında, fiyat avantajlı.&quot;
+
+  [Onayla ve gönder] [Düzenle] [Reddet]
+
+→ Hakan onaylar
+→ A-Tedarikçi&#39;ye email + KEP otomatik
+→ Audit log + PO oluşur (`satinalma_siparisleri`)</code></pre>
+<p><strong>Toplam süre:</strong> Sistem 30 saniye, Hakan onayı 2 dakika.</p>
+<hr />
+<h2 id="yolculuk-10-bayi-whatsapp-ile-sipariş-faz-8">Yolculuk #10 — Bayi: WhatsApp ile Sipariş (Faz 8)</h2>
+<p><strong>Aktör:</strong> Mehmet (Bayi) <strong>Senaryo:</strong> Yolda, telefondan, WhatsApp üzerinden sipariş verecek.</p>
+<pre><code>[WhatsApp — Promats Resmi Hesabı]
+  Mehmet: Merhaba, 30 adet star siyah corolla 2018 lazım
+
+  Bot: Merhaba Mehmet Bey, İstanbul Oto Aksesuar.
+       Siparişinizi inceleyeyim:
+       • 30 × Star Siyah Corolla 2018
+       • Birim fiyat: 271₺ (%5 iskonto)
+       • Toplam: 8.130₺ + KDV = 9.756₺
+       • Stok: ✓ var (245 adet)
+       • Vadeli ödeme: limit yeterli (45K boş)
+       • Tahmini teslim: 4 iş günü
+
+       Onaylıyor musunuz?
+       Onaylamak için &quot;EVET&quot; yazın.
+
+  Mehmet: EVET
+
+  Bot: ✓ Siparişiniz alındı: SS-2026-0156
+       Email + portal bildirimi gitti.
+       Detay: portal.promats.com.tr/siparis/SS-2026-0156</code></pre>
+<p><strong>Toplam süre:</strong> ~1 dakika.</p>
+<p><strong>Not:</strong> Bu yolculuk Faz 8 ile aktif. İlk 1 yıl sadece manuel onaylı senaryolarda — risk skoru 7+ otomatik kapanır.</p>
+<hr />
+<h2 id="akış-karar-noktaları-risk-eşikleri">Akış Karar Noktaları (Risk Eşikleri)</h2>
+<table>
+<colgroup>
+<col style="width: 19%" />
+<col style="width: 26%" />
+<col style="width: 30%" />
+<col style="width: 23%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Aksiyon</th>
+<th>Risk skoru</th>
+<th>Otomatik mi?</th>
+<th>Onay tipi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bayi katalog görüntüle</td>
+<td>1</td>
+<td>✅ Anlık</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Sepete ekle</td>
+<td>1</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Bayi sipariş onaylama (limit içi)</td>
+<td>8</td>
+<td>✅ Sessiz onay (5 dk)</td>
+<td>Bayi kendi onayı</td>
+</tr>
+<tr class="even">
+<td>Yöneticiye sipariş bildirimi</td>
+<td>1</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Otomatik PO taslağı (&gt;2K TL)</td>
+<td>10+</td>
+<td>❌ Manuel zorunlu</td>
+<td>Yönetici</td>
+</tr>
+<tr class="even">
+<td>Email gönderme (1-100)</td>
+<td>5</td>
+<td>✅</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Toplu mail (&gt;100)</td>
+<td>14</td>
+<td>❌ Manuel</td>
+<td>Pazarlama müdürü</td>
+</tr>
+<tr class="even">
+<td>Bayi pasifleştirme</td>
+<td>12</td>
+<td>❌ Manuel</td>
+<td>Yönetici</td>
+</tr>
+<tr class="odd">
+<td>Fiyat değişikliği önerme</td>
+<td>11</td>
+<td>❌ Manuel</td>
+<td>Yönetici</td>
+</tr>
+<tr class="even">
+<td>Tedarikçiye PO gönderme</td>
+<td>12</td>
+<td>❌ Manuel</td>
+<td>Hakan</td>
+</tr>
+<tr class="odd">
+<td>Stok düzeltme (manuel)</td>
+<td>14</td>
+<td>❌ Manuel</td>
+<td>Yönetici</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/09-otomasyon-esikleri.md"><code>tartisma/09-otomasyon-esikleri.md</code></a></p>
+</blockquote>
+<hr />
+<h2 id="açık-karar-noktaları-yolculuklar">Açık karar noktaları (Yolculuklar)</h2>
+<ol type="1">
+<li><strong>WhatsApp Business API:</strong> Faz 8’de mi, daha önce manuel kanal mı? (Önerim: Faz 8 sonrası, hesap onayı zaman alır)</li>
+<li><strong>Sesli komut (TTS/STT):</strong> mobil saha ekibi için ne kadar kritik? (Önerim: Whisper sadece, TTS Faz 9 v2)</li>
+<li><strong>Bayi tek hesap mı, çoklu kullanıcı mı (MVP)?</strong> (Önerim: tek hesap MVP, çoklu kullanıcı v2)</li>
+<li><strong>PWA bayi mobil:</strong> ne zaman? (Önerim: Faz 6 ile birlikte responsive web; PWA Faz 9)</li>
+<li><strong>Sohbet bayi tarafı (Faz 8):</strong> açılsın mı? (Önerim: ilk yıl sadece yönetici)</li>
+<li><strong>Onboarding video:</strong> hangi formatta? (Önerim: Loom ekran kayıtları + altyazı)</li>
+<li><strong>5 dk sessiz onay:</strong> Bayi sepet onaylar, 5 dk içinde sistem otomatik geçirir mi? (Önerim: hayır, bayi onayı kalır manuel)</li>
+<li><strong>Pilot bayi sayısı:</strong> 5 mi, 10 mu? (Önerim: 5 — yönetilebilir feedback)</li>
+<li><strong>Saha mobil offline:</strong> kaç saat veri tutsun? (Önerim: 24 saat queue)</li>
+<li><strong>Email frekans:</strong> kaç bildirim/gün max? (Önerim: kullanıcı tercihiyle, default 5)</li>
+</ol>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("04 — Kullanıcı Yolculukları").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

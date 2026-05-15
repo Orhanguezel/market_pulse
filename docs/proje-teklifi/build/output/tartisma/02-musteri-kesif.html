@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>02 — Müşteri Keşif Otomasyonu (Yurt İçi + Yurt Dışı) — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>02 — Müşteri Keşif Otomasyonu (Yurt İçi + Yurt Dışı)</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="müşteri-keşif-otomasyonu-yurt-içi-yurt-dışı">02 — Müşteri Keşif Otomasyonu (Yurt İçi + Yurt Dışı)</h1>
+<blockquote>
+<p><strong>Bağlam (v1.1):</strong> Bu doküman <strong>Faz 3 — Müşteri Keşif Motoru</strong>’nun temel hipotez ve yöntemini anlatır. Güncel resmî yapı: <a href="../proje-teklifi/02-cozum-genel-bakis.md#faz-3--müşteri-keşif-motoru"><code>proje-teklifi/02-cozum-genel-bakis.md</code></a>. CRM kararı: <a href="./10-crm-karari.md"><code>10-crm-karari.md</code></a>. SaaS bütçe: <a href="./08-saas-butce-analizi.md"><code>08-saas-butce-analizi.md</code></a>.</p>
+</blockquote>
+<h2 id="hipotez">Hipotez</h2>
+<blockquote>
+<p>Mevcut müşteri profili (sektör, bölge, sipariş hacmi, ürün karması) çıkarılırsa; aynı profile uyan yeni firmalar <strong>otomatik aranabilir</strong>, skorlanıp satış ekibinin önüne düşürülebilir. Bu, soğuk arama randımanını ciddi yükseltir.</p>
+</blockquote>
+<h2 id="sorun-tanımı">Sorun tanımı</h2>
+<p>Bugün: - Yeni müşteri = ekip arkadaşının çevresi + fuar + tavsiye. Yani <strong>şanssal</strong>. - Mevcut müşterilerin profili (sektör/skala/coğrafya) <strong>sistemde tanımlı değil</strong> — sadece <code>musteriler.ad/adres/telefon</code>. - Yurt dışı genişleme <strong>öncelikle dil bariyeri + erişim kanalı yok</strong> olduğu için ele alınmamış.</p>
+<h2 id="önerilen-mimari-üç-faz">Önerilen mimari — üç faz</h2>
+<h3 id="faz-1-mevcut-müşteriyi-profilleme">Faz 1 — Mevcut müşteriyi profilleme</h3>
+<p>Yeni alanlar (<code>musteriler</code> tablosuna ek + ayrı <code>musteri_profili</code> tablosu):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> sektor <span class="dt">varchar</span>(<span class="dv">64</span>);</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> sehir <span class="dt">varchar</span>(<span class="dv">64</span>);</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> ulke <span class="dt">varchar</span>(<span class="dv">64</span>) <span class="kw">DEFAULT</span> <span class="st">&#39;TR&#39;</span>;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> olcek ENUM(<span class="st">&#39;mikro&#39;</span>,<span class="st">&#39;kucuk&#39;</span>,<span class="st">&#39;orta&#39;</span>,<span class="st">&#39;buyuk&#39;</span>);</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> musteri_profili (</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  musteri_id <span class="dt">char</span>(<span class="dv">36</span>) PK FK,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  toplam_siparis_tutari <span class="dt">decimal</span>(<span class="dv">14</span>,<span class="dv">2</span>),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  ortalama_aylik_siparis_tutari <span class="dt">decimal</span>(<span class="dv">14</span>,<span class="dv">2</span>),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  en_cok_alinan_urun_kategorileri JSON,  <span class="co">-- [&quot;urun:STAR&quot;, &quot;urun:MAXIMUM&quot;]</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  ilk_siparis_tarihi <span class="dt">date</span>,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  son_siparis_tarihi <span class="dt">date</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  siparis_sıklığı_gun <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">2</span>),       <span class="co">-- aylık ortalama gün</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">segment</span> <span class="dt">varchar</span>(<span class="dv">32</span>),                    <span class="co">-- otomatik segmentasyon: &quot;premium&quot;,&quot;düzenli&quot;,&quot;tek_seferlik&quot;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  recalc_at datetime</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p><code>musteri_profili</code> haftalık cron ile (re)hesaplanır. Bu olmadan keşif arama kriteri yok.</p>
+<h3 id="faz-2-mevcut-müşteriden-segment-çıkarımı">Faz 2 — Mevcut müşteriden segment çıkarımı</h3>
+<p>K-means veya basit kuralcı segmentasyon: - <strong>Premium:</strong> son 12 ay &gt; X TL ciro + sipariş sıklığı yüksek - <strong>Düzenli:</strong> orta hacim, mevsimsel - <strong>Tek seferlik:</strong> 1-2 sipariş, sonra sessiz - <strong>Kayıp:</strong> son 6 ay sıfır sipariş</p>
+<p>Her segment için “ideal müşteri profili” (ICP) çıkar: hangi sektör, hangi ölçek, hangi şehir, hangi ürünler.</p>
+<h3 id="faz-3-lead-keşif-kanalları">Faz 3 — Lead keşif kanalları</h3>
+<p>Yurt içi:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 19%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Kaynak</th>
+<th>Erişim</th>
+<th>Veri</th>
+<th>Maliyet</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Ticaret Sicili Gazetesi</strong></td>
+<td>API yok, scrape edilebilir (firma açılış ilanları, sektör, ortaklar)</td>
+<td>Yarı yapılandırılmış HTML</td>
+<td>Düşük (zaman)</td>
+</tr>
+<tr class="even">
+<td><strong>TOBB Üye Veritabanı</strong></td>
+<td>Web sorgu</td>
+<td>Sektör + il + üye no</td>
+<td>Düşük</td>
+</tr>
+<tr class="odd">
+<td><strong>Sektörel B2B platformlar</strong> (Sanayim.net, EkoB2B)</td>
+<td>Scraping</td>
+<td>Firma profili + ürün katalogu</td>
+<td>Düşük</td>
+</tr>
+<tr class="even">
+<td><strong>Google Maps Places API</strong></td>
+<td>Resmi API</td>
+<td>Sektör + konum + iletişim</td>
+<td>$17 / 1000 req</td>
+</tr>
+<tr class="odd">
+<td><strong>LinkedIn Sales Navigator</strong></td>
+<td>Resmi API’ı yok, scrape de yasak</td>
+<td>Yöneticiler</td>
+<td>Yüksek (insan)</td>
+</tr>
+</tbody>
+</table>
+<p>Yurt dışı:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 19%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Kaynak</th>
+<th>Erişim</th>
+<th>Veri</th>
+<th>Maliyet</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Alibaba Trade Show</strong></td>
+<td>RFQ feed scrape</td>
+<td>Talep eden firmalar</td>
+<td>Düşük</td>
+</tr>
+<tr class="even">
+<td><strong>Google Maps Places</strong></td>
+<td>Tüm ülkeler</td>
+<td>Konum + sektör</td>
+<td>$17 / 1000</td>
+</tr>
+<tr class="odd">
+<td><strong>Apollo.io / Lusha / Hunter.io</strong></td>
+<td>API + email enrichment</td>
+<td>E-posta + CEO/satın alma yetkili</td>
+<td>$50-200/ay</td>
+</tr>
+<tr class="even">
+<td><strong>Sektör fuarları (Messe Frankfurt, Heimtextil)</strong></td>
+<td>Katılımcı listesi PDF</td>
+<td>Fuar bazında</td>
+<td>Manuel</td>
+</tr>
+<tr class="odd">
+<td><strong>B2B SaaS:</strong> ZoomInfo, Dun &amp; Bradstreet</td>
+<td>API</td>
+<td>Tam profil + finansal</td>
+<td>$$$</td>
+</tr>
+<tr class="even">
+<td><strong>Türkiye İhracatçılar Meclisi (TİM)</strong></td>
+<td>Üye listesi</td>
+<td>İhracatçı firmalar</td>
+<td>Düşük</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Önerilen başlangıç paketi (yurt içi):</strong> Google Maps Places + TOBB + sektörel B2B scraping. <strong>Önerilen başlangıç paketi (yurt dışı):</strong> Hunter.io (email) + Apollo.io free tier + LinkedIn manuel.</p>
+<h3 id="faz-4-skorlama-ve-outreach">Faz 4 — Skorlama ve outreach</h3>
+<p>Her keşfedilen lead için:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> lead_havuzu (</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  kaynak <span class="dt">varchar</span>(<span class="dv">64</span>),                    <span class="co">-- &#39;tobb&#39;, &#39;google_places&#39;, &#39;apollo&#39;, &#39;manuel&#39;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  firma_adi <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  sektor <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  sehir <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  ulke <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  iletisim JSON,                         <span class="co">-- {email, telefon, web, linkedin}</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  benzerlik_skoru <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),          <span class="co">-- mevcut müşterilerle vektör/kural benzerliği</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  segment_eslestigi <span class="dt">varchar</span>(<span class="dv">32</span>),         <span class="co">-- &quot;premium&quot; segmentine en yakın</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;yeni&#39;</span>,<span class="st">&#39;iletildi&#39;</span>,<span class="st">&#39;red&#39;</span>,<span class="st">&#39;musteri_oldu&#39;</span>,<span class="st">&#39;arsiv&#39;</span>),</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  ham_metadata JSON,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  created_at, updated_at</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> lead_etkilesim (</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  lead_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  tip ENUM(<span class="st">&#39;email&#39;</span>,<span class="st">&#39;telefon&#39;</span>,<span class="st">&#39;toplanti&#39;</span>,<span class="st">&#39;sosyal_medya&#39;</span>,<span class="st">&#39;diger&#39;</span>),</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  tarih datetime,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  ozet text,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  cikti <span class="dt">varchar</span>(<span class="dv">64</span>),                     <span class="co">-- &#39;cevap_yok&#39;,&#39;olumlu&#39;,&#39;olumsuz&#39;,&#39;toplanti_alindi&#39;</span></span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p>Skorlama formülü (basit başlangıç):</p>
+<pre><code>skor = 0.4 * sektor_eslesme + 0.3 * sehir_yakinligi + 0.2 * olcek_uyumu + 0.1 * sosyal_medya_aktif</code></pre>
+<p>Faz B’de LLM’den geçirilir: “şu mevcut müşteri profili + şu lead profili — uyum skorunu 0-100 arası ver, gerekçe yaz.”</p>
+<h2 id="kullanılacak-araçlar-özet">Kullanılacak araçlar (özet)</h2>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 30%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Araç</th>
+<th>Rolü</th>
+<th>Lisans</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Crawlee</strong> (Node.js)</td>
+<td>Google Maps, Sanayim.net, TOBB scraping</td>
+<td>Apache 2.0</td>
+</tr>
+<tr class="even">
+<td><strong>Playwright</strong></td>
+<td>JS-render eden sayfalar (LinkedIn)</td>
+<td>Apache 2.0</td>
+</tr>
+<tr class="odd">
+<td><strong>Puppeteer-extra + stealth</strong></td>
+<td>Bot algılama bypass</td>
+<td>MIT</td>
+</tr>
+<tr class="even">
+<td><strong>Hunter.io API</strong></td>
+<td>Email bulma</td>
+<td>$49/ay</td>
+</tr>
+<tr class="odd">
+<td><strong>Apollo.io API</strong></td>
+<td>İletişim enrichment</td>
+<td>Free tier 50 lead/ay</td>
+</tr>
+<tr class="even">
+<td><strong>Google Places API</strong></td>
+<td>Konum tabanlı keşif</td>
+<td>$17/1000 req</td>
+</tr>
+<tr class="odd">
+<td><strong>PDF parser</strong> (pdf-parse)</td>
+<td>Fuar katılımcı PDF’i okuma</td>
+<td>MIT</td>
+</tr>
+<tr class="even">
+<td><strong>Anthropic Claude</strong></td>
+<td>Lead skoru, outreach metni üretme</td>
+<td>Mevcut</td>
+</tr>
+</tbody>
+</table>
+<h2 id="açık-sorular">Açık sorular</h2>
+<ol type="1">
+<li><strong>Yasal:</strong> Türkiye’de KVKK + GDPR (Avrupa lead’leri için) açısından şirket bilgisi (B2B) toplama nasıl konumlandırılır? Genelde “şirket bilgisi” kişisel veri sayılmaz ama CEO/satın alma yöneticisinin adı/email’i sayılır → opt-out altyapısı şart.</li>
+<li><strong>Outreach kanalı:</strong> Otomatik email mi, satış ekibi manuel mi? Otomatikse spam riski + domain reputasyon kaybı.</li>
+<li><strong>Yurt dışı dil:</strong> Çıktı promotional metinleri Türkçe + İngilizce + Almanca + Arapça mı? Hangi dilde?</li>
+<li><strong>Bütçe:</strong> Hunter.io + Apollo + Google Places aylık ~$100. Bu kabul edilebilir mi?</li>
+<li><strong>CRM:</strong> Lead pipeline yönetimi için açık kaynak CRM entegrasyonu (SuiteCRM/EspoCRM) yapılsın mı yoksa Paspas ERP içinde basit modül mü?</li>
+</ol>
+<h2 id="bağımlılıklar">Bağımlılıklar</h2>
+<ul>
+<li>✅ <code>musteriler</code> tablosu mevcut</li>
+<li>⚠️ Müşteri profili çıkarımı için aylık ciro/sipariş sıklığı view’ı yok</li>
+<li>⚠️ Web crawler altyapısı kurulu değil</li>
+<li>⚠️ Lead pipeline arayüzü yok</li>
+</ul>
+<h2 id="tahmini-iş-büyüklüğü">Tahmini iş büyüklüğü</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 42%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Faz</th>
+<th>İçerik</th>
+<th>Süre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Müşteri profili tablosu + cron + dashboard</td>
+<td>~3 gün</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Segmentasyon kuralları + ICP çıkarımı</td>
+<td>~2 gün</td>
+</tr>
+<tr class="odd">
+<td>3a</td>
+<td>İlk crawler: Google Places + TOBB</td>
+<td>~5-7 gün</td>
+</tr>
+<tr class="even">
+<td>3b</td>
+<td>Lead havuzu + skorlama + UI</td>
+<td>~5 gün</td>
+</tr>
+<tr class="odd">
+<td>3c</td>
+<td>Crawler genişletme (sektörel B2B, fuar PDF)</td>
+<td>~5-10 gün (kapsama göre)</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Outreach (manuel takip arayüzü)</td>
+<td>~3 gün</td>
+</tr>
+<tr class="odd">
+<td><strong>Toplam başlangıç</strong></td>
+<td></td>
+<td><strong>~20-30 iş günü</strong></td>
+</tr>
+</tbody>
+</table>
+<p>Yurt dışı (Apollo/LinkedIn) tarafı ayrı bir faz; başlangıçta yurt içi crawler + scoring + manuel outreach yeterli.</p>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("02 — Müşteri Keşif Otomasyonu (Yurt İçi + Yurt Dışı)").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

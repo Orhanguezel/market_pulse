@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MatPortal — Tek Sayfa Özet — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="tartisma/index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="tartisma/12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="tartisma/13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="tartisma/14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="tartisma/15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>MatPortal — Tek Sayfa Özet</strong></div>
+  <div class="actions">
+    <a href="index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="matportal-tek-sayfa-özet">MatPortal — Tek Sayfa Özet</h1>
+<blockquote>
+<p>A4 tek sayfa görsel özet — yönetim sunumu / asansör konuşması.</p>
+</blockquote>
+<hr />
+<h2 id="tek-cümle">Tek Cümle</h2>
+<p><strong>Promats’ın Üretim ERP’sini, piyasayı dinleyen, talebi öngören, kendi kendini düzelten 11 fazlı bir dijital ekosisteme dönüştüren proje.</strong></p>
+<hr />
+<h2 id="neden-3-sayı">Neden? — 3 Sayı</h2>
+<pre><code>3-4 saat/gün       8-12/ay              ~150-200K TL/ay
+satış ekibi        yanlış sipariş       toplam ölçülmemiş
+sipariş alma                            kayıp (zaman + hata + körlemesine üretim)</code></pre>
+<p>Mevcut WhatsApp/telefon kaosu <strong>35 bayide yürür</strong>, <strong>100 bayide çöker</strong>. Şimdiden altyapı kurulmalı.</p>
+<hr />
+<h2 id="ne-11-faz-7-katmanlı-mimari">Ne? — 11 Faz, 7 Katmanlı Mimari</h2>
+<pre><code>G — KONVERSASYONEL  ← yönetici/bayi sohbet (Faz 8)
+F — UYGULAMA        ← bayi portal + mobil + saha (Faz 6, 9)
+E — MLOps           ← Excel&#39;den eğitilebilir model (Faz 7)
+D — TAHMİN          ← sipariş + churn + stok (Faz 2, 4, 5)
+C — SİNYAL          ← scraping + sosyal (Faz 5)
+B — KEŞİF           ← talep havuzu + lead (Faz 1, 3)
+A — PASPAS ERP      ← mevcut, dokunulmaz (Faz 0)</code></pre>
+<p><strong>11 faz × ~14-15 ay</strong> ana iskelet. Her faz <strong>tek başına çalışır</strong>, sıralama esnek.</p>
+<hr />
+<h2 id="felsefe-4-prensip">Felsefe — 4 Prensip</h2>
+<p>1 | <strong>Veri-önce, AI-yardımcı</strong> | İstatistik konuşur, AI tercüme eder |<br />
+2 | <strong>Kademeli karmaşıklık</strong> | Veri yetmediği yerde gelişmiş model yok |<br />
+3 | <strong>Açıklanabilir</strong> | Her tahmin “neden” sorusuna 3 cümle cevap verir |<br />
+4 | <strong>Geri alınabilir</strong> | Risk skorlu eşik, audit, rollback |</p>
+<hr />
+<h2 id="stratejik-kazançlar-5-boyut">Stratejik Kazançlar — 5 Boyut</h2>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Kazanç</th>
+<th>Faz</th>
+<th>Etki</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Sipariş frekansı +%30-40</td>
+<td>6</td>
+<td>Bayi 3 dk’da sipariş</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Sepet büyür +%15-25</td>
+<td>6 + 2</td>
+<td>Cross-sell otomatik</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Tahmin doğruluğu MAPE &lt;%20</td>
+<td>2 + 7</td>
+<td>Üretim planlama hatası -%50</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Erken churn yakalama -%30</td>
+<td>5</td>
+<td>2-3 ay önce sinyal</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>Operasyonel zaman -%65</td>
+<td>6 + 8</td>
+<td>Satış ekibi 2-3 saat/gün açık</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="yol-haritası-görsel">Yol Haritası — Görsel</h2>
+<pre><code>2026 Q2          2026 Q4          2027 Q2          2027 Q4
+  │                │                │                │
+  Faz 0  Faz 1  Faz 2  Faz 3+4  Faz 5  Faz 6  Faz 7  Faz 8+9  Faz 10+
+  ████   ████   ████████ ██████ ████████ ████████ ████████ ████████  ─────
+  4hf    4hf    8hf      6hf    8hf      8hf      8hf      paralel   ihtiyaca
+                                                                      göre</code></pre>
+<p><strong>Pilot Faz 6 sonu:</strong> Hafta 38 (~9. ay). 5 bayi canlı. <strong>Tüm ana iskelet tamamlanma:</strong> Hafta 60 (~14. ay).</p>
+<hr />
+<h2 id="operasyonel-bütçe-aylık">Operasyonel Bütçe — Aylık</h2>
+<pre><code>Senaryo A (Faz 0-3):     $50-100/ay     ← Free tier başlangıç
+Senaryo B (Faz 4-7):     $430-500/ay    ← Operasyonel olgunluk
+Senaryo C (Faz 8+):      $1.500-1.800/ay ← Hızlı büyüme</code></pre>
+<p>Geliştirme ücreti hariç. Promats yönetimi ile ayrı görüşme.</p>
+<hr />
+<h2 id="roi-tahmini">ROI Tahmini</h2>
+<pre><code>Yıllık fayda:           ~1.6-2.3M TL    (zaman + hata + ciro artışı)
+Yıllık operasyonel:     ~100-170K TL    ($3-5K)
+Net yıllık değer:       ~1.5-2.2M TL</code></pre>
+<p>ROI ≥ <strong>10x</strong> aylık operasyonel maliyet (yıl 1).</p>
+<hr />
+<h2 id="risk-yönetimi-3-en-yüksek">Risk Yönetimi — 3 En Yüksek</h2>
+<table>
+<colgroup>
+<col style="width: 14%" />
+<col style="width: 28%" />
+<col style="width: 57%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Risk</th>
+<th>Mitigation</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Bayi portal’ı kullanmaz</td>
+<td>Pilot 5 → kademeli + onboarding + paralel WA kanal</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Tahmin doğruluk düşük</td>
+<td>Naive baseline kıyas + manuel onay 3 ay + MLOps</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Scraping yasal sorun</td>
+<td>KVKK + bayi sözleşme + avukat + sadece firma verisi</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="çıkarım-niye-şimdi">Çıkarım — Niye Şimdi?</h2>
+<ol type="1">
+<li><strong>Rakipler dijital olgunluk düşük</strong> — Promats 2-3 yıl önde başlar</li>
+<li><strong>Veri birikimi moat</strong> — sonradan yetişmek zor</li>
+<li><strong>Çin baskısı</strong> — premium + hızlı teslim avantajını dijital ile pekiştir</li>
+<li><strong>CBAM 2026</strong> — sürdürülebilirlik raporu zorunlu olacak, hazırlık şimdi</li>
+<li><strong>Multi-deployment hazırlık</strong> — başka müşterilere konuşlanabilir kod tabanı</li>
+</ol>
+<hr />
+<h2 id="karar-beklenen-4-soru">Karar Beklenen 4 Soru</h2>
+<ol type="1">
+<li><strong>Faz sıralaması</strong> — Önce Paspas tamamlanma, paralel hazırlık. Onay?</li>
+<li><strong>Bütçe başlangıç</strong> — Senaryo A ($50-100/ay) onay?</li>
+<li><strong>AI otomasyon eşiği</strong> — İlk 3 ay tüm öneriler manuel onay; sonra kademeli aç. Onay?</li>
+<li><strong>Marka isim (bayi tarafı)</strong> — “Promats Bayi Portalı” / “MatPortal” / başka?</li>
+</ol>
+<hr />
+<pre><code>İletişim:          Orhan Güzel — orhanguzell@gmail.com
+Doküman versiyonu: v1.1 — 2026-05-01
+Detay:             docs/proje-teklifi/ (12 alt doküman)
+                   docs/tartisma/      (15 derinlemesine teknik tartışma)</code></pre>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("MatPortal — Tek Sayfa Özet").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

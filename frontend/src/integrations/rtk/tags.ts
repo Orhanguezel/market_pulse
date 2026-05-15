@@ -1,0 +1,51 @@
+// =============================================================
+// FILE: src/integrations/rtk/tags.ts
+// RTK Query cache/tag listesi
+// =============================================================
+
+export const metahubTags = [
+  'Auth',
+  'User',
+  'AdminUsers',
+  'Profiles',
+  'Profile',
+  'UserRoles',
+  'UserRole',
+  'SiteSettings',
+  'SiteSettingsBulk',
+  'CustomPages',
+  'CustomPageSlug',
+  'CustomPage',
+  'Faqs',
+  'Services',
+  'MenuItems',
+  'MenuItem',
+  'MenuItemPublic',
+  'Slider',
+  'Sliders',
+  'Contacts',
+  'FooterSections',
+  'FooterSectionsBySlug',
+  'Mail',
+  'Newsletter',
+  'Notifications',
+  'Notification',
+  'Reviews',
+  'Review',
+  'Storage',
+  'Health',
+  'Resources',
+  'History',
+  'Subscriptions',
+  'Orders',
+  'Order',
+  'Popups',
+  'Banners',
+  'Banner',
+  'AmazonQuota',
+  'AmazonScanJob',
+  'AmazonHistory',
+  'ByokKey',
+] as const;
+
+export type MetahubTag = (typeof metahubTags)[number];

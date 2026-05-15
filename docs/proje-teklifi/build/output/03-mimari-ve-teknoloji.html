@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>03 — Mimari ve Teknoloji — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="tartisma/index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="tartisma/12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="tartisma/13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="tartisma/14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="tartisma/15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>03 — Mimari ve Teknoloji</strong></div>
+  <div class="actions">
+    <a href="index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="mimari-ve-teknoloji">03 — Mimari ve Teknoloji</h1>
+<p>Bu doküman MatPortal’ın <strong>teknik mimarisini</strong>, Paspas ERP ile <strong>entegrasyon noktalarını</strong>, <strong>deployment topolojisini</strong> ve teknoloji kararlarının <strong>gerekçelerini</strong> açıklar. Hedef: hem teknik müdür/yatırımcı hem de senior geliştirici okuyabilsin.</p>
+<h2 id="mimari-genel-bakış">1. Mimari Genel Bakış</h2>
+<h3 id="üst-düzey-diyagram">1.1 Üst Düzey Diyagram</h3>
+<pre><code>┌──────────────────────────────────────────────────────────────────────┐
+│                          KULLANICI KATMANI                           │
+├──────────────────────────────────────────────────────────────────────┤
+│  Bayi Web   │  Yönetici   │  Saha Mobil  │  Operatör  │  Sohbet UI  │
+│  (Next.js)  │  (Next.js)  │  (Flutter)   │  (Mobile)  │  (Next.js)  │
+└──────┬─────────────┬────────────┬─────────────┬──────────────┬──────┘
+       │             │            │             │              │
+       └─────────────┴────────────┴─────────────┴──────────────┘
+                                  │ HTTPS (REST + WebSocket)
+                                  ↓
+┌──────────────────────────────────────────────────────────────────────┐
+│                       API GATEWAY KATMANI                            │
+├──────────────────────────────────────────────────────────────────────┤
+│              Nginx (TLS + rate limit + reverse proxy)                │
+└──────────────────────────────┬───────────────────────────────────────┘
+                               ↓
+┌──────────────────────────────────────────────────────────────────────┐
+│                    UYGULAMA KATMANI (Bun runtime)                    │
+├──────────────────────────────────────────────────────────────────────┤
+│  Paspas Backend (Fastify 5)                                          │
+│  • /admin/*       — mevcut ERP endpoints                             │
+│  • /portal/*      — yeni Faz 6 endpoints                             │
+│  • /tahmin/*      — Faz 2 sipariş tahmin                             │
+│  • /churn/*       — Faz 5 churn radar                                │
+│  • /lead/*        — Faz 3 müşteri keşif                              │
+│  • /sohbet/*      — Faz 8 konversasyonel                             │
+│  • /mlops/*       — Faz 7 model yönetim                              │
+│  • /webhook/*     — dış sistem callback                              │
+└──┬───────────────┬─────────────┬─────────────────┬───────────────────┘
+   │               │             │                 │
+   ↓               ↓             ↓                 ↓
+┌──────────┐ ┌────────────┐ ┌─────────────┐ ┌────────────────┐
+│ ML       │ │ Crawler    │ │ LLM         │ │ Email / SMS    │
+│ Service  │ │ Worker     │ │ Gateway     │ │ / WhatsApp     │
+│          │ │            │ │             │ │                │
+│ Python   │ │ Crawlee +  │ │ Claude /    │ │ Brevo /        │
+│ FastAPI  │ │ Playwright │ │ OpenAI /    │ │ Mailgun /      │
+│ scikit / │ │ + Apify    │ │ Groq        │ │ Twilio         │
+│ Prophet/ │ │            │ │ multi-      │ │                │
+│ XGBoost  │ │            │ │ provider    │ │                │
+└─────┬────┘ └──────┬─────┘ └──────┬──────┘ └────────────────┘
+      │             │              │
+      └─────────────┼──────────────┘
+                    ↓
+┌──────────────────────────────────────────────────────────────────────┐
+│                       VERİ KATMANI                                   │
+├──────────────────────────────────────────────────────────────────────┤
+│  MySQL 8     │ Redis        │ S3 / MinIO       │ MLflow            │
+│  (ana DB)    │ (cache+queue)│ (HTML snapshot,  │ (model registry)  │
+│              │              │  model artifact) │                   │
+└──────────────────────────────────────────────────────────────────────┘</code></pre>
+<h3 id="bileşen-sorumluluğu">1.2 Bileşen sorumluluğu</h3>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 35%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Bileşen</th>
+<th>Sorumluluk</th>
+<th>Teknoloji</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Paspas Backend</strong></td>
+<td>İş mantığı, REST API, auth, DB CRUD</td>
+<td>Fastify 5 + Bun + Drizzle</td>
+</tr>
+<tr class="even">
+<td><strong>Bayi Web (Portal)</strong></td>
+<td>Bayi UI</td>
+<td>Next.js 16 + React 19</td>
+</tr>
+<tr class="odd">
+<td><strong>Yönetici Web</strong></td>
+<td>Mevcut admin panel + yeni modül UI</td>
+<td>Next.js 16 + React 19</td>
+</tr>
+<tr class="even">
+<td><strong>Saha Mobil</strong></td>
+<td>Saha satış ekibi mobil</td>
+<td>Flutter</td>
+</tr>
+<tr class="odd">
+<td><strong>Operatör Mobil</strong></td>
+<td>Üretim ekranı (mevcut)</td>
+<td>Flutter</td>
+</tr>
+<tr class="even">
+<td><strong>ML Service</strong></td>
+<td>Model eğitim + tahmin</td>
+<td>Python FastAPI + scikit + Prophet + XGBoost</td>
+</tr>
+<tr class="odd">
+<td><strong>Crawler Worker</strong></td>
+<td>Web kazıma + sosyal medya</td>
+<td>Crawlee + Playwright + Apify</td>
+</tr>
+<tr class="even">
+<td><strong>LLM Gateway</strong></td>
+<td>Multi-provider abstraction</td>
+<td>Bun + provider SDK’ları</td>
+</tr>
+<tr class="odd">
+<td><strong>Email/SMS Gateway</strong></td>
+<td>Bildirim + outreach</td>
+<td>Brevo + Mailgun (yedek)</td>
+</tr>
+<tr class="even">
+<td><strong>Cache + Queue</strong></td>
+<td>Asenkron iş + cache</td>
+<td>Redis + BullMQ</td>
+</tr>
+<tr class="odd">
+<td><strong>Model Registry</strong></td>
+<td>Model versiyonlama</td>
+<td>MLflow</td>
+</tr>
+<tr class="even">
+<td><strong>Object Storage</strong></td>
+<td>Dosya/snapshot/artifact</td>
+<td>S3 (cloud) veya MinIO (self-host)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="teknoloji-kararları-ve-gerekçeleri">2. Teknoloji Kararları (ve Gerekçeleri)</h2>
+<h3 id="backend-fastify-bun">2.1 Backend — Fastify + Bun</h3>
+<p><strong>Karar:</strong> Paspas backend Fastify 5 + Bun runtime. MatPortal modülleri <strong>aynı projeye yeni route’lar</strong> olarak eklenir.</p>
+<p><strong>Gerekçe:</strong> - Paspas zaten Fastify+Bun kullanıyor, <strong>yeni stack öğrenmeye gerek yok</strong> - Bun runtime: Node’dan <strong>2-3x hızlı</strong>, native TypeScript, native test - Tek backend → tek auth, tek DB connection pool, tek deployment - Yeni bir Express/NestJS kurmak fragmentasyon yaratır</p>
+<p><strong>Alternatif değerlendirilen:</strong> - ❌ Express: Yavaş, Promats projesi modern stack’te - ❌ NestJS: Aşırı katmanlı, küçük takım için overhead - ❌ Microservices (her modül ayrı backend): erken optimizasyon, operasyonel yük büyük - ✅ Fastify monolith: doğru tercih</p>
+<h3 id="frontend-next.js-16-react-19">2.2 Frontend — Next.js 16 + React 19</h3>
+<p><strong>Karar:</strong> İki ayrı Next.js uygulaması: <code>admin_panel/</code> (mevcut) ve <code>dealer_portal/</code> (yeni).</p>
+<p><strong>Gerekçe:</strong> - Yönetici ve bayi UI’ları <strong>ayrı izolasyon</strong> ister (farklı kullanıcı, farklı yetki, farklı UX) - Tek Next.js’te iki rol göstermek şişme + güvenlik riski - Aynı backend → kod paylaşımı <code>_shared/</code> üzerinden - Tailwind 4 + Shadcn UI Promats projelerinde standart</p>
+<p><strong>Frontend stack:</strong> - <strong>Next.js 16</strong> App Router - <strong>React 19</strong> server components, suspense - <strong>Redux Toolkit + RTK Query</strong> state + cache - <strong>Shadcn/UI</strong> + <strong>Tailwind 4</strong> stil - <strong>Zod</strong> validation (backend schemas paylaşılır) - <strong>next-intl</strong> çoklu dil hazırlığı (Faz 9 sonrası)</p>
+<h3 id="veritabanı-mysql-drizzle">2.3 Veritabanı — MySQL + Drizzle</h3>
+<p><strong>Karar:</strong> Mevcut MySQL 8 devam. Yeni 30+ tablo aynı <code>promats_erp</code> DB’ye eklenir.</p>
+<p><strong>Gerekçe:</strong> - Paspas zaten MySQL + Drizzle ORM - Tek DB → JOIN’ler basit, transaction güçlü - char(36) UUID konvansiyonu Promats projelerinde standart - Migration: seed-based (CLAUDE.md kuralı: ALTER yasak, <code>0XX_*_schema.sql</code> güncellenir)</p>
+<p><strong>MySQL vs PostgreSQL?</strong> - PostgreSQL’in avantajları: JSON sorguları, full-text search, advanced index - Ama: Promats stack’inde MySQL standart, geri dönüş maliyeti yüksek - Eklenebilen JSON desteği MySQL 8 ile yeterli (modern) - ✅ MySQL devam</p>
+<h3 id="ml-service-python-fastapi-ayrı-container">2.4 ML Service — Python FastAPI (ayrı container)</h3>
+<p><strong>Karar:</strong> Python FastAPI servisi ayrı Docker container’da. Bun backend HTTP üzerinden iletişim.</p>
+<p><strong>Gerekçe:</strong> - ML kütüphaneleri (scikit-learn, Prophet, XGBoost, SHAP) <strong>Python ekosisteminde</strong> - Bun’da bunları yeniden yazmak imkansız (saatlik / aylık eğitim) - Köprü: REST API - Bun → POST <code>/train</code> → Python eğitir, MLflow’a yazar, ID döner - Bun → POST <code>/predict</code> → Python tahmin döner (cache’li, &lt;100ms) - Container izolasyonu: Python crash’i Bun’u etkilemez</p>
+<p><strong>Alternatif:</strong> - ❌ Bun’dan child_process spawn: ölçeklenmez, tek instance - ❌ JS-native ML (TensorFlow.js): Prophet/XGBoost yok, ekosistem zayıf - ✅ FastAPI ayrı container: doğru tercih</p>
+<p><strong>Stack detayı:</strong></p>
+<pre><code>ml_service/
+├── Dockerfile
+├── requirements.txt    # fastapi, scikit-learn, prophet, xgboost, mlflow, shap
+├── app/
+│   ├── main.py        # FastAPI app
+│   ├── routers/       # /train, /predict, /evaluate
+│   ├── models/        # algoritma wrapper&#39;lar
+│   ├── pipeline/      # feature engineering
+│   └── storage/       # MLflow + S3 client</code></pre>
+<h3 id="crawling-crawlee-playwright">2.5 Crawling — Crawlee + Playwright</h3>
+<p><strong>Karar:</strong> TypeScript native Crawlee + Playwright (ana backend ile aynı dilde).</p>
+<p><strong>Gerekçe:</strong> - Crawlee Apify ekiplinin: queue, retry, throttle, robots.txt <strong>built-in</strong> - Playwright: JS-rendered modern siteler için (bayilerin çoğu) - TypeScript → mevcut backend ile kod paylaşımı - Apify (sosyal medya): managed scraping, ToS uyumlu</p>
+<p><strong>Alternatif:</strong> - ❌ Python Scrapy: ayrı dil, ayrı stack - ❌ Puppeteer: Playwright daha modern + cross-browser - ❌ Cheerio only: JS-rendered siteler kazıyamıyor</p>
+<h3 id="llm-multi-provider-abstraction">2.6 LLM — Multi-provider abstraction</h3>
+<p><strong>Karar:</strong> Tek bir LLM client wrapper, runtime’da provider seçilebilir.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">interface</span> LLMProvider {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  name<span class="op">:</span> <span class="st">&#39;claude&#39;</span> <span class="op">|</span> <span class="st">&#39;openai&#39;</span> <span class="op">|</span> <span class="st">&#39;groq&#39;</span><span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">chat</span>(messages<span class="op">:</span> Message[]<span class="op">,</span> opts<span class="op">?:</span> ChatOpts)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>Response<span class="op">&gt;;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">structured</span><span class="op">&lt;</span>T<span class="op">&gt;</span>(prompt<span class="op">:</span> <span class="dt">string</span><span class="op">,</span> schema<span class="op">:</span> ZodSchema<span class="op">&lt;</span>T<span class="op">&gt;</span>)<span class="op">:</span> <span class="bu">Promise</span><span class="op">&lt;</span>T<span class="op">&gt;;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> llm <span class="op">=</span> <span class="fu">createLLM</span>({ provider<span class="op">:</span> env<span class="op">.</span><span class="at">LLM_DEFAULT</span><span class="op">,</span> fallback<span class="op">:</span> <span class="st">&#39;groq&#39;</span> })<span class="op">;</span></span></code></pre></div>
+<p><strong>Gerekçe:</strong> - <strong>Vendor lock-in yok</strong>: Anthropic pahalanırsa Groq’a geç - <strong>Maliyet optimizasyonu</strong>: kritik aksiyon Claude (kalite), bulk Groq (ucuz/hızlı) - <strong>Fallback</strong>: birinin API çökerse alternatife geç - Promats’a teslim: API key Promats’ın hesabında, kontrol onların</p>
+<p><strong>Provider seçim kuralları:</strong></p>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 41%" />
+<col style="width: 29%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Görev</th>
+<th>Önerilen</th>
+<th>Neden</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Konversasyonel sohbet</td>
+<td>Claude</td>
+<td>Reasoning kalitesi</td>
+</tr>
+<tr class="even">
+<td>Structured JSON çıkarımı</td>
+<td>OpenAI gpt-4o-mini</td>
+<td>Cheap + structured output</td>
+</tr>
+<tr class="odd">
+<td>Bulk sinyal çıkarımı</td>
+<td>Groq llama-3.1-70b</td>
+<td>Hız + ucuz</td>
+</tr>
+<tr class="even">
+<td>Tahmin açıklama</td>
+<td>Claude</td>
+<td>Doğal dil kalite</td>
+</tr>
+<tr class="odd">
+<td>OCR sonrası ekstrasyon</td>
+<td>Claude</td>
+<td>Karmaşık doc anlama</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mobil-flutter">2.7 Mobil — Flutter</h3>
+<p><strong>Karar:</strong> Saha satış + bayi mobil + operatör → Flutter.</p>
+<p><strong>Gerekçe:</strong> - Promats mobil projeleri zaten Flutter (Bereket Fide, VistaSeeds) - Tek codebase → iOS + Android - Performance native’a yakın - React Native: Bun ile çelişkiler, ayrı bilgi tabanı</p>
+<p><strong>Alternatif:</strong> - PWA (sadece bayi tarafı, Faz 9.7) — başlangıçta yeterli, sonradan native’a geçilebilir</p>
+<h3 id="authentication-fastify-jwt-httponly-cookie">2.8 Authentication — Fastify JWT + httpOnly cookie</h3>
+<p><strong>Karar:</strong> Mevcut Paspas auth pattern’i tüm yeni modüllerde devam.</p>
+<pre><code>Login → POST /auth/login → JWT (15dk) + Refresh JWT (7gün) → httpOnly cookie
+RTK Query her request&#39;te cookie ekler
+401 → otomatik refresh → tekrar dene</code></pre>
+<p><strong>Gerekçe:</strong> - Mevcut Paspas auth çalışıyor, yeniden tasarlamaya gerek yok - httpOnly cookie: XSS koruma (localStorage’dan güvenli) - Refresh token rotation - Bayi portalı için: aynı auth mekanizması, farklı <code>audience</code> claim’i (bayi vs admin)</p>
+<h3 id="cache-queue-redis-bullmq">2.9 Cache &amp; Queue — Redis + BullMQ</h3>
+<p><strong>Karar:</strong> Tek Redis instance: cache + BullMQ queue + rate limit + session.</p>
+<p><strong>Kullanım:</strong> - <strong>Cache:</strong> tahmin sonucu (1 saat TTL), bayi cari (5dk TTL), katalog (15dk TTL) - <strong>Queue:</strong> scraper işleri, ML eğitim, email gönderim, Excel parsing - <strong>Rate limit:</strong> API per-IP, per-user - <strong>Session:</strong> opsiyonel — JWT zaten stateless</p>
+<h3 id="object-storage-s3-minio">2.10 Object Storage — S3 / MinIO</h3>
+<p><strong>Karar:</strong> Cloud deployment’ta AWS S3, self-host’ta MinIO.</p>
+<p><strong>Kullanım:</strong> - HTML snapshot’lar (Faz 5 — 90 gün retention) - Model artifact (Faz 7 — versiyon × bayi-ürün) - Bayi yüklenen dosyalar (iade fotoğraf, vs) - PDF rapor (cari ekstre, fatura)</p>
+<h2 id="paspas-ile-entegrasyon-noktaları">3. Paspas ile Entegrasyon Noktaları</h2>
+<h3 id="mevcut-paspas-tabloları-paylaşılan">3.1 Mevcut Paspas tabloları (paylaşılan)</h3>
+<p>MatPortal aşağıdaki Paspas tablolarını <strong>read</strong> + bazılarına <strong>write</strong> yapar:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Tablo</th>
+<th>Read</th>
+<th>Write</th>
+<th>Hangi modül?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>musteriler</code></td>
+<td>✅</td>
+<td>⚠️ (sadece portal_kullanicilari linkler)</td>
+<td>Tümü</td>
+</tr>
+<tr class="even">
+<td><code>urunler</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>Faz 6 (katalog)</td>
+</tr>
+<tr class="odd">
+<td><code>urun_kategorileri</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>Faz 6</td>
+</tr>
+<tr class="even">
+<td><code>satis_siparisleri</code></td>
+<td>✅</td>
+<td>✅ (<code>repoCreate</code> çağırarak)</td>
+<td>Faz 6</td>
+</tr>
+<tr class="odd">
+<td><code>siparis_kalemleri</code></td>
+<td>✅</td>
+<td>✅</td>
+<td>Faz 6</td>
+</tr>
+<tr class="even">
+<td><code>uretim_emirleri</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>Faz 6 (sipariş takip)</td>
+</tr>
+<tr class="odd">
+<td><code>sevkiyat_emirleri</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>Faz 6</td>
+</tr>
+<tr class="even">
+<td><code>hareketler</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>Faz 6 (cari)</td>
+</tr>
+<tr class="odd">
+<td><code>stoklar</code></td>
+<td>✅</td>
+<td>⚠️ (rezervasyon)</td>
+<td>Faz 4, Faz 6</td>
+</tr>
+<tr class="even">
+<td><code>recete_*</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>Faz 4</td>
+</tr>
+<tr class="odd">
+<td><code>makine_havuzu</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>Faz 2 (kapasite)</td>
+</tr>
+<tr class="even">
+<td><code>vardiya_*</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>Faz 2</td>
+</tr>
+<tr class="odd">
+<td><code>kullanicilar</code></td>
+<td>✅</td>
+<td>❌</td>
+<td>Tümü</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Kritik prensip:</strong> MatPortal <strong>doğrudan Paspas tablolarına yazmaz</strong>. Yazma yapacaksa Paspas’ın repository fonksiyonlarını çağırır (örn. <code>satis_siparisleri/repository.ts:repoCreate</code>). Bu sayede: - Paspas iş kuralları korunur (validation, audit) - Tek doğruluk kaynağı - İlerde Paspas API değişirse MatPortal kırılmaz, repo wrapper güncellenir</p>
+<h3 id="yeni-matportal-tabloları">3.2 Yeni MatPortal tabloları</h3>
+<p>Faz bazlı yeni tablolar (özet):</p>
+<pre><code>Faz 1: talep_havuzu, talep_kalemleri, talep_kaynak
+Faz 2: tahmin_modelleri, tahmin_calistirma, tahmin_dogruluk,
+       siparis_gecmisi_yuklenen
+Faz 3: lead_havuzu, lead_etkilesim, outreach_kampanya
+Faz 5: web_kazima_hedefleri, web_kazima_kayitlari, bayi_sinyalleri,
+       churn_skor_gecmisi, churn_aksiyon_log
+Faz 6: portal_kullanicilari, portal_oturumlari, portal_sepet,
+       portal_sepet_kalemleri, portal_audit, portal_bildirimler,
+       portal_not_defteri, arac_modelleri, urun_arac_uyumlulugu,
+       portal_numune_talepleri, portal_iadeler
+Faz 7: model_versiyonlari, ab_test_calistirma, excel_yukleme_gecmisi,
+       feature_pipeline_kayitlari, tahmin_geri_besleme
+Faz 8: ai_aksiyon_audit, ai_otomasyon_ayarlari, ai_oneri_geri_besleme
+Faz 9: ziyaret_kayitlari, push_bildirim_log, mobil_oturumlari</code></pre>
+<blockquote>
+<p><strong>Detay:</strong> <a href="./06-veri-modeli.md"><code>06-veri-modeli.md</code></a></p>
+</blockquote>
+<h3 id="mevcut-sidebar-genişlemesi">3.3 Mevcut sidebar genişlemesi</h3>
+<p>Paspas admin paneli sidebar’a yeni menü grupları:</p>
+<pre><code>PASPAS (mevcut)
+  ├── Dashboard
+  ├── Ürünler
+  ├── Reçeteler
+  ├── Müşteriler
+  ├── Satış Siparişleri
+  ├── Üretim Emirleri
+  ├── Makine Havuzu
+  ├── İş Yükleri
+  ├── Gantt
+  ├── Stoklar
+  ├── Satın Alma
+  ├── Hareketler
+  ├── Operatör
+  └── Tanımlar
+
+MATPORTAL (yeni)
+  ├── Talep Havuzu (Faz 1)
+  ├── Tahmin Motoru (Faz 2)
+  ├── Müşteri Keşif (Faz 3)
+  ├── Stok Otomasyonu (Faz 4)
+  ├── Bayi Radarı (Faz 5)
+  ├── Bayi Portalı (Faz 6)
+  │   ├── Bayi Yönetimi
+  │   ├── Portal Raporları
+  │   └── Araç-Paspas Uyumluluk
+  ├── ML Laboratuvarı (Faz 7)
+  └── Konversasyonel (Faz 8)</code></pre>
+<p>Yetki: Paspas admin, MatPortal admin, segment admin, satış sorumlusu rolleri. Her menü kendi yetkisine bağlı.</p>
+<h2 id="deployment-topolojisi">4. Deployment Topolojisi</h2>
+<h3 id="tek-müşteri-promats-deployment">4.1 Tek müşteri (Promats) deployment</h3>
+<pre><code>                    ┌──────────────────┐
+                    │  promats.local   │ → DNS
+                    └────────┬─────────┘
+                             ↓
+                    ┌──────────────────┐
+                    │  Nginx (TLS)     │
+                    │  443 + 80→443    │
+                    └────────┬─────────┘
+                             ↓
+        ┌────────────────────┼────────────────────┐
+        ↓                    ↓                    ↓
+┌──────────────┐   ┌──────────────────┐   ┌──────────────┐
+│ Admin Panel  │   │ Bayi Portal      │   │ Backend API  │
+│ Next.js      │   │ Next.js          │   │ Bun:3001     │
+│ :3000        │   │ :3002            │   │              │
+└──────┬───────┘   └────────┬─────────┘   └──────┬───────┘
+       │                    │                    │
+       └────────────────────┴────────────────────┘
+                             ↓
+                ┌────────────┴─────────────┐
+                ↓                          ↓
+        ┌───────────────┐         ┌───────────────┐
+        │ MySQL :3306   │         │ Redis :6379   │
+        │ promats_erp   │         │ cache+queue   │
+        └───────────────┘         └───────────────┘
+                ↓
+        ┌──────────────────────────┐
+        │ ML Service (Docker)      │
+        │ Python FastAPI :8000     │
+        └──────────────────────────┘
+                ↓
+        ┌──────────────────────────┐
+        │ Crawler Worker (Docker)  │
+        │ Bun + Playwright         │
+        └──────────────────────────┘
+                ↓
+        ┌──────────────────────────┐
+        │ MinIO :9000              │
+        │ (self-host) veya AWS S3  │
+        └──────────────────────────┘</code></pre>
+<h3 id="vps-gereksinimleri">4.2 VPS gereksinimleri</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 15%" />
+<col style="width: 15%" />
+<col style="width: 18%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Bileşen</th>
+<th>RAM</th>
+<th>CPU</th>
+<th>Disk</th>
+<th>Notlar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Ana VPS (backend + DB + admin/portal Next.js)</td>
+<td>8GB</td>
+<td>4 vCPU</td>
+<td>100GB SSD</td>
+<td>Faz 0-6 yeter</td>
+</tr>
+<tr class="even">
+<td>ML Service container</td>
+<td>4GB</td>
+<td>2 vCPU</td>
+<td>50GB</td>
+<td>Faz 7 sonrası</td>
+</tr>
+<tr class="odd">
+<td>Crawler Worker</td>
+<td>2GB</td>
+<td>2 vCPU</td>
+<td>20GB</td>
+<td>Playwright RAM hungry</td>
+</tr>
+<tr class="even">
+<td>Redis</td>
+<td>2GB</td>
+<td>1 vCPU</td>
+<td>10GB</td>
+<td>Aynı VPS’te paylaşımlı olabilir</td>
+</tr>
+<tr class="odd">
+<td>MinIO veya S3</td>
+<td>10GB+</td>
+<td>—</td>
+<td>100GB+ büyür</td>
+<td>HTML snapshot + model artifact</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Önerilen başlangıç:</strong> 8GB+4vCPU+200GB tek VPS (~$30-50/ay). <strong>Faz 7 itibariyle:</strong> ML + Crawler ayrı container, ayrı host (~$80-120/ay).</p>
+<h3 id="multi-deployment-gizli-saas">4.3 Multi-deployment (gizli SaaS)</h3>
+<pre><code>                  ┌──────────────────┐
+                  │ Tek Codebase     │
+                  │ (matportal-core) │
+                  └─────────┬────────┘
+                            ↓ deploy
+        ┌───────────────────┼───────────────────┐
+        ↓                   ↓                   ↓
+┌───────────────┐  ┌────────────────┐  ┌────────────────┐
+│ Promats       │  │ Müşteri 2      │  │ Müşteri N      │
+│ matportal.    │  │ matportal-x.   │  │ matportal-y.   │
+│ promats.com   │  │ com            │  │ com            │
+│               │  │                │  │                │
+│ DB: promats_  │  │ DB: musteri2_  │  │ DB: musteriN_  │
+│     erp       │  │     erp        │  │     erp        │
+│ Konfig: özel  │  │ Konfig: özel   │  │ Konfig: özel   │
+│ LLM key: özel │  │ LLM key: özel  │  │ LLM key: özel  │
+└───────────────┘  └────────────────┘  └────────────────┘</code></pre>
+<p><strong>Not:</strong> Bu strateji <strong>Promats’a görünmez</strong>. Promats için MatPortal “kendi özel ürünüdür”. Ortak codebase Orhan’ın bilgisindedir, müşteri tarafına aksetmez.</p>
+<p><strong>Konfig farklılıkları:</strong> - <code>MATPORTAL_BRAND_NAME=Promats Bayi Portalı</code> - <code>MATPORTAL_SECTOR=plastik_enjeksiyon</code> - <code>MATPORTAL_SEASONALITY=yıllık</code> - <code>MATPORTAL_CURRENCY=TRY</code> - <code>LLM_API_KEY=...</code> (her müşteri kendi)</p>
+<h2 id="güvenlik">5. Güvenlik</h2>
+<h3 id="authentication-authorization">5.1 Authentication &amp; Authorization</h3>
+<ul>
+<li>JWT access token: <strong>15 dk</strong> TTL</li>
+<li>JWT refresh token: <strong>7 gün</strong> TTL, rotation aktif</li>
+<li>httpOnly cookie + SameSite=Strict</li>
+<li>Şifre: bcrypt (cost 12), min 10 karakter, complexity check</li>
+<li>2FA (Faz 6 v2): TOTP veya SMS</li>
+</ul>
+<h3 id="yetkilendirme-matrisi">5.2 Yetkilendirme matrisi</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Rol</th>
+<th>Paspas erişim</th>
+<th>Portal erişim</th>
+<th>ML Lab</th>
+<th>Sohbet</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sistem admin</td>
+<td>Tam</td>
+<td>Tam</td>
+<td>Tam</td>
+<td>Tam</td>
+</tr>
+<tr class="even">
+<td>MatPortal admin</td>
+<td>Bayi yönetim</td>
+<td>Tam</td>
+<td>Görüntüle</td>
+<td>Tam</td>
+</tr>
+<tr class="odd">
+<td>Satış sorumlusu</td>
+<td>Müşteri+sipariş</td>
+<td>Bayi yönetim</td>
+<td>❌</td>
+<td>Sınırlı</td>
+</tr>
+<tr class="even">
+<td>Bayi admin (portal-side)</td>
+<td>❌</td>
+<td>Kendi bayisi</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>Bayi operator</td>
+<td>❌</td>
+<td>Sipariş ver</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="even">
+<td>Bayi görüntüleyici</td>
+<td>❌</td>
+<td>Read-only</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr class="odd">
+<td>Saha satış</td>
+<td>Müşteri görüntüle</td>
+<td>Atadığı bayiler</td>
+<td>❌</td>
+<td>Sınırlı</td>
+</tr>
+</tbody>
+</table>
+<h3 id="veri-koruma">5.3 Veri koruma</h3>
+<ul>
+<li><strong>At rest:</strong> MySQL şifreli volume (LUKS), S3 SSE</li>
+<li><strong>In transit:</strong> TLS 1.3 her yerde, HSTS aktif</li>
+<li><strong>PII:</strong> bayi telefon/email yalnızca <code>musteriler</code> tablosunda — log’a girmez</li>
+<li><strong>KVKK:</strong> aydınlatma metni, silme talebi flow’u (Faz 6)</li>
+<li><strong>Audit:</strong> tüm sensitive aksiyonlar <code>*_audit</code> tablolarında, 7 yıl saklanır</li>
+</ul>
+<h3 id="saldırı-yüzeyi">5.4 Saldırı yüzeyi</h3>
+<table>
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Vektör</th>
+<th>Önlem</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>SQL injection</td>
+<td>Drizzle ORM parametreli sorgu (raw SQL yasak)</td>
+</tr>
+<tr class="even">
+<td>XSS</td>
+<td>React 19 default escape + Content Security Policy</td>
+</tr>
+<tr class="odd">
+<td>CSRF</td>
+<td>SameSite=Strict cookie + CSRF token (form-based)</td>
+</tr>
+<tr class="even">
+<td>Brute force login</td>
+<td>Rate limit 5 deneme/dakika + 30dk kilit</td>
+</tr>
+<tr class="odd">
+<td>API rate limit</td>
+<td>Redis bazlı per-IP + per-user limit</td>
+</tr>
+<tr class="even">
+<td>Secret leak</td>
+<td>env değişkenleri Docker secret, repo’ya commit yok</td>
+</tr>
+<tr class="odd">
+<td>LLM prompt injection</td>
+<td>Kullanıcı girdisi <code>&lt;user&gt;</code> tag içinde, sistem prompt sabit</td>
+</tr>
+<tr class="even">
+<td>Scraping yasal sorun</td>
+<td>robots.txt + KVKK + bayi sözleşme klozu (Faz 5)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="performans-hedefleri">6. Performans Hedefleri</h2>
+<h3 id="latency">6.1 Latency</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Endpoint tipi</th>
+<th>p50</th>
+<th>p95</th>
+<th>p99</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Auth (login, refresh)</td>
+<td>&lt;100ms</td>
+<td>&lt;300ms</td>
+<td>&lt;500ms</td>
+</tr>
+<tr class="even">
+<td>CRUD basit</td>
+<td>&lt;80ms</td>
+<td>&lt;200ms</td>
+<td>&lt;400ms</td>
+</tr>
+<tr class="odd">
+<td>Liste + filtre + sayfalama</td>
+<td>&lt;150ms</td>
+<td>&lt;500ms</td>
+<td>&lt;1s</td>
+</tr>
+<tr class="even">
+<td>Tahmin (cache hit)</td>
+<td>&lt;50ms</td>
+<td>&lt;100ms</td>
+<td>&lt;200ms</td>
+</tr>
+<tr class="odd">
+<td>Tahmin (cache miss)</td>
+<td>&lt;500ms</td>
+<td>&lt;2s</td>
+<td>&lt;5s</td>
+</tr>
+<tr class="even">
+<td>LLM çağrısı</td>
+<td>&lt;2s</td>
+<td>&lt;8s</td>
+<td>&lt;15s</td>
+</tr>
+<tr class="odd">
+<td>Excel upload (1000 satır)</td>
+<td>&lt;5s</td>
+<td>&lt;15s</td>
+<td>&lt;30s</td>
+</tr>
+<tr class="even">
+<td>Crawler bir sayfa</td>
+<td>&lt;3s</td>
+<td>&lt;10s</td>
+<td>&lt;20s</td>
+</tr>
+</tbody>
+</table>
+<h3 id="throughput">6.2 Throughput</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Sistem</th>
+<th>Hedef RPS</th>
+<th>Notlar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Backend (peak)</td>
+<td>200 RPS</td>
+<td>Tek instance Bun + Fastify</td>
+</tr>
+<tr class="even">
+<td>Tahmin endpoint</td>
+<td>50 RPS</td>
+<td>Cache’li</td>
+</tr>
+<tr class="odd">
+<td>Crawler worker</td>
+<td>1 req / 2s / domain</td>
+<td>Rate limit gereği</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ölçek-hedefleri-1-yıl">6.3 Ölçek hedefleri (1 yıl)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Metrik</th>
+<th>Yıl 1</th>
+<th>Yıl 2</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bayi sayısı</td>
+<td>50-65</td>
+<td>100+</td>
+</tr>
+<tr class="even">
+<td>Aktif kullanıcı (portal+admin)</td>
+<td>~150</td>
+<td>300+</td>
+</tr>
+<tr class="odd">
+<td>Aylık sipariş</td>
+<td>250-300</td>
+<td>500+</td>
+</tr>
+<tr class="even">
+<td>Tahmin tablosu (kayıt)</td>
+<td>~50K</td>
+<td>200K</td>
+</tr>
+<tr class="odd">
+<td>Bayi sinyalleri (kayıt)</td>
+<td>~10K</td>
+<td>50K</td>
+</tr>
+<tr class="even">
+<td>HTML snapshot (S3)</td>
+<td>~5GB</td>
+<td>30GB</td>
+</tr>
+<tr class="odd">
+<td>Model artifact (S3)</td>
+<td>~2GB</td>
+<td>10GB</td>
+</tr>
+</tbody>
+</table>
+<p>Bu rakamlar <strong>tek VPS+tek Redis+tek MySQL</strong> ile rahat karşılanır. 100+ bayide horizontal scaling değerlendirilebilir.</p>
+<h2 id="geliştirme-akışı">7. Geliştirme Akışı</h2>
+<h3 id="repository-yapısı">7.1 Repository yapısı</h3>
+<pre><code>paspas/                     # mevcut monorepo
+├── admin_panel/            # mevcut Next.js admin
+├── backend/                # mevcut Fastify backend (genişler)
+│   ├── src/modules/
+│   │   ├── musteriler/     # mevcut
+│   │   ├── urunler/        # mevcut
+│   │   ├── ...
+│   │   ├── portal/         # Faz 6 yeni
+│   │   ├── tahmin/         # Faz 2 yeni
+│   │   ├── churn/          # Faz 5 yeni
+│   │   ├── lead/           # Faz 3 yeni
+│   │   ├── sohbet/         # Faz 8 yeni
+│   │   ├── mlops/          # Faz 7 yeni
+│   │   └── crawler/        # Faz 5 yeni
+│   └── src/db/seed/sql/    # schema dosyaları
+├── dealer_portal/          # Faz 6 yeni Next.js
+├── ml_service/             # Faz 7 yeni Python container
+├── crawler_worker/         # Faz 5 yeni Bun worker (ayrı süreç)
+├── mobile/                 # Faz 9 yeni Flutter
+└── docs/
+    ├── tartisma/           # mevcut tartışma dokümanları
+    └── proje-teklifi/      # mevcut teklif dokümanları</code></pre>
+<h3 id="cicd">7.2 CI/CD</h3>
+<p><strong>Pipeline:</strong> 1. PR açıldığında: lint + type-check + unit test 2. main’e merge: integration test + build 3. Auto-deploy staging 4. Manuel approve → production deploy</p>
+<p><strong>Stack:</strong> - GitHub Actions (Promats projeleri zaten kullanıyor) - Docker Compose (deployment) - Health check + auto-restart (Docker <code>restart: unless-stopped</code>)</p>
+<h3 id="test-piramidi">7.3 Test piramidi</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Tip</th>
+<th>Coverage hedefi</th>
+<th>Araç</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Unit (kritik fonksiyonlar)</td>
+<td>%80+</td>
+<td>bun test</td>
+</tr>
+<tr class="even">
+<td>Integration (API + DB)</td>
+<td>Kritik akışlar</td>
+<td>bun test + test DB</td>
+</tr>
+<tr class="odd">
+<td>E2E (kullanıcı senaryosu)</td>
+<td>Top 10 senaryo</td>
+<td>Playwright</td>
+</tr>
+<tr class="even">
+<td>Smoke (deploy sonrası)</td>
+<td>Health check + login</td>
+<td>Curl + GH Action</td>
+</tr>
+</tbody>
+</table>
+<h2 id="operasyonel-konular">8. Operasyonel Konular</h2>
+<h3 id="izleme-monitoring">8.1 İzleme (monitoring)</h3>
+<p><strong>Stack:</strong> - Application: Sentry (hata takibi) - Metrik: Prometheus + Grafana - Log: structured JSON → loki (ileride) - Uptime: UptimeRobot ya da Healthchecks.io (eksternal)</p>
+<p><strong>Kritik dashboard:</strong> - API latency p95/p99 - Hata oranı (HTTP 5xx) - DB connection pool - Crawler success rate - LLM token usage + maliyet - Tahmin MAPE (model dashboard) - Churn alarm count</p>
+<h3 id="yedekleme">8.2 Yedekleme</h3>
+<ul>
+<li>MySQL: günlük tam dump → S3 (30 gün retention)</li>
+<li>MySQL: saatlik incremental binlog</li>
+<li>S3: cross-region replication (kritik artifact’lar)</li>
+<li>Konfig: Docker compose + env’ler git’te (secret hariç)</li>
+</ul>
+<h3 id="disaster-recovery">8.3 Disaster recovery</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Senaryo</th>
+<th>Recovery time hedefi</th>
+<th>Yaklaşım</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>VPS çökmesi</td>
+<td>&lt;30 dk</td>
+<td>Yeni VPS + dump restore</td>
+</tr>
+<tr class="even">
+<td>DB veri bozulması</td>
+<td>&lt;2 saat</td>
+<td>Saatlik binlog restore</td>
+</tr>
+<tr class="odd">
+<td>Model artifact kaybı</td>
+<td>&lt;4 saat</td>
+<td>Re-train (offline)</td>
+</tr>
+<tr class="even">
+<td>Tüm S3 kaybı</td>
+<td>&lt;8 saat</td>
+<td>Cross-region replica</td>
+</tr>
+<tr class="odd">
+<td>Codebase kaybı</td>
+<td>&lt;15 dk</td>
+<td>Git remote (GitHub/GitLab)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="açık-karar-noktaları-mimari">9. Açık karar noktaları (Mimari)</h2>
+<ol type="1">
+<li><strong>Bun vs Node.js:</strong> Bun stable mı yeterli, bazı paket uyumsuzluğu olabilir? (Önerim: Bun devam, sorun çıkan paketleri replace)</li>
+<li><strong>MinIO vs AWS S3:</strong> Self-host mu cloud mu? (Önerim: başlangıç MinIO, ölçek olunca S3)</li>
+<li><strong>Mobil PWA vs native Flutter (bayi tarafı):</strong> PWA ilk çıkışta yeter mi? (Önerim: PWA → ihtiyaç doğunca native)</li>
+<li><strong>Microservice ayrımı:</strong> Hangi noktada ML/Crawler’ı tamamen ayırmak gerek? (Önerim: 100+ bayi sonrası)</li>
+<li><strong>MySQL vs PostgreSQL geçişi:</strong> İlerde gerek olur mu? (Önerim: hayır, MySQL 8 yeterli)</li>
+<li><strong>Kubernetes:</strong> Ne zaman? (Önerim: 3+ müşteri deployment olunca)</li>
+<li><strong>Frontend tek monorepo mu, ayrı repo mu (admin vs portal)?</strong> (Önerim: monorepo, yarn workspaces / turborepo)</li>
+<li><strong>WebSocket gerek mi (gerçek zamanlı bildirim)?</strong> (Önerim: Faz 6’da Server-Sent Events; WS Faz 8’de)</li>
+<li><strong>i18n (çoklu dil):</strong> Faz 9 mu, baştan mı? (Önerim: anahtar yapısı baştan, çeviri Faz 9)</li>
+<li><strong>GraphQL vs REST:</strong> REST devam mı? (Önerim: REST devam, RTK Query iyi çalışıyor)</li>
+</ol>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("03 — Mimari ve Teknoloji").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

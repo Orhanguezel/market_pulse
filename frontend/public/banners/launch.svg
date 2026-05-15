@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 400" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#FAF6EF"/>
+      <stop offset="100%" stop-color="#F2EBDD"/>
+    </linearGradient>
+    <linearGradient id="gold" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#A8884A"/>
+      <stop offset="50%" stop-color="#C9A961"/>
+      <stop offset="100%" stop-color="#E5D0A0"/>
+    </linearGradient>
+  </defs>
+  <rect width="1200" height="400" fill="url(#bg)"/>
+  <!-- Decorative orbits (right) -->
+  <circle cx="950" cy="200" r="170" fill="none" stroke="url(#gold)" stroke-width="1" opacity="0.35"/>
+  <circle cx="950" cy="200" r="120" fill="none" stroke="url(#gold)" stroke-width="1" opacity="0.5"/>
+  <circle cx="950" cy="200" r="70"  fill="none" stroke="url(#gold)" stroke-width="1" opacity="0.7"/>
+  <circle cx="950" cy="200" r="6"   fill="#C9A961"/>
+  <!-- Decorative orbits (left, faint) -->
+  <circle cx="120" cy="320" r="90" fill="none" stroke="url(#gold)" stroke-width="0.5" opacity="0.25" stroke-dasharray="3 5"/>
+  <!-- Twinkles -->
+  <circle cx="880" cy="100" r="2"   fill="#C9A961" opacity="0.7"/>
+  <circle cx="1050" cy="290" r="2"  fill="#C9A961" opacity="0.5"/>
+  <circle cx="820" cy="270" r="1.5" fill="#3D2E47" opacity="0.6"/>
+  <circle cx="200" cy="80"  r="1.5" fill="#C9A961" opacity="0.6"/>
+  <circle cx="420" cy="180" r="1"   fill="#3D2E47" opacity="0.5"/>
+  <circle cx="640" cy="60"  r="1.5" fill="#C9A961" opacity="0.5"/>
+</svg>

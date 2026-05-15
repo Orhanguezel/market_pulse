@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>09 — Otomasyon Eşikleri &amp; Onay Kuralları — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>09 — Otomasyon Eşikleri &amp; Onay Kuralları</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="otomasyon-eşikleri-onay-kuralları">09 — Otomasyon Eşikleri &amp; Onay Kuralları</h1>
+<blockquote>
+<p><strong>Bağlam (v1.1):</strong> Bu doküman risk skoru × güven eşiği × tutar limiti üçlü onay matrisinin <strong>detaylı tasarımını</strong> içerir. Faz 8 (Konversasyonel) bu kuralları kullanır. Risk yönetimi genel: <a href="../proje-teklifi/09-risk.md"><code>proje-teklifi/09-risk.md</code></a>. Audit log şeması: <a href="../proje-teklifi/06-veri-modeli.md#faz-8--konversasyonel-3-tablo"><code>proje-teklifi/06-veri-modeli.md</code></a>.</p>
+</blockquote>
+<h2 id="soru">Soru</h2>
+<blockquote>
+<p>“AI önerilerinin hangi tutar/güven skoru üstünde manuel onaya çıksın?”</p>
+</blockquote>
+<p>İki uç: - <strong>Aşırı muhafazakar:</strong> her AI önerisi insan onayı bekler → güven yüksek, ama AI değer üretmez (insan zamanını yine yer). - <strong>Aşırı liberal:</strong> AI her şeyi otomatik yapar → değer yüksek ama hata maliyeti büyük (yanlış mail/sipariş/satınalma).</p>
+<p>Doğru cevap <strong>risk seviyesine göre kademeli kural seti</strong>. Bu doküman 4 boyutla bunu tasarlar.</p>
+<h2 id="risk-boyutları">1. Risk boyutları</h2>
+<p>Her aksiyonu 4 boyutta puanla:</p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 31%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Boyut</th>
+<th>Soru</th>
+<th>Puan</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Geri alınabilirlik</strong></td>
+<td>Hata olursa kolay düzeltilir mi?</td>
+<td>Kolay (1) → Mümkün (2) → Zor (3) → Geri alınamaz (4)</td>
+</tr>
+<tr class="even">
+<td><strong>Para etkisi</strong></td>
+<td>Tutar büyüklüğü?</td>
+<td>&lt;500₺ (1) → 5K (2) → 50K (3) → &gt;50K (4)</td>
+</tr>
+<tr class="odd">
+<td><strong>Dış görünüm</strong></td>
+<td>Müşteri/tedarikçi/kamu görüyor mu?</td>
+<td>İçeride kalır (1) → İç dağıtım (2) → Müşteri görür (3) → Kamu görür (4)</td>
+</tr>
+<tr class="even">
+<td><strong>Veri etkisi</strong></td>
+<td>Kaç kayıt etkileniyor?</td>
+<td>1 (1) → &lt;10 (2) → &lt;100 (3) → &gt;100 (4)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Toplam risk skoru:</strong> 4 boyutun toplamı (4-16 arası)</p>
+<table>
+<colgroup>
+<col style="width: 28%" />
+<col style="width: 38%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Skor</th>
+<th>Seviye</th>
+<th>Kural</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4-6</td>
+<td>Düşük</td>
+<td>AI otomatik yapar (sessiz)</td>
+</tr>
+<tr class="even">
+<td>7-9</td>
+<td>Orta</td>
+<td>AI taslak çıkarır, onay UI’da bekler (5 dk içinde tepki yoksa email uyarı)</td>
+</tr>
+<tr class="odd">
+<td>10-12</td>
+<td>Yüksek</td>
+<td>AI önerir + insan zorunlu onay + audit log</td>
+</tr>
+<tr class="even">
+<td>13-16</td>
+<td>Kritik</td>
+<td>AI sadece bilgilendirir; aksiyon <strong>insan başlatır</strong>, AI yardımcı</td>
+</tr>
+</tbody>
+</table>
+<h2 id="aksiyon-kataloğu-risk-skoruna-göre">2. Aksiyon kataloğu — risk skoruna göre</h2>
+<h3 id="düşük-4-6-ai-sessizce-yapar">Düşük (4-6) — AI sessizce yapar</h3>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 25%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Aksiyon</th>
+<th>Risk</th>
+<th>Gerekçe</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Lead skoru hesapla / güncelle</td>
+<td>4</td>
+<td>Sadece DB içi sıralama</td>
+</tr>
+<tr class="even">
+<td>Müşteri profili re-segment</td>
+<td>5</td>
+<td>Otomatik etiket, sayısal etki yok</td>
+</tr>
+<tr class="odd">
+<td>Stok hızı raporu üret</td>
+<td>4</td>
+<td>Read-only</td>
+</tr>
+<tr class="even">
+<td>Tedarikçi performans skor güncelle</td>
+<td>5</td>
+<td>İç metrik</td>
+</tr>
+<tr class="odd">
+<td>Talep özeti yapılandır (havuza yaz)</td>
+<td>6</td>
+<td>DB write ama “yeni” durumda kalır, aksiyon yok</td>
+</tr>
+<tr class="even">
+<td>Geri besleme metrik kaydet</td>
+<td>4</td>
+<td>İç audit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="orta-7-9-taslak-sessiz-onay-penceresi">Orta (7-9) — taslak + sessiz onay penceresi</h3>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 19%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Aksiyon</th>
+<th>Risk</th>
+<th>Onay penceresi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Stok yeniden sipariş önerisi (taslak)</td>
+<td>8</td>
+<td>24 saat — sessiz onayla otomatik satın alma siparişi taslağı</td>
+</tr>
+<tr class="even">
+<td>Üretim önerisi (planlanan, taslak)</td>
+<td>7</td>
+<td>12 saat</td>
+</tr>
+<tr class="odd">
+<td>Lead’e iletildi durumuna geçir</td>
+<td>7</td>
+<td>Anlık (ama email gönderme yok)</td>
+</tr>
+<tr class="even">
+<td>Olası talep tahmini → siparişe önerilen</td>
+<td>9</td>
+<td>24 saat</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yüksek-10-12-insan-onayı-zorunlu">Yüksek (10-12) — insan onayı zorunlu</h3>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 26%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Aksiyon</th>
+<th>Risk</th>
+<th>Notlar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Satın alma siparişi (PO) onaylama → tedarikçiye gitsin</td>
+<td>11</td>
+<td>Tutar limit yok, hep manuel</td>
+</tr>
+<tr class="even">
+<td>Üretim emri açma</td>
+<td>10</td>
+<td>Stok rezervasyon ve makine yükü</td>
+</tr>
+<tr class="odd">
+<td>Müşteri sipariş açma (B2B portaldan)</td>
+<td>12</td>
+<td>Stok + üretim + finansal</td>
+</tr>
+<tr class="even">
+<td>Lead’e otomatik email gönder</td>
+<td>11</td>
+<td>Tedarikçi/müşteri ilişkisini etkiler</td>
+</tr>
+<tr class="odd">
+<td>Fiyat değişikliği önerme</td>
+<td>11</td>
+<td>Müşteri ilişkisi</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kritik-13-16-sadece-bilgi-insan-başlatır">Kritik (13-16) — sadece bilgi, insan başlatır</h3>
+<table>
+<colgroup>
+<col style="width: 39%" />
+<col style="width: 26%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Aksiyon</th>
+<th>Risk</th>
+<th>Notlar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Toplu mail kampanyası başlat</td>
+<td>14</td>
+<td>1000+ alıcı, domain reputasyon</td>
+</tr>
+<tr class="even">
+<td>Tedarikçi/müşteri silme</td>
+<td>15</td>
+<td>Veri kaybı</td>
+</tr>
+<tr class="odd">
+<td>Fiyat listesi tüm müşterilerde değiştir</td>
+<td>16</td>
+<td>İçerik değişikliği büyük</td>
+</tr>
+<tr class="even">
+<td>Ödeme/iade işlemi</td>
+<td>16</td>
+<td>Para hareketi</td>
+</tr>
+</tbody>
+</table>
+<h2 id="tutar-bazlı-override-kuralları">3. Tutar bazlı override kuralları</h2>
+<p>Skor üstüne ek <strong>mutlak limitler</strong>:</p>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 74%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Aksiyon türü</th>
+<th>AI’nın otomatik yapabileceği üst tutar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Satın alma siparişi taslağı</td>
+<td><strong>2.000₺</strong> üstü zorunlu manuel onay</td>
+</tr>
+<tr class="even">
+<td>Müşteri sipariş onayı (B2B portal)</td>
+<td><strong>10.000₺</strong> üstü ek onay (satış müdürü)</td>
+</tr>
+<tr class="odd">
+<td>Toplu email</td>
+<td><strong>100 alıcı</strong> üstü manuel onay</td>
+</tr>
+<tr class="even">
+<td>Stok düzeltme (manuel)</td>
+<td>Hiçbir zaman AI yapmaz, sadece insan</td>
+</tr>
+</tbody>
+</table>
+<h2 id="güven-skoru-bazlı-override">4. Güven skoru bazlı override</h2>
+<p>AI’nın kendi <code>guven_skoru</code> (LLM çıktıdan parse) bazlı:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Güven aralığı</th>
+<th>Davranış</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.95-1.00</td>
+<td>Otomatik (eğer risk skoru izin veriyorsa)</td>
+</tr>
+<tr class="even">
+<td>0.80-0.95</td>
+<td>Onay bekler</td>
+</tr>
+<tr class="odd">
+<td>0.60-0.80</td>
+<td>Onay zorunlu + AI alternatif öneri sunmaya zorlanır</td>
+</tr>
+<tr class="even">
+<td>&lt;0.60</td>
+<td>Aksiyon önerme; sadece “şunu netleştirir misiniz” sorusu</td>
+</tr>
+</tbody>
+</table>
+<p>Örnek: AI talep özetinde <code>guven_skoru=0.92</code> çıkarsa “10K sipariş aç” öneremez (risk yüksek + güven 0.95 altı). Ama <code>guven_skoru=0.97</code> çıkarsa “5K sipariş taslağı” otomatik açabilir.</p>
+<h2 id="reddedilen-önerilerden-öğrenme">5. Reddedilen önerilerden öğrenme</h2>
+<p>Geri besleme tablosu:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> ai_oneri_geri_besleme (</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  oneri_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  oneri_tipi <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  ai_guven_skoru <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  risk_skoru <span class="dt">int</span>,</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  insan_karari ENUM(<span class="st">&#39;onayli&#39;</span>,<span class="st">&#39;red&#39;</span>,<span class="st">&#39;revize&#39;</span>,<span class="st">&#39;iptal&#39;</span>),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  red_sebebi text,</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  manual_alternatif JSON,            <span class="co">-- insan ne yaptı</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p>Haftalık cron: - Red oranı %30 üzeri olan aksiyon türleri → eşik yükselt - Onay-revize ratio %50 üzeri → AI eksik bilgi alıyor, prompt güncelle - Red sebepleri kümele → top-3’ü prompt’a few-shot olarak ekle</p>
+<h2 id="audit-log-zorunluluğu">6. Audit log zorunluluğu</h2>
+<p>Risk 7+ olan <strong>her aksiyon</strong> audit kaydı zorunlu:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> ai_aksiyon_audit (</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  aksiyon_tipi <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  tetikleyen ENUM(<span class="st">&#39;ai_otomatik&#39;</span>,<span class="st">&#39;ai_onerili&#39;</span>,<span class="st">&#39;insan_manuel&#39;</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  ai_oneri_id <span class="dt">char</span>(<span class="dv">36</span>),                <span class="co">-- AI önermişse</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  insan_user_id <span class="dt">char</span>(<span class="dv">36</span>),              <span class="co">-- onaylayan/yapan</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  payload JSON,                        <span class="co">-- ne yapıldı</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  oncesi_state JSON,                   <span class="co">-- aksiyondan önce DB&#39;deki ilgili kayıt</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  sonrasi_state JSON,                  <span class="co">-- aksiyon sonrası</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  rollback_mumkun tinyint,</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  rollback_yapildi_at datetime,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h2 id="rollback-stratejisi">7. Rollback stratejisi</h2>
+<table>
+<colgroup>
+<col style="width: 46%" />
+<col style="width: 33%" />
+<col style="width: 20%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Aksiyon türü</th>
+<th>Rollback</th>
+<th>Süre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sipariş açma</td>
+<td>DB delete (henüz üretime aktarılmadıysa)</td>
+<td>Sınırsız</td>
+</tr>
+<tr class="even">
+<td>Üretim emri açma</td>
+<td>DB delete + rezervasyon iptal</td>
+<td>Üretim başlamadan</td>
+</tr>
+<tr class="odd">
+<td>Email gönderildi</td>
+<td>Mümkün değil ❌</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>Satın alma siparişi onaylandı (tedarikçiye)</td>
+<td>Mümkün değil; iptal yazısı gerekir</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>Stok düzeltme</td>
+<td>Ters yönde düzeltme</td>
+<td>Sınırsız</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Rollback olmayan aksiyonlar her zaman insan onayı gerektirir</strong> — risk skoruna bakılmaz.</p>
+<h2 id="müşteriyönetici-konuşma-katmanında-uygulama">8. Müşteri/yönetici konuşma katmanında uygulama</h2>
+<p><a href="./07-konversasyonel-katman.md">Faz 6 — konversasyonel katman</a> için:</p>
+<pre><code>KULLANICI: &quot;5000 takım STAR SİYAH sipariş ver, ay sonuna yetişsin&quot;
+AI: niyet çıkar, parametreleri topla
+    risk_skoru = 4(geri al kolay) + 3(50K tutar) + 3(müşteri görür) + 1(1 kayıt) = 11 (Yüksek)
+    guven_skoru = 0.93
+AI: TASLAK ÖNER → onay bekle (zorunlu, risk yüksek)
+KULLANICI: &quot;Onayla&quot;
+AI: aksiyon yap → DB write + audit log
+AI: &quot;Sipariş SS-2026-0125 oluşturuldu. 28 Mart sevke hazır.&quot;</code></pre>
+<h2 id="acil-durum-kill-switch">9. Acil durum kill-switch</h2>
+<p>Kullanıcı her zaman: - Tüm AI önerilerini global olarak <strong>kapatabilir</strong> (admin ayar) - Belirli aksiyon türünü <strong>kapatabilir</strong> (“AI artık satın alma siparişi açmasın”) - Belirli AI provider’ı <strong>kapatabilir</strong> (örn. Claude pahalıysa Groq’a düş)</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> ai_otomasyon_ayarlari (</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">scope</span> ENUM(<span class="st">&#39;global&#39;</span>,<span class="st">&#39;aksiyon_tipi&#39;</span>,<span class="st">&#39;provider&#39;</span>),</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  scope_value <span class="dt">varchar</span>(<span class="dv">128</span>),         <span class="co">-- aksiyon adı veya provider adı</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  enabled tinyint,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  updated_by <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  updated_at datetime</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h2 id="önerilen-başlangıç-yapılandırması">10. Önerilen başlangıç yapılandırması</h2>
+<table>
+<colgroup>
+<col style="width: 46%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Ayar</th>
+<th>Değer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Risk 4-6 otomasyonu</td>
+<td><strong>Aktif</strong></td>
+</tr>
+<tr class="even">
+<td>Risk 7-9 otomasyon (sessiz onay)</td>
+<td><strong>Kapalı</strong> ilk 3 ay — manuel onay zorunlu</td>
+</tr>
+<tr class="odd">
+<td>Risk 7-9 otomasyon</td>
+<td>3 ay sonra <strong>Aktif</strong> (geri besleme verisi yeterse)</td>
+</tr>
+<tr class="even">
+<td>Risk 10+</td>
+<td>Hep manuel</td>
+</tr>
+<tr class="odd">
+<td>Güven skoru eşiği</td>
+<td>0.90 (otomatik için)</td>
+</tr>
+<tr class="even">
+<td>Tutar limiti — satın alma</td>
+<td><strong>1.000₺</strong> ilk 6 ay</td>
+</tr>
+<tr class="odd">
+<td>Tutar limiti — müşteri sipariş onay</td>
+<td><strong>5.000₺</strong> ilk 6 ay</td>
+</tr>
+<tr class="even">
+<td>Audit log saklama</td>
+<td>Sınırsız</td>
+</tr>
+<tr class="odd">
+<td>Kill-switch</td>
+<td>Always available</td>
+</tr>
+</tbody>
+</table>
+<p>İlk 3 ay = “öğrenme dönemi”. Sapma metrikleri toparlanır, eşikler kalibre edilir, sonra otomasyonlar kademeli açılır.</p>
+<h2 id="açık-karar-noktaları">Açık karar noktaları</h2>
+<ol type="1">
+<li><strong>İlk başlangıç tutarı:</strong> 1.000₺ ve 5.000₺ önerim uygun mu? Daha düşük/yüksek?</li>
+<li><strong>Sessiz onay penceresi:</strong> 12-24 saat mi, daha kısa mı (örn. 1 saat)?</li>
+<li><strong>Kill-switch yetkisi:</strong> sadece sistem admin mi, satış müdürü de yapabilsin mi?</li>
+<li><strong>Audit log saklama:</strong> sınırsız mı, 5 yıl gibi sınır mı?</li>
+<li><strong>AI kararsızlığı:</strong> “AI emin değilim, insan karar versin” durumu için ayrı bir kuyruk mu?</li>
+</ol>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("09 — Otomasyon Eşikleri &amp; Onay Kuralları").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

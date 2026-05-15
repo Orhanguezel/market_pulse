@@ -1,0 +1,4249 @@
+{
+    "db": {
+      "title": "Database Management",
+      "description": "Create snapshot points, download full backup, apply SQL import or export/import by module.",
+      "auth": {
+        "loading": "Loading admin panel..."
+      },
+      "help": {
+        "pageTitle": "What does this page do?",
+        "dbAdmin": "DB Admin screen",
+        "fullDbDesc": "export/import the entire database.",
+        "snapshotDesc": "take a restore point before risky operations, restore it.",
+        "moduleDesc": "transfer only selected module tables (e.g. products).",
+        "uiDesc": "export/bootstrap UI texts in bulk by locale.",
+        "closeHint": "Tip: Click outside or press ESC to close.",
+        "closeButton": "Close"
+      },
+      "fullDb": {
+        "title": "Database Backup & Snapshot Management",
+        "description": "You can create snapshots and download full database backups.",
+        "snapshotLabel": "Snapshot label",
+        "snapshotPlaceholder": "E.g: Current live system",
+        "notePlaceholder": "Why was this snapshot taken?",
+        "noteLabel": "Note (optional)",
+        "createButton": "Create Snapshot",
+        "creating": "Creating...",
+        "downloadTitle": "Download Full Database Backup",
+        "downloadDesc": "Download the current DB state as a full dump.",
+        "sqlButton": "Download SQL (.sql)",
+        "sqlPreparing": "Preparing SQL...",
+        "jsonButton": "Download JSON (.json)",
+        "snapshotCreated": "Snapshot created: {label}",
+        "snapshotError": "Error creating snapshot.",
+        "exportSuccess": "SQL backup downloaded.",
+        "exportError": "Error during DB export (SQL).",
+        "jsonNotImplemented": "JSON export feature not implemented yet. You can use SQL export."
+      },
+      "import": {
+        "title": "SQL Import (IMPORT)",
+        "titleWithMode": "SQL Import (IMPORT) — {mode}",
+        "warning": "These operations can permanently change database contents. Especially when truncate is checked, be sure to take a snapshot before proceeding.",
+        "dangerLabel": "WARNING:",
+        "helpTitle": "Import explanation",
+        "helpHeadline": "SQL Import (Full DB)",
+        "helpDesc1": "This panel applies SQL dump to the entire database (text / URL / file).",
+        "helpDesc2": "empties tables before import. Very risky in production environment.",
+        "helpDesc3": "is a dry run in supported flows (rollback).",
+        "processing": "Operation in progress...",
+        "tabs": {
+          "text": "SQL Text",
+          "url": "From URL",
+          "file": "From File"
+        },
+        "text": {
+          "label": "SQL Script (utf8)",
+          "placeholder": "Paste the full SQL script here.",
+          "required": "SQL text cannot be empty.",
+          "helpTitle": "SQL text tips",
+          "helpHeadline": "SQL Text",
+          "helpDesc1": "Paste the full SQL script here.",
+          "helpDesc2": "Browser may slow down with very large dumps; file import is more suitable.",
+          "helpDesc3": "Content must be correct encoding (utf8)."
+        },
+        "url": {
+          "label": "SQL Dump URL (.sql or .sql.gz)",
+          "placeholder": "https://.../dump.sql or dump.sql.gz",
+          "required": "First enter a valid .sql or .sql.gz URL.",
+          "helpTitle": "URL import tips",
+          "helpHeadline": "URL Import",
+          "helpDesc1": "HTTPS usage is recommended.",
+          "helpDesc2": ".sql.gz dumps transfer faster with large data.",
+          "helpDesc3": "URLs requiring authentication/protection may not be downloadable by backend."
+        },
+        "file": {
+          "label": "SQL Dump File (.sql or .gz)",
+          "placeholder": "Select file",
+          "required": "First select a .sql or .gz file.",
+          "selected": "Selected file:",
+          "note": "There is no dry run in file import flow (only truncate is applied).",
+          "helpTitle": "File import tips",
+          "helpHeadline": "From File Import",
+          "helpDesc1": "Most stable method (recommended for large dumps).",
+          "helpDesc2": "There is no dry run in file import flow.",
+          "helpDesc3": "Nginx/Fastify body limit settings can affect file size."
+        },
+        "truncate": {
+          "label": "TRUNCATE ALL tables before operation",
+          "helpTitle": "What is truncate?",
+          "helpHeadline": "TruncateBefore",
+          "helpDesc": "Tables are emptied before import. Incorrect use leads to data loss. Taking a snapshot before the operation in production should be considered mandatory.",
+          "helpDescFile": "This is the most critical option in file import. When enabled, tables are completely emptied before import. Consider taking a snapshot mandatory."
+        },
+        "dryRun": {
+          "label": "Dry run (rehearsal, roll back changes)",
+          "helpTitle": "How does dry run work?",
+          "helpHeadline": "Dry Run",
+          "helpDesc": "If backend supports, runs inside SQL transaction and rolls back. Some DDL operations can do implicit commit in MySQL; not 100% guaranteed.",
+          "helpDescUrl": "If backend supports, does transaction + rollback. Time and resource consumption increases with large dumps."
+        },
+        "buttons": {
+          "apply": "Apply SQL",
+          "importing": "Importing...",
+          "importFromUrl": "Import from URL",
+          "importFromFile": "Import from File"
+        },
+        "confirm": {
+          "text": "You are about to apply this SQL script directly to the database.\n\nTruncate: {truncate}\nDo you want to continue?",
+          "url": "SQL dump downloaded from this URL will be applied to the database.\n\nURL: {url}\nTruncate: {truncate}\n\nDo you want to continue?",
+          "file": "The SQL file you selected will be applied to the database.\n\nFile: {file}\nTruncate: {truncate}\n\nThis operation cannot be undone. Do you want to continue?",
+          "truncateYes": "YES (empty all tables)",
+          "truncateNo": "No"
+        },
+        "success": {
+          "text": "SQL text successfully imported.",
+          "url": "SQL dump from URL successfully imported.",
+          "file": "SQL dump from file successfully imported.",
+          "dryRun": "Dry run successful. Changes rolled back."
+        },
+        "error": {
+          "text": "SQL import (text) error.",
+          "textGeneric": "Error during SQL import (text).",
+          "url": "SQL import (URL) error.",
+          "urlGeneric": "Error during SQL import (URL).",
+          "file": "SQL import (file) error.",
+          "fileGeneric": "Error during SQL import (file)."
+        }
+      },
+      "snapshots": {
+        "title": "Snapshot Points",
+        "total": "Total:",
+        "processing": "Operation in progress...",
+        "columns": {
+          "index": "#",
+          "labelNote": "Label / Note",
+          "file": "File",
+          "created": "Created",
+          "size": "Size",
+          "actions": "Actions"
+        },
+        "noLabel": "No label",
+        "noNote": "-",
+        "loading": "Loading...",
+        "noData": "No snapshots found yet.",
+        "scrollNote": "Note: If the screen is narrow, the table can be scrolled horizontally.",
+        "restore": "Restore",
+        "delete": "Delete",
+        "restoreConfirm": "You are about to restore from this snapshot.\n\nSnapshot: {label}\n\nThis operation will OVERWRITE current database content (truncate).\nDo you want to continue?",
+        "deleteConfirm": "You are about to delete this snapshot file.\n\nSnapshot: {label}\n\nDo you want to continue?",
+        "restoreSuccess": "Snapshot successfully restored.",
+        "restoreError": "An error occurred during snapshot restoration.",
+        "restoreFailed": "Snapshot restore failed",
+        "deleteSuccess": "Snapshot deleted.",
+        "deleteFailed": "Snapshot could not be deleted.",
+        "deleteError": "Snapshot delete failed"
+      },
+      "modules": {
+        "title": "Module Based DB Management",
+        "selected": "Selected module: {module}",
+        "tabs": {
+          "export": "Export",
+          "import": "Import",
+          "validate": "Manifest Validate",
+          "ui": "UI Export/Bootstrap"
+        },
+        "export": {
+          "title": "Module Export",
+          "description": "Tables of module {module} are exported in manifest order.",
+          "format": {
+            "sql": "SQL",
+            "json": "JSON"
+          },
+          "downloadButton": "Download",
+          "preparing": "Preparing...",
+          "notImplemented": "Module export feature not implemented yet.",
+          "success": "SQL backup for module {module} downloaded.",
+          "error": "Error during module export."
+        },
+        "import": {
+          "title": "Module Import",
+          "description": "Apply SQL/JSON dump for module {module}.",
+          "upsertLabel": "UPSERT (Update if exists, otherwise add)",
+          "importButton": "Import",
+          "importing": "Importing...",
+          "notImplemented": "Module import feature not implemented yet.",
+          "success": "Module {module} successfully imported.",
+          "error": "Error during module import."
+        },
+        "validate": {
+          "title": "Manifest Validation",
+          "description": "Is the table manifest for module {module} compatible with DB?",
+          "validateButton": "Validate",
+          "validating": "Validating...",
+          "success": "Manifest compatible.",
+          "error": "Manifest incompatible!"
+        },
+        "ui": {
+          "title": "Site Settings UI Export / Bootstrap",
+          "description": "Manage entries with prefix 'ui_' in site_settings table in bulk.",
+          "downloadButton": "Download JSON",
+          "downloadSuccess": "UI settings downloaded as JSON.",
+          "downloadError": "No data found to download.",
+          "sourceLocale": "Source Locale",
+          "targetLocale": "Target Locale",
+          "overwrite": "Overwrite existing entries",
+          "onlyUiKeys": "Process only keys with 'ui_' prefix",
+          "bootstrapButton": "Start Bootstrap",
+          "applying": "Applying...",
+          "bootstrapSuccess": "Bootstrap completed.",
+          "bootstrapError": "Error during bootstrap.",
+          "bootstrapErrorGeneric": "Unexpected error during bootstrap process."
+        }
+      }
+    },
+    "reports": {
+      "title": "Reports (Admin)",
+      "description": "KPI, resource performance and location breakdown.",
+      "refresh": "Refresh",
+      "tabs": {
+        "title": "Tabs",
+        "description": "KPI • Resource Performance • Locations",
+        "kpi": "KPI",
+        "users": "Resources",
+        "locations": "Locations"
+      },
+      "filter": {
+        "title": "Filter",
+        "description": "Date range (start/end) and resource selection.",
+        "apply": "Apply",
+        "reset": "Reset",
+        "from": "Start",
+        "to": "End",
+        "role": "Role",
+        "roleHint": "Only used in the “Resources” tab.",
+        "invalidFrom": "Start date is invalid.",
+        "invalidTo": "End date is invalid."
+      },
+      "kpi": {
+        "daily": "Daily",
+        "weekly": "Weekly",
+        "monthly": "Monthly",
+        "loadingError": "KPI could not be loaded.",
+        "noData": "No records found.",
+        "bucket": "Period",
+        "total": "Total",
+        "completed": "Completed",
+        "success": "Success"
+      },
+      "users": {
+        "title": "Resource Performance",
+        "description": "role={role} • count: {count}",
+        "loadingError": "Performance report could not be loaded.",
+        "noData": "No records found.",
+        "table": {
+          "user": "Resource",
+          "total": "Bookings",
+          "completed": "Completed",
+          "cancelled": "Cancelled",
+          "success": "Success"
+        }
+      },
+      "locations": {
+        "title": "Location (Locale) Breakdown",
+        "description": "count: {count}",
+        "loadingError": "Location report could not be loaded.",
+        "noData": "No records found.",
+        "table": {
+          "city": "Locale / Region",
+          "district": "Sub Region",
+          "total": "Bookings",
+          "completed": "Completed",
+          "cancelled": "Cancelled",
+          "success": "Success"
+        }
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Login",
+        "welcomeBack": "Welcome back",
+        "heroTagline": "Manage your digital products securely.",
+        "copyrightLine": "© {year} {app}",
+        "continueLogin": "Login to continue",
+        "description": "Enter your email and password to access the admin panel.",
+        "noAccess": "Don't have access?",
+        "contactAdmin": "Contact administrator",
+        "emailLabel": "Email Address",
+        "emailPlaceholder": "you@example.com",
+        "passwordLabel": "Password",
+        "passwordPlaceholder": "••••••••",
+        "rememberMe": "Remember me for 30 days",
+        "loginButton": "Login",
+        "loggingIn": "Logging in...",
+        "loginSuccess": "Logged in successfully.",
+        "loginFailed": "Login failed. Please check your credentials and try again.",
+        "emailRequired": "Please enter a valid email address.",
+        "passwordMinLength": "Password must be at least 6 characters.",
+        "loginLink": "Login",
+        "fullNameLabel": "Full name (optional)",
+        "fullNamePlaceholder": "Your name",
+        "phoneLabel": "Phone (optional)",
+        "phonePlaceholder": "+90 5xx xxx xx xx",
+        "confirmPasswordLabel": "Confirm password",
+        "confirmPasswordPlaceholder": "••••••••",
+        "acceptTerms": "I accept the terms and conditions",
+        "registerButton": "Register",
+        "creatingAccount": "Creating account...",
+        "accountCreated": "Account created and signed in.",
+        "registrationFailed": "Registration failed. Please check your details and try again.",
+        "passwordsNoMatch": "Passwords do not match.",
+        "mustAcceptTerms": "You must accept the terms to continue."
+      }
+    },
+    "consultants": {
+      "header": {
+        "title": "Consultants",
+        "description": "Review, approve or edit consultant applications.",
+        "badge": "Guide Management"
+      },
+      "filters": {
+        "all": "All",
+        "pending": "Pending",
+        "approved": "Approved",
+        "rejected": "Rejected"
+      },
+      "table": {
+        "consultant": "Consultant",
+        "expertise": "Expertise",
+        "price": "Fee",
+        "status": "Status",
+        "actions": "Actions",
+        "empty": "No consultant applications found yet.",
+        "sessionMinutes": "{minutes} MINUTES"
+      },
+      "status": {
+        "approved": "APPROVED",
+        "rejected": "REJECTED",
+        "pending": "PENDING"
+      },
+      "actions": {
+        "approve": "Approve",
+        "approve_success": "Consultant approved.",
+        "approve_failed": "Error occurred while approving.",
+        "reject": "Reject",
+        "reject_success": "Consultant rejected.",
+        "reject_failed": "Error occurred while rejecting.",
+        "rejection_reason_prompt": "Rejection reason"
+      },
+      "detail": {
+        "title": "Consultant Detail",
+        "profile": "Profile Information",
+        "bio": "About / Biography",
+        "expertise": "Areas of Expertise",
+        "languages": "Spoken Languages",
+        "session": "Session Details",
+        "stats": "Statistics",
+        "totalSessions": "Total Sessions",
+        "rating": "Rating",
+        "rejectionReason": "Rejection Reason",
+        "pricePerSession": "{price} {currency} / {duration} min"
+      },
+      "expertise": {
+        "astrology": "Astrology",
+        "birth_chart": "Birth Chart",
+        "relationship": "Relationship",
+        "mood": "Mood",
+        "career": "Career",
+        "numerology": "Numerology",
+        "tarot": "Tarot"
+      },
+      "languages": {
+        "tr": "Turkish",
+        "en": "English"
+      }
+    },
+    "common": {
+      "save": "Save",
+      "saving": "Saving...",
+      "cancel": "Cancel",
+      "delete": "Delete",
+      "deleteConfirm": "Delete \"{item}\"?",
+      "deleted": "\"{item}\" deleted.",
+      "edit": "Edit",
+      "create": "Create",
+      "created": "\"{item}\" created.",
+      "update": "Update",
+      "updated": "\"{item}\" updated.",
+      "search": "Search",
+      "searchPlaceholder": "Search...",
+      "filter": "Filter",
+      "refresh": "Refresh",
+      "loading": "Loading...",
+      "noData": "No data found",
+      "actions": "Actions",
+      "back": "Back",
+      "total": "Total",
+      "next": "Next",
+      "previous": "Previous",
+      "confirm": "Confirm",
+      "yes": "Yes",
+      "no": "No",
+      "close": "Close",
+      "copy": "Copy",
+      "copied": "Copied",
+      "copySuccess": "Copied.",
+      "copyFailed": "Copy failed.",
+      "upload": "Upload",
+      "download": "Download",
+      "preview": "Preview",
+      "previewColon": "Preview:",
+      "view": "View",
+      "add": "Add",
+      "remove": "Remove",
+      "clear": "Clear",
+      "reset": "Reset",
+      "restore": "Restore",
+      "apply": "Apply",
+      "locale": "Language",
+      "localePlaceholder": "Select language",
+      "localeOptionsMissing": "No locale options found.",
+      "key": "Key",
+      "value": "Value",
+      "source": "Source",
+      "exists": "Exists",
+      "doesNotExist": "Does not exist",
+      "note": "Note",
+      "savedUrl": "Saved URL:",
+      "imageLoadFailed": "Image failed to load",
+      "operationFailed": "Operation failed. Please try again.",
+      "active": "Active",
+      "inactive": "Inactive"
+    },
+    "slider": {
+      "header": {
+        "title": "Slider Management",
+        "description": "Manage your homepage sliders here.",
+        "total": "Total Found:",
+        "loading": "Loading...",
+        "searchLabel": "Search",
+        "searchPlaceholder": "Search by title...",
+        "localeLabel": "Language",
+        "localePlaceholder": "Select Language",
+        "localeEmptyError": "No languages found.",
+        "localeEmptyHelp": "Please define active languages in settings.",
+        "filterLabel": "Active Filter",
+        "onlyActiveLabel": "Only Active",
+        "onlyActiveHelp": "Show only sliders visible on the site.",
+        "refreshButton": "Refresh",
+        "createButton": "Create Slider"
+      },
+      "list": {
+        "title": "Slider List",
+        "processing": "Processing...",
+        "totalLabel": "Total Sliders:",
+        "saveOrderButton": "Save Order",
+        "savingOrder": "Saving...",
+        "reorderHelp": "Drag and drop or use up/down buttons to reorder (only when not filtering/searching).",
+        "imageColumn": "Image",
+        "titleColumn": "Title",
+        "localeColumn": "Lang",
+        "slugColumn": "Slug",
+        "activeColumn": "Active",
+        "featuredColumn": "Featured",
+        "orderColumn": "Order",
+        "actionsColumn": "Actions",
+        "noImage": "No Image",
+        "noTitle": "(No Title)",
+        "activeStatus": "Active",
+        "inactiveStatus": "Inactive",
+        "featuredStatus": "Featured",
+        "normalStatus": "Normal",
+        "editButton": "Edit",
+        "deleteButton": "Delete",
+        "loading": "Loading data...",
+        "noRecords": "No sliders found matching your criteria.",
+        "upButton": "Move Up",
+        "downButton": "Move Down",
+        "buttonLabel": "Button:",
+        "linkLabel": "Link:",
+        "deleteConfirm": "Are you sure you want to delete slider '{name}'?",
+        "deleted": "Slider '{name}' deleted.",
+        "deleteError": "Error deleting slider.",
+        "activeUpdateError": "Error updating status.",
+        "featuredUpdateError": "Error updating featured status.",
+        "orderSaved": "Order saved successfully.",
+        "orderSaveError": "Error saving order."
+      },
+      "form": {
+        "contentTitle": "Slider Content",
+        "localeLabel": "Language",
+        "orderLabel": "Display Order",
+        "activeLabel": "Active",
+        "activeHelp": "Enable/Disable this slider on frontend.",
+        "featuredLabel": "Featured",
+        "featuredHelp": "Mark as important/featured if applicable.",
+        "titleLabel": "Title",
+        "slugLabel": "Slug",
+        "slugHelp": "Auto-generated from title for URLs.",
+        "descriptionLabel": "Description",
+        "buttonTextLabel": "Button Text",
+        "buttonLinkLabel": "Button Link",
+        "altLabel": "Image Alt Text",
+        "localeRequired": "Language selection is required.",
+        "titleRequired": "Title is required.",
+        "slugRequired": "Slug is required.",
+        "created": "Slider created successfully.",
+        "idNotFound": "Record ID to edit not found.",
+        "updated": "Slider updated successfully.",
+        "saveError": "Error occurred while saving.",
+        "editTitle": "Edit Slider",
+        "createTitle": "New Slider",
+        "formMode": "Form View",
+        "jsonMode": "JSON View"
+      },
+      "formImage": {
+        "imageLabel": "Slider Image",
+        "imageHelp": "Recommended size: 1920x800px. WebP or JPG format.",
+        "altLabel": "Alt Text",
+        "altPlaceholder": "Enter description for image...",
+        "altHelp": "Important for SEO. Displayed if image fails to load."
+      },
+      "formHeader": {
+        "createTitle": "Create New Slider",
+        "editTitle": "Edit Slider",
+        "description": "You can edit slider details using the form below.",
+        "loading": "Loading...",
+        "saving": "Saving...",
+        "backButton": "Go Back",
+        "createButton": "Create",
+        "saveButton": "Save"
+      },
+      "formJson": {
+        "label": "Raw JSON Data",
+        "helperText": "Warning: Editing JSON directly is for advanced users."
+      }
+    },
+    "menuitem": {
+      "header": {
+        "title": "Header Menu Items",
+        "total": "Total {count} records found.",
+        "refresh": "Refresh",
+        "refreshing": "Refreshing...",
+        "loading": "Loading...",
+        "create": "New Menu Item",
+        "searchLabel": "Search",
+        "searchPlaceholder": "Search title or URL...",
+        "localeLabel": "Language",
+        "allLocales": "All Languages",
+        "defaultLabel": "default",
+        "activeLabel": "Status",
+        "allStats": "All",
+        "active": "Active",
+        "inactive": "Inactive",
+        "sortLabel": "Sort",
+        "sortOrder": "Order",
+        "sortCreated": "Created At",
+        "sortTitle": "Title",
+        "orderLabel": "Direction",
+        "asc": "Ascending",
+        "desc": "Descending",
+        "filtersTitle": "Filters"
+      },
+      "list": {
+        "title": "Menu Items",
+        "totalLabel": "Total:",
+        "saveOrder": "Save Order",
+        "savingOrder": "Saving...",
+        "columns": {
+          "title": "Title",
+          "url": "URL",
+          "type": "Type",
+          "location": "Location",
+          "active": "Active",
+          "date": "Date",
+          "actions": "Actions",
+          "locale": "Language"
+        },
+        "types": {
+          "page": "Page",
+          "custom": "Custom URL"
+        },
+        "deleteConfirm": "Are you sure you want to delete \"{title}\"?",
+        "deleted": "Menu item deleted.",
+        "editButton": "Edit",
+        "deleteButton": "Delete",
+        "noData": "No menu items found.",
+        "loading": "Loading...",
+        "noTitle": "(no title)",
+        "orderSaved": "Order saved.",
+        "statusActive": "Activated",
+        "statusPassive": "Deactivated"
+      },
+      "form": {
+        "createTitle": "New Menu Item",
+        "editTitle": "Edit Menu Item",
+        "createDesc": "Create a new menu item",
+        "editDesc": "Edit existing menu item",
+        "headerHelp": "This screen manages only <code>Header</code> menu items. <code>location</code> field is fixed.",
+        "advancedUsageHelp": "<code>page_id</code>, <code>parent_id</code> and <code>section_id</code> fields are for advanced usage and can only be edited in <strong>JSON mode</strong>.",
+        "urlCustomHelp": "URL is required if type is <code>custom</code>.",
+        "contentTitle": "Menu Item Details",
+        "created": "Menu item created.",
+        "updated": "Menu item updated.",
+        "basicInfo": "Basic Info",
+        "advancedTitle": "Advanced Settings",
+        "labels": {
+          "title": "Title",
+          "url": "URL",
+          "type": "Type",
+          "pageId": "Page ID",
+          "parentId": "Parent Menu",
+          "location": "Location",
+          "icon": "Icon",
+          "sectionId": "Section ID",
+          "order": "Display Order",
+          "locale": "Language",
+          "active": "Active"
+        },
+        "placeholders": {
+          "title": "Menu title",
+          "url": "https://... or /example",
+          "urlPage": "Optional for Page type",
+          "icon": "Bootstrap / custom icon class",
+          "pageId": "UUID or slug",
+          "parentNone": "No parent (top level)",
+          "sectionId": "Group ID"
+        },
+        "metaTitle": "Metadata",
+        "metaId": "ID",
+        "metaCreatedAt": "Created At",
+        "metaUpdatedAt": "Updated At",
+        "metaLocale": "Locale",
+        "errors": {
+          "titleRequired": "Title is required.",
+          "urlRequired": "URL is required for Custom URL type.",
+          "pageIdRequired": "Page ID is required for Page type.",
+          "generic": "Operation failed."
+        },
+        "success": {
+          "created": "Menu item created.",
+          "updated": "Menu item updated."
+        },
+        "help": {
+          "headerOnly": "This screen manages <code>Header</code> items only.",
+          "typeDesc": "Page: Internal, Custom URL: External/Custom link",
+          "typeCustomUrlRequired": "URL is required if type is custom.",
+          "advanced": "Advanced fields are editable in JSON mode.",
+          "pageIdHelp": "Custom page ID or slug.",
+          "parentNoneOption": "No parent",
+          "parentHelp": "Select a parent menu to create a submenu.",
+          "iconExample": "Example: fa fa-home, lucide-home, or 🏠",
+          "orderHelp": "Display order (lower numbers first)",
+          "activeHelp": "Show menu item on the site",
+          "locationUnknown": "Unknown",
+          "locationHeader": "Header",
+          "locationFooter": "Footer"
+        },
+        "back": "Back",
+        "delete": "Delete",
+        "save": "Save",
+        "saving": "Saving..."
+      }
+    },
+    "footerSections": {
+      "header": {
+        "title": "Footer Sections",
+        "description": "Manage the sections to be shown in the footer.",
+        "create": "Add New Section",
+        "edit": "Edit",
+        "delete": "Delete",
+        "searchLabel": "Search",
+        "searchPlaceholder": "Search by title...",
+        "activeLabel": "Status",
+        "activeOptions": {
+          "all": "All",
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "loading": "Loading..."
+      },
+      "list": {
+        "title": "Title",
+        "slug": "Slug",
+        "active": "Active",
+        "createdAt": "Created At",
+        "actions": "Actions",
+        "empty": "No sections found.",
+        "deleteConfirmTitle": "Delete section?",
+        "deleteConfirmDesc": "This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete",
+        "statusActive": "Activated",
+        "statusPassive": "Deactivated",
+        "deleted": "Section deleted.",
+        "deleteError": "Failed to delete section."
+      },
+      "form": {
+        "createTitle": "New Footer Section",
+        "editTitle": "Edit Footer Section",
+        "createDesc": "Create a new footer section.",
+        "editDesc": "Edit the footer section.",
+        "back": "Back",
+        "generalInfo": "General Information",
+        "displayOrder": "Display Order",
+        "displayOrderPlaceholder": "Enter order number",
+        "active": "Active",
+        "title": "Title",
+        "titlePlaceholder": "Section title",
+        "slug": "Slug",
+        "slugPlaceholder": "footer-section",
+        "description": "Description",
+        "descriptionPlaceholder": "Short description",
+        "save": "Save",
+        "saving": "Saving...",
+        "created": "Footer section created.",
+        "updated": "Footer section updated.",
+        "error": {
+          "titleRequired": "Title is required.",
+          "slugRequired": "Slug is required.",
+          "load": "Failed to load record.",
+          "return": "Return to list"
+        }
+      }
+    },
+    "faqs": {
+      "header": {
+        "title": "FAQs",
+        "description": "Manage FAQ records by language, status, and search filters.",
+        "filters": {
+          "searchLabel": "Search (q)",
+          "searchPlaceholder": "Search in question/answer",
+          "slugLabel": "Slug",
+          "slugPlaceholder": "e.g. pricing",
+          "localeLabel": "Language",
+          "allLocalesOption": "All languages",
+          "localesLoading": "Loading languages...",
+          "noLocalesError": "No active language list. Check app_locales in Site Settings.",
+          "statusLabel": "Status",
+          "statusOptions": {
+            "all": "All",
+            "active": "Active",
+            "inactive": "Inactive"
+          },
+          "sortLabel": "Sort",
+          "sortOptions": {
+            "updatedAt": "Updated At",
+            "createdAt": "Created At",
+            "displayOrder": "Display Order"
+          },
+          "dirLabel": "Direction",
+          "dirOptions": {
+            "desc": "Descending",
+            "asc": "Ascending"
+          }
+        },
+        "summary": {
+          "totalLabel": "Total Records"
+        },
+        "actions": {
+          "refresh": "Refresh",
+          "create": "New FAQ"
+        }
+      },
+      "list": {
+        "title": "List",
+        "loadingInline": "Loading…",
+        "recordCount": "{count} records",
+        "saveOrder": "Save order",
+        "savingOrder": "Saving…",
+        "loading": "Loading FAQs...",
+        "empty": "No FAQs yet.",
+        "reorderHint": "Reorder: move up/down, then save.",
+        "viewNote": "Default view is cards. On very large screens (≥ {bp}px) table view is shown.",
+        "deleteConfirm": "You are about to delete this FAQ.\n\nQuestion: {question}\nID: {id}\nSlug: {slug}\n\nDo you want to continue?",
+        "status": {
+          "active": "Active",
+          "inactive": "Inactive"
+        },
+        "actions": {
+          "edit": "Edit",
+          "delete": "Delete",
+          "moveUp": "Move up",
+          "moveDown": "Move down"
+        },
+        "meta": {
+          "locale": "Locale",
+          "order": "Order",
+          "slug": "Slug",
+          "createdAt": "Created",
+          "updatedAt": "Updated"
+        },
+        "columns": {
+          "question": "Question",
+          "slug": "Slug",
+          "order": "Order",
+          "status": "Status",
+          "date": "Date",
+          "actions": "Actions"
+        },
+        "placeholders": {
+          "noQuestion": "(no question)",
+          "noSlug": "(no slug)"
+        }
+      },
+      "form": {
+        "editorModes": {
+          "form": "Form",
+          "json": "JSON"
+        },
+        "editorStatus": {
+          "jsonInvalid": "JSON invalid",
+          "jsonReady": "JSON ready"
+        },
+        "titles": {
+          "create": "Create new FAQ",
+          "edit": "Edit FAQ"
+        },
+        "descriptions": {
+          "formMode": "Fill locale, status, order, question/answer and slug fields.",
+          "jsonMode": "Edit request payload as JSON and save."
+        },
+        "switchingLocale": "Switching language...",
+        "loading": "Loading...",
+        "fields": {
+          "locale": "Language",
+          "active": "Active",
+          "displayOrder": "Order (display_order)",
+          "question": "Question",
+          "slug": "Slug",
+          "answer": "Answer"
+        },
+        "validation": {
+          "requiredFields": "Question, Answer and Slug are required.",
+          "invalidJson": "JSON is invalid. Please fix the error.",
+          "requiredFieldsInJson": "In JSON, Question, Answer and Slug are required."
+        },
+        "notes": {
+          "title": "Notes",
+          "body": "FAQ module has no image/SEO fields. This form manages backend FAQ fields only.",
+          "jsonTip": "You can switch to JSON mode to edit the payload directly.",
+          "createdAt": "Created",
+          "updatedAt": "Updated"
+        }
+      },
+      "jsonEditor": {
+        "label": "FAQ JSON (create/update payload)",
+        "help": {
+          "intro": "This JSON matches the payload sent to /admin/faqs create/update endpoints.",
+          "mainFields": "Main fields:",
+          "localeNote": "Note: If you omit locale in JSON mode, the selected locale (from the form) is used."
+        }
+      },
+      "messages": {
+        "orderSaved": "Order saved.",
+        "orderSaveError": "Failed to save order.",
+        "created": "FAQ created.",
+        "updated": "FAQ updated.",
+        "deleted": "FAQ deleted.",
+        "deleteError": "Failed to delete FAQ.",
+        "noRecordForLocale": "No record found for selected language; you can create new content for this language.",
+        "loadForLocaleError": "Failed to load record for selected language."
+      },
+      "errors": {
+        "invalidLocale": "Invalid locale selected. Check app_locales and default_locale.",
+        "createdButInvalidId": "Created, but the response did not include a valid UUID id. Check backend response.",
+        "missingId": "FAQ data could not be loaded (missing id).",
+        "generic": "Operation failed. Please try again."
+      },
+      "noLocales": {
+        "title": "Language list not found",
+        "description": "<code>site_settings.app_locales</code> is empty or invalid. Configure languages in Site Settings first."
+      },
+      "invalidId": {
+        "title": "Invalid ID",
+        "description": "Not a UUID:"
+      },
+      "actions": {
+        "backToList": "Back to list",
+        "back": "Back",
+        "create": "Create",
+        "creating": "Creating...",
+        "save": "Save",
+        "saving": "Saving..."
+      }
+    },
+    "contacts": {
+      "header": {
+        "title": "Contacts",
+        "subtitle": "Manage contact form submissions."
+      },
+      "filters": {
+        "title": "Filters",
+        "description": "Search, status and sorting options.",
+        "searchPlaceholder": "Search by name, email or subject...",
+        "statusLabel": "Status",
+        "statusAll": "All",
+        "statusNew": "New",
+        "statusInProgress": "In progress",
+        "statusClosed": "Closed",
+        "orderByLabel": "Order by",
+        "orderByCreated": "Created At",
+        "orderByUpdated": "Updated At",
+        "orderByStatus": "Status",
+        "orderByName": "Name",
+        "orderLabel": "Order",
+        "orderDesc": "Descending",
+        "orderAsc": "Ascending",
+        "onlyUnresolved": "Only unresolved"
+      },
+      "list": {
+        "title": "List",
+        "description": "View and manage contact messages.",
+        "loading": "Loading contacts...",
+        "empty": "No contacts found."
+      },
+      "columns": {
+        "name": "Name",
+        "email": "Email",
+        "subject": "Subject",
+        "status": "Status",
+        "createdAt": "Created"
+      },
+      "status": {
+        "new": "New",
+        "inProgress": "In progress",
+        "closed": "Closed"
+      },
+      "details": {
+        "title": "Details",
+        "name": "Name",
+        "email": "Email",
+        "phone": "Phone",
+        "subject": "Subject",
+        "message": "Message",
+        "createdAt": "Created",
+        "updatedAt": "Updated",
+        "id": "ID"
+      },
+      "editDialog": {
+        "title": "Edit contact",
+        "description": "Update status, resolution and admin note.",
+        "statusLabel": "Status",
+        "resolvedLabel": "Resolved",
+        "adminNoteLabel": "Admin note",
+        "adminNotePlaceholder": "Internal note for staff..."
+      },
+      "messages": {
+        "saved": "Saved.",
+        "saveError": "Failed to save changes.",
+        "deleted": "Deleted.",
+        "deleteError": "Failed to delete message.",
+        "loadError": "Failed to load contacts."
+      },
+      "confirmDelete": "You are about to delete this contact message.\n\nName: {name}\nEmail: {email}\nSubject: {subject}\nID: {id}\n\nDo you want to continue?"
+    },
+    "reviews": {
+      "header": {
+        "title": "Reviews",
+        "description": "Examine consultant reviews and ratings from a moderator's perspective.",
+        "badge": "Customer Experience"
+      },
+      "actions": {
+        "create": "Add new",
+        "createManual": "MANUAL REVIEW",
+        "backToList": "Back to list",
+        "deleting": "Deleting...",
+        "bulkModerateApprove": "Bulk Approve",
+        "bulkModerateReject": "Bulk Reject",
+        "clearSelection": "Clear",
+        "saveAndApprove": "MARK SAFE AND APPROVE"
+      },
+      "filters": {
+        "searchLabel": "Search Reviews",
+        "searchPlaceholder": "Name or comment content...",
+        "statusLabel": "Status",
+        "ratingLabel": "Rating",
+        "localeLabel": "Language",
+        "statusOptions": {
+          "all": "All",
+          "pending": "Pending / Rejected",
+          "approved": "Approved",
+          "auto_flagged": "Auto-flagged",
+          "verified": "Verified",
+          "with_outcome": "Answered"
+        }
+      },
+      "bulk": {
+        "selectedCount": "{count} reviews selected",
+        "success": "{count} reviews {action}."
+      },
+      "table": {
+        "approval": "Approval",
+        "user": "User",
+        "rating": "Rating",
+        "comment": "Comment",
+        "date": "Date",
+        "actions": "Actions",
+        "empty": "No reviews found yet.",
+        "loading": "Data loading...",
+        "unknownUser": "Anonymous",
+        "noEmail": "No email",
+        "verified": "Verified",
+        "autoFlagged": "Auto-flagged"
+      },
+      "dialogs": {
+        "delete": {
+          "title": "Delete Review?",
+          "description": "This review by \"{name}\" will be permanently deleted.",
+          "action": "DELETE",
+          "cancel": "Cancel"
+        },
+        "report": {
+          "title": "Moderation Report",
+          "description": "This review failed automated content checks. Manual review required.",
+          "triggeredFlags": "Triggered Flags",
+          "matchedPatterns": "Matched Patterns",
+          "source": "Source",
+          "checkTime": "Check Time",
+          "empty": "No report data found.",
+          "close": "Close",
+          "flags": {
+            "generic": "Generic flag"
+          }
+        }
+      },
+      "messages": {
+        "activated": "Activated.",
+        "deactivated": "Deactivated.",
+        "approved": "Approved.",
+        "approvalRemoved": "Approval removed.",
+        "deleted": "Review deleted.",
+        "error": "Error occurred.",
+        "created": "Review created.",
+        "updated": "Review updated.",
+        "genericError": "Operation failed."
+      },
+      "form": {
+        "createTitle": "New Review",
+        "editTitle": "Edit Review",
+        "createDescription": "Create a manual review for the platform.",
+        "editDescription": "Update existing review details.",
+        "userInfo": "User Information",
+        "userName": "User Name",
+        "email": "Email",
+        "rating": "Rating",
+        "commentContent": "Comment Content",
+        "commentTitle": "Title (Optional)",
+        "commentText": "Comment Text",
+        "adminReply": "Admin Reply",
+        "settings": "Settings",
+        "activeStatus": "Publish Status",
+        "activeStatusDesc": "Active on site",
+        "approvedStatus": "Approval Status",
+        "approvedStatusDesc": "Moderator approval",
+        "displayOrder": "Display Order",
+        "targetType": "Target Type",
+        "targetId": "Target ID",
+        "deleteRecord": "DELETE RECORD"
+      }
+    },
+    "support": {
+      "header": {
+        "title": "Support Tickets",
+        "description": "Manage user questions and technical support requests here.",
+        "badge": "Help Desk"
+      },
+      "stats": {
+        "total": "Total Tickets",
+        "open": "Open Tickets",
+        "closed": "Closed"
+      },
+      "filters": {
+        "searchPlaceholder": "Search tickets..."
+      },
+      "table": {
+        "status": "Status",
+        "priority": "Priority",
+        "subject": "Subject & Message",
+        "date": "Date",
+        "actions": "Actions",
+        "empty": "No support tickets found yet.",
+        "loading": "Data loading..."
+      },
+      "status": {
+        "closed": "CLOSED",
+        "waiting_response": "WAITING RESPONSE",
+        "open": "OPEN"
+      },
+      "priority": {
+        "urgent": "URGENT",
+        "high": "HIGH",
+        "medium": "MEDIUM",
+        "low": "LOW"
+      },
+      "actions": {
+        "reply": "Reply",
+        "reopen": "Ticket reopened.",
+        "close": "Ticket closed.",
+        "error": "Error occurred."
+      }
+    },
+    "announcements": {
+      "header": {
+        "title": "Announcements",
+        "description": "Manage announcements and notifications across the application here.",
+        "badge": "System Communication"
+      },
+      "actions": {
+        "create": "NEW ANNOUNCEMENT"
+      },
+      "table": {
+        "active": "Active",
+        "audience": "Target Audience",
+        "titleContent": "Title & Content",
+        "dateRange": "Publication Date",
+        "actions": "Actions",
+        "empty": "No announcements found yet.",
+        "loading": "Loading..."
+      },
+      "audience": {
+        "all": "EVERYONE",
+        "users": "USERS",
+        "consultants": "CONSULTANTS"
+      },
+      "messages": {
+        "statusUpdated": "Status updated.",
+        "deleted": "Announcement deleted.",
+        "deleteConfirm": "Are you sure you want to delete this announcement?",
+        "error": "Error occurred."
+      },
+      "form": {
+        "createTitle": "New Announcement",
+        "editTitle": "Edit Announcement",
+        "description": "Fill in the details to publish an announcement.",
+        "details": "Announcement Details",
+        "title": "Title",
+        "titlePlaceholder": "e.g. New Feature Release",
+        "messageBody": "Message Body",
+        "messagePlaceholder": "Write your announcement here...",
+        "targetAudience": "Target Audience",
+        "active": "Active",
+        "startsAt": "Starts At (Optional)",
+        "endsAt": "Ends At (Optional)",
+        "createAction": "Create Announcement",
+        "updateAction": "Update Announcement"
+      }
+    },
+    "bookings": {
+      "header": {
+        "title": "Bookings",
+        "description": "Filter, view and update booking requests."
+      },
+      "summary": {
+        "total": "Total {total}"
+      },
+      "states": {
+        "loadingInline": "Loading…",
+        "loading": "Loading bookings...",
+        "empty": "No records found.",
+        "resourcesLoading": "Loading resources..."
+      },
+      "filters": {
+        "searchLabel": "Search",
+        "searchPlaceholder": "Name / Email / Phone",
+        "statusLabel": "Status",
+        "statusOptions": {
+          "all": "All",
+          "pending_payment": "Pending payment",
+          "booked": "Booked",
+          "new": "New",
+          "confirmed": "Confirmed",
+          "rejected": "Rejected",
+          "completed": "Completed",
+          "cancelled": "Cancelled",
+          "no_show": "No show",
+          "expired": "Expired"
+        },
+        "readLabel": "Read",
+        "readOptions": {
+          "all": "All",
+          "unread": "Unread",
+          "read": "Read"
+        },
+        "dateLabel": "Date",
+        "resourceIdLabel": "Resource ID",
+        "resourceIdPlaceholder": "(optional)"
+      },
+      "badges": {
+        "unread": "Unread"
+      },
+      "status": {
+        "pending_payment": "Pending payment",
+        "booked": "Booked",
+        "new": "New",
+        "confirmed": "Confirmed",
+        "rejected": "Rejected",
+        "completed": "Completed",
+        "cancelled": "Cancelled",
+        "no_show": "No show",
+        "expired": "Expired"
+      },
+      "read": {
+        "read": "Read",
+        "unread": "Unread"
+      },
+      "list": {
+        "title": "Booking list",
+        "description": "Manage bookings and quick actions.",
+        "views": {
+          "table": "Table",
+          "cards": "Cards",
+          "calendar": "Calendar"
+        },
+        "calendar": {
+          "count": "{count} booking(s)",
+          "contact": "Contact"
+        },
+        "columns": {
+          "status": "Status",
+          "customer": "Customer",
+          "date": "Date",
+          "resource": "Resource",
+          "service": "Service"
+        }
+      },
+      "labels": {
+        "dateTime": "Date/time",
+        "resource": "Resource",
+        "service": "Service",
+        "customerMessage": "Customer message",
+        "selected": "Selected",
+        "available": "Available",
+        "full": "Full",
+        "inactive": "Inactive"
+      },
+      "tooltips": {
+        "acceptDisabled": "Only \"New\" requests can be accepted.",
+        "rejectDisabled": "This status cannot be rejected.",
+        "alreadyRead": "Already read",
+        "decisionAlreadyMade": "A decision has already been made for this booking."
+      },
+      "actions": {
+        "accept": "Accept",
+        "accepting": "Accepting...",
+        "reject": "Reject",
+        "rejecting": "Rejecting...",
+        "sendReminder": "Send reminder",
+        "markRead": "Mark read",
+        "backToList": "Back to list"
+      },
+      "decision": {
+        "titleAccept": "Accept booking",
+        "titleReject": "Reject booking",
+        "actionAccept": "Accept",
+        "actionReject": "Reject",
+        "noteLabel": "Decision note (optional)",
+        "notePlaceholder": "This note may be shown to the customer via email template.",
+        "noteHelp": "This action triggers email template + notifications in backend.",
+        "processing": "Processing..."
+      },
+      "confirm": {
+        "delete": "You are about to delete this booking.\n\nCustomer: {name}\nDate: {dateTime}\n\nDo you want to continue?",
+        "reject": "You are about to reject this booking request. Do you want to continue?"
+      },
+      "messages": {
+        "created": "Record created.",
+        "updated": "Record updated.",
+        "deleted": "Booking deleted.",
+        "deleteError": "Failed to delete booking.",
+        "markedRead": "Marked as read.",
+        "accepted": "Booking accepted. (Email + notification triggered)",
+        "rejected": "Booking rejected. (Email + notification triggered)",
+        "reminderSent": "Reminder email sent.",
+        "loadError": "Failed to load record.",
+        "createUnavailableTitle": "Manual booking creation is disabled",
+        "createUnavailableDescription": "Bookings are created through the user flow; from the admin panel you can view existing records and update their status.",
+        "genericError": "Operation failed. Please try again."
+      },
+      "form": {
+        "titles": {
+          "create": "New booking",
+          "edit": "Edit booking"
+        },
+        "description": "Manage customer info, date/time, resource and status fields.",
+        "fields": {
+          "name": "Name",
+          "email": "Email",
+          "phone": "Phone",
+          "locale": "Locale",
+          "status": "Status",
+          "isRead": "Read",
+          "serviceId": "Service ID",
+          "resource": "Resource",
+          "date": "Date",
+          "time": "Time",
+          "customerMessage": "Customer message",
+          "adminNote": "Admin note",
+          "decisionNote": "Decision note"
+        },
+        "placeholders": {
+          "serviceId": "(optional)",
+          "resource": "Select resource",
+          "time": "Select time",
+          "select": "Select...",
+          "optional": "(optional)",
+          "decisionNote": "(optional) Can be shown to the customer in accept/reject email."
+        },
+        "help": {
+          "locale": "Customer preferred language. Email templates use this locale.",
+          "status": "Use Accept/Reject actions for decision note + email + notifications.",
+          "date": "Daily plan is fetched by this date.",
+          "pickResourceAndDate": "Pick resource + date.",
+          "slotsLoading": "Loading slots...",
+          "slotCount": "{count} slots"
+        },
+        "validation": {
+          "requiredCustomerFields": "Name, email and phone are required.",
+          "resourceRequired": "Resource selection is required.",
+          "invalidDate": "Select a valid date. (YYYY-MM-DD)",
+          "invalidTime": "Select a valid time. (HH:mm)"
+        },
+        "availability": {
+          "checking": "Checking availability...",
+          "noSlot": "No slot record found (can be created via plan).",
+          "available": "Available ({reserved}/{cap})",
+          "unavailable": "Full / inactive ({reserved}/{cap})"
+        }
+      },
+      "plan": {
+        "title": "Daily plan",
+        "description": "Slots come from daily plan endpoint. Only available slots can be selected.",
+        "columns": {
+          "time": "Time",
+          "status": "Status",
+          "capacity": "Capacity"
+        }
+      }
+    },
+    "customPage": {
+      "title": "Custom Pages",
+      "subtitle": "List static content pages",
+      "newPage": "New Page",
+      "allLanguages": "All languages",
+      "allModules": "All Modules",
+      "searchPlaceholder": "Search: Title or Slug...",
+      "status": {
+        "all": "All",
+        "published": "Published Only",
+        "draft": "Drafts"
+      },
+      "moduleLabels": {
+        "blog": "Blog",
+        "news": "News / Announcements",
+        "about": "About / Static",
+        "services": "Services",
+        "products": "Products",
+        "solutions": "Solutions",
+        "library": "Library",
+        "faq": "FAQ",
+        "contact": "Contact"
+      },
+      "list": {
+        "published": "Published",
+        "draft": "Draft",
+        "saveOrder": "Save Order",
+        "savingOrder": "Saving...",
+        "deleteConfirm": "You are about to delete this page.\n\nTitle: {title}\nID: {id}\nSlug: {slug}\n\nDo you want to continue?",
+        "deleteSuccess": "Page deleted",
+        "deleteError": "Delete failed",
+        "listTitle": "List",
+        "recordCount": "{count} records",
+        "noTitle": "No title",
+        "created": "Created",
+        "updated": "Updated",
+        "moveUp": "Up",
+        "moveDown": "Down",
+        "reorderHelp": "Reorder: Move up/down, then save.",
+        "cardViewHint": "Default view is card. Table view is available on large screens.",
+        "featured": "Homepage",
+        "unfeatured": "Not shown",
+        "featuredSuccess": "Will be shown on homepage.",
+        "unfeaturedSuccess": "Removed from homepage."
+      },
+      "form": {
+        "isPublished": "Published",
+        "featured": "Show on Homepage",
+        "title": "Title",
+        "slug": "Slug",
+        "summary": "Summary",
+        "content": "Content",
+        "tags": "Tags",
+        "featuredImage": "Featured Image",
+        "gallery": "Gallery",
+        "metaTitle": "SEO Title",
+        "metaDescription": "SEO Description",
+        "imageSize": "Image Size",
+        "manualUrl": "Manual Image URL",
+        "createTitle": "Create New Page",
+        "editTitle": "Edit Page",
+        "formDescription": "Fill in the title, slug, content, tags and SEO fields.",
+        "formMode": "Form",
+        "jsonMode": "JSON",
+        "back": "Back",
+        "createBtn": "Create Page",
+        "saveBtn": "Save Changes",
+        "creating": "Creating...",
+        "saving": "Saving...",
+        "switchingLocale": "Switching language...",
+        "localeLabel": "Language",
+        "localeHint": "Selection also determines the locale record you are editing.",
+        "jsonHelperText": "This JSON is a direct representation of all form fields.",
+        "titleSlugRequired": "Title and slug fields are required.",
+        "imageAddedToContent": "Image added to content.",
+        "invalidImageUrl": "Please enter a valid image URL.",
+        "localeRecordNotFound": "No record found for the selected language; you can create new content in this language.",
+        "localeLoadFailed": "An error occurred while loading the custom page for the selected language.",
+        "imageSizeSm": "Small (1/2)",
+        "imageSizeMd": "Medium (3/4)",
+        "imageSizeLg": "Large (default)",
+        "imageSizeFull": "Full width",
+        "uploadHelperText": "Uploaded image will be added as a block at the end of the content.",
+        "altTextPlaceholder": "Alt text (optional)",
+        "addManualUrl": "Add URL to Content",
+        "coverHelperText": "Upload a cover/featured image for this page.",
+        "galleryHelperText": "Upload multiple images and define a gallery for this page."
+      },
+      "detail": {
+        "noLocales": "No languages found",
+        "noLocalesDesc": "app_locales is empty or invalid. Please set languages from Site Settings first.",
+        "invalidId": "Invalid ID",
+        "invalidIdDesc": "Not a UUID:",
+        "returnToList": "Return to list",
+        "invalidLocale": "No valid locale selected.",
+        "createSuccess": "Page created successfully.",
+        "createIdError": "Created but ID was not returned.",
+        "updateSuccess": "Page updated.",
+        "noPageId": "Page data could not be loaded (no ID).",
+        "operationFailed": "Operation failed. Please try again.",
+        "localeListError": "Could not load record list for the selected language."
+      }
+    },
+    "profile": {
+      "subtitle": "You can update your profile information and password here.",
+      "personalInfo": "Personal Information",
+      "personalInfoDesc": "Your name, email address, and profile picture.",
+      "avatarUploaded": "Profile picture uploaded.",
+      "avatarUploadFailed": "Image upload failed.",
+      "updated": "Profile updated successfully.",
+      "updateFailed": "Profile update failed.",
+      "avatarSet": "Custom profile picture set",
+      "noAvatar": "Using default avatar",
+      "name": "Full Name",
+      "email": "Email",
+      "security": "Security",
+      "securityDesc": "Update your password for account security.",
+      "newPassword": "New Password",
+      "confirmPassword": "Confirm Password",
+      "changePassword": "Change Password",
+      "passwordRequired": "New password is required.",
+      "passwordsDontMatch": "Passwords do not match.",
+      "passwordUpdated": "Password updated successfully.",
+      "passwordUpdateFailed": "Password update failed."
+    },
+    "sidebar": {
+      "search": "Search",
+      "searchShortcut": "⌘J",
+      "searchPlaceholder": "Search (limited for now)...",
+      "noResults": "No results found.",
+      "quickCreate": "Quick Create",
+      "inbox": "Inbox",
+      "comingSoon": "Soon",
+      "user": {
+        "account": "Account",
+        "billing": "Billing",
+        "notifications": "Notifications",
+        "logout": "Log out"
+      },
+      "theme": {
+        "light": "Light",
+        "dark": "Dark"
+      },
+      "preferences": {
+        "title": "Preferences",
+        "description": "Customize your dashboard layout preferences.",
+        "cookieNote": "*Preferences use cookies by default. You can switch between cookies, localStorage, or no storage in code.",
+        "themePreset": "Theme Preset",
+        "themePresetPlaceholder": "Preset",
+        "fonts": "Fonts",
+        "fontsPlaceholder": "Select font",
+        "themeMode": "Theme Mode",
+        "pageLayout": "Page Layout",
+        "navbarBehavior": "Navbar Behavior",
+        "sidebarStyle": "Sidebar Style",
+        "sidebarCollapseMode": "Sidebar Collapse Mode",
+        "restoreDefaults": "Restore Defaults",
+        "layout": {
+          "centered": "Centered",
+          "fullWidth": "Full Width"
+        },
+        "navbar": {
+          "sticky": "Sticky",
+          "scroll": "Scroll"
+        },
+        "sidebarVariant": {
+          "inset": "Inset",
+          "sidebar": "Sidebar",
+          "floating": "Floating"
+        },
+        "sidebarCollapsible": {
+          "icon": "Icon",
+          "offcanvas": "OffCanvas"
+        },
+        "language": "Interface Language",
+        "languagePlaceholder": "Select language"
+      },
+      "groups": {
+        "general": "General / Management",
+        "content": "Content Management",
+        "marketing": "Marketing",
+        "communication": "Communication & CRM",
+        "system": "System & Settings"
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Overview of records in the system",
+      "analytics": {
+        "subtitle": "Bookings, revenue trend and service performance overview.",
+        "ranges": {
+          "7d": "Last 7 days",
+          "30d": "Last 30 days",
+          "90d": "Last 90 days"
+        },
+        "kpi": {
+          "bookings": "Bookings",
+          "confirmed": "Confirmed",
+          "revenue": "Revenue",
+          "reservedSlots": "Reserved Slots"
+        },
+        "kpis": {
+          "users": "Total Users",
+          "consultants": "Active Consultants",
+          "todayBookings": "Today's Bookings",
+          "revenue": "Revenue"
+        },
+        "revenueChart": {
+          "title": "Revenue Trend",
+          "description": "Time series based on non-cancelled bookings."
+        },
+        "servicesChart": {
+          "title": "Bookings by Service",
+          "description": "Which service receives how many bookings."
+        },
+        "servicesTable": {
+          "title": "Service Performance",
+          "description": "Booking count and revenue by service.",
+          "bookings": "{count} bookings"
+        },
+        "modules": {
+          "title": "Module Counts",
+          "description": "Quick navigation cards for key admin modules."
+        },
+        "states": {
+          "empty": "No analytics data found for this range."
+        }
+      },
+      "items": {
+        "consultants": "Consultants",
+        "db": "Database",
+        "audit": "Audit Logs",
+        "availability": "Availability",
+        "notifications": "Notifications",
+        "storage": "File Manager",
+        "contacts": "Contact Messages",
+        "bookings": "Bookings",
+        "users": "Users",
+        "reviews": "Reviews",
+        "newsletter": "Newsletter",
+        "menu_items": "Menu Items",
+        "sliders": "Sliders",
+        "footer_sections": "Footer Sections",
+        "custom_pages": "Custom Pages",
+        "site_settings": "Site Settings",
+        "cache": "Cache Management",
+        "email_templates": "Email Templates",
+        "services": "Services",
+        "faqs": "FAQs",
+        "resources": "Resources",
+        "reports": "Reports",
+        "mail": "Mail",
+        "telegram": "Telegram",
+        "chat": "Chat & AI",
+        "dashboard": "Overview",
+        "orders": "Orders",
+        "announcements": "Announcements",
+        "support": "Support",
+        "subscriptions": "Subscriptions",
+        "subscription_plans": "Subscription Plans",
+        "wallet": "Wallet",
+        "gutschein": "Gift Cards",
+        "payment_settings": "Payment Settings",
+        "popups": "Popups",
+        "navigation": "Menu & Footer"
+      },
+      "stats": {
+        "deliveredOrders": "Delivered Orders",
+        "deliveredOrdersDescription": "Status: delivered",
+        "deliveredOrdersHelp": "Number of delivered orders",
+        "deliveredUnits": "Delivered Units",
+        "deliveredUnitsDescription": "Total units",
+        "deliveredUnitsHelp": "Total units delivered",
+        "earnedIncentives": "Earned Incentives",
+        "earnedIncentivesDescription": "Seller + Driver",
+        "earnedIncentivesHelp": "Total calculated incentives",
+        "avgIncentivePerOrder": "Average Incentive / Order",
+        "avgIncentivePerOrderDescription": "Total incentive / order",
+        "avgIncentivePerOrderHelp": "Simple KPI",
+        "totalIncentivesLabel": "Total incentives",
+        "avgLabel": "Average"
+      },
+      "range": {
+        "last7Days": "Last 7 days",
+        "last30Days": "Last 30 days",
+        "last3Months": "Last 3 months"
+      },
+      "chart": {
+        "title": "Delivery Chart",
+        "description": "Selected metrics — {range}",
+        "descriptionShort": "{range}",
+        "ordersLabel": "Orders",
+        "unitsLabel": "Units (Chicken)",
+        "selectRange": "Select range",
+        "note": "Note: Scales differ, so axes are separate (Orders: left, Units: right)."
+      },
+      "table": {
+        "viewSelector": "View",
+        "viewPlaceholder": "Select view",
+        "allTab": "All",
+        "driversTab": "Drivers",
+        "sellersTab": "Sellers",
+        "addSection": "Add section",
+        "detailView": "Detail view",
+        "columns": {
+          "units": "Units",
+          "orders": "Orders",
+          "incentives": "Incentives"
+        },
+        "type": {
+          "driver": "Driver",
+          "seller": "Seller"
+        }
+      },
+      "states": {
+        "loading": "Loading…",
+        "noRecords": "No records found."
+      }
+    },
+    "db": {
+      "title": "Database Management",
+      "description": "Create snapshot points, download full backup, apply SQL import or export/import by module.",
+      "auth": {
+        "loading": "Loading admin panel..."
+      },
+      "help": {
+        "pageTitle": "What does this page do?",
+        "dbAdmin": "DB Admin screen",
+        "fullDbDesc": "export/import the entire database.",
+        "snapshotDesc": "take a restore point before risky operations, restore it.",
+        "moduleDesc": "transfer only selected module tables (e.g. products).",
+        "uiDesc": "export/bootstrap UI texts in bulk by locale.",
+        "closeHint": "Tip: Click outside or press ESC to close.",
+        "closeButton": "Close"
+      },
+      "fullDb": {
+        "title": "Database Backup & Snapshot Management",
+        "description": "You can create snapshots and download full database backups.",
+        "snapshotLabel": "Snapshot label",
+        "snapshotPlaceholder": "E.g: Current live system",
+        "notePlaceholder": "Why was this snapshot taken?",
+        "noteLabel": "Note (optional)",
+        "createButton": "Create Snapshot",
+        "creating": "Creating...",
+        "downloadTitle": "Download Full Database Backup",
+        "downloadDesc": "Download the current DB state as a full dump.",
+        "sqlButton": "Download SQL (.sql)",
+        "sqlPreparing": "Preparing SQL...",
+        "jsonButton": "Download JSON (.json)",
+        "snapshotCreated": "Snapshot created: {label}",
+        "snapshotError": "Error creating snapshot.",
+        "exportSuccess": "SQL backup downloaded.",
+        "exportError": "Error during DB export (SQL).",
+        "jsonNotImplemented": "JSON export feature not implemented yet. You can use SQL export."
+      },
+      "import": {
+        "title": "SQL Import (IMPORT)",
+        "titleWithMode": "SQL Import (IMPORT) — {mode}",
+        "warning": "These operations can permanently change database contents. Especially when truncate is checked, be sure to take a snapshot before proceeding.",
+        "dangerLabel": "WARNING:",
+        "helpTitle": "Import explanation",
+        "helpHeadline": "SQL Import (Full DB)",
+        "helpDesc1": "This panel applies SQL dump to the entire database (text / URL / file).",
+        "helpDesc2": "empties tables before import. Very risky in production environment.",
+        "helpDesc3": "is a dry run in supported flows (rollback).",
+        "processing": "Operation in progress...",
+        "tabs": {
+          "text": "SQL Text",
+          "url": "From URL",
+          "file": "From File"
+        },
+        "text": {
+          "label": "SQL Script (utf8)",
+          "placeholder": "Paste the full SQL script here.",
+          "required": "SQL text cannot be empty.",
+          "helpTitle": "SQL text tips",
+          "helpHeadline": "SQL Text",
+          "helpDesc1": "Paste the full SQL script here.",
+          "helpDesc2": "Browser may slow down with very large dumps; file import is more suitable.",
+          "helpDesc3": "Content must be correct encoding (utf8)."
+        },
+        "url": {
+          "label": "SQL Dump URL (.sql or .sql.gz)",
+          "placeholder": "https://.../dump.sql or dump.sql.gz",
+          "required": "First enter a valid .sql or .sql.gz URL.",
+          "helpTitle": "URL import tips",
+          "helpHeadline": "URL Import",
+          "helpDesc1": "HTTPS usage is recommended.",
+          "helpDesc2": ".sql.gz dumps transfer faster with large data.",
+          "helpDesc3": "URLs requiring authentication/protection may not be downloadable by backend."
+        },
+        "file": {
+          "label": "SQL Dump File (.sql or .gz)",
+          "placeholder": "Select file",
+          "required": "First select a .sql or .gz file.",
+          "selected": "Selected file:",
+          "note": "There is no dry run in file import flow (only truncate is applied).",
+          "helpTitle": "File import tips",
+          "helpHeadline": "From File Import",
+          "helpDesc1": "Most stable method (recommended for large dumps).",
+          "helpDesc2": "There is no dry run in file import flow.",
+          "helpDesc3": "Nginx/Fastify body limit settings can affect file size."
+        },
+        "truncate": {
+          "label": "TRUNCATE ALL tables before operation",
+          "helpTitle": "What is truncate?",
+          "helpHeadline": "TruncateBefore",
+          "helpDesc": "Tables are emptied before import. Incorrect use leads to data loss. Taking a snapshot before the operation in production should be considered mandatory.",
+          "helpDescFile": "This is the most critical option in file import. When enabled, tables are completely emptied before import. Consider taking a snapshot mandatory."
+        },
+        "dryRun": {
+          "label": "Dry run (rehearsal, roll back changes)",
+          "helpTitle": "How does dry run work?",
+          "helpHeadline": "Dry Run",
+          "helpDesc": "If backend supports, runs inside SQL transaction and rolls back. Some DDL operations can do implicit commit in MySQL; not 100% guaranteed.",
+          "helpDescUrl": "If backend supports, does transaction + rollback. Time and resource consumption increases with large dumps."
+        },
+        "buttons": {
+          "apply": "Apply SQL",
+          "importing": "Importing...",
+          "importFromUrl": "Import from URL",
+          "importFromFile": "Import from File"
+        },
+        "confirm": {
+          "text": "You are about to apply this SQL script directly to the database.\n\nTruncate: {truncate}\nDo you want to continue?",
+          "url": "SQL dump downloaded from this URL will be applied to the database.\n\nURL: {url}\nTruncate: {truncate}\n\nDo you want to continue?",
+          "file": "The SQL file you selected will be applied to the database.\n\nFile: {file}\nTruncate: {truncate}\n\nThis operation cannot be undone. Do you want to continue?",
+          "truncateYes": "YES (empty all tables)",
+          "truncateNo": "No"
+        },
+        "success": {
+          "text": "SQL text successfully imported.",
+          "url": "SQL dump from URL successfully imported.",
+          "file": "SQL dump from file successfully imported.",
+          "dryRun": "Dry run successful. Changes rolled back."
+        },
+        "error": {
+          "text": "SQL import (text) error.",
+          "textGeneric": "Error during SQL import (text).",
+          "url": "SQL import (URL) error.",
+          "urlGeneric": "Error during SQL import (URL).",
+          "file": "SQL import (file) error.",
+          "fileGeneric": "Error during SQL import (file)."
+        }
+      },
+      "snapshots": {
+        "title": "Snapshot Points",
+        "total": "Total:",
+        "processing": "Operation in progress...",
+        "columns": {
+          "index": "#",
+          "labelNote": "Label / Note",
+          "file": "File",
+          "created": "Created",
+          "size": "Size",
+          "actions": "Actions"
+        },
+        "noLabel": "No label",
+        "noNote": "-",
+        "loading": "Loading...",
+        "noData": "No snapshots found yet.",
+        "scrollNote": "Note: If screen is narrow, table can be scrolled horizontally.",
+        "restore": "Restore",
+        "delete": "Delete",
+        "restoreConfirm": "You are about to restore from this snapshot.\n\nSnapshot: {label}\n\nThis operation will OVERWRITE current database contents (truncate).\nDo you want to continue?",
+        "deleteConfirm": "You are about to delete this snapshot file.\n\nSnapshot: {label}\n\nDo you want to continue?",
+        "restoreSuccess": "Snapshot successfully restored.",
+        "restoreError": "An error occurred during snapshot restore.",
+        "restoreFailed": "Snapshot restore failed",
+        "deleteSuccess": "Snapshot deleted.",
+        "deleteFailed": "Could not delete snapshot.",
+        "deleteError": "Snapshot delete failed"
+      },
+      "modules": {
+        "title": "Module-based DB Management",
+        "selected": "Selected module: {module}",
+        "tabs": {
+          "export": "Export",
+          "import": "Import",
+          "validate": "Manifest Validate",
+          "ui": "UI Export/Bootstrap"
+        },
+        "export": {
+          "title": "Module Export",
+          "description": "Tables belonging to {module} module will be exported in manifest order.",
+          "format": {
+            "sql": "SQL",
+            "json": "JSON"
+          },
+          "downloadButton": "Download",
+          "preparing": "Preparing...",
+          "notImplemented": "Module export feature not implemented yet.",
+          "success": "{module} export downloaded ({format}).",
+          "error": "Error during module export."
+        },
+        "import": {
+          "title": "Module Import",
+          "description": "Imports {module} module tables according to manifest order.",
+          "truncate": "TRUNCATE module tables first",
+          "tabs": {
+            "text": "SQL Text",
+            "file": "File"
+          },
+          "text": {
+            "label": "SQL Script",
+            "placeholder": "Paste module SQL content here."
+          },
+          "file": {
+            "label": "File (.sql / .gz)"
+          },
+          "applyButton": "Apply SQL",
+          "importButton": "Import from File",
+          "importing": "Importing...",
+          "notImplemented": "Module import feature not implemented yet."
+        },
+        "validate": {
+          "title": "Manifest Validation",
+          "description": "Do tables in manifest exist in DB? Are there duplicates? Is sorting safe?",
+          "checkButton": "Check",
+          "checking": "Checking...",
+          "noResult": "No result yet.",
+          "statusOk": "OK",
+          "statusError": "ERROR",
+          "module": "Module:",
+          "errors": "Errors",
+          "warnings": "Warnings",
+          "declaredTables": "Declared tables:",
+          "duplicates": "Duplicates:"
+        },
+        "ui": {
+          "title": "Site Settings UI Export / Bootstrap",
+          "description": "Export ui_* keys in bulk and bootstrap locale.",
+          "downloadButton": "Download JSON",
+          "targetLocale": "Target locale",
+          "sourceLocale": "Source locale",
+          "overwrite": "Overwrite",
+          "onlyUiKeys": "Only ui_* keys",
+          "bootstrapButton": "Apply Bootstrap",
+          "applying": "Applying...",
+          "downloadSuccess": "UI JSON downloaded.",
+          "downloadError": "UI export data not ready.",
+          "bootstrapSuccess": "UI bootstrap completed.",
+          "bootstrapError": "UI bootstrap failed.",
+          "bootstrapErrorGeneric": "Error during UI bootstrap."
+        }
+      }
+    },
+    "subscriptions": {
+      "title": "Subscriptions",
+      "description": "List and refund subscriptions.",
+      "listTitle": "Subscription List",
+      "actions": {
+        "refresh": "Refresh",
+        "search": "Search",
+        "refund": "Refund",
+        "refundReasonPrompt": "Refund reason"
+      },
+      "toasts": {
+        "refundSuccess": "Subscription refunded/closed.",
+        "refundFailed": "Could not refund subscription."
+      },
+      "filters": {
+        "status": "Status",
+        "search": "Search",
+        "searchPlaceholder": "Email, plan code, status, subscription id"
+      },
+      "table": {
+        "user": "User",
+        "plan": "Plan",
+        "status": "Status",
+        "provider": "Provider",
+        "price": "Price",
+        "started": "Started",
+        "ends": "Ends",
+        "actions": "Actions",
+        "noRecords": "No subscriptions found."
+      },
+      "pagination": {
+        "page": "Page {page} / {totalPages}",
+        "prev": "Prev",
+        "next": "Next"
+      },
+      "statuses": {
+        "all": "All",
+        "pending": "Pending",
+        "active": "Active",
+        "cancelled": "Cancelled",
+        "expired": "Expired",
+        "grace_period": "Grace Period",
+        "past_due": "Past Due"
+      }
+    },
+    "notifications": {
+      "header": {
+        "title": "Notifications",
+        "description": "{count} notifications found, {unread} unread.",
+        "badge": "System Notifications"
+      },
+      "actions": {
+        "markAllRead": "MARK ALL READ",
+        "refresh": "Refresh",
+        "sendPush": "SEND PUSH",
+        "create": "CREATE NEW",
+        "markRead": "Mark Read",
+        "markUnread": "Mark Unread",
+        "back": "Back",
+        "save": "Save"
+      },
+      "filters": {
+        "title": "Filters",
+        "search": "Search",
+        "searchPlaceholder": "Title or message...",
+        "status": "Status",
+        "type": "Type",
+        "all": "All",
+        "read": "Read",
+        "unread": "Unread",
+        "typePlaceholder": "All"
+      },
+      "table": {
+        "status": "S",
+        "title": "Title",
+        "message": "Message",
+        "type": "Type",
+        "date": "Date",
+        "actions": "Actions",
+        "empty": "No notifications found yet.",
+        "loading": "Loading...",
+        "noRecords": "No notifications found"
+      },
+      "form": {
+        "createTitle": "New Notification",
+        "editTitle": "Notification Detail",
+        "createDescription": "Create a new notification",
+        "editDescription": "View notification details",
+        "infoTitle": "Notification Information",
+        "userId": "User ID",
+        "userIdPlaceholder": "Leave empty for all users",
+        "userIdHelp": "Enter UUID to send to a specific user",
+        "title": "Title",
+        "titlePlaceholder": "Notification title",
+        "message": "Message",
+        "messagePlaceholder": "Notification message",
+        "type": "Type",
+        "optional": "(optional)",
+        "editWarning": "ℹ️ Notifications cannot be edited after creation. Only read/unread status can be changed."
+      },
+      "messages": {
+        "markAllSuccess": "All marked as read.",
+        "markedRead": "Marked as read.",
+        "markedUnread": "Marked as unread.",
+        "deleteConfirm": "Delete notification \"{title}\"?",
+        "deleteSuccess": "Notification deleted.",
+        "operationFailed": "Operation failed.",
+        "titleRequired": "Title required",
+        "messageRequired": "Message required",
+        "createSuccess": "Notification created"
+      },
+      "types": {
+        "system": "System",
+        "booking": "Booking",
+        "payment": "Payment",
+        "support": "Support",
+        "announcement": "Announcement",
+        "order_created": "Order Created",
+        "order_paid": "Order Paid",
+        "order_failed": "Order Failed",
+        "booking_created": "Booking Created",
+        "booking_status_changed": "Booking Status Changed",
+        "custom": "Custom"
+      }
+    },
+    "mail": {
+      "title": "Mail Settings",
+      "description": "Test the email system and verify SMTP settings",
+      "test": {
+        "title": "Send Test Email",
+        "description": "Enter an email address to send a test email",
+        "label": "Email Address",
+        "placeholder": "example@domain.com",
+        "send": "Send Test",
+        "sending": "Sending...",
+        "success": "Test email sent successfully",
+        "error": "Error sending test email",
+        "required": "Email address is required"
+      },
+      "smtp": {
+        "title": "SMTP Configuration",
+        "description": "Test emails use your current SMTP settings from environment variables",
+        "info": "Check your SMTP configuration in the .env file:",
+        "variables": {
+          "host": "SMTP Host",
+          "port": "SMTP Port",
+          "user": "SMTP User",
+          "pass": "SMTP Password",
+          "from": "Sender Address"
+        }
+      }
+    },
+    "availability": {
+      "header": {
+        "title": "Availability Management",
+        "description": "Manage resources (therapist, room, etc.) and weekly schedules.",
+        "totalLabel": "Total:",
+        "actions": {
+          "refresh": "Refresh",
+          "create": "New Resource"
+        }
+      },
+      "filters": {
+        "searchLabel": "Search",
+        "searchPlaceholder": "Name or reference...",
+        "typeLabel": "Type",
+        "typeAll": "All",
+        "statusLabel": "Status",
+        "statusAll": "All",
+        "statusActive": "Active",
+        "statusInactive": "Inactive",
+        "clear": "Clear",
+        "statusOptions": {
+          "all": "All",
+          "active": "Active",
+          "inactive": "Inactive"
+        }
+      },
+      "list": {
+        "title": "Resource List",
+        "empty": "No records found",
+        "loading": "Loading...",
+        "total": "Total: {count}",
+        "columns": {
+          "name": "Name",
+          "type": "Type",
+          "status": "Status",
+          "updated": "Updated",
+          "created": "Created",
+          "actions": "Actions",
+          "ref": "Reference"
+        },
+        "actions": {
+          "manage": "Manage",
+          "delete": "Delete"
+        },
+        "deleteConfirm": {
+          "title": "Delete Resource",
+          "description": "Are you sure you want to delete \"{name}\"?\nType: {type}\nRef: {ref}\nThis action cannot be undone."
+        }
+      },
+      "form": {
+        "createTitle": "New Resource",
+        "editTitle": "Resource Management",
+        "description": "Manage resource details, weekly and daily plans.",
+        "tabs": {
+          "resource": "General Info",
+          "weekly": "Weekly Plan",
+          "daily": "Daily Plan"
+        },
+        "buttons": {
+          "back": "Back",
+          "create": "Create",
+          "save": "Save",
+          "creating": "Creating...",
+          "saving": "Saving..."
+        },
+        "messages": {
+          "createSuccess": "Resource created successfully.",
+          "updateSuccess": "Resource updated successfully.",
+          "deleteSuccess": "Resource deleted successfully.",
+          "invalidId": "Invalid ID.",
+          "notFound": "Resource not found.",
+          "notFoundDesc": "This resource could not be accessed or may have been deleted.",
+          "returnToList": "Return to List"
+        },
+        "resource": {
+          "titleLabel": "Resource Name",
+          "titlePlaceholder": "e.g. Therapist Anna",
+          "typeLabel": "Type",
+          "capacityLabel": "Capacity",
+          "capacityHelp": "How many services can be provided simultaneously? Usually 1.",
+          "refLabel": "External Reference",
+          "refPlaceholder": "e.g. room-101 (optional)",
+          "statusLabel": "Status",
+          "active": "Active",
+          "inactive": "Inactive"
+        }
+      },
+      "common": {
+        "loading": "Loading...",
+        "noName": "(no name)",
+        "noRef": "(no ref)"
+      },
+      "weekly": {
+        "title": "Weekly Working Hours",
+        "description": "These ranges are the source for daily session generation.",
+        "empty": "No working-hour range exists yet. You can add a new range below.",
+        "addTitle": "Add New Working Range",
+        "days": {
+          "1": "Monday",
+          "2": "Tuesday",
+          "3": "Wednesday",
+          "4": "Thursday",
+          "5": "Friday",
+          "6": "Saturday",
+          "7": "Sunday"
+        },
+        "columns": {
+          "day": "Day",
+          "start": "Start",
+          "end": "End",
+          "session": "Session (min)",
+          "break": "Break (min)",
+          "capacity": "Capacity",
+          "active": "Active"
+        },
+        "actions": {
+          "edit": "Edit",
+          "save": "Save",
+          "delete": "Delete",
+          "add": "Add",
+          "editDayHint": "Edit daily sessions for this day"
+        },
+        "messages": {
+          "invalidRange": "Invalid start/end time. End time must be after start time.",
+          "added": "Working range added.",
+          "addFailed": "Working range could not be added.",
+          "updated": "Working range updated.",
+          "updateFailed": "Working range could not be updated.",
+          "deleted": "Working range deleted.",
+          "deleteFailed": "Working range could not be deleted.",
+          "deleteConfirm": "You are about to delete this working range.\n\nDay: {day}\nTime: {start} - {end}\n\nContinue?"
+        }
+      },
+      "recurring": {
+        "title": "Recurring Day Overrides",
+        "description": "Define a weekly override pattern such as closing every Friday or forcing a day open.",
+        "modes": {
+          "default": "Use weekly plan",
+          "open": "Force open",
+          "closed": "Force closed",
+          "defaultDesc": "No recurring override. Weekly working hours remain in effect.",
+          "openDesc": "This day stays open every week if working hours exist.",
+          "closedDesc": "This day is treated as closed every week."
+        },
+        "preview": {
+          "closedByRecurring": "This day is closed by a recurring weekly override. Remove the override or switch it to open to preview working ranges again."
+        },
+        "messages": {
+          "saved": "Recurring override saved.",
+          "deleted": "Recurring override removed.",
+          "saveFailed": "Recurring override could not be saved."
+        }
+      },
+      "daily": {
+        "title": "Daily Plan",
+        "description": "Sessions are derived from the weekly plan for the selected day. Use Generate Slots to persist them.",
+        "fields": {
+          "date": "Date",
+          "dayOfWeek": "Day: {dow} (1=Mon ... 7=Sun)"
+        },
+        "actions": {
+          "generate": "Generate Slots",
+          "closeDay": "Close Day",
+          "openDay": "Open Day",
+          "closeSlot": "Close",
+          "openSlot": "Open"
+        },
+        "notes": {
+          "capacityCheck": "Capacity is checked again at confirmation time by backend rules."
+        },
+        "preview": {
+          "title": "Session Preview (From Weekly Plan)",
+          "description": "Preview is UI-only. Public bookable hours require a persisted DB plan.",
+          "noRanges": "There is no active weekly range for this day.",
+          "rangeLabel": "Working Range",
+          "rangePlaceholder": "Select a range",
+          "rangeHelp": "If there are multiple ranges in one day, manage sessions range by range.",
+          "selectRange": "Select a range to preview sessions.",
+          "noPreview": "No sessions could be generated for the selected range."
+        },
+        "dbPlan": {
+          "title": "DB Plan (Slot Records)",
+          "description": "Public available hours are read from here.",
+          "empty": "DB plan is empty. If you see a preview, use Generate Slots first."
+        },
+        "columns": {
+          "time": "Time",
+          "capacity": "Capacity",
+          "status": "Status",
+          "range": "Range"
+        },
+        "capacityLegend": "(reserved/total)",
+        "statusOpen": "Open",
+        "statusFull": "Full",
+        "statusClosed": "Closed",
+        "rules": {
+          "title": "Rule",
+          "weekly": "Weekly plan is the source of session generation.",
+          "db": "DB plan is the real public source of available hours.",
+          "empty": "If the plan is empty, no public hours are shown."
+        },
+        "messages": {
+          "generateSuccess": "Slot generation completed. Created={created}, Planned={planned}",
+          "generateFailed": "Slot generation failed.",
+          "dayUpdated": "Day updated. Updated={updated}",
+          "dayUpdateFailed": "Day override failed.",
+          "reservationWarning": "This slot has {reserved} confirmed reservation(s).\nClosing it may require follow-up on those bookings.\n\nContinue?",
+          "slotUpdated": "Slot updated.",
+          "slotUpdateFailed": "Slot could not be updated."
+        }
+      }
+    },
+    "audit": {
+      "header": {
+        "title": "Audit Logs",
+        "description": "Request logs, authentication events, metrics and geographic distribution."
+      },
+      "refresh": "Refresh",
+      "refreshed": "Data refreshed.",
+      "error": "Failed to load data.",
+      "clear": {
+        "button": "Clear Logs",
+        "dialogTitle": "Clear all logs?",
+        "dialogDescription": "All audit entries in the current tab will be permanently deleted. This action cannot be undone.",
+        "cancel": "Cancel",
+        "confirm": "Delete permanently",
+        "success": "{count} entries deleted."
+      },
+      "tabs": {
+        "requests": "Requests",
+        "auth": "Authentication",
+        "metrics": "Metrics",
+        "map": "Map",
+        "stream": "Live Stream"
+      },
+      "requests": {
+        "filtersTitle": "Filters",
+        "filtersDescription": "Filter request logs by criteria.",
+        "search": "Search (URL/Path)",
+        "method": "Method",
+        "status": "Status Code",
+        "sort": "Sort",
+        "sortDate": "Date",
+        "sortResponseTime": "Response Time",
+        "sortStatusCode": "Status Code",
+        "logsTitle": "Request Logs",
+        "bodySnapshot": "Body Snapshot",
+        "compare": "Compare",
+        "compareSelected": "{count} entries selected",
+        "compareAction": "Compare snapshots"
+      },
+      "compare": {
+        "title": "Compare Request Snapshots",
+        "description": "Two selected request bodies are shown side by side line by line.",
+        "needTwo": "Please select exactly two entries to compare.",
+        "close": "Close"
+      },
+      "auth": {
+        "filtersTitle": "Filters",
+        "filtersDescription": "Filter authentication events.",
+        "event": "Event",
+        "email": "Email",
+        "eventsTitle": "Authentication Events"
+      },
+      "metrics": {
+        "title": "Daily Metrics",
+        "description": "Daily request statistics and trends.",
+        "days": "Period",
+        "nDays": "{n} Days",
+        "pathPrefix": "Path Prefix",
+        "chartTitle": "Daily Chart",
+        "lastNDays": "Last {n} days"
+      },
+      "map": {
+        "title": "Geographic Distribution",
+        "description": "Requests by location for the last {days} days."
+      },
+      "stream": {
+        "title": "Live Event Stream",
+        "description": "Real-time app events from the audit SSE stream.",
+        "recentCount": "{count} events in local history",
+        "clearLocal": "Clear history",
+        "empty": "No live events received yet.",
+        "unknownTopic": "Unknown topic",
+        "noMessage": "No message",
+        "status": {
+          "connecting": "Connecting",
+          "open": "Connected",
+          "closed": "Closed",
+          "error": "Connection error"
+        }
+      },
+      "common": {
+        "from": "From",
+        "to": "To",
+        "userId": "User ID",
+        "ip": "IP Address",
+        "desc": "Descending",
+        "asc": "Ascending",
+        "onlyAdmin": "Admin Only",
+        "adminRequests": "Admin requests",
+        "apply": "Apply",
+        "reset": "Reset",
+        "all": "All",
+        "loading": "Loading...",
+        "noRecords": "No records found.",
+        "totalRecords": "Total: {count} records",
+        "recordCount": "{count} records",
+        "prev": "Previous",
+        "next": "Next",
+        "anon": "Anonymous"
+      },
+      "columns": {
+        "date": "Date",
+        "request": "Request",
+        "status": "Status",
+        "ipUser": "IP / User",
+        "location": "Location",
+        "userAgent": "User Agent",
+        "user": "User"
+      }
+    },
+    "siteSettings": {
+      "title": "Site Settings",
+      "description": "Manage key-value settings. List tabs can be filtered with search.",
+      "tabs": {
+        "general": "General Settings",
+        "seo": "SEO & Meta",
+        "smtp": "Email (SMTP)",
+        "cloudinary": "Cloudinary",
+        "api": "API & Integration",
+        "brandMedia": "Logo & Favicon",
+        "list": "All Records",
+        "globalList": "List (Global *)",
+        "locales": "Locales",
+        "branding": "Brand & Identity",
+        "payment": "Payment",
+        "design_tokens": "Design Tokens",
+        "custom_css": "Custom CSS",
+        "livekit": "Video Infrastructure"
+      },
+      "messages": {
+        "deleteConfirm": "Are you sure you want to delete setting {key}?",
+        "deleted": "Setting deleted.",
+        "error": "Error occurred."
+      },
+      "general": {
+        "title": "General Settings",
+        "description": "Branding, contact info, and social media links.",
+        "keyLabels": {
+          "contact_info": "Contact Information",
+          "socials": "Social Media",
+          "businessHours": "Business Hours",
+          "company_profile": "Company Profile",
+          "ui_header": "Header Navigation"
+        },
+        "keyDescriptions": {
+          "contact_info": "Phone, email, WhatsApp, and address info.",
+          "socials": "Instagram, Facebook, X, and other social networks.",
+          "businessHours": "Weekly operation and appointment hours.",
+          "company_profile": "Company name, slogan, and about summary.",
+          "ui_header": "Menu labels and CTA button in the header."
+        }
+      },
+      "seo": {
+        "inline": {
+          "title": "SEO Settings",
+          "description": "Page-based title, description, and social media previews.",
+          "saved": "SEO settings saved.",
+          "saveError": "Save error.",
+          "dirty": "Unsaved",
+          "save": "Save",
+          "saveAll": "Save All",
+          "loading": "Loading...",
+          "expandAll": "Expand All",
+          "collapseAll": "Collapse All",
+          "fieldTitle": "Title (meta title)",
+          "fieldDescription": "Description (meta description)",
+          "placeholderTitle": "MarketPulse — Dealer monitoring and market signals platform",
+          "placeholderDescription": "Short summary of the page — ideal 140-160 chars.",
+          "ogImage": "OG Image (1200×630)",
+          "noindex": "Hide this page from search engines (noindex)",
+          "googlePreview": "Google Preview",
+          "socialPreview": "Social Media Preview",
+          "siteName": "MarketPulse",
+          "noDescription": "No description entered yet.",
+          "noOgImage": "OG image not uploaded yet"
+        },
+        "pageLabels": {
+          "home": "Home",
+          "birth-chart": "Birth Chart",
+          "consultants": "Consultants",
+          "consultant-detail": "Consultant Detail",
+          "pricing": "Pricing",
+          "daily": "Daily Horoscope",
+          "blog": "Blog",
+          "blog-post": "Blog Post",
+          "about": "About Us",
+          "contact": "Contact",
+          "faqs": "FAQs"
+        }
+      },
+      "payment": {
+        "title": "Payment Settings",
+        "description": "Configure PayPal and bank transfer options.",
+        "paypal": {
+          "title": "PayPal",
+          "enabled": "Enable PayPal",
+          "mode": "Mode",
+          "modeSandbox": "Sandbox (Test)",
+          "modeProduction": "Live (Production)",
+          "clientId": "Client ID",
+          "clientIdPh": "AXxxxx...",
+          "clientSecret": "Client Secret",
+          "clientSecretPh": "ELxxxx...",
+          "webhookId": "Webhook ID (optional)",
+          "webhookIdPh": "WH-xxxx..."
+        },
+        "bankTransfer": {
+          "title": "Bank Transfer",
+          "enabled": "Enable bank transfer",
+          "accountName": "Account holder",
+          "accountNamePh": "Company Name Ltd.",
+          "iban": "IBAN",
+          "ibanPh": "DE89 3704 0044 0532 0130 00",
+          "bankName": "Bank",
+          "bankNamePh": "Deutsche Bank",
+          "branch": "Branch",
+          "branchPh": "Frankfurt am Main",
+          "swift": "SWIFT / BIC",
+          "swiftPh": "DEUTDEDBXXX"
+        },
+        "bookingPayment": {
+          "title": "Booking Online Payment",
+          "description": "When enabled, customers receive a payment link in their booking confirmation email.",
+          "enabled": "Enable online payment for bookings",
+          "activeNote": "Active: Booking confirmation emails will include a payment link. The appointment page will show a \"Pay\" button after booking.",
+          "inactiveNote": "Inactive: Booking confirmation emails will only confirm the appointment without a payment link."
+        },
+        "saved": "Payment settings saved.",
+        "saveError": "Failed to save settings.",
+        "refresh": "Refresh",
+        "loading": "Loading…",
+        "saving": "Saving…",
+        "save": "Save"
+      },
+      "filters": {
+        "title": "Filters",
+        "description": "Search, language and tab selection.",
+        "search": "Search",
+        "searchPlaceholder": "Search in key or value...",
+        "language": "Language",
+        "selectLanguage": "Select language",
+        "globalPlaceholder": "Global",
+        "defaultSuffix": "default",
+        "inactiveSuffix": "inactive",
+        "languageDisabledNote": "Language selection is not used in this tab.",
+        "refreshButton": "Refresh",
+        "resetButton": "Reset",
+        "refreshed": "Refreshed."
+      },
+      "badges": {
+        "global": "Global"
+      },
+      "management": {
+        "title": "Management",
+        "localeRecords": "Selected language records",
+        "globalRecords": "Global (*) records",
+        "loadingMeta": "Loading locale meta…"
+      },
+      "locales": {
+        "title": "Locales",
+        "description": "Manage active locales (app_locales) and the default locale (default_locale).",
+        "defaultLabel": "Default locale",
+        "defaultPlaceholder": "Select default locale",
+        "table": {
+          "code": "Code",
+          "label": "Label",
+          "active": "Active",
+          "default": "Default"
+        },
+        "empty": "No locale configuration found.",
+        "presetDeEnTr": "Set de/en/tr preset",
+        "presetTop20": "Add 20 common locales",
+        "saved": "Locales updated.",
+        "saveError": "Failed to update locales."
+      },
+      "list": {
+        "title": "Settings List",
+        "description": "site_settings records",
+        "dash": "—",
+        "hideSeoNote": "SEO keys are hidden here; manage them in the SEO tab.",
+        "deleteConfirm": "Delete \"{key}\" ({locale})?",
+        "noRecords": "No records found.",
+        "updatedAtLabel": "Updated",
+        "mobileNote": "On mobile, records are shown as cards.",
+        "mobileHideSeoSuffix": "SEO keys are also hidden here.",
+        "columns": {
+          "key": "Key",
+          "locale": "Locale",
+          "value": "Value (Summary)",
+          "updatedAt": "Updated At",
+          "actions": "Actions"
+        },
+        "preview": {
+          "array": "Array [{count} items]",
+          "object": "Object ({count} fields)"
+        }
+      },
+      "form": {
+        "title": "Setting",
+        "description": "Structured mode: form editor. Raw mode: JSON or plain string.",
+        "imageLabel": "Image",
+        "saved": "\"{key}\" ({locale}) saved.",
+        "saveError": "Failed to save setting.",
+        "deleteConfirm": "Delete \"{key}\" ({locale})?",
+        "deleted": "\"{key}\" ({locale}) deleted.",
+        "deleteError": "Failed to delete setting.",
+        "modes": {
+          "structured": "Structured",
+          "raw": "Raw"
+        },
+        "structuredMissingTitle": "Structured renderer missing",
+        "structuredMissingDesc": "No structured renderer is defined for this key. Use Raw mode.",
+        "rawHelp": "Raw: If you enter valid JSON it will be parsed and saved; otherwise it will be saved as plain text.",
+        "rawPlaceholder": "E.g.: {\"title\":\"...\"} or plain text",
+        "rawTip": "Tip: To save as JSON, start the text with “{” or “[”."
+      },
+      "detail": {
+        "globalOption": "Global (*)",
+        "keyMissingTitle": "Error",
+        "keyMissingDesc": "Setting key not found.",
+        "localesMissingTitle": "Language list not found",
+        "localesMissingDesc": "site_settings.app_locales is empty or invalid. Configure languages first.",
+        "localesMissingAction": "Go to Site Settings",
+        "editTitle": "Edit",
+        "backToList": "Back to list",
+        "localeLabel": "Locale",
+        "loadingLocale": "Loading locale…",
+        "fallbackNotice": "No exact record for <code>{selectedLocale}</code>. Showing fallback from <code>{effectiveLocale}</code>. Saving will create/update <code>{selectedLocale}</code>.",
+        "noRecordNotice": "No record found for <code>{key}</code> (<code>{locale}</code>). You can create it by saving.",
+        "note": "Note: General/UI keys open a structured form. Other keys fall back to JSON editor in structured mode.",
+        "siteMetaDefaultGlobalGuard": "site_meta_default cannot be locale=\"*\". Select a locale and save.",
+        "updated": "\"{key}\" ({locale}) updated.",
+        "deleted": "\"{key}\" ({locale}) deleted.",
+        "structuredJson": {
+          "noRenderer": "No structured form is defined for this key. Structured mode works as a JSON editor.",
+          "label": "Structured JSON",
+          "helperText": "Parsed on blur. Invalid JSON will not be saved."
+        }
+      },
+      "general": {
+        "title": "General / UI",
+        "description": "GLOBAL (*) default + selected language ({locale}) override are managed together.",
+        "searchPlaceholder": "Search in key or value",
+        "globalBootstrap": "Global Bootstrap",
+        "globalBootstrapTooltip": "Creates missing GLOBAL (*) records with default seed",
+        "recordsTitle": "Records",
+        "managedKeys": "Managed keys:",
+        "keyColumn": "Key",
+        "sourceColumn": "Source",
+        "effectiveColumn": "Effective (Summary)",
+        "actionsColumn": "Actions",
+        "globalExists": "GLOBAL (*) Exists",
+        "globalNotExists": "GLOBAL (*) Does not exist",
+        "localeExists": "LOCALE ({locale}) Exists",
+        "localeNotExists": "LOCALE ({locale}) Does not exist",
+        "sourceOverride": "Override",
+        "sourceGlobal": "Global",
+        "sourceNone": "None",
+        "noOverrideNote": "No {locale} override for this key; GLOBAL (*) is applied.",
+        "overrideButton": "Override",
+        "restoreButton": "Restore",
+        "restoreTooltip": "Restore default values for this row",
+        "deleteGlobal": "Delete*",
+        "deleteGlobalTooltip": "Delete GLOBAL (*)",
+        "deleteLocale": "Delete",
+        "deleteLocaleTooltip": "Delete LOCALE ({locale})",
+        "noRecords": "No records found.",
+        "deleteConfirm": "Delete \"{key}\" ({locale})?",
+        "deleted": "\"{key}\" ({locale}) deleted.",
+        "overrideCreated": "{locale} override created for \"{key}\" (GLOBAL copied).",
+        "defaultsRestored": "Default values restored for \"{key}\" ({locale}).",
+        "missingGlobalError": "GLOBAL (*) record not found. You need to create global value first.",
+        "globalBootstrapSuccess": "Missing keys created with empty defaults.",
+        "loadingNote": "Fetching global + locale records.",
+        "deleteTooltip": "Tip: \"Delete*\" deletes GLOBAL (*) record. \"Delete\" deletes selected locale override.",
+        "recordCount": "{count} records",
+        "keyLabels": {
+          "contact_info": "Contact Information",
+          "socials": "Social Media",
+          "businessHours": "Business Hours",
+          "company_profile": "Company Profile",
+          "ui_header": "Header / Menu"
+        },
+        "keyDescriptions": {
+          "contact_info": "Phone, email, address, WhatsApp.",
+          "socials": "Instagram, Facebook, LinkedIn, YouTube, X.",
+          "businessHours": "Weekly business hours.",
+          "company_profile": "Company name, slogan, about text.",
+          "ui_header": "Top menu labels and CTA button."
+        }
+      },
+      "cloudinary": {
+        "title": "Cloudinary / Storage Settings",
+        "description": "These are global settings (locale=*). Selected language is for UI only.",
+        "badge": "Global (locale=*) • Selected language: {locale}",
+        "storageDriver": "Storage Driver",
+        "storageDriverPlaceholder": "local or cloudinary",
+        "storageDriverHelp": "E.g.: cloudinary or local",
+        "localRoot": "Local Root",
+        "localRootPlaceholder": "/var/www/uploads",
+        "localBaseUrl": "Local Base URL",
+        "localBaseUrlPlaceholder": "/uploads or https://cdn.site.com/uploads",
+        "cdnPublicBase": "CDN Public Base",
+        "cdnPublicBasePlaceholder": "https://cdn.example.com",
+        "publicApiBase": "Public API Base",
+        "publicApiBasePlaceholder": "https://api.example.com",
+        "cloudName": "Cloudinary Cloud Name",
+        "cloudNamePlaceholder": "cloud-name",
+        "apiKey": "Cloudinary API Key",
+        "apiKeyPlaceholder": "API key",
+        "apiSecret": "Cloudinary API Secret",
+        "apiSecretPlaceholder": "API secret",
+        "folder": "Cloudinary Folder",
+        "folderPlaceholder": "uploads",
+        "unsignedPreset": "Cloudinary Unsigned Preset",
+        "unsignedPresetPlaceholder": "Optional preset name",
+        "testButton": "Cloudinary Test",
+        "testing": "Testing...",
+        "saved": "Cloudinary / Storage settings saved.",
+        "testSuccess": "Cloudinary connection successful. Cloud: {cloud}, test file: {publicId}",
+        "testFailedConsole": "Cloudinary test failed. Check console for details.",
+        "testFailedLocal": "Cloudinary test failed: storage_driver is currently 'local'. To use Cloudinary, set storage_driver to 'cloudinary' and fill in the keys.",
+        "testFailedConfig": "Cloudinary not configured: Fill in Cloud name, API key and secret values and try again.",
+        "testFailedStep": "Cloudinary test failed ({step}): {message}",
+        "testInfo": "Click \"Cloudinary Test\" button to test connection.",
+        "testInfoTesting": "Testing Cloudinary...",
+        "testInfoSuccess": "Last test: SUCCESS (cloud: {cloud})",
+        "testInfoError": "Last test: ERROR – check logs for details."
+      },
+      "branding": {
+        "title": "Branding & Identity",
+        "description": "General panel settings: page title, copyright, favicons and meta tags.",
+        "saved": "Branding settings saved.",
+        "saveError": "Failed to save branding settings.",
+        "identity": "Identity",
+        "adminLogin": "Admin sign-in screen",
+        "adminLoginHelp": "Left panel title, quote and background. If the title is empty, the translated default is used.",
+        "visual": "Visual",
+        "metaSeo": "Meta / SEO",
+        "placeholders": {
+          "adminLoginHeading": "e.g. Welcome back",
+          "adminLoginQuote": "Short tagline"
+        },
+        "fields": {
+          "appName": "Panel Name",
+          "copyright": "Copyright Text",
+          "htmlLang": "HTML Language",
+          "htmlLangHelp": "<html lang=\"...\"> attribute. e.g.: de, en, tr",
+          "themeColor": "Theme Color",
+          "favicon16": "Favicon 16×16",
+          "favicon32": "Favicon 32×32",
+          "faviconUrl": "Favicon",
+          "logoUrl": "Logo",
+          "appleTouchIcon": "Apple Touch Icon",
+          "ogImage": "OG Image",
+          "metaTitle": "Meta Title",
+          "metaDescription": "Meta Description",
+          "ogUrl": "OG URL",
+          "ogTitle": "OG Title",
+          "ogDescription": "OG Description",
+          "twitterCard": "Twitter Card Type",
+          "adminLoginHeading": "Sign-in — left panel title",
+          "adminLoginQuote": "Sign-in — quote",
+          "adminLoginBackground": "Sign-in — background image"
+        }
+      },
+      "brandMedia": {
+        "title": "Logo & Favicon",
+        "description": "This tab is language-independent. Records are stored as locale=\"*\".",
+        "badge": "Global (locale=*)",
+        "searchPlaceholder": "Search in key (e.g.: logo, favicon)",
+        "labels": {
+          "site_logo": "Logo",
+          "site_logo_dark": "Logo (Dark)",
+          "site_logo_light": "Logo (Light)",
+          "site_favicon": "Favicon",
+          "site_apple_touch_icon": "Apple Touch Icon",
+          "site_app_icon_512": "App Icon 512x512",
+          "site_og_default_image": "Default OG Image",
+          "site_appointment_cover": "Appointment Cover Image"
+        },
+        "updated": "{label} updated.",
+        "updateError": "Failed to save {label}.",
+        "deleteConfirm": "Delete \"{key}\" ({locale})?",
+        "deleteError": "Delete failed."
+      },
+      "api": {
+        "title": "API & Integration Settings",
+        "description": "These are global settings (locale=*). Selected language is for UI only.",
+        "badge": "Global (locale=*)",
+        "uiBadge": "UI: {locale}",
+        "note": "These fields usually do not vary by language. Stored as locale=* in database.",
+        "googleClientId": "Google Client ID",
+        "googleClientIdHelp": "Client ID for Google OAuth / Login integration.",
+        "googleClientSecret": "Google Client Secret",
+        "googleClientSecretHelp": "For security, manage with backend environment variables if possible.",
+        "gtmContainerId": "GTM Container ID",
+        "gtmContainerIdPlaceholder": "GTM-XXXXXXX",
+        "gtmContainerIdHelp": "If GTM is active, frontend only loads GTM script; GA4 tag is managed within GTM.",
+        "ga4MeasurementId": "GA4 Measurement ID",
+        "ga4MeasurementIdPlaceholder": "G-XXXXXXXXXX",
+        "ga4MeasurementIdHelp": "Can be used as fallback with gtag.js if GTM is not available.",
+        "cookieConsent": "Cookie Consent (JSON)",
+        "cookieConsentPlaceholder": "{\"consent_version\":1,\"defaults\":{\"necessary\":true,\"analytics\":false,\"marketing\":false},\"ui\":{\"enabled\":true}}",
+        "cookieConsentHelp": "If you enter JSON, it's stored as object. If you enter plain text, it's stored as string.",
+        "saved": "API & integration settings saved.",
+        "saveError": "An error occurred while saving API settings.",
+        "agoraAppId": "Agora App ID",
+        "agoraAppCertificate": "Agora App Certificate",
+        "firebaseProjectId": "Firebase Project ID",
+        "firebaseClientEmail": "Firebase Client Email",
+        "firebasePrivateKey": "Firebase Private Key",
+        "iyzipayApiKey": "Iyzipay API Key",
+        "iyzipaySecretKey": "Iyzipay Secret Key",
+        "iyzipayBaseUrl": "Iyzipay Base URL"
+      },
+      "actions": {
+        "edit": "Edit",
+        "delete": "Delete",
+        "restore": "Restore",
+        "override": "Override",
+        "save": "Save",
+        "saving": "Saving...",
+        "test": "Test",
+        "testing": "Testing...",
+        "refresh": "Refresh",
+        "reset": "Reset",
+        "bootstrap": "Bootstrap",
+        "copy": "Copy"
+      },
+      "messages": {
+        "loading": "Loading…",
+        "deleted": "Setting deleted.",
+        "saved": "Settings saved.",
+        "copied": "Copied.",
+        "copyError": "Copy failed.",
+        "error": "Operation failed. Please try again."
+      },
+      "seo": {
+        "title": "SEO Settings",
+        "description": "GLOBAL (*) default + selected language ({locale}) override are managed together. \"Edit\" button opens the form page.",
+        "ogDefaultImage": "Default OG Image (Global)",
+        "ogDefaultImageKey": "site_og_default_image",
+        "ogDefaultImageHelp": "Automatically saved after upload. Same as {key} in Brand & Media tab.",
+        "searchPlaceholder": "Search in key (e.g.: site, meta)",
+        "effective": "Effective (Summary)",
+        "override": "Override",
+        "global": "Global",
+        "none": "None",
+        "globalRow": "GLOBAL (*)",
+        "localeRow": "LOCALE ({locale})",
+        "hasOverride": "No {locale} override for this key; GLOBAL (*) is applied.",
+        "createOverride": "Create Override",
+        "restoreTooltip": "Restore default values for this row",
+        "note": "site_meta_default cannot be GLOBAL(*); edit link always opens with locale.",
+        "defaultsCreated": "Default SEO settings created.",
+        "defaultsRestored": "Default values restored for \"{key}\" ({locale}).",
+        "overrideCreated": "\"{key}\" ({locale}) override created.",
+        "overrideError": "Failed to create override.",
+        "deleteConfirm": "Delete \"{key}\" ({locale})?",
+        "deleted": "\"{key}\" ({locale}) deleted.",
+        "deleteError": "Failed to delete SEO setting.",
+        "defaultNotDefined": "No default is defined for this key.",
+        "siteMetaDefaultGlobalError": "site_meta_default cannot be GLOBAL(*). Save/restore with a locale.",
+        "siteMetaDefaultMustBeLocale": "site_meta_default cannot be GLOBAL(*). Select a locale and restore.",
+        "defaultsRestoreError": "Failed to restore defaults.",
+        "defaultsCreateError": "Global bootstrap failed.",
+        "globalBootstrap": "Global Bootstrap",
+        "globalBootstrapTooltip": "Creates missing SEO GLOBAL(*) records with default schema",
+        "ogUpdated": "Default OG image updated.",
+        "ogUpdateError": "Failed to update default OG image.",
+        "savedUrlLabel": "Saved URL:",
+        "previewLabel": "Preview:",
+        "ogDefaultImageAlt": "Default OG image",
+        "imageLoadError": "Image failed to load",
+        "existsYes": "Exists",
+        "existsNo": "Missing",
+        "siteMetaDefaultGlobalDeleteHint": "Normally not GLOBAL; if present it can be deleted.",
+        "noRecords": "No SEO records found.",
+        "seedNote": "If seed ran, at least seo and site_seo GLOBAL rows should exist.",
+        "columns": {
+          "key": "Key",
+          "source": "Source",
+          "effective": "Effective (Summary)",
+          "actions": "Actions"
+        },
+        "inline": {
+          "title": "SEO Settings",
+          "description": "Per-page title, description, OG image, and indexing settings.",
+          "save": "Save",
+          "saveAll": "Save All",
+          "saved": "SEO settings saved.",
+          "saveError": "Save failed.",
+          "loading": "Loading...",
+          "dirty": "Unsaved",
+          "expandAll": "Expand All",
+          "collapseAll": "Collapse All",
+          "fieldTitle": "Title",
+          "fieldDescription": "Description",
+          "ogImage": "OG Image (1200×630)",
+          "noindex": "Hide this page from search engines (noindex)",
+          "googlePreview": "Google Preview",
+          "socialPreview": "Social Media Preview",
+          "siteName": "MarketPulse",
+          "noDescription": "No description yet.",
+          "noOgImage": "No OG image yet",
+          "placeholderTitle": "MarketPulse — Dealer monitoring and market signals platform",
+          "placeholderDescription": "Short summary of the page — ideal 140-160 characters.",
+          "charCount": "{count} / 160"
+        },
+        "pageLabels": {
+          "home": "Home",
+          "birth-chart": "Birth Chart",
+          "consultants": "Consultants",
+          "consultant-detail": "Consultant Detail",
+          "pricing": "Pricing",
+          "daily": "Daily Reading",
+          "blog": "Blog",
+          "blog-post": "Blog Post",
+          "about": "About",
+          "contact": "Contact",
+          "faqs": "FAQs"
+        }
+      },
+      "structured": {
+        "title": "Structured edit: Manages SEO fields as a form. If strict validation is applied on the backend during saving, invalid structure will not be saved.",
+        "robotsNote": "If {field} is true in Robots, indexing is not recommended for search engines.",
+        "ogImageUpload": "Upload OpenGraph Image (optional)",
+        "siteName": "Site Name",
+        "titleDefault": "Title Default",
+        "titleTemplate": "Title Template",
+        "titleTemplatePlaceholder": "%s | Platform",
+        "description": "Description",
+        "ogType": "OpenGraph Type",
+        "ogImages": "OpenGraph Images (1 per line)",
+        "ogImagesPlaceholder": "/img/og-default.jpg",
+        "twitterCard": "Twitter Card",
+        "twitterCardRecommended": "Recommended for most sites: {card}",
+        "twitterSite": "Twitter Site",
+        "twitterSitePlaceholder": "@platform",
+        "twitterCreator": "Twitter Creator",
+        "twitterCreatorPlaceholder": "@creator",
+        "robots": "Robots",
+        "noindex": "noindex",
+        "index": "index",
+        "follow": "follow",
+        "robotsRecommendation": "Recommendation: Normally {noindex}, {index}, {follow}.",
+        "contact": {
+          "description": "Contact information. Empty fields are stored as empty strings.",
+          "labels": {
+            "phone": "Phone",
+            "email": "Email",
+            "whatsapp": "WhatsApp",
+            "address": "Address"
+          }
+        },
+        "socials": {
+          "description": "Enter social links as full URL (https://...) or username.",
+          "labels": {
+            "instagram": "Instagram",
+            "facebook": "Facebook",
+            "linkedin": "LinkedIn",
+            "youtube": "YouTube",
+            "x": "X (Twitter)"
+          }
+        },
+        "companyProfile": {
+          "labels": {
+            "companyName": "Company Name",
+            "slogan": "Slogan",
+            "about": "About"
+          }
+        },
+        "uiHeader": {
+          "description": "Header navigation and CTA labels. Use a locale row for language-specific overrides.",
+          "labels": {
+            "navHome": "Menu: Home",
+            "navProducts": "Menu: Products",
+            "navServices": "Menu: Services",
+            "navContact": "Menu: Contact",
+            "ctaLabel": "CTA Label"
+          }
+        },
+        "businessHours": {
+          "description": "Time format is HH:MM. If \"Closed\" is selected, the day is closed.",
+          "columns": {
+            "day": "Day",
+            "open": "Open",
+            "close": "Close",
+            "closed": "Closed"
+          },
+          "closedLabel": "closed",
+          "addRow": "Add Row",
+          "removeRow": "Remove",
+          "days": {
+            "mon": "Mon",
+            "tue": "Tue",
+            "wed": "Wed",
+            "thu": "Thu",
+            "fri": "Fri",
+            "sat": "Sat",
+            "sun": "Sun"
+          }
+        }
+      },
+      "slider": {
+        "title": "Slider Management",
+        "description": "Manage slider records in multiple languages; filter, sort, and change publication status.",
+        "header": {
+          "title": "Slider Management",
+          "description": "Manage slider records in multiple languages; filter, sort, and change publication status.",
+          "total": "Total:",
+          "loading": "Loading…",
+          "searchLabel": "Search",
+          "searchPlaceholder": "Search in title / slug…",
+          "localeLabel": "Language",
+          "localePlaceholder": "Select locale",
+          "localeEmptyError": "app_locales is empty.",
+          "localeEmptyHelp": "Check Site Settings → app_locales value.",
+          "filterLabel": "Filter",
+          "onlyActiveLabel": "Active only",
+          "onlyActiveHelp": "Show active sliders",
+          "refreshButton": "Refresh",
+          "createButton": "+ New Slider"
+        },
+        "list": {
+          "title": "Slider List",
+          "processing": "Processing…",
+          "totalLabel": "Total:",
+          "saveOrderButton": "Save Order",
+          "savingOrder": "Saving order…",
+          "reorderHelp": "Use up/down buttons to reorder. Click \"Save Order\" to make it permanent.",
+          "noImage": "No image",
+          "imageColumn": "Image",
+          "titleColumn": "Title",
+          "localeColumn": "Language",
+          "slugColumn": "Slug",
+          "activeColumn": "Active",
+          "featuredColumn": "Featured",
+          "orderColumn": "Order",
+          "actionsColumn": "Actions",
+          "noTitle": "(No title)",
+          "upButton": "Up",
+          "downButton": "Down",
+          "buttonLabel": "BTN:",
+          "linkLabel": "Link:",
+          "activeStatus": "Active",
+          "inactiveStatus": "Inactive",
+          "featuredStatus": "Featured",
+          "normalStatus": "Normal",
+          "editButton": "Edit",
+          "deleteButton": "Delete",
+          "loading": "Loading slider records…",
+          "noRecords": "No slider records yet.",
+          "itemNumber": "#",
+          "localeLabel": "Language:",
+          "orderLabel": "Order:",
+          "slugLabel": "Slug:",
+          "deleteConfirm": "You are about to delete \"{name}\" slider record. Do you want to continue?",
+          "deleted": "\"{name}\" slider record deleted.",
+          "deleteError": "An error occurred while deleting slider.",
+          "activeUpdateError": "Could not update active status.",
+          "featuredUpdateError": "Could not update featured status.",
+          "orderSaved": "Slider order saved.",
+          "orderSaveError": "Could not save order."
+        },
+        "form": {
+          "contentTitle": "Content",
+          "localeLabel": "Language",
+          "orderLabel": "Order",
+          "activeLabel": "Active",
+          "activeHelp": "Show in publication",
+          "featuredLabel": "Featured",
+          "featuredHelp": "Show with priority",
+          "titleLabel": "Title",
+          "slugLabel": "Slug",
+          "slugHelp": "Auto-generated when typing title; click slug field to manually change.",
+          "descriptionLabel": "Description",
+          "buttonTextLabel": "Button Text",
+          "buttonLinkLabel": "Button Link",
+          "altLabel": "Image Alt Text",
+          "localeRequired": "Locale is required.",
+          "titleRequired": "Title is required.",
+          "slugRequired": "Slug is required.",
+          "created": "Slider created.",
+          "idNotFound": "ID not found. Please refresh and try again.",
+          "updated": "Slider updated.",
+          "saveError": "Error while saving.",
+          "editTitle": "Edit Slider",
+          "createTitle": "Create New Slider",
+          "formMode": "Form",
+          "jsonMode": "JSON"
+        },
+        "formHeader": {
+          "createTitle": "Create New Slider",
+          "editTitle": "Edit Slider",
+          "description": "Edit title/slug/content/image and button fields. You can also update all fields at once with JSON mode.",
+          "loading": "Loading…",
+          "saving": "Saving…",
+          "backButton": "Back",
+          "createButton": "Create",
+          "saveButton": "Save"
+        },
+        "formImage": {
+          "imageLabel": "Slider Image",
+          "imageHelp": "You can upload an image for the slider from Storage. The URL of the selected image will be written to the image_url field (also reflected in JSON mode).",
+          "altLabel": "Alt Text",
+          "altPlaceholder": "E.g.: Home hero slider image",
+          "altHelp": "Alt text is used for SEO and accessibility."
+        },
+        "formJson": {
+          "label": "Slider JSON",
+          "helperText": "This is the exact equivalent of all fields in the form."
+        }
+      },
+      "smtp": {
+        "title": "SMTP / Email Settings",
+        "description": "These settings are usually global (locale=`*`). The selected language is for UI only.",
+        "badge": "Global (locale=`*`) • Selected language: {locale}",
+        "host": "SMTP Host",
+        "hostPlaceholder": "smtp.hostinger.com or smtp.gmail.com",
+        "port": "SMTP Port",
+        "portPlaceholder": "465 or 587",
+        "ssl": "SSL enabled",
+        "username": "Username",
+        "usernamePlaceholder": "SMTP username",
+        "password": "Password",
+        "passwordPlaceholder": "••••••••",
+        "fromEmail": "From Email",
+        "fromEmailPlaceholder": "no-reply@example.com",
+        "fromEmailHelp": "Emails in the application are sent from this address.",
+        "fromName": "From Name",
+        "fromNamePlaceholder": "Platform",
+        "testEmail": "Test email recipient",
+        "testEmailPlaceholder": "example@example.com",
+        "testEmailHelp": "If filled, test email goes here. Otherwise, from email is used first, then the logged-in user's email.",
+        "sendTest": "Send test email",
+        "sendingTest": "Sending test email...",
+        "saved": "SMTP settings saved.",
+        "testSent": "Test email sent. Check your inbox (and spam)."
+      }
+    },
+    "services": {
+      "header": {
+        "title": "Service Management",
+        "description": "List, filter, sort and edit services.",
+        "searchLabel": "Search",
+        "searchPlaceholder": "Name, slug...",
+        "searchPlaceholderLong": "e.g. maintenance, modernization…",
+        "localeLabel": "Language",
+        "localePlaceholder": "Select locale",
+        "localeEmptyError": "app_locales is empty. Check Site Settings → app_locales value.",
+        "localeUrlSync": "Locale syncs with URL.",
+        "statusLabel": "Status",
+        "statusAll": "All",
+        "statusAllAlt": "All",
+        "statusActive": "Active",
+        "statusInactive": "Inactive",
+        "statusOnlyActive": "Active only",
+        "statusOnlyInactive": "Inactive only",
+        "featuredLabel": "Featured",
+        "featuredOnly": "Featured only",
+        "featuredItems": "Featured",
+        "featuredOthers": "Others",
+        "filterLabel": "Filters",
+        "clearFilters": "Clear filters",
+        "resetButton": "Reset",
+        "refreshButton": "Refresh",
+        "createButton": "New Service",
+        "createButtonLong": "+ Add New Service",
+        "totalLabel": "Total:",
+        "activeLocale": "Active locale:",
+        "loading": "Loading…",
+        "headerDescription": "Manage service records."
+      },
+      "list": {
+        "title": "Service List",
+        "listTitle": "List",
+        "totalLabel": "Total:",
+        "loading": "Loading…",
+        "savingOrder": "Saving…",
+        "saveOrderButton": "Save Order",
+        "recordCount": "{count} records (page)",
+        "noRecords": "No records found.",
+        "reorderHelp": "Move rows up/down to reorder; then click \"Save Order\".",
+        "nameColumn": "Name",
+        "serviceColumn": "Service",
+        "slugColumn": "Slug",
+        "typeColumn": "Type",
+        "statusColumn": "Status",
+        "featuredColumn": "Featured",
+        "priceColumn": "Price / Date",
+        "actionsColumn": "Actions",
+        "actionsColumnPlural": "Actions",
+        "slugLabel": "Slug:",
+        "localeLabel": "Locale:",
+        "priceLabel": "Price:",
+        "dateLabel": "Created:",
+        "typeLabel": "Type:",
+        "activeStatus": "Active",
+        "inactiveStatus": "Inactive",
+        "featuredStatus": "Featured",
+        "normalStatus": "Normal",
+        "featuredYes": "Yes",
+        "featuredNo": "No",
+        "featuredBadge": "Featured",
+        "upButton": "Up",
+        "downButton": "Down",
+        "editButton": "Edit",
+        "deleteButton": "Delete",
+        "makeFeatured": "Make Featured",
+        "makeNormal": "Make Normal",
+        "featuredMobileLabel": "Featured",
+        "featuredMobileHelp": "Highlight in list",
+        "activeMobileLabel": "Active",
+        "activeMobileHelp": "Publish status",
+        "orderSaved": "Order saved.",
+        "orderSaveError": "Failed to save order.",
+        "statusUpdated": "Status updated.",
+        "statusUpdateError": "Update failed.",
+        "featuredUpdated": "Featured status updated.",
+        "deleteConfirm": "Delete \"{name}\"?",
+        "deleted": "Deleted.",
+        "deleteError": "Delete failed.",
+        "listLoadError": "Failed to load list.",
+        "retryButton": "Retry",
+        "listLoadErrorToast": "Failed to load list. Please try again."
+      },
+      "form": {
+        "createTitle": "Create New Service",
+        "editTitle": "Edit Service",
+        "description": "Fill in name, slug, content, technical fields and image details. You can work in Form or JSON mode.",
+        "loading": "Loading…",
+        "backButton": "Back",
+        "creating": "Creating...",
+        "saving": "Saving...",
+        "createButton": "Create Service",
+        "saveButton": "Save Changes",
+        "formTab": "Form",
+        "jsonTab": "JSON",
+        "jsonLabel": "Service JSON",
+        "jsonHelperText": "Exact representation of all form fields.",
+        "localeLabel": "Language",
+        "localePlaceholder": "Select locale",
+        "localeEmptyError": "app_locales is empty. Check Site Settings → app_locales value.",
+        "activeLabel": "Active",
+        "featuredLabel": "Featured",
+        "nameLabel": "Service Name",
+        "slugLabel": "Slug",
+        "descriptionLabel": "Description (Rich Content)",
+        "materialLabel": "Material / Content",
+        "priceLabel": "Price",
+        "priceNumericLabel": "Price (Numeric)",
+        "priceNumericHelp": "Enter numeric price for Google Analytics conversion tracking (e.g., 80.00 for 80 EUR)",
+        "includesLabel": "Includes",
+        "warrantyLabel": "Warranty / Conditions",
+        "tagsLabel": "Tags",
+        "tagsHelp": "(separate with commas)",
+        "tagsPlaceholder": "maintenance, repair, retrofit, scada",
+        "metaTitleLabel": "Meta Title",
+        "metaKeywordsLabel": "Meta Keywords",
+        "metaDescriptionLabel": "Meta Description",
+        "areaLabel": "Area / Capacity",
+        "durationLabel": "Duration",
+        "maintenanceLabel": "Maintenance",
+        "seasonLabel": "Season",
+        "equipmentLabel": "Equipment",
+        "displayOrderLabel": "Display Order",
+        "imageAltLabel": "Image Alt Text",
+        "multiLocaleTitle": "Multi-Language Operations",
+        "replicateAllLocales": "Copy to all languages on create",
+        "applyAllLocales": "Apply to all languages on update",
+        "localeRequired": "Locale selection is required. Check app_locales settings.",
+        "nameSlugRequired": "Name and slug fields are required."
+      },
+      "formHeader": {
+        "createTitle": "Create New Service",
+        "editTitle": "Edit Service",
+        "description": "Create or edit a service. Locale syncs with URL.",
+        "backButton": "Back",
+        "cancelButton": "Cancel",
+        "saveButton": "Save",
+        "activeLocale": "Active locale:",
+        "noLocalesTitle": "Language list not found",
+        "noLocalesDescription": "site_settings.app_locales is empty or invalid. Set up languages in Site Settings first.",
+        "goToSettings": "Go to Site Settings",
+        "invalidIdTitle": "Invalid ID",
+        "invalidIdDescription": "URL parameter is not a UUID:",
+        "backToList": "Back to list",
+        "notFoundTitle": "Service not found",
+        "notFoundDescription": "No record found for this ID:",
+        "retryButton": "Retry",
+        "localeError": "No valid locale selected. Check app_locales and default_locale.",
+        "nameSlugRequired": "Name and Slug are required.",
+        "createdNoId": "Created but ID not returned or not a UUID. Check backend response.",
+        "created": "Service created.",
+        "idNotFound": "Service data could not be loaded (no ID).",
+        "updated": "Service updated.",
+        "defaultError": "Operation failed. Please try again."
+      },
+      "formImage": {
+        "coverLabel": "Cover Image",
+        "coverHelperPrefix": "Cover image is written to",
+        "coverHelperField": "field (legacy: featured_image). The selected cover image",
+        "coverHelperSuffix": "is not deleted from the gallery, it stays in the pool.",
+        "galleryLabel": "Image Pool (Gallery)",
+        "galleryHelperPrefix": "All images stay in the pool",
+        "galleryHelperSuffix": "When selecting a cover, only the pointer is updated.",
+        "coverSaved": "Cover image saved.",
+        "coverSaveError": "Error saving cover image.",
+        "coverDeleteError": "Cover image cannot be deleted. Select another cover first.",
+        "galleryAddError": "Error adding images.",
+        "galleryDeleteError": "Error deleting images.",
+        "galleryPlaceholder": "Save the service first to use gallery/pool (ID must be created). Images are managed here after that."
+      },
+      "upload": {
+        "noUrl": "Upload successful but URL could not be obtained.",
+        "error": "Error uploading image."
+      },
+      "types": {
+        "maintenance_repair": "Maintenance & Repair",
+        "modernization": "Modernization",
+        "spare_parts_components": "Spare Parts",
+        "applications_references": "References",
+        "engineering_support": "Engineering",
+        "production": "Production",
+        "other": "Other"
+      }
+    },
+    "storage": {
+      "title": "File Management",
+      "description": "Upload, edit, and delete files.",
+      "list": {
+        "title": "Storage Assets",
+        "description": "File management - upload, edit, delete.",
+        "uploadButton": "Upload",
+        "deleteSelected": "Delete Selected ({count})",
+        "selectFileError": "Please select at least one file",
+        "filesDeleted": "{count} file(s) deleted",
+        "fileDeleted": "File deleted",
+        "searchLabel": "Search",
+        "searchPlaceholder": "File name...",
+        "bucketLabel": "Bucket",
+        "folderLabel": "Folder",
+        "fileTypeLabel": "File Type",
+        "allOption": "All",
+        "rootFolder": "(root)",
+        "imageType": "Image",
+        "videoType": "Video",
+        "audioType": "Audio",
+        "pdfType": "PDF",
+        "refreshButton": "Refresh",
+        "totalFiles": "Total {total} file(s)",
+        "selectedCount": "{count} selected",
+        "loading": "Loading...",
+        "noFiles": "No files found.",
+        "previewColumn": "Preview",
+        "fileColumn": "File",
+        "bucketColumn": "Bucket",
+        "folderColumn": "Folder",
+        "typeColumn": "Type",
+        "sizeColumn": "Size",
+        "dateColumn": "Date",
+        "actionsColumn": "Actions",
+        "downloadTitle": "Download",
+        "editButton": "Edit",
+        "deleteConfirmTitle": "Are you sure you want to delete?",
+        "deleteConfirmDescription": "{name} will be deleted. This action cannot be undone.",
+        "cancelButton": "Cancel",
+        "deleteButton": "Delete",
+        "defaultFileName": "This file"
+      },
+      "detail": {
+        "uploadTitle": "Upload File",
+        "editTitle": "Edit File",
+        "uploadDescription": "Upload a new file",
+        "editDescription": "Edit file information",
+        "backButton": "Back",
+        "previewTitle": "Preview",
+        "mimeLabel": "MIME:",
+        "sizeLabel": "Size:",
+        "dimensionsLabel": "Dimensions:",
+        "urlLabel": "URL:",
+        "openLink": "Open",
+        "selectFileTitle": "Select File",
+        "fileLabel": "File",
+        "required": "*",
+        "selectedFile": "Selected: {name} ({size})",
+        "bucketLabel": "Bucket",
+        "bucketPlaceholder": "public, private, assets...",
+        "folderLabel": "Folder",
+        "folderPlaceholder": "images, documents...",
+        "folderHelp": "Optional. Folder name to organize the file.",
+        "fileInfoTitle": "File Information",
+        "fileNameLabel": "File Name",
+        "fileNamePlaceholder": "example.jpg",
+        "bucketReadonlyHelp": "Bucket cannot be changed.",
+        "deleting": "Deleting...",
+        "deleteButton": "Delete",
+        "cancelButton": "Cancel",
+        "uploading": "Uploading...",
+        "saving": "Saving...",
+        "uploadButton": "Upload",
+        "saveButton": "Save",
+        "selectFileError": "Please select a file",
+        "bucketRequiredError": "Bucket is required",
+        "fileUploaded": "File uploaded",
+        "recordUpdated": "Record updated",
+        "loadError": "Failed to load record: {error}",
+        "backToList": "Back to List"
+      },
+      "errorFallback": "Operation failed"
+    },
+    "users": {
+      "list": {
+        "title": "Users",
+        "description": "View, edit, and manage user roles.",
+        "filters": {
+          "title": "Filters",
+          "description": "Search and filter settings.",
+          "searchLabel": "Search",
+          "searchPlaceholder": "Name, phone, email...",
+          "roleLabel": "Role",
+          "rolePlaceholder": "All",
+          "onlyActive": "Only active",
+          "searchButton": "Search",
+          "resetButton": "Reset",
+          "refreshButton": "Refresh"
+        },
+        "table": {
+          "title": "User List",
+          "loading": "Loading…",
+          "totalRecords": "Total: {count} record(s) (page)",
+          "loadError": "Failed to load list.",
+          "retryButton": "Retry",
+          "noRecords": "No records found.",
+          "fullName": "Full Name",
+          "email": "Email",
+          "phone": "Phone",
+          "status": "Status",
+          "role": "Role",
+          "actions": "Actions",
+          "viewButton": "Details",
+          "statusActive": "Active",
+          "statusInactive": "Inactive",
+          "unknownUser": "Unknown User"
+        },
+        "pagination": {
+          "offset": "Offset: {offset}",
+          "limit": "Limit: {limit}",
+          "previous": "Previous",
+          "next": "Next"
+        }
+      },
+      "detail": {
+        "title": "User Details",
+        "unknownUser": "Unknown User",
+        "backButton": "Back",
+        "loadError": "Failed to load user.",
+        "loading": "Loading…",
+        "retryButton": "Retry",
+        "statusActive": "Active",
+        "statusInactive": "Inactive",
+        "profile": {
+          "title": "Basic Information",
+          "description": "Update name, phone, and email if needed.",
+          "emailLabel": "Email",
+          "fullNameLabel": "Full Name",
+          "phoneLabel": "Phone",
+          "saveButton": "Save",
+          "saved": "User information updated."
+        },
+        "status": {
+          "title": "User Status",
+          "description": "Toggle active/inactive status.",
+          "active": "Active",
+          "inactive": "Inactive",
+          "activated": "User activated.",
+          "deactivated": "User deactivated."
+        },
+        "roles": {
+          "title": "Role Management",
+          "description": "Role is kept singular; selection is saved as a \"set\".",
+          "currentRole": "Selected role:",
+          "saveButton": "Save Role",
+          "saved": "Roles updated.",
+          "admin": "Admin",
+          "consultant": "Consultant",
+          "user": "User"
+        },
+        "password": {
+          "title": "Update Password",
+          "description": "Set a new password for security purposes.",
+          "label": "New Password",
+          "placeholder": "At least 8 characters",
+          "updateButton": "Update Password",
+          "minLengthError": "Password must be at least 8 characters.",
+          "updated": "Password updated."
+        },
+        "verification": {
+          "title": "Email Verification",
+          "description": "User's email verification status.",
+          "verified": "Verified",
+          "unverified": "Unverified"
+        },
+        "delete": {
+          "title": "Dangerous Operation",
+          "description": "Permanently deletes the user.",
+          "button": "Delete User",
+          "confirm": "This user will be deleted. Continue?",
+          "deleted": "User deleted."
+        },
+        "errorFallback": "Operation failed. Please try again."
+      },
+      "roles": {
+        "all": "All",
+        "admin": "Admin",
+        "consultant": "Consultant",
+        "user": "User"
+      }
+    },
+    "userRoles": {
+      "title": "Role Management",
+      "description": "List user roles, add roles, and delete roles.",
+      "create": {
+        "title": "Add New Role",
+        "description": "Admin-only. Same role cannot be added to the same user.",
+        "userLabel": "User",
+        "userPlaceholder": "Select user",
+        "roleLabel": "Role",
+        "rolePlaceholder": "Select role",
+        "addButton": "Add",
+        "selectUser": "Please select a user.",
+        "added": "Role added.",
+        "alreadyExists": "This role already exists.",
+        "usersLoading": "Loading…",
+        "usersLoadError": "Failed to load users.",
+        "retryButton": "Retry"
+      },
+      "list": {
+        "title": "Role List",
+        "description": "Filter and perform management operations.",
+        "userFilterLabel": "User filter",
+        "roleFilterLabel": "Role filter",
+        "limitLabel": "Limit",
+        "all": "All",
+        "refreshButton": "Refresh",
+        "loadError": "Failed to load roles.",
+        "retryButton": "Retry",
+        "noRecords": "No records found.",
+        "note": "Note: Since this page is admin-only, permissions should be managed carefully to reduce user enumeration risk."
+      },
+      "table": {
+        "userColumn": "User",
+        "roleColumn": "Role",
+        "createdColumn": "Created",
+        "actionColumn": "Action",
+        "deleteButton": "Delete",
+        "deleteConfirm": "Delete this role?\n{user} → {role}",
+        "deleted": "Role deleted.",
+        "loading": "Loading",
+        "notFound": "Not Found"
+      },
+      "roles": {
+        "admin": "Admin",
+        "seller": "Seller",
+        "driver": "Driver"
+      },
+      "user": {
+        "unknown": "Unnamed User",
+        "loading": "Loading…",
+        "notFound": "User not found"
+      },
+      "errorFallback": "Operation failed. Please try again."
+    },
+    "orders": {
+      "header": {
+        "title": "Orders",
+        "description": "Track all payments, refunds and transaction statuses here.",
+        "badge": "Financial Records"
+      },
+      "summary": {
+        "total_label": "Total Transactions"
+      },
+      "filters": {
+        "searchLabel": "Order No / Email",
+        "searchPlaceholder": "Order no or email...",
+        "orderStatusLabel": "Order Status",
+        "paymentStatusLabel": "Payment Status",
+        "all": "All"
+      },
+      "table": {
+        "orderNo": "Order No",
+        "customer": "Customer Info",
+        "amount": "Amount",
+        "status": "Status",
+        "payment": "Payment",
+        "date": "Date",
+        "actions": "Details",
+        "empty": "No order records found.",
+        "loading": "Loading..."
+      },
+      "pagination": {
+        "info": "Page {page} • Total {total} Transactions",
+        "prev": "Previous",
+        "next": "Next"
+      },
+      "detail": {
+        "title": "Order Detail",
+        "loading": "Loading...",
+        "notFound": "Order not found.",
+        "info": "Order Information",
+        "orderNumber": "Order No",
+        "total": "Total",
+        "txId": "Transaction ID",
+        "createdAt": "Created At",
+        "updatedAt": "Updated At",
+        "statusUpdate": "Update Status",
+        "statusDesc": "Change order and payment status.",
+        "orderStatus": "Order Status",
+        "paymentStatus": "Payment Status",
+        "adminNote": "Admin Note",
+        "adminNotePh": "Internal note...",
+        "refundReason": "Refund reason (optional):",
+        "items": "Order Items",
+        "itemTitle": "Title",
+        "itemType": "Type",
+        "itemQty": "Qty",
+        "itemPrice": "Price",
+        "itemTotal": "Total",
+        "noItems": "No items found.",
+        "payments": "Payments",
+        "payAmount": "Amount",
+        "payStatus": "Status",
+        "payTxId": "Transaction ID",
+        "payDate": "Date"
+      },
+      "messages": {
+        "noChanges": "No changes",
+        "updated": "Order updated",
+        "updateFailed": "Update failed",
+        "refunded": "Order refunded",
+        "refundFailed": "Refund failed"
+      }
+    },
+    "emailTemplates": {
+      "list": {
+        "title": "Email Templates",
+        "description": "Manage email templates. Each template can have content in different languages.",
+        "addButton": "Add New",
+        "filters": {
+          "searchLabel": "Search",
+          "searchPlaceholder": "Template key, name, subject...",
+          "statusLabel": "Status",
+          "statusOptions": {
+            "all": "All",
+            "active": "Active",
+            "inactive": "Inactive"
+          }
+        },
+        "totalRecords": "Total {count} records",
+        "refreshButton": "Refresh",
+        "fetching": "Loading...",
+        "loading": "Loading...",
+        "empty": "No records found.",
+        "table": {
+          "headers": {
+            "templateKey": "Template Key",
+            "nameSubject": "Name & Subject",
+            "variables": "Variables",
+            "active": "Active",
+            "locale": "Locale",
+            "date": "Date",
+            "actions": "Actions"
+          },
+          "updatedLabel": "Updated"
+        },
+        "actions": {
+          "edit": "Edit",
+          "delete": "Delete"
+        },
+        "mobile": {
+          "activeLabel": "Active",
+          "variablesLabel": "Variables",
+          "createdLabel": "Created",
+          "updatedLabel": "Updated"
+        },
+        "toast": {
+          "activated": "Set to active.",
+          "deactivated": "Set to inactive.",
+          "deleted": "Record deleted."
+        },
+        "dialog": {
+          "title": "Are you sure you want to delete?",
+          "description": "{template} will be deleted. This action cannot be undone.",
+          "templateFallback": "This template",
+          "cancel": "Cancel",
+          "delete": "Delete"
+        }
+      },
+      "detail": {
+        "loadError": "Failed to load record",
+        "backToList": "Back to list",
+        "titleCreate": "New Email Template",
+        "titleEdit": "Edit Email Template",
+        "descriptionCreate": "Create a new email template",
+        "descriptionEdit": "Edit existing email template",
+        "sections": {
+          "generalInfo": "General Information",
+          "templateInfo": "Template Information",
+          "content": "Email Content",
+          "contentDescription": "HTML content. Use {{variable}} format for variables.",
+          "variables": "Variables",
+          "variablesDescription": "Define variables used in email content (optional)"
+        },
+        "fields": {
+          "statusLabel": "Status",
+          "templateKeyLabel": "Template Key",
+          "templateKeyPlaceholder": "welcome_email",
+          "templateKeyHelp": "Unique key (cannot be changed). Example: welcome_email, password_reset",
+          "templateNameLabel": "Template Name",
+          "templateNamePlaceholder": "Welcome Email",
+          "subjectLabel": "Subject",
+          "subjectPlaceholder": "Welcome {{name}}!",
+          "subjectHelp": "Email subject. Use {{variable}} for dynamic fields.",
+          "contentLabel": "HTML Content",
+          "contentPlaceholder": "<html><body><h1>Hello {{name}}!</h1><p>Welcome...</p></body></html>",
+          "variablesLabel": "Variables",
+          "variablesPlaceholder": "name, email, url or [\"name\", \"email\", \"url\"]",
+          "variablesHelp": "Use comma-separated values (name, email, url) or JSON array ([\"name\", \"email\"]).",
+          "detectedVariablesLabel": "Detected Variables in Content"
+        },
+        "validation": {
+          "templateKeyRequired": "Template key is required.",
+          "templateNameRequired": "Template name is required.",
+          "subjectRequired": "Subject is required.",
+          "contentRequired": "Content is required."
+        },
+        "actions": {
+          "back": "Back",
+          "delete": "Delete",
+          "deleting": "Deleting...",
+          "cancel": "Cancel",
+          "save": "Save",
+          "saving": "Saving..."
+        },
+        "toast": {
+          "created": "Template created.",
+          "updated": "Template updated.",
+          "deleted": "Template deleted."
+        },
+        "dialog": {
+          "title": "Are you sure you want to delete?",
+          "description": "{template} will be deleted. This action cannot be undone.",
+          "templateFallback": "This template",
+          "cancel": "Cancel",
+          "delete": "Delete"
+        },
+        "preview": {
+          "showButton": "Preview",
+          "hideButton": "Hide Preview",
+          "title": "HTML Preview"
+        },
+        "testSend": {
+          "title": "Send Test Email",
+          "showButton": "Show",
+          "hideButton": "Hide",
+          "emailLabel": "Recipient email address",
+          "emailPlaceholder": "test@example.com",
+          "sendButton": "Send Test",
+          "sent": "Test email sent successfully.",
+          "failed": "Failed to send test email.",
+          "invalidEmail": "Please enter a valid email address."
+        }
+      }
+    },
+    "telegram": {
+      "header": {
+        "title": "Telegram",
+        "description": "Configure Telegram notifications and auto-reply"
+      },
+      "tabs": {
+        "settings": "Settings",
+        "autoreply": "Auto Reply",
+        "inbound": "Incoming Messages"
+      },
+      "settings": {
+        "title": "Telegram Settings",
+        "enableNotifications": "Enable Telegram Notifications",
+        "enableNotificationsDesc": "When disabled, event messages will not be sent.",
+        "enableWebhook": "Enable Webhook",
+        "enableWebhookDesc": "For inbound messages and raw reply flows.",
+        "botToken": "Bot Token",
+        "primaryChatId": "Primary Chat ID",
+        "defaultChatId": "Default Chat ID",
+        "events": {
+          "title": "Event Notifications",
+          "newBooking": "New Booking",
+          "bookingConfirmed": "Booking Confirmed",
+          "bookingRejected": "Booking Rejected",
+          "bookingCancelled": "Booking Cancelled",
+          "bookingStatusChanged": "Booking Status Changed",
+          "newContact": "New Contact Message"
+        },
+        "templates": {
+          "title": "Message Templates",
+          "newBooking": "Template: New Booking",
+          "newBookingVars": "{{customer_name}}, {{customer_email}}, {{customer_phone}}, {{appointment_date}}, {{appointment_time}}, {{service_title}}, {{resource_title}}, {{customer_message}}",
+          "bookingConfirmed": "Template: Booking Confirmed",
+          "bookingConfirmedVars": "{{customer_name}}, {{appointment_date}}, {{appointment_time}}, {{service_title}}, {{decision_note}}",
+          "bookingRejected": "Template: Booking Rejected",
+          "bookingRejectedVars": "{{customer_name}}, {{appointment_date}}, {{appointment_time}}, {{service_title}}, {{decision_note}}",
+          "bookingCancelled": "Template: Booking Cancelled",
+          "bookingCancelledVars": "{{customer_name}}, {{appointment_date}}, {{appointment_time}}, {{service_title}}, {{decision_note}}",
+          "bookingStatusChanged": "Template: Booking Status Changed",
+          "bookingStatusChangedVars": "{{customer_name}}, {{appointment_date}}, {{appointment_time}}, {{service_title}}, {{status_before}}, {{status_after}}, {{decision_note}}",
+          "newContact": "Template: New Contact Message",
+          "newContactVars": "{{name}}, {{email}}, {{phone}}, {{subject}}, {{message}}"
+        },
+        "preview": "Preview",
+        "variables": "Variables",
+        "testSend": "Send Test with This Template",
+        "testSending": "Sending...",
+        "testEmpty": "Test message cannot be empty.",
+        "testRequirements": "Notifications must be enabled + token + chatId required for test.",
+        "testSent": "Test message sent.",
+        "testFailed": "Telegram test failed.",
+        "save": "Save",
+        "saving": "Saving...",
+        "saved": "Telegram settings saved.",
+        "saveError": "Failed to save Telegram settings.",
+        "loading": "Loading..."
+      },
+      "autoreply": {
+        "title": "Auto Reply",
+        "enable": "Auto Reply",
+        "enableDesc": "When enabled, incoming messages receive an automatic template reply.",
+        "templateLabel": "Reply Message (Template)",
+        "modeInfo": "Mode: {mode}. AI mode + prompt/agent config will be added in the future.",
+        "save": "Save",
+        "saving": "Saving...",
+        "saved": "Auto reply saved.",
+        "saveError": "Failed to save.",
+        "emptyError": "Auto reply message cannot be empty.",
+        "loading": "Loading..."
+      },
+      "inbound": {
+        "title": "Incoming Messages",
+        "searchPlaceholder": "Search: message / username / chat...",
+        "chatIdPlaceholder": "Chat ID (optional)",
+        "limitPlaceholder": "Limit",
+        "refresh": "Refresh",
+        "refreshing": "Refreshing...",
+        "loadMore": "Load More",
+        "loading": "Loading...",
+        "noMoreRecords": "No more records",
+        "noRecords": "No records found.",
+        "nextPage": "Next page available (cursor).",
+        "noText": "(no text)",
+        "table": {
+          "date": "Date",
+          "chat": "Chat",
+          "sender": "Sender",
+          "message": "Message",
+          "source": "Source"
+        }
+      }
+    },
+    "chat": {
+      "header": {
+        "title": "Chat & AI Support",
+        "description": "Manage chat threads and maintain AI knowledge base"
+      },
+      "tabs": {
+        "threads": "Conversations",
+        "knowledge": "AI Knowledge Base",
+        "settings": "Settings"
+      },
+      "settings": {
+        "loading": "Loading...",
+        "saved": "Settings saved.",
+        "saveError": "Save failed.",
+        "save": "Save",
+        "saving": "Saving...",
+        "generalTitle": "General Settings",
+        "aiEnabled": "AI Support Enabled",
+        "aiEnabledDesc": "AI automatically responds to customer messages.",
+        "widgetEnabled": "Chat Widget on Website",
+        "widgetEnabledDesc": "Show chat widget on the customer website.",
+        "defaultProvider": "Default AI Provider",
+        "providerOrder": "Provider Order (Fallback)",
+        "providerOrderDesc": "Comma-separated order: grok, openai, anthropic. On failure, the next provider is tried.",
+        "providersTitle": "AI Providers & API Keys",
+        "offerUrl": "Offer URL",
+        "offerUrlDesc": "URL for offer redirect. {locale} is replaced with the language code.",
+        "systemPromptTitle": "System Prompt (AI Instruction)",
+        "systemPromptPlaceholder": "Enter custom AI instruction (empty = default)...",
+        "systemPromptDesc": "Leave empty for the default prompt. Sent to AI as system message.",
+        "welcomeTitle": "Welcome Messages"
+      },
+      "threads": {
+        "title": "Chat Threads",
+        "noThreads": "No conversations yet.",
+        "selectThread": "Select a conversation from the list.",
+        "filterAll": "All",
+        "filterAi": "AI Mode",
+        "filterAdmin": "Admin Mode",
+        "modeAi": "AI",
+        "modeAdmin": "Admin",
+        "takeover": "Take Over",
+        "releaseToAi": "Release to AI",
+        "takeoverSuccess": "Thread taken over.",
+        "takeoverError": "Takeover failed.",
+        "releaseSuccess": "Released to AI.",
+        "releaseError": "Release failed.",
+        "providerChanged": "AI provider changed.",
+        "providerError": "Change failed."
+      },
+      "messages": {
+        "noMessages": "No messages yet.",
+        "placeholder": "Type a message...",
+        "sendError": "Failed to send message."
+      },
+      "knowledge": {
+        "title": "AI Knowledge Base",
+        "noItems": "No entries found.",
+        "loading": "Loading...",
+        "addNew": "Add New",
+        "addTitle": "Create new entry",
+        "editTitle": "Edit entry",
+        "locale": "Language",
+        "priority": "Priority",
+        "titleLabel": "Title",
+        "titlePlaceholder": "e.g. Price inquiry policy",
+        "contentLabel": "Content",
+        "contentPlaceholder": "Enter AI instruction here...",
+        "tags": "Tags",
+        "tagsPlaceholder": "comma separated, e.g. price,booking",
+        "active": "Active",
+        "yes": "Yes",
+        "no": "No",
+        "allLocales": "All Languages",
+        "searchPlaceholder": "Search...",
+        "requiredFields": "Title and content are required.",
+        "save": "Save",
+        "saving": "Saving...",
+        "cancel": "Cancel",
+        "created": "Entry created.",
+        "updated": "Entry updated.",
+        "deleted": "Entry deleted.",
+        "saveError": "Save failed.",
+        "deleteError": "Delete failed."
+      }
+    },
+    "wallet": {
+      "title": "Wallet & Payments",
+      "description": "Wallet balances, deposit requests and payment approvals",
+      "wallets": {
+        "title": "Wallets",
+        "desc": "User balances and status management",
+        "empty": "No records found",
+        "table": {
+          "user": "User",
+          "balance": "Balance",
+          "earnings": "Total In",
+          "withdrawn": "Total Out",
+          "status": "Status",
+          "actions": "Actions"
+        },
+        "actions": {
+          "transactions": "Transactions"
+        }
+      },
+      "deposits": {
+        "title": "Deposit Requests",
+        "desc": "Approve or reject PayPal and bank transfer requests",
+        "empty": "No records found",
+        "filters": {
+          "status": "Status",
+          "method": "Method",
+          "userId": "User ID",
+          "userIdPh": "Filter by UUID"
+        },
+        "table": {
+          "user": "User",
+          "amount": "Amount",
+          "method": "Method",
+          "status": "Status",
+          "createdAt": "Date",
+          "actions": "Actions"
+        },
+        "actions": {
+          "approve": "Approve",
+          "reject": "Reject"
+        }
+      },
+      "transactions": {
+        "title": "Wallet Transactions",
+        "empty": "No records found",
+        "table": {
+          "type": "Type",
+          "amount": "Amount",
+          "method": "Method",
+          "status": "Status",
+          "purpose": "Purpose",
+          "createdAt": "Date"
+        }
+      },
+      "actions": {
+        "refresh": "Refresh",
+        "prev": "Previous",
+        "next": "Next",
+        "search": "Search"
+      },
+      "labels": {
+        "page": "Page {page}"
+      },
+      "messages": {
+        "walletStatusUpdated": "Wallet status updated",
+        "depositApproved": "Deposit approved",
+        "depositRejected": "Deposit rejected",
+        "operationFailed": "Operation failed",
+        "rejectPrompt": "Rejection reason (optional):"
+      }
+    },
+    "popups": {
+      "title": "Popup Management",
+      "description": "Manage popup content, order and visibility",
+      "list": {
+        "title": "Popup List",
+        "desc": "Manage popups with active/passive filters"
+      },
+      "filters": {
+        "search": "Search title or content",
+        "localeLabel": "Language",
+        "localePlaceholder": "Select language",
+        "activeLocale": "Language",
+        "typeLabel": "Type",
+        "typeAll": "All Types",
+        "statusLabel": "Status",
+        "statusAll": "All",
+        "statusActive": "Active",
+        "statusPassive": "Passive"
+      },
+      "types": {
+        "topbar": "Top bar",
+        "sidebarTop": "Sidebar top",
+        "sidebarCenter": "Sidebar center",
+        "sidebarBottom": "Sidebar bottom"
+      },
+      "frequency": {
+        "always": "Always",
+        "once": "Once",
+        "daily": "Daily"
+      },
+      "linkTargets": {
+        "self": "Same tab",
+        "blank": "New tab"
+      },
+      "textBehavior": {
+        "marquee": "Marquee",
+        "static": "Static"
+      },
+      "badges": {
+        "active": "Active",
+        "passive": "Passive"
+      },
+      "table": {
+        "title": "Title",
+        "type": "Type",
+        "targets": "Target",
+        "allPages": "All pages",
+        "order": "Order",
+        "active": "Status",
+        "actions": "Actions"
+      },
+      "states": {
+        "empty": "No records found",
+        "loading": "Loading...",
+        "loadError": "Failed to load popup."
+      },
+      "actions": {
+        "refresh": "Refresh",
+        "create": "New",
+        "edit": "Edit",
+        "delete": "Delete",
+        "prev": "Previous",
+        "next": "Next",
+        "cancel": "Cancel",
+        "save": "Save",
+        "back": "Back"
+      },
+      "labels": {
+        "page": "Page {page}"
+      },
+      "messages": {
+        "titleRequired": "Title is required",
+        "saved": "Saved",
+        "failed": "Operation failed",
+        "deleteConfirm": "Are you sure you want to delete?",
+        "deleted": "Deleted",
+        "statusUpdated": "Status updated"
+      },
+      "modal": {
+        "edit": "Edit Popup",
+        "new": "New Popup"
+      },
+      "form": {
+        "title": "Title",
+        "locale": "Locale",
+        "content": "Content",
+        "type": "Type",
+        "frequency": "Frequency",
+        "order": "Order",
+        "buttonText": "Button Text",
+        "linkUrl": "Link",
+        "targetPaths": "Target pages",
+        "linkTarget": "Link Target",
+        "textBehavior": "Text Behavior",
+        "scrollSpeed": "Scroll Speed",
+        "imageUrl": "Image URL",
+        "imageAsset": "Image Asset ID",
+        "alt": "Alt Text",
+        "bgColor": "Background Color",
+        "textColor": "Text Color",
+        "buttonColor": "Button Color",
+        "buttonHoverColor": "Button Hover Color",
+        "buttonTextColor": "Button Text Color",
+        "start": "Start",
+        "end": "End",
+        "delay": "Delay (sec)",
+        "active": "Active",
+        "closeable": "Closeable",
+        "newDesc": "Create a new popup",
+        "editDesc": "Edit popup content and settings",
+        "sectionContent": "Content",
+        "sectionContentDesc": "Title, text and language",
+        "sectionDisplay": "Display",
+        "sectionDisplayDesc": "Type, behavior and order",
+        "sectionSchedule": "Schedule",
+        "sectionScheduleDesc": "Start and end date",
+        "sectionImage": "Image",
+        "sectionImageDesc": "Image URL or asset",
+        "sectionColors": "Colors",
+        "sectionColorsDesc": "Background, text and button colors"
+      }
+    },
+    "gutschein": {
+      "title": "Gift Cards",
+      "description": "Manage gift cards – create, activate, cancel or view details.",
+      "actions": {
+        "create": "New Gift Card",
+        "products": "Products",
+        "activate": "Activate",
+        "cancel": "Cancel",
+        "refresh": "Refresh"
+      },
+      "filters": {
+        "searchLabel": "Search (code / email / name)",
+        "searchPlaceholder": "KM-XXXX-XXXX or email...",
+        "localeLabel": "Language",
+        "localePlaceholder": "Select language",
+        "statusLabel": "Status",
+        "all": "All"
+      },
+      "table": {
+        "code": "Code",
+        "value": "Value",
+        "status": "Status",
+        "payment": "Payment",
+        "recipient": "Recipient",
+        "purchaser": "Purchaser",
+        "expires": "Expires",
+        "actions": "Actions",
+        "empty": "No gift cards found."
+      },
+      "labels": {
+        "admin": "Admin",
+        "total": "Total: {total}",
+        "created": "Created",
+        "expires": "Expires",
+        "recipient": "Recipient"
+      },
+      "create": {
+        "title": "Create Gift Card",
+        "description": "Admin-created gift cards are immediately marked as paid.",
+        "template": "Template Product (optional)",
+        "templatePlaceholder": "Select a product template...",
+        "templateNone": "— Custom (no template) —",
+        "value": "Value",
+        "currency": "Currency",
+        "validityDays": "Validity (days)",
+        "recipientName": "Recipient Name",
+        "recipientEmail": "Recipient Email",
+        "purchaserName": "Purchaser Name",
+        "purchaserEmail": "Purchaser Email",
+        "note": "Internal Note",
+        "notePlaceholder": "Optional internal note...",
+        "personalMessage": "Personal Message",
+        "status": "Status",
+        "submit": "Create Gift Card",
+        "cancel": "Cancel"
+      },
+      "cancelDialog": {
+        "title": "Cancel Gift Card",
+        "description": "Are you sure you want to cancel {code}? This action cannot be undone.",
+        "confirm": "Cancel Card",
+        "keep": "Keep"
+      },
+      "status": {
+        "pending": "Pending",
+        "active": "Active",
+        "redeemed": "Redeemed",
+        "expired": "Expired",
+        "cancelled": "Cancelled"
+      },
+      "paymentStatus": {
+        "pending": "Pending",
+        "paid": "Paid",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      },
+      "detail": {
+        "purchaser": "Purchaser",
+        "purchaserEmail": "Purchaser Email",
+        "paymentStatus": "Payment Status",
+        "orderRef": "Order Ref",
+        "redeemedAt": "Redeemed At",
+        "personalMessage": "Personal Message",
+        "editTitle": "Edit",
+        "status": "Status",
+        "recipientName": "Recipient Name",
+        "recipientEmail": "Recipient Email",
+        "expiresAt": "Expires At",
+        "internalNote": "Internal Note",
+        "close": "Close",
+        "saveChanges": "Save Changes"
+      },
+      "messages": {
+        "created": "Gift card created.",
+        "cancelled": "Gift card cancelled.",
+        "activated": "Gift card activated.",
+        "createError": "Failed to create gift card.",
+        "cancelError": "Failed to cancel gift card.",
+        "activateError": "Failed to activate gift card.",
+        "valueRequired": "Please enter a valid value.",
+        "purchaserRequired": "Purchaser name and email are required.",
+        "updated": "Gift card updated.",
+        "updateError": "Failed to update gift card.",
+        "noChanges": "No changes."
+      },
+      "products": {
+        "title": "Gift Card Products",
+        "description": "Define gift card templates with preset values and validity periods.",
+        "create": "New Product",
+        "empty": "No products yet. Create one to get started.",
+        "table": {
+          "name": "Name",
+          "value": "Value",
+          "validity": "Validity",
+          "order": "Order",
+          "active": "Active",
+          "created": "Created",
+          "actions": "Actions"
+        },
+        "form": {
+          "title": "Create Product",
+          "editTitle": "Edit Product",
+          "description": "Create a new gift card template that customers can purchase.",
+          "editDescription": "Update the gift card template.",
+          "name": "Name",
+          "namePlaceholder": "Gift Card 50 €",
+          "value": "Value",
+          "valuePlaceholder": "50.00",
+          "currency": "Currency",
+          "validityDays": "Validity (days)",
+          "displayOrder": "Display Order",
+          "productDescription": "Description",
+          "descriptionPlaceholder": "Optional description...",
+          "isActive": "Active (visible to customers)",
+          "save": "Save Changes",
+          "create": "Create Product",
+          "cancel": "Cancel"
+        },
+        "messages": {
+          "created": "Product created.",
+          "updated": "Product updated.",
+          "error": "Failed to save product.",
+          "toggleError": "Failed to update status.",
+          "nameRequired": "Name is required.",
+          "valueRequired": "Please enter a valid value."
+        }
+      }
+    }
+  ,
+  "notFound": {
+    "title": "Page not found.",
+    "description": "The page you are looking for could not be found or has been moved.",
+    "goBack": "Go to home"
+  }
+}

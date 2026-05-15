@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>04 — Stok Tüketim Tahmini &amp; Otomatik Satın Alma — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>04 — Stok Tüketim Tahmini &amp; Otomatik Satın Alma</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="stok-tüketim-tahmini-otomatik-satın-alma">04 — Stok Tüketim Tahmini &amp; Otomatik Satın Alma</h1>
+<blockquote>
+<p><strong>Bağlam (v1.1):</strong> Bu doküman <strong>Faz 4 — Stok &amp; Tedarik Otomasyonu</strong>’nun stok tarafını anlatır. Tedarikçi tarafı: <a href="./03-tedarikci-yonetimi.md"><code>03-tedarikci-yonetimi.md</code></a>. Sipariş tahmin motoru (Faz 2) bu modülü besler — derinlemesine: <a href="./12-tahmin-motoru-derinlemesine.md"><code>12-tahmin-motoru-derinlemesine.md</code></a>.</p>
+</blockquote>
+<h2 id="hipotez">Hipotez</h2>
+<blockquote>
+<p>Geçmiş tüketim hızı + bekleyen üretim ihtiyacı + tedarikçi lead time + güvenlik stoğu kullanılarak: “X ürünü Y tarihinde Z adet sipariş et” sinyali otomatik üretilebilir. İnsan onayı zincirde kalır ama hesabı sistem yapar.</p>
+</blockquote>
+<h2 id="sorun-tanımı">Sorun tanımı</h2>
+<p>Bugün: - Stok kritik seviyenin altına düşünce kullanıcı manuel fark ediyor → reaksiyon gecikme - “Önümüzdeki 15 günde patlayacak ürünler” görünmüyor - Satın alma kararı eski sezonun manuel hafıza alışkanlığına bağlı - Stok tutma maliyeti hesaplanmıyor (fazla stok = işletme sermayesi tıkanması)</p>
+<h2 id="önerilen-mimari">Önerilen mimari</h2>
+<h3 id="adım-1-tüketim-hızı-viewı">Adım 1 — Tüketim hızı view’ı</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> v_urun_tuketim_hizi <span class="kw">AS</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  u.<span class="kw">id</span>, u.kod, u.ad, u.kategori, u.stok, u.kritik_stok, u.stok_takip_aktif,</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Son 30 günün ortalama günlük tüketimi (cikis hareketleri)</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="fu">COALESCE</span>(<span class="fu">SUM</span>(<span class="cf">CASE</span> <span class="cf">WHEN</span> h.created_at <span class="op">&gt;</span> NOW() <span class="op">-</span> <span class="dt">INTERVAL</span> <span class="dv">30</span> <span class="dt">DAY</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">THEN</span> h.miktar <span class="cf">END</span>), <span class="dv">0</span>) <span class="op">/</span> <span class="dv">30</span> <span class="kw">AS</span> gunluk_30g,</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Son 90 günün ortalama günlük tüketimi (mevsimsellik için)</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="fu">COALESCE</span>(<span class="fu">SUM</span>(<span class="cf">CASE</span> <span class="cf">WHEN</span> h.created_at <span class="op">&gt;</span> NOW() <span class="op">-</span> <span class="dt">INTERVAL</span> <span class="dv">90</span> <span class="dt">DAY</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">THEN</span> h.miktar <span class="cf">END</span>), <span class="dv">0</span>) <span class="op">/</span> <span class="dv">90</span> <span class="kw">AS</span> gunluk_90g,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Son 365 gün</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  <span class="fu">COALESCE</span>(<span class="fu">SUM</span>(<span class="cf">CASE</span> <span class="cf">WHEN</span> h.created_at <span class="op">&gt;</span> NOW() <span class="op">-</span> <span class="dt">INTERVAL</span> <span class="dv">365</span> <span class="dt">DAY</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>                    <span class="cf">THEN</span> h.miktar <span class="cf">END</span>), <span class="dv">0</span>) <span class="op">/</span> <span class="dv">365</span> <span class="kw">AS</span> gunluk_365g</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> urunler u</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> hareketler h</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">ON</span> h.urun_id <span class="op">=</span> u.<span class="kw">id</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> h.hareket_tipi <span class="op">=</span> <span class="st">&#39;cikis&#39;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> h.referans_tipi <span class="kw">IN</span> (<span class="st">&#39;uretim&#39;</span>,<span class="st">&#39;uretim_emri&#39;</span>,<span class="st">&#39;montaj&#39;</span>)</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> u.kategori <span class="kw">IN</span> (<span class="st">&#39;hammadde&#39;</span>,<span class="st">&#39;yarimamul&#39;</span>,<span class="st">&#39;operasyonel_ym&#39;</span>)</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> u.stok_takip_aktif <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> u.<span class="kw">id</span>;</span></code></pre></div>
+<h3 id="adım-2-tahmin-formülü">Adım 2 — Tahmin formülü</h3>
+<p><strong>Klasik EOQ + güvenlik stoğu (faz A):</strong></p>
+<pre><code>gunluk_tuketim = max(gunluk_30g, gunluk_90g * 0.7)   -- son trend ağırlıklı
+lead_time_gun = tedarikci.ortalama_lead_time
+guvenlik_stogu = gunluk_tuketim * lead_time_gun * 1.5  -- %50 buffer
+yeniden_siparis_noktasi = gunluk_tuketim * lead_time_gun + guvenlik_stogu
+
+eger urun.stok &lt;= yeniden_siparis_noktasi:
+  onerilen_siparis_tarihi = bugün
+else:
+  kalan_gun = (urun.stok - yeniden_siparis_noktasi) / gunluk_tuketim
+  onerilen_siparis_tarihi = bugün + kalan_gun
+  
+onerilen_miktar = max(min_alim_miktari, gunluk_tuketim * 30)  -- 30 günlük talep</code></pre>
+<p><strong>Mevsimsellik (faz B):</strong> - Aylık tüketim tablosu çıkar (son 24 ay) - ARIMA/Prophet ile bir sonraki ay tahmin - Üst-alt güven aralığı</p>
+<p><strong>LLM destekli (faz C):</strong> - “Önümüzdeki 6 ay üretim planında şu siparişler bekliyor, şu reçetelerde X hammadde geçiyor, mevsim, tedarikçi lead time, güvenlik stoğu — optimal satın alma takvimi öner”</p>
+<h3 id="adım-3-satın-alma-takvimi-tablosu">Adım 3 — Satın alma takvimi tablosu</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> satin_alma_onerileri (</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  urun_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  onerilen_siparis_tarihi <span class="dt">date</span>,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  onerilen_miktar <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">4</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  onerilen_tedarikci_id <span class="dt">char</span>(<span class="dv">36</span>) <span class="kw">NULL</span>,    <span class="co">-- mevcut performansı en yüksek</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  alternatif_tedarikciler JSON,            <span class="co">-- 2-3 alternatif</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  hesaplama_metodu ENUM(<span class="st">&#39;basit_eoq&#39;</span>,<span class="st">&#39;mevsimsellik&#39;</span>,<span class="st">&#39;llm&#39;</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  hesaplama_detay JSON,                    <span class="co">-- {gunluk_tuketim, lead_time, guvenlik...}</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;oneriden&#39;</span>,<span class="st">&#39;onaylandi&#39;</span>,<span class="st">&#39;reddedildi&#39;</span>,<span class="st">&#39;siparise_donustu&#39;</span>),</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  siparis_id <span class="dt">char</span>(<span class="dv">36</span>) <span class="kw">NULL</span>,</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  uyari_seviyesi ENUM(<span class="st">&#39;bilgi&#39;</span>,<span class="st">&#39;uyari&#39;</span>,<span class="st">&#39;kritik&#39;</span>),</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  generated_at datetime,</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  reviewed_at datetime,</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  reviewed_by_user_id <span class="dt">char</span>(<span class="dv">36</span>)</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="adım-4-üretim-ihtiyacı-entegrasyonu">Adım 4 — Üretim ihtiyacı entegrasyonu</h3>
+<p><code>uretim_emirleri</code> + reçete kalemleri’nden <strong>bekleyen hammadde tüketimi</strong>:</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  rk.urun_id <span class="kw">AS</span> hammadde_id,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">SUM</span>(rk.miktar <span class="op">*</span> ue.planlanan_miktar <span class="op">/</span> r.hedef_miktar) <span class="kw">AS</span> bekleyen_ihtiyac,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">MIN</span>(ue.termin_tarihi) <span class="kw">AS</span> en_yakin_termin</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> uretim_emirleri ue</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> receteler r <span class="kw">ON</span> r.<span class="kw">id</span> <span class="op">=</span> ue.recete_id</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="kw">JOIN</span> recete_kalemleri rk <span class="kw">ON</span> rk.recete_id <span class="op">=</span> r.<span class="kw">id</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> ue.durum <span class="kw">IN</span> (<span class="st">&#39;atanmamis&#39;</span>,<span class="st">&#39;planlandi&#39;</span>,<span class="st">&#39;uretimde&#39;</span>)</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> ue.is_active <span class="op">=</span> <span class="dv">1</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> rk.urun_id;</span></code></pre></div>
+<p>Bu satır tüketim hızının üzerine <strong>üst sınır olarak</strong> eklenir: “30 günde ortalama 100 kg hammadde tüketiyoruz ama bekleyen üretim için 250 kg gerekiyor → siparişi öne çek”.</p>
+<h3 id="adım-5-cron-bildirimler">Adım 5 — Cron + bildirimler</h3>
+<p>Günlük cron 06:00: 1. Tüm aktif takipli ürünler için yeniden sipariş hesabını yap 2. Yeni öneri varsa <code>satin_alma_onerileri</code> tablosuna yaz 3. <code>uyari_seviyesi=kritik</code> ise <code>notifications</code> modülünden admin’e push</p>
+<h2 id="dashboard-görünümleri">Dashboard görünümleri</h2>
+<table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pencere</th>
+<th>İçerik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Bugün sipariş edilmesi gereken</strong></td>
+<td>Yeniden sipariş noktasını geçmiş ürünler</td>
+</tr>
+<tr class="even">
+<td><strong>Önümüzdeki 7 gün</strong></td>
+<td>Yakın zamanda kritik olacak ürünler</td>
+</tr>
+<tr class="odd">
+<td><strong>Stok fazlası uyarısı</strong></td>
+<td>Tüketim hızına göre 90+ günlük stok = bağlı sermaye</td>
+</tr>
+<tr class="even">
+<td><strong>Trend değişim alarmı</strong></td>
+<td>Son 30 gün tüketimi 90 gün ortalamasından %50+ sapmış ürünler</td>
+</tr>
+</tbody>
+</table>
+<h2 id="açık-sorular">Açık sorular</h2>
+<ol type="1">
+<li><strong>Lead time kaynağı:</strong> tedarikçi-ürün bazında mı saklanacak (<code>tedarikci_urun_lead_time</code> ek tablo) yoksa tedarikçi seviyesinde ortalama mı yeter?</li>
+<li><strong>MOQ (minimum sipariş miktarı):</strong> tedarikçi bazlı mı, ürün bazlı mı? Şu an sistemde yok.</li>
+<li><strong>Otomatik satın alma siparişi açma:</strong> <code>onerilen → siparise_donustu</code> adımı tek tık mı, çoklu onay mı? Hangi tutarın altı otomatik?</li>
+<li><strong>Mevsimsellik:</strong> plastik enjeksiyon sektörü için mevsimsel desen var mı? (paspas → otomotiv hat planlaması, otelcilik?)</li>
+<li><strong>Para birimi/kur:</strong> ithal hammadde için kur risk yönetimi sistemce yapılsın mı?</li>
+<li><strong>Stok tutma maliyeti hesabı:</strong> %2/ay gibi bir varsayım mı, gerçek WACC mi?</li>
+</ol>
+<h2 id="bağımlılıklar">Bağımlılıklar</h2>
+<ul>
+<li>✅ <code>urunler</code>, <code>hareketler</code>, <code>uretim_emirleri</code>, <code>receteler</code>, <code>recete_kalemleri</code> mevcut</li>
+<li>✅ <code>stok_takip_aktif</code> filtresi var</li>
+<li>⚠️ Tedarikçi lead time verisi şu an yok — tedarikçi yönetim modülünden gelmeli (bkz. <a href="./03-tedarikci-yonetimi.md">03-tedarikci-yonetimi.md</a>)</li>
+<li>⚠️ MOQ/güvenlik stoğu <code>urunler</code> üzerinde yok; ek alan gerek</li>
+</ul>
+<h2 id="tahmini-iş-büyüklüğü">Tahmini iş büyüklüğü</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Faz</th>
+<th>İçerik</th>
+<th>Süre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A1</td>
+<td>View’lar + faz A formülü + cron</td>
+<td>~3 gün</td>
+</tr>
+<tr class="even">
+<td>A2</td>
+<td><code>satin_alma_onerileri</code> tablosu + dashboard</td>
+<td>~3 gün</td>
+</tr>
+<tr class="odd">
+<td>A3</td>
+<td>Üretim ihtiyacı entegrasyonu (reçete tüketim toplamı)</td>
+<td>~2 gün</td>
+</tr>
+<tr class="even">
+<td>A4</td>
+<td>Otomatik taslak satın alma siparişi (insan onaylı)</td>
+<td>~2 gün</td>
+</tr>
+<tr class="odd">
+<td>B1</td>
+<td>Mevsimsellik (Prophet/ARIMA Python servisi)</td>
+<td>~5-7 gün</td>
+</tr>
+<tr class="even">
+<td>C1</td>
+<td>LLM destekli takvim önerisi</td>
+<td>~3-5 gün</td>
+</tr>
+<tr class="odd">
+<td><strong>Toplam Faz A</strong></td>
+<td>İlk değer üreten sürüm</td>
+<td><strong>~10-12 iş günü</strong></td>
+</tr>
+</tbody>
+</table>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("04 — Stok Tüketim Tahmini &amp; Otomatik Satın Alma").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

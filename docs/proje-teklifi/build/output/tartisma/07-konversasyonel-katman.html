@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>07 — Konversasyonel Katman: Yazışarak İş Yapma + Onay Döngüsü — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>07 — Konversasyonel Katman: Yazışarak İş Yapma + Onay Döngüsü</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="konversasyonel-katman-yazışarak-iş-yapma-onay-döngüsü">07 — Konversasyonel Katman: Yazışarak İş Yapma + Onay Döngüsü</h1>
+<blockquote>
+<p><strong>Bağlam (v1.1):</strong> Bu doküman <strong>Faz 8 — Konversasyonel Katman</strong>’ın felsefesi ve UX yaklaşımını anlatır. Risk skoru + onay matrisi detayı: <a href="./09-otomasyon-esikleri.md"><code>09-otomasyon-esikleri.md</code></a>. Güncel resmî yapı: <a href="../proje-teklifi/02-cozum-genel-bakis.md#faz-8--konversasyonel-katman"><code>proje-teklifi/02-cozum-genel-bakis.md</code></a>. Faz 8 ön koşulu: Faz 2-7 olgunlaşması.</p>
+</blockquote>
+<h2 id="hipotez">Hipotez</h2>
+<blockquote>
+<p>Hem müşteri hem yönetici, ERP ile <strong>yazışarak</strong> iş yapabilir. Sistem her aksiyondan önce <strong>anladığını geri özetler</strong>, kullanıcı onaylar veya revize eder, sonra aksiyon gerçekleşir, ardından sonuç geri rapor edilir. Bu çift yönlü döngü, klasik form-tabanlı arayüze ek (yedek değil) bir kanal olur.</p>
+</blockquote>
+<h2 id="openclawden-alınan-ilham-kopya-değil">OpenClaw’den alınan ilham (kopya değil)</h2>
+<p><a href="/home/orhan/Documents/Projeler/openclaw">OpenClaw VPS’i</a> bize şu pattern’leri gösterdi:</p>
+<table>
+<colgroup>
+<col style="width: 32%" />
+<col style="width: 67%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pattern</th>
+<th>Bizdeki karşılığı</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Persona katmanı</strong> (kimlik + üslup + sınır)</td>
+<td>Paspas’ta her arayüz için ayrı persona: müşteri portalında “Paspas Sipariş Asistanı”, yönetici panelinde “Operasyon Asistanı”</td>
+</tr>
+<tr class="even">
+<td><strong>Çoklu provider routing</strong> (Anthropic/OpenAI/Groq)</td>
+<td>Hızlı sohbet → Groq, derinlikli analiz → Claude, JSON yapılandırma → OpenAI</td>
+</tr>
+<tr class="odd">
+<td><strong>Komut → onay → eylem zinciri</strong></td>
+<td>“Sipariş yarat” komutu önce <strong>taslak</strong> oluşturur, kullanıcı onaylayınca DB’ye yazılır</td>
+</tr>
+<tr class="even">
+<td><strong>Bildirim kanalı (Telegram)</strong></td>
+<td>Aynı pattern, ama opsiyonel; admin’in tercihine göre web push, email, Telegram</td>
+</tr>
+<tr class="odd">
+<td><strong>SSH/Repo otomasyon</strong></td>
+<td>Bizdeki karşılık: “ERP action” — siparişe dönüştür, üretime aktar, satın alma aç</td>
+</tr>
+<tr class="even">
+<td><strong>Geri besleme döngüsü</strong></td>
+<td>Her aksiyon sonrası “tamamlandı / şu sapma var / X kayıt etkilendi” özeti</td>
+</tr>
+</tbody>
+</table>
+<p>Önemli ayrım: OpenClaw <strong>dışarıdan komuta veren</strong> bir katman. Paspas’taki konversasyonel katman <strong>içeride</strong> çalışan, üstelik <strong>müşteriye de açılan</strong> bir katman. Yani daha içsel, daha yetki-bilinçli.</p>
+<h2 id="üç-ana-persona">Üç ana persona</h2>
+<h3 id="müşteri-asistanı-b2b-portal-public">1. Müşteri Asistanı (B2B portal — public)</h3>
+<p><strong>Kim:</strong> mevcut/yeni müşteri. Web/mobil B2B portala login olmuş.</p>
+<p><strong>Konuşabildikleri:</strong> - “Geçen ay aldığım Star Siyah’tan 200 takım daha istiyorum, ay sonuna yetişsin” - “Sipariş #SS-2026-0123 ne durumda?” - “Bu üründen 500 takım kaç güne kadar gelir, fiyatı nedir?” - “Sevkiyat geldi, eksik var mı kontrol edebilir miyim?”</p>
+<p><strong>Asistan ne yapar:</strong> - Sipariş taslağı çıkarır → “Anladığım: 200 takım STAR SİYAH (kod 1101 101), termin 30 Nisan, son fiyatınız 510₺/takım. Onaylıyor musunuz?” - Müşteri “evet” → sipariş gerçekten oluşur - Müşteri “termini 5 Mayıs yap” → taslağı revize eder, tekrar özet gösterir - Sipariş durumu → mevcut DB’den gerçek zamanlı çeker - <strong>Asla</strong> asistan tek başına sipariş açamaz, fiyat değiştiremez, kredi limiti aşamaz</p>
+<p><strong>Sınırlar:</strong> - Sadece o müşterinin verisine erişir (kendi siparişleri, kendi fiyat listesi) - Yetki dışı talep → “Bunu için satış ekibi sizi arasın mı?” yönlendirmesi - Şüpheli durumda (büyük tutar, alışılmadık miktar) otomatik insan onayına yönlendirir</p>
+<h3 id="yönetici-asistanı-admin-panel-internal">2. Yönetici Asistanı (admin panel — internal)</h3>
+<p><strong>Kim:</strong> Paspas yöneticisi/operasyon ekibi.</p>
+<p><strong>Konuşabildikleri:</strong> - “Bu hafta hangi makineler boş?” - “Star Siyah’ın son 30 günde stok düşüş hızı?” - “Kamil Tekstil’den son 6 ay neler aldı?” - “Şu 5 siparişi makinelere optimal nasıl dağıtırım?” - “Hammadde ‘X’ tedarikçi alternatif çıkar”</p>
+<p><strong>Asistan ne yapar:</strong> - Veriyi çeker, görselleştirir - Aksiyon önerirse onay bekler: “3 sipariş için üretim emri açayım mı?” → onaylanırsa açar - Karmaşık planlama → çoklu adım: “Önce stok kontrol edeyim → tedarikçiye sor → fiyat dönerse satın alma taslağı aç” - Her adım sonunda durum raporu</p>
+<h3 id="saha-asistanı-operatör-tabletmobil-opsiyonel-faz-2">3. Saha Asistanı (operatör tablet/mobil — opsiyonel faz 2)</h3>
+<p><strong>Kim:</strong> üretimde operatör, mal kabul personeli.</p>
+<p><strong>Konuşabildikleri:</strong> - “Bu makinede şu an ne üretiyoruz?” - “Kaç tane yaptım bugün?” - “Bu makinedeki kalıp arıza, bildirim gönder” - “Vardiya sonu, son 250 adet girişimi yap”</p>
+<p>Mevcut operatör arayüzünün üzerine yazışma katmanı. Faz 1’de zorunlu değil.</p>
+<h2 id="onay-döngüsü-anatomik">Onay döngüsü — anatomik</h2>
+<p>Her etkileşim 5 aşamalı:</p>
+<pre><code>[1] KULLANICI → ham mesaj
+       │
+       ▼
+[2] AI INTENT EXTRACTION
+       │  Niyetin ne, hangi domain (sipariş/stok/müşteri vs.),
+       │  hangi parametreler eksik?
+       ▼
+[3] AI ACTION PROPOSAL (taslak)
+       │  &quot;Yapacağım şey: ...&quot;
+       │  Yapılandırılmış JSON + insan dilinde özet
+       ▼
+[4] KULLANICI → onay / revize / iptal
+       │  Onay → eyleme geç
+       │  Revize → 2&#39;ye dön (yeni parametrelerle)
+       │  İptal → kapat
+       ▼
+[5] EYLEM GERÇEKLEŞTİRME + GERİ RAPOR
+       │  ERP API&#39;sini çağır, sonucu özetle
+       │  &quot;Sipariş SS-2026-0124 oluşturuldu, termin 30 Nisan&quot;
+       │  Gerekirse hata: &quot;stok yetersiz, alternatif: X&quot;</code></pre>
+<p><strong>Kritik kural:</strong> [3] olmadan [5] asla olmaz. AI doğrudan eyleme geçemez. Düşük-risk eylemler (örn. “raporu göster”) onay aşamasını atlayabilir; yan etkili her şey (DB’ye yazma, mail gönderme, sipariş açma) onay zorunlu.</p>
+<h2 id="mimari-katmanlar">Mimari katmanlar</h2>
+<h3 id="katman-1-konuşma-altyapısı">Katman 1: Konuşma altyapısı</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> konusma_oturumlari (</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  persona ENUM(<span class="st">&#39;musteri&#39;</span>,<span class="st">&#39;yonetici&#39;</span>,<span class="st">&#39;operator&#39;</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  kullanici_id <span class="dt">char</span>(<span class="dv">36</span>),                 <span class="co">-- müşteri.id veya users.id</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  baslik <span class="dt">varchar</span>(<span class="dv">255</span>),                    <span class="co">-- AI özeti</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;aktif&#39;</span>,<span class="st">&#39;tamamlandi&#39;</span>,<span class="st">&#39;iptal&#39;</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  baslangic datetime,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  son_etkilesim datetime,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  toplam_token <span class="dt">int</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  toplam_maliyet <span class="dt">decimal</span>(<span class="dv">10</span>,<span class="dv">4</span>)</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> konusma_mesajlari (</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  oturum_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  rol ENUM(<span class="st">&#39;user&#39;</span>,<span class="st">&#39;assistant&#39;</span>,<span class="st">&#39;system&#39;</span>,<span class="st">&#39;tool&#39;</span>),</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>  icerik TEXT,</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a>  intent JSON,                            <span class="co">-- {&quot;domain&quot;: &quot;siparis&quot;, &quot;action&quot;: &quot;olustur&quot;, ...}</span></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a>  proposed_action JSON,                   <span class="co">-- onay bekleyen aksiyon</span></span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  approved tinyint,                       <span class="co">-- 1=onaylandı, 0=reddedildi, NULL=henüz</span></span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  executed_action_id <span class="dt">char</span>(<span class="dv">36</span>),            <span class="co">-- gerçekleşen aksiyon kaydı</span></span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  tokens_input <span class="dt">int</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  tokens_output <span class="dt">int</span>,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  provider <span class="dt">varchar</span>(<span class="dv">32</span>),</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  model <span class="dt">varchar</span>(<span class="dv">128</span>),</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  latency_ms <span class="dt">int</span>,</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> konusma_eylemleri (</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  mesaj_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  eylem_tipi <span class="dt">varchar</span>(<span class="dv">64</span>),                <span class="co">-- &#39;siparis.olustur&#39;, &#39;satin_alma.taslak&#39;, &#39;rapor.goster&#39;</span></span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  payload JSON,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  sonuc JSON,</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;basarili&#39;</span>,<span class="st">&#39;kismen&#39;</span>,<span class="st">&#39;hata&#39;</span>),</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>  hata_mesaji <span class="dt">varchar</span>(<span class="dv">2000</span>),</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="katman-2-intent-action-engine">Katman 2: Intent + Action engine</h3>
+<p><code>konusma_engine</code>: - Mesajı + son N mesajı + persona context’i + erişilebilir tool listesini AI’a gönderir - AI iki olası çıktı: (a) sadece bilgi yanıtı, (b) yapılandırılmış action proposal - Action proposal <code>proposed_action</code> field’ına yazılır, kullanıcıya gösterilir</p>
+<p>Tool registry (whitelist edilmiş ERP eylemleri):</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">type</span> ERPTool <span class="op">=</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  id<span class="op">:</span> <span class="dt">string</span><span class="op">;</span>                     <span class="co">// &quot;siparis.olustur&quot;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  description<span class="op">:</span> <span class="dt">string</span><span class="op">;</span>            <span class="co">// AI prompt&#39;a verilecek</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  parameters_schema<span class="op">:</span> ZodSchema<span class="op">;</span>   <span class="co">// strict validation</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  required_role<span class="op">:</span> <span class="st">&#39;musteri&#39;</span><span class="op">|</span><span class="st">&#39;yonetici&#39;</span><span class="op">|</span><span class="st">&#39;operator&#39;</span><span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  side_effects<span class="op">:</span> <span class="st">&#39;none&#39;</span><span class="op">|</span><span class="st">&#39;read&#39;</span><span class="op">|</span><span class="st">&#39;write&#39;</span><span class="op">|</span><span class="st">&#39;irreversible&#39;</span><span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  needs_approval<span class="op">:</span> <span class="dt">boolean</span><span class="op">;</span>        <span class="co">// side_effects != &#39;none&#39; ise true zorunlu</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  handler<span class="op">:</span> (params<span class="op">,</span> context) <span class="kw">=&gt;</span> <span class="bu">Promise</span><span class="op">&lt;</span>Result<span class="op">&gt;;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span></code></pre></div>
+<p>Örnek tool’lar: - <code>siparis.olustur</code> (write, approval) - <code>siparis.durum_sorgu</code> (read, no approval) - <code>urun.fiyat_sorgu</code> (read, no approval) - <code>uretim_emri.olustur</code> (write, approval, sadece yönetici) - <code>satin_alma.taslak</code> (write, approval, sadece yönetici) - <code>stok.rapor</code> (read, no approval) - <code>lead.kayit</code> (write, approval, sadece yönetici) - <code>mail.gonder</code> (irreversible, approval, sadece yönetici)</p>
+<h3 id="katman-3-persona-yönetimi">Katman 3: Persona yönetimi</h3>
+<p>OpenClaw pattern’i: her persona ayrı <code>system_prompt</code> + ton + sınır seti.</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> konusma_personalari (</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  kod <span class="dt">varchar</span>(<span class="dv">64</span>) <span class="kw">UNIQUE</span>,        <span class="co">-- &#39;musteri_asistani&#39;, &#39;yonetici_asistani&#39;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  ad <span class="dt">varchar</span>(<span class="dv">128</span>),</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  system_prompt text,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  default_provider <span class="dt">varchar</span>(<span class="dv">32</span>),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  default_model <span class="dt">varchar</span>(<span class="dv">128</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  izinli_tool_ids JSON,           <span class="co">-- [&quot;siparis.olustur&quot;,&quot;siparis.durum_sorgu&quot;]</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  ton_kurallari text,             <span class="co">-- &quot;Resmi, kısa, müşteriye &#39;siz&#39; kullanma&quot;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  sinirlar text,                  <span class="co">-- &quot;Fiyat değiştirme yetkisi yok&quot;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  is_active tinyint</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p>Mevcut <code>test_center_ai_templates</code>’dan farklı: bu <strong>dialog-spesifik</strong>, action engine’e bağlı. Yeniden kullanım tartışılabilir; önce ayrı tablo, sonra birleştirme düşünülür.</p>
+<h3 id="katman-4-bildirim-dış-kanal">Katman 4: Bildirim + dış kanal</h3>
+<p>OpenClaw pattern’inden — telegram zorunlu değil: - Web push (admin paneli açıkken anlık) - Email (özet günlük rapor) - Telegram (isteyen yönetici için) - Whatsapp Business (ileride müşteri tarafı için)</p>
+<p>Bu kanallar <strong>sadece bildirim</strong> — gelen mesaja içeriden cevap verilmez (faz 2’de düşünülür). Konversasyon Paspas’ın kendi UI’ı içinde.</p>
+<h2 id="geri-besleme-her-etkileşim-öğrenir">Geri besleme — her etkileşim öğrenir</h2>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> konusma_geri_besleme (</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  mesaj_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  kullanici_skoru tinyint,        <span class="co">-- 1-5</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  manual_duzeltme text,           <span class="co">-- AI yanlış anladıysa kullanıcının düzeltmesi</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  intent_dogru tinyint,           <span class="co">-- AI&#39;ın anlama doğruluğu</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  action_uygunluk tinyint,        <span class="co">-- önerinin uygunluğu</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p>Haftada bir cron: - Düşük skorlu yanıtları çıkar - Persona’nın <code>system_prompt</code>’una “şu durumlarda şöyle yap” eklentisi öner - LLM’den few-shot örnek üret - Yönetici onayıyla persona güncellenir</p>
+<h2 id="openclaw-ile-bağlantı-orkestrasyon">OpenClaw ile bağlantı (orkestrasyon)</h2>
+<p>OpenClaw VPS’i orchestrator olarak kalır: - Cron: “günlük 06:00 yönetici özeti üret + email gönder” - Webhook: müşteri portala mesaj geldiğinde Paspas backend → OpenClaw’a forward → Paspas DB’ye yazıştırma kaydı - AI provider routing: OpenClaw’in çoklu provider config’ini Paspas backend’inden tekrar yazmamak için ortak proxy</p>
+<p>Ama <strong>konuşma DB’si Paspas’ta</strong> kalır (domain veri orada). OpenClaw stateless yardımcıdır.</p>
+<h2 id="use-case-akışı-bir-baştan-sona-örnek">Use case akışı — bir baştan sona örnek</h2>
+<p><strong>Müşteri</strong> B2B portala girer, sohbet açar:</p>
+<blockquote>
+<p>“Selam, geçen ay aldığım STAR SİYAH’tan 200 daha lazım. Mart sonuna yetişir mi?”</p>
+</blockquote>
+<p><strong>Sistem (intent extract):</strong></p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">{</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;domain&quot;</span><span class="fu">:</span> <span class="st">&quot;siparis&quot;</span><span class="fu">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;action&quot;</span><span class="fu">:</span> <span class="st">&quot;olustur_taslak&quot;</span><span class="fu">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;urun_ipucu&quot;</span><span class="fu">:</span> <span class="st">&quot;STAR SİYAH&quot;</span><span class="fu">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;miktar&quot;</span><span class="fu">:</span> <span class="dv">200</span><span class="fu">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;termin&quot;</span><span class="fu">:</span> <span class="st">&quot;2026-03-31&quot;</span><span class="fu">,</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;musteri_id&quot;</span><span class="fu">:</span> <span class="st">&quot;&lt;oturumdan&gt;&quot;</span><span class="fu">,</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&quot;guven&quot;</span><span class="fu">:</span> <span class="fl">0.85</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a><span class="fu">}</span></span></code></pre></div>
+<p><strong>Sistem (proposal):</strong> &gt; “Anladığım: <strong>STAR SİYAH (kod 1101 101)</strong>, <strong>200 takım</strong>, termin <strong>31 Mart</strong>. Son fiyatınız <strong>510₺/takım</strong>, toplam <strong>102.000₺ + KDV</strong>. Mevcut üretim sırasına göre tahmini hazırlık süresi <strong>9 iş günü</strong>, yani 26 Mart’ta sevke hazır olur. Onaylar mısınız?”</p>
+<p><strong>Müşteri:</strong> “Evet ama 250 yapsak?”</p>
+<p><strong>Sistem (revize):</strong> &gt; “Tamam, <strong>250 takım</strong> olarak güncellendim. Yeni toplam <strong>127.500₺ + KDV</strong>, hazırlık süresi <strong>11 iş günü</strong> (28 Mart’ta hazır). Onaylar mısınız?”</p>
+<p><strong>Müşteri:</strong> “Onayla”</p>
+<p><strong>Sistem (action):</strong> - <code>siparis.olustur</code> tool çağrılır - Validation: müşterinin kredi limiti, ürün stok takibi, üretim kapasitesi - DB’ye yazılır → SS-2026-0125 - Geri rapor: “Sipariş <strong>SS-2026-0125</strong> oluşturuldu. Termin tarihiniz <strong>31 Mart</strong>. Mail ile teyit gönderildi. Üretim başladığında size haber vereceğim.”</p>
+<p><strong>Sistem (otomatik takip):</strong> - Üretim başladığında → push bildirim - Sevkiyat hazırlandığında → push bildirim - Sevk edildiğinde → push bildirim - Hata/gecikme → erken uyarı</p>
+<h2 id="açık-sorular">Açık sorular</h2>
+<ol type="1">
+<li><strong>Müşteri portalı:</strong> Şu an yok. Faz 1’de yönetici asistanı (admin panel iç chat) yapılır, portal sonra mı?</li>
+<li><strong>Action onay UI:</strong> Modal mı, inline kart mı? Mobil için?</li>
+<li><strong>Konuşma geçmişi saklama:</strong> Müşteri bazlı sınırsız mı, 6 ay sonra arşiv mi? KVKK</li>
+<li><strong>Çoklu turn maliyeti:</strong> Her mesajda son 10 mesaj + tool listesi gönderiliyor → token maliyeti büyür. Özet/sıkıştırma stratejisi gerek mi?</li>
+<li><strong>Yetki modeli:</strong> Müşteri sadece kendi siparişlerini görebilir — bu DB seviyesinde RLS (Row-Level Security) gerektirir mi, yoksa application kontrol yeterli mi?</li>
+<li><strong>Halüsinasyon:</strong> AI olmayan ürün/müşteri uydurursa? → Tool çağrısı validation katmanında DB’de kontrol; uydurma → kullanıcıya “böyle bir kayıt bulunamadı” mesajı.</li>
+<li><strong>Çoklu dil:</strong> Müşteri yurt dışıysa İngilizce/Almanca/Arapça konuşma desteği? Persona tek mi (otomatik dil algılama), persona başına dil mi?</li>
+<li><strong>Sesli mesaj:</strong> Whatsapp’tan ses geldiğinde STT (speech-to-text) ile metne çevirip işleme alma? Faz 3.</li>
+</ol>
+<h2 id="bağımlılıklar">Bağımlılıklar</h2>
+<ul>
+<li>✅ <code>test_center/ai_provider.ts</code> — multi-provider altyapısı hazır</li>
+<li>✅ Paspas DB’sinde <code>musteriler</code>, <code>urunler</code>, <code>siparis_*</code> mevcut</li>
+<li>⚠️ Tool registry yok — yeni iş kalemi</li>
+<li>⚠️ B2B portal frontend yok (müşteri tarafı için)</li>
+<li>⚠️ Konuşma DB tabloları yok — yeni schema</li>
+<li>⚠️ Onay UI/UX kuralları henüz tasarlanmadı</li>
+</ul>
+<h2 id="faz-planı">Faz planı</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 42%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Faz</th>
+<th>İçerik</th>
+<th>Süre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>A — yönetici asistanı v1</strong></td>
+<td>Admin panel içi chat sidebar, 5-10 read-only tool (rapor, sorgu)</td>
+<td>~7-10 gün</td>
+</tr>
+<tr class="even">
+<td><strong>B — yönetici asistanı v2</strong></td>
+<td>Write tool’lar (sipariş aç, üretim emri aç) + onay UI</td>
+<td>~5-7 gün</td>
+</tr>
+<tr class="odd">
+<td><strong>C — geri besleme + retro</strong></td>
+<td>Skor + cron + persona update önerisi</td>
+<td>~3-4 gün</td>
+</tr>
+<tr class="even">
+<td><strong>D — müşteri portalı v1</strong></td>
+<td>Public B2B portal + read-only sohbet (sipariş durum, fiyat sorgu)</td>
+<td>~10-14 gün</td>
+</tr>
+<tr class="odd">
+<td><strong>E — müşteri portalı v2</strong></td>
+<td>Sipariş açma + onay döngüsü</td>
+<td>~5-7 gün</td>
+</tr>
+<tr class="even">
+<td><strong>F — saha asistanı</strong></td>
+<td>Operatör mobil chat</td>
+<td>~7-10 gün</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Toplam (A-E):</strong> ~30-40 iş günü.</p>
+<h2 id="vizyondaki-yeri">Vizyondaki yeri</h2>
+<p>Bu katman <strong>5. motor</strong> olarak <a href="./00-vizyon.md"><code>00-vizyon.md</code></a>’ye eklenmeli. Diğer 4 motora yatay bağlanır: - <strong>Talep motoru:</strong> sohbetten gelen yapılandırılmış talepler aynı havuza - <strong>Müşteri/tedarikçi keşfi:</strong> “şu lead’i çıkar” komutu - <strong>Stok/üretim tahmin:</strong> “bu hafta stok riski olan ürünleri özetle” - <strong>Geri besleme:</strong> her sohbetin sapma raporu — modeli güçlendirir</p>
+<p>Konversasyonel katman <strong>görünür arayüz</strong>; arkasında 4 motor çalışır. Müşteri ne motor olduğunu bilmez, sadece “asistanla konuştuğunu” hisseder.</p>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("07 — Konversasyonel Katman: Yazışarak İş Yapma + Onay Döngüsü").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

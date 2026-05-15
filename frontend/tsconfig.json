@@ -1,0 +1,62 @@
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "jsx": "react-jsx",
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "allowJs": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "noEmit": true,
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "node"
+    ],
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "src/**/*",
+    "src/types/**/*.d.ts",
+    "tests/**/*",
+    "playwright.config.ts",
+    "test-results/legal.static.spec.ts",
+    "test-results/library.detail.spec.ts",
+    "test-results/library.list.spec.ts",
+    "test-results/news.detail.spec.ts",
+    "test-results/news.list.spec.ts",
+    "test-results/product.detail.spec.ts",
+    "test-results/product.list.spec.ts",
+    "test-results/service.detail.spec.ts",
+    "test-results/service.list.spec.ts",
+    "test-results/team.detail.spec.ts",
+    "test-results/team.list.spec.ts",
+    "src/components/admin/bookings/_components/slotPlan.ts",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/pages_backup/**/*"
+  ]
+}

@@ -1,0 +1,71 @@
+{
+  "tr": {
+    "eyebrow": "Amazon pazar analizi",
+    "title": "{{appName}}",
+    "subtitle": "ANALİZ · KARAR",
+    "heroTitleLine1": "Girmeden önce",
+    "heroTitleGradient": "riski ölç.",
+    "headline": "<em>Keyword bazlı risk analizi</em> ile Amazon kategorisine<br/>— <strong>veri odaklı, güvenli</strong> girişim yap.",
+    "lead": "{{appName}}; 5 boyutlu pazar analizi, Keepa fiyat geçmişi ve AI destekli risk skoru ile Amazon'da doğru kategoriye girmenizi sağlar.",
+    "tagline": "Keyword yaz, riski gör, karar al.",
+    "socialProof": "Amazon FBA ve e-ihracat kararları için tasarlandı.",
+    "metrics": [
+      { "value": "5", "label": "Boyutlu analiz" },
+      { "value": "3", "label": "Dakikada sonuç" },
+      { "value": "%100", "label": "Veri odaklı" }
+    ],
+    "showcaseXpLabel": "RİSK",
+    "showcaseXpValue": "72",
+    "primaryCTA": "Ücretsiz analiz yap",
+    "secondaryCTA": "Nasıl çalışır?",
+    "scrollHint": "Aşağı kaydır",
+    "titleLine1": "Girmeden önce",
+    "titleGradient": "riski ölç."
+  },
+  "en": {
+    "eyebrow": "Amazon market analysis",
+    "title": "{{appName}}",
+    "subtitle": "ANALYZE · DECIDE",
+    "heroTitleLine1": "Measure the risk",
+    "heroTitleGradient": "before you enter.",
+    "headline": "<em>Keyword-based risk analysis</em> for Amazon categories<br/>— make <strong>data-driven, confident</strong> decisions.",
+    "lead": "{{appName}} provides 5-dimensional market analysis, Keepa price history and AI-powered risk scoring to help you enter the right Amazon category.",
+    "tagline": "Type a keyword, see the risk, decide.",
+    "socialProof": "Designed for Amazon FBA and e-export decisions.",
+    "metrics": [
+      { "value": "5", "label": "Dimensions" },
+      { "value": "3", "label": "Minutes to results" },
+      { "value": "100%", "label": "Data-driven" }
+    ],
+    "showcaseXpLabel": "RISK",
+    "showcaseXpValue": "72",
+    "primaryCTA": "Start free analysis",
+    "secondaryCTA": "How it works",
+    "scrollHint": "Scroll down",
+    "titleLine1": "Measure the risk",
+    "titleGradient": "before you enter."
+  },
+  "de": {
+    "eyebrow": "Amazon Marktanalyse",
+    "title": "{{appName}}",
+    "subtitle": "ANALYSIEREN · ENTSCHEIDEN",
+    "heroTitleLine1": "Risiko messen",
+    "heroTitleGradient": "bevor Sie einsteigen.",
+    "headline": "<em>Keyword-basierte Risikoanalyse</em> für Amazon-Kategorien<br/>— <strong>datengestützte</strong> Entscheidungen treffen.",
+    "lead": "{{appName}} bietet 5-dimensionale Marktanalyse, Keepa-Preisverlauf und KI-gestütztes Risikorating für sichere Amazon-Entscheidungen.",
+    "tagline": "Keyword eingeben, Risiko sehen, entscheiden.",
+    "socialProof": "Für Amazon FBA und E-Export-Entscheidungen konzipiert.",
+    "metrics": [
+      { "value": "5", "label": "Dimensionen" },
+      { "value": "3", "label": "Minuten bis zum Ergebnis" },
+      { "value": "100%", "label": "Datengestützt" }
+    ],
+    "showcaseXpLabel": "RISIKO",
+    "showcaseXpValue": "72",
+    "primaryCTA": "Kostenlos analysieren",
+    "secondaryCTA": "Wie es funktioniert",
+    "scrollHint": "Nach unten scrollen",
+    "titleLine1": "Risiko messen",
+    "titleGradient": "bevor Sie einsteigen."
+  }
+}

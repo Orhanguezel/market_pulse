@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>06 — Birleşik Yol Haritası (A Seçeneği — Veri Önce, Konuşma Sonra) — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>06 — Birleşik Yol Haritası (A Seçeneği — Veri Önce, Konuşma Sonra)</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="birleşik-yol-haritası-a-seçeneği-veri-önce-konuşma-sonra">06 — Birleşik Yol Haritası (A Seçeneği — Veri Önce, Konuşma Sonra)</h1>
+<blockquote>
+<p><strong>Bağlam (v1.1):</strong> Bu doküman ilk taslak yol haritasıdır (5 motor odaklı). Sonradan <strong>11 fazlı genişletilmiş yol haritası</strong> hazırlandı: <a href="../proje-teklifi/07-yol-haritasi.md"><code>proje-teklifi/07-yol-haritasi.md</code></a> (hafta-hafta, milestone, paralel akış, kabul kriterleri). Bu doküman ilk strateji kararını (A — veri önce, konuşma sonra) kayıt amaçlı tutar.</p>
+</blockquote>
+<blockquote>
+<p><strong>Kararlaştırılan strateji (A):</strong> Önce 4 motoru (veri + AI + keşif + tahmin) sağlamlaştır. Konversasyonel katman 5. motor olarak EN SONA, tüm altyapı oturduktan sonra eklenir. Telegram konuşma kanalı değil <strong>bildirim</strong> katmanı; isteyen yönetici aktive eder.</p>
+</blockquote>
+<h2 id="yol-haritası-tasarım-kuralları">Yol haritası tasarım kuralları</h2>
+<ol type="1">
+<li><strong>Hızlı geri dönüş önce.</strong> Her faz sonunda kullanıcının somut faydası olmalı (rapor, panel, otomatik öneri).</li>
+<li><strong>Veri önce, AI sonra.</strong> AI’ın değer üretebilmesi için altında temiz veri lazım (müşteri profili, tedarikçi performansı, tüketim hızı).</li>
+<li><strong>Manuel onay zinciri her zaman.</strong> AI hiçbir yan etkili aksiyonu (sipariş açma, mail gönderme) tek başına gerçekleştirmez.</li>
+<li><strong>Her motor bir öğrenme döngüsü.</strong> Tahmin → gerçekleşen → sapma → kalibre.</li>
+<li><strong>Konuşma katmanı en son.</strong> Diğer 4 motor sağlamlaşmadan üzerine sohbet eklemek istenmiyor; aksi halde sohbet boş eylem fısıldayan bir maket olur.</li>
+</ol>
+<h2 id="faz-0-karar-netleştirme-1-hafta">Faz 0 — Karar netleştirme (1 hafta)</h2>
+<p>Kod yazılmaz. Tartışma dokümanlarındaki <strong>açık sorular</strong> netleştirilir:</p>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 45%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Konu</th>
+<th>Karar gerekli</th>
+<th>Mevcut yön</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>✅ “openclaw”</td>
+<td>Hangi tool/yaklaşım?</td>
+<td><strong>Çözüldü:</strong> OpenClaw self-hosted AI ops platformu, mevcut VPS’te kurulu. Pattern olarak ilham; doğrudan kullanılmıyor.</td>
+</tr>
+<tr class="even">
+<td>✅ Telegram</td>
+<td>Konuşma mı bildirim mi?</td>
+<td><strong>Çözüldü:</strong> Sadece bildirim katmanı (web push + email + isteyene Telegram). Konuşma Paspas UI’ı içinde.</td>
+</tr>
+<tr class="odd">
+<td>❓ CRM</td>
+<td>Paspas içinde basit lead pipeline mı, ayrı CRM mı?</td>
+<td><strong>Bekliyor — <a href="./10-crm-karari.md">10-crm-karari.md</a> açıldı</strong></td>
+</tr>
+<tr class="even">
+<td>❓ Email kaynak</td>
+<td>Hangi mailbox(lar) IMAP ile dinlenecek?</td>
+<td><strong>Bekliyor</strong></td>
+</tr>
+<tr class="odd">
+<td>❓ Bütçe</td>
+<td>Aylık SaaS API maliyeti (~$150-300) onaylı mı?</td>
+<td><strong>Bekliyor — <a href="./08-saas-butce-analizi.md">08-saas-butce-analizi.md</a> açıldı</strong></td>
+</tr>
+<tr class="even">
+<td>✅ Yurt dışı odak</td>
+<td>Hangi 1-2 hedef ülke?</td>
+<td><strong>Çözüldü:</strong> Esnek — ülke öncelik tanımlamayalım. Hangi lead/talep nereden gelirse o yönde ilerle.</td>
+</tr>
+<tr class="odd">
+<td>❓ Otomasyon eşiği</td>
+<td>AI önerilerinin hangi tutar/güven skoru üstünde manuel onaya çıksın?</td>
+<td><strong>Bekliyor — <a href="./09-otomasyon-esikleri.md">09-otomasyon-esikleri.md</a> açıldı</strong></td>
+</tr>
+<tr class="even">
+<td>❓ KVKK/GDPR</td>
+<td>Hukuki danışmanlık alınacak mı?</td>
+<td><strong>Bekliyor</strong></td>
+</tr>
+<tr class="odd">
+<td>✅ vps.md</td>
+<td>Plaintext root parolası ne yapılacak?</td>
+<td><strong>Çözüldü:</strong> Dosya kalsın — git’e commit edilmiyor (<code>.gitignore</code> korumalı), sadece local notlama.</td>
+</tr>
+</tbody>
+</table>
+<p>→ Bu 7 açık sorunun cevabı olmadan Faz 1 başlamamalı.</p>
+<h2 id="faz-1-veri-zenginleştirme-3-4-hafta">Faz 1 — Veri zenginleştirme (3-4 hafta)</h2>
+<p><strong>Hedef:</strong> sonraki fazların ihtiyaç duyduğu meta-veri katmanı kurulur. Görünür değer: yöneticiye yeni dashboard’lar, somut kararlar.</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 30%" />
+<col style="width: 26%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Modül</th>
+<th>Süre</th>
+<th>Çıktı</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1.1</td>
+<td>Müşteri profili tablosu + cron + segmentasyon dashboard</td>
+<td>4-5 gün</td>
+<td>“Premium/Düzenli/Tek seferlik/Kayıp” segmentleri görünür</td>
+</tr>
+<tr class="even">
+<td>1.2</td>
+<td>Tedarikçi performans tablosu + skor + risk haritası</td>
+<td>4-5 gün</td>
+<td>“Tek tedarikçili kritik 12 ürün” listesi, performans badge’i</td>
+</tr>
+<tr class="odd">
+<td>1.3</td>
+<td>Stok tüketim hızı view + trend dashboard</td>
+<td>3 gün</td>
+<td>“Önümüzdeki 7 günde kritik olacak ürünler” panosu</td>
+</tr>
+<tr class="even">
+<td>1.4</td>
+<td>Talep havuzu manuel girişle + ürün/müşteri eşleşme</td>
+<td>3-4 gün</td>
+<td>“Bekleyen talep listesi” sayfası</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Bu fazda hiç AI çağrısı yok.</strong> Saf SQL + UI. Faz sonunda sistemde dört yeni rapor var.</p>
+<h2 id="faz-2-ilk-ai-entegrasyonu-2-3-hafta">Faz 2 — İlk AI entegrasyonu (2-3 hafta)</h2>
+<p><strong>Hedef:</strong> mevcut AI altyapısı (test merkezi) genişletilir; ilk gerçek otomasyon kazançları.</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 30%" />
+<col style="width: 26%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Modül</th>
+<th>Süre</th>
+<th>Çıktı</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2.1</td>
+<td>Email IMAP polling + Talep özeti AI’ı</td>
+<td>4-5 gün</td>
+<td>E-mailden gelen talepler <code>talep_havuzu</code>’na yapılandırılmış kaydedilir</td>
+</tr>
+<tr class="even">
+<td>2.2</td>
+<td>Stok yeniden sipariş öneri motoru (faz A formülü)</td>
+<td>3-4 gün</td>
+<td>Günlük cron, “satın alma önerileri” sayfası</td>
+</tr>
+<tr class="odd">
+<td>2.3</td>
+<td>Üretim önerisi (basit istatistiksel)</td>
+<td>3-4 gün</td>
+<td>“Önümüzdeki 30 günün üretim planı taslağı” panosu</td>
+</tr>
+<tr class="even">
+<td>2.4</td>
+<td>Geri besleme cron’u (tahmin vs gerçek)</td>
+<td>2 gün</td>
+<td>Sapma raporu, 7 gün/30 gün retrospektif</td>
+</tr>
+</tbody>
+</table>
+<p>Faz sonunda: “manuel müdahale olmadan AI 24/7 talep yapılandırıyor + stok sipariş zamanı öneriyor + üretim sıkışık günleri uyarıyor”.</p>
+<h2 id="faz-3-keşif-motoru-3-5-hafta">Faz 3 — Keşif motoru (3-5 hafta)</h2>
+<p><strong>Hedef:</strong> dış dünyadan veri çekme. Öncelikli <strong>yurt içi</strong>.</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 30%" />
+<col style="width: 26%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Modül</th>
+<th>Süre</th>
+<th>Çıktı</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3.1</td>
+<td>Crawler altyapısı (Crawlee + job queue) — OpenClaw VPS hosted</td>
+<td>4-5 gün</td>
+<td>İlk crawler çalışıyor (Google Places örnekleri)</td>
+</tr>
+<tr class="even">
+<td>3.2</td>
+<td>Yurt içi lead crawler (TOBB + B2B platformlar)</td>
+<td>5-7 gün</td>
+<td>Lead havuzu dolar; gün başına 100-500 yeni firma adayı</td>
+</tr>
+<tr class="odd">
+<td>3.3</td>
+<td>Lead skorlama + pipeline UI</td>
+<td>3-4 gün</td>
+<td>Lead listesi, segment uyumuna göre sıralı</td>
+</tr>
+<tr class="even">
+<td>3.4</td>
+<td>Hunter.io email enrichment</td>
+<td>1-2 gün</td>
+<td>İletişim email’leri otomatik bulunur</td>
+</tr>
+<tr class="odd">
+<td>3.5</td>
+<td>Tedarikçi keşif (aynı altyapı, farklı domain ayar)</td>
+<td>3 gün</td>
+<td>Alternatif tedarikçi listesi</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Crawler hosting kararı:</strong> OpenClaw VPS uygun bir aday — Paspas backend yükünü artırmaz, Tailscale’le erişim güvenli. Karar: bu fazda netleşir.</p>
+<h2 id="faz-4-yurt-dışı-outreach-3-4-hafta">Faz 4 — Yurt dışı + outreach (3-4 hafta)</h2>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 30%" />
+<col style="width: 26%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Modül</th>
+<th>Süre</th>
+<th>Çıktı</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4.1</td>
+<td>Apollo.io entegrasyonu (yurt dışı)</td>
+<td>2 gün</td>
+<td>AB/ABD lead’leri</td>
+</tr>
+<tr class="even">
+<td>4.2</td>
+<td>Çok dilli outreach metni AI üretimi</td>
+<td>2-3 gün</td>
+<td>Lead’e tek tıkla email taslağı (TR/EN/DE)</td>
+</tr>
+<tr class="odd">
+<td>4.3</td>
+<td>Email kampanya entegrasyonu (Brevo/Mailgun + opt-out)</td>
+<td>4-5 gün</td>
+<td>Toplu/sıralı email akışı, GDPR uyumu</td>
+</tr>
+<tr class="even">
+<td>4.4</td>
+<td>LinkedIn manuel araştırma desteği (sayfa parser)</td>
+<td>2-3 gün</td>
+<td>Profil URL’inden firma bilgisi çıkarımı</td>
+</tr>
+</tbody>
+</table>
+<h2 id="faz-5-gelişmiş-tahmin-4-6-hafta">Faz 5 — Gelişmiş tahmin (4-6 hafta)</h2>
+<p><strong>Sadece veri yeterince birikmişse</strong> (en az 6-12 ay sonra) anlam kazanır.</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 30%" />
+<col style="width: 26%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Modül</th>
+<th>Süre</th>
+<th>Çıktı</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5.1</td>
+<td>Mevsimsellik analizi (ARIMA/Prophet, Python servisi)</td>
+<td>5-7 gün</td>
+<td>Aylık tahmin + güven aralığı</td>
+</tr>
+<tr class="even">
+<td>5.2</td>
+<td>LLM destekli üretim planı asistanı</td>
+<td>3-5 gün</td>
+<td>“Şu hafta için optimal üretim planı” önerisi</td>
+</tr>
+<tr class="odd">
+<td>5.3</td>
+<td>Anomali tespiti (sapma alarmı)</td>
+<td>3 gün</td>
+<td>Beklenmeyen talep/tüketim sıçramalarına bildirim</td>
+</tr>
+<tr class="even">
+<td>5.4</td>
+<td>Otomatik kalibrasyon (model retraining)</td>
+<td>5-7 gün</td>
+<td>Aylık model güncelleme</td>
+</tr>
+</tbody>
+</table>
+<h2 id="faz-6-konversasyonel-katman-5-8-hafta-en-sona">Faz 6 — Konversasyonel Katman (5-8 hafta) — EN SONA</h2>
+<p><strong>Hedef:</strong> dört motor sağlamlaştıktan sonra, <strong>görünür yüz</strong> olarak konuşma arayüzü. <a href="./07-konversasyonel-katman.md">Detaylı tasarım: <code>07-konversasyonel-katman.md</code></a>.</p>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 30%" />
+<col style="width: 26%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Modül</th>
+<th>Süre</th>
+<th>Çıktı</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.1</td>
+<td><strong>Yönetici asistanı v1</strong> (read-only)</td>
+<td>7-10 gün</td>
+<td>Admin panel sidebar chat, 5-10 sorgu/rapor tool’u: “Bu hafta hangi makineler boş?”, “Ahmet’in son 6 ay siparişleri”</td>
+</tr>
+<tr class="even">
+<td>6.2</td>
+<td><strong>Yönetici asistanı v2</strong> (write + onay UI)</td>
+<td>5-7 gün</td>
+<td>“Bu siparişi makineye ata”, “Üretim emri aç” — taslak → onay → eylem zinciri</td>
+</tr>
+<tr class="odd">
+<td>6.3</td>
+<td><strong>Geri besleme + persona retro</strong></td>
+<td>3-4 gün</td>
+<td>Skor + cron + persona update önerisi</td>
+</tr>
+<tr class="even">
+<td>6.4</td>
+<td><strong>Müşteri portalı v1</strong> (read-only)</td>
+<td>10-14 gün</td>
+<td>Public B2B portal + sipariş durum sorgu, fiyat sorgu, sevkiyat takibi</td>
+</tr>
+<tr class="odd">
+<td>6.5</td>
+<td><strong>Müşteri portalı v2</strong> (write + onay)</td>
+<td>5-7 gün</td>
+<td>Müşteri kendi siparişini açar (taslak → onay → DB)</td>
+</tr>
+<tr class="even">
+<td>6.6</td>
+<td><strong>Saha asistanı (opsiyonel)</strong></td>
+<td>7-10 gün</td>
+<td>Operatör mobil chat: vardiya kaydı, arıza bildirimi</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Faz 6 kuralları:</strong> - Onay zinciri yan etkili her aksiyonda zorunlu (taslak → kullanıcı onay → eylem → geri rapor) - Tool registry whitelist edilmiş; rol bazlı erişim - Konuşma DB’si Paspas’ta; OpenClaw orchestration için ileriki opsiyon - Telegram aktive eden yöneticiye <strong>sadece bildirim</strong> (önemli sapma, kritik onay bekleyen) — konuşma değil</p>
+<h2 id="faz-7-genişlemeler-esnek">Faz 7 — Genişlemeler (esnek)</h2>
+<ul>
+<li><strong>Whatsapp Business API</strong> entegrasyonu — müşteri tarafı talep girişi otomasyonu</li>
+<li><strong>CRM</strong> (EspoCRM/Twenty) — ayrı bir CRM kurulumu kararı verildiyse</li>
+<li><strong>Fiyat takibi</strong> — rakip ürün fiyatlarını otomatik izleme</li>
+<li><strong>Maliyet ve karlılık analizi</strong> — hangi müşteri/ürün karlı?</li>
+<li><strong>Sesli mesaj</strong> (STT) — müşteri sesli not gönderirse metne çevir</li>
+<li><strong>OpenClaw orchestration entegrasyonu</strong> — cron + AI provider proxy katmanı</li>
+</ul>
+<h2 id="risk-panosu">Risk panosu</h2>
+<table>
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 31%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Risk</th>
+<th>Etki</th>
+<th>Önlem</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Crawler yasal sorun (LinkedIn vb.)</td>
+<td>Hesap banı, dava</td>
+<td>Resmi API’lar + manual research</td>
+</tr>
+<tr class="even">
+<td>AI’ın yanlış lead/talep eşleşmesi</td>
+<td>Spam/yanlış outreach</td>
+<td>Düşük guven_skor → manuel kuyruk</td>
+</tr>
+<tr class="odd">
+<td>KVKK ihlali</td>
+<td>Para cezası</td>
+<td>Hukuki danışmanlık + opt-out altyapısı</td>
+</tr>
+<tr class="even">
+<td>Veri kalitesi düşük</td>
+<td>Tahmin hatalı</td>
+<td>Faz 1’de zaman harca, sonraki faza atlama</td>
+</tr>
+<tr class="odd">
+<td>API maliyetleri ölçeklendi</td>
+<td>Aylık $$ artışı</td>
+<td>Bütçe alarmı, free tier öncelik</td>
+</tr>
+<tr class="even">
+<td>Geri besleme döngüsü kurulmadı</td>
+<td>“Tahmin etmiş gibi yapan” sistem</td>
+<td>Her tahmin için sapma kaydı zorunlu</td>
+</tr>
+<tr class="odd">
+<td>Konuşma katmanı erken eklenirse</td>
+<td>“Boş eylem fısıldayan maket”</td>
+<td>A stratejisi: konuşma EN SON. Faz 6 öncesi 4 motor çalışır olmalı.</td>
+</tr>
+<tr class="even">
+<td>vps.md plaintext parola</td>
+<td>Sızıntı, ele geçirme</td>
+<td>Faz 0’da acil temizlik</td>
+</tr>
+</tbody>
+</table>
+<h2 id="önerilen-ilk-hamle">Önerilen ilk hamle</h2>
+<p><strong>Faz 0 (1 hafta — açık soruları cevapla) → Faz 1.1 + 1.2 + 1.3 paralel</strong> (3-4 hafta).</p>
+<p>Bu, ileriki tüm modüllerin temelini atar ve her birini 1-2 günde bağlamak mümkün hale gelir. Bu fazdan çıkan dashboard’lar zaten yöneticiye değer üretir; AI tarafı eklenmemiş bile olsa.</p>
+<p>Sonra: - <strong>Faz 2.2 (stok yeniden sipariş)</strong> — en hızlı somut tasarruf (stok tükenme + işletme sermayesi) - <strong>Faz 3.2 (yurt içi lead crawler)</strong> — büyüme tarafında ilk ROI</p>
+<p>Faz 4-5-6-7 ileride kararlaştırılır.</p>
+<h2 id="tahmini-toplam-süre">Tahmini toplam süre</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Faz</th>
+<th>Süre</th>
+<th>Kümülatif</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0 — Karar</td>
+<td>1 hafta</td>
+<td>1 hafta</td>
+</tr>
+<tr class="even">
+<td>1 — Veri</td>
+<td>3-4 hafta</td>
+<td>4-5 hafta</td>
+</tr>
+<tr class="odd">
+<td>2 — İlk AI</td>
+<td>2-3 hafta</td>
+<td>6-8 hafta</td>
+</tr>
+<tr class="even">
+<td>3 — Keşif</td>
+<td>3-5 hafta</td>
+<td>9-13 hafta</td>
+</tr>
+<tr class="odd">
+<td>4 — Yurt dışı + outreach</td>
+<td>3-4 hafta</td>
+<td>12-17 hafta</td>
+</tr>
+<tr class="even">
+<td>5 — Gelişmiş tahmin</td>
+<td>4-6 hafta</td>
+<td>16-23 hafta</td>
+</tr>
+<tr class="odd">
+<td>6 — Konversasyonel katman</td>
+<td>5-8 hafta</td>
+<td>21-31 hafta</td>
+</tr>
+<tr class="even">
+<td><strong>Tam vizyon (Faz 0-6)</strong></td>
+<td></td>
+<td><strong>~5-8 ay</strong></td>
+</tr>
+<tr class="odd">
+<td>Faz 7 (esnek)</td>
+<td>duruma göre</td>
+<td>+ 2-4 ay</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Pragmatik milestone:</strong> - 1. ay sonunda: yeni dashboard’lar (segment, tedarikçi skor, stok trend) - 2. ay sonunda: ilk AI otomasyonu (talep email parsing, stok sipariş önerisi) - 4. ay sonunda: yurt içi keşif motoru çalışıyor - 6. ay sonunda: yurt dışı + outreach - 8. ay sonunda: konuşma katmanı (yönetici asistanı) - 9-10. ay: müşteri portalı</p>
+<h2 id="sıradaki-adım">Sıradaki adım</h2>
+<p>Faz 0 açık sorularını cevapla. Özellikle: 1. <strong>CRM kararı</strong> (Paspas içinde mi, ayrı mı, hiç mi?) 2. <strong>Email kaynak</strong> (hangi mailbox dinlenecek?) 3. <strong>Bütçe</strong> (aylık $150-300 SaaS uygun mu?) 4. <strong>Yurt dışı odak</strong> (1-2 hedef ülke?) 5. <strong>Otomasyon eşiği</strong> (hangi tutarın altı/üstü onaysız/onaylı?) 6. <strong>vps.md</strong> (parola temizliği — şimdi yap, beklemesin)</p>
+<p>Bu 6 cevap geldikten sonra Faz 1.1 (müşteri profili) ile kod başlar.</p>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("06 — Birleşik Yol Haritası (A Seçeneği — Veri Önce, Konuşma Sonra)").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

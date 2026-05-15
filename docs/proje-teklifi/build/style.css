@@ -1,0 +1,415 @@
+/* MatPortal Proje Teklifi — Stil */
+
+:root {
+  --bg: #fafafa;
+  --bg-card: #ffffff;
+  --fg: #1a1a1a;
+  --fg-muted: #555;
+  --accent: #2563eb;
+  --accent-soft: #dbeafe;
+  --border: #e5e7eb;
+  --code-bg: #f4f4f5;
+  --table-border: #e5e7eb;
+  --warn: #f59e0b;
+  --warn-soft: #fef3c7;
+  --ok: #10b981;
+  --ok-soft: #d1fae5;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, "Helvetica Neue", Arial, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  color: var(--fg);
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  min-height: 100vh;
+}
+
+/* Sidebar */
+aside.sidebar {
+  background: var(--bg-card);
+  border-right: 1px solid var(--border);
+  padding: 24px 16px;
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}
+
+aside.sidebar h2 {
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--fg-muted);
+  margin: 0 0 12px 0;
+}
+
+aside.sidebar h2:first-child {
+  margin-top: 0;
+}
+
+aside.sidebar .brand {
+  font-size: 22px;
+  font-weight: 800;
+  color: var(--accent);
+  text-decoration: none;
+  display: block;
+  margin-bottom: 24px;
+}
+
+aside.sidebar .brand small {
+  display: block;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--fg-muted);
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  margin-top: 4px;
+}
+
+aside.sidebar nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 24px 0;
+}
+
+aside.sidebar nav li {
+  margin-bottom: 2px;
+}
+
+aside.sidebar nav a {
+  display: block;
+  padding: 8px 12px;
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--fg);
+  font-size: 14px;
+  transition: background 0.15s;
+}
+
+aside.sidebar nav a:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+aside.sidebar nav a.active {
+  background: var(--accent);
+  color: white;
+  font-weight: 600;
+}
+
+/* Main */
+main {
+  padding: 40px 60px;
+  max-width: 920px;
+}
+
+main .doc-meta {
+  font-size: 13px;
+  color: var(--fg-muted);
+  padding-bottom: 16px;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 32px;
+}
+
+main h1 {
+  font-size: 32px;
+  font-weight: 800;
+  margin: 0 0 16px 0;
+  color: var(--fg);
+}
+
+main h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 40px 0 16px 0;
+  padding-bottom: 8px;
+  border-bottom: 2px solid var(--border);
+}
+
+main h3 {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 28px 0 12px 0;
+}
+
+main h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 20px 0 8px 0;
+}
+
+main p {
+  margin: 0 0 12px 0;
+}
+
+main ul, main ol {
+  margin: 0 0 16px 0;
+  padding-left: 24px;
+}
+
+main li {
+  margin-bottom: 4px;
+}
+
+main a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+main a:hover {
+  text-decoration: underline;
+}
+
+main code {
+  background: var(--code-bg);
+  padding: 2px 6px;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: "SF Mono", "Monaco", "Consolas", monospace;
+}
+
+main pre {
+  background: var(--code-bg);
+  padding: 16px;
+  border-radius: 8px;
+  overflow-x: auto;
+  font-size: 13px;
+  line-height: 1.5;
+  border: 1px solid var(--border);
+  margin: 16px 0;
+}
+
+main pre code {
+  background: transparent;
+  padding: 0;
+}
+
+main blockquote {
+  border-left: 4px solid var(--accent);
+  padding: 8px 16px;
+  margin: 16px 0;
+  background: var(--accent-soft);
+  border-radius: 0 6px 6px 0;
+  color: var(--fg);
+}
+
+main blockquote p {
+  margin: 0 0 8px 0;
+}
+
+main blockquote p:last-child {
+  margin-bottom: 0;
+}
+
+main table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 14px;
+}
+
+main table th,
+main table td {
+  border: 1px solid var(--table-border);
+  padding: 8px 12px;
+  text-align: left;
+}
+
+main table th {
+  background: var(--code-bg);
+  font-weight: 600;
+}
+
+main table tr:nth-child(even) {
+  background: rgba(0, 0, 0, 0.02);
+}
+
+main hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 32px 0;
+}
+
+/* Yorum bölümü */
+.comments-section {
+  margin-top: 64px;
+  padding: 32px;
+  background: var(--bg-card);
+  border-radius: 12px;
+  border: 1px solid var(--border);
+}
+
+.comments-section h3 {
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.comments-section h3::before {
+  content: "💬";
+}
+
+.comments-list {
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.comment-item {
+  padding: 12px 16px;
+  background: var(--bg);
+  border-left: 3px solid var(--accent);
+  border-radius: 0 6px 6px 0;
+}
+
+.comment-item .meta {
+  font-size: 12px;
+  color: var(--fg-muted);
+  margin-bottom: 4px;
+}
+
+.comment-item .author {
+  font-weight: 600;
+  color: var(--fg);
+}
+
+.comment-item .body {
+  font-size: 14px;
+  white-space: pre-wrap;
+}
+
+.comment-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.comment-form input,
+.comment-form textarea {
+  border: 1px solid var(--border);
+  padding: 10px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 14px;
+}
+
+.comment-form textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.comment-form button {
+  align-self: flex-start;
+  background: var(--accent);
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.comment-form button:hover {
+  background: #1d4ed8;
+}
+
+.comment-info {
+  font-size: 12px;
+  color: var(--fg-muted);
+  margin-top: 8px;
+  font-style: italic;
+}
+
+/* Top banner */
+.top-banner {
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  border-bottom: 1px solid var(--border);
+  padding: 12px 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  z-index: 10;
+}
+
+.top-banner .breadcrumb {
+  font-size: 13px;
+  color: var(--fg-muted);
+}
+
+.top-banner .actions {
+  display: flex;
+  gap: 8px;
+}
+
+.top-banner .actions a {
+  font-size: 13px;
+  padding: 6px 12px;
+  background: var(--code-bg);
+  border-radius: 6px;
+  text-decoration: none;
+  color: var(--fg);
+}
+
+.top-banner .actions a:hover {
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+
+/* Print için */
+@media print {
+  body {
+    grid-template-columns: 1fr;
+  }
+  aside.sidebar,
+  .top-banner,
+  .comments-section {
+    display: none;
+  }
+  main {
+    padding: 0;
+    max-width: 100%;
+  }
+  main h2 {
+    page-break-after: avoid;
+  }
+  main pre,
+  main table {
+    page-break-inside: avoid;
+  }
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+  body {
+    grid-template-columns: 1fr;
+  }
+  aside.sidebar {
+    position: relative;
+    height: auto;
+    border-right: none;
+    border-bottom: 1px solid var(--border);
+  }
+  main {
+    padding: 24px;
+  }
+  .top-banner {
+    padding: 12px 24px;
+  }
+}

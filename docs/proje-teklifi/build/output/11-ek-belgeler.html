@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>11 — Ek Belgeler — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="tartisma/index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="tartisma/12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="tartisma/13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="tartisma/14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="tartisma/15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>11 — Ek Belgeler</strong></div>
+  <div class="actions">
+    <a href="index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="ek-belgeler">11 — Ek Belgeler</h1>
+<p>Bu doküman MatPortal’ın <strong>terimler sözlüğünü</strong>, <strong>referans linklerini</strong>, <strong>örnek yasal metinleri</strong> (KVKK aydınlatma, bayi sözleşme klozu), <strong>teknik referansları</strong>, <strong>rapor şablonlarını</strong> ve <strong>ek görselleri</strong> içerir. Diğer dokümanların yanında destekleyici materyaldir.</p>
+<h2 id="terim-sözlüğü">1. Terim Sözlüğü</h2>
+<h3 id="genel">Genel</h3>
+<ul>
+<li><strong>MatPortal</strong> — Bu projenin adı. Promats Bayi Portalı + AI tahmin + churn radarı + saha CRM’in birleşik markası</li>
+<li><strong>Paspas ERP</strong> — Promats için geliştirilmiş mevcut Üretim ERP sistemi</li>
+<li><strong>Promats</strong> — MatPortal’ın hedef müşterisi (plastik enjeksiyon kalıplama üreticisi)</li>
+<li><strong>Bayi</strong> — Promats’tan toptan ürün alan distribütör/perakendeci (B2B müşteri)</li>
+</ul>
+<h3 id="teknik">Teknik</h3>
+<ul>
+<li><strong>MAPE</strong> — Mean Absolute Percentage Error. Tahmin doğruluğu metriği. Düşük iyi</li>
+<li><strong>RMSE</strong> — Root Mean Squared Error. Büyük sapmaları cezalandırır</li>
+<li><strong>MAE</strong> — Mean Absolute Error. Mutlak ortalama sapma</li>
+<li><strong>SHAP</strong> — SHapley Additive exPlanations. Hangi feature tahmini ne kadar etkiledi</li>
+<li><strong>ROP</strong> — Reorder Point. Stok yeniden sipariş seviyesi</li>
+<li><strong>PO</strong> — Purchase Order. Satınalma siparişi</li>
+<li><strong>LTV</strong> — Lifetime Value. Müşteri ömür boyu değeri</li>
+<li><strong>NPS</strong> — Net Promoter Score. Müşteri memnuniyet skoru</li>
+<li><strong>CRUD</strong> — Create, Read, Update, Delete</li>
+<li><strong>JWT</strong> — JSON Web Token. Authentication mekanizması</li>
+<li><strong>TTL</strong> — Time To Live. Cache geçerlilik süresi</li>
+<li><strong>FCM</strong> — Firebase Cloud Messaging. Push bildirim</li>
+<li><strong>MTTR</strong> — Mean Time To Recovery. Hatadan toparlanma süresi</li>
+<li><strong>DR</strong> — Disaster Recovery. Felaket kurtarma</li>
+<li><strong>A/B test</strong> — İki versiyonu paralel çalıştırma + karşılaştırma</li>
+<li><strong>Champion/Challenger</strong> — Aktif model vs yeni eğitilmiş model</li>
+</ul>
+<h3 id="ai-ml">AI / ML</h3>
+<ul>
+<li><strong>LLM</strong> — Large Language Model (Claude, GPT, Llama)</li>
+<li><strong>Prophet</strong> — Facebook geliştirdiği zaman serisi tahmin kütüphanesi</li>
+<li><strong>ARIMA</strong> — AutoRegressive Integrated Moving Average. Klasik zaman serisi modeli</li>
+<li><strong>XGBoost</strong> — Gradient boosting kütüphanesi (tabular veri)</li>
+<li><strong>LSTM</strong> — Long Short-Term Memory. Recurrent neural network</li>
+<li><strong>Univariate</strong> — Tek değişkenli (sadece geçmiş sipariş)</li>
+<li><strong>Multivariate</strong> — Çok değişkenli (sipariş + kur + tatil + hava)</li>
+<li><strong>Active learning</strong> — Kullanıcı düzeltmesinden öğrenen sistem</li>
+<li><strong>Calibration</strong> — Modelin çıktılarının ince ayarı</li>
+<li><strong>Federated learning</strong> — Veriyi paylaşmadan model paylaşımı</li>
+<li><strong>Slot-filling</strong> — Sohbet’te eksik parametre toplama</li>
+<li><strong>Intent</strong> — Niyet (kullanıcının ne istediği)</li>
+<li><strong>Prompt injection</strong> — Kullanıcı girdisi ile sistem prompt’u manipüle etme</li>
+</ul>
+<h3 id="yasal">Yasal</h3>
+<ul>
+<li><strong>KVKK</strong> — Kişisel Verilerin Korunması Kanunu (Türkiye)</li>
+<li><strong>GDPR</strong> — General Data Protection Regulation (AB)</li>
+<li><strong>CBAM</strong> — Carbon Border Adjustment Mechanism (AB karbon vergisi)</li>
+<li><strong>GİB</strong> — Gelir İdaresi Başkanlığı</li>
+<li><strong>TBK</strong> — Türk Borçlar Kanunu</li>
+<li><strong>TCK</strong> — Türk Ceza Kanunu</li>
+<li><strong>e-Fatura</strong> — Elektronik fatura (GİB sistemi)</li>
+<li><strong>e-Arşiv</strong> — Elektronik arşiv (B2C için)</li>
+<li><strong>TOBB</strong> — Türkiye Odalar ve Borsalar Birliği</li>
+<li><strong>TÜİK</strong> — Türkiye İstatistik Kurumu</li>
+<li><strong>TCMB</strong> — Türkiye Cumhuriyet Merkez Bankası</li>
+<li><strong>TÜFE</strong> — Tüketici Fiyatları Endeksi</li>
+<li><strong>Aydınlatma metni</strong> — KVKK gereği veri toplama amacının açıklandığı belge</li>
+<li><strong>Açık rıza</strong> — Veri sahibinin bilinçli onayı</li>
+<li><strong>VERBİS</strong> — Veri Sorumluları Sicili (KVKK kayıt sistemi)</li>
+</ul>
+<h3 id="iş">İş</h3>
+<ul>
+<li><strong>B2B</strong> — Business to Business. Firma-firma satış</li>
+<li><strong>B2C</strong> — Business to Consumer. Firma-tüketici satış</li>
+<li><strong>OEM</strong> — Original Equipment Manufacturer</li>
+<li><strong>Aftermarket</strong> — Yedek parça / aksesuar pazarı</li>
+<li><strong>Distribütör</strong> — Toplu alıp dağıtan bayi</li>
+<li><strong>Cari hesap</strong> — Müşteri/tedarikçi mali takip hesabı</li>
+<li><strong>Vade</strong> — Ödeme süresi</li>
+<li><strong>Cross-sell</strong> — Mevcut müşteriye ek ürün satışı</li>
+<li><strong>Upsell</strong> — Mevcut müşteriye daha pahalı/üst ürün satışı</li>
+<li><strong>Churn</strong> — Müşteri kaybı (rakibe geçme veya hesap kapatma)</li>
+<li><strong>Lead</strong> — Potansiyel müşteri (henüz satış olmamış)</li>
+<li><strong>Pipeline</strong> — Satış süreci akışı (lead → kazanç)</li>
+<li><strong>Outreach</strong> — Soğuk iletişim (yeni müşteriye ilk temas)</li>
+<li><strong>Sequence</strong> — Otomatik çoklu adımlı email akışı</li>
+<li><strong>Onboarding</strong> — Yeni kullanıcı/bayi alıştırma süreci</li>
+</ul>
+<h2 id="yasal-metin-şablonları">2. Yasal Metin Şablonları</h2>
+<h3 id="kvkk-aydınlatma-metni-bayi-portalı-için">2.1 KVKK Aydınlatma Metni — Bayi Portal’ı için</h3>
+<pre><code>PROMATS BAYİ PORTALI (MATPORTAL)
+KİŞİSEL VERİLERİN KORUNMASI KANUNU AYDINLATMA METNİ
+
+1. VERİ SORUMLUSU
+[Promats Şirket Bilgisi — yasal isim, adres, vergi no]
+
+2. VERİ TOPLAMA AMACI
+Promats Bayi Portalı (MatPortal) hizmetinin sunulması, sipariş yönetimi,
+cari hesap takibi, ürün önerisi ve müşteri ilişkileri yönetimi amacıyla
+aşağıdaki kişisel veriler işlenmektedir:
+
+  - Kimlik bilgileri (ad, soyad)
+  - İletişim bilgileri (email, telefon)
+  - Firma temsilciliği bilgileri (görev, departman)
+  - İşlem bilgileri (sipariş geçmişi, sepet hareketi)
+  - Teknik bilgiler (IP, cihaz, oturum)
+
+3. İŞLEME HUKUKİ SEBEP
+KVKK m.5/2 uyarınca:
+  - Sözleşmenin kurulması veya ifasıyla doğrudan doğrulu ilgili olması (e)
+  - Veri sorumlusunun meşru menfaati (f)
+
+4. AKTARIM
+Veriler, MatPortal hizmet sağlayıcılarına (cloud hosting, email gateway,
+analitik) hizmet sunum sınırı içinde aktarılır. Yurt dışı aktarım sadece
+KVKK m.9 kapsamında, Avrupa Birliği uyumlu sağlayıcılara yapılır.
+
+5. SAKLAMA SÜRESİ
+Aktif hesap dönemi + 5 yıl yasal saklama yükümlülüğü kapsamında saklanır.
+
+6. HAKLARINIZ (KVKK m.11)
+  - Verilere erişim, düzeltme, silme talebi
+  - İşlemenin amacını öğrenme
+  - Yurt içi/dışı aktarım bilgisi
+  - İtiraz hakkı
+
+Talepleriniz için: kvkk@promats.com.tr
+
+7. SCRAPING / VERİ ZENGİNLEŞTİRME
+MatPortal hizmeti gelişimi amacıyla, bayinizin **public** web sitesi ve
+sosyal medya hesapları periyodik olarak izlenir. Bu işlem yalnızca
+firma verilerinizi (ürün listesi, kampanyalar, çalışma saatleri vb.)
+kapsar; çalışanlarınızın kişisel verisi izlenmez. Detay için:
+[link: scraping politikası]</code></pre>
+<h3 id="bayi-sözleşmesi-scraping-ve-veri-klozu">2.2 Bayi Sözleşmesi — Scraping ve Veri Klozu</h3>
+<pre><code>[BAYİ SÖZLEŞMESİ — EK MADDE]
+
+Madde X. DİJİTAL VERİ KULLANIMI
+
+X.1 Bayi, MatPortal hizmetinin geliştirilmesi ve iyileştirilmesi
+amacıyla, kendi web sitesi, sosyal medya hesapları ve diğer **public**
+dijital varlıklarının izlenmesine onay verir.
+
+X.2 İzleme kapsamı:
+  a) Bayinin sattığı markalar listesi
+  b) Yayınladığı kampanyalar
+  c) Çalışma saatleri ve iletişim bilgileri (public)
+  d) Müşteri yorumları (public platformlar)
+
+X.3 Toplanan veri:
+  a) Yalnızca dahili kullanımdır, üçüncü tarafa paylaşılmaz
+  b) KVKK kapsamı dışındaki firma verisidir
+  c) Bayinin onayı olmadan rakip bilgisi olarak kullanılmaz
+
+X.4 Veri saklama:
+  a) HTML snapshot maksimum 90 gün saklanır
+  b) Yapılandırılmış veri 2 yıl saklanır
+  c) Bayi onayı geri çekerse, ilgili veri 30 gün içinde silinir
+
+X.5 Bayi onayı geri çekme:
+  Yazılı bildirim ile: kvkk@promats.com.tr
+  Onay geri çekilirse, scraping durur, mevcut veri silinir, MatPortal
+  hizmetlerinin bazı özellikleri (churn radarı vb.) o bayi için devre
+  dışı kalır.</code></pre>
+<blockquote>
+<p><strong>Not:</strong> Yukarıdaki metinler <strong>şablon</strong>dur. Avukat onayından geçirilmeli, Promats kurumsal kimliğine uyarlanmalıdır.</p>
+</blockquote>
+<h2 id="teknik-referans-linkleri">3. Teknik Referans Linkleri</h2>
+<h3 id="stack-belgeleri">Stack belgeleri</h3>
+<ul>
+<li>Fastify: https://fastify.dev/docs/latest/</li>
+<li>Bun: https://bun.sh/docs</li>
+<li>Drizzle ORM: https://orm.drizzle.team/docs/overview</li>
+<li>Next.js 16: https://nextjs.org/docs</li>
+<li>Shadcn/UI: https://ui.shadcn.com/docs</li>
+<li>Redux Toolkit: https://redux-toolkit.js.org/</li>
+<li>RTK Query: https://redux-toolkit.js.org/rtk-query/overview</li>
+<li>Zod: https://zod.dev</li>
+</ul>
+<h3 id="ml-python">ML / Python</h3>
+<ul>
+<li>scikit-learn: https://scikit-learn.org</li>
+<li>Prophet: https://facebook.github.io/prophet/</li>
+<li>XGBoost: https://xgboost.readthedocs.io</li>
+<li>MLflow: https://mlflow.org</li>
+<li>SHAP: https://shap.readthedocs.io</li>
+<li>FastAPI: https://fastapi.tiangolo.com</li>
+</ul>
+<h3 id="scraping">Scraping</h3>
+<ul>
+<li>Crawlee: https://crawlee.dev</li>
+<li>Playwright: https://playwright.dev</li>
+<li>Apify: https://apify.com</li>
+</ul>
+<h3 id="llm-providers">LLM Providers</h3>
+<ul>
+<li>Anthropic Claude: https://docs.anthropic.com</li>
+<li>OpenAI: https://platform.openai.com/docs</li>
+<li>Groq: https://console.groq.com/docs</li>
+</ul>
+<h3 id="mobil">Mobil</h3>
+<ul>
+<li>Flutter: https://docs.flutter.dev</li>
+<li>Firebase FCM: https://firebase.google.com/docs/cloud-messaging</li>
+</ul>
+<h3 id="devops">DevOps</h3>
+<ul>
+<li>Docker: https://docs.docker.com</li>
+<li>GitHub Actions: https://docs.github.com/actions</li>
+<li>Sentry: https://docs.sentry.io</li>
+<li>Cloudflare: https://developers.cloudflare.com</li>
+</ul>
+<h3 id="türkiye-public-veri">Türkiye public veri</h3>
+<ul>
+<li>TOBB üye sorgusu: https://www.tobb.org.tr</li>
+<li>sanayim.net: https://www.sanayim.net</li>
+<li>TCMB EVDS: https://evds2.tcmb.gov.tr</li>
+<li>TÜİK: https://www.tuik.gov.tr</li>
+<li>GİB e-Fatura: https://efatura.gov.tr</li>
+<li>Türkpatent: https://www.turkpatent.gov.tr</li>
+</ul>
+<h3 id="yasal-1">Yasal</h3>
+<ul>
+<li>KVKK kanun: https://www.kvkk.gov.tr/Icerik/2030/6698-Sayili-Kisisel-Verilerin-Korunmasi-Kanunu</li>
+<li>VERBİS: https://verbis.kvkk.gov.tr</li>
+<li>KVKK aydınlatma rehberi: https://www.kvkk.gov.tr/Icerik/4123/Aydinlatma-Yukumlulugunun-Yerine-Getirilmesinde-Uyulacak-Usul-ve-Esaslar-Hakkinda-Teblig</li>
+<li>AB CBAM: https://taxation-customs.ec.europa.eu/carbon-border-adjustment-mechanism_en</li>
+</ul>
+<h2 id="rapor-şablonları">4. Rapor Şablonları</h2>
+<h3 id="aylık-yönetici-raporu-otomatik-pdf">4.1 Aylık yönetici raporu (otomatik PDF)</h3>
+<pre><code>┌─────────────────────────────────────────────────────┐
+│  MATPORTAL — AYLIK RAPOR                            │
+│  [Ay/Yıl]                                           │
+├─────────────────────────────────────────────────────┤
+│                                                     │
+│  ÜST DÜZEY                                          │
+│  ─────────                                          │
+│  Aktif bayi: 47 (önceki ay: 42, +12%)              │
+│  Aylık sipariş: 285 (önceki: 245, +16%)            │
+│  Portal payı: %68 (hedef: %70)                     │
+│  Tahmin MAPE: %23 (hedef: %25 ✓)                   │
+│                                                     │
+│  KAZANÇLAR                                          │
+│  ─────────                                          │
+│  • 3 churn risk → 2 kurtarma (saha ziyareti)       │
+│  • 12 yeni lead → 2 bayiye dönüşüm                 │
+│  • Stok-out 2 olay (önceki ay: 7)                  │
+│  • Sipariş hatası 1 (önceki: 9)                    │
+│                                                     │
+│  DİKKAT NOKTALARI                                   │
+│  ──────────────                                     │
+│  ⚠ Ankara Oto Market — churn skoru 75 yükselen    │
+│  ⚠ PE Granül stok 2 hafta yeterli — PO açıldı     │
+│  ⚠ Trabzon bölgesi sipariş %20 düşük               │
+│                                                     │
+│  MALİ                                               │
+│  ────                                               │
+│  Operasyonel maliyet: $245 (bütçe $300, %82)       │
+│  ROI tahmini: 18x                                  │
+│                                                     │
+│  SONRAKİ AY ODAKLAR                                 │
+│  ──────────────────                                 │
+│  • Pilot 5 → 10 bayi yaygınlaştırma                │
+│  • Tahmin model v1.4 → v1.5 challenger test        │
+│  • Yurt dışı outreach 3 lead → görüşme             │
+│                                                     │
+└─────────────────────────────────────────────────────┘</code></pre>
+<h3 id="çeyreklik-yönetim-toplantı-şablonu">4.2 Çeyreklik yönetim toplantı şablonu</h3>
+<pre><code>1. ÖNCEKİ ÇEYREK ÖZET
+   - Hedef vs gerçekleşen
+   - Başarılar
+   - Eksikler
+
+2. ÜRÜN GELİŞMELERİ
+   - Tamamlanan fazlar
+   - Yeni özellikler
+   - Demo
+
+3. KPI REVIEW
+   - 7 kategori detayı
+   - Hedef revizyon önerileri
+
+4. RİSK GÜNCELLEMESİ
+   - Aktif riskler
+   - Yeni riskler
+   - Mitigation durumu
+
+5. BÜTÇE DURUMU
+   - Operasyonel maliyet trendi
+   - Beklenmedik kalemler
+
+6. SONRAKİ ÇEYREK PLANI
+   - Faz öncelikleri
+   - Personel ihtiyacı
+   - Karar bekleyen noktalar
+
+7. AÇIK SORULAR</code></pre>
+<h3 id="bayi-onboarding-kontrol-listesi">4.3 Bayi onboarding kontrol listesi</h3>
+<pre><code>✓ Müşteri kaydı tamam (Paspas&#39;ta `musteriler`)
+✓ Portal hesabı oluşturuldu (`portal_kullanicilari`)
+✓ Geçici şifre email gönderildi
+✓ İskonto + kredi limit + vade tanımlandı
+✓ İlk giriş yapıldı (3 gün içinde)
+✓ Şifre değiştirildi
+✓ Onboarding video izlendi
+✓ İlk katalog araması yapıldı
+✓ İlk sepet hareketi
+✓ İlk sipariş onaylandı
+✓ İlk cari sorgu
+✓ NPS anket gönderildi (1 hafta sonra)
+✓ Saha ekibi pasif takip aktif (4 hafta)</code></pre>
+<h2 id="ek-görseller-yer-tutucular">5. Ek Görseller (Yer Tutucular)</h2>
+<h3 id="gerekli-görseller">5.1 Gerekli görseller</h3>
+<p>Proje teklifinin HTML/PDF haline getirilirken eklenecek:</p>
+<ol type="1">
+<li><strong>Üst düzey mimari diyagramı</strong> (<code>docs/proje-teklifi/03-mimari-ve-teknoloji.md</code> içindeki ASCII’den çizim)</li>
+<li><strong>7 katmanlı vizyon</strong> (<code>docs/proje-teklifi/02-cozum-genel-bakis.md</code>)</li>
+<li><strong>11 fazlı zaman çizelgesi</strong> (Gantt görünümü)</li>
+<li><strong>Bayi web portal ekran görüntüleri</strong> (mockup) — Faz 6 dashboard, katalog, sepet, cari</li>
+<li><strong>Yönetici dashboard ekran görüntüleri</strong> (mockup) — KPI, churn radar, tahmin heatmap</li>
+<li><strong>Saha mobil app mockup</strong> — ziyaret formu, ses kaydı UI</li>
+<li><strong>Veri akış diyagramı</strong> (kaynaklar → backend → frontend)</li>
+<li><strong>KPI dashboard örnek</strong> (gerçek veri ile)</li>
+<li><strong>Risk matrisi grafiği</strong> (olasılık × etki)</li>
+<li><strong>ROI grafiği</strong> (yatırım vs tasarruf)</li>
+</ol>
+<h3 id="excalidraw-kaynak-dosyaları">5.2 Excalidraw kaynak dosyaları</h3>
+<p>Wireframe ve diyagramlar Excalidraw’da hazırlanır: - <code>docs/proje-teklifi/diagrams/</code> klasöründe <code>.excalidraw</code> dosyaları - Her diyagramın <code>.png</code> export’u dokümana eklenir - Kaynak değişikliği güncellenir</p>
+<h2 id="bayi-onboarding-detay-akış">6. Bayi Onboarding — Detay Akış</h2>
+<h3 id="yönetici-tarafı-yeni-bayi">6.1 Yönetici tarafı (yeni bayi)</h3>
+<pre><code>Adım 1: Müşteri kaydı kontrolü
+  → Paspas /admin/musteriler
+  → Mevcut mü? → Evet ise devam, yok ise yeni kayıt
+
+Adım 2: Portal hesabı
+  → /admin/bayi-portali/yonetim
+  → &quot;Yeni bayi hesabı oluştur&quot;
+  → Form doldur: müşteri seç + yetkili bilgisi + iskonto + kredi + vade
+  → Sistem: portal_kullanicilari + audit log
+  → Sistem: geçici şifre üret + email gönder
+
+Adım 3: Onboarding takip
+  → Email gönderildi mi? ✓
+  → 24 saat — ilk giriş yapıldı mı?
+  → 3 gün — yapılmadıysa hatırlatma email
+  → 7 gün — yapılmadıysa telefon görüşmesi
+
+Adım 4: İlk hafta destek
+  → Kullanıcı analitik takip
+  → &quot;Sepet aktif ama sipariş yok&quot; → proaktif yardım
+  → Memnuniyet kontrol (manuel)</code></pre>
+<h3 id="bayi-tarafı-ilk-kullanım">6.2 Bayi tarafı (ilk kullanım)</h3>
+<pre><code>Adım 1: Email aldım
+  ↓
+Adım 2: Linki tıkla
+  ↓
+Adım 3: Login (geçici şifre)
+  ↓
+Adım 4: Şifre değiştir (zorunlu)
+  ↓
+Adım 5: Dashboard&#39;da yön
+  ↓
+Adım 6: &quot;Onboarding turu&quot; (3 dakikalık interaktif tur)
+  - Ana menü
+  - Katalog araması
+  - Sepete ekleme
+  - Cari hesap görünümü
+  - Bildirim merkezi
+  ↓
+Adım 7: İlk gerçek arama
+  - Marka → Model → Yıl → Uyumlu paspas
+  ↓
+Adım 8: İlk sepet
+  ↓
+Adım 9: İlk sipariş onayı
+  ↓
+Adım 10: Email + portal bildirimi</code></pre>
+<h2 id="eğitim-materyalleri-listesi">7. Eğitim Materyalleri Listesi</h2>
+<h3 id="bayi-için">7.1 Bayi için</h3>
+<ul>
+<li>Video: “MatPortal’a Hoş Geldin” (3 dk, Loom kayıt)</li>
+<li>Video: “Sipariş nasıl verilir?” (5 dk)</li>
+<li>Video: “Cari hesap nasıl izlenir?” (3 dk)</li>
+<li>PDF: Sıkça Sorulan Sorular (2 sayfa)</li>
+<li>PDF: Hangi paspas hangi araca uyar? (genişleyen referans)</li>
+</ul>
+<h3 id="yönetici-için">7.2 Yönetici için</h3>
+<ul>
+<li>Canlı eğitim: 2 saat (sistem genel turu)</li>
+<li>Canlı eğitim: 1 saat (tahmin motoru ve raporlar)</li>
+<li>Canlı eğitim: 1 saat (churn radarı + aksiyon)</li>
+<li>PDF: Yönetici Operasyonel Runbook (10 sayfa)</li>
+</ul>
+<h3 id="saha-ekibi-için">7.3 Saha ekibi için</h3>
+<ul>
+<li>Canlı eğitim: 1 saat (mobil app + ziyaret kaydı)</li>
+<li>Video: “Ses kaydı nasıl alınır?” (2 dk)</li>
+<li>PDF: Saha Operasyon Rehberi (5 sayfa)</li>
+</ul>
+<h3 id="teknik-destek">7.4 Teknik destek</h3>
+<ul>
+<li>Internal: API dokümantasyonu (Swagger)</li>
+<li>Internal: Architecture decision records (ADR)</li>
+<li>Internal: Operational runbook (DevOps)</li>
+</ul>
+<h2 id="geri-besleme-ve-sürekli-iyileştirme">8. Geri Besleme ve Sürekli İyileştirme</h2>
+<h3 id="kanal-listesi">8.1 Kanal listesi</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Kanal</th>
+<th>Kullanıcı</th>
+<th>Sıklık</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>NPS anketi</td>
+<td>Bayi</td>
+<td>Çeyreklik</td>
+</tr>
+<tr class="even">
+<td>Yönetici görüşme</td>
+<td>Promats yönetimi</td>
+<td>Aylık</td>
+</tr>
+<tr class="odd">
+<td>Saha ekibi feedback</td>
+<td>Mert + diğer saha</td>
+<td>Haftalık</td>
+</tr>
+<tr class="even">
+<td>Bug raporu</td>
+<td>Tüm</td>
+<td>Anlık</td>
+</tr>
+<tr class="odd">
+<td>Feature request</td>
+<td>Tüm</td>
+<td>Anlık (backlog’a)</td>
+</tr>
+<tr class="even">
+<td>Pen test</td>
+<td>Dış güvenlik firması</td>
+<td>Yıllık</td>
+</tr>
+</tbody>
+</table>
+<h3 id="feedback-aksiyon-döngüsü">8.2 Feedback → aksiyon döngüsü</h3>
+<pre><code>1. Feedback toplama (sürekli)
+2. Triage haftalık (Tech Lead + Sales lead)
+3. Kategorize: bug / iyileştirme / yeni özellik
+4. Önceliklendirme: matrix (etki × kolaylık)
+5. Backlog&#39;a ekle
+6. Sprint planlamaya dahil
+7. Geri bildirimi yapan kişiye dönüş</code></pre>
+<h2 id="versiyon-geçmişi">9. Versiyon Geçmişi</h2>
+<pre><code>v1.0 (2026-05-01) — İlk taslak (B2B portal odaklı)
+v1.1 (2026-05-01) — 11 fazlı tam vizyona genişletildi
+                  - Doc 00, 02, 05 yeniden yazıldı
+                  - Doc 01, 03, 04, 06, 07, 08, 09, 10, 11 yeni eklendi
+                  - tartisma/ klasöründe Doc 12-15 derinlemesine eklendi</code></pre>
+<h2 id="iletişim-destek">10. İletişim &amp; Destek</h2>
+<pre><code>Geliştirici:        Orhan Güzel
+Email:             orhanguzell@gmail.com
+GitHub:            (özel repo, Promats erişim)
+Acil durum:        (telefon — sözleşme ile)
+
+Promats temsilci:  [Yönetici adı]
+Email:             [Promats KVKK email]
+Telefon:           [Promats genel]</code></pre>
+<h2 id="lisans-ve-fikri-mülkiyet">11. Lisans ve Fikri Mülkiyet</h2>
+<pre><code>KOD:
+  - matportal-core kod tabanı Geliştirici (Orhan Güzel) sahipliğindedir
+  - Promats için kullanım hakkı: süresiz, devredilemez, münhasır olmayan
+  - Promats, kodu değiştiremez veya başka tarafa lisanslayamaz
+  - Geliştirici, aynı kodu başka müşterilere de adapte edebilir
+    (Promats&#39;ın özel müşteri verisi gizli kalır)
+
+VERİ:
+  - Promats verileri Promats sahipliğindedir
+  - Geliştirici sadece sözleşme süresi boyunca işler
+  - Sözleşme bitiminde verisi tam export edilir, sistemden silinir
+
+MARKA:
+  - &quot;MatPortal&quot; isim hakkı Geliştirici tarafından kullanılır
+  - Promats için &quot;Paspas Bayi Portalı&quot; markası kullanılır
+  - Promats marka kimliği değişmeden kalır</code></pre>
+<blockquote>
+<p><strong>Not:</strong> Yukarıdaki lisans şablonu <strong>çalışma taslağıdır</strong>. Avukat onayından geçirilmeli, Promats ile sözleşmeleştirilmelidir.</p>
+</blockquote>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("11 — Ek Belgeler").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

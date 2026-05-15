@@ -1,0 +1,2436 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>05 — Fonksiyonel Kapsam (Özellik Listesi) — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="tartisma/index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="tartisma/12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="tartisma/13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="tartisma/14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="tartisma/15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>05 — Fonksiyonel Kapsam (Özellik Listesi)</strong></div>
+  <div class="actions">
+    <a href="index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="fonksiyonel-kapsam-özellik-listesi">05 — Fonksiyonel Kapsam (Özellik Listesi)</h1>
+<p>Bu doküman MatPortal’ın <strong>11 faza dağılmış</strong> tüm özelliklerini listeler. Her özellik bir satırda — fazı, modülü, MVP/Genişleme/Vizyon kategorisi belli.</p>
+<h2 id="toplam-özet">Toplam Özet</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Faz</th>
+<th>Modül</th>
+<th>MVP</th>
+<th>Genişleme</th>
+<th>Vizyon</th>
+<th>Toplam</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>Paspas tamamlanma</td>
+<td>8</td>
+<td>4</td>
+<td>—</td>
+<td>12</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>Talep toplama altyapısı</td>
+<td>7</td>
+<td>4</td>
+<td>2</td>
+<td>13</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>Sipariş tahmin motoru</td>
+<td>12</td>
+<td>6</td>
+<td>4</td>
+<td>22</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>Müşteri keşif motoru</td>
+<td>8</td>
+<td>5</td>
+<td>3</td>
+<td>16</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Stok &amp; tedarik otomasyonu</td>
+<td>9</td>
+<td>5</td>
+<td>3</td>
+<td>17</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Bayi scraping &amp; churn</td>
+<td>10</td>
+<td>6</td>
+<td>4</td>
+<td>20</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>B2B Bayi Portalı</td>
+<td>53</td>
+<td>23</td>
+<td>—</td>
+<td>76</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>MLOps &amp; eğitilebilir modeller</td>
+<td>10</td>
+<td>5</td>
+<td>4</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>Konversasyonel katman</td>
+<td>7</td>
+<td>5</td>
+<td>4</td>
+<td>16</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>Mobil &amp; saha CRM</td>
+<td>9</td>
+<td>6</td>
+<td>4</td>
+<td>19</td>
+</tr>
+<tr class="odd">
+<td>10+</td>
+<td>Genişleme (10 sinyal)</td>
+<td>—</td>
+<td>—</td>
+<td>30</td>
+<td>30</td>
+</tr>
+<tr class="even">
+<td><strong>Toplam</strong></td>
+<td></td>
+<td><strong>133</strong></td>
+<td><strong>69</strong></td>
+<td><strong>58</strong></td>
+<td><strong>260</strong></td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p>“MVP” = ilk teslim. “Genişleme” = 3-12 ay sonra. “Vizyon” = 1+ yıl.</p>
+</blockquote>
+<hr />
+<h2 id="faz-0-paspas-tamamlanma-12-özellik">Faz 0 — Paspas Tamamlanma (12 özellik)</h2>
+<h3 id="mvp-8">MVP (8)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.1</td>
+<td>Mevcut 14 modülün açık edge case’leri</td>
+<td>Sevkiyat, üretim emri, vardiya dipnotları</td>
+</tr>
+<tr class="even">
+<td>0.2</td>
+<td>Bilinen kritik bug listesi → 0</td>
+<td>Bug tracker’da open=0 hedefi</td>
+</tr>
+<tr class="odd">
+<td>0.3</td>
+<td>Test coverage genişlemesi</td>
+<td>Backend ≥ 70%, kritik akışlar 90%+</td>
+</tr>
+<tr class="even">
+<td>0.4</td>
+<td>Performance baseline ölçümü</td>
+<td>API p50/p95/p99 latency, DB query slow log</td>
+</tr>
+<tr class="odd">
+<td>0.5</td>
+<td>Loglama standartlaştırma</td>
+<td>Structured JSON, log level yönetimi</td>
+</tr>
+<tr class="even">
+<td>0.6</td>
+<td>Hata raporlama</td>
+<td>Sentry veya alternatif kurulumu</td>
+</tr>
+<tr class="odd">
+<td>0.7</td>
+<td>Backup &amp; restore prosedürü</td>
+<td>Günlük DB dump, haftalık tam yedek</td>
+</tr>
+<tr class="even">
+<td>0.8</td>
+<td>Operasyonel runbook</td>
+<td>Acil durum prosedürleri yazılı</td>
+</tr>
+</tbody>
+</table>
+<h3 id="genişleme-4">Genişleme (4)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0.9</td>
+<td>Performance optimization</td>
+<td>N+1 query’ler, cache layer (Redis)</td>
+</tr>
+<tr class="even">
+<td>0.10</td>
+<td>Audit log yaygınlaştırma</td>
+<td>Risk 7+ tüm aksiyonlara genişlet</td>
+</tr>
+<tr class="odd">
+<td>0.11</td>
+<td>Rol tabanlı yetki revizyonu</td>
+<td>Mevcut yetki matrisini genişlet</td>
+</tr>
+<tr class="even">
+<td>0.12</td>
+<td>Tek tıkla deployment</td>
+<td>Docker compose + GitHub Actions</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="faz-1-talep-toplama-altyapısı-13-özellik">Faz 1 — Talep Toplama Altyapısı (13 özellik)</h2>
+<h3 id="mvp-7">MVP (7)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1.1</td>
+<td><code>talep_havuzu</code> tablosu</td>
+<td>bayi/müşteri/iç tüm talepler tek yerde</td>
+</tr>
+<tr class="even">
+<td>1.2</td>
+<td>Talep girişi formu</td>
+<td>Yönetici manuel: kaynak, içerik, durum</td>
+</tr>
+<tr class="odd">
+<td>1.3</td>
+<td>LLM yapılandırma</td>
+<td>Serbest metin → JSON (<code>{urun, miktar, vade}</code>)</td>
+</tr>
+<tr class="even">
+<td>1.4</td>
+<td><code>/admin/talep-havuzu</code> kanban</td>
+<td>yeni → işleniyor → siparişe → kapanış</td>
+</tr>
+<tr class="odd">
+<td>1.5</td>
+<td>Müşteri kartına talep geçmişi</td>
+<td>Bayi/müşteri 360 derece görünüm</td>
+</tr>
+<tr class="even">
+<td>1.6</td>
+<td>Talep → sipariş dönüşümü</td>
+<td>Tek tıkla <code>satis_siparisleri</code> oluştur</td>
+</tr>
+<tr class="odd">
+<td>1.7</td>
+<td>Talep kaynağı dağılım raporu</td>
+<td>WhatsApp/telefon/email/portal/manuel</td>
+</tr>
+</tbody>
+</table>
+<h3 id="genişleme-4-1">Genişleme (4)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1.8</td>
+<td>WhatsApp talep alma (manuel kopyala)</td>
+<td>WA mesajı yapıştır, LLM yapılandırsın</td>
+</tr>
+<tr class="even">
+<td>1.9</td>
+<td>Email otomatik parsing</td>
+<td>IMAP entegrasyonu, gelen email → talep</td>
+</tr>
+<tr class="odd">
+<td>1.10</td>
+<td>Sesli talep (Whisper)</td>
+<td>Telefon görüşme ses kaydı → metin → JSON</td>
+</tr>
+<tr class="even">
+<td>1.11</td>
+<td>Talep önceliklendirme (AI)</td>
+<td>Aciliyet + müşteri değeri + ürün kritikliği skoru</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vizyon-2">Vizyon (2)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1.12</td>
+<td>WhatsApp Business API doğrudan webhook</td>
+<td>Resmi entegrasyon</td>
+</tr>
+<tr class="even">
+<td>1.13</td>
+<td>Talep → tahmin motoruna besleme</td>
+<td>Faz 2 modeli için ek özellik</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="faz-2-sipariş-tahmin-motoru-22-özellik">Faz 2 — Sipariş Tahmin Motoru (22 özellik)</h2>
+<h3 id="mvp-12">MVP (12)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2.1</td>
+<td><code>tahmin_calistirma</code> tablosu</td>
+<td>Bayi-ürün × dönem × tahmin sonucu</td>
+</tr>
+<tr class="even">
+<td>2.2</td>
+<td><code>tahmin_modelleri</code> tablosu</td>
+<td>Algoritma versiyon ve metadata</td>
+</tr>
+<tr class="odd">
+<td>2.3</td>
+<td><code>tahmin_dogruluk</code> tablosu</td>
+<td>Gerçekleşen vs tahmin karşılaştırma</td>
+</tr>
+<tr class="even">
+<td>2.4</td>
+<td>Naive baseline modeli</td>
+<td>Fallback + iyilik karşılaştırması</td>
+</tr>
+<tr class="odd">
+<td>2.5</td>
+<td>Mevsimsel ortalama modeli</td>
+<td>Geçen yıl + 2 yıl önce ortalama</td>
+</tr>
+<tr class="even">
+<td>2.6</td>
+<td>Lineer regresyon modeli</td>
+<td>scikit-learn, açıklanabilir</td>
+</tr>
+<tr class="odd">
+<td>2.7</td>
+<td>Prophet modeli (varsayılan)</td>
+<td>Türk tatil takvimi entegre</td>
+</tr>
+<tr class="even">
+<td>2.8</td>
+<td>Algoritma seçim mantığı</td>
+<td>Veri yaşına göre otomatik (kademeli)</td>
+</tr>
+<tr class="odd">
+<td>2.9</td>
+<td><code>/admin/tahmin-motoru</code> UI</td>
+<td>Bayi-ürün heatmap, top yükselen/düşen</td>
+</tr>
+<tr class="even">
+<td>2.10</td>
+<td>Bayi-detay tahmin grafiği</td>
+<td>Tarihsel + 30 gün ileri</td>
+</tr>
+<tr class="odd">
+<td>2.11</td>
+<td>Açıklanabilirlik — sinyal listesi</td>
+<td>Hangi faktör ne kadar etkiledi</td>
+</tr>
+<tr class="even">
+<td>2.12</td>
+<td>Manuel re-train butonu</td>
+<td>Yönetici tetikleyebilir</td>
+</tr>
+</tbody>
+</table>
+<h3 id="genişleme-6">Genişleme (6)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2.13</td>
+<td>XGBoost modeli (multivariate)</td>
+<td>Kur + tatil + kampanya birlikte</td>
+</tr>
+<tr class="even">
+<td>2.14</td>
+<td>Champion/challenger seçimi</td>
+<td>Otomatik en iyi model</td>
+</tr>
+<tr class="odd">
+<td>2.15</td>
+<td>Excel upload — geçmiş veri</td>
+<td><code>siparis_gecmisi_v1.xlsx</code> şablonu</td>
+</tr>
+<tr class="even">
+<td>2.16</td>
+<td>Excel upload kolon mapping</td>
+<td>Otomatik tespit + manuel düzeltme</td>
+</tr>
+<tr class="odd">
+<td>2.17</td>
+<td>Outlier auto-flag</td>
+<td>IQR × 3 üstü eğitimden çıkarılır</td>
+</tr>
+<tr class="even">
+<td>2.18</td>
+<td>Doğal dil tahmin açıklaması</td>
+<td>LLM ile “neden bu tahmin” cümlesi</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vizyon-4">Vizyon (4)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>2.19</td>
+<td>LSTM / Transformer model</td>
+<td>24+ ay veride çoklu bayi ortak desen</td>
+</tr>
+<tr class="even">
+<td>2.20</td>
+<td>Hyperparameter tuning (Optuna)</td>
+<td>Aylık otomatik optimizasyon</td>
+</tr>
+<tr class="odd">
+<td>2.21</td>
+<td>Hava durumu entegrasyonu</td>
+<td>OpenWeather geçmiş, sezonsal sektör</td>
+</tr>
+<tr class="even">
+<td>2.22</td>
+<td>Kampanya etkisi modelleme</td>
+<td><code>kampanyalar</code> tablosu → feature</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/12-tahmin-motoru-derinlemesine.md"><code>tartisma/12-tahmin-motoru-derinlemesine.md</code></a></p>
+</blockquote>
+<hr />
+<h2 id="faz-3-müşteri-keşif-motoru-16-özellik">Faz 3 — Müşteri Keşif Motoru (16 özellik)</h2>
+<h3 id="mvp-8-1">MVP (8)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3.1</td>
+<td><code>lead_havuzu</code> tablosu</td>
+<td>Aday firma, iletişim, sektör, ölçek, skor</td>
+</tr>
+<tr class="even">
+<td>3.2</td>
+<td><code>lead_etkilesim</code> tablosu</td>
+<td>Temas geçmişi (tarih, kim, sonuç)</td>
+</tr>
+<tr class="odd">
+<td>3.3</td>
+<td>TOBB veri çekme</td>
+<td>TOBB üye listesi parser (resmi public data)</td>
+</tr>
+<tr class="even">
+<td>3.4</td>
+<td>sanayim.net entegrasyonu</td>
+<td>Sektör/şehir filtreyle firma listesi</td>
+</tr>
+<tr class="odd">
+<td>3.5</td>
+<td>Google Places API entegrasyonu</td>
+<td>TR sektör + şehir → işletme listesi</td>
+</tr>
+<tr class="even">
+<td>3.6</td>
+<td>Mevcut bayi profil benzerlik skoru</td>
+<td>ML — yeni leadi mevcut bayiyle karşılaştır</td>
+</tr>
+<tr class="odd">
+<td>3.7</td>
+<td><code>/admin/lead-pipeline</code> kanban</td>
+<td>yeni → temas → görüşme → kazanıldı/kayıp</td>
+</tr>
+<tr class="even">
+<td>3.8</td>
+<td>Manuel lead girişi formu</td>
+<td>Yöneticinin elle eklediği aday</td>
+</tr>
+</tbody>
+</table>
+<h3 id="genişleme-5">Genişleme (5)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3.9</td>
+<td>Apollo.io API (yurt dışı)</td>
+<td>Free tier başlangıç, ihtiyaç doğunca paid</td>
+</tr>
+<tr class="even">
+<td>3.10</td>
+<td>Hunter.io / Snov.io email bulma</td>
+<td>Domain → çalışan kurumsal email</td>
+</tr>
+<tr class="odd">
+<td>3.11</td>
+<td>Outreach taslak üretimi (LLM)</td>
+<td>Bayi profili + sektör → kişiselleştirilmiş email</td>
+</tr>
+<tr class="even">
+<td>3.12</td>
+<td>Lead → bayi dönüşüm raporu</td>
+<td>Pipeline conversion oranı</td>
+</tr>
+<tr class="odd">
+<td>3.13</td>
+<td>OpenStreetMap Overpass yedek</td>
+<td>Google Places limit aşıldığında</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vizyon-3">Vizyon (3)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>3.14</td>
+<td>Sequence email otomasyonu</td>
+<td>Brevo/Mailgun ile çoklu adımlı follow-up</td>
+</tr>
+<tr class="even">
+<td>3.15</td>
+<td>LinkedIn Sales Navigator (manuel)</td>
+<td>Hunter üzerinden dolaylı erişim</td>
+</tr>
+<tr class="odd">
+<td>3.16</td>
+<td>Hibrit CRM (Apollo + dahili)</td>
+<td>Doc 10 — D opsiyonu uygulaması</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/02-musteri-kesif.md"><code>tartisma/02-musteri-kesif.md</code></a>, <a href="../tartisma/10-crm-karari.md"><code>tartisma/10-crm-karari.md</code></a></p>
+</blockquote>
+<hr />
+<h2 id="faz-4-stok-tedarik-otomasyonu-17-özellik">Faz 4 — Stok &amp; Tedarik Otomasyonu (17 özellik)</h2>
+<h3 id="mvp-9">MVP (9)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4.1</td>
+<td>Tüketim hızı analizi</td>
+<td>Her ürün/hammadde için aylık/haftalık</td>
+</tr>
+<tr class="even">
+<td>4.2</td>
+<td>Reçete bazlı ham madde projeksiyonu</td>
+<td>Üretim emri × reçete = hammadde</td>
+</tr>
+<tr class="odd">
+<td>4.3</td>
+<td>Reorder point (ROP) hesabı</td>
+<td>Lead time × ortalama tüketim + safety stock</td>
+</tr>
+<tr class="even">
+<td>4.4</td>
+<td>“Bu hafta ne almalıyız” raporu</td>
+<td>Yöneticiye Pazartesi sabah otomatik</td>
+</tr>
+<tr class="odd">
+<td>4.5</td>
+<td>Tedarikçi performans skoru</td>
+<td>Zamanında teslim, kalite, fiyat ağırlıklı</td>
+</tr>
+<tr class="even">
+<td>4.6</td>
+<td>Tedarikçi karşılaştırma tablosu</td>
+<td>Aynı malzeme için alternatif tedarikçiler</td>
+</tr>
+<tr class="odd">
+<td>4.7</td>
+<td>Otomatik PO taslağı</td>
+<td>Manuel onayla tedarikçiye email</td>
+</tr>
+<tr class="even">
+<td>4.8</td>
+<td>Stok-out anomali uyarısı</td>
+<td>Beklenmedik tükenme tespiti</td>
+</tr>
+<tr class="odd">
+<td>4.9</td>
+<td>Aşırı stok uyarısı</td>
+<td>Tüketim hızının çok üzerindeki birikim</td>
+</tr>
+</tbody>
+</table>
+<h3 id="genişleme-5-1">Genişleme (5)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4.10</td>
+<td>Tedarikçi keşif (yeni alternatif arama)</td>
+<td>Web crawler + sektör portalları</td>
+</tr>
+<tr class="even">
+<td>4.11</td>
+<td>Fiyat trend analizi</td>
+<td>Hammadde fiyat geçmişi, tahmin</td>
+</tr>
+<tr class="odd">
+<td>4.12</td>
+<td>Otomatik teklif isteme</td>
+<td>Multi-tedarikçi RFQ akışı</td>
+</tr>
+<tr class="even">
+<td>4.13</td>
+<td>Stok rezervasyon önceliği</td>
+<td>Premium müşteri/sipariş için</td>
+</tr>
+<tr class="odd">
+<td>4.14</td>
+<td>Multi-depo stok</td>
+<td>Birden fazla lokasyon</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vizyon-3-1">Vizyon (3)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>4.15</td>
+<td>Just-in-time tedarik</td>
+<td>Tahmin × lead time eşleşmesi</td>
+</tr>
+<tr class="even">
+<td>4.16</td>
+<td>Fason iş yönü</td>
+<td>Kapasite aşıldığında dış üretim önerisi</td>
+</tr>
+<tr class="odd">
+<td>4.17</td>
+<td>Sürdürülebilir tedarikçi skoru</td>
+<td>Karbon ayakizi, etik kriterler</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/03-tedarikci-yonetimi.md"><code>tartisma/03-tedarikci-yonetimi.md</code></a>, <a href="../tartisma/04-stok-tahmin-otomasyonu.md"><code>tartisma/04-stok-tahmin-otomasyonu.md</code></a></p>
+</blockquote>
+<hr />
+<h2 id="faz-5-bayi-scraping-churn-radarı-20-özellik">Faz 5 — Bayi Scraping &amp; Churn Radarı (20 özellik)</h2>
+<h3 id="mvp-10">MVP (10)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5.1</td>
+<td><code>web_kazima_hedefleri</code> tablosu</td>
+<td>URL, tip, sıklık, öncelik</td>
+</tr>
+<tr class="even">
+<td>5.2</td>
+<td><code>web_kazima_kayitlari</code> tablosu</td>
+<td>HTTP yanıt, S3 snapshot, parse durumu</td>
+</tr>
+<tr class="odd">
+<td>5.3</td>
+<td><code>bayi_sinyalleri</code> tablosu</td>
+<td>Tip, değer, kanıt, güven, puan</td>
+</tr>
+<tr class="even">
+<td>5.4</td>
+<td><code>churn_skor_gecmisi</code> tablosu</td>
+<td>Tarih × bayi × skor + risk</td>
+</tr>
+<tr class="odd">
+<td>5.5</td>
+<td>Crawlee + Playwright crawler</td>
+<td>robots.txt + rate limit + retry</td>
+</tr>
+<tr class="even">
+<td>5.6</td>
+<td>HTML diff → sinyal çıkarımı</td>
+<td>Önceki vs şu anki, LLM yardımcı</td>
+</tr>
+<tr class="odd">
+<td>5.7</td>
+<td>11 sinyal türü tespiti</td>
+<td>Yeni rakip ürün, post pasifliği vb.</td>
+</tr>
+<tr class="even">
+<td>5.8</td>
+<td>Kural-bazlı churn skoru</td>
+<td>Sinyal × ağırlık → 0-100</td>
+</tr>
+<tr class="odd">
+<td>5.9</td>
+<td><code>/admin/bayi-radari</code> heatmap</td>
+<td>Tüm bayi × son 12 hafta</td>
+</tr>
+<tr class="even">
+<td>5.10</td>
+<td>Acil müdahale top listesi</td>
+<td>Kritik (70+) skor → email + dashboard</td>
+</tr>
+</tbody>
+</table>
+<h3 id="genişleme-6-1">Genişleme (6)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5.11</td>
+<td>XGBoost churn ML modeli</td>
+<td>30/60/90 gün churn olasılık</td>
+</tr>
+<tr class="even">
+<td>5.12</td>
+<td>Apify Instagram/Facebook</td>
+<td>Sosyal medya pasiflik tespiti</td>
+</tr>
+<tr class="odd">
+<td>5.13</td>
+<td>Google Maps yorum izleme</td>
+<td>Negatif yorum oranı sentiment</td>
+</tr>
+<tr class="even">
+<td>5.14</td>
+<td>Saha aksiyon log</td>
+<td>Önce/sonra ölçümleme</td>
+</tr>
+<tr class="odd">
+<td>5.15</td>
+<td>LLM aksiyon önerisi</td>
+<td>“Bu bayiye ne yapılmalı?” 3 alternatif</td>
+</tr>
+<tr class="even">
+<td>5.16</td>
+<td>Manuel sinyal girişi (saha)</td>
+<td>Çağrı merkezi, “kapalı/cevap yok”</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vizyon-4-1">Vizyon (4)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>5.17</td>
+<td>Vergi mükellefi sorgusu (GIB API)</td>
+<td>Bayi kapalı mı kontrol</td>
+</tr>
+<tr class="even">
+<td>5.18</td>
+<td>Türkpatent yeni patent başvuruları</td>
+<td>Sektör inovasyon</td>
+</tr>
+<tr class="odd">
+<td>5.19</td>
+<td>Sentiment analizi (genelleştirilmiş)</td>
+<td>Tüm metin sinyalleri</td>
+</tr>
+<tr class="even">
+<td>5.20</td>
+<td>Federated churn modeli</td>
+<td>Çok müşterili meta-model</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/13-bayi-scraping-churn.md"><code>tartisma/13-bayi-scraping-churn.md</code></a></p>
+</blockquote>
+<hr />
+<h2 id="faz-6-b2b-bayi-portalı-76-özellik">Faz 6 — B2B Bayi Portalı (76 özellik)</h2>
+<h3 id="modül-6.1-bayi-kimlik-hesap">Modül 6.1 — Bayi Kimlik &amp; Hesap</h3>
+<h4 id="mvp-8-2">MVP (8)</h4>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.1.1</td>
+<td>Email + şifre login</td>
+<td>bcrypt + JWT cookie, mevcut Paspas auth</td>
+</tr>
+<tr class="even">
+<td>6.1.2</td>
+<td>İlk girişte zorunlu şifre değişikliği</td>
+<td><code>must_change_pw</code> flag</td>
+</tr>
+<tr class="odd">
+<td>6.1.3</td>
+<td>Şifre sıfırlama (email link)</td>
+<td>24 saatlik token</td>
+</tr>
+<tr class="even">
+<td>6.1.4</td>
+<td>Bayi profil görüntüleme</td>
+<td>Salt okunur — firma adı, adres, vergi no</td>
+</tr>
+<tr class="odd">
+<td>6.1.5</td>
+<td>Birden fazla kullanıcı per bayi</td>
+<td>Müdür/Operatör/Görüntüleyici rolleri</td>
+</tr>
+<tr class="even">
+<td>6.1.6</td>
+<td>Bayi-içi yetki sistemi</td>
+<td>Rol bazlı erişim</td>
+</tr>
+<tr class="odd">
+<td>6.1.7</td>
+<td>Audit log (login, sepet, sipariş)</td>
+<td>IP + tarayıcı kayıt</td>
+</tr>
+<tr class="even">
+<td>6.1.8</td>
+<td>Aktif oturum yönetimi</td>
+<td>“Diğer cihazlardan çıkış yap”</td>
+</tr>
+</tbody>
+</table>
+<h4 id="genişleme-4-2">Genişleme (4)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.1.9</td>
+<td>İki faktörlü kimlik (2FA)</td>
+<td>SMS/email kod</td>
+</tr>
+<tr class="even">
+<td>6.1.10</td>
+<td>Tek tıkla giriş (magic link)</td>
+<td>E-posta tabanlı</td>
+</tr>
+<tr class="odd">
+<td>6.1.11</td>
+<td>Bayilik sözleşmesi e-imza</td>
+<td>Yasal dokümanlama</td>
+</tr>
+<tr class="even">
+<td>6.1.12</td>
+<td>KVKK aydınlatma + onay akışı</td>
+<td>Yasal uyum</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modül-6.2-katalog-araç-eşleştirme">Modül 6.2 — Katalog &amp; Araç Eşleştirme</h3>
+<h4 id="mvp-10-1">MVP (10)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.2.1</td>
+<td>Marka dropdown</td>
+<td><code>arac_modelleri.marka</code> distinct</td>
+</tr>
+<tr class="even">
+<td>6.2.2</td>
+<td>Model dropdown (markaya bağlı)</td>
+<td>Cascading</td>
+</tr>
+<tr class="odd">
+<td>6.2.3</td>
+<td>Yıl dropdown</td>
+<td>Yıl aralığı</td>
+</tr>
+<tr class="even">
+<td>6.2.4</td>
+<td>Gövde tipi filtresi</td>
+<td>Sedan/Hatchback/Wagon/SUV</td>
+</tr>
+<tr class="odd">
+<td>6.2.5</td>
+<td>Uyumlu paspas listesi</td>
+<td><code>urun_arac_uyumlulugu</code> join</td>
+</tr>
+<tr class="even">
+<td>6.2.6</td>
+<td>Bayi iskontosuyla fiyat</td>
+<td>Server-side hesaplama</td>
+</tr>
+<tr class="odd">
+<td>6.2.7</td>
+<td>Stok durumu görüntüleme</td>
+<td>Var/Az kaldı/Stokta yok</td>
+</tr>
+<tr class="even">
+<td>6.2.8</td>
+<td>Ürün detay sayfası</td>
+<td>Görsel, açıklama, teknik</td>
+</tr>
+<tr class="odd">
+<td>6.2.9</td>
+<td>SKU ile arama</td>
+<td>Hızlı arama bar</td>
+</tr>
+<tr class="even">
+<td>6.2.10</td>
+<td>İlk 30-40 araç modeli verisi</td>
+<td>Manuel + AI destekli yükleme</td>
+</tr>
+</tbody>
+</table>
+<h4 id="genişleme-6-2">Genişleme (6)</h4>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.2.11</td>
+<td>Genişletilmiş araç verisi (200+)</td>
+<td>Long-tail modeller</td>
+</tr>
+<tr class="even">
+<td>6.2.12</td>
+<td>Ürün karşılaştırma (max 4)</td>
+<td>Yan yana</td>
+</tr>
+<tr class="odd">
+<td>6.2.13</td>
+<td>Favoriler / “İlgilendiklerim”</td>
+<td>Kullanıcı listesi</td>
+</tr>
+<tr class="even">
+<td>6.2.14</td>
+<td>Cross-sell önerileri (AI)</td>
+<td>“Bu ürüne bakanlar ayrıca aldı”</td>
+</tr>
+<tr class="odd">
+<td>6.2.15</td>
+<td>Excel/CSV katalog dışa aktarma</td>
+<td>Bayi kendi sistemi için</td>
+</tr>
+<tr class="even">
+<td>6.2.16</td>
+<td>Toplu sipariş şablonu yükleme (Excel)</td>
+<td>Çoklu kalem hızlı sipariş</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modül-6.3-sipariş-sepet">Modül 6.3 — Sipariş &amp; Sepet</h3>
+<h4 id="mvp-9-1">MVP (9)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.3.1</td>
+<td>Sepete ekle</td>
+<td>Ürün + miktar + araç bilgisi</td>
+</tr>
+<tr class="even">
+<td>6.3.2</td>
+<td>Sepet görüntüleme + güncelleme</td>
+<td>Miktar, sil</td>
+</tr>
+<tr class="odd">
+<td>6.3.3</td>
+<td>Sepet kalıcılığı</td>
+<td>Bayi tekrar girince bekler</td>
+</tr>
+<tr class="even">
+<td>6.3.4</td>
+<td>Checkout 1 — özet</td>
+<td>Toplam, iskonto, vergi</td>
+</tr>
+<tr class="odd">
+<td>6.3.5</td>
+<td>Checkout 2 — adres + ödeme</td>
+<td>Vadeli/havale/kart</td>
+</tr>
+<tr class="even">
+<td>6.3.6</td>
+<td>Checkout 3 — onay</td>
+<td>Son özet, “siparişi onayla”</td>
+</tr>
+<tr class="odd">
+<td>6.3.7</td>
+<td>Kredi limit kontrolü</td>
+<td>Vadeli aşılırsa engellenir</td>
+</tr>
+<tr class="even">
+<td>6.3.8</td>
+<td>Stok kontrol + transaction</td>
+<td><code>repoCreate</code> atomik</td>
+</tr>
+<tr class="odd">
+<td>6.3.9</td>
+<td>Sipariş onay maili</td>
+<td>Email + portal bildirim</td>
+</tr>
+</tbody>
+</table>
+<h4 id="genişleme-5-2">Genişleme (5)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.3.10</td>
+<td>Birden fazla aktif sepet</td>
+<td>Mağaza/şube ayrı</td>
+</tr>
+<tr class="even">
+<td>6.3.11</td>
+<td>Sipariş notu (yöneticiye mesaj)</td>
+<td>Serbest metin</td>
+</tr>
+<tr class="odd">
+<td>6.3.12</td>
+<td>Tahmini teslim tarihi</td>
+<td>Üretim kapasitesinden</td>
+</tr>
+<tr class="even">
+<td>6.3.13</td>
+<td>Acele sipariş seçeneği</td>
+<td>Ekstra ücretle</td>
+</tr>
+<tr class="odd">
+<td>6.3.14</td>
+<td>Tekrar eden sipariş</td>
+<td>Aylık/haftalık otomatik</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modül-6.4-cari-hesap-ödeme">Modül 6.4 — Cari Hesap &amp; Ödeme</h3>
+<h4 id="mvp-5">MVP (5)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.4.1</td>
+<td>Dashboard’da cari özeti</td>
+<td>Bakiye + son ödeme</td>
+</tr>
+<tr class="even">
+<td>6.4.2</td>
+<td>Vadeli faturalar listesi</td>
+<td>Tarih, tutar, kalan</td>
+</tr>
+<tr class="odd">
+<td>6.4.3</td>
+<td>Ekstre görüntüleme</td>
+<td>Tarih aralığı seç</td>
+</tr>
+<tr class="even">
+<td>6.4.4</td>
+<td>PDF fatura indirme</td>
+<td>ERP’den serve</td>
+</tr>
+<tr class="odd">
+<td>6.4.5</td>
+<td>Yaklaşan ödemeler widget</td>
+<td>30 gün ileri</td>
+</tr>
+</tbody>
+</table>
+<h4 id="genişleme-4-3">Genişleme (4)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.4.6</td>
+<td>Online ödeme (Iyzipay/Stripe)</td>
+<td>Kart/havale/dijital</td>
+</tr>
+<tr class="even">
+<td>6.4.7</td>
+<td>Bakiye kapatıldıkça bildirim</td>
+<td>Otomatik</td>
+</tr>
+<tr class="odd">
+<td>6.4.8</td>
+<td>Yıllık hesap durumu PDF</td>
+<td>Yöneticiye + bayiye</td>
+</tr>
+<tr class="even">
+<td>6.4.9</td>
+<td>Cari mutabakat formu</td>
+<td>İmzalı PDF</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modül-6.5-sipariş-takibi-kargo">Modül 6.5 — Sipariş Takibi &amp; Kargo</h3>
+<h4 id="mvp-6">MVP (6)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.5.1</td>
+<td>Sipariş listesi</td>
+<td>Tarih, durum, tutar</td>
+</tr>
+<tr class="even">
+<td>6.5.2</td>
+<td>Sipariş detay sayfası</td>
+<td>Kalemler, fatura, sevk</td>
+</tr>
+<tr class="odd">
+<td>6.5.3</td>
+<td>Statü zinciri</td>
+<td>Onaylandı→Üretimde→Kargoda→Teslim</td>
+</tr>
+<tr class="even">
+<td>6.5.4</td>
+<td>Tahmini teslim tarihi</td>
+<td>Üretim planından</td>
+</tr>
+<tr class="odd">
+<td>6.5.5</td>
+<td>Yeniden sipariş et (tek tık)</td>
+<td>Geçmişi sepete kopyala</td>
+</tr>
+<tr class="even">
+<td>6.5.6</td>
+<td>Sipariş arama / filtreleme</td>
+<td>Tarih, durum, ürün</td>
+</tr>
+</tbody>
+</table>
+<h4 id="genişleme-3">Genişleme (3)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.5.7</td>
+<td>Kargo entegrasyonu</td>
+<td>Yurtiçi/Aras/MNG API gerçek zamanlı</td>
+</tr>
+<tr class="even">
+<td>6.5.8</td>
+<td>Teslim onayı</td>
+<td>Bayi imzasıyla doğrulama</td>
+</tr>
+<tr class="odd">
+<td>6.5.9</td>
+<td>Gecikme uyarısı + tazminat hesabı</td>
+<td>Otomatik</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modül-6.6-numune-iade">Modül 6.6 — Numune &amp; İade</h3>
+<h4 id="genişleme-5-3">Genişleme (5)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.6.1</td>
+<td>Numune talep formu</td>
+<td>Ürün + adres + not</td>
+</tr>
+<tr class="even">
+<td>6.6.2</td>
+<td>Yöneticiden onay akışı</td>
+<td>Onay → ücretsiz örnek</td>
+</tr>
+<tr class="odd">
+<td>6.6.3</td>
+<td>İade bildir formu</td>
+<td>Sipariş + sebep + dosya</td>
+</tr>
+<tr class="even">
+<td>6.6.4</td>
+<td>İade onay → cari düşüm + iade etiketi</td>
+<td>Otomatik</td>
+</tr>
+<tr class="odd">
+<td>6.6.5</td>
+<td>İade geçmişi</td>
+<td>Bayi görür</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modül-6.7-bildirim-mesajlaşma-not-defteri">Modül 6.7 — Bildirim &amp; Mesajlaşma (Not Defteri)</h3>
+<h4 id="mvp-4">MVP (4)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.7.1</td>
+<td>Sipariş alındı mail + push</td>
+<td>Otomatik</td>
+</tr>
+<tr class="even">
+<td>6.7.2</td>
+<td>Üretime aktarıldı mail + push</td>
+<td>Otomatik</td>
+</tr>
+<tr class="odd">
+<td>6.7.3</td>
+<td>Kargoda mail + push</td>
+<td>Kargo takip linki</td>
+</tr>
+<tr class="even">
+<td>6.7.4</td>
+<td>Bildirim merkezi</td>
+<td>Portal içi geçmiş</td>
+</tr>
+</tbody>
+</table>
+<h4 id="genişleme-4-4">Genişleme (4)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.7.5</td>
+<td>WhatsApp Business API</td>
+<td>Resmi entegrasyon</td>
+</tr>
+<tr class="even">
+<td>6.7.6</td>
+<td>Push bildirim (PWA)</td>
+<td>Mobil destekli</td>
+</tr>
+<tr class="odd">
+<td>6.7.7</td>
+<td>Not defteri (yönetici-bayi mesaj)</td>
+<td>Thread, dosya ek, okundu</td>
+</tr>
+<tr class="even">
+<td>6.7.8</td>
+<td>Toplu duyuru</td>
+<td>Yönetici → tüm bayilere</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modül-6.8-eğitim-yardım">Modül 6.8 — Eğitim &amp; Yardım</h3>
+<h4 id="genişleme-4-5">Genişleme (4)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.8.1</td>
+<td>SSS sayfası</td>
+<td>Kategorili, aranabilir</td>
+</tr>
+<tr class="even">
+<td>6.8.2</td>
+<td>Video eğitim kütüphanesi</td>
+<td>Portal kullanım</td>
+</tr>
+<tr class="odd">
+<td>6.8.3</td>
+<td>Canlı destek talep</td>
+<td>Yönetici thread’ine</td>
+</tr>
+<tr class="even">
+<td>6.8.4</td>
+<td>“Hangi paspas hangi araca” PDF</td>
+<td>Otomatik üretim</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modül-6.9-bayi-yönetimi-yönetici">Modül 6.9 — Bayi Yönetimi (Yönetici)</h3>
+<h4 id="mvp-7-1">MVP (7)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.9.1</td>
+<td>Bayi listesi sayfası</td>
+<td>Filtre + arama + sıralama</td>
+</tr>
+<tr class="even">
+<td>6.9.2</td>
+<td>Yeni bayi kaydı</td>
+<td>Mevcut müşteriden + portal user</td>
+</tr>
+<tr class="odd">
+<td>6.9.3</td>
+<td>Bayi pasifleştirme</td>
+<td>Erişim kapatma</td>
+</tr>
+<tr class="even">
+<td>6.9.4</td>
+<td>İskonto güncelleme</td>
+<td>Toplu/tek</td>
+</tr>
+<tr class="odd">
+<td>6.9.5</td>
+<td>Kredi limiti tanımlama</td>
+<td>Aşılırsa portalda uyarı</td>
+</tr>
+<tr class="even">
+<td>6.9.6</td>
+<td>Bayi audit log görünümü</td>
+<td>Tek bayi tüm aktivite</td>
+</tr>
+<tr class="odd">
+<td>6.9.7</td>
+<td>Şifre sıfırlama (yöneticiden)</td>
+<td>Acil durum</td>
+</tr>
+</tbody>
+</table>
+<h4 id="genişleme-4-6">Genişleme (4)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.9.8</td>
+<td>Toplu bayi işlemleri (Excel)</td>
+<td>Çoklu güncelleme</td>
+</tr>
+<tr class="even">
+<td>6.9.9</td>
+<td>Bayi performans skoru</td>
+<td>Ciro + sıklık + ödeme disiplini</td>
+</tr>
+<tr class="odd">
+<td>6.9.10</td>
+<td>Bayi segmentasyon otomasyonu</td>
+<td>Davranış kümeleri</td>
+</tr>
+<tr class="even">
+<td>6.9.11</td>
+<td>Bayi davranış zaman çizelgesi</td>
+<td>Tek görünüm</td>
+</tr>
+</tbody>
+</table>
+<h3 id="modül-6.10-portal-raporları-yönetici">Modül 6.10 — Portal Raporları (Yönetici)</h3>
+<h4 id="mvp-4-1">MVP (4)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.10.1</td>
+<td>Günlük/haftalık sipariş hacmi</td>
+<td>Bar chart</td>
+</tr>
+<tr class="even">
+<td>6.10.2</td>
+<td>Bayi bazında sipariş listesi</td>
+<td>Sıralı tablo</td>
+</tr>
+<tr class="odd">
+<td>6.10.3</td>
+<td>Top 10 ürün</td>
+<td>Hacim + adet</td>
+</tr>
+<tr class="even">
+<td>6.10.4</td>
+<td>Aktif/pasif bayi sayısı</td>
+<td>Son 30 gün</td>
+</tr>
+</tbody>
+</table>
+<h4 id="genişleme-8">Genişleme (8)</h4>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>6.10.5</td>
+<td>En çok aranan araç (yeni ürün sinyali)</td>
+<td>Filtreden okur</td>
+</tr>
+<tr class="even">
+<td>6.10.6</td>
+<td>Sepet terk analizi</td>
+<td>Terk + sebep tahmini</td>
+</tr>
+<tr class="odd">
+<td>6.10.7</td>
+<td>Bayi kayıp risk uyarısı</td>
+<td>60 gün siparişsiz</td>
+</tr>
+<tr class="even">
+<td>6.10.8</td>
+<td>Coğrafi pazar haritası</td>
+<td>Şehir dağılımı</td>
+</tr>
+<tr class="odd">
+<td>6.10.9</td>
+<td>Kampanya etkinlik raporu</td>
+<td>Öncesi/sonrası</td>
+</tr>
+<tr class="even">
+<td>6.10.10</td>
+<td>Saatlik portal kullanım</td>
+<td>Trafik grafiği</td>
+</tr>
+<tr class="odd">
+<td>6.10.11</td>
+<td>Cohort analizi</td>
+<td>Yeni bayi takip</td>
+</tr>
+<tr class="even">
+<td>6.10.12</td>
+<td>Excel/PDF özelleştirilebilir rapor</td>
+<td>Filtreli dışa aktarma</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/11-b2b-bayi-portali.md"><code>tartisma/11-b2b-bayi-portali.md</code></a></p>
+</blockquote>
+<hr />
+<h2 id="faz-7-mlops-eğitilebilir-modeller-19-özellik">Faz 7 — MLOps &amp; Eğitilebilir Modeller (19 özellik)</h2>
+<h3 id="mvp-10-2">MVP (10)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>7.1</td>
+<td>Python FastAPI ML servis</td>
+<td>Bun → HTTP, ayrı container</td>
+</tr>
+<tr class="even">
+<td>7.2</td>
+<td>MLflow kurulumu</td>
+<td>Deneme + artifact tracking</td>
+</tr>
+<tr class="odd">
+<td>7.3</td>
+<td>S3 model storage</td>
+<td>Versiyon arşivi</td>
+</tr>
+<tr class="even">
+<td>7.4</td>
+<td><code>model_versiyonlari</code> tablosu</td>
+<td>Versiyon, metrik, durum</td>
+</tr>
+<tr class="odd">
+<td>7.5</td>
+<td><code>/admin/ml-laboratuvari</code> UI</td>
+<td>Aktif modeller, eğitim kuyruğu</td>
+</tr>
+<tr class="even">
+<td>7.6</td>
+<td>Model detay sayfası</td>
+<td>Eğitim geçmişi, metrik trend</td>
+</tr>
+<tr class="odd">
+<td>7.7</td>
+<td>Excel upload UX</td>
+<td>Dosya seç + preview + onay</td>
+</tr>
+<tr class="even">
+<td>7.8</td>
+<td>Kolon eşleştirme arayüzü</td>
+<td>Otomatik tespit + manuel</td>
+</tr>
+<tr class="odd">
+<td>7.9</td>
+<td>Hata düzeltme inline</td>
+<td>Hatalı satırı düzelt</td>
+</tr>
+<tr class="even">
+<td>7.10</td>
+<td>Yeniden eğitim butonu</td>
+<td>Manuel tetikleme</td>
+</tr>
+</tbody>
+</table>
+<h3 id="genişleme-5-4">Genişleme (5)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>7.11</td>
+<td>Champion/challenger A/B test</td>
+<td>%5 trafiğe challenger</td>
+</tr>
+<tr class="even">
+<td>7.12</td>
+<td>İstatistiksel anlamlılık testi</td>
+<td>t-test, p &lt; 0.05</td>
+</tr>
+<tr class="odd">
+<td>7.13</td>
+<td>Multivariate feature pipeline</td>
+<td>Kur+tatil+hava+kampanya</td>
+</tr>
+<tr class="even">
+<td>7.14</td>
+<td>SHAP feature importance UI</td>
+<td>Görsel etki tablosu</td>
+</tr>
+<tr class="odd">
+<td>7.15</td>
+<td>Auto-rollback (MAPE &gt; %50)</td>
+<td>Eski stabile dön</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vizyon-4-2">Vizyon (4)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>7.16</td>
+<td>Active learning calibration</td>
+<td>Yönetici düzeltme → calibration layer</td>
+</tr>
+<tr class="even">
+<td>7.17</td>
+<td>Hyperparameter tuning otomatik</td>
+<td>Optuna entegrasyonu</td>
+</tr>
+<tr class="odd">
+<td>7.18</td>
+<td>Multi-deployment hazırlık</td>
+<td>Env-based config</td>
+</tr>
+<tr class="even">
+<td>7.19</td>
+<td>Federated learning iskelet</td>
+<td>Anonim ağırlık paylaşımı</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/14-egitilebilir-modeller-mlops.md"><code>tartisma/14-egitilebilir-modeller-mlops.md</code></a></p>
+</blockquote>
+<hr />
+<h2 id="faz-8-konversasyonel-katman-16-özellik">Faz 8 — Konversasyonel Katman (16 özellik)</h2>
+<h3 id="mvp-7-2">MVP (7)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8.1</td>
+<td>Yönetici sohbet UI</td>
+<td>Doğal dilde istek + AI yanıt</td>
+</tr>
+<tr class="even">
+<td>8.2</td>
+<td>LLM provider abstraction</td>
+<td>Claude/OpenAI/Groq seçimi</td>
+</tr>
+<tr class="odd">
+<td>8.3</td>
+<td>Niyet (intent) çıkarımı</td>
+<td>“5000 paspas siyah” → action</td>
+</tr>
+<tr class="even">
+<td>8.4</td>
+<td>Slot-filling</td>
+<td>Eksik parametre sorma</td>
+</tr>
+<tr class="odd">
+<td>8.5</td>
+<td>Risk skoru hesabı</td>
+<td>Geri al × tutar × dış görünüm × kayıt</td>
+</tr>
+<tr class="even">
+<td>8.6</td>
+<td>Onay matrisi (risk × güven × tutar)</td>
+<td>Otomatik mi onay mı</td>
+</tr>
+<tr class="odd">
+<td>8.7</td>
+<td>Audit log + rollback</td>
+<td>Her aksiyon için</td>
+</tr>
+</tbody>
+</table>
+<h3 id="genişleme-5-5">Genişleme (5)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8.8</td>
+<td>Kill-switch (global/aksiyon/provider)</td>
+<td>Tek tıkla kapatma</td>
+</tr>
+<tr class="even">
+<td>8.9</td>
+<td>Sessiz onay penceresi</td>
+<td>12-24 saat tepki yoksa otomatik</td>
+</tr>
+<tr class="odd">
+<td>8.10</td>
+<td>LLM fallback mekanizması</td>
+<td>Pahalı patladıysa ucuza düş</td>
+</tr>
+<tr class="even">
+<td>8.11</td>
+<td>Reddedilen önerilerden öğrenme</td>
+<td>Few-shot prompt güncelleme</td>
+</tr>
+<tr class="odd">
+<td>8.12</td>
+<td>Çoklu intent tek mesajda</td>
+<td>“X aldır + Y kontrol et + Z bildir”</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vizyon-4-3">Vizyon (4)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>8.13</td>
+<td>Bayi-tarafı sohbet (opsiyonel)</td>
+<td>Bayi WhatsApp/portaldan sohbet</td>
+</tr>
+<tr class="even">
+<td>8.14</td>
+<td>Sesli giriş (Whisper STT)</td>
+<td>Mobil mikrofondan</td>
+</tr>
+<tr class="odd">
+<td>8.15</td>
+<td>Ses çıkışı (TTS)</td>
+<td>Operatör ekranı sesli yanıt</td>
+</tr>
+<tr class="even">
+<td>8.16</td>
+<td>Çoklu dil sohbet</td>
+<td>İngilizce/Almanca</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/07-konversasyonel-katman.md"><code>tartisma/07-konversasyonel-katman.md</code></a>, <a href="../tartisma/09-otomasyon-esikleri.md"><code>tartisma/09-otomasyon-esikleri.md</code></a></p>
+</blockquote>
+<hr />
+<h2 id="faz-9-mobil-saha-crm-19-özellik">Faz 9 — Mobil &amp; Saha CRM (19 özellik)</h2>
+<h3 id="mvp-9-2">MVP (9)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>9.1</td>
+<td>Saha satış mobil app (Flutter)</td>
+<td>iOS + Android</td>
+</tr>
+<tr class="even">
+<td>9.2</td>
+<td>Bayi ziyaret kaydı</td>
+<td>Tarih, lokasyon, not</td>
+</tr>
+<tr class="odd">
+<td>9.3</td>
+<td>Sesli not (Whisper API)</td>
+<td>Konuşmadan metin</td>
+</tr>
+<tr class="even">
+<td>9.4</td>
+<td>Foto/video yükleme</td>
+<td>Ziyaret kanıtı</td>
+</tr>
+<tr class="odd">
+<td>9.5</td>
+<td>Offline-first sipariş</td>
+<td>Bağlantı dönünce senkron</td>
+</tr>
+<tr class="even">
+<td>9.6</td>
+<td>Push bildirim altyapısı (FCM)</td>
+<td>Kritik uyarılar</td>
+</tr>
+<tr class="odd">
+<td>9.7</td>
+<td>Bayi mobil PWA</td>
+<td>Web portal’ın mobil versiyonu</td>
+</tr>
+<tr class="even">
+<td>9.8</td>
+<td>Operatör mobil polish</td>
+<td>Mevcut uygulama tamamlama</td>
+</tr>
+<tr class="odd">
+<td>9.9</td>
+<td>Push bildirim teslim raporu</td>
+<td>Açma/tıklama metrikleri</td>
+</tr>
+</tbody>
+</table>
+<h3 id="genişleme-6-3">Genişleme (6)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>9.10</td>
+<td>Bayi native mobil (Flutter)</td>
+<td>PWA yetersizse</td>
+</tr>
+<tr class="even">
+<td>9.11</td>
+<td>Saha ziyaret → churn sinyali</td>
+<td>Otomatik feed-in</td>
+</tr>
+<tr class="odd">
+<td>9.12</td>
+<td>LLM ziyaret özeti</td>
+<td>“Bu ziyarette kritik bilgi var mı?”</td>
+</tr>
+<tr class="even">
+<td>9.13</td>
+<td>Aksiyon takibi (next steps + due)</td>
+<td>Otomatik reminder</td>
+</tr>
+<tr class="odd">
+<td>9.14</td>
+<td>QR kod ile sipariş</td>
+<td>Ürün koduna fotoğraf</td>
+</tr>
+<tr class="even">
+<td>9.15</td>
+<td>Saha ekibi performans dashboard</td>
+<td>Ziyaret sayısı, dönüşüm</td>
+</tr>
+</tbody>
+</table>
+<h3 id="vizyon-4-4">Vizyon (4)</h3>
+<table>
+<colgroup>
+<col style="width: 13%" />
+<col style="width: 40%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+<th>Açıklama</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>9.16</td>
+<td>AR ürün önizleme (3D)</td>
+<td>Paspas aracın içinde nasıl</td>
+</tr>
+<tr class="even">
+<td>9.17</td>
+<td>Mobil sohbet entegrasyonu</td>
+<td>Faz 8 ile birleşik</td>
+</tr>
+<tr class="odd">
+<td>9.18</td>
+<td>Müşteri B2C mobil app</td>
+<td>Son tüketici uygulaması</td>
+</tr>
+<tr class="even">
+<td>9.19</td>
+<td>Saha rotalama (mini lojistik)</td>
+<td>Günlük ziyaret rotası optimize</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="faz-10-genişleme-modülleri-30-özellik">Faz 10+ — Genişleme Modülleri (30 özellik)</h2>
+<h3 id="sinyal-1-rakip-pazar-istihbaratı-4">Sinyal #1 — Rakip &amp; Pazar İstihbaratı (4)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10.1.1</td>
+<td>Rakip web tarama altyapısı (mevcut Faz 5 reuse)</td>
+</tr>
+<tr class="even">
+<td>10.1.2</td>
+<td>Yeni ürün/fiyat değişikliği tespiti</td>
+</tr>
+<tr class="odd">
+<td>10.1.3</td>
+<td>Kamu İhale Kurumu kazanan/kaybeden analiz</td>
+</tr>
+<tr class="even">
+<td>10.1.4</td>
+<td>Türkpatent yeni başvuru takibi</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sinyal-2-müşteri-b2c-churn-3">Sinyal #2 — Müşteri (B2C) Churn (3)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10.2.1</td>
+<td>B2C müşteri sipariş aralığı analizi</td>
+</tr>
+<tr class="even">
+<td>10.2.2</td>
+<td>Survival analysis (Kaplan-Meier)</td>
+</tr>
+<tr class="odd">
+<td>10.2.3</td>
+<td>Otomatik retention email (eşik üstü)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sinyal-3-fiyat-optimizasyonu-3">Sinyal #3 — Fiyat Optimizasyonu (3)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10.3.1</td>
+<td>Bayi-spesifik iskonto önerisi (RL bandit)</td>
+</tr>
+<tr class="even">
+<td>10.3.2</td>
+<td>Liste fiyatı elastikiyeti analizi</td>
+</tr>
+<tr class="odd">
+<td>10.3.3</td>
+<td>Rakip fiyat + maliyet + marj optimizasyonu</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sinyal-4-ai-belge-işleme-3">Sinyal #4 — AI Belge İşleme (3)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10.4.1</td>
+<td>OCR (Tesseract / Google Vision)</td>
+</tr>
+<tr class="even">
+<td>10.4.2</td>
+<td>LLM JSON çıkarımı (fatura/PO/irsaliye)</td>
+</tr>
+<tr class="odd">
+<td>10.4.3</td>
+<td>İnsan onay kuyruğu (eşik altı)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sinyal-5-lojistik-rota-3">Sinyal #5 — Lojistik &amp; Rota (3)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10.5.1</td>
+<td>OR-Tools VRP solver</td>
+</tr>
+<tr class="even">
+<td>10.5.2</td>
+<td>Trafik + kapasite + zaman penceresi</td>
+</tr>
+<tr class="odd">
+<td>10.5.3</td>
+<td>Günlük sevkiyat plan haritası</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sinyal-7-dış-veri-sektör-3">Sinyal #7 — Dış Veri / Sektör (3)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10.7.1</td>
+<td>TÜİK / TCMB / TOBB veri pipeline</td>
+</tr>
+<tr class="even">
+<td>10.7.2</td>
+<td>Aylık “sektör nabzı” raporu</td>
+</tr>
+<tr class="odd">
+<td>10.7.3</td>
+<td>Tahmin motoruna sektör endeksi feature</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sinyal-8-api-entegrasyonları-8">Sinyal #8 — API Entegrasyonları (8)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10.8.1</td>
+<td>e-Fatura (Logo/Mikro/GİB)</td>
+</tr>
+<tr class="even">
+<td>10.8.2</td>
+<td>e-Arşiv</td>
+</tr>
+<tr class="odd">
+<td>10.8.3</td>
+<td>Banka mutabakat API</td>
+</tr>
+<tr class="even">
+<td>10.8.4</td>
+<td>Kargo API (Aras/Yurtiçi/MNG/PTT)</td>
+</tr>
+<tr class="odd">
+<td>10.8.5</td>
+<td>Trendyol/Hepsiburada/N11 ürün senk</td>
+</tr>
+<tr class="even">
+<td>10.8.6</td>
+<td>WhatsApp Business doğrudan</td>
+</tr>
+<tr class="odd">
+<td>10.8.7</td>
+<td>SMS Gateway (Netgsm/İletimerkezi)</td>
+</tr>
+<tr class="even">
+<td>10.8.8</td>
+<td>Logo/Mikro muhasebe senk</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sinyal-9-field-crm-3">Sinyal #9 — Field CRM (3)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10.9.1</td>
+<td>Detaylı saha ziyaret formu</td>
+</tr>
+<tr class="even">
+<td>10.9.2</td>
+<td>Hashtag / sektör trendi feed-in</td>
+</tr>
+<tr class="odd">
+<td>10.9.3</td>
+<td>Saha ekibi koçluk dashboard</td>
+</tr>
+</tbody>
+</table>
+<h3 id="sinyal-10-sürdürülebilirlik-3">Sinyal #10 — Sürdürülebilirlik (3)</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Özellik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>10.10.1</td>
+<td>LCA hesaplama altyapısı</td>
+</tr>
+<tr class="even">
+<td>10.10.2</td>
+<td>Ürün başına karbon raporu (PDF)</td>
+</tr>
+<tr class="odd">
+<td>10.10.3</td>
+<td>CBAM uyumlu müşteri raporu</td>
+</tr>
+</tbody>
+</table>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/15-genisletme-sinyalleri.md"><code>tartisma/15-genisletme-sinyalleri.md</code></a></p>
+</blockquote>
+<hr />
+<h2 id="teslimat-sırası-hafta-hafta-özeti">Teslimat Sırası — Hafta-Hafta Özeti</h2>
+<pre><code>Hafta 1-4    → Faz 0 (Paspas tamamlanma)
+Hafta 5-8    → Faz 1 (Talep havuzu)
+Hafta 9-16   → Faz 2 (Tahmin motoru)
+Hafta 17-22  → Faz 3 (Müşteri keşif) + Faz 4 (Stok) [paralel]
+Hafta 23-30  → Faz 5 (Bayi scraping &amp; churn)
+Hafta 31-38  → Faz 6 (Bayi Portalı MVP)
+Hafta 39-46  → Faz 7 (MLOps)
+Hafta 47-52  → Faz 8 (Konversasyonel)
+Hafta 53-60  → Faz 9 (Mobil &amp; saha)
+Hafta 61+    → Faz 10+ (genişleme — Promats yönetimi ile sıralı)</code></pre>
+<blockquote>
+<p>Ana iskelet (Faz 0-9): ~60 hafta (~14 ay). Faz 10+ ihtiyaca göre paralel veya sıralı.</p>
+</blockquote>
+<h2 id="açık-tartışma-noktaları-fonksiyonel">Açık Tartışma Noktaları (Fonksiyonel)</h2>
+<ol type="1">
+<li><strong>Faz 6 öne çekilsin mi?</strong> Bayi portalı bayinin en hızlı hissedeceği değer. Faz 0+6 önce, Faz 1-5 paralel olabilir mi?</li>
+<li><strong>Yetki sistemi:</strong> Bayi içi rol (admin/operatör/görüntüleyici) MVP’de mi v2’de mi?</li>
+<li><strong>WhatsApp Business:</strong> Hesap onay süreci 2-3 ay; MVP’de mi v2’de mi?</li>
+<li><strong>Mobil:</strong> PWA yeter mi (Faz 9.7), native şart mı (Faz 9.10)?</li>
+<li><strong>e-Fatura:</strong> Faz 10.8.1 öne çekilebilir mi (yasal zorunluluk)?</li>
+<li><strong>Çoklu dil:</strong> v3’te mi (Faz 9 sonrası), önce mi?</li>
+<li><strong>Online ödeme:</strong> Iyzipay entegrasyonu MVP’de mi (6.4.6)?</li>
+<li><strong>Faz 8 (sohbet) bayi tarafı:</strong> ilk yıl yönetici-only mi?</li>
+<li><strong>Faz 10 önceliklendirme:</strong> AI belge işleme mi (Sinyal #4) önce, yoksa rakip istihbaratı mı (Sinyal #1)?</li>
+<li><strong>Sürdürülebilirlik (Sinyal #10):</strong> CBAM 2026 yürürlükte — şimdiden başlamak gerekir mi?</li>
+</ol>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("05 — Fonksiyonel Kapsam (Özellik Listesi)").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,543 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>00 — Yönetici Özeti — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="tartisma/index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="tartisma/12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="tartisma/13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="tartisma/14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="tartisma/15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>00 — Yönetici Özeti</strong></div>
+  <div class="actions">
+    <a href="index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="yönetici-özeti">00 — Yönetici Özeti</h1>
+<h2 id="tek-cümle">Tek Cümle</h2>
+<blockquote>
+<p>Mevcut Paspas Üretim ERP’nizi piyasayı dinleyen, talebi öngören, kendi kendini düzelten bir <strong>dijital ekosisteme</strong> dönüştürüyoruz: bayi portalı + sipariş tahmin motoru + churn radarı + AI destekli otomasyon — her biri canlı verinizden öğrenen, açıklanabilir, geri alınabilir.</p>
+</blockquote>
+<h2 id="matportal-nedir">MatPortal Nedir?</h2>
+<p><strong>MatPortal</strong>, Paspas ERP’nizin üzerine inşa edilen 11 fazlı bir genişlemedir. Tek seferlik bir ürün kurulumu değil, <strong>kademeli bir dönüşüm yol haritasıdır</strong>. Her faz kendi başına çalışır, kendi başına değer üretir, sonraki faz öncekini besler.</p>
+<pre><code>Paspas ERP (var)              MatPortal (eklenecek)
+─────────────                 ──────────────────────
+Üretim, stok, müşteri    →    Bayi portalı, talep tahmini, otomasyon
+satış siparişi, fatura   →    Tahmin motoru, churn radarı, AI sohbet
+operatör ekranı          →    MLOps + Excel&#39;den eğitilebilir modeller</code></pre>
+<p>Paspas dokunulmaz. MatPortal aynı veritabanını okur, üzerine yeni modüller ekler. Yeni proje değil — Paspas’ın doğal uzantısı.</p>
+<h2 id="mevcut-durum-1.-mayıs-2026">Mevcut Durum (1. Mayıs 2026)</h2>
+<h3 id="paspas-erp-çalışan-sistem">Paspas ERP — Çalışan Sistem</h3>
+<ul>
+<li>14 modül aktif: ürünler, reçeteler, üretim emirleri, makine havuzu, Gantt, stoklar, satın alma, operatör ekranı</li>
+<li>Plastik enjeksiyon kalıplama fabrikasının tam üretim akışı</li>
+<li>Fastify + Bun + MySQL + Drizzle ORM</li>
+<li>Admin panel canlıda</li>
+</ul>
+<h3 id="bayi-operasyonu-whatsapptelefon-kaosu">Bayi Operasyonu — WhatsApp/Telefon Kaosu</h3>
+<ul>
+<li>Aktif <strong>35 bayi</strong>, 18’i stratejik distribütör</li>
+<li>Sipariş kanalı: WhatsApp + telefon + email — kayıtsız, dağınık</li>
+<li>Satış ekibi günde <strong>3-4 saat</strong> sipariş kabul ediyor</li>
+<li>Yanlış fiyat/miktar siparişleri ayda <strong>8-12 adet</strong></li>
+<li>Bayinin ne aldığı, ne aramadığı, ne istediği <strong>görünmez</strong> → veri yok → tahmin yok → planlama körlemesine</li>
+</ul>
+<h3 id="veriden-yoksun-karar">Veriden Yoksun Karar</h3>
+<ul>
+<li>Üretim planlama: “geçen ay olduğu kadar yapalım”</li>
+<li>Hammadde alımı: “bittiğinde alırız”</li>
+<li>Bayi takibi: “ne sipariş verirse onu işleriz”</li>
+<li>Pazar bilgisi: “WhatsApp’tan duyduğumuz kadar”</li>
+</ul>
+<p>Bu yöntem 35 bayiyle yürür. <strong>100 bayide çöker.</strong> Şimdiden altyapı kurulmalı.</p>
+<h2 id="önerilen-çözüm-11-faz">Önerilen Çözüm — 11 Faz</h2>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 28%" />
+<col style="width: 28%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Faz</th>
+<th>Modül</th>
+<th>Çıktı</th>
+<th>Süre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>0</strong></td>
+<td>Paspas tamamlanma</td>
+<td>Mevcut açık modüllerin polish’i, stabilite</td>
+<td>4 hafta</td>
+</tr>
+<tr class="even">
+<td><strong>1</strong></td>
+<td>Talep toplama altyapısı</td>
+<td>Bayi/müşteri talepleri merkezi havuz</td>
+<td>4 hafta</td>
+</tr>
+<tr class="odd">
+<td><strong>2</strong></td>
+<td><strong>Sipariş tahmin motoru</strong></td>
+<td>Bayi-ürün bazında 30-90 gün tahmin (Prophet→XGBoost)</td>
+<td>8 hafta</td>
+</tr>
+<tr class="even">
+<td><strong>3</strong></td>
+<td>Müşteri keşif motoru</td>
+<td>Yurt içi+dışı yeni bayi/müşteri leadleri</td>
+<td>6 hafta</td>
+</tr>
+<tr class="odd">
+<td><strong>4</strong></td>
+<td>Stok &amp; tedarik otomasyonu</td>
+<td>“Ne zaman, hangi malzeme, ne kadar al” otomatik</td>
+<td>6 hafta</td>
+</tr>
+<tr class="even">
+<td><strong>5</strong></td>
+<td><strong>Bayi scraping &amp; churn radarı</strong></td>
+<td>Bayi web/sosyal taraması, churn sinyalleri</td>
+<td>8 hafta</td>
+</tr>
+<tr class="odd">
+<td><strong>6</strong></td>
+<td><strong>B2B Bayi Portalı (MatPortal)</strong></td>
+<td>Bayinin sipariş/cari/katalog gördüğü kurumsal portal</td>
+<td>8 hafta</td>
+</tr>
+<tr class="even">
+<td><strong>7</strong></td>
+<td><strong>Eğitilebilir modeller (MLOps)</strong></td>
+<td>Excel yükleyerek modeli yeniden eğitme</td>
+<td>8 hafta</td>
+</tr>
+<tr class="odd">
+<td><strong>8</strong></td>
+<td>Konversasyonel katman</td>
+<td>Yönetici/bayi yazışarak iş yapsın (onaylı, audit’li)</td>
+<td>6 hafta</td>
+</tr>
+<tr class="even">
+<td><strong>9</strong></td>
+<td>Mobil + saha CRM</td>
+<td>Saha satış elemanı + bayi mobil uygulamaları</td>
+<td>8 hafta</td>
+</tr>
+<tr class="odd">
+<td><strong>10+</strong></td>
+<td>Genişleme</td>
+<td>Rakip istihbaratı, fiyat optimizasyonu, AI belge işleme, lojistik</td>
+<td>sürekli</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Toplam ana iskelet süresi:</strong> ~14-15 ay (Faz 0-7 + 8-9 paralel başlayabilir)</p>
+<h2 id="felsefe">4 Felsefe</h2>
+<h3 id="veri-önce-ai-yardımcı">1. Veri-önce, AI-yardımcı</h3>
+<p>Her tahmin önce <strong>istatistiksel</strong> yöntemle yapılır (lineer regresyon, Prophet, XGBoost). AI yanına gelir, açıklar, öneri verir — yerine geçmez. “Claude öneriyor” diye karar vermek itibar zedeler. Sayılar konuşur, AI tercüme eder.</p>
+<h3 id="kademeli-karmaşıklık">2. Kademeli karmaşıklık</h3>
+<p>Veri 3 ay → naive model. 6 ay → mevsimsel ortalama. 12 ay → Prophet. 24 ay → XGBoost. <strong>Verinin yetmediği yerde gelişmiş model kullanılmaz</strong>, hataya yol açar.</p>
+<h3 id="açıklanabilirlik">3. Açıklanabilirlik</h3>
+<p>Her AI tahmin “neden böyle?” sorusuna cevap verir. SHAP değerleri + sinyal listesi + doğal dil açıklama. Yönetici “240 dedin, neden?” diye sorduğunda anlamlı 3 cümle alır.</p>
+<h3 id="geri-alınabilirlik">4. Geri alınabilirlik</h3>
+<p>Her AI aksiyon <strong>risk skoruyla</strong> etiketlenir. Yüksek risk → manuel onay. Düşük risk → otomatik ama audit log + rollback hazır. <strong>Tedarikçiye email, müşteri sipariş onayı, fiyat değişikliği</strong> asla otomatik değildir.</p>
+<h2 id="stratejik-kazanç">5 Stratejik Kazanç</h2>
+<table>
+<colgroup>
+<col style="width: 7%" />
+<col style="width: 20%" />
+<col style="width: 27%" />
+<col style="width: 45%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Kazanç</th>
+<th>Hangi faz</th>
+<th>Ölçülebilir etki</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><strong>Sipariş veriyi yakala</strong></td>
+<td>Faz 6 (Portal)</td>
+<td>Bayi 3 dk’da sipariş verir; aylık sipariş sayısında <strong>%30-40 artış</strong></td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><strong>Sepet büyür</strong></td>
+<td>Faz 6 (Portal)</td>
+<td>Katalog görünürlüğü → cross-sell; ortalama sepet <strong>%15-25 büyür</strong></td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><strong>Tahmin doğruluğu</strong></td>
+<td>Faz 2 + 7 (Tahmin + MLOps)</td>
+<td>Üretim planlamada MAPE <strong>&lt;%20</strong> olgunlukta; planlama hatası → kayıp eskimesi azalır</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><strong>Erken churn yakalama</strong></td>
+<td>Faz 5 (Churn radarı)</td>
+<td>Bayi rakibe gitmeden 2-3 ay önce sinyal; churn oranı <strong>%30+ azaltma</strong> hedefi</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td><strong>Operasyonel zaman</strong></td>
+<td>Faz 6 + 8 (Portal + Sohbet)</td>
+<td>Satış ekibi günlük <strong>2-3 saat açılır</strong> → büyük müşteri &amp; yeni pazar odağı</td>
+</tr>
+</tbody>
+</table>
+<h2 id="teknik-yaklaşım-stack-ve-ilkeler">Teknik Yaklaşım — Stack ve İlkeler</h2>
+<h3 id="stack-paspas-ile-uyumlu">Stack (Paspas ile uyumlu)</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Katman</th>
+<th>Araç</th>
+<th>Neden</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Backend</td>
+<td>Fastify 5 + Bun + Drizzle + MySQL</td>
+<td>Paspas zaten kullanıyor — ek ML/scraping modülleri</td>
+</tr>
+<tr class="even">
+<td>Frontend (admin)</td>
+<td>Next.js 16 + React 19 + Shadcn/UI</td>
+<td>Paspas admin paneli devam</td>
+</tr>
+<tr class="odd">
+<td>Frontend (bayi portal)</td>
+<td>Ayrı Next.js app, aynı backend</td>
+<td>İzolasyon + farklı UX</td>
+</tr>
+<tr class="even">
+<td>ML servis</td>
+<td>Python FastAPI (Bun → spawn)</td>
+<td>scikit-learn, Prophet, XGBoost ekosistemi</td>
+</tr>
+<tr class="odd">
+<td>Scraping</td>
+<td>Crawlee + Playwright + Apify (sosyal)</td>
+<td>TypeScript native, robots.txt uyumlu</td>
+</tr>
+<tr class="even">
+<td>LLM</td>
+<td>Anthropic Claude + OpenAI + Groq (multi-provider)</td>
+<td>Provider değişebilir, vendor lock-in yok</td>
+</tr>
+<tr class="odd">
+<td>Model storage</td>
+<td>MLflow + S3</td>
+<td>Versiyonlama + rollback</td>
+</tr>
+<tr class="even">
+<td>Mobil</td>
+<td>Flutter (mevcut Promats projeleriyle uyumlu)</td>
+<td>Tek ekosistem</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mimari-ilkeler">Mimari ilkeler</h3>
+<ul>
+<li><strong>Paspas dokunulmaz</strong>: yeni modüller <code>_shared/</code> üzerinden import eder, Paspas tablolarına yazmaz (ya da explicit kontrolle yazar)</li>
+<li><strong>Multi-deployment ready</strong>: aynı kod, ayrı VPS/DB ile başka müşteriye konuşlanabilir</li>
+<li><strong>DRY</strong>: ortak feature engineering, ortak LLM client, ortak scraping queue tek yerde</li>
+<li><strong>Audit log</strong>: risk 7+ her aksiyon için before/after state DB’de</li>
+<li><strong>Kill-switch</strong>: AI otomasyonu global / aksiyon türü / provider bazlı tek tıkla kapatılabilir</li>
+</ul>
+<h2 id="risk-yönetimi">Risk Yönetimi</h2>
+<h3 id="teknik-riskler">Teknik riskler</h3>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Risk</th>
+<th>Kontrol</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tahmin modeli yanlış öneri verir</td>
+<td>Naive baseline ile karşılaştır; %10 iyilik yoksa kullanma. Champion/challenger + auto-rollback</td>
+</tr>
+<tr class="even">
+<td>Bayi scraping yasal sorun</td>
+<td>KVKK uyumu (sadece firma verisi), robots.txt, rate limit, açık User-Agent, bayi sözleşme klozu</td>
+</tr>
+<tr class="odd">
+<td>LLM maliyeti kontrolden çıkar</td>
+<td>Aylık token üst sınırı, ucuz provider (Groq) çoğunluk, pahalı (Claude) sadece kritik</td>
+</tr>
+<tr class="even">
+<td>Excel yükleme bozuk veri</td>
+<td>Validation + preview + hata satırı düzeltme + outlier auto-flag</td>
+</tr>
+<tr class="odd">
+<td>ML modeli “siyah kutu” hissi</td>
+<td>SHAP + sinyal listesi + LLM doğal dil açıklama her tahminde</td>
+</tr>
+</tbody>
+</table>
+<h3 id="iş-riskleri">İş riskleri</h3>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Risk</th>
+<th>Kontrol</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bayi portal’ı kullanmaz</td>
+<td>Pilot 5 bayi ile başla, feedback loop, eski WhatsApp kanalı paralel açık</td>
+</tr>
+<tr class="even">
+<td>Yönetici AI önerisine güvenmez</td>
+<td>İlk 3 ay tüm öneriler <strong>manuel onay</strong>; veri biriktikçe eşik açılır</td>
+</tr>
+<tr class="odd">
+<td>Tedarikçi/müşteri “robot mu yazıyor” tepkisi</td>
+<td>Konversasyonel katman opsiyonel, default kapalı, açıkken her mesajda “AI hazırladı” işareti</td>
+</tr>
+<tr class="even">
+<td>Kapsam genişliği yönetilemez</td>
+<td>11 fazlı plan, her faz <strong>tek başına çalışır</strong>, durulabilir, sıralama esnek</td>
+</tr>
+</tbody>
+</table>
+<h2 id="maliyet-operasyonel-saas-bütçesi">Maliyet — Operasyonel SaaS Bütçesi</h2>
+<p>Geliştirme ücreti hariç, <strong>aylık dış servis bütçesi</strong>:</p>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 29%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Senaryo</th>
+<th>Aylık</th>
+<th>Kapsam</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>A — Free tier başlangıç</strong></td>
+<td>$20-50</td>
+<td>Hunter/Apollo free, Google Places $200 credit, AI orta yoğunluk</td>
+</tr>
+<tr class="even">
+<td><strong>B — Operasyonel olgunluk</strong></td>
+<td>$255-325</td>
+<td>Snov.io + Apollo Basic + LLM + Brevo email + scraping (Apify+proxy)</td>
+</tr>
+<tr class="odd">
+<td><strong>C — Hızlı büyüme</strong></td>
+<td>$667-867</td>
+<td>Hunter Growth + Apollo Pro + Lusha + Mailgun + yoğun LLM</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Önerim:</strong> Aşamalı. Faz 0-3’te A; Faz 4-6’da B; Faz 8+ büyümeye göre C.</p>
+<h2 id="geliştirme-yol-haritası-tek-bakış">Geliştirme Yol Haritası — Tek Bakış</h2>
+<pre><code>2026 Q2 ───────────────── 2026 Q4 ───────────────── 2027 Q2 ───────────────── 2027 Q4
+  │                          │                          │                          │
+  ├─ Faz 0 (4 hf)            │                          │                          │
+  ├─ Faz 1 (4 hf)            │                          │                          │
+  ├─ Faz 2 (8 hf) ───────────┤                          │                          │
+  │  └ tahmin motoru canlı   │                          │                          │
+  │                          ├─ Faz 3 (6 hf)            │                          │
+  │                          ├─ Faz 4 (6 hf)            │                          │
+  │                          ├─ Faz 5 (8 hf) ───────────┤                          │
+  │                          │  └ churn radarı canlı    │                          │
+  │                          │                          ├─ Faz 6 (8 hf)            │
+  │                          │                          │  └ Bayi portalı pilot    │
+  │                          │                          ├─ Faz 7 (8 hf) ───────────┤
+  │                          │                          │  └ Excel-eğitim canlı    │
+  │                          │                          │                          ├─ Faz 8-9 (paralel)
+  │                          │                          │                          │  konversasyonel + mobil
+  │                          │                          │                          │
+  │                          │                          │                          ├─ Faz 10+ genişleme</code></pre>
+<p>Faz 0-7 ana iskelet ~14-15 ay. Faz 8-10 ihtiyaca göre paralel veya sıralı.</p>
+<h2 id="onay-için-4-soru">Onay İçin 4 Soru</h2>
+<p>Bu doküman <strong>karar vermek için</strong> değil, <strong>karar zemini hazırlamak için</strong> yazıldı. Promats yönetiminin onaylaması gereken 4 başlık:</p>
+<ol type="1">
+<li><strong>Faz sıralaması doğru mu?</strong> Faz 6 (Bayi Portalı) öncelendirilmesin mi? (Paspas tamamlanmadan portal değer üretmez ama bayiler bekliyor olabilir.)</li>
+<li><strong>Bütçe senaryosu A mı, B mi?</strong> İlk 6 ay free tier mi, doğrudan B mi? (Önerim: A → ihtiyaç doğunca B’ye geçiş)</li>
+<li><strong>AI otomasyon eşiği:</strong> ilk 3 ay her şey manuel onay mı (önerim: evet)? Yoksa düşük risk (skor 4-6) otomatik açılsın mı?</li>
+<li><strong>MatPortal bayi-side branding:</strong> “Paspas Bayi Portalı” mı, “MatPortal” mi, başka isim mi?</li>
+</ol>
+<h2 id="doküman-yapısı">Doküman Yapısı</h2>
+<p>Bu yönetici özeti + 11 alt başlıkta detay:</p>
+<table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 47%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Doküman</th>
+<th>İçerik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>01-pazar-ve-musteri-analizi.md</code></td>
+<td>Bayi profili, pazar fırsatı, rakip durumu</td>
+</tr>
+<tr class="even">
+<td><code>02-cozum-genel-bakis.md</code></td>
+<td>11 fazın her birinin çıktısı, modül haritası</td>
+</tr>
+<tr class="odd">
+<td><code>03-mimari-ve-teknoloji.md</code></td>
+<td>Stack detay, deployment topolojisi, multi-tenant</td>
+</tr>
+<tr class="even">
+<td><code>04-kullanici-yolculuklari.md</code></td>
+<td>Bayi/yönetici/saha ekibi senaryolar (wireframe)</td>
+</tr>
+<tr class="odd">
+<td><code>05-fonksiyonel-kapsam.md</code></td>
+<td>Özellik listesi MVP / v2 / v3 — 200+ özellik</td>
+</tr>
+<tr class="even">
+<td><code>06-veri-modeli.md</code></td>
+<td>Yeni DB tabloları, mevcut tablolarla ilişki</td>
+</tr>
+<tr class="odd">
+<td><code>07-yol-haritasi.md</code></td>
+<td>Hafta-hafta milestone, kabul kriterleri</td>
+</tr>
+<tr class="even">
+<td><code>08-butce-kaynak.md</code></td>
+<td>Operasyonel SaaS bütçesi, donanım/cloud, alternatifler</td>
+</tr>
+<tr class="odd">
+<td><code>09-risk.md</code></td>
+<td>Teknik + iş riskleri, mitigation tablosu</td>
+</tr>
+<tr class="even">
+<td><code>10-basari-kpi.md</code></td>
+<td>Başarı metrikleri (MAPE, churn rate, sepet, sipariş frekansı)</td>
+</tr>
+<tr class="odd">
+<td><code>11-ek-belgeler.md</code></td>
+<td>KVKK aydınlatma, bayi sözleşme klozu örneği, teknik referanslar</td>
+</tr>
+<tr class="even">
+<td><code>tek-sayfa-ozet.md</code></td>
+<td>A4 tek sayfa görsel özet (yönetim sunumu)</td>
+</tr>
+</tbody>
+</table>
+<p>Her bölümün altında <strong>yorum sistemi</strong> vardır — yönetici/teknik müdür/yatırımcı soruları kalıcı kaydedilir, anlık görülür, geri yanıtlanır.</p>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("00 — Yönetici Özeti").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,3950 @@
+{
+    "db": {
+      "title": "Datenbankverwaltung",
+      "description": "Erstellen Sie Snapshot-Punkte, laden Sie ein vollständiges Backup herunter, wenden Sie einen SQL-Import an oder führen Sie einen export/import nach Modul durch.",
+      "auth": {
+        "loading": "Admin-Panel wird geladen..."
+      },
+      "help": {
+        "pageTitle": "Was macht diese Seite?",
+        "dbAdmin": "DB-Admin-Bildschirm",
+        "fullDbDesc": "die gesamte Datenbank exportieren / importieren.",
+        "snapshotDesc": "einen Wiederherstellungspunkt vor riskanten Operationen erstellen, diesen wiederherstellen.",
+        "moduleDesc": "nur Tabellen ausgewählter Module übertragen (z. B. Produkte).",
+        "uiDesc": "UI-Texte von site_settings ui_* in großen Mengen nach Locale exportieren/bootstrappen.",
+        "closeHint": "Tipp: Klicken Sie nach draußen oder drücken Sie ESC zum Schließen.",
+        "closeButton": "Schließen"
+      },
+      "fullDb": {
+        "title": "Datenbank-Backup & Snapshot-Verwaltung",
+        "description": "Sie können Snapshots erstellen und vollständige Datenbank-Backups herunterladen.",
+        "snapshotLabel": "Snapshot-Bezeichnung",
+        "snapshotPlaceholder": "Z. B.: Aktuelles Live-System",
+        "notePlaceholder": "Warum wurde dieser Snapshot erstellt?",
+        "noteLabel": "Hinweis (optional)",
+        "createButton": "Snapshot Erstellen",
+        "creating": "Wird erstellt...",
+        "downloadTitle": "Vollständiges Datenbank-Backup Herunterladen",
+        "downloadDesc": "Laden Sie den aktuellen DB-Zustand als vollständigen Dump herunter.",
+        "sqlButton": "SQL Herunterladen (.sql)",
+        "sqlPreparing": "SQL wird vorbereitet...",
+        "jsonButton": "JSON Herunterladen (.json)",
+        "snapshotCreated": "Snapshot erstellt: {label}",
+        "snapshotError": "Fehler beim Erstellen des Snapshots.",
+        "exportSuccess": "SQL-Backup heruntergeladen.",
+        "exportError": "Fehler während DB-Export (SQL).",
+        "jsonNotImplemented": "JSON-Exportfunktion noch nicht implementiert. Sie können SQL-Export verwenden."
+      },
+      "import": {
+        "title": "SQL Import (IMPORT)",
+        "titleWithMode": "SQL Import (IMPORT) — {mode}",
+        "warning": "Diese Operationen können Datenbankinhalte dauerhaft ändern. Besonders wenn Truncate aktiviert ist, erstellen Sie unbedingt einen Snapshot vor dem Fortfahren.",
+        "dangerLabel": "WARNUNG:",
+        "helpTitle": "Import-Erklärung",
+        "helpHeadline": "SQL Import (Full DB)",
+        "helpDesc1": "Dieses Panel wendet SQL-Dump auf die gesamte Datenbank an (Text / URL / Datei).",
+        "helpDesc2": "leert Tabellen vor dem Import. Sehr riskant in der Produktionsumgebung.",
+        "helpDesc3": "ist ein Probelauf in unterstützten Flows (Rollback).",
+        "processing": "Operation läuft...",
+        "tabs": {
+          "text": "SQL-Text",
+          "url": "Von URL",
+          "file": "Von Datei"
+        },
+        "text": {
+          "label": "SQL-Skript (utf8)",
+          "placeholder": "Fügen Sie das vollständige SQL-Skript hier ein.",
+          "required": "SQL-Text darf nicht leer sein.",
+          "helpTitle": "SQL-Text-Tipps",
+          "helpHeadline": "SQL-Text",
+          "helpDesc1": "Fügen Sie das vollständige SQL-Skript hier ein.",
+          "helpDesc2": "Browser kann bei sehr großen Dumps langsam werden; Datei-Import ist besser geeignet.",
+          "helpDesc3": "Inhalt muss korrekte Kodierung haben (utf8)."
+        },
+        "url": {
+          "label": "SQL-Dump-URL (.sql oder .sql.gz)",
+          "placeholder": "https://.../dump.sql oder dump.sql.gz",
+          "required": "Geben Sie zuerst eine gültige .sql oder .sql.gz URL ein.",
+          "helpTitle": "URL-Import-Tipps",
+          "helpHeadline": "URL-Import",
+          "helpDesc1": "HTTPS-Verwendung wird empfohlen.",
+          "helpDesc2": ".sql.gz Dumps übertragen sich schneller bei großen Daten.",
+          "helpDesc3": "URLs, die Authentifizierung/Schutz erfordern, können möglicherweise nicht vom Backend heruntergeladen werden."
+        },
+        "file": {
+          "label": "SQL-Dump-Datei (.sql oder .gz)",
+          "placeholder": "Datei auswählen",
+          "required": "Wählen Sie zuerst eine .sql oder .gz Datei.",
+          "selected": "Ausgewählte Datei:",
+          "note": "Es gibt keinen Dry Run im Datei-Import-Flow (nur Truncate wird angewendet).",
+          "helpTitle": "Datei-Import-Tipps",
+          "helpHeadline": "Von Datei Import",
+          "helpDesc1": "Stabilste Methode (empfohlen für große Dumps).",
+          "helpDesc2": "Es gibt keinen Dry Run im Datei-Import-Flow.",
+          "helpDesc3": "Nginx/Fastify Body-Limit-Einstellungen können die Dateigröße beeinflussen."
+        },
+        "truncate": {
+          "label": "ALLE Tabellen vor der Operation TRUNCATE",
+          "helpTitle": "Was ist Truncate?",
+          "helpHeadline": "TruncateBefore",
+          "helpDesc": "Tabellen werden vor dem Import geleert. Falsche Verwendung führt zu Datenverlust. Das Erstellen eines Snapshots vor der Operation in der Produktion sollte als obligatorisch angesehen werden.",
+          "helpDescFile": "Dies ist die kritischste Option beim Datei-Import. Wenn aktiviert, werden Tabellen vor dem Import vollständig geleert. Betrachten Sie das Erstellen eines Snapshots als obligatorisch."
+        },
+        "dryRun": {
+          "label": "Dry Run (Probe, Änderungen rückgängig machen)",
+          "helpTitle": "Wie funktioniert Dry Run?",
+          "helpHeadline": "Dry Run",
+          "helpDesc": "Wenn Backend unterstützt, läuft innerhalb von SQL-Transaktion und macht Rollback. Einige DDL-Operationen können in MySQL impliziten Commit machen; nicht 100% garantiert.",
+          "helpDescUrl": "Wenn Backend unterstützt, macht Transaktion + Rollback. Zeit- und Ressourcenverbrauch steigt bei großen Dumps."
+        },
+        "buttons": {
+          "apply": "SQL Anwenden",
+          "importing": "Wird importiert...",
+          "importFromUrl": "Von URL Importieren",
+          "importFromFile": "Von Datei Importieren"
+        },
+        "confirm": {
+          "text": "Sie sind dabei, dieses SQL-Skript direkt auf die Datenbank anzuwenden.\n\nTruncate: {truncate}\nMöchten Sie fortfahren?",
+          "url": "SQL-Dump von dieser URL heruntergeladen wird auf die Datenbank angewendet.\n\nURL: {url}\nTruncate: {truncate}\n\nMöchten Sie fortfahren?",
+          "file": "Die von Ihnen ausgewählte SQL-Datei wird auf die Datenbank angewendet.\n\nDatei: {file}\nTruncate: {truncate}\n\nDieser Vorgang kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?",
+          "truncateYes": "JA (alle Tabellen leeren)",
+          "truncateNo": "Nein"
+        },
+        "success": {
+          "text": "SQL-Text erfolgreich importiert.",
+          "url": "SQL-Dump von URL erfolgreich importiert.",
+          "file": "SQL-Dump von Datei erfolgreich importiert.",
+          "dryRun": "Dry Run erfolgreich. Änderungen zurückgerollt."
+        },
+        "error": {
+          "text": "SQL-Import (Text) Fehler.",
+          "textGeneric": "Fehler während SQL-Import (Text).",
+          "url": "SQL-Import (URL) Fehler.",
+          "urlGeneric": "Fehler während SQL-Import (URL).",
+          "file": "SQL-Import (Datei) Fehler.",
+          "fileGeneric": "Fehler während SQL-Import (Datei)."
+        }
+      },
+      "snapshots": {
+        "title": "Snapshot-Punkte",
+        "total": "Gesamt:",
+        "processing": "Operation läuft...",
+        "columns": {
+          "index": "#",
+          "labelNote": "Bezeichnung / Hinweis",
+          "file": "Datei",
+          "created": "Erstellt",
+          "size": "Größe",
+          "actions": "Aktionen"
+        },
+        "noLabel": "Keine Bezeichnung",
+        "noNote": "-",
+        "loading": "Laden...",
+        "noData": "Noch keine Snapshots gefunden.",
+        "scrollNote": "Hinweis: Wenn der Bildschirm schmal ist, kann die Tabelle horizontal gescrollt werden.",
+        "restore": "Wiederherstellen",
+        "delete": "Löschen",
+        "restoreConfirm": "Sie sind dabei, von diesem Snapshot wiederherzustellen.\n\nSnapshot: {label}\n\nDieser Vorgang wird aktuelle Datenbankinhalte ÜBERSCHREIBEN (truncate).\nMöchten Sie fortfahren?",
+        "deleteConfirm": "Sie sind dabei, diese Snapshot-Datei zu löschen.\n\nSnapshot: {label}\n\nMöchten Sie fortfahren?",
+        "restoreSuccess": "Snapshot erfolgreich wiederhergestellt.",
+        "restoreError": "Ein Fehler ist während der Snapshot-Wiederherstellung aufgetreten.",
+        "restoreFailed": "Snapshot-Wiederherstellung fehlgeschlagen",
+        "deleteSuccess": "Snapshot gelöscht.",
+        "deleteFailed": "Snapshot konnte nicht gelöscht werden.",
+        "deleteError": "Snapshot-Löschung fehlgeschlagen"
+      },
+      "modules": {
+        "title": "Modulbasierte DB-Verwaltung",
+        "selected": "Ausgewähltes Modul: {module}",
+        "tabs": {
+          "export": "Export",
+          "import": "Import",
+          "validate": "Manifest Validate",
+          "ui": "UI Export/Bootstrap"
+        },
+        "export": {
+          "title": "Modul-Export",
+          "description": "Tabellen des Moduls {module} werden in Manifest-Reihenfolge exportiert.",
+          "format": {
+            "sql": "SQL",
+            "json": "JSON"
+          },
+          "downloadButton": "Herunterladen",
+          "preparing": "Wird vorbereitet...",
+          "notImplemented": "Modul-Exportfunktion noch nicht implementiert.",
+          "success": "SQL-Backup für Modul {module} heruntergeladen.",
+          "error": "Fehler während des Modul-Exports."
+        },
+        "import": {
+          "title": "Modul-Import",
+          "description": "Wenden Sie SQL/JSON-Dump für das Modul {module} an.",
+          "upsertLabel": "UPSERT (Aktualisieren, wenn vorhanden, andernfalls hinzufügen)",
+          "importButton": "Importieren",
+          "importing": "Wird importiert...",
+          "notImplemented": "Modul-Importfunktion noch nicht implementiert.",
+          "success": "Modul {module} erfolgreich importiert.",
+          "error": "Fehler während des Modul-Imports."
+        },
+        "validate": {
+          "title": "Manifest-Validierung",
+          "description": "Ist das Tabellen-Manifest für Modul {module} mit der DB kompatibel?",
+          "validateButton": "Validieren",
+          "validating": "Wird validiert...",
+          "success": "Manifest kompatibel.",
+          "error": "Manifest inkompatibel!"
+        },
+        "ui": {
+          "title": "Site Settings UI Export / Bootstrap",
+          "description": "Verwalten Sie Einträge mit dem Präfix 'ui_' in der Tabelle site_settings in großen Mengen.",
+          "downloadButton": "JSON Herunterladen",
+          "downloadSuccess": "UI-Einstellungen als JSON heruntergeladen.",
+          "downloadError": "Keine Daten zum Herunterladen gefunden.",
+          "sourceLocale": "Quell-Locale",
+          "targetLocale": "Ziel-Locale",
+          "overwrite": "Bestehende Einträge überschreiben (Overwrite)",
+          "onlyUiKeys": "Nur Schlüssel mit Präfix 'ui_' verarbeiten",
+          "bootstrapButton": "Bootstrap Starten",
+          "applying": "Wird angewendet...",
+          "bootstrapSuccess": "Bootstrap abgeschlossen.",
+          "bootstrapError": "Fehler während des Bootstraps.",
+          "bootstrapErrorGeneric": "Unerwarteter Fehler während des Bootstrap-Vorgangs."
+        }
+      }
+    },
+    "reports": {
+      "title": "Berichte (Admin)",
+      "description": "KPI, Ressourcenleistung und Standortaufschlüsselung.",
+      "refresh": "Aktualisieren",
+      "tabs": {
+        "title": "Ansichten",
+        "description": "KPI • Ressourcenleistung • Standorte",
+        "kpi": "KPI",
+        "users": "Ressourcen",
+        "locations": "Standorte"
+      },
+      "filter": {
+        "title": "Filter",
+        "description": "Datumsbereich (Start/Ende) und Ressourcenauswahl.",
+        "apply": "Anwenden",
+        "reset": "Zurücksetzen",
+        "from": "Start",
+        "to": "Ende",
+        "role": "Rolle",
+        "roleHint": "Wird nur im Tab „Ressourcen“ verwendet.",
+        "invalidFrom": "Startdatum ist ungültig.",
+        "invalidTo": "Endedatum ist ungültig."
+      },
+      "kpi": {
+        "daily": "Täglich",
+        "weekly": "Wöchentlich",
+        "monthly": "Monatlich",
+        "loadingError": "KPI konnten nicht geladen werden.",
+        "noData": "Keine Datensätze gefunden.",
+        "bucket": "Zeitraum",
+        "total": "Gesamt",
+        "completed": "Abgeschlossen",
+        "success": "Erfolg"
+      },
+      "users": {
+        "title": "Ressourcenleistung",
+        "description": "Rolle={role} • Anzahl: {count}",
+        "loadingError": "Leistungsbericht konnte nicht geladen werden.",
+        "noData": "Keine Datensätze gefunden.",
+        "table": {
+          "user": "Ressource",
+          "total": "Buchungen",
+          "completed": "Abgeschlossen",
+          "cancelled": "Storniert",
+          "success": "Erfolg"
+        }
+      },
+      "locations": {
+        "title": "Standort (Locale) Aufschlüsselung",
+        "description": "Anzahl: {count}",
+        "loadingError": "Standortbericht konnte nicht geladen werden.",
+        "noData": "Keine Datensätze gefunden.",
+        "table": {
+          "city": "Locale / Region",
+          "district": "Unterregion",
+          "total": "Buchungen",
+          "completed": "Abgeschlossen",
+          "cancelled": "Storniert",
+          "success": "Erfolg"
+        }
+      }
+    },
+    "db": {
+      "title": "Datenbank-Verwaltung",
+      "description": "Snapshot-Punkte erstellen, vollständiges Backup herunterladen, SQL-Import anwenden oder nach Modul exportieren/importieren.",
+      "auth": {
+        "loading": "Admin-Panel wird geladen..."
+      },
+      "help": {
+        "pageTitle": "Was macht diese Seite?",
+        "dbAdmin": "DB Admin-Bildschirm",
+        "fullDbDesc": "Exportieren/Importieren Sie die gesamte Datenbank.",
+        "snapshotDesc": "Wiederherstellungspunkt vor riskanten Operationen erstellen, wiederherstellen.",
+        "moduleDesc": "Nur ausgewählte Modultabellen übertragen (z.B. products).",
+        "uiDesc": "UI-Texte nach Locale in großen Mengen exportieren/bootstrappen.",
+        "closeHint": "Tipp: Klicken Sie außerhalb oder drücken Sie ESC zum Schließen.",
+        "closeButton": "Schließen"
+      },
+      "fullDb": {
+        "title": "Datenbank-Backup & Snapshot-Verwaltung",
+        "description": "Sie können Snapshots erstellen und vollständige Datenbank-Backups herunterladen.",
+        "snapshotLabel": "Snapshot-Bezeichnung",
+        "snapshotPlaceholder": "Z.B.: Aktuelles Live-System",
+        "notePlaceholder": "Warum wurde dieser Snapshot erstellt?",
+        "noteLabel": "Hinweis (optional)",
+        "createButton": "Snapshot Erstellen",
+        "creating": "Wird erstellt...",
+        "downloadTitle": "Vollständiges Datenbank-Backup Herunterladen",
+        "downloadDesc": "Aktuellen DB-Status als vollständigen Dump herunterladen.",
+        "sqlButton": "SQL Herunterladen (.sql)",
+        "sqlPreparing": "SQL wird vorbereitet...",
+        "jsonButton": "JSON Herunterladen (.json)",
+        "snapshotCreated": "Snapshot erstellt: {label}",
+        "snapshotError": "Fehler beim Erstellen des Snapshots.",
+        "exportSuccess": "SQL-Backup heruntergeladen.",
+        "exportError": "Fehler während DB-Export (SQL).",
+        "jsonNotImplemented": "JSON-Exportfunktion noch nicht implementiert. Sie können SQL-Export verwenden."
+      },
+      "import": {
+        "title": "SQL Import (IMPORT)",
+        "titleWithMode": "SQL Import (IMPORT) — {mode}",
+        "warning": "Diese Operationen können Datenbankinhalte dauerhaft ändern. Besonders wenn Truncate aktiviert ist, erstellen Sie unbedingt einen Snapshot vor dem Fortfahren.",
+        "dangerLabel": "WARNUNG:",
+        "helpTitle": "Import-Erklärung",
+        "helpHeadline": "SQL Import (Full DB)",
+        "helpDesc1": "Dieses Panel wendet SQL-Dump auf die gesamte Datenbank an (Text / URL / Datei).",
+        "helpDesc2": "leert Tabellen vor dem Import. Sehr riskant in der Produktionsumgebung.",
+        "helpDesc3": "ist ein Probelauf in unterstützten Flows (Rollback).",
+        "processing": "Operation läuft...",
+        "tabs": {
+          "text": "SQL-Text",
+          "url": "Von URL",
+          "file": "Von Datei"
+        },
+        "text": {
+          "label": "SQL-Skript (utf8)",
+          "placeholder": "Fügen Sie das vollständige SQL-Skript hier ein.",
+          "required": "SQL-Text darf nicht leer sein.",
+          "helpTitle": "SQL-Text-Tipps",
+          "helpHeadline": "SQL-Text",
+          "helpDesc1": "Fügen Sie das vollständige SQL-Skript hier ein.",
+          "helpDesc2": "Browser kann bei sehr großen Dumps langsam werden; Datei-Import ist besser geeignet.",
+          "helpDesc3": "Inhalt muss korrekte Kodierung haben (utf8)."
+        },
+        "url": {
+          "label": "SQL-Dump-URL (.sql oder .sql.gz)",
+          "placeholder": "https://.../dump.sql oder dump.sql.gz",
+          "required": "Geben Sie zuerst eine gültige .sql oder .sql.gz URL ein.",
+          "helpTitle": "URL-Import-Tipps",
+          "helpHeadline": "URL-Import",
+          "helpDesc1": "HTTPS-Verwendung wird empfohlen.",
+          "helpDesc2": ".sql.gz Dumps übertragen sich schneller bei großen Daten.",
+          "helpDesc3": "URLs, die Authentifizierung/Schutz erfordern, können möglicherweise nicht vom Backend heruntergeladen werden."
+        },
+        "file": {
+          "label": "SQL-Dump-Datei (.sql oder .gz)",
+          "placeholder": "Datei auswählen",
+          "required": "Wählen Sie zuerst eine .sql oder .gz Datei.",
+          "selected": "Ausgewählte Datei:",
+          "note": "Es gibt keinen Dry Run im Datei-Import-Flow (nur Truncate wird angewendet).",
+          "helpTitle": "Datei-Import-Tipps",
+          "helpHeadline": "Von Datei Import",
+          "helpDesc1": "Stabilste Methode (empfohlen für große Dumps).",
+          "helpDesc2": "Es gibt keinen Dry Run im Datei-Import-Flow.",
+          "helpDesc3": "Nginx/Fastify Body-Limit-Einstellungen können die Dateigröße beeinflussen."
+        },
+        "truncate": {
+          "label": "ALLE Tabellen vor der Operation TRUNCATE",
+          "helpTitle": "Was ist Truncate?",
+          "helpHeadline": "TruncateBefore",
+          "helpDesc": "Tabellen werden vor dem Import geleert. Falsche Verwendung führt zu Datenverlust. Das Erstellen eines Snapshots vor der Operation in der Produktion sollte als obligatorisch angesehen werden.",
+          "helpDescFile": "Dies ist die kritischste Option beim Datei-Import. Wenn aktiviert, werden Tabellen vor dem Import vollständig geleert. Betrachten Sie das Erstellen eines Snapshots als obligatorisch."
+        },
+        "dryRun": {
+          "label": "Dry Run (Probe, Änderungen rückgängig machen)",
+          "helpTitle": "Wie funktioniert Dry Run?",
+          "helpHeadline": "Dry Run",
+          "helpDesc": "Wenn Backend unterstützt, läuft innerhalb von SQL-Transaktion und macht Rollback. Einige DDL-Operationen können in MySQL impliziten Commit machen; nicht 100% garantiert.",
+          "helpDescUrl": "Wenn Backend unterstützt, macht Transaktion + Rollback. Zeit- und Ressourcenverbrauch steigt bei großen Dumps."
+        },
+        "buttons": {
+          "apply": "SQL Anwenden",
+          "importing": "Wird importiert...",
+          "importFromUrl": "Von URL Importieren",
+          "importFromFile": "Von Datei Importieren"
+        },
+        "confirm": {
+          "text": "Sie sind dabei, dieses SQL-Skript direkt auf die Datenbank anzuwenden.\n\nTruncate: {truncate}\nMöchten Sie fortfahren?",
+          "url": "SQL-Dump von dieser URL heruntergeladen wird auf die Datenbank angewendet.\n\nURL: {url}\nTruncate: {truncate}\n\nMöchten Sie fortfahren?",
+          "file": "Die von Ihnen ausgewählte SQL-Datei wird auf die Datenbank angewendet.\n\nDatei: {file}\nTruncate: {truncate}\n\nDieser Vorgang kann nicht rückgängig gemacht werden. Möchten Sie fortfahren?",
+          "truncateYes": "JA (alle Tabellen leeren)",
+          "truncateNo": "Nein"
+        },
+        "success": {
+          "text": "SQL-Text erfolgreich importiert.",
+          "url": "SQL-Dump von URL erfolgreich importiert.",
+          "file": "SQL-Dump von Datei erfolgreich importiert.",
+          "dryRun": "Dry Run erfolgreich. Änderungen zurückgerollt."
+        },
+        "error": {
+          "text": "SQL-Import (Text) Fehler.",
+          "textGeneric": "Fehler während SQL-Import (Text).",
+          "url": "SQL-Import (URL) Fehler.",
+          "urlGeneric": "Fehler während SQL-Import (URL).",
+          "file": "SQL-Import (Datei) Fehler.",
+          "fileGeneric": "Fehler während SQL-Import (Datei)."
+        }
+      },
+      "snapshots": {
+        "title": "Snapshot-Punkte",
+        "total": "Gesamt:",
+        "processing": "Operation läuft...",
+        "columns": {
+          "index": "#",
+          "labelNote": "Bezeichnung / Hinweis",
+          "file": "Datei",
+          "created": "Erstellt",
+          "size": "Größe",
+          "actions": "Aktionen"
+        },
+        "noLabel": "Keine Bezeichnung",
+        "noNote": "-",
+        "loading": "Laden...",
+        "noData": "Noch keine Snapshots gefunden.",
+        "scrollNote": "Hinweis: Wenn der Bildschirm schmal ist, kann die Tabelle horizontal gescrollt werden.",
+        "restore": "Wiederherstellen",
+        "delete": "Löschen",
+        "restoreConfirm": "Sie sind dabei, von diesem Snapshot wiederherzustellen.\n\nSnapshot: {label}\n\nDieser Vorgang wird aktuelle Datenbankinhalte ÜBERSCHREIBEN (truncate).\nMöchten Sie fortfahren?",
+        "deleteConfirm": "Sie sind dabei, diese Snapshot-Datei zu löschen.\n\nSnapshot: {label}\n\nMöchten Sie fortfahren?",
+        "restoreSuccess": "Snapshot erfolgreich wiederhergestellt.",
+        "restoreError": "Ein Fehler ist während der Snapshot-Wiederherstellung aufgetreten.",
+        "restoreFailed": "Snapshot-Wiederherstellung fehlgeschlagen",
+        "deleteSuccess": "Snapshot gelöscht.",
+        "deleteFailed": "Snapshot konnte nicht gelöscht werden.",
+        "deleteError": "Snapshot-Löschung fehlgeschlagen"
+      },
+      "modules": {
+        "title": "Modulbasierte DB-Verwaltung",
+        "selected": "Ausgewähltes Modul: {module}",
+        "tabs": {
+          "export": "Export",
+          "import": "Import",
+          "validate": "Manifest Validate",
+          "ui": "UI Export/Bootstrap"
+        },
+        "export": {
+          "title": "Modul-Export",
+          "description": "Tabellen des Moduls {module} werden in Manifest-Reihenfolge exportiert.",
+          "format": {
+            "sql": "SQL",
+            "json": "JSON"
+          },
+          "downloadButton": "Herunterladen",
+          "preparing": "Wird vorbereitet...",
+          "notImplemented": "Modul-Exportfunktion noch nicht implementiert.",
+          "success": "{module} Export heruntergeladen ({format}).",
+          "error": "Fehler während Modul-Export."
+        },
+        "import": {
+          "title": "Modul-Import",
+          "description": "Importiert {module} Modultabellen gemäß Manifest-Reihenfolge.",
+          "truncate": "Modultabellen zuerst TRUNCATE",
+          "tabs": {
+            "text": "SQL-Text",
+            "file": "Datei"
+          },
+          "text": {
+            "label": "SQL-Skript",
+            "placeholder": "Modul-SQL-Inhalt hier einfügen."
+          },
+          "file": {
+            "label": "Datei (.sql / .gz)"
+          },
+          "applyButton": "SQL Anwenden",
+          "importButton": "Von Datei Importieren",
+          "importing": "Wird importiert...",
+          "notImplemented": "Modul-Importfunktion noch nicht implementiert."
+        },
+        "validate": {
+          "title": "Manifest-Validierung",
+          "description": "Existieren Tabellen im Manifest in der DB? Gibt es Duplikate? Ist die Sortierung sicher?",
+          "checkButton": "Prüfen",
+          "checking": "Wird geprüft...",
+          "noResult": "Noch kein Ergebnis.",
+          "statusOk": "OK",
+          "statusError": "FEHLER",
+          "module": "Modul:",
+          "errors": "Fehler",
+          "warnings": "Warnungen",
+          "declaredTables": "Deklarierte Tabellen:",
+          "duplicates": "Duplikate:"
+        },
+        "ui": {
+          "title": "Site Settings UI Export / Bootstrap",
+          "description": "ui_* Schlüssel in großen Mengen exportieren und Locale bootstrappen.",
+          "downloadButton": "JSON Herunterladen",
+          "targetLocale": "Ziel-Locale",
+          "sourceLocale": "Quell-Locale",
+          "overwrite": "Überschreiben",
+          "onlyUiKeys": "Nur ui_* Schlüssel",
+          "bootstrapButton": "Bootstrap Anwenden",
+          "applying": "Wird angewendet...",
+          "downloadSuccess": "UI JSON heruntergeladen.",
+          "downloadError": "UI-Exportdaten nicht bereit.",
+          "bootstrapSuccess": "UI Bootstrap abgeschlossen.",
+          "bootstrapError": "UI Bootstrap fehlgeschlagen.",
+          "bootstrapErrorGeneric": "Fehler während UI Bootstrap."
+        }
+      }
+    },
+    "auth": {
+      "login": {
+        "title": "Anmelden",
+        "welcomeBack": "Willkommen zurück",
+        "heroTagline": "Verwalten Sie Ihre digitalen Produkte sicher.",
+        "copyrightLine": "© {year} {app}",
+        "continueLogin": "Anmelden um fortzufahren",
+        "description": "Geben Sie Ihre E-Mail und Ihr Passwort ein, um auf das Admin-Panel zuzugreifen.",
+        "noAccess": "Haben Sie keinen Zugang?",
+        "contactAdmin": "Administrator kontaktieren",
+        "emailLabel": "E-Mail-Adresse",
+        "emailPlaceholder": "sie@beispiel.de",
+        "passwordLabel": "Passwort",
+        "passwordPlaceholder": "••••••••",
+        "rememberMe": "30 Tage lang angemeldet bleiben",
+        "loginButton": "Anmelden",
+        "loggingIn": "Anmelden...",
+        "loginSuccess": "Erfolgreich angemeldet.",
+        "loginFailed": "Anmeldung fehlgeschlagen. Bitte überprüfen Sie Ihre Anmeldedaten und versuchen Sie es erneut.",
+        "emailRequired": "Bitte geben Sie eine gültige E-Mail-Adresse ein.",
+        "passwordMinLength": "Das Passwort muss mindestens 6 Zeichen lang sein.",
+        "loginLink": "Anmelden",
+        "fullNameLabel": "Vollständiger Name (optional)",
+        "fullNamePlaceholder": "Ihr Name",
+        "phoneLabel": "Telefon (optional)",
+        "phonePlaceholder": "+49 xxx xxx xx xx",
+        "confirmPasswordLabel": "Passwort bestätigen",
+        "confirmPasswordPlaceholder": "••••••••",
+        "acceptTerms": "Ich akzeptiere die Allgemeinen Geschäftsbedingungen",
+        "registerButton": "Registrieren",
+        "creatingAccount": "Konto wird erstellt...",
+        "accountCreated": "Konto erstellt und angemeldet.",
+        "registrationFailed": "Registrierung fehlgeschlagen. Bitte überprüfen Sie Ihre Angaben und versuchen Sie es erneut.",
+        "passwordsNoMatch": "Die Passwörter stimmen nicht überein.",
+        "mustAcceptTerms": "Sie müssen die Bedingungen akzeptieren, um fortzufahren."
+      }
+    },
+    "common": {
+      "save": "Speichern",
+      "saving": "Speichern...",
+      "cancel": "Abbrechen",
+      "deleteConfirm": "\"{item}\" löschen?",
+      "deleted": "\"{item}\" gelöscht.",
+      "edit": "Bearbeiten",
+      "create": "Erstellen",
+      "created": "\"{item}\" erstellt.",
+      "update": "Aktualisieren",
+      "updated": "\"{item}\" aktualisiert.",
+      "search": "Suchen",
+      "searchPlaceholder": "Suchen...",
+      "filter": "Filtern",
+      "refresh": "Aktualisieren",
+      "loading": "Lädt...",
+      "noData": "Keine Daten gefunden",
+      "actions": "Aktionen",
+      "back": "Zurück",
+      "next": "Weiter",
+      "previous": "Vorherige",
+      "confirm": "Bestätigen",
+      "yes": "Ja",
+      "no": "Nein",
+      "close": "Schließen",
+      "copy": "Kopieren",
+      "copied": "Kopiert",
+      "copySuccess": "Kopiert.",
+      "copyFailed": "Kopieren fehlgeschlagen.",
+      "upload": "Upload",
+      "download": "Herunterladen",
+      "preview": "Vorschau",
+      "previewColon": "Vorschau:",
+      "view": "Ansehen",
+      "add": "Hinzufügen",
+      "remove": "Entfernen",
+      "clear": "Löschen",
+      "reset": "Zurücksetzen",
+      "restore": "Wiederherstellen",
+      "apply": "Anwenden",
+      "locale": "Sprache",
+      "localePlaceholder": "Sprache auswählen",
+      "localeOptionsMissing": "Keine Sprachoptionen gefunden.",
+      "key": "Schlüssel",
+      "value": "Wert",
+      "source": "Quelle",
+      "exists": "Existiert",
+      "doesNotExist": "Existiert nicht",
+      "note": "Hinweis",
+      "savedUrl": "Gespeicherte URL:",
+      "imageLoadFailed": "Bild konnte nicht geladen werden",
+      "total": "Gesamt",
+      "operationFailed": "Vorgang fehlgeschlagen. Bitte versuchen Sie es erneut.",
+      "active": "Aktiv",
+      "inactive": "Inaktiv"
+    },
+    "slider": {
+      "header": {
+        "title": "Slider Management",
+        "description": "Manage your homepage sliders here.",
+        "total": "Total Found:",
+        "loading": "Laden...",
+        "searchLabel": "Suche",
+        "searchPlaceholder": "Search by title...",
+        "localeLabel": "Language",
+        "localePlaceholder": "Select Language",
+        "localeEmptyError": "No languages found.",
+        "localeEmptyHelp": "Please define active languages in settings.",
+        "filterLabel": "Active Filter",
+        "onlyActiveLabel": "Only Active",
+        "onlyActiveHelp": "Show only sliders visible on the site.",
+        "refreshButton": "Aktualisieren",
+        "createButton": "Create Slider"
+      },
+      "list": {
+        "title": "Slider List",
+        "processing": "Processing...",
+        "totalLabel": "Total Sliders:",
+        "saveOrderButton": "Save Order",
+        "savingOrder": "Saving...",
+        "reorderHelp": "Drag and drop or use up/down buttons to reorder (only when not filtering/searching).",
+        "imageColumn": "Image",
+        "titleColumn": "Titel",
+        "localeColumn": "Lang",
+        "slugColumn": "Slug",
+        "activeColumn": "Active",
+        "featuredColumn": "Featured",
+        "orderColumn": "Order",
+        "actionsColumn": "Aktionen",
+        "noImage": "No Image",
+        "noTitle": "(No Title)",
+        "activeStatus": "Active",
+        "inactiveStatus": "Inactive",
+        "featuredStatus": "Featured",
+        "normalStatus": "Normal",
+        "editButton": "Bearbeiten",
+        "deleteButton": "Löschen",
+        "loading": "Loading data...",
+        "noRecords": "No sliders found matching your criteria.",
+        "upButton": "Move Up",
+        "downButton": "Move Down",
+        "buttonLabel": "Button:",
+        "linkLabel": "Link:",
+        "deleteConfirm": "Are you sure you want to delete slider '{name}'?",
+        "deleted": "Slider '{name}' deleted.",
+        "deleteError": "Error deleting slider.",
+        "activeUpdateError": "Error updating status.",
+        "featuredUpdateError": "Error updating featured status.",
+        "orderSaved": "Order saved successfully.",
+        "orderSaveError": "Error saving order."
+      },
+      "form": {
+        "contentTitle": "Slider Content",
+        "localeLabel": "Language",
+        "orderLabel": "Display Order",
+        "activeLabel": "Active",
+        "activeHelp": "Enable/Disable this slider on frontend.",
+        "featuredLabel": "Featured",
+        "featuredHelp": "Mark as important/featured if applicable.",
+        "titleLabel": "Titel",
+        "slugLabel": "Slug",
+        "slugHelp": "Auto-generated from title for URLs.",
+        "descriptionLabel": "Beschreibung",
+        "buttonTextLabel": "Button Text",
+        "buttonLinkLabel": "Button Link",
+        "altLabel": "Image Alt Text",
+        "localeRequired": "Language selection is required.",
+        "titleRequired": "Title is required.",
+        "slugRequired": "Slug is required.",
+        "created": "Slider created successfully.",
+        "idNotFound": "Record ID to edit not found.",
+        "updated": "Slider updated successfully.",
+        "saveError": "Error occurred while saving.",
+        "editTitle": "Edit Slider",
+        "createTitle": "New Slider",
+        "formMode": "Form View",
+        "jsonMode": "JSON View"
+      },
+      "formImage": {
+        "imageLabel": "Slider Image",
+        "imageHelp": "Recommended size: 1920x800px. WebP or JPG format.",
+        "altLabel": "Alt Text",
+        "altPlaceholder": "Enter description for image...",
+        "altHelp": "Important for SEO. Displayed if image fails to load."
+      },
+      "formHeader": {
+        "createTitle": "Create New Slider",
+        "editTitle": "Edit Slider",
+        "description": "You can edit slider details using the form below.",
+        "loading": "Laden...",
+        "saving": "Saving...",
+        "backButton": "Go Back",
+        "createButton": "Erstellen",
+        "saveButton": "Speichern"
+      },
+      "formJson": {
+        "label": "Rohe JSON-Daten",
+        "helperText": "Achtung: Das direkte Bearbeiten von JSON-Daten ist für fortgeschrittene Benutzer."
+      }
+    },
+    "menuitem": {
+      "header": {
+        "title": "Menüpunkte (Header)",
+        "total": "Gesamt {count} Einträge.",
+        "refresh": "Aktualisieren",
+        "refreshing": "Laden...",
+        "loading": "Lädt...",
+        "create": "Neues Menüelement",
+        "searchLabel": "Suche",
+        "searchPlaceholder": "Titel oder URL suchen...",
+        "localeLabel": "Sprache",
+        "allLocales": "Alle Sprachen",
+        "defaultLabel": "Standard",
+        "activeLabel": "Status",
+        "allStats": "Alle",
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "sortLabel": "Sortierung",
+        "sortOrder": "Reihenfolge",
+        "sortCreated": "Erstellt am",
+        "sortTitle": "Titel",
+        "orderLabel": "Richtung",
+        "asc": "Aufsteigend",
+        "desc": "Absteigend",
+        "filtersTitle": "Filter"
+      },
+      "list": {
+        "title": "Menüelemente",
+        "totalLabel": "Gesamt:",
+        "saveOrder": "Reihenfolge speichern",
+        "savingOrder": "Speichert...",
+        "columns": {
+          "title": "Titel",
+          "url": "URL",
+          "type": "Typ",
+          "location": "Ort",
+          "active": "Aktiv",
+          "date": "Datum",
+          "actions": "Aktionen",
+          "locale": "Sprache"
+        },
+        "types": {
+          "page": "Page",
+          "custom": "Custom URL"
+        },
+        "deleteConfirm": "Möchten Sie \"{title}\" wirklich löschen?",
+        "deleted": "Menüelement gelöscht.",
+        "editButton": "Bearbeiten",
+        "deleteButton": "Löschen",
+        "noData": "Keine Menüelemente gefunden.",
+        "loading": "Laden...",
+        "noTitle": "(Kein Titel)",
+        "orderSaved": "Reihenfolge gespeichert.",
+        "statusActive": "Aktiviert",
+        "statusPassive": "Deaktiviert"
+      },
+      "form": {
+        "createTitle": "Neues Menüelement",
+        "editTitle": "Menüelement bearbeiten",
+        "createDesc": "Neues Menüelement erstellen",
+        "editDesc": "Bestehendes Menüelement bearbeiten",
+        "headerHelp": "Dieser Bildschirm verwaltet nur <code>Header</code>-Menüelemente. Das Feld <code>location</code> ist fest.",
+        "advancedUsageHelp": "Die Felder <code>page_id</code>, <code>parent_id</code> und <code>section_id</code> sind für die erweiterte Verwendung und können nur im <strong>JSON-Modus</strong> bearbeitet werden.",
+        "urlCustomHelp": "URL ist erforderlich, wenn der Typ <code>custom</code> ist.",
+        "contentTitle": "Menüelement Details",
+        "created": "Menüelement erstellt.",
+        "updated": "Menüelement aktualisiert.",
+        "basicInfo": "Basisinformationen",
+        "advancedTitle": "Erweiterte Einstellungen",
+        "labels": {
+          "title": "Titel",
+          "url": "URL",
+          "type": "Typ",
+          "pageId": "Seiten-ID",
+          "parentId": "Übergeordnetes Menü",
+          "location": "Ort",
+          "icon": "Icon",
+          "sectionId": "Abschnitts-ID",
+          "order": "Anzeigereihenfolge",
+          "locale": "Sprache",
+          "active": "Aktiv"
+        },
+        "placeholders": {
+          "title": "Menütitel",
+          "url": "https://... oder /beispiel",
+          "urlPage": "Optional für Seitentyp",
+          "icon": "Bootstrap / Custom Icon Klasse",
+          "pageId": "UUID oder Slug",
+          "parentNone": "Kein übergeordnetes Menü (Hauptebene)",
+          "sectionId": "Gruppen-ID"
+        },
+        "metaTitle": "Meta-Informationen",
+        "metaId": "ID",
+        "metaCreatedAt": "Erstellt am",
+        "metaUpdatedAt": "Aktualisiert am",
+        "metaLocale": "Sprache",
+        "errors": {
+          "titleRequired": "Titel ist erforderlich.",
+          "urlRequired": "URL ist für benutzerdefinierten Typ erforderlich.",
+          "pageIdRequired": "Seiten-ID ist für den Seitentyp erforderlich.",
+          "generic": "Vorgang fehlgeschlagen."
+        },
+        "success": {
+          "created": "Menüelement erstellt.",
+          "updated": "Menüelement aktualisiert."
+        },
+        "help": {
+          "headerOnly": "Dieser Bildschirm verwaltet nur <code>Header</code>-Menüelemente.",
+          "typeDesc": "Seite: Intern, Custom: Externer Link",
+          "typeCustomUrlRequired": "URL ist erforderlich, wenn Typ custom ist.",
+          "advanced": "Erweiterte Felder sind im JSON-Modus bearbeitbar.",
+          "pageIdHelp": "ID oder Slug der Seite.",
+          "parentNoneOption": "Kein übergeordnetes Menü",
+          "parentHelp": "Wählen Sie ein übergeordnetes Menü, um ein Untermenü zu erstellen.",
+          "iconExample": "Beispiel: fa fa-home, lucide-home oder 🏠",
+          "orderHelp": "Anzeigereihenfolge (kleinere Werte zuerst)",
+          "activeHelp": "Menüelement auf der Website anzeigen",
+          "locationUnknown": "Unbekannt",
+          "locationHeader": "Kopfzeile",
+          "locationFooter": "Fußzeile"
+        },
+        "back": "Zurück",
+        "delete": "Löschen",
+        "save": "Speichern",
+        "saving": "Speichert..."
+      }
+    },
+    "customPage": {
+      "title": "Benutzerdefinierte Seiten",
+      "subtitle": "Statische Inhaltsseiten auflisten",
+      "newPage": "Neue Seite",
+      "allLanguages": "Alle Sprachen",
+      "allModules": "Alle Module",
+      "searchPlaceholder": "Suche: Titel oder Slug...",
+      "status": {
+        "all": "Alle",
+        "published": "Nur Veröffentlichte",
+        "draft": "Entwürfe"
+      },
+      "moduleLabels": {
+        "blog": "Blog",
+        "news": "Nachrichten / Ankündigungen",
+        "about": "Über uns / Statisch",
+        "services": "Dienstleistungen",
+        "products": "Produkte",
+        "solutions": "Lösungen",
+        "library": "Bibliothek",
+        "faq": "FAQ",
+        "contact": "Kontakt"
+      },
+      "list": {
+        "published": "Veröffentlicht",
+        "draft": "Entwurf",
+        "saveOrder": "Reihenfolge speichern",
+        "savingOrder": "Speichert...",
+        "deleteConfirm": "Sie sind dabei, diese Seite zu löschen.\n\nTitel: {title}\nID: {id}\nSlug: {slug}\n\nMöchten Sie fortfahren?",
+        "deleteSuccess": "Seite gelöscht",
+        "deleteError": "Löschen fehlgeschlagen",
+        "listTitle": "Liste",
+        "recordCount": "{count} Einträge",
+        "noTitle": "Kein Titel",
+        "created": "Erstellt",
+        "updated": "Aktualisiert",
+        "moveUp": "Hoch",
+        "moveDown": "Runter",
+        "reorderHelp": "Reihenfolge: Hoch/Runter bewegen, dann speichern.",
+        "cardViewHint": "Standardansicht ist Karte. Tabellenansicht auf großen Bildschirmen.",
+        "featured": "Startseite",
+        "unfeatured": "Nicht angezeigt",
+        "featuredSuccess": "Wird auf der Startseite angezeigt.",
+        "unfeaturedSuccess": "Von der Startseite entfernt."
+      },
+      "form": {
+        "isPublished": "Veröffentlicht",
+        "featured": "Auf Startseite anzeigen",
+        "title": "Titel",
+        "slug": "Slug",
+        "summary": "Zusammenfassung",
+        "content": "Inhalt",
+        "tags": "Tags",
+        "featuredImage": "Vorschaubild",
+        "gallery": "Galerie",
+        "metaTitle": "SEO Titel",
+        "metaDescription": "SEO Beschreibung",
+        "imageSize": "Bildgröße",
+        "manualUrl": "Manuelle Bild-URL",
+        "createTitle": "Neue Seite erstellen",
+        "editTitle": "Seite bearbeiten",
+        "formDescription": "Titel, Slug, Inhalt, Tags und SEO-Felder ausfüllen.",
+        "formMode": "Formular",
+        "jsonMode": "JSON",
+        "back": "Zurück",
+        "createBtn": "Seite erstellen",
+        "saveBtn": "Änderungen speichern",
+        "creating": "Erstellen...",
+        "saving": "Speichern...",
+        "switchingLocale": "Sprache wird gewechselt...",
+        "localeLabel": "Sprache",
+        "localeHint": "Auswahl bestimmt auch den Locale-Datensatz, den Sie bearbeiten.",
+        "jsonHelperText": "Dieses JSON ist eine direkte Darstellung aller Formularfelder.",
+        "titleSlugRequired": "Titel und Slug sind erforderlich.",
+        "imageAddedToContent": "Bild zum Inhalt hinzugefügt.",
+        "invalidImageUrl": "Bitte geben Sie eine gültige Bild-URL ein.",
+        "localeRecordNotFound": "Kein Eintrag für die gewählte Sprache gefunden; Sie können neuen Inhalt in dieser Sprache erstellen.",
+        "localeLoadFailed": "Beim Laden der Seite für die gewählte Sprache ist ein Fehler aufgetreten.",
+        "imageSizeSm": "Klein (1/2)",
+        "imageSizeMd": "Mittel (3/4)",
+        "imageSizeLg": "Groß (Standard)",
+        "imageSizeFull": "Volle Breite",
+        "uploadHelperText": "Hochgeladenes Bild wird als Block am Ende des Inhalts hinzugefügt.",
+        "altTextPlaceholder": "Alternativtext (optional)",
+        "addManualUrl": "URL zum Inhalt hinzufügen",
+        "coverHelperText": "Laden Sie ein Cover-/Vorschaubild für diese Seite hoch.",
+        "galleryHelperText": "Laden Sie mehrere Bilder hoch und definieren Sie eine Galerie für diese Seite."
+      },
+      "detail": {
+        "noLocales": "Keine Sprachen gefunden",
+        "noLocalesDesc": "app_locales ist leer oder ungültig. Bitte setzen Sie die Sprachen zuerst in den Site-Einstellungen.",
+        "invalidId": "Ungültige ID",
+        "invalidIdDesc": "Keine UUID:",
+        "returnToList": "Zur Liste zurückkehren",
+        "invalidLocale": "Keine gültige Locale ausgewählt.",
+        "createSuccess": "Seite erfolgreich erstellt.",
+        "createIdError": "Erstellt, aber keine ID zurückgegeben.",
+        "updateSuccess": "Seite aktualisiert.",
+        "noPageId": "Seitendaten konnten nicht geladen werden (keine ID).",
+        "operationFailed": "Vorgang fehlgeschlagen. Bitte versuchen Sie es erneut.",
+        "localeListError": "Eintragsliste für die gewählte Sprache konnte nicht geladen werden."
+      }
+    },
+    "profile": {
+      "subtitle": "Hier können Sie Ihre Profilinformationen und Ihr Passwort aktualisieren.",
+      "personalInfo": "Persönliche Informationen",
+      "personalInfoDesc": "Ihr Name, Ihre E-Mail-Adresse und Ihr Profilbild.",
+      "avatarUploaded": "Profilbild hochgeladen.",
+      "avatarUploadFailed": "Bild-Upload fehlgeschlagen.",
+      "updated": "Profil erfolgreich aktualisiert.",
+      "updateFailed": "Profilaktualisierung fehlgeschlagen.",
+      "avatarSet": "Benutzerdefiniertes Profilbild gesetzt",
+      "noAvatar": "Standard-Avatar wird verwendet",
+      "name": "Vollständiger Name",
+      "email": "E-Mail",
+      "security": "Sicherheit",
+      "securityDesc": "Aktualisieren Sie Ihr Passwort für die Kontosicherheit.",
+      "newPassword": "Neues Passwort",
+      "confirmPassword": "Passwort bestätigen",
+      "changePassword": "Passwort ändern",
+      "passwordRequired": "Neues Passwort ist erforderlich.",
+      "passwordsDontMatch": "Passwörter stimmen nicht überein.",
+      "passwordUpdated": "Passwort erfolgreich aktualisiert.",
+      "passwordUpdateFailed": "Passwortaktualisierung fehlgeschlagen."
+    },
+    "sidebar": {
+      "search": "Suchen",
+      "searchShortcut": "⌘J",
+      "searchPlaceholder": "Suchen (derzeit eingeschränkt)...",
+      "noResults": "Keine Ergebnisse gefunden.",
+      "quickCreate": "Schnell Erstellen",
+      "inbox": "Posteingang",
+      "comingSoon": "Demnächst",
+      "user": {
+        "account": "Konto",
+        "billing": "Abrechnung",
+        "notifications": "Benachrichtigungen",
+        "logout": "Abmelden"
+      },
+      "theme": {
+        "light": "Hell",
+        "dark": "Dunkel"
+      },
+      "preferences": {
+        "title": "Einstellungen",
+        "description": "Passen Sie Ihre Dashboard-Layout-Einstellungen an.",
+        "cookieNote": "*Einstellungen verwenden standardmäßig Cookies. Sie können im Code zwischen Cookies, localStorage oder keinem Speicher wechseln.",
+        "themePreset": "Themenvorlage",
+        "themePresetPlaceholder": "Vorlage",
+        "fonts": "Schriftarten",
+        "fontsPlaceholder": "Schriftart auswählen",
+        "themeMode": "Themenmodus",
+        "pageLayout": "Seitenlayout",
+        "navbarBehavior": "Navigationsleiste Verhalten",
+        "sidebarStyle": "Seitenleiste Stil",
+        "sidebarCollapseMode": "Seitenleiste Einklappmodus",
+        "restoreDefaults": "Standardwerte wiederherstellen",
+        "layout": {
+          "centered": "Zentriert",
+          "fullWidth": "Volle Breite"
+        },
+        "navbar": {
+          "sticky": "Fixiert",
+          "scroll": "Scrollen"
+        },
+        "sidebarVariant": {
+          "inset": "Eingelassen",
+          "sidebar": "Seitenleiste",
+          "floating": "Schwebend"
+        },
+        "sidebarCollapsible": {
+          "icon": "Symbol",
+          "offcanvas": "Außerhalb Canvas"
+        },
+        "language": "Oberflächensprache",
+        "languagePlaceholder": "Sprache wählen"
+      },
+      "groups": {
+        "general": "Allgemein / Verwaltung",
+        "content": "Inhaltsverwaltung",
+        "marketing": "Marketing",
+        "communication": "Kommunikation & CRM",
+        "system": "System & Einstellungen"
+      }
+    },
+    "dashboard": {
+      "title": "Dashboard",
+      "subtitle": "Übersicht der Datensätze im System",
+      "analytics": {
+        "subtitle": "Überblick über Buchungen, Umsatztrend und Service-Performance.",
+        "ranges": {
+          "7d": "Letzte 7 Tage",
+          "30d": "Letzte 30 Tage",
+          "90d": "Letzte 90 Tage"
+        },
+        "kpi": {
+          "bookings": "Buchungen",
+          "confirmed": "Bestätigt",
+          "revenue": "Umsatz",
+          "reservedSlots": "Reservierte Slots"
+        },
+        "revenueChart": {
+          "title": "Umsatztrend",
+          "description": "Zeitreihe auf Basis nicht stornierter Buchungen."
+        },
+        "servicesChart": {
+          "title": "Buchungen nach Service",
+          "description": "Welcher Service wie viele Buchungen erhalten hat."
+        },
+        "servicesTable": {
+          "title": "Service-Performance",
+          "description": "Buchungsanzahl und Umsatz pro Service.",
+          "bookings": "{count} Buchungen"
+        },
+        "modules": {
+          "title": "Modulzähler",
+          "description": "Schnellzugriff für wichtige Admin-Module."
+        },
+        "states": {
+          "empty": "Für diesen Zeitraum wurden keine Analytics-Daten gefunden."
+        }
+      },
+      "items": {
+        "db": "Datenbank",
+        "audit": "Audit-Protokolle",
+        "availability": "Availability",
+        "notifications": "Benachrichtigungen",
+        "storage": "Dateimanager",
+        "contacts": "Kontaktanfragen",
+        "bookings": "Buchungen",
+        "users": "Benutzer",
+        "reviews": "Bewertungen",
+        "newsletter": "Newsletter",
+        "menu_items": "Menüpunkte",
+        "sliders": "Slider",
+        "footer_sections": "Footer-Bereiche",
+        "custom_pages": "Benutzerdefinierte Seiten",
+        "site_settings": "Site-Einstellungen",
+        "cache": "Cache-Verwaltung",
+        "email_templates": "E-Mail-Vorlagen",
+        "services": "Dienstleistungen",
+        "faqs": "FAQ",
+        "resources": "Ressourcen",
+        "reports": "Berichte",
+        "mail": "E-Mail",
+        "telegram": "Telegram",
+        "chat": "Chat & KI",
+        "dashboard": "Übersicht",
+        "orders": "Bestellungen",
+        "wallet": "Wallet",
+        "gutschein": "Gutscheine",
+        "payment_settings": "Zahlungen",
+        "popups": "Popups",
+        "navigation": "Menü & Footer",
+        "llm_prompts": "AI Prompts",
+        "banners": "Banner-Management",
+        "campaigns": "Kampagnen",
+        "home_layout": "Startseiten-Layout"
+      },
+      "stats": {
+        "deliveredOrders": "Gelieferte Bestellungen",
+        "deliveredOrdersHelp": "Anzahl gelieferter Bestellungen",
+        "deliveredUnits": "Gelieferte Einheiten",
+        "deliveredUnitsDescription": "Gesamteinheiten",
+        "deliveredUnitsHelp": "Gelieferte Gesamteinheiten",
+        "earnedIncentives": "Verdiente Prämien",
+        "earnedIncentivesDescription": "Verkäufer + Fahrer",
+        "earnedIncentivesHelp": "Berechnete Gesamtprämien",
+        "avgIncentivePerOrder": "Durchschnittliche Prämie / Bestellung",
+        "avgIncentivePerOrderDescription": "Gesamtprämie / Bestellung",
+        "avgIncentivePerOrderHelp": "Einfacher KPI",
+        "totalIncentivesLabel": "Gesamtprämien",
+        "avgLabel": "Durchschnitt"
+      },
+      "addSection": "Abschnitt hinzufügen",
+      "detailView": "Detailansicht",
+      "columns": {
+        "units": "Einheiten",
+        "orders": "Bestellungen",
+        "incentives": "Prämien"
+      },
+      "type": {
+        "driver": "Fahrer",
+        "seller": "Verkäufer"
+      }
+    },
+    "states": {
+      "loading": "Laden…",
+      "noRecords": "Keine Datensätze gefunden."
+    },
+    "footerSections": {
+      "header": {
+        "title": "Footer-Bereiche",
+        "description": "Verwalten Sie die Bereiche, die im Footer angezeigt werden.",
+        "create": "Neuen Bereich hinzufügen",
+        "searchLabel": "Suche",
+        "searchPlaceholder": "Nach Titel suchen...",
+        "activeLabel": "Status",
+        "activeOptions": {
+          "all": "Alle",
+          "active": "Aktiv",
+          "inactive": "Inaktiv"
+        },
+        "loading": "Lädt...",
+        "edit": "Bearbeiten",
+        "delete": "Löschen"
+      },
+      "list": {
+        "title": "Titel",
+        "slug": "Slug",
+        "active": "Aktiv",
+        "createdAt": "Erstellt am",
+        "actions": "Aktionen",
+        "statusActive": "Aktiviert",
+        "statusPassive": "Deaktiviert",
+        "deleted": "Bereich gelöscht.",
+        "deleteError": "Bereich konnte nicht gelöscht werden.",
+        "loading": "Yükleniyor...",
+        "empty": "Keine Bereiche gefunden.",
+        "deleteConfirmTitle": "Bereich löschen?",
+        "deleteConfirmDesc": "Diese Aktion kann nicht rückgängig gemacht werden.",
+        "cancel": "Abbrechen",
+        "confirm": "Löschen"
+      },
+      "form": {
+        "createTitle": "Neuer Footer-Bereich",
+        "editTitle": "Footer-Bereich bearbeiten",
+        "createDesc": "Einen neuen Footer-Bereich erstellen.",
+        "editDesc": "Footer-Bereich bearbeiten.",
+        "back": "Zurück",
+        "generalInfo": "Allgemeine Informationen",
+        "displayOrder": "Anzeigereihenfolge",
+        "displayOrderPlaceholder": "Reihenfolgenummer eingeben",
+        "active": "Aktiv",
+        "title": "Titel",
+        "titlePlaceholder": "Bereichstitel",
+        "slug": "Slug",
+        "slugPlaceholder": "footer-bereich",
+        "save": "Speichern",
+        "delete": "Sil",
+        "created": "Footer-Bereich erstellt.",
+        "updated": "Footer-Bereich aktualisiert.",
+        "error": {
+          "titleRequired": "Titel ist erforderlich.",
+          "slugRequired": "Slug ist erforderlich.",
+          "load": "Datensatz konnte nicht geladen werden.",
+          "return": "Zur Liste zurückkehren"
+        },
+        "description": "Beschreibung",
+        "descriptionPlaceholder": "Kurze Beschreibung",
+        "saving": "Speichert..."
+      }
+    },
+    "faqs": {
+      "header": {
+        "title": "FAQs",
+        "description": "FAQ-Einträge nach Sprache, Status und Suche verwalten.",
+        "filters": {
+          "searchLabel": "Suche (q)",
+          "searchPlaceholder": "In Frage/Antwort suchen",
+          "slugLabel": "Slug",
+          "slugPlaceholder": "z.B. preise",
+          "localeLabel": "Sprache",
+          "allLocalesOption": "Alle Sprachen",
+          "localesLoading": "Sprachen werden geladen...",
+          "noLocalesError": "Keine aktive Sprachliste. Prüfen Sie app_locales in den Site-Einstellungen.",
+          "statusLabel": "Status",
+          "statusOptions": {
+            "all": "Alle",
+            "active": "Aktiv",
+            "inactive": "Inaktiv"
+          },
+          "sortLabel": "Sortierung",
+          "sortOptions": {
+            "updatedAt": "Aktualisiert am",
+            "createdAt": "Erstellt am",
+            "displayOrder": "Reihenfolge"
+          },
+          "dirLabel": "Richtung",
+          "dirOptions": {
+            "desc": "Absteigend",
+            "asc": "Aufsteigend"
+          }
+        },
+        "summary": {
+          "totalLabel": "Gesamt"
+        },
+        "actions": {
+          "refresh": "Aktualisieren",
+          "create": "Neues FAQ"
+        }
+      },
+      "list": {
+        "title": "Liste",
+        "loadingInline": "Lädt…",
+        "recordCount": "{count} Einträge",
+        "saveOrder": "Reihenfolge speichern",
+        "savingOrder": "Speichert…",
+        "loading": "FAQs werden geladen...",
+        "empty": "Noch keine FAQs.",
+        "reorderHint": "Reihenfolge: hoch/runter verschieben, dann speichern.",
+        "viewNote": "Standardansicht ist Karten. Auf sehr großen Bildschirmen (≥ {bp}px) wird die Tabellenansicht angezeigt.",
+        "deleteConfirm": "Sie sind dabei, diesen FAQ-Eintrag zu löschen.\n\nFrage: {question}\nID: {id}\nSlug: {slug}\n\nMöchten Sie fortfahren?",
+        "status": {
+          "active": "Aktiv",
+          "inactive": "Inaktiv"
+        },
+        "actions": {
+          "edit": "Bearbeiten",
+          "delete": "Löschen",
+          "moveUp": "Nach oben",
+          "moveDown": "Nach unten"
+        },
+        "meta": {
+          "locale": "Sprache",
+          "order": "Reihenfolge",
+          "slug": "Slug",
+          "createdAt": "Erstellt",
+          "updatedAt": "Aktualisiert"
+        },
+        "columns": {
+          "question": "Frage",
+          "slug": "Slug",
+          "order": "Reihenfolge",
+          "status": "Status",
+          "date": "Datum",
+          "actions": "Aktionen"
+        },
+        "placeholders": {
+          "noQuestion": "(keine Frage)",
+          "noSlug": "(kein Slug)"
+        }
+      },
+      "form": {
+        "editorModes": {
+          "form": "Formular",
+          "json": "JSON"
+        },
+        "editorStatus": {
+          "jsonInvalid": "JSON ungültig",
+          "jsonReady": "JSON bereit"
+        },
+        "titles": {
+          "create": "Neues FAQ erstellen",
+          "edit": "FAQ bearbeiten"
+        },
+        "descriptions": {
+          "formMode": "Sprache, Status, Reihenfolge, Frage/Antwort und Slug ausfüllen.",
+          "jsonMode": "Request-Payload als JSON bearbeiten und speichern."
+        },
+        "switchingLocale": "Sprache wird gewechselt...",
+        "loading": "Lädt...",
+        "fields": {
+          "locale": "Sprache",
+          "active": "Aktiv",
+          "displayOrder": "Reihenfolge (display_order)",
+          "question": "Frage",
+          "slug": "Slug",
+          "answer": "Antwort"
+        },
+        "validation": {
+          "requiredFields": "Frage, Antwort und Slug sind erforderlich.",
+          "invalidJson": "JSON ist ungültig. Bitte beheben Sie den Fehler.",
+          "requiredFieldsInJson": "Im JSON sind Frage, Antwort und Slug erforderlich."
+        },
+        "notes": {
+          "title": "Notizen",
+          "body": "Das FAQ-Modul hat keine Bild/SEO-Felder. Dieses Formular verwaltet nur die Backend-FAQ-Felder.",
+          "jsonTip": "Sie können in den JSON-Modus wechseln, um den Payload direkt zu bearbeiten.",
+          "createdAt": "Erstellt",
+          "updatedAt": "Aktualisiert"
+        }
+      },
+      "jsonEditor": {
+        "label": "FAQ JSON (create/update payload)",
+        "help": {
+          "intro": "Dieses JSON entspricht dem Payload für /admin/faqs create/update.",
+          "mainFields": "Hauptfelder:",
+          "localeNote": "Hinweis: Wenn Sie locale im JSON-Modus weglassen, wird die ausgewählte Sprache (aus dem Formular) verwendet."
+        }
+      },
+      "messages": {
+        "orderSaved": "Reihenfolge gespeichert.",
+        "orderSaveError": "Reihenfolge konnte nicht gespeichert werden.",
+        "created": "FAQ erstellt.",
+        "updated": "FAQ aktualisiert.",
+        "deleted": "FAQ gelöscht.",
+        "deleteError": "FAQ konnte nicht gelöscht werden.",
+        "noRecordForLocale": "Kein Eintrag für die ausgewählte Sprache gefunden; Sie können neuen Inhalt für diese Sprache erstellen.",
+        "loadForLocaleError": "Eintrag für die ausgewählte Sprache konnte nicht geladen werden."
+      },
+      "errors": {
+        "invalidLocale": "Ungültige Sprache ausgewählt. Prüfen Sie app_locales und default_locale.",
+        "createdButInvalidId": "Erstellt, aber die Antwort enthält keine gültige UUID id. Prüfen Sie die Backend-Response.",
+        "missingId": "FAQ-Daten konnten nicht geladen werden (id fehlt).",
+        "generic": "Aktion fehlgeschlagen. Bitte erneut versuchen."
+      },
+      "noLocales": {
+        "title": "Sprachliste nicht gefunden",
+        "description": "<code>site_settings.app_locales</code> ist leer oder ungültig. Konfigurieren Sie zuerst die Sprachen in den Site-Einstellungen."
+      },
+      "invalidId": {
+        "title": "Ungültige ID",
+        "description": "Keine UUID:"
+      },
+      "actions": {
+        "backToList": "Zurück zur Liste",
+        "back": "Zurück",
+        "create": "Erstellen",
+        "creating": "Wird erstellt...",
+        "save": "Speichern",
+        "saving": "Speichert..."
+      }
+    },
+    "contacts": {
+      "header": {
+        "title": "Kontaktanfragen",
+        "subtitle": "Kontaktformular-Nachrichten verwalten."
+      },
+      "filters": {
+        "title": "Filter",
+        "description": "Suche, Status und Sortierung.",
+        "searchPlaceholder": "Nach Name, E-Mail oder Betreff suchen...",
+        "statusLabel": "Status",
+        "statusAll": "Alle",
+        "statusNew": "Neu",
+        "statusInProgress": "In Bearbeitung",
+        "statusClosed": "Geschlossen",
+        "orderByLabel": "Sortieren nach",
+        "orderByCreated": "Erstellt am",
+        "orderByUpdated": "Aktualisiert am",
+        "orderByStatus": "Status",
+        "orderByName": "Name",
+        "orderLabel": "Reihenfolge",
+        "orderDesc": "Absteigend",
+        "orderAsc": "Aufsteigend",
+        "onlyUnresolved": "Nur ungelöst"
+      },
+      "list": {
+        "title": "Liste",
+        "description": "Kontakt-Nachrichten ansehen und verwalten.",
+        "loading": "Kontaktanfragen werden geladen...",
+        "empty": "Keine Kontaktanfragen gefunden."
+      },
+      "columns": {
+        "name": "Name",
+        "email": "E-Mail",
+        "subject": "Betreff",
+        "status": "Status",
+        "createdAt": "Erstellt"
+      },
+      "status": {
+        "new": "Neu",
+        "inProgress": "In Bearbeitung",
+        "closed": "Geschlossen"
+      },
+      "details": {
+        "title": "Details",
+        "name": "Name",
+        "email": "E-Mail",
+        "phone": "Telefon",
+        "subject": "Betreff",
+        "message": "Nachricht",
+        "createdAt": "Erstellt",
+        "updatedAt": "Aktualisiert",
+        "id": "ID"
+      },
+      "editDialog": {
+        "title": "Kontakt bearbeiten",
+        "description": "Status, Erledigt-Markierung und Admin-Notiz aktualisieren.",
+        "statusLabel": "Status",
+        "resolvedLabel": "Erledigt",
+        "adminNoteLabel": "Admin-Notiz",
+        "adminNotePlaceholder": "Interne Notiz für das Team..."
+      },
+      "messages": {
+        "saved": "Gespeichert.",
+        "saveError": "Änderungen konnten nicht gespeichert werden.",
+        "deleted": "Gelöscht.",
+        "deleteError": "Nachricht konnte nicht gelöscht werden.",
+        "loadError": "Kontaktanfragen konnten nicht geladen werden."
+      },
+      "confirmDelete": "Sie sind dabei, diese Kontakt-Nachricht zu löschen.\n\nName: {name}\nE-Mail: {email}\nBetreff: {subject}\nID: {id}\n\nMöchten Sie fortfahren?"
+    },
+    "reviews": {
+      "header": {
+        "title": "Bewertungen & Testimonials",
+        "description": "Kundenbewertungen und Testimonials verwalten."
+      },
+      "actions": {
+        "create": "Neue Bewertung",
+        "backToList": "Zurück zur Liste",
+        "deleting": "Wird gelöscht..."
+      },
+      "filters": {
+        "searchLabel": "Suche",
+        "searchPlaceholder": "Name, E-Mail, Kommentar...",
+        "approvedLabel": "Freigabe",
+        "activeLabel": "Status",
+        "minRatingLabel": "Min. Bewertung",
+        "minRatingPlaceholder": "0",
+        "maxRatingLabel": "Max. Bewertung",
+        "maxRatingPlaceholder": "5",
+        "localeLabel": "Sprache",
+        "options": {
+          "all": "Alle",
+          "approved": "Freigegeben",
+          "unapproved": "Nicht freigegeben",
+          "active": "Aktiv",
+          "inactive": "Inaktiv"
+        }
+      },
+      "summary": {
+        "total": "Gesamt {total} Einträge"
+      },
+      "table": {
+        "columns": {
+          "nameEmail": "Name & E-Mail",
+          "rating": "Bewertung",
+          "comment": "Kommentar",
+          "approved": "Freigegeben",
+          "active": "Aktiv",
+          "locale": "Locale",
+          "date": "Datum"
+        },
+        "empty": "Keine Einträge gefunden.",
+        "updatedAt": "Aktualisiert"
+      },
+      "labels": {
+        "approved": "Freigegeben",
+        "unapproved": "Nicht freigegeben",
+        "active": "Aktiv",
+        "inactive": "Inaktiv",
+        "comment": "Kommentar",
+        "createdAt": "Erstellt",
+        "updatedAt": "Aktualisiert"
+      },
+      "deleteDialog": {
+        "title": "Bewertung löschen?",
+        "description": "Die Bewertung von {name} wird gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+        "fallbackName": "Dieser Eintrag"
+      },
+      "messages": {
+        "activated": "Aktiviert.",
+        "deactivated": "Deaktiviert.",
+        "approved": "Freigegeben.",
+        "approvalRemoved": "Freigabe entfernt.",
+        "created": "Eintrag erstellt.",
+        "updated": "Eintrag aktualisiert.",
+        "deleted": "Eintrag gelöscht.",
+        "loadError": "Eintrag konnte nicht geladen werden.",
+        "genericError": "Aktion fehlgeschlagen. Bitte erneut versuchen."
+      },
+      "form": {
+        "titles": {
+          "create": "Neue Bewertung",
+          "edit": "Bewertung bearbeiten"
+        },
+        "descriptions": {
+          "create": "Neue Kundenbewertung hinzufügen.",
+          "edit": "Vorhandene Kundenbewertung bearbeiten."
+        },
+        "sections": {
+          "meta": "Allgemein",
+          "customer": "Kundeninformationen",
+          "content": "Bewertungsinhalt",
+          "extras": "Testimonial-Zusatzfelder",
+          "extrasDescription": "Optionale Felder für das Testimonial-Layout.",
+          "adminReply": "Admin-Antwort",
+          "adminReplyDescription": "Sie können als Admin auf diese Bewertung antworten."
+        },
+        "fields": {
+          "locale": "Sprache",
+          "displayOrder": "Reihenfolge",
+          "approved": "Freigabe",
+          "active": "Aktiv",
+          "targetType": "Zieltyp",
+          "targetId": "Ziel-ID",
+          "name": "Name",
+          "email": "E-Mail",
+          "rating": "Bewertung",
+          "title": "Titel",
+          "comment": "Kommentar",
+          "role": "Rolle / Position",
+          "company": "Unternehmen",
+          "avatarUrl": "Avatar-URL",
+          "logoUrl": "Logo-URL",
+          "profileHref": "Profil-Link",
+          "adminReply": "Antwort"
+        },
+        "placeholders": {
+          "targetType": "z.B. testimonial, product, service",
+          "targetId": "UUID oder Kennung",
+          "name": "z.B. Max Mustermann",
+          "email": "beispiel@email.com",
+          "title": "Optionaler Titel",
+          "comment": "Kundenbewertung...",
+          "role": "z.B. CEO, Manager",
+          "company": "Unternehmensname",
+          "adminReply": "Optionale Admin-Antwort"
+        },
+        "validation": {
+          "targetTypeRequired": "Zieltyp ist erforderlich.",
+          "targetIdRequired": "Ziel-ID ist erforderlich.",
+          "nameRequired": "Name ist erforderlich.",
+          "emailRequired": "E-Mail ist erforderlich.",
+          "commentRequired": "Kommentar ist erforderlich.",
+          "ratingRange": "Bewertung muss zwischen 0 und 5 liegen."
+        }
+      }
+    },
+    "bookings": {
+      "header": {
+        "title": "Buchungen",
+        "description": "Buchungsanfragen filtern, anzeigen und aktualisieren."
+      },
+      "summary": {
+        "total": "Gesamt {total}"
+      },
+      "states": {
+        "loadingInline": "Lädt…",
+        "loading": "Buchungen werden geladen...",
+        "empty": "Keine Einträge gefunden.",
+        "resourcesLoading": "Ressourcen werden geladen..."
+      },
+      "filters": {
+        "searchLabel": "Suche",
+        "searchPlaceholder": "Name / E-Mail / Telefon",
+        "statusLabel": "Status",
+        "statusOptions": {
+          "all": "Alle",
+          "pending_payment": "Zahlung ausstehend",
+          "booked": "Gebucht",
+          "new": "Neu",
+          "confirmed": "Bestätigt",
+          "rejected": "Abgelehnt",
+          "completed": "Abgeschlossen",
+          "cancelled": "Storniert",
+          "no_show": "Nicht erschienen",
+          "expired": "Abgelaufen"
+        },
+        "readLabel": "Gelesen",
+        "readOptions": {
+          "all": "Alle",
+          "unread": "Ungelesen",
+          "read": "Gelesen"
+        },
+        "dateLabel": "Datum",
+        "resourceIdLabel": "Ressourcen-ID",
+        "resourceIdPlaceholder": "(optional)"
+      },
+      "badges": {
+        "unread": "Ungelesen"
+      },
+      "status": {
+        "pending_payment": "Zahlung ausstehend",
+        "booked": "Gebucht",
+        "new": "Neu",
+        "confirmed": "Bestätigt",
+        "rejected": "Abgelehnt",
+        "completed": "Abgeschlossen",
+        "cancelled": "Storniert",
+        "no_show": "Nicht erschienen",
+        "expired": "Abgelaufen"
+      },
+      "read": {
+        "read": "Gelesen",
+        "unread": "Ungelesen"
+      },
+      "list": {
+        "title": "Buchungsliste",
+        "description": "Buchungen verwalten und schnelle Aktionen ausführen.",
+        "views": {
+          "table": "Tabelle",
+          "cards": "Karten",
+          "calendar": "Kalender"
+        },
+        "calendar": {
+          "count": "{count} Buchung(en)",
+          "contact": "Kontakt"
+        },
+        "columns": {
+          "status": "Status",
+          "customer": "Kunde",
+          "date": "Datum",
+          "resource": "Ressource",
+          "service": "Service"
+        }
+      },
+      "labels": {
+        "dateTime": "Datum/Zeit",
+        "resource": "Ressource",
+        "service": "Service",
+        "customerMessage": "Kundennachricht",
+        "selected": "Ausgewählt",
+        "available": "Verfügbar",
+        "full": "Belegt",
+        "inactive": "Inaktiv"
+      },
+      "tooltips": {
+        "acceptDisabled": "Nur „Neu“-Anfragen können akzeptiert werden.",
+        "rejectDisabled": "Dieser Status kann nicht abgelehnt werden.",
+        "alreadyRead": "Bereits gelesen",
+        "decisionAlreadyMade": "Für diese Buchung wurde bereits eine Entscheidung getroffen."
+      },
+      "actions": {
+        "accept": "Akzeptieren",
+        "accepting": "Akzeptiert...",
+        "reject": "Ablehnen",
+        "rejecting": "Lehnt ab...",
+        "sendReminder": "Erinnerung senden",
+        "markRead": "Als gelesen markieren",
+        "backToList": "Zurück zur Liste"
+      },
+      "decision": {
+        "titleAccept": "Buchung akzeptieren",
+        "titleReject": "Buchung ablehnen",
+        "actionAccept": "Akzeptieren",
+        "actionReject": "Ablehnen",
+        "noteLabel": "Entscheidungsnotiz (optional)",
+        "notePlaceholder": "Diese Notiz kann dem Kunden im E-Mail-Template angezeigt werden.",
+        "noteHelp": "Diese Aktion löst im Backend E-Mail-Templates + Benachrichtigungen aus.",
+        "processing": "Wird verarbeitet..."
+      },
+      "confirm": {
+        "delete": "Sie sind dabei, diese Buchung zu löschen.\n\nKunde: {name}\nDatum: {dateTime}\n\nMöchten Sie fortfahren?",
+        "reject": "Sie sind dabei, diese Buchungsanfrage abzulehnen. Möchten Sie fortfahren?"
+      },
+      "messages": {
+        "created": "Eintrag erstellt.",
+        "updated": "Eintrag aktualisiert.",
+        "deleted": "Buchung gelöscht.",
+        "deleteError": "Buchung konnte nicht gelöscht werden.",
+        "markedRead": "Als gelesen markiert.",
+        "accepted": "Buchung akzeptiert. (E-Mail + Benachrichtigung ausgelöst)",
+        "rejected": "Buchung abgelehnt. (E-Mail + Benachrichtigung ausgelöst)",
+        "reminderSent": "Erinnerungs-E-Mail gesendet.",
+        "loadError": "Eintrag konnte nicht geladen werden.",
+        "createUnavailableTitle": "Manuelle Buchungserstellung ist deaktiviert",
+        "createUnavailableDescription": "Buchungen werden über den Benutzerfluss erstellt; im Admin-Panel können Sie vorhandene Einträge anzeigen und ihren Status aktualisieren.",
+        "genericError": "Aktion fehlgeschlagen. Bitte erneut versuchen."
+      },
+      "form": {
+        "titles": {
+          "create": "Neue Buchung",
+          "edit": "Buchung bearbeiten"
+        },
+        "description": "Kundendaten, Datum/Zeit, Ressource und Status verwalten.",
+        "fields": {
+          "name": "Name",
+          "email": "E-Mail",
+          "phone": "Telefon",
+          "locale": "Locale",
+          "status": "Status",
+          "isRead": "Gelesen",
+          "serviceId": "Service-ID",
+          "resource": "Ressource",
+          "date": "Datum",
+          "time": "Uhrzeit",
+          "customerMessage": "Kundennachricht",
+          "adminNote": "Admin-Notiz",
+          "decisionNote": "Entscheidungsnotiz"
+        },
+        "placeholders": {
+          "serviceId": "(optional)",
+          "resource": "Ressource auswählen",
+          "time": "Uhrzeit auswählen",
+          "select": "Auswählen...",
+          "optional": "(optional)",
+          "decisionNote": "(optional) Kann dem Kunden in der Akzeptieren/Ablehnen-E-Mail angezeigt werden."
+        },
+        "help": {
+          "locale": "Bevorzugte Kundensprache. E-Mail-Templates verwenden diese Locale.",
+          "status": "Für Entscheidung mit Notiz + E-Mail + Benachrichtigung die Akzeptieren/Ablehnen-Aktionen nutzen.",
+          "date": "Tagesplan wird anhand dieses Datums geladen.",
+          "pickResourceAndDate": "Ressource + Datum auswählen.",
+          "slotsLoading": "Slots werden geladen...",
+          "slotCount": "{count} Slots"
+        },
+        "validation": {
+          "requiredCustomerFields": "Name, E-Mail und Telefon sind erforderlich.",
+          "resourceRequired": "Ressource ist erforderlich.",
+          "invalidDate": "Wählen Sie ein gültiges Datum. (YYYY-MM-DD)",
+          "invalidTime": "Wählen Sie eine gültige Uhrzeit. (HH:mm)"
+        },
+        "availability": {
+          "checking": "Checking availability...",
+          "noSlot": "No slot record found (can be created via plan).",
+          "available": "Available ({reserved}/{cap})",
+          "unavailable": "Full / inactive ({reserved}/{cap})"
+        }
+      },
+      "plan": {
+        "title": "Tagesplan",
+        "description": "Slots kommen aus dem Tagesplan-Endpoint. Nur verfügbare Slots können ausgewählt werden.",
+        "columns": {
+          "time": "Uhrzeit",
+          "status": "Status",
+          "capacity": "Kapazität"
+        }
+      }
+    },
+    "storage": {
+      "title": "Dateiverwaltung",
+      "description": "Dateien hochladen, bearbeiten und löschen.",
+      "list": {
+        "title": "Storage Assets",
+        "description": "Dateiverwaltung - hochladen, bearbeiten, löschen.",
+        "uploadButton": "Hochladen",
+        "deleteSelected": "Ausgewählte löschen ({count})",
+        "selectFileError": "Bitte wählen Sie mindestens eine Datei aus",
+        "filesDeleted": "{count} Datei(en) gelöscht",
+        "fileDeleted": "Datei gelöscht",
+        "searchLabel": "Suchen",
+        "searchPlaceholder": "Dateiname...",
+        "bucketLabel": "Bucket",
+        "folderLabel": "Ordner",
+        "fileTypeLabel": "Dateityp",
+        "allOption": "Alle",
+        "rootFolder": "(Stammordner)",
+        "imageType": "Bild",
+        "videoType": "Video",
+        "audioType": "Audio",
+        "pdfType": "PDF",
+        "refreshButton": "Aktualisieren",
+        "totalFiles": "Insgesamt {total} Datei(en)",
+        "selectedCount": "{count} ausgewählt",
+        "loading": "Lädt...",
+        "noFiles": "Keine Dateien gefunden.",
+        "previewColumn": "Vorschau",
+        "fileColumn": "Datei",
+        "bucketColumn": "Bucket",
+        "folderColumn": "Ordner",
+        "typeColumn": "Typ",
+        "sizeColumn": "Größe",
+        "dateColumn": "Datum",
+        "actionsColumn": "Aktionen",
+        "downloadTitle": "Herunterladen",
+        "editButton": "Bearbeiten",
+        "deleteConfirmTitle": "Sind Sie sicher, dass Sie löschen möchten?",
+        "deleteConfirmDescription": "{name} wird gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+        "cancelButton": "Abbrechen",
+        "deleteButton": "Löschen",
+        "defaultFileName": "Diese Datei"
+      },
+      "detail": {
+        "uploadTitle": "Datei hochladen",
+        "editTitle": "Datei bearbeiten",
+        "uploadDescription": "Neue Datei hochladen",
+        "editDescription": "Dateiinformationen bearbeiten",
+        "backButton": "Zurück",
+        "previewTitle": "Vorschau",
+        "mimeLabel": "MIME:",
+        "sizeLabel": "Größe:",
+        "dimensionsLabel": "Abmessungen:",
+        "urlLabel": "URL:",
+        "openLink": "Öffnen",
+        "selectFileTitle": "Datei auswählen",
+        "fileLabel": "Datei",
+        "required": "*",
+        "selectedFile": "Ausgewählt: {name} ({size})",
+        "bucketLabel": "Bucket",
+        "bucketPlaceholder": "public, private, assets...",
+        "folderLabel": "Ordner",
+        "folderPlaceholder": "images, documents...",
+        "folderHelp": "Optional. Ordnername zur Organisation der Datei.",
+        "fileInfoTitle": "Dateiinformationen",
+        "fileNameLabel": "Dateiname",
+        "fileNamePlaceholder": "example.jpg",
+        "bucketReadonlyHelp": "Bucket kann nicht geändert werden.",
+        "deleting": "Löschen...",
+        "deleteButton": "Löschen",
+        "cancelButton": "Abbrechen",
+        "uploading": "Hochladen...",
+        "saving": "Speichern...",
+        "uploadButton": "Hochladen",
+        "saveButton": "Speichern",
+        "selectFileError": "Bitte wählen Sie eine Datei aus",
+        "bucketRequiredError": "Bucket ist erforderlich",
+        "fileUploaded": "Datei hochgeladen",
+        "recordUpdated": "Datensatz aktualisiert",
+        "loadError": "Datensatz konnte nicht geladen werden: {error}",
+        "backToList": "Zurück zur Liste"
+      },
+      "errorFallback": "Vorgang fehlgeschlagen"
+    },
+    "users": {
+      "list": {
+        "title": "Benutzer",
+        "description": "Benutzer anzeigen, bearbeiten und Rollen verwalten.",
+        "filters": {
+          "title": "Filter",
+          "description": "Such- und Filtereinstellungen.",
+          "searchLabel": "Suchen",
+          "searchPlaceholder": "Name, Telefon, E-Mail...",
+          "roleLabel": "Rolle",
+          "rolePlaceholder": "Alle",
+          "onlyActive": "Nur aktive",
+          "searchButton": "Suchen",
+          "resetButton": "Zurücksetzen",
+          "refreshButton": "Aktualisieren"
+        },
+        "table": {
+          "title": "Benutzerliste",
+          "loading": "Laden…",
+          "totalRecords": "Gesamt: {count} Datensatz/-sätze (Seite)",
+          "loadError": "Liste konnte nicht geladen werden.",
+          "retryButton": "Erneut versuchen",
+          "noRecords": "Keine Datensätze gefunden.",
+          "fullName": "Vollständiger Name",
+          "email": "E-Mail",
+          "phone": "Telefon",
+          "status": "Status",
+          "role": "Rolle",
+          "actions": "Aktionen",
+          "viewButton": "Details",
+          "statusActive": "Aktiv",
+          "statusInactive": "Inaktiv",
+          "unknownUser": "Unbekannter Benutzer"
+        },
+        "pagination": {
+          "offset": "Offset: {offset}",
+          "limit": "Limit: {limit}",
+          "previous": "Zurück",
+          "next": "Weiter"
+        }
+      },
+      "detail": {
+        "title": "Benutzerdetails",
+        "unknownUser": "Unbekannter Benutzer",
+        "backButton": "Zurück",
+        "loadError": "Benutzer konnte nicht geladen werden.",
+        "loading": "Laden…",
+        "retryButton": "Erneut versuchen",
+        "statusActive": "Aktiv",
+        "statusInactive": "Inaktiv",
+        "profile": {
+          "title": "Grundinformationen",
+          "description": "Name, Telefon und E-Mail bei Bedarf aktualisieren.",
+          "emailLabel": "E-Mail",
+          "fullNameLabel": "Vollständiger Name",
+          "phoneLabel": "Telefon",
+          "saveButton": "Speichern",
+          "saved": "Benutzerinformationen aktualisiert."
+        },
+        "status": {
+          "title": "Benutzerstatus",
+          "description": "Aktiv/Inaktiv-Status umschalten.",
+          "active": "Aktiv",
+          "inactive": "Inaktiv",
+          "activated": "Benutzer aktiviert.",
+          "deactivated": "Benutzer deaktiviert."
+        },
+        "roles": {
+          "title": "Rollenverwaltung",
+          "description": "Die Rolle wird im Singular gehalten; die Auswahl wird als \"set\" gespeichert.",
+          "currentRole": "Ausgewählte Rolle:",
+          "saveButton": "Rolle speichern",
+          "saved": "Rollen aktualisiert.",
+          "admin": "Admin",
+          "consultant": "Berater",
+          "user": "Benutzer"
+        },
+        "password": {
+          "title": "Passwort aktualisieren",
+          "description": "Neues Passwort aus Sicherheitsgründen festlegen.",
+          "label": "Neues Passwort",
+          "placeholder": "Mindestens 8 Zeichen",
+          "updateButton": "Passwort aktualisieren",
+          "minLengthError": "Passwort muss mindestens 8 Zeichen lang sein.",
+          "updated": "Passwort aktualisiert."
+        },
+        "delete": {
+          "title": "Gefährliche Operation",
+          "description": "Löscht den Benutzer dauerhaft.",
+          "button": "Benutzer löschen",
+          "confirm": "Dieser Benutzer wird gelöscht. Fortfahren?",
+          "deleted": "Benutzer gelöscht."
+        },
+        "errorFallback": "Vorgang fehlgeschlagen. Bitte versuchen Sie es erneut."
+      },
+      "roles": {
+        "all": "Alle",
+        "admin": "Admin",
+        "consultant": "Berater",
+        "user": "Benutzer"
+      }
+    },
+    "userRoles": {
+      "title": "Rollenverwaltung",
+      "description": "Benutzerrollen auflisten, Rollen hinzufügen und Rollen löschen.",
+      "create": {
+        "title": "Neue Rolle hinzufügen",
+        "description": "Nur für Admins. Dieselbe Rolle kann nicht zweimal demselben Benutzer zugewiesen werden.",
+        "userLabel": "Benutzer",
+        "userPlaceholder": "Benutzer auswählen",
+        "roleLabel": "Rolle",
+        "rolePlaceholder": "Rolle auswählen",
+        "addButton": "Hinzufügen",
+        "selectUser": "Bitte wählen Sie einen Benutzer aus.",
+        "added": "Rolle hinzugefügt.",
+        "alreadyExists": "Diese Rolle existiert bereits.",
+        "usersLoading": "Lädt…",
+        "usersLoadError": "Benutzer konnten nicht geladen werden.",
+        "retryButton": "Erneut versuchen"
+      },
+      "list": {
+        "title": "Rollenliste",
+        "description": "Filtern und Verwaltungsvorgänge durchführen.",
+        "userFilterLabel": "Benutzerfilter",
+        "roleFilterLabel": "Rollenfilter",
+        "limitLabel": "Limit",
+        "all": "Alle",
+        "refreshButton": "Aktualisieren",
+        "loadError": "Rollen konnten nicht geladen werden.",
+        "retryButton": "Erneut versuchen",
+        "noRecords": "Keine Einträge gefunden.",
+        "note": "Hinweis: Da diese Seite nur für Admins ist, sollten Berechtigungen sorgfältig verwaltet werden, um das Risiko einer Benutzeraufzählung zu reduzieren."
+      },
+      "table": {
+        "userColumn": "Benutzer",
+        "roleColumn": "Rolle",
+        "createdColumn": "Erstellt",
+        "actionColumn": "Aktion",
+        "deleteButton": "Löschen",
+        "deleteConfirm": "Diese Rolle löschen?\n{user} → {role}",
+        "deleted": "Rolle gelöscht.",
+        "loading": "Lädt",
+        "notFound": "Nicht gefunden"
+      },
+      "roles": {
+        "admin": "Admin",
+        "seller": "Verkäufer",
+        "driver": "Fahrer"
+      },
+      "user": {
+        "unknown": "Unbenannter Benutzer",
+        "loading": "Lädt…",
+        "notFound": "Benutzer nicht gefunden"
+      },
+      "errorFallback": "Vorgang fehlgeschlagen. Bitte versuchen Sie es erneut."
+    },
+    "emailTemplates": {
+      "list": {
+        "title": "E-Mail-Vorlagen",
+        "description": "E-Mail-Vorlagen verwalten. Jede Vorlage kann Inhalte in verschiedenen Sprachen enthalten.",
+        "addButton": "Neu hinzufügen",
+        "filters": {
+          "searchLabel": "Suche",
+          "searchPlaceholder": "Template-Key, Name, Betreff...",
+          "statusLabel": "Status",
+          "statusOptions": {
+            "all": "Alle",
+            "active": "Aktiv",
+            "inactive": "Inaktiv"
+          }
+        },
+        "totalRecords": "Insgesamt {count} Einträge",
+        "refreshButton": "Aktualisieren",
+        "fetching": "Lädt...",
+        "loading": "Lädt...",
+        "empty": "Keine Einträge gefunden.",
+        "table": {
+          "headers": {
+            "templateKey": "Template-Key",
+            "nameSubject": "Name & Betreff",
+            "variables": "Variablen",
+            "active": "Aktiv",
+            "locale": "Locale",
+            "date": "Datum",
+            "actions": "Aktionen"
+          },
+          "updatedLabel": "Aktualisiert"
+        },
+        "actions": {
+          "edit": "Bearbeiten",
+          "delete": "Löschen"
+        },
+        "mobile": {
+          "activeLabel": "Aktiv",
+          "variablesLabel": "Variablen",
+          "createdLabel": "Erstellt",
+          "updatedLabel": "Aktualisiert"
+        },
+        "toast": {
+          "activated": "Als aktiv markiert.",
+          "deactivated": "Als inaktiv markiert.",
+          "deleted": "Eintrag gelöscht."
+        },
+        "dialog": {
+          "title": "Möchten Sie wirklich löschen?",
+          "description": "{template} wird gelöscht. Dieser Vorgang kann nicht rückgängig gemacht werden.",
+          "templateFallback": "Diese Vorlage",
+          "cancel": "Abbrechen",
+          "delete": "Löschen"
+        }
+      },
+      "detail": {
+        "loadError": "Eintrag konnte nicht geladen werden",
+        "backToList": "Zurück zur Liste",
+        "titleCreate": "Neue E-Mail-Vorlage",
+        "titleEdit": "E-Mail-Vorlage bearbeiten",
+        "descriptionCreate": "Erstellen Sie eine neue E-Mail-Vorlage",
+        "descriptionEdit": "Bestehende E-Mail-Vorlage bearbeiten",
+        "sections": {
+          "generalInfo": "Allgemeine Informationen",
+          "templateInfo": "Vorlageninformationen",
+          "content": "E-Mail-Inhalt",
+          "contentDescription": "HTML-Inhalt. Verwenden Sie für Variablen das Format {{variable}}.",
+          "variables": "Variablen",
+          "variablesDescription": "Definieren Sie Variablen im E-Mail-Inhalt (optional)"
+        },
+        "fields": {
+          "statusLabel": "Status",
+          "templateKeyLabel": "Template-Key",
+          "templateKeyPlaceholder": "welcome_email",
+          "templateKeyHelp": "Eindeutiger Schlüssel (nicht änderbar). Beispiel: welcome_email, password_reset",
+          "templateNameLabel": "Vorlagenname",
+          "templateNamePlaceholder": "Willkommens-E-Mail",
+          "subjectLabel": "Betreff",
+          "subjectPlaceholder": "Willkommen {{name}}!",
+          "subjectHelp": "E-Mail-Betreff. Für dynamische Felder {{variable}} verwenden.",
+          "contentLabel": "HTML-Inhalt",
+          "contentPlaceholder": "<html><body><h1>Hallo {{name}}!</h1><p>Willkommen...</p></body></html>",
+          "variablesLabel": "Variablen",
+          "variablesPlaceholder": "name, email, url oder [\"name\", \"email\", \"url\"]",
+          "variablesHelp": "Kommagetrennt (name, email, url) oder als JSON-Array ([\"name\", \"email\"]).",
+          "detectedVariablesLabel": "Im Inhalt erkannte Variablen"
+        },
+        "validation": {
+          "templateKeyRequired": "Template-Key ist erforderlich.",
+          "templateNameRequired": "Vorlagenname ist erforderlich.",
+          "subjectRequired": "Betreff ist erforderlich.",
+          "contentRequired": "Inhalt ist erforderlich."
+        },
+        "actions": {
+          "back": "Zurück",
+          "delete": "Löschen",
+          "deleting": "Wird gelöscht...",
+          "cancel": "Abbrechen",
+          "save": "Speichern",
+          "saving": "Wird gespeichert..."
+        },
+        "toast": {
+          "created": "Vorlage erstellt.",
+          "updated": "Vorlage aktualisiert.",
+          "deleted": "Vorlage gelöscht."
+        },
+        "dialog": {
+          "title": "Möchten Sie wirklich löschen?",
+          "description": "{template} wird gelöscht. Dieser Vorgang kann nicht rückgängig gemacht werden.",
+          "templateFallback": "Diese Vorlage",
+          "cancel": "Abbrechen",
+          "delete": "Löschen"
+        },
+        "preview": {
+          "showButton": "Vorschau",
+          "hideButton": "Vorschau ausblenden",
+          "title": "HTML-Vorschau"
+        },
+        "testSend": {
+          "title": "Test-E-Mail senden",
+          "showButton": "Anzeigen",
+          "hideButton": "Ausblenden",
+          "emailLabel": "Empfänger-E-Mail-Adresse",
+          "emailPlaceholder": "test@example.com",
+          "sendButton": "Test senden",
+          "sent": "Test-E-Mail erfolgreich gesendet.",
+          "failed": "Test-E-Mail konnte nicht gesendet werden.",
+          "invalidEmail": "Bitte geben Sie eine gültige E-Mail-Adresse ein."
+        }
+      }
+    },
+    "notifications": {
+      "title": "Benachrichtigungen",
+      "description": "Alle Systembenachrichtigungen verwalten ({count} Benachrichtigungen, {unread} ungelesen)",
+      "actions": {
+        "markAllRead": "Alle als gelesen markieren",
+        "refresh": "Aktualisieren",
+        "create": "Neue Benachrichtigung",
+        "back": "Zurück",
+        "delete": "Löschen",
+        "save": "Speichern",
+        "saving": "Speichert...",
+        "cancel": "Abbrechen",
+        "edit": "Bearbeiten",
+        "markRead": "Als gelesen markieren",
+        "markUnread": "Als ungelesen markieren"
+      },
+      "filters": {
+        "title": "Filter",
+        "search": "Suche",
+        "searchPlaceholder": "Titel, Nachricht oder Typ...",
+        "status": "Status",
+        "type": "Typ",
+        "all": "Alle",
+        "read": "Gelesen",
+        "unread": "Ungelesen",
+        "typePlaceholder": "Alle"
+      },
+      "table": {
+        "status": "Status",
+        "title": "Titel",
+        "message": "Nachricht",
+        "type": "Typ",
+        "date": "Datum",
+        "actions": "Aktionen",
+        "loading": "Lädt...",
+        "noRecords": "Keine Benachrichtigungen gefunden",
+        "read": "Gelesen",
+        "unread": "Ungelesen"
+      },
+      "form": {
+        "createTitle": "Neue Benachrichtigung",
+        "editTitle": "Benachrichtigungsdetails",
+        "createDescription": "Erstellen Sie eine neue Benachrichtigung",
+        "editDescription": "Benachrichtigungsdetails anzeigen",
+        "infoTitle": "Benachrichtigungsinformationen",
+        "userId": "Benutzer-ID",
+        "userIdPlaceholder": "Vorhandener Benutzer, wenn leer gelassen",
+        "userIdHelp": "UUID eingeben, um an einen bestimmten Benutzer zu senden",
+        "title": "Titel",
+        "titlePlaceholder": "Benachrichtigungstitel",
+        "message": "Nachricht",
+        "messagePlaceholder": "Benachrichtigungsnachricht",
+        "type": "Typ",
+        "optional": "(optional)",
+        "editWarning": "ℹ️ Benachrichtigungen können nach der Erstellung nicht mehr bearbeitet werden. Nur der Status gelesen/ungelesen kann geändert werden."
+      },
+      "details": {
+        "title": "Benachrichtigungsdetails",
+        "id": "ID",
+        "userId": "Benutzer-ID",
+        "status": "Status",
+        "createdAt": "Erstellt am",
+        "read": "Gelesen",
+        "unread": "Ungelesen"
+      },
+      "messages": {
+        "markAllSuccess": "Alle Benachrichtigungen wurden als gelesen markiert",
+        "markedRead": "Als gelesen markiert",
+        "markedUnread": "Als ungelesen markiert",
+        "deleteConfirm": "Sind Sie sicher, dass Sie die Benachrichtigung \"{title}\" löschen möchten?",
+        "deleteSuccess": "Benachrichtigung gelöscht",
+        "operationFailed": "Vorgang fehlgeschlagen",
+        "titleRequired": "Titel erforderlich",
+        "messageRequired": "Nachricht erforderlich",
+        "createSuccess": "Benachrichtigung erstellt",
+        "editNotSupported": "Das Bearbeiten von Benachrichtigungen wird derzeit nicht unterstützt"
+      },
+      "types": {
+        "order_created": "Rückfrage",
+        "order_paid": "Bestellung bezahlt",
+        "order_failed": "Bestellung fehlgeschlagen",
+        "booking_created": "Buchung erstellt",
+        "booking_status_changed": "Buchungsstatus geändert",
+        "system": "System",
+        "custom": "Benutzerdefiniert"
+      }
+    },
+    "audit": {
+      "header": {
+        "title": "Audit-Protokolle",
+        "description": "Anfrage-Logs, Authentifizierungsereignisse, Metriken und geografische Verteilung."
+      },
+      "refresh": "Aktualisieren",
+      "refreshed": "Daten aktualisiert.",
+      "error": "Fehler beim Laden der Daten.",
+      "clear": {
+        "button": "Logs löschen",
+        "dialogTitle": "Alle Logs löschen?",
+        "dialogDescription": "Alle Audit-Einträge im aktuellen Tab werden unwiderruflich gelöscht. Diese Aktion kann nicht rückgängig gemacht werden.",
+        "cancel": "Abbrechen",
+        "confirm": "Endgültig löschen",
+        "success": "{count} Einträge gelöscht."
+      },
+      "tabs": {
+        "requests": "Anfragen",
+        "auth": "Authentifizierung",
+        "metrics": "Metriken",
+        "map": "Karte",
+        "stream": "Live-Stream"
+      },
+      "requests": {
+        "filtersTitle": "Filter",
+        "filtersDescription": "Anfrage-Logs nach Kriterien filtern.",
+        "search": "Suche (URL/Pfad)",
+        "method": "Methode",
+        "status": "Status-Code",
+        "sort": "Sortierung",
+        "sortDate": "Datum",
+        "sortResponseTime": "Antwortzeit",
+        "sortStatusCode": "Status-Code",
+        "logsTitle": "Anfrage-Logs",
+        "bodySnapshot": "Body-Snapshot",
+        "compare": "Vergleichen",
+        "compareSelected": "{count} Einträge ausgewählt",
+        "compareAction": "Snapshots vergleichen"
+      },
+      "compare": {
+        "title": "Request-Snapshots vergleichen",
+        "description": "Zwei ausgewählte Request-Bodys werden zeilenweise nebeneinander angezeigt.",
+        "needTwo": "Bitte genau zwei Einträge für den Vergleich auswählen.",
+        "close": "Schließen"
+      },
+      "auth": {
+        "filtersTitle": "Filter",
+        "filtersDescription": "Authentifizierungsereignisse filtern.",
+        "event": "Ereignis",
+        "email": "E-Mail",
+        "eventsTitle": "Authentifizierungsereignisse"
+      },
+      "metrics": {
+        "title": "Tägliche Metriken",
+        "description": "Tägliche Anfrage-Statistiken und Trends.",
+        "days": "Zeitraum",
+        "nDays": "{n} Tage",
+        "pathPrefix": "Pfad-Präfix",
+        "chartTitle": "Tägliches Diagramm",
+        "lastNDays": "Letzte {n} Tage"
+      },
+      "map": {
+        "title": "Geografische Verteilung",
+        "description": "Anfragen nach Standort der letzten {days} Tage."
+      },
+      "stream": {
+        "title": "Live-Ereignisstream",
+        "description": "Echtzeit-App-Events aus dem Audit-SSE-Stream.",
+        "recentCount": "{count} Ereignisse im lokalen Verlauf",
+        "clearLocal": "Verlauf leeren",
+        "empty": "Noch keine Live-Ereignisse empfangen.",
+        "unknownTopic": "Unbekanntes Thema",
+        "noMessage": "Keine Nachricht",
+        "status": {
+          "connecting": "Verbindung wird aufgebaut",
+          "open": "Verbunden",
+          "closed": "Geschlossen",
+          "error": "Verbindungsfehler"
+        }
+      },
+      "common": {
+        "from": "Von",
+        "to": "Bis",
+        "userId": "Benutzer-ID",
+        "ip": "IP-Adresse",
+        "desc": "Absteigend",
+        "asc": "Aufsteigend",
+        "onlyAdmin": "Nur Admin",
+        "adminRequests": "Admin-Anfragen",
+        "apply": "Anwenden",
+        "reset": "Zurücksetzen",
+        "all": "Alle",
+        "loading": "Wird geladen...",
+        "noRecords": "Keine Einträge gefunden.",
+        "totalRecords": "Gesamt: {count} Einträge",
+        "recordCount": "{count} Einträge",
+        "prev": "Zurück",
+        "next": "Weiter",
+        "anon": "Anonym"
+      },
+      "columns": {
+        "date": "Datum",
+        "request": "Anfrage",
+        "status": "Status",
+        "ipUser": "IP / Benutzer",
+        "location": "Standort",
+        "userAgent": "User-Agent",
+        "user": "Benutzer"
+      }
+    },
+    "siteSettings": {
+      "title": "Site-Einstellungen",
+      "description": "Schlüssel-Wert-Einstellungen verwalten. Listen-Tabs können mit Suche gefiltert werden.",
+      "tabs": {
+        "general": "Allgemein",
+        "seo": "SEO",
+        "smtp": "SMTP / E-Mail",
+        "cloudinary": "Cloudinary",
+        "api": "API",
+        "brandMedia": "Logo & Favicon",
+        "list": "Liste (Sprache)",
+        "globalList": "Liste (Global *)",
+        "locales": "Sprachen",
+        "branding": "Markenbildung",
+        "payment": "Zahlung"
+      },
+      "general": {
+        "title": "Allgemeine Einstellungen",
+        "description": "Branding, Kontaktinformationen und Social-Media-Links.",
+        "keyLabels": {
+          "contact_info": "Kontaktinformationen",
+          "socials": "Soziale Medien",
+          "businessHours": "Öffnungszeiten",
+          "company_profile": "Unternehmensprofil",
+          "ui_header": "Header-Navigation"
+        },
+        "keyDescriptions": {
+          "contact_info": "Telefon, E-Mail, WhatsApp und Adressdaten.",
+          "socials": "Instagram, Facebook, X und andere soziale Netzwerke.",
+          "businessHours": "Wöchentliche Betriebs- und Terminstunden.",
+          "company_profile": "Unternehmensname, Slogan und Zusammenfassung.",
+          "ui_header": "Menübezeichnungen und CTA-Button im Header."
+        }
+      },
+      "seo": {
+        "inline": {
+          "title": "SEO-Einstellungen",
+          "description": "Seitenbasierte Titel, Beschreibungen und Social-Media-Vorschauen.",
+          "saved": "SEO-Einstellungen gespeichert.",
+          "saveError": "Fehler beim Speichern.",
+          "dirty": "Nicht gespeichert",
+          "save": "Speichern",
+          "saveAll": "Alle speichern",
+          "loading": "Laden...",
+          "expandAll": "Alle ausklappen",
+          "collapseAll": "Alle einklappen",
+          "fieldTitle": "Titel (Meta-Titel)",
+          "fieldDescription": "Beschreibung (Meta-Beschreibung)",
+          "placeholderTitle": "MarketPulse — Plattform fuer Haendler-Monitoring und Marktsignale",
+          "placeholderDescription": "Kurze Zusammenfassung der Seite — ideal 140-160 Zeichen.",
+          "ogImage": "OG-Bild (1200×630)",
+          "noindex": "Diese Seite vor Suchmaschinen verbergen (noindex)",
+          "googlePreview": "Google-Vorschau",
+          "socialPreview": "Social-Media-Vorschau",
+          "siteName": "MarketPulse",
+          "noDescription": "Noch keine Beschreibung eingegeben.",
+          "noOgImage": "OG-Bild noch nicht hochgeladen"
+        },
+        "pageLabels": {
+          "home": "Startseite",
+          "birth-chart": "Geburtshoroskop",
+          "consultants": "Berater",
+          "consultant-detail": "Berater-Details",
+          "pricing": "Preise",
+          "daily": "Tageshoroskop",
+          "blog": "Blog",
+          "blog-post": "Blog-Beitrag",
+          "about": "Über uns",
+          "contact": "Kontakt",
+          "faqs": "FAQs"
+        }
+      },
+      "payment": {
+        "title": "Zahlungseinstellungen",
+        "description": "PayPal und Banküberweisung konfigurieren.",
+        "paypal": {
+          "title": "PayPal",
+          "enabled": "PayPal aktivieren",
+          "mode": "Modus",
+          "modeSandbox": "Sandbox (Test)",
+          "modeProduction": "Live (Produktion)",
+          "clientId": "Client ID",
+          "clientIdPh": "AXxxxx...",
+          "clientSecret": "Client Secret",
+          "clientSecretPh": "ELxxxx...",
+          "webhookId": "Webhook ID (optional)",
+          "webhookIdPh": "WH-xxxx..."
+        },
+        "bankTransfer": {
+          "title": "Banküberweisung",
+          "enabled": "Banküberweisung aktivieren",
+          "accountName": "Kontoinhaber",
+          "accountNamePh": "Max Mustermann GmbH",
+          "iban": "IBAN",
+          "ibanPh": "DE89 3704 0044 0532 0130 00",
+          "bankName": "Bank",
+          "bankNamePh": "Deutsche Bank",
+          "branch": "Filiale",
+          "branchPh": "Frankfurt am Main",
+          "swift": "SWIFT / BIC",
+          "swiftPh": "DEUTDEDBXXX"
+        },
+        "bookingPayment": {
+          "title": "Online-Zahlung für Termine",
+          "description": "Wenn aktiviert, erhalten Kunden einen Zahlungslink in ihrer Terminbestätigungs-E-Mail.",
+          "enabled": "Online-Zahlung für Termine aktivieren",
+          "activeNote": "Aktiv: Terminbestätigungs-E-Mails enthalten einen Zahlungslink. Die Terminseite zeigt nach der Buchung eine Schaltfläche \"Jetzt bezahlen\".",
+          "inactiveNote": "Inaktiv: Terminbestätigungs-E-Mails bestätigen nur den Termin ohne Zahlungslink."
+        },
+        "saved": "Zahlungseinstellungen gespeichert.",
+        "saveError": "Fehler beim Speichern.",
+        "refresh": "Aktualisieren",
+        "loading": "Wird geladen…",
+        "saving": "Wird gespeichert…",
+        "save": "Speichern"
+      },
+      "filters": {
+        "title": "Filter",
+        "description": "Suche, Sprache und Tab-Auswahl.",
+        "search": "Suchen",
+        "searchPlaceholder": "In Schlüssel oder Wert suchen...",
+        "language": "Sprache",
+        "selectLanguage": "Sprache wählen",
+        "globalPlaceholder": "Global",
+        "defaultSuffix": "Standard",
+        "inactiveSuffix": "Inaktiv",
+        "languageDisabledNote": "Sprachauswahl wird in diesem Tab nicht verwendet.",
+        "refreshButton": "Aktualisieren",
+        "resetButton": "Zurücksetzen",
+        "refreshed": "Aktualisiert."
+      },
+      "badges": {
+        "global": "Global"
+      },
+      "management": {
+        "title": "Verwaltung",
+        "localeRecords": "Datensätze der ausgewählten Sprache",
+        "globalRecords": "Globale (*) Datensätze",
+        "loadingMeta": "Locale-Meta wird geladen…"
+      },
+      "locales": {
+        "title": "Sprachen",
+        "description": "Aktive Sprachen (app_locales) und Standard-Sprache (default_locale) verwalten.",
+        "defaultLabel": "Standardsprache",
+        "defaultPlaceholder": "Standardsprache wählen",
+        "table": {
+          "code": "Code",
+          "label": "Bezeichnung",
+          "active": "Aktiv",
+          "default": "Standard"
+        },
+        "empty": "Keine Sprachkonfiguration gefunden.",
+        "presetDeEnTr": "Preset de/en/tr setzen",
+        "presetTop20": "20 Sprachen hinzufügen",
+        "saved": "Sprachen aktualisiert.",
+        "saveError": "Sprachen konnten nicht aktualisiert werden."
+      },
+      "list": {
+        "title": "Einstellungsliste",
+        "description": "site_settings Einträge",
+        "dash": "—",
+        "hideSeoNote": "SEO-Schlüssel werden hier ausgeblendet; verwalten Sie sie im SEO-Tab.",
+        "deleteConfirm": "\"{key}\" ({locale}) löschen?",
+        "noRecords": "Keine Datensätze gefunden.",
+        "updatedAtLabel": "Aktualisiert",
+        "mobileNote": "In der mobilen Ansicht werden Einträge als Karten angezeigt.",
+        "mobileHideSeoSuffix": "SEO-Schlüssel sind auch hier ausgeblendet.",
+        "columns": {
+          "key": "Schlüssel",
+          "locale": "Sprache",
+          "value": "Wert (Zusammenfassung)",
+          "updatedAt": "Aktualisiert am",
+          "actions": "Aktionen"
+        },
+        "preview": {
+          "array": "Array [{count} Elemente]",
+          "object": "Objekt ({count} Felder)"
+        }
+      },
+      "form": {
+        "title": "Einstellung",
+        "description": "Strukturiert: Formular-Editor. Raw: JSON oder Text.",
+        "imageLabel": "Bild",
+        "saved": "\"{key}\" ({locale}) gespeichert.",
+        "saveError": "Einstellung konnte nicht gespeichert werden.",
+        "deleteConfirm": "\"{key}\" ({locale}) löschen?",
+        "deleted": "\"{key}\" ({locale}) gelöscht.",
+        "deleteError": "Einstellung konnte nicht gelöscht werden.",
+        "modes": {
+          "structured": "Strukturiert",
+          "raw": "Raw"
+        },
+        "structuredMissingTitle": "Structured Renderer fehlt",
+        "structuredMissingDesc": "Für diesen Schlüssel ist kein Structured Renderer definiert. Verwenden Sie den Raw-Modus.",
+        "rawHelp": "Raw: Wenn Sie gültiges JSON eingeben, wird es geparst und gespeichert; andernfalls als Text gespeichert.",
+        "rawPlaceholder": "z.B.: {\"title\":\"...\"} oder Text",
+        "rawTip": "Tipp: Um als JSON zu speichern, muss der Text mit „{“ oder „[“ beginnen."
+      },
+      "detail": {
+        "globalOption": "Global (*)",
+        "keyMissingTitle": "Fehler",
+        "keyMissingDesc": "Setting-Schlüssel nicht gefunden.",
+        "localesMissingTitle": "Sprachliste nicht gefunden",
+        "localesMissingDesc": "site_settings.app_locales ist leer oder ungültig. Konfigurieren Sie zuerst die Sprachen.",
+        "localesMissingAction": "Zu den Site-Einstellungen",
+        "editTitle": "Bearbeiten",
+        "backToList": "Zurück zur Liste",
+        "localeLabel": "Locale",
+        "loadingLocale": "Locale wird geladen…",
+        "fallbackNotice": "Kein exakter Eintrag für <code>{selectedLocale}</code>. Fallback von <code>{effectiveLocale}</code> wird angezeigt. Speichern erstellt/aktualisiert <code>{selectedLocale}</code>.",
+        "noRecordNotice": "Kein Eintrag gefunden für <code>{key}</code> (<code>{locale}</code>). Sie können ihn durch Speichern erstellen.",
+        "note": "Hinweis: General/UI-Schlüssel öffnen ein Structured-Formular. Andere Schlüssel verwenden im Structured-Modus den JSON-Editor.",
+        "siteMetaDefaultGlobalGuard": "site_meta_default kann nicht locale=\"*\" sein. Wählen Sie eine Locale und speichern Sie.",
+        "updated": "\"{key}\" ({locale}) aktualisiert.",
+        "deleted": "\"{key}\" ({locale}) gelöscht.",
+        "structuredJson": {
+          "noRenderer": "Für diesen Schlüssel ist kein spezielles Structured-Formular definiert. Structured-Modus arbeitet als JSON-Editor.",
+          "label": "Structured JSON",
+          "helperText": "Wird bei Blur geparst. Ungültiges JSON wird nicht gespeichert."
+        }
+      },
+      "general": {
+        "title": "Allgemein / UI",
+        "description": "GLOBAL (*) Standard + ausgewählte Sprache ({locale}) Override werden zusammen verwaltet.",
+        "searchPlaceholder": "In Schlüssel oder Wert suchen",
+        "globalBootstrap": "Global Bootstrap",
+        "globalBootstrapTooltip": "Erstellt fehlende GLOBAL (*) Datensätze mit Standard-Seed",
+        "recordsTitle": "Datensätze",
+        "managedKeys": "Verwaltete Schlüssel:",
+        "keyColumn": "Schlüssel",
+        "sourceColumn": "Quelle",
+        "effectiveColumn": "Effektiv (Zusammenfassung)",
+        "actionsColumn": "Aktionen",
+        "globalExists": "GLOBAL (*) Existiert",
+        "globalNotExists": "GLOBAL (*) Existiert nicht",
+        "localeExists": "LOCALE ({locale}) Existiert",
+        "localeNotExists": "LOCALE ({locale}) Existiert nicht",
+        "sourceOverride": "Override",
+        "sourceGlobal": "Global",
+        "sourceNone": "Keine",
+        "noOverrideNote": "Kein {locale} Override für diesen Schlüssel; GLOBAL (*) wird angewendet.",
+        "overrideButton": "Override",
+        "restoreButton": "Wiederherstellen",
+        "restoreTooltip": "Standardwerte für diese Zeile wiederherstellen",
+        "deleteGlobal": "Löschen*",
+        "deleteGlobalTooltip": "GLOBAL (*) löschen",
+        "deleteLocale": "Löschen",
+        "deleteLocaleTooltip": "LOCALE ({locale}) löschen",
+        "noRecords": "Keine Datensätze gefunden.",
+        "deleteConfirm": "\"{key}\" ({locale}) löschen?",
+        "deleted": "\"{key}\" ({locale}) gelöscht.",
+        "overrideCreated": "{locale} Override für \"{key}\" erstellt (GLOBAL kopiert).",
+        "defaultsRestored": "Standardwerte für \"{key}\" ({locale}) wiederhergestellt.",
+        "missingGlobalError": "GLOBAL (*) Datensatz nicht gefunden. Sie müssen zuerst einen globalen Wert erstellen.",
+        "globalBootstrapSuccess": "Fehlende Schlüssel mit leeren Standardwerten erstellt.",
+        "loadingNote": "Globale + Locale Datensätze werden abgerufen.",
+        "deleteTooltip": "Tipp: \"Löschen*\" löscht GLOBAL (*) Datensatz. \"Löschen\" löscht ausgewählten Locale Override.",
+        "recordCount": "{count} Einträge",
+        "keyLabels": {
+          "contact_info": "Kontaktinformationen",
+          "socials": "Soziale Medien",
+          "businessHours": "Öffnungszeiten",
+          "company_profile": "Firmenprofil",
+          "ui_header": "Header / Menü"
+        },
+        "keyDescriptions": {
+          "contact_info": "Telefon, E-Mail, Adresse, WhatsApp.",
+          "socials": "Instagram, Facebook, LinkedIn, YouTube, X.",
+          "businessHours": "Wöchentliche Öffnungszeiten.",
+          "company_profile": "Firmenname, Slogan, Über uns Text.",
+          "ui_header": "Top-Menü-Beschriftungen und CTA-Schaltfläche."
+        }
+      },
+      "cloudinary": {
+        "title": "Cloudinary / Storage Einstellungen",
+        "description": "Dies sind globale Einstellungen (locale=*). Die ausgewählte Sprache ist nur für die Benutzeroberfläche.",
+        "badge": "Global (locale=*) • Ausgewählte Sprache: {locale}",
+        "storageDriver": "Storage Driver",
+        "storageDriverPlaceholder": "local oder cloudinary",
+        "storageDriverHelp": "Z.B.: cloudinary oder local",
+        "localRoot": "Local Root",
+        "localRootPlaceholder": "/var/www/uploads",
+        "localBaseUrl": "Local Base URL",
+        "localBaseUrlPlaceholder": "/uploads oder https://cdn.site.com/uploads",
+        "cdnPublicBase": "CDN Public Base",
+        "cdnPublicBasePlaceholder": "https://cdn.example.com",
+        "publicApiBase": "Public API Base",
+        "publicApiBasePlaceholder": "https://api.example.com",
+        "cloudName": "Cloudinary Cloud Name",
+        "cloudNamePlaceholder": "cloud-name",
+        "apiKey": "Cloudinary API Key",
+        "apiKeyPlaceholder": "API key",
+        "apiSecret": "Cloudinary API Secret",
+        "apiSecretPlaceholder": "API secret",
+        "folder": "Cloudinary Folder",
+        "folderPlaceholder": "uploads",
+        "unsignedPreset": "Cloudinary Unsigned Preset",
+        "unsignedPresetPlaceholder": "Optionaler Preset-Name",
+        "testButton": "Cloudinary Test",
+        "testing": "Wird getestet...",
+        "saved": "Cloudinary / Storage Einstellungen gespeichert.",
+        "testSuccess": "Cloudinary-Verbindung erfolgreich. Cloud: {cloud}, Testdatei: {publicId}",
+        "testFailedConsole": "Cloudinary-Test fehlgeschlagen. Überprüfen Sie die Konsole für Details.",
+        "testFailedLocal": "Cloudinary-Test fehlgeschlagen: storage_driver ist derzeit 'local'. Um Cloudinary zu verwenden, setzen Sie storage_driver auf 'cloudinary' und füllen Sie die Schlüssel aus.",
+        "testFailedConfig": "Cloudinary nicht konfiguriert: Füllen Sie Cloud-Name, API-Schlüssel und Secret-Werte aus und versuchen Sie es erneut.",
+        "testFailedStep": "Cloudinary-Test fehlgeschlagen ({step}): {message}",
+        "testInfo": "Klicken Sie auf \"Cloudinary Test\", um die Verbindung zu testen.",
+        "testInfoTesting": "Cloudinary wird getestet...",
+        "testInfoSuccess": "Letzter Test: ERFOLGREICH (cloud: {cloud})",
+        "testInfoError": "Letzter Test: FEHLER – Überprüfen Sie die Logs für Details."
+      },
+      "branding": {
+        "title": "Branding & Identität",
+        "description": "Allgemeine Panel-Einstellungen: Seitentitel, Copyright, Favicons und Meta-Tags.",
+        "saved": "Branding-Einstellungen gespeichert.",
+        "saveError": "Branding-Einstellungen konnten nicht gespeichert werden.",
+        "identity": "Identität",
+        "visual": "Visuell",
+        "metaSeo": "Meta / SEO",
+        "fields": {
+          "appName": "Panel-Name",
+          "copyright": "Copyright-Text",
+          "htmlLang": "HTML-Sprache",
+          "htmlLangHelp": "Attribut <html lang=\"...\">. z.B.: de, en, tr",
+          "themeColor": "Theme-Farbe",
+          "favicon16": "Favicon 16×16",
+          "favicon32": "Favicon 32×32",
+          "appleTouchIcon": "Apple Touch Icon",
+          "ogImage": "OG-Bild",
+          "metaTitle": "Meta-Titel",
+          "metaDescription": "Meta-Beschreibung",
+          "ogUrl": "OG URL",
+          "ogTitle": "OG-Titel",
+          "ogDescription": "OG-Beschreibung",
+          "twitterCard": "Twitter Card Typ"
+        }
+      },
+      "brandMedia": {
+        "title": "Logo & Favicon",
+        "description": "Diese Registerkarte ist sprachunabhängig. Datensätze werden als locale=\"*\" gespeichert.",
+        "badge": "Global (locale=*)",
+        "searchPlaceholder": "Im Schlüssel suchen (z.B.: logo, favicon)",
+        "labels": {
+          "site_logo": "Logo",
+          "site_logo_dark": "Logo (Dunkel)",
+          "site_logo_light": "Logo (Hell)",
+          "site_favicon": "Favicon",
+          "site_apple_touch_icon": "Apple Touch Icon",
+          "site_app_icon_512": "App Icon 512x512",
+          "site_og_default_image": "OG-Standardbild",
+          "site_appointment_cover": "Termin-Titelbild"
+        },
+        "updated": "{label} aktualisiert.",
+        "updateError": "Fehler beim Speichern von {label}.",
+        "deleteConfirm": "\"{key}\" ({locale}) löschen?",
+        "deleteError": "Fehler beim Löschen."
+      },
+      "api": {
+        "title": "API & Integrations-Einstellungen",
+        "description": "Dies sind globale Einstellungen (locale=*). Die ausgewählte Sprache ist nur für die Benutzeroberfläche.",
+        "badge": "Global (locale=*)",
+        "uiBadge": "UI: {locale}",
+        "note": "Diese Felder variieren normalerweise nicht nach Sprache. In der Datenbank als locale=* gespeichert.",
+        "googleClientId": "Google Client ID",
+        "googleClientIdHelp": "Client-ID für Google OAuth / Login-Integration.",
+        "googleClientSecret": "Google Client Secret",
+        "googleClientSecretHelp": "Aus Sicherheitsgründen nach Möglichkeit mit Backend-Umgebungsvariablen verwalten.",
+        "gtmContainerId": "GTM Container ID",
+        "gtmContainerIdPlaceholder": "GTM-XXXXXXX",
+        "gtmContainerIdHelp": "Wenn GTM aktiv ist, lädt das Frontend nur GTM-Skript; GA4-Tag wird innerhalb von GTM verwaltet.",
+        "ga4MeasurementId": "GA4 Measurement ID",
+        "ga4MeasurementIdPlaceholder": "G-XXXXXXXXXX",
+        "ga4MeasurementIdHelp": "Kann als Fallback mit gtag.js verwendet werden, wenn GTM nicht verfügbar ist.",
+        "cookieConsent": "Cookie Consent (JSON)",
+        "cookieConsentPlaceholder": "{\"consent_version\":1,\"defaults\":{\"necessary\":true,\"analytics\":false,\"marketing\":false},\"ui\":{\"enabled\":true}}",
+        "cookieConsentHelp": "Wenn Sie JSON eingeben, wird es als Objekt gespeichert. Wenn Sie einfachen Text eingeben, wird es als String gespeichert.",
+        "saved": "API & Integrations-Einstellungen gespeichert.",
+        "saveError": "Beim Speichern der API-Einstellungen ist ein Fehler aufgetreten."
+      },
+      "actions": {
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "restore": "Wiederherstellen",
+        "override": "Override",
+        "save": "Speichern",
+        "saving": "Speichern...",
+        "test": "Test",
+        "testing": "Wird getestet...",
+        "refresh": "Aktualisieren",
+        "reset": "Zurücksetzen",
+        "bootstrap": "Bootstrap",
+        "copy": "Kopieren"
+      },
+      "messages": {
+        "loading": "Laden…",
+        "deleted": "Einstellung gelöscht.",
+        "saved": "Einstellungen gespeichert.",
+        "copied": "Kopiert.",
+        "copyError": "Kopieren fehlgeschlagen.",
+        "error": "Vorgang fehlgeschlagen. Bitte versuchen Sie es erneut."
+      },
+      "seo": {
+        "title": "SEO-Einstellungen",
+        "description": "GLOBAL (*) Standard + ausgewählte Sprache ({locale}) Override werden zusammen verwaltet. \"Bearbeiten\" öffnet die Formularseite.",
+        "ogDefaultImage": "Standard OG-Bild (Global)",
+        "ogDefaultImageKey": "site_og_default_image",
+        "ogDefaultImageHelp": "Automatisch nach dem Upload gespeichert. Gleich wie {key} im Brand & Media Tab.",
+        "searchPlaceholder": "Im Schlüssel suchen (z.B.: site, meta)",
+        "effective": "Effektiv (Zusammenfassung)",
+        "override": "Überschreiben",
+        "global": "Global",
+        "none": "Keine",
+        "globalRow": "GLOBAL (*)",
+        "localeRow": "LOCALE ({locale})",
+        "hasOverride": "Kein {locale} Override für diesen Schlüssel; GLOBAL (*) wird angewendet.",
+        "createOverride": "Override erstellen",
+        "restoreTooltip": "Standardwerte für diese Zeile wiederherstellen",
+        "note": "site_meta_default kann nicht GLOBAL(*) sein; Bearbeitungslink öffnet immer mit Locale.",
+        "defaultsCreated": "Standard-SEO-Einstellungen erstellt.",
+        "defaultsRestored": "Standardwerte für \"{key}\" ({locale}) wiederhergestellt.",
+        "overrideCreated": "\"{key}\" ({locale}) Override erstellt.",
+        "overrideError": "Override konnte nicht erstellt werden.",
+        "deleteConfirm": "\"{key}\" ({locale}) löschen?",
+        "deleted": "\"{key}\" ({locale}) gelöscht.",
+        "deleteError": "SEO-Einstellung konnte nicht gelöscht werden.",
+        "defaultNotDefined": "Für diesen Schlüssel ist kein Standard definiert.",
+        "siteMetaDefaultGlobalError": "site_meta_default kann nicht GLOBAL(*) sein. Mit Locale speichern/wiederherstellen.",
+        "siteMetaDefaultMustBeLocale": "site_meta_default kann nicht GLOBAL(*) sein. Locale auswählen und wiederherstellen.",
+        "defaultsRestoreError": "Standardwerte konnten nicht wiederhergestellt werden.",
+        "defaultsCreateError": "Global Bootstrap fehlgeschlagen.",
+        "globalBootstrap": "Global Bootstrap",
+        "globalBootstrapTooltip": "Erstellt fehlende SEO GLOBAL(*) Einträge mit Standard-Schema",
+        "ogUpdated": "Standard OG-Bild aktualisiert.",
+        "ogUpdateError": "Standard OG-Bild konnte nicht aktualisiert werden.",
+        "savedUrlLabel": "Gespeicherte URL:",
+        "previewLabel": "Vorschau:",
+        "ogDefaultImageAlt": "Standard OG-Bild",
+        "imageLoadError": "Bild konnte nicht geladen werden",
+        "existsYes": "Vorhanden",
+        "existsNo": "Fehlt",
+        "siteMetaDefaultGlobalDeleteHint": "Normalerweise nicht GLOBAL; falls vorhanden, kann es gelöscht werden.",
+        "noRecords": "Keine SEO-Einträge gefunden.",
+        "seedNote": "Wenn Seed gelaufen ist, sollten mindestens seo und site_seo GLOBAL-Zeilen existieren.",
+        "columns": {
+          "key": "Schlüssel",
+          "source": "Quelle",
+          "effective": "Effektiv (Zusammenfassung)",
+          "actions": "Aktionen"
+        },
+        "inline": {
+          "title": "SEO-Einstellungen",
+          "description": "Pro-Seite Titel, Beschreibung, OG-Bild und Indexierungseinstellungen.",
+          "save": "Speichern",
+          "saveAll": "Alle speichern",
+          "saved": "SEO-Einstellungen gespeichert.",
+          "saveError": "Speichern fehlgeschlagen.",
+          "loading": "Lädt...",
+          "dirty": "Nicht gespeichert",
+          "expandAll": "Alle ausklappen",
+          "collapseAll": "Alle einklappen",
+          "fieldTitle": "Titel",
+          "fieldDescription": "Beschreibung",
+          "ogImage": "OG-Bild (1200×630)",
+          "noindex": "Diese Seite vor Suchmaschinen verbergen (noindex)",
+          "googlePreview": "Google-Vorschau",
+          "socialPreview": "Social Media Vorschau",
+          "siteName": "MarketPulse",
+          "noDescription": "Noch keine Beschreibung.",
+          "noOgImage": "Noch kein OG-Bild",
+          "placeholderTitle": "MarketPulse — Plattform fuer Haendler-Monitoring und Marktsignale",
+          "placeholderDescription": "Kurze Zusammenfassung der Seite — ideal 140-160 Zeichen.",
+          "charCount": "{count} / 160"
+        },
+        "pageLabels": {
+          "home": "Startseite",
+          "birth-chart": "Geburtshoroskop",
+          "consultants": "Berater",
+          "consultant-detail": "Berater Detail",
+          "pricing": "Preise",
+          "daily": "Tageshoroskop",
+          "blog": "Blog",
+          "blog-post": "Blog-Beitrag",
+          "about": "Über uns",
+          "contact": "Kontakt",
+          "faqs": "FAQs"
+        }
+      },
+      "structured": {
+        "title": "Strukturierte Bearbeitung: Verwaltet SEO-Felder als Formular. Wenn strenge Validierung beim Speichern angewendet wird, wird ungültige Struktur nicht gespeichert.",
+        "robotsNote": "Wenn {field} in Robots true ist, wird Indizierung für Suchmaschinen nicht empfohlen.",
+        "ogImageUpload": "OpenGraph-Bild hochladen (optional)",
+        "siteName": "Site Name",
+        "titleDefault": "Standard-Titel",
+        "titleTemplate": "Titel-Vorlage",
+        "titleTemplatePlaceholder": "%s | Platform",
+        "description": "Beschreibung",
+        "ogType": "OpenGraph-Typ",
+        "ogImages": "OpenGraph-Bilder (1 pro Zeile)",
+        "ogImagesPlaceholder": "/img/og-default.jpg",
+        "twitterCard": "Twitter Card",
+        "twitterCardRecommended": "Empfohlen für die meisten Sites: {card}",
+        "twitterSite": "Twitter Site",
+        "twitterSitePlaceholder": "@platform",
+        "twitterCreator": "Twitter Creator",
+        "twitterCreatorPlaceholder": "@creator",
+        "robots": "Robots",
+        "noindex": "noindex",
+        "index": "index",
+        "follow": "follow",
+        "robotsRecommendation": "Empfehlung: Normalerweise {noindex}, {index}, {follow}.",
+        "contact": {
+          "description": "Kontaktinformationen. Leere Felder werden als leere Strings gespeichert.",
+          "labels": {
+            "phone": "Telefon",
+            "email": "E-Mail",
+            "whatsapp": "WhatsApp",
+            "address": "Adresse"
+          }
+        },
+        "socials": {
+          "description": "Social Links als vollständige URL (https://...) oder Benutzername eingeben.",
+          "labels": {
+            "instagram": "Instagram",
+            "facebook": "Facebook",
+            "linkedin": "LinkedIn",
+            "youtube": "YouTube",
+            "x": "X (Twitter)"
+          }
+        },
+        "companyProfile": {
+          "labels": {
+            "companyName": "Firmenname",
+            "slogan": "Slogan",
+            "about": "Über uns"
+          }
+        },
+        "uiHeader": {
+          "description": "Header-Navigation und CTA-Texte. Für sprachspezifische Overrides verwenden Sie eine Locale-Zeile.",
+          "labels": {
+            "navHome": "Menü: Home",
+            "navProducts": "Menü: Products",
+            "navServices": "Menü: Services",
+            "navContact": "Menü: Contact",
+            "ctaLabel": "CTA Label"
+          }
+        },
+        "businessHours": {
+          "description": "Zeitformat ist HH:MM. Wenn \"Closed\" ausgewählt ist, ist der Tag geschlossen.",
+          "columns": {
+            "day": "Tag",
+            "open": "Öffnet",
+            "close": "Schließt",
+            "closed": "Geschlossen"
+          },
+          "closedLabel": "closed",
+          "addRow": "Zeile hinzufügen",
+          "removeRow": "Entfernen",
+          "days": {
+            "mon": "Mo",
+            "tue": "Di",
+            "wed": "Mi",
+            "thu": "Do",
+            "fri": "Fr",
+            "sat": "Sa",
+            "sun": "So"
+          }
+        }
+      },
+      "slider": {
+        "title": "Slider-Verwaltung",
+        "description": "Slider-Datensätze mehrsprachig verwalten; filtern, sortieren und Veröffentlichungsstatus ändern.",
+        "header": {
+          "title": "Slider-Verwaltung",
+          "description": "Slider-Datensätze mehrsprachig verwalten; filtern, sortieren und Veröffentlichungsstatus ändern.",
+          "total": "Gesamt:",
+          "loading": "Lädt…",
+          "searchLabel": "Suchen",
+          "searchPlaceholder": "In Titel / Slug suchen…",
+          "localeLabel": "Sprache",
+          "localePlaceholder": "Sprache wählen",
+          "localeEmptyError": "app_locales ist leer.",
+          "localeEmptyHelp": "Überprüfen Sie Site Settings → app_locales Wert.",
+          "filterLabel": "Filter",
+          "onlyActiveLabel": "Nur aktive",
+          "onlyActiveHelp": "Aktive Slider anzeigen",
+          "refreshButton": "Aktualisieren",
+          "createButton": "+ Neuer Slider"
+        },
+        "list": {
+          "title": "Slider-Liste",
+          "processing": "Verarbeitung…",
+          "totalLabel": "Gesamt:",
+          "saveOrderButton": "Reihenfolge speichern",
+          "savingOrder": "Reihenfolge wird gespeichert…",
+          "reorderHelp": "Verwenden Sie die Auf-/Ab-Schaltflächen zum Sortieren. Klicken Sie auf \"Reihenfolge speichern\", um die Änderung dauerhaft zu machen.",
+          "noImage": "Kein Bild",
+          "imageColumn": "Bild",
+          "titleColumn": "Titel",
+          "localeColumn": "Sprache",
+          "slugColumn": "Slug",
+          "activeColumn": "Aktiv",
+          "featuredColumn": "Hervorgehoben",
+          "orderColumn": "Reihenfolge",
+          "actionsColumn": "Aktionen",
+          "noTitle": "(Kein Titel)",
+          "upButton": "Auf",
+          "downButton": "Ab",
+          "buttonLabel": "BTN:",
+          "linkLabel": "Link:",
+          "activeStatus": "Aktiv",
+          "inactiveStatus": "Inaktiv",
+          "featuredStatus": "Hervorgehoben",
+          "normalStatus": "Normal",
+          "editButton": "Bearbeiten",
+          "deleteButton": "Löschen",
+          "loading": "Slider-Datensätze werden geladen…",
+          "noRecords": "Noch keine Slider-Datensätze vorhanden.",
+          "itemNumber": "#",
+          "localeLabel": "Sprache:",
+          "orderLabel": "Reihenfolge:",
+          "slugLabel": "Slug:",
+          "deleteConfirm": "Sie sind dabei, den Slider-Datensatz \"{name}\" zu löschen. Möchten Sie fortfahren?",
+          "deleted": "Slider-Datensatz \"{name}\" gelöscht.",
+          "deleteError": "Fehler beim Löschen des Sliders.",
+          "activeUpdateError": "Aktiv-Status konnte nicht aktualisiert werden.",
+          "featuredUpdateError": "Hervorgehoben-Status konnte nicht aktualisiert werden.",
+          "orderSaved": "Slider-Reihenfolge gespeichert.",
+          "orderSaveError": "Reihenfolge konnte nicht gespeichert werden."
+        },
+        "form": {
+          "contentTitle": "Inhalt",
+          "localeLabel": "Sprache",
+          "orderLabel": "Reihenfolge",
+          "activeLabel": "Aktiv",
+          "activeHelp": "In Veröffentlichung anzeigen",
+          "featuredLabel": "Hervorgehoben",
+          "featuredHelp": "Mit Priorität anzeigen",
+          "titleLabel": "Titel",
+          "slugLabel": "Slug",
+          "slugHelp": "Automatisch generiert beim Tippen des Titels; klicken Sie auf das Slug-Feld, um es manuell zu ändern.",
+          "descriptionLabel": "Beschreibung",
+          "buttonTextLabel": "Button-Text",
+          "buttonLinkLabel": "Button-Link",
+          "altLabel": "Bild-Alt-Text",
+          "localeRequired": "Sprache ist erforderlich.",
+          "titleRequired": "Titel ist erforderlich.",
+          "slugRequired": "Slug ist erforderlich.",
+          "created": "Slider erstellt.",
+          "idNotFound": "ID nicht gefunden. Bitte aktualisieren Sie die Seite und versuchen Sie es erneut.",
+          "updated": "Slider aktualisiert.",
+          "saveError": "Fehler beim Speichern.",
+          "editTitle": "Slider bearbeiten",
+          "createTitle": "Neuen Slider erstellen",
+          "formMode": "Formular",
+          "jsonMode": "JSON"
+        },
+        "formHeader": {
+          "createTitle": "Neuen Slider erstellen",
+          "editTitle": "Slider bearbeiten",
+          "description": "Bearbeiten Sie Titel/Slug/Inhalt/Bild und Button-Felder. Sie können auch alle Felder auf einmal mit dem JSON-Modus aktualisieren.",
+          "loading": "Lädt…",
+          "saving": "Speichern…",
+          "backButton": "Zurück",
+          "createButton": "Erstellen",
+          "saveButton": "Speichern"
+        },
+        "formImage": {
+          "imageLabel": "Slider-Bild",
+          "imageHelp": "Sie können ein Bild für den Slider aus dem Speicher hochladen. Die URL des ausgewählten Bildes wird in das Feld image_url geschrieben (wird auch im JSON-Modus angezeigt).",
+          "altLabel": "Alt-Text",
+          "altPlaceholder": "Z.B.: Home Hero Slider-Bild",
+          "altHelp": "Alt-Text wird für SEO und Barrierefreiheit verwendet."
+        },
+        "formJson": {
+          "label": "Slider JSON",
+          "helperText": "Dies ist das exakte Äquivalent aller Felder im Formular."
+        }
+      },
+      "smtp": {
+        "title": "SMTP / E-Mail-Einstellungen",
+        "description": "Diese Einstellungen sind normalerweise global (locale=`*`). Die ausgewählte Sprache ist nur für die Benutzeroberfläche.",
+        "badge": "Global (locale=`*`) • Ausgewählte Sprache: {locale}",
+        "host": "SMTP-Host",
+        "hostPlaceholder": "smtp.hostinger.com oder smtp.gmail.com",
+        "port": "SMTP-Port",
+        "portPlaceholder": "465 oder 587",
+        "ssl": "SSL aktiviert",
+        "username": "Benutzername",
+        "usernamePlaceholder": "SMTP-Benutzername",
+        "password": "Passwort",
+        "passwordPlaceholder": "••••••••",
+        "fromEmail": "Von E-Mail",
+        "fromEmailPlaceholder": "no-reply@example.com",
+        "fromEmailHelp": "E-Mails in der Anwendung werden von dieser Adresse gesendet.",
+        "fromName": "Von Name",
+        "fromNamePlaceholder": "Platform",
+        "testEmail": "Test-E-Mail-Empfänger",
+        "testEmailPlaceholder": "beispiel@beispiel.com",
+        "testEmailHelp": "Wenn ausgefüllt, geht Test-E-Mail hierhin. Andernfalls wird zuerst Von-E-Mail verwendet, dann die E-Mail des angemeldeten Benutzers.",
+        "sendTest": "Test-E-Mail senden",
+        "sendingTest": "Test-E-Mail wird gesendet...",
+        "saved": "SMTP-Einstellungen gespeichert.",
+        "testSent": "Test-E-Mail gesendet. Überprüfen Sie Ihren Posteingang (und Spam)."
+      }
+    },
+    "services": {},
+    "mail": {
+      "title": "Mail-Einstellungen",
+      "description": "Testen Sie das E-Mail-System und überprüfen Sie die SMTP-Einstellungen",
+      "test": {
+        "title": "Test-E-Mail senden",
+        "description": "Geben Sie eine E-Mail-Adresse ein, um eine Test-E-Mail zu senden",
+        "label": "E-Mail-Adresse",
+        "placeholder": "beispiel@domain.com",
+        "send": "Test senden",
+        "sending": "Wird gesendet...",
+        "success": "Test-E-Mail erfolgreich gesendet",
+        "error": "Fehler beim Senden der Test-E-Mail",
+        "required": "E-Mail-Adresse ist erforderlich"
+      },
+      "smtp": {
+        "title": "SMTP-Konfiguration",
+        "description": "Test-E-Mails verwenden Ihre aktuellen SMTP-Einstellungen aus den Umgebungsvariablen",
+        "info": "Überprüfen Sie Ihre SMTP-Konfiguration in der .env-Datei:",
+        "variables": {
+          "host": "SMTP-Host",
+          "port": "SMTP-Port",
+          "user": "SMTP-Benutzer",
+          "pass": "SMTP-Passwort",
+          "from": "Absenderadresse"
+        }
+      }
+    },
+    "availability": {
+      "header": {
+        "title": "Verfügbarkeitsverwaltung",
+        "description": "Ressourcen (Therapeuten, Räume usw.) und Arbeitszeiten verwalten.",
+        "totalLabel": "Gesamt:",
+        "actions": {
+          "refresh": "Aktualisieren",
+          "create": "Neue Ressource"
+        }
+      },
+      "filters": {
+        "searchLabel": "Suche",
+        "searchPlaceholder": "Name oder Referenz...",
+        "typeLabel": "Typ",
+        "typeAll": "Alle",
+        "statusLabel": "Status",
+        "statusAll": "Alle",
+        "statusActive": "Aktiv",
+        "statusInactive": "Inaktiv",
+        "clear": "Zurücksetzen",
+        "statusOptions": {
+          "all": "Alle",
+          "active": "Aktiv",
+          "inactive": "Inaktiv"
+        }
+      },
+      "list": {
+        "title": "Ressourcenliste",
+        "empty": "Keine Einträge gefunden",
+        "loading": "Lädt...",
+        "total": "Gesamt: {count}",
+        "columns": {
+          "name": "Name",
+          "type": "Typ",
+          "status": "Status",
+          "updated": "Aktualisiert",
+          "created": "Erstellt",
+          "actions": "Aktionen",
+          "ref": "Referenz"
+        },
+        "actions": {
+          "manage": "Verwalten",
+          "delete": "Löschen"
+        },
+        "deleteConfirm": {
+          "title": "Ressource löschen",
+          "description": "Möchten Sie \"{name}\" wirklich löschen?\nTyp: {type}\nRef: {ref}\nDiese Aktion kann nicht rückgängig gemacht werden."
+        }
+      },
+      "form": {
+        "createTitle": "Neue Ressource",
+        "editTitle": "Ressourcenverwaltung",
+        "description": "Ressourcendetails, Wochen- und Tagespläne verwalten.",
+        "tabs": {
+          "resource": "Allgemeine Info",
+          "weekly": "Wochenplan",
+          "daily": "Tagesplan"
+        },
+        "buttons": {
+          "back": "Zurück",
+          "create": "Erstellen",
+          "save": "Speichern",
+          "creating": "Wird erstellt...",
+          "saving": "Wird gespeichert..."
+        },
+        "messages": {
+          "createSuccess": "Ressource erfolgreich erstellt.",
+          "updateSuccess": "Ressource erfolgreich aktualisiert.",
+          "deleteSuccess": "Ressource erfolgreich gelöscht.",
+          "invalidId": "Ungültige ID.",
+          "notFound": "Ressource nicht gefunden.",
+          "notFoundDesc": "Auf diese Ressource konnte nicht zugegriffen werden oder sie wurde möglicherweise gelöscht.",
+          "returnToList": "Zurück zur Liste"
+        },
+        "resource": {
+          "titleLabel": "Ressourcenname",
+          "titlePlaceholder": "z.B. Therapeut Anna",
+          "typeLabel": "Typ",
+          "capacityLabel": "Kapazität",
+          "capacityHelp": "Wie viele Personen können gleichzeitig bedient werden? In der Regel 1.",
+          "refLabel": "Externe Referenz",
+          "refPlaceholder": "z.B. raum-101 (optional)",
+          "statusLabel": "Status",
+          "active": "Aktiv",
+          "inactive": "Inaktiv"
+        }
+      },
+      "common": {
+        "loading": "Lädt...",
+        "noName": "(kein Name)",
+        "noRef": "(keine Ref)"
+      },
+      "weekly": {
+        "title": "Wöchentliche Arbeitszeiten",
+        "description": "Diese Zeitfenster sind die Grundlage für die tägliche Slot-Erzeugung.",
+        "empty": "Es gibt noch keine Arbeitszeitfenster. Unten können Sie ein neues Fenster hinzufügen.",
+        "addTitle": "Neues Arbeitszeitfenster hinzufügen",
+        "days": {
+          "1": "Montag",
+          "2": "Dienstag",
+          "3": "Mittwoch",
+          "4": "Donnerstag",
+          "5": "Freitag",
+          "6": "Samstag",
+          "7": "Sonntag"
+        },
+        "columns": {
+          "day": "Tag",
+          "start": "Beginn",
+          "end": "Ende",
+          "session": "Sitzung (Min.)",
+          "break": "Pause (Min.)",
+          "capacity": "Kapazität",
+          "active": "Aktiv"
+        },
+        "actions": {
+          "edit": "Bearbeiten",
+          "save": "Speichern",
+          "delete": "Löschen",
+          "add": "Hinzufügen",
+          "editDayHint": "Tages-Slots für diesen Tag bearbeiten"
+        },
+        "messages": {
+          "invalidRange": "Ungültige Start-/Endzeit. Die Endzeit muss nach der Startzeit liegen.",
+          "added": "Arbeitszeitfenster hinzugefügt.",
+          "addFailed": "Arbeitszeitfenster konnte nicht hinzugefügt werden.",
+          "updated": "Arbeitszeitfenster aktualisiert.",
+          "updateFailed": "Arbeitszeitfenster konnte nicht aktualisiert werden.",
+          "deleted": "Arbeitszeitfenster gelöscht.",
+          "deleteFailed": "Arbeitszeitfenster konnte nicht gelöscht werden.",
+          "deleteConfirm": "Sie sind dabei, dieses Arbeitszeitfenster zu löschen.\n\nTag: {day}\nZeit: {start} - {end}\n\nFortfahren?"
+        }
+      },
+      "recurring": {
+        "title": "Wiederkehrende Tages-Overrides",
+        "description": "Definieren Sie ein wöchentliches Override-Muster, z.B. jeden Freitag geschlossen oder einen Tag dauerhaft offen.",
+        "modes": {
+          "default": "Wochenplan verwenden",
+          "open": "Immer offen",
+          "closed": "Immer geschlossen",
+          "defaultDesc": "Kein wiederkehrendes Override. Die wöchentlichen Arbeitszeiten gelten weiter.",
+          "openDesc": "Dieser Tag bleibt jede Woche offen, sofern Arbeitszeiten vorhanden sind.",
+          "closedDesc": "Dieser Tag wird jede Woche als geschlossen behandelt."
+        },
+        "preview": {
+          "closedByRecurring": "Dieser Tag ist durch ein wiederkehrendes Wochen-Override geschlossen. Entfernen Sie das Override oder stellen Sie es auf offen, um wieder Zeitfenster in der Vorschau zu sehen."
+        },
+        "messages": {
+          "saved": "Wiederkehrendes Override gespeichert.",
+          "deleted": "Wiederkehrendes Override entfernt.",
+          "saveFailed": "Wiederkehrendes Override konnte nicht gespeichert werden."
+        }
+      },
+      "daily": {
+        "title": "Tagesplan",
+        "description": "Für den ausgewählten Tag werden Slots aus dem Wochenplan abgeleitet. Verwenden Sie Slot-Erzeugung, um sie zu speichern.",
+        "fields": {
+          "date": "Datum",
+          "dayOfWeek": "Tag: {dow} (1=Mo ... 7=So)"
+        },
+        "actions": {
+          "generate": "Slots erzeugen",
+          "closeDay": "Tag schließen",
+          "openDay": "Tag öffnen",
+          "closeSlot": "Schließen",
+          "openSlot": "Öffnen"
+        },
+        "notes": {
+          "capacityCheck": "Die Kapazität wird bei der Bestätigung gemäß Backend-Regeln erneut geprüft."
+        },
+        "preview": {
+          "title": "Vorschau der Sitzungen (aus Wochenplan)",
+          "description": "Die Vorschau dient nur der UI. Für öffentliche buchbare Zeiten ist ein DB-Plan erforderlich.",
+          "noRanges": "Für diesen Tag gibt es kein aktives Wochenzeitfenster.",
+          "rangeLabel": "Arbeitszeitfenster",
+          "rangePlaceholder": "Zeitfenster auswählen",
+          "rangeHelp": "Wenn es mehrere Zeitfenster an einem Tag gibt, verwalten Sie die Sitzungen fensterweise.",
+          "selectRange": "Wählen Sie ein Zeitfenster für die Vorschau aus.",
+          "noPreview": "Für das ausgewählte Zeitfenster konnten keine Sitzungen erzeugt werden."
+        },
+        "dbPlan": {
+          "title": "DB-Plan (Slot-Einträge)",
+          "description": "Die öffentlichen verfügbaren Zeiten werden von hier gelesen.",
+          "empty": "Der DB-Plan ist leer. Wenn Sie eine Vorschau sehen, erzeugen Sie zuerst Slots."
+        },
+        "columns": {
+          "time": "Uhrzeit",
+          "capacity": "Kapazität",
+          "status": "Status",
+          "range": "Zeitfenster"
+        },
+        "capacityLegend": "(reserviert/gesamt)",
+        "statusOpen": "Offen",
+        "statusFull": "Voll",
+        "statusClosed": "Geschlossen",
+        "rules": {
+          "title": "Regel",
+          "weekly": "Der Wochenplan ist die Quelle der Slot-Erzeugung.",
+          "db": "Der DB-Plan ist die tatsächliche öffentliche Quelle der verfügbaren Zeiten.",
+          "empty": "Wenn der Plan leer ist, werden öffentlich keine Zeiten angezeigt."
+        },
+        "messages": {
+          "generateSuccess": "Slot-Erzeugung abgeschlossen. Erstellt={created}, Geplant={planned}",
+          "generateFailed": "Slot-Erzeugung fehlgeschlagen.",
+          "dayUpdated": "Tag aktualisiert. Aktualisiert={updated}",
+          "dayUpdateFailed": "Tages-Override fehlgeschlagen.",
+          "reservationWarning": "Dieser Slot hat {reserved} bestätigte Reservierung(en).\nBeim Schließen kann Nacharbeit für diese Buchungen nötig sein.\n\nFortfahren?",
+          "slotUpdated": "Slot aktualisiert.",
+          "slotUpdateFailed": "Slot konnte nicht aktualisiert werden."
+        }
+      }
+    },
+    "telegram": {
+      "header": {
+        "title": "Telegram",
+        "description": "Telegram-Benachrichtigungen und automatische Antworten konfigurieren"
+      },
+      "tabs": {
+        "settings": "Einstellungen",
+        "autoreply": "Automatische Antwort",
+        "inbound": "Eingehende Nachrichten"
+      },
+      "settings": {
+        "title": "Telegram-Einstellungen",
+        "enableNotifications": "Telegram-Benachrichtigungen aktivieren",
+        "enableNotificationsDesc": "Wenn deaktiviert, werden keine Event-Nachrichten gesendet.",
+        "enableWebhook": "Webhook aktivieren",
+        "enableWebhookDesc": "Für eingehende Nachrichten und Raw-Reply-Abläufe.",
+        "botToken": "Bot-Token",
+        "primaryChatId": "Primäre Chat-ID",
+        "defaultChatId": "Standard Chat-ID",
+        "events": {
+          "title": "Event-Benachrichtigungen",
+          "newBooking": "Neue Terminanfrage",
+          "bookingConfirmed": "Termin bestätigt",
+          "bookingRejected": "Termin abgelehnt",
+          "bookingCancelled": "Termin storniert",
+          "bookingStatusChanged": "Terminstatus geändert",
+          "newContact": "Neue Kontaktnachricht"
+        },
+        "templates": {
+          "title": "Nachrichtenvorlagen",
+          "newBooking": "Vorlage: Neue Terminanfrage",
+          "newBookingVars": "{{customer_name}}, {{customer_email}}, {{customer_phone}}, {{appointment_date}}, {{appointment_time}}, {{service_title}}, {{resource_title}}, {{customer_message}}",
+          "bookingConfirmed": "Vorlage: Termin bestätigt",
+          "bookingConfirmedVars": "{{customer_name}}, {{appointment_date}}, {{appointment_time}}, {{service_title}}, {{decision_note}}",
+          "bookingRejected": "Vorlage: Termin abgelehnt",
+          "bookingRejectedVars": "{{customer_name}}, {{appointment_date}}, {{appointment_time}}, {{service_title}}, {{decision_note}}",
+          "bookingCancelled": "Vorlage: Termin storniert",
+          "bookingCancelledVars": "{{customer_name}}, {{appointment_date}}, {{appointment_time}}, {{service_title}}, {{decision_note}}",
+          "bookingStatusChanged": "Vorlage: Terminstatus geändert",
+          "bookingStatusChangedVars": "{{customer_name}}, {{appointment_date}}, {{appointment_time}}, {{service_title}}, {{status_before}}, {{status_after}}, {{decision_note}}",
+          "newContact": "Vorlage: Neue Kontaktnachricht",
+          "newContactVars": "{{name}}, {{email}}, {{phone}}, {{subject}}, {{message}}"
+        },
+        "preview": "Vorschau",
+        "variables": "Variablen",
+        "testSend": "Testversand mit dieser Vorlage",
+        "testSending": "Wird gesendet...",
+        "testEmpty": "Testnachricht darf nicht leer sein.",
+        "testRequirements": "Für den Test: Benachrichtigungen aktiv + Token + Chat-ID erforderlich.",
+        "testSent": "Testnachricht gesendet.",
+        "testFailed": "Telegram-Test fehlgeschlagen.",
+        "save": "Speichern",
+        "saving": "Wird gespeichert...",
+        "saved": "Telegram-Einstellungen gespeichert.",
+        "saveError": "Telegram-Einstellungen konnten nicht gespeichert werden.",
+        "loading": "Wird geladen..."
+      },
+      "autoreply": {
+        "title": "Automatische Antwort",
+        "enable": "Automatische Antwort",
+        "enableDesc": "Wenn aktiviert, wird auf eingehende Nachrichten automatisch mit der Vorlage geantwortet.",
+        "templateLabel": "Antwortnachricht (Vorlage)",
+        "modeInfo": "Modus: {mode}. KI-Modus + Prompt/Agent-Konfiguration wird in Zukunft hinzugefügt.",
+        "save": "Speichern",
+        "saving": "Wird gespeichert...",
+        "saved": "Automatische Antwort gespeichert.",
+        "saveError": "Speichern fehlgeschlagen.",
+        "emptyError": "Automatische Antwortnachricht darf nicht leer sein.",
+        "loading": "Wird geladen..."
+      },
+      "inbound": {
+        "title": "Eingehende Nachrichten",
+        "searchPlaceholder": "Suche: Nachricht / Benutzername / Chat...",
+        "chatIdPlaceholder": "Chat-ID (optional)",
+        "limitPlaceholder": "Limit",
+        "refresh": "Aktualisieren",
+        "refreshing": "Wird aktualisiert...",
+        "loadMore": "Mehr laden",
+        "loading": "Wird geladen...",
+        "noMoreRecords": "Keine weiteren Einträge",
+        "noRecords": "Keine Einträge vorhanden.",
+        "nextPage": "Nächste Seite verfügbar (Cursor).",
+        "noText": "(kein Text)",
+        "table": {
+          "date": "Datum",
+          "chat": "Chat",
+          "sender": "Absender",
+          "message": "Nachricht",
+          "source": "Quelle"
+        }
+      }
+    },
+    "chat": {
+      "header": {
+        "title": "Chat & KI-Support",
+        "description": "Chat-Threads verwalten und KI-Wissensbasis pflegen"
+      },
+      "tabs": {
+        "threads": "Gespräche",
+        "knowledge": "KI-Wissensbasis",
+        "settings": "Einstellungen"
+      },
+      "settings": {
+        "loading": "Wird geladen...",
+        "saved": "Einstellungen gespeichert.",
+        "saveError": "Speichern fehlgeschlagen.",
+        "save": "Speichern",
+        "saving": "Speichern...",
+        "generalTitle": "Allgemeine Einstellungen",
+        "aiEnabled": "KI-Support aktiviert",
+        "aiEnabledDesc": "KI antwortet automatisch auf Kundennachrichten.",
+        "widgetEnabled": "Chat-Widget auf der Website",
+        "widgetEnabledDesc": "Chat-Widget auf der Kundenwebseite anzeigen.",
+        "defaultProvider": "Standard KI-Anbieter",
+        "providerOrder": "Anbieter-Reihenfolge (Fallback)",
+        "providerOrderDesc": "Kommagetrennte Reihenfolge: grok, openai, anthropic. Bei Fehler wird der nächste Anbieter versucht.",
+        "providersTitle": "KI-Anbieter & API-Schlüssel",
+        "offerUrl": "Angebots-URL",
+        "offerUrlDesc": "URL für Angebotsweiterleitung. {locale} wird durch die Sprache ersetzt.",
+        "systemPromptTitle": "System-Prompt (KI-Anweisung)",
+        "systemPromptPlaceholder": "Benutzerdefinierte KI-Anweisung eingeben (leer = Standard)...",
+        "systemPromptDesc": "Leer lassen für den Standard-Prompt. Wird als Systemnachricht an die KI gesendet.",
+        "welcomeTitle": "Willkommensnachrichten"
+      },
+      "threads": {
+        "title": "Chat-Threads",
+        "noThreads": "Noch keine Gespräche vorhanden.",
+        "selectThread": "Wählen Sie ein Gespräch aus der Liste.",
+        "filterAll": "Alle",
+        "filterAi": "KI-Modus",
+        "filterAdmin": "Admin-Modus",
+        "modeAi": "KI",
+        "modeAdmin": "Admin",
+        "takeover": "Übernehmen",
+        "releaseToAi": "An KI übergeben",
+        "takeoverSuccess": "Thread übernommen.",
+        "takeoverError": "Übernahme fehlgeschlagen.",
+        "releaseSuccess": "An KI übergeben.",
+        "releaseError": "Übergabe fehlgeschlagen.",
+        "providerChanged": "KI-Anbieter geändert.",
+        "providerError": "Änderung fehlgeschlagen."
+      },
+      "messages": {
+        "noMessages": "Noch keine Nachrichten.",
+        "placeholder": "Nachricht eingeben...",
+        "sendError": "Nachricht konnte nicht gesendet werden."
+      },
+      "knowledge": {
+        "title": "KI-Wissensbasis",
+        "noItems": "Keine Einträge vorhanden.",
+        "loading": "Wird geladen...",
+        "addNew": "Neuer Eintrag",
+        "addTitle": "Neuen Eintrag erstellen",
+        "editTitle": "Eintrag bearbeiten",
+        "locale": "Sprache",
+        "priority": "Priorität",
+        "titleLabel": "Titel",
+        "titlePlaceholder": "z.B. Preisauskunft-Richtlinie",
+        "contentLabel": "Inhalt",
+        "contentPlaceholder": "KI-Anweisung hier eingeben...",
+        "tags": "Tags",
+        "tagsPlaceholder": "kommagetrennt, z.B. preis,buchung",
+        "active": "Aktiv",
+        "yes": "Ja",
+        "no": "Nein",
+        "allLocales": "Alle Sprachen",
+        "searchPlaceholder": "Suchen...",
+        "requiredFields": "Titel und Inhalt sind Pflichtfelder.",
+        "save": "Speichern",
+        "saving": "Speichern...",
+        "cancel": "Abbrechen",
+        "created": "Eintrag erstellt.",
+        "updated": "Eintrag aktualisiert.",
+        "deleted": "Eintrag gelöscht.",
+        "saveError": "Speichern fehlgeschlagen.",
+        "deleteError": "Löschen fehlgeschlagen."
+      }
+    },
+    "wallet": {
+      "title": "Wallet & Zahlungen",
+      "description": "Wallet-Guthaben, Einzahlungsanfragen und Zahlungsfreigaben",
+      "wallets": {
+        "title": "Wallets",
+        "desc": "Benutzerguthaben und Statusverwaltung",
+        "empty": "Keine Einträge gefunden",
+        "table": {
+          "user": "Benutzer",
+          "balance": "Guthaben",
+          "earnings": "Gesamteingang",
+          "withdrawn": "Gesamtausgang",
+          "status": "Status",
+          "actions": "Aktionen"
+        },
+        "actions": {
+          "transactions": "Transaktionen"
+        }
+      },
+      "deposits": {
+        "title": "Einzahlungsanfragen",
+        "desc": "PayPal und Banküberweisungen genehmigen oder ablehnen",
+        "empty": "Keine Einträge gefunden",
+        "filters": {
+          "status": "Status",
+          "method": "Methode",
+          "userId": "Benutzer-ID",
+          "userIdPh": "Nach UUID filtern"
+        },
+        "table": {
+          "user": "Benutzer",
+          "amount": "Betrag",
+          "method": "Methode",
+          "status": "Status",
+          "createdAt": "Datum",
+          "actions": "Aktionen"
+        },
+        "actions": {
+          "approve": "Genehmigen",
+          "reject": "Ablehnen"
+        }
+      },
+      "transactions": {
+        "title": "Wallet-Transaktionen",
+        "empty": "Keine Einträge gefunden",
+        "table": {
+          "type": "Typ",
+          "amount": "Betrag",
+          "method": "Methode",
+          "status": "Status",
+          "purpose": "Zweck",
+          "createdAt": "Datum"
+        }
+      },
+      "actions": {
+        "refresh": "Aktualisieren",
+        "prev": "Zurück",
+        "next": "Weiter",
+        "search": "Suchen"
+      },
+      "labels": {
+        "page": "Seite {page}"
+      },
+      "messages": {
+        "walletStatusUpdated": "Wallet-Status aktualisiert",
+        "depositApproved": "Einzahlung genehmigt",
+        "depositRejected": "Einzahlung abgelehnt",
+        "operationFailed": "Vorgang fehlgeschlagen",
+        "rejectPrompt": "Ablehnungsgrund (optional):"
+      }
+    },
+    "popups": {
+      "title": "Popup-Verwaltung",
+      "description": "Popup-Inhalte, Reihenfolge und Sichtbarkeit verwalten",
+      "list": {
+        "title": "Popup-Liste",
+        "desc": "Popups mit Aktiv/Passiv-Filtern verwalten"
+      },
+      "filters": {
+        "search": "Titel oder Inhalt suchen",
+        "localeLabel": "Sprache",
+        "localePlaceholder": "Sprache wählen",
+        "activeLocale": "Sprache",
+        "typeLabel": "Typ",
+        "typeAll": "Alle Typen",
+        "statusLabel": "Status",
+        "statusAll": "Alle",
+        "statusActive": "Aktiv",
+        "statusPassive": "Passiv"
+      },
+      "types": {
+        "topbar": "Top-Leiste",
+        "sidebarTop": "Sidebar oben",
+        "sidebarCenter": "Sidebar mitte",
+        "sidebarBottom": "Sidebar unten"
+      },
+      "frequency": {
+        "always": "Immer",
+        "once": "Einmal",
+        "daily": "Täglich"
+      },
+      "linkTargets": {
+        "self": "Gleicher Tab",
+        "blank": "Neuer Tab"
+      },
+      "textBehavior": {
+        "marquee": "Lauftext",
+        "static": "Statisch"
+      },
+      "badges": {
+        "active": "Aktiv",
+        "passive": "Passiv"
+      },
+      "table": {
+        "title": "Titel",
+        "type": "Typ",
+        "targets": "Ziel",
+        "allPages": "Alle Seiten",
+        "order": "Reihenfolge",
+        "active": "Status",
+        "actions": "Aktionen"
+      },
+      "states": {
+        "empty": "Keine Einträge gefunden",
+        "loading": "Laden...",
+        "loadError": "Popup konnte nicht geladen werden."
+      },
+      "actions": {
+        "refresh": "Aktualisieren",
+        "create": "Neu",
+        "edit": "Bearbeiten",
+        "delete": "Löschen",
+        "prev": "Zurück",
+        "next": "Weiter",
+        "cancel": "Abbrechen",
+        "save": "Speichern",
+        "back": "Zurück"
+      },
+      "labels": {
+        "page": "Seite {page}"
+      },
+      "messages": {
+        "titleRequired": "Titel ist erforderlich",
+        "saved": "Gespeichert",
+        "failed": "Vorgang fehlgeschlagen",
+        "deleteConfirm": "Möchten Sie diesen Eintrag wirklich löschen?",
+        "deleted": "Gelöscht",
+        "statusUpdated": "Status aktualisiert"
+      },
+      "modal": {
+        "edit": "Popup bearbeiten",
+        "new": "Popup erstellen"
+      },
+      "form": {
+        "title": "Titel",
+        "locale": "Sprache",
+        "content": "Inhalt",
+        "type": "Typ",
+        "frequency": "Frequenz",
+        "order": "Reihenfolge",
+        "buttonText": "Button-Text",
+        "linkUrl": "Link",
+        "targetPaths": "Zielseiten",
+        "linkTarget": "Link-Ziel",
+        "textBehavior": "Textverhalten",
+        "scrollSpeed": "Scroll-Geschwindigkeit",
+        "imageUrl": "Bild-URL",
+        "imageAsset": "Bild-Asset-ID",
+        "alt": "Alt-Text",
+        "bgColor": "Hintergrundfarbe",
+        "textColor": "Textfarbe",
+        "buttonColor": "Button-Farbe",
+        "buttonHoverColor": "Button-Hover-Farbe",
+        "buttonTextColor": "Button-Textfarbe",
+        "start": "Start",
+        "end": "Ende",
+        "delay": "Verzögerung (Sek.)",
+        "active": "Aktiv",
+        "closeable": "Schließbar",
+        "newDesc": "Neues Popup erstellen",
+        "editDesc": "Popup-Inhalt und Einstellungen bearbeiten",
+        "sectionContent": "Inhalt",
+        "sectionContentDesc": "Titel, Text und Sprache",
+        "sectionDisplay": "Anzeige",
+        "sectionDisplayDesc": "Typ, Verhalten und Reihenfolge",
+        "sectionSchedule": "Zeitplan",
+        "sectionScheduleDesc": "Start- und Enddatum",
+        "sectionImage": "Bild",
+        "sectionImageDesc": "Bild-URL oder Asset",
+        "sectionColors": "Farben",
+        "sectionColorsDesc": "Hintergrund-, Text- und Button-Farben"
+      }
+    },
+    "gutschein": {
+      "title": "Gutscheine",
+      "description": "Gutscheine verwalten – erstellen, aktivieren, stornieren oder Details anzeigen.",
+      "actions": {
+        "create": "Neuer Gutschein",
+        "products": "Produkte",
+        "activate": "Aktivieren",
+        "cancel": "Stornieren",
+        "refresh": "Aktualisieren"
+      },
+      "filters": {
+        "searchLabel": "Suche (Code / E-Mail / Name)",
+        "searchPlaceholder": "KM-XXXX-XXXX oder E-Mail...",
+        "localeLabel": "Sprache",
+        "localePlaceholder": "Sprache wählen",
+        "statusLabel": "Status",
+        "all": "Alle"
+      },
+      "table": {
+        "code": "Code",
+        "value": "Wert",
+        "status": "Status",
+        "payment": "Zahlung",
+        "recipient": "Empfänger",
+        "purchaser": "Käufer",
+        "expires": "Läuft ab",
+        "actions": "Aktionen",
+        "empty": "Keine Gutscheine gefunden."
+      },
+      "labels": {
+        "admin": "Admin",
+        "total": "Gesamt: {total}",
+        "created": "Erstellt",
+        "expires": "Läuft ab",
+        "recipient": "Empfänger"
+      },
+      "create": {
+        "title": "Gutschein erstellen",
+        "description": "Admin-erstellte Gutscheine werden sofort als bezahlt markiert.",
+        "template": "Vorlagenprodukt (optional)",
+        "templatePlaceholder": "Produkt auswählen...",
+        "templateNone": "— Individuell (keine Vorlage) —",
+        "value": "Wert",
+        "currency": "Währung",
+        "validityDays": "Gültigkeit (Tage)",
+        "recipientName": "Empfängername",
+        "recipientEmail": "Empfänger-E-Mail",
+        "purchaserName": "Käufername",
+        "purchaserEmail": "Käufer-E-Mail",
+        "note": "Interne Notiz",
+        "notePlaceholder": "Optionale interne Notiz...",
+        "personalMessage": "Persönliche Nachricht",
+        "status": "Status",
+        "submit": "Gutschein erstellen",
+        "cancel": "Abbrechen"
+      },
+      "cancelDialog": {
+        "title": "Gutschein stornieren",
+        "description": "Sind Sie sicher, dass Sie {code} stornieren möchten? Diese Aktion kann nicht rückgängig gemacht werden.",
+        "confirm": "Karte stornieren",
+        "keep": "Behalten"
+      },
+      "status": {
+        "pending": "Ausstehend",
+        "active": "Aktiv",
+        "redeemed": "Eingelöst",
+        "expired": "Abgelaufen",
+        "cancelled": "Storniert"
+      },
+      "paymentStatus": {
+        "pending": "Ausstehend",
+        "paid": "Bezahlt",
+        "failed": "Fehlgeschlagen",
+        "refunded": "Erstattet"
+      },
+      "detail": {
+        "purchaser": "Käufer",
+        "purchaserEmail": "Käufer-E-Mail",
+        "paymentStatus": "Zahlungsstatus",
+        "orderRef": "Bestellnummer",
+        "redeemedAt": "Eingelöst am",
+        "personalMessage": "Persönliche Nachricht",
+        "editTitle": "Bearbeiten",
+        "status": "Status",
+        "recipientName": "Empfängername",
+        "recipientEmail": "Empfänger-E-Mail",
+        "expiresAt": "Ablaufdatum",
+        "internalNote": "Interne Notiz",
+        "close": "Schließen",
+        "saveChanges": "Änderungen speichern"
+      },
+      "messages": {
+        "created": "Gutschein erstellt.",
+        "cancelled": "Gutschein storniert.",
+        "activated": "Gutschein aktiviert.",
+        "createError": "Gutschein konnte nicht erstellt werden.",
+        "cancelError": "Stornierung fehlgeschlagen.",
+        "activateError": "Aktivierung fehlgeschlagen.",
+        "valueRequired": "Bitte einen gültigen Wert eingeben.",
+        "purchaserRequired": "Käufername und E-Mail sind erforderlich.",
+        "updated": "Gutschein aktualisiert.",
+        "updateError": "Gutschein konnte nicht aktualisiert werden.",
+        "noChanges": "Keine Änderungen."
+      },
+      "products": {
+        "title": "Gutschein-Produkte",
+        "description": "Gutscheinvorlagen mit voreingestellten Werten und Gültigkeitszeiträumen definieren.",
+        "create": "Neues Produkt",
+        "empty": "Noch keine Produkte. Erstellen Sie eines, um zu beginnen.",
+        "table": {
+          "name": "Name",
+          "value": "Wert",
+          "validity": "Gültigkeit",
+          "order": "Reihenfolge",
+          "active": "Aktiv",
+          "created": "Erstellt",
+          "actions": "Aktionen"
+        },
+        "form": {
+          "title": "Produkt erstellen",
+          "editTitle": "Produkt bearbeiten",
+          "description": "Eine neue Gutscheinvorlage erstellen, die Kunden kaufen können.",
+          "editDescription": "Die Gutscheinvorlage aktualisieren.",
+          "name": "Name",
+          "namePlaceholder": "Gutschein 50 €",
+          "value": "Wert",
+          "valuePlaceholder": "50.00",
+          "currency": "Währung",
+          "validityDays": "Gültigkeit (Tage)",
+          "displayOrder": "Anzeigereihenfolge",
+          "productDescription": "Beschreibung",
+          "descriptionPlaceholder": "Optionale Beschreibung...",
+          "isActive": "Aktiv (für Kunden sichtbar)",
+          "save": "Änderungen speichern",
+          "create": "Produkt erstellen",
+          "cancel": "Abbrechen"
+        },
+        "messages": {
+          "created": "Produkt erstellt.",
+          "updated": "Produkt aktualisiert.",
+          "error": "Produkt konnte nicht gespeichert werden.",
+          "toggleError": "Status konnte nicht aktualisiert werden.",
+          "nameRequired": "Name ist erforderlich.",
+          "valueRequired": "Bitte einen gültigen Wert eingeben."
+        }
+      }
+    }
+  ,
+  "header": {
+    "title": "Slider Verwaltung",
+    "description": "Verwalten Sie hier Ihre Homepage-Slider.",
+    "searchLabel": "Suche",
+    "searchPlaceholder": "Nach Titel suchen...",
+    "searchPlaceholderLong": "Örn: bakım, modernizasyon…",
+    "localeLabel": "Sprache",
+    "localePlaceholder": "Sprache auswählen",
+    "localeEmptyError": "Keine Sprachen gefunden.",
+    "localeUrlSync": "Locale URL ile senkron çalışır.",
+    "statusLabel": "Durum",
+    "statusAll": "Tümü",
+    "statusAllAlt": "Hepsi",
+    "statusActive": "Aktif",
+    "statusInactive": "Pasif",
+    "statusOnlyActive": "Sadece aktif",
+    "statusOnlyInactive": "Sadece pasif",
+    "featuredLabel": "Öne çıkan",
+    "featuredOnly": "Sadece öne çıkanlar",
+    "featuredItems": "Öne çıkanlar",
+    "featuredOthers": "Diğerleri",
+    "filterLabel": "Aktiv-Filter",
+    "clearFilters": "Filtreleri temizle",
+    "resetButton": "Sıfırla",
+    "refreshButton": "Aktualisieren",
+    "createButton": "Slider erstellen",
+    "createButtonLong": "+ Yeni Hizmet Ekle",
+    "totalLabel": "Toplam:",
+    "activeLocale": "Aktif locale:",
+    "loading": "Lädt...",
+    "headerDescription": "Hizmet kayıtlarını yönet."
+  },
+  "list": {
+    "title": "Slider Liste",
+    "listTitle": "Liste",
+    "totalLabel": "Gesamt Slider:",
+    "loading": "Daten werden geladen...",
+    "savingOrder": "Speichere...",
+    "saveOrderButton": "Reihenfolge speichern",
+    "recordCount": "{count} kayıt (sayfa)",
+    "noRecords": "Keine Slider gefunden, die den Kriterien entsprechen.",
+    "reorderHelp": "Verschieben Sie per Drag & Drop oder mit den Pfeiltasten (nur ohne Filter).",
+    "nameColumn": "Ad",
+    "serviceColumn": "Hizmet",
+    "slugColumn": "Slug",
+    "typeColumn": "Tip",
+    "statusColumn": "Durum",
+    "featuredColumn": "Hervorgehoben",
+    "priceColumn": "Fiyat / Tarih",
+    "actionsColumn": "Aktionen",
+    "actionsColumnPlural": "İşlemler",
+    "slugLabel": "Slug:",
+    "localeLabel": "Locale:",
+    "priceLabel": "Fiyat:",
+    "dateLabel": "Kayıt:",
+    "typeLabel": "Tip:",
+    "activeStatus": "Aktiv",
+    "inactiveStatus": "Inaktiv",
+    "featuredStatus": "Hervorgehoben",
+    "normalStatus": "Normal",
+    "featuredYes": "Evet",
+    "featuredNo": "Hayır",
+    "featuredBadge": "Featured",
+    "upButton": "Nach oben",
+    "downButton": "Nach unten",
+    "editButton": "Bearbeiten",
+    "deleteButton": "Löschen",
+    "makeFeatured": "Öne Çıkar",
+    "makeNormal": "Normal Yap",
+    "featuredMobileLabel": "Öne Çıkan",
+    "featuredMobileHelp": "Listede vurgula",
+    "activeMobileLabel": "Aktif",
+    "activeMobileHelp": "Yayın durumu",
+    "orderSaved": "Reihenfolge erfolgreich gespeichert.",
+    "orderSaveError": "Fehler beim Speichern der Reihenfolge.",
+    "statusUpdated": "Durum güncellendi.",
+    "statusUpdateError": "Güncellenemedi.",
+    "featuredUpdated": "Öne çıkan güncellendi.",
+    "deleteConfirm": "Sind Sie sicher, dass Sie den Slider '{name}' löschen möchten?",
+    "deleted": "Slider '{name}' gelöscht.",
+    "deleteError": "Fehler beim Löschen des Sliders.",
+    "listLoadError": "Liste yüklenemedi.",
+    "retryButton": "Yeniden dene",
+    "listLoadErrorToast": "Liste yüklenemedi. Tekrar deneyin."
+  },
+  "form": {
+    "createTitle": "Neuer Slider",
+    "editTitle": "Slider bearbeiten",
+    "description": "İsim, slug, içerik, teknik alanlar ve görsel bilgilerini doldur. Form veya JSON modunda çalışabilirsin.",
+    "loading": "Yükleniyor…",
+    "backButton": "Geri",
+    "creating": "Oluşturuluyor...",
+    "saving": "Kaydediliyor...",
+    "createButton": "Hizmeti Oluştur",
+    "saveButton": "Değişiklikleri Kaydet",
+    "formTab": "Form",
+    "jsonTab": "JSON",
+    "jsonLabel": "Service JSON",
+    "jsonHelperText": "Formdaki tüm alanların bire bir karşılığıdır.",
+    "localeLabel": "Sprache",
+    "localePlaceholder": "Locale seç",
+    "localeEmptyError": "app_locales boş. Site Settings → app_locales değerini kontrol et.",
+    "activeLabel": "Aktiv",
+    "featuredLabel": "Hervorgehoben",
+    "nameLabel": "Hizmet Adı",
+    "slugLabel": "Slug",
+    "descriptionLabel": "Beschreibung",
+    "materialLabel": "Malzeme / İçerik",
+    "priceLabel": "Fiyat",
+    "includesLabel": "Dahil Olanlar",
+    "warrantyLabel": "Garanti / Koşullar",
+    "tagsLabel": "Etiketler",
+    "tagsHelp": "(virgül ile ayır)",
+    "tagsPlaceholder": "bakım, onarım, retrofit, scada",
+    "metaTitleLabel": "Meta Title",
+    "metaKeywordsLabel": "Meta Keywords",
+    "metaDescriptionLabel": "Meta Description",
+    "areaLabel": "Alan / Kapasite",
+    "durationLabel": "Süre",
+    "maintenanceLabel": "Bakım",
+    "seasonLabel": "Sezon",
+    "equipmentLabel": "Ekipman",
+    "displayOrderLabel": "Görüntüleme Sırası",
+    "imageAltLabel": "Görsel Alt Metni",
+    "multiLocaleTitle": "Çok Dilli İşlem",
+    "replicateAllLocales": "Oluştururken tüm dillere kopyala",
+    "applyAllLocales": "Güncellerken tüm dillere uygula",
+    "localeRequired": "Sprachauswahl ist erforderlich.",
+    "nameSlugRequired": "İsim ve slug alanları zorunludur."
+  },
+  "formHeader": {
+    "createTitle": "Neuen Slider erstellen",
+    "editTitle": "Slider bearbeiten",
+    "description": "Sie können die Slider-Details im untenstehenden Formular bearbeiten.",
+    "backButton": "Zurück",
+    "cancelButton": "Vazgeç",
+    "saveButton": "Speichern",
+    "activeLocale": "Active locale:",
+    "noLocalesTitle": "Dil listesi bulunamadı",
+    "noLocalesDescription": "site_settings.app_locales boş veya geçersiz. Önce Site Settings'ten dilleri ayarlayın.",
+    "goToSettings": "Site Ayarlarına git",
+    "invalidIdTitle": "Geçersiz ID",
+    "invalidIdDescription": "URL paramı UUID değil:",
+    "backToList": "Listeye dön",
+    "notFoundTitle": "Hizmet bulunamadı",
+    "notFoundDescription": "Bu id için kayıt yok:",
+    "retryButton": "Yeniden dene",
+    "localeError": "Geçerli bir locale seçilmedi. app_locales ve default_locale kontrol edin.",
+    "nameSlugRequired": "Name ve Slug zorunludur.",
+    "createdNoId": "Oluşturuldu ama id dönmedi/UUID değil. Backend response'u kontrol et.",
+    "created": "Hizmet oluşturuldu.",
+    "idNotFound": "Hizmet verisi yüklenemedi (id yok).",
+    "updated": "Hizmet güncellendi.",
+    "defaultError": "İşlem başarısız. Lütfen tekrar deneyin."
+  },
+  "formImage": {
+    "coverLabel": "Kapak Görseli",
+    "coverHelperPrefix": "Kapak görseli",
+    "coverHelperField": "alanına yazılır (legacy: featured_image). Kapak seçilen görsel",
+    "coverHelperSuffix": "galeriden silinmez, havuzda kalır.",
+    "galleryLabel": "Görsel Havuzu (Galeri)",
+    "galleryHelperPrefix": "Tüm görseller havuzda durur",
+    "galleryHelperSuffix": "Kapak seçince sadece pointer güncellenir.",
+    "coverSaved": "Kapak görseli kaydedildi.",
+    "coverSaveError": "Kapak kaydedilirken hata oluştu.",
+    "coverDeleteError": "Kapak görseli silinemez. Önce başka bir kapak seç.",
+    "galleryAddError": "Görseller eklenirken hata oluştu.",
+    "galleryDeleteError": "Görseller silinirken hata oluştu.",
+    "galleryPlaceholder": "Galeri/havuz için önce hizmeti kaydet (ID oluşmalı). Sonra görseller burada yönetilir."
+  },
+  "upload": {
+    "noUrl": "Upload başarılı ama URL alınamadı.",
+    "error": "Resim yüklenirken hata oluştu."
+  },
+  "types": {
+    "maintenance_repair": "Bakım & Onarım",
+    "modernization": "Modernizasyon",
+    "spare_parts_components": "Yedek Parça",
+    "applications_references": "Referanslar",
+    "engineering_support": "Mühendislik",
+    "production": "Üretim",
+    "other": "Diğer"
+  },
+  "notFound": {
+    "title": "Seite nicht gefunden.",
+    "description": "Die von Ihnen gesuchte Seite konnte nicht gefunden werden oder wurde verschoben.",
+    "goBack": "Zur Startseite"
+  }
+}

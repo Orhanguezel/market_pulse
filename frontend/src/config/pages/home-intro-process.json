@@ -1,0 +1,71 @@
+{
+  "tr": {
+    "eyebrow": "Nasıl çalışır?",
+    "titleBefore": "3 adımda ",
+    "titleAccent": "pazar analizi.",
+    "lead": "Keyword yazın, risk skorunu görün, bilinçli kararınızı alın.",
+    "steps": [
+      {
+        "icon": "search",
+        "title": "Keyword ve pazar seç",
+        "desc": "Analiz etmek istediğiniz ürün keywordünü ve Amazon marketplace'i (DE, UK, US…) seçin."
+      },
+      {
+        "icon": "chartColumn",
+        "title": "Analiz et",
+        "desc": "Sistem Keepa, Oxylabs ve AI motoruyla 5 boyutlu risk analizini arka planda çalıştırır. ~3 dakika."
+      },
+      {
+        "icon": "shield",
+        "title": "Karar al",
+        "desc": "GÜVENLİ / DİKKATLİ OL / GİRME etiketi, composite skor ve 5 boyutlu gerekçeyle bilinçli karar alın."
+      }
+    ]
+  },
+  "en": {
+    "eyebrow": "How it works",
+    "titleBefore": "Market analysis in ",
+    "titleAccent": "3 steps.",
+    "lead": "Enter a keyword, see the risk score, make an informed decision.",
+    "steps": [
+      {
+        "icon": "search",
+        "title": "Select keyword & marketplace",
+        "desc": "Enter the product keyword you want to analyze and select the Amazon marketplace (DE, UK, US…)."
+      },
+      {
+        "icon": "chartColumn",
+        "title": "Analyze",
+        "desc": "The system runs a 5-dimensional risk analysis using Keepa, Oxylabs and AI engine in the background. ~3 minutes."
+      },
+      {
+        "icon": "shield",
+        "title": "Decide",
+        "desc": "Get SAFE / PROCEED WITH CAUTION / DO NOT ENTER label, composite score and 5-dimensional reasoning for a confident decision."
+      }
+    ]
+  },
+  "de": {
+    "eyebrow": "Wie es funktioniert",
+    "titleBefore": "Marktanalyse in ",
+    "titleAccent": "3 Schritten.",
+    "lead": "Keyword eingeben, Risikoscore sehen, fundierte Entscheidung treffen.",
+    "steps": [
+      {
+        "icon": "search",
+        "title": "Keyword und Marktplatz wählen",
+        "desc": "Geben Sie das Produkt-Keyword ein und wählen Sie den Amazon-Marktplatz (DE, UK, US…)."
+      },
+      {
+        "icon": "chartColumn",
+        "title": "Analysieren",
+        "desc": "Das System führt eine 5-dimensionale Risikoanalyse mit Keepa, Oxylabs und KI-Engine im Hintergrund durch. ~3 Minuten."
+      },
+      {
+        "icon": "shield",
+        "title": "Entscheiden",
+        "desc": "Erhalten Sie SICHER / MIT VORSICHT / NICHT EINSTEIGEN-Label mit Composite Score und 5-dimensionaler Begründung."
+      }
+    ]
+  }
+}

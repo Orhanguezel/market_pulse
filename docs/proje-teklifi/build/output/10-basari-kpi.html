@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 — Başarı Kriterleri ve KPI — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="tartisma/index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="tartisma/12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="tartisma/13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="tartisma/14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="tartisma/15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>10 — Başarı Kriterleri ve KPI</strong></div>
+  <div class="actions">
+    <a href="index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="başarı-kriterleri-ve-kpi">10 — Başarı Kriterleri ve KPI</h1>
+<p>Bu doküman MatPortal’ın <strong>ne zaman başarılı olduğunu</strong>, <strong>nasıl ölçüleceğini</strong>, <strong>kim sorumlu</strong> ve <strong>hangi sıklıkla raporlanacağını</strong> tanımlar. Felsefe: <strong>ölçülemeyen başarı, başarı değildir</strong>.</p>
+<h2 id="üst-düzey-başarı-tanımı">1. Üst Düzey Başarı Tanımı</h2>
+<p>MatPortal aşağıdaki 4 noktada başarılıdır:</p>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 43%" />
+<col style="width: 37%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Boyut</th>
+<th>Ölçü</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td><strong>Bayi tarafı</strong></td>
+<td>Bayinin sipariş alma kanalı portal oluyor (&gt;%70 portal)</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td><strong>Tahmin doğruluğu</strong></td>
+<td>Üretim planlama hatası yarıdan az oluyor (MAPE &lt; %20)</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td><strong>Operasyonel verimlilik</strong></td>
+<td>Satış ekibi sipariş alma zamanı yarıdan az</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td><strong>Stratejik avantaj</strong></td>
+<td>Bayi churn’dan korunma, pazar zekası, yeni keşif</td>
+</tr>
+</tbody>
+</table>
+<p>Bu 4 boyut için 30+ KPI tanımlıdır. Her ay raporlanır, her çeyrek değerlendirilir.</p>
+<h2 id="ana-kpi-kategorileri">2. Ana KPI Kategorileri</h2>
+<h3 id="kategori-a-bayi-adopt-faz-6">Kategori A — Bayi Adopt (Faz 6)</h3>
+<h3 id="kategori-b-tahmin-doğruluğu-faz-2-7">Kategori B — Tahmin Doğruluğu (Faz 2 + 7)</h3>
+<h3 id="kategori-c-operasyonel-verimlilik-tüm-fazlar">Kategori C — Operasyonel Verimlilik (Tüm fazlar)</h3>
+<h3 id="kategori-d-churn-retention-faz-5">Kategori D — Churn &amp; Retention (Faz 5)</h3>
+<h3 id="kategori-e-lead-büyüme-faz-3">Kategori E — Lead &amp; Büyüme (Faz 3)</h3>
+<h3 id="kategori-f-sistem-sağlığı-tüm-fazlar">Kategori F — Sistem Sağlığı (Tüm fazlar)</h3>
+<h3 id="kategori-g-mali-operasyonel">Kategori G — Mali (operasyonel)</h3>
+<h2 id="kategori-a-bayi-adopt">3. Kategori A — Bayi Adopt</h2>
+<h3 id="a-1-portal-aktif-kullanıcı-sayısı">A-1: Portal aktif kullanıcı sayısı</h3>
+<ul>
+<li><strong>Tanım:</strong> Son 30 gün içinde en az 1 kez giriş yapan bayi user</li>
+<li><strong>Veri:</strong> <code>portal_audit</code> (login event)</li>
+<li><strong>Hedef ay 3:</strong> 5 (pilot)</li>
+<li><strong>Hedef ay 6:</strong> 25</li>
+<li><strong>Hedef ay 12:</strong> 50+</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+<li><strong>Sahibi:</strong> Satış sorumlusu</li>
+</ul>
+<h3 id="a-2-portaldan-gelen-sipariş-oranı">A-2: Portal’dan gelen sipariş oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> (portal sipariş / toplam sipariş) %</li>
+<li><strong>Veri:</strong> <code>satis_siparisleri.kaynak</code></li>
+<li><strong>Hedef ay 6:</strong> %30</li>
+<li><strong>Hedef ay 12:</strong> %70</li>
+<li><strong>Hedef ay 18:</strong> %85</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="a-3-bayi-başına-aylık-sipariş-sayısı">A-3: Bayi başına aylık sipariş sayısı</h3>
+<ul>
+<li><strong>Tanım:</strong> Aktif bayilerin ortalama sipariş frekansı</li>
+<li><strong>Veri:</strong> <code>satis_siparisleri</code> GROUP BY bayi</li>
+<li><strong>Baseline:</strong> ~2-4 sipariş/ay</li>
+<li><strong>Hedef ay 12:</strong> %30-40 artış (3-5 sipariş/ay)</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="a-4-ortalama-sepet-büyüklüğü">A-4: Ortalama sepet büyüklüğü</h3>
+<ul>
+<li><strong>Tanım:</strong> Sipariş başına ortalama tutar</li>
+<li><strong>Veri:</strong> <code>satis_siparisleri.toplam_tutar</code> ortalama</li>
+<li><strong>Baseline:</strong> ~40K TL</li>
+<li><strong>Hedef ay 12:</strong> %15-25 artış (50K TL)</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="a-5-sepet-terk-oranı">A-5: Sepet terk oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> Sepete eklenip onaylanmayan / toplam sepet</li>
+<li><strong>Veri:</strong> <code>portal_sepet.durum = 'terk'</code></li>
+<li><strong>Hedef:</strong> &lt;%30</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="a-6-tek-tıkla-yeniden-sipariş-kullanımı">A-6: Tek tıkla yeniden sipariş kullanımı</h3>
+<ul>
+<li><strong>Tanım:</strong> “Yeniden sipariş” butonu kullanım sıklığı</li>
+<li><strong>Veri:</strong> <code>portal_audit.aksiyon = 'yeniden_siparis'</code></li>
+<li><strong>Hedef ay 6:</strong> Aktif bayilerin %40’ı kullanıyor</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="a-7-bayi-memnuniyet-skoru-nps">A-7: Bayi memnuniyet skoru (NPS)</h3>
+<ul>
+<li><strong>Tanım:</strong> Net Promoter Score, 0-10 ölçeği</li>
+<li><strong>Veri:</strong> Anket (3 ayda bir)</li>
+<li><strong>Hedef:</strong> &gt;40 (iyi sektör)</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+<li><strong>Not:</strong> Faz 6 sonu pilot anket, sonra çeyreklik</li>
+</ul>
+<h2 id="kategori-b-tahmin-doğruluğu">4. Kategori B — Tahmin Doğruluğu</h2>
+<h3 id="b-1-mape-genel">B-1: MAPE (genel)</h3>
+<ul>
+<li><strong>Tanım:</strong> Mean Absolute Percentage Error tüm tahminler ortalaması</li>
+<li><strong>Veri:</strong> <code>tahmin_dogruluk.mape</code></li>
+<li><strong>Hedef ay 3:</strong> &lt;%50</li>
+<li><strong>Hedef ay 6:</strong> &lt;%35</li>
+<li><strong>Hedef ay 12:</strong> &lt;%25</li>
+<li><strong>Hedef ay 24:</strong> &lt;%20</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+<li><strong>Sahibi:</strong> ML Engineer</li>
+</ul>
+<h3 id="b-2-mape-bayi-ürün-özel">B-2: MAPE (bayi-ürün özel)</h3>
+<ul>
+<li><strong>Tanım:</strong> Bayi-ürün modellerinin ayrı ortalaması</li>
+<li><strong>Hedef ay 12:</strong> %15-20 (az hata)</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="b-3-coverage-güven-aralığı-doğruluğu">B-3: Coverage (güven aralığı doğruluğu)</h3>
+<ul>
+<li><strong>Tanım:</strong> %95 güven aralığı içine düşen gerçek değer oranı</li>
+<li><strong>Hedef:</strong> &gt;%90</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="b-4-bias-sistematik-sapma">B-4: Bias (sistematik sapma)</h3>
+<ul>
+<li><strong>Tanım:</strong> Tahminlerin gerçek değerden ortalama sapması (yön belli)</li>
+<li><strong>Hedef:</strong> ±%5</li>
+<li><strong>Yön:</strong> Sıfıra yakın iyi</li>
+</ul>
+<h3 id="b-5-naive-baseline-iyilik-oranı">B-5: Naive baseline iyilik oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> Model MAPE’si ne kadar naive’den iyi?</li>
+<li><strong>Formula:</strong> <code>(naive_mape - model_mape) / naive_mape</code></li>
+<li><strong>Hedef:</strong> &gt;%10</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+<li><strong>Not:</strong> %10’dan az iyilik → naive yeter, modele gerek yok</li>
+</ul>
+<h3 id="b-6-champion-değişim-sıklığı">B-6: Champion değişim sıklığı</h3>
+<ul>
+<li><strong>Tanım:</strong> Haftalık champion model güncelleme sayısı</li>
+<li><strong>Hedef:</strong> İlk 3 ay sık (modeller olgunlaşıyor), sonra stabil</li>
+<li><strong>Yön:</strong> Stabil iyi (yıl 2’de değişiklik az)</li>
+</ul>
+<h3 id="b-7-ab-test-başarı-oranı">B-7: A/B test başarı oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> Challenger → champion’a yükselen oran</li>
+<li><strong>Hedef:</strong> %20-40 (ne çok ne az değişim)</li>
+<li><strong>Yön:</strong> Sağlıklı bant</li>
+</ul>
+<h3 id="b-8-tahmin-açıklama-kalitesi">B-8: Tahmin “açıklama” kalitesi</h3>
+<ul>
+<li><strong>Tanım:</strong> Yöneticinin “açıklama anlamlı mıydı?” puanı</li>
+<li><strong>Veri:</strong> Aksiyon onay UI’da feedback</li>
+<li><strong>Hedef:</strong> 4/5 ortalama</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h2 id="kategori-c-operasyonel-verimlilik">5. Kategori C — Operasyonel Verimlilik</h2>
+<h3 id="c-1-satış-ekibi-sipariş-alma-zamanı">C-1: Satış ekibi sipariş alma zamanı</h3>
+<ul>
+<li><strong>Tanım:</strong> Günlük ortalama sipariş kabul süresi (saat)</li>
+<li><strong>Baseline:</strong> 3-4 saat/gün/kişi</li>
+<li><strong>Hedef ay 12:</strong> &lt;1.5 saat/gün/kişi</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+<li><strong>Veri:</strong> Manuel anket + portal sipariş sayısından çıkarsama</li>
+</ul>
+<h3 id="c-2-sipariş-hatası-sayısı">C-2: Sipariş hatası sayısı</h3>
+<ul>
+<li><strong>Tanım:</strong> Aylık yanlış fiyat/miktar/SKU sipariş sayısı</li>
+<li><strong>Baseline:</strong> 8-12/ay</li>
+<li><strong>Hedef ay 6:</strong> &lt;3/ay</li>
+<li><strong>Hedef ay 12:</strong> &lt;2/ay</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="c-3-cari-sorgu-sayısı-bayinin-muhasebeyi-araması">C-3: Cari sorgu sayısı (bayinin muhasebeyi araması)</h3>
+<ul>
+<li><strong>Tanım:</strong> Telefon/email cari soru sayısı</li>
+<li><strong>Baseline:</strong> ~50/ay</li>
+<li><strong>Hedef ay 12:</strong> &lt;%20’sine düşer</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+<li><strong>Veri:</strong> Manuel kayıt + portal cari sayfa view’dan çıkarsama</li>
+</ul>
+<h3 id="c-4-stok-out-olayı-sayısı">C-4: Stok-out olayı sayısı</h3>
+<ul>
+<li><strong>Tanım:</strong> Aylık ürün stoksuz kalma vakası</li>
+<li><strong>Baseline:</strong> ~5-10/ay</li>
+<li><strong>Hedef ay 12:</strong> -%50</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+<li><strong>Veri:</strong> <code>stoklar</code> historical + sipariş ret</li>
+</ul>
+<h3 id="c-5-aşırı-stok-kalemi">C-5: Aşırı stok kalemi</h3>
+<ul>
+<li><strong>Tanım:</strong> 3 ay tüketim üstünde duran ürün sayısı</li>
+<li><strong>Hedef:</strong> -%30 (ay 12)</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="c-6-po-taslağı-onay-süresi">C-6: PO taslağı onay süresi</h3>
+<ul>
+<li><strong>Tanım:</strong> Otomatik PO taslağı oluşturulup yönetici onaylanana kadar</li>
+<li><strong>Hedef:</strong> &lt;24 saat</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="c-7-üretim-planı-ile-gerçekleşen-sapma">C-7: Üretim planı ile gerçekleşen sapma</h3>
+<ul>
+<li><strong>Tanım:</strong> Planlanan üretim - gerçekleşen</li>
+<li><strong>Baseline:</strong> ~%15</li>
+<li><strong>Hedef ay 12:</strong> &lt;%8</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="c-8-emailbildirim-teslim-oranı">C-8: Email/bildirim teslim oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> Gönderilen / başarıyla teslim edilen</li>
+<li><strong>Hedef:</strong> &gt;%95</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h2 id="kategori-d-churn-retention">6. Kategori D — Churn &amp; Retention</h2>
+<h3 id="d-1-aylık-bayi-churn-oranı">D-1: Aylık bayi churn oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> (Son 90 gün siparişsiz bayi / aktif bayi) %</li>
+<li><strong>Baseline:</strong> Bilinmiyor (Faz 5 sonrası ölçülecek)</li>
+<li><strong>Hedef yıl 1:</strong> &lt;%5/yıl</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="d-2-churn-radarı-erken-sinyal-precision">D-2: Churn radarı erken sinyal precision</h3>
+<ul>
+<li><strong>Tanım:</strong> Yüksek risk işaretledik, gerçekten churn etti mi?</li>
+<li><strong>Hedef:</strong> &gt;%70</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="d-3-churn-radarı-recall">D-3: Churn radarı recall</h3>
+<ul>
+<li><strong>Tanım:</strong> Churn etti, biz önceden işaretleyebildik mi?</li>
+<li><strong>Hedef:</strong> &gt;%50 (manuel sinyalle birlikte)</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="d-4-churndan-kurtarma-oranı">D-4: Churn’dan kurtarma oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> Yüksek riskli bayi → aksiyon → düşük risk</li>
+<li><strong>Hedef:</strong> %30+ kurtarma</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="d-5-aksiyon-roi">D-5: Aksiyon ROI</h3>
+<ul>
+<li><strong>Tanım:</strong> Aksiyon maliyeti vs kurtarılan ciro</li>
+<li><strong>Hedef:</strong> ROI &gt; 5x</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="d-6-bayi-lifetime-value-ltv">D-6: Bayi Lifetime Value (LTV)</h3>
+<ul>
+<li><strong>Tanım:</strong> Bayi başına ömür boyu beklenen ciro</li>
+<li><strong>Hesap:</strong> Ortalama yıllık ciro × ortalama ömür</li>
+<li><strong>Hedef yıl 1:</strong> %20+ artış (churn azaldıkça)</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h2 id="kategori-e-lead-büyüme">7. Kategori E — Lead &amp; Büyüme</h2>
+<h3 id="e-1-yeni-leaday-yurt-içi">E-1: Yeni lead/ay (yurt içi)</h3>
+<ul>
+<li><strong>Tanım:</strong> Kalite filtreden geçen lead sayısı</li>
+<li><strong>Hedef ay 6:</strong> 200+/ay</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="e-2-yeni-leaday-yurt-dışı">E-2: Yeni lead/ay (yurt dışı)</h3>
+<ul>
+<li><strong>Tanım:</strong> Apollo/Hunter ile çıkarılan</li>
+<li><strong>Hedef ay 12:</strong> 100+/ay</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="e-3-lead-bayi-dönüşüm-oranı">E-3: Lead → bayi dönüşüm oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> Lead’lerden ne kadarı müşteriye dönüşüyor</li>
+<li><strong>Hedef:</strong> %5-10 (sektör ortalaması)</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="e-4-aktif-bayi-sayısı-toplam">E-4: Aktif bayi sayısı (toplam)</h3>
+<ul>
+<li><strong>Tanım:</strong> Son 90 gün siparişli bayi</li>
+<li><strong>Baseline:</strong> 35</li>
+<li><strong>Hedef ay 12:</strong> 50-65</li>
+<li><strong>Hedef ay 24:</strong> 100+</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="e-5-outreach-email-açma-oranı">E-5: Outreach email açma oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> Gönderilen / açılan</li>
+<li><strong>Hedef:</strong> &gt;%20</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="e-6-outreach-yanıt-oranı">E-6: Outreach yanıt oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> Email gönderilen / yanıt alınan</li>
+<li><strong>Hedef:</strong> &gt;%5</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h2 id="kategori-f-sistem-sağlığı">8. Kategori F — Sistem Sağlığı</h2>
+<h3 id="f-1-api-uptime">F-1: API uptime</h3>
+<ul>
+<li><strong>Tanım:</strong> %</li>
+<li><strong>Hedef:</strong> %99.5 (downtime &lt;4.4 saat/ay)</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="f-2-api-latency-p95">F-2: API latency p95</h3>
+<ul>
+<li><strong>Tanım:</strong> 95. percentile yanıt süresi</li>
+<li><strong>Hedef:</strong> &lt;500ms</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="f-3-api-hata-oranı">F-3: API hata oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> HTTP 5xx /toplam</li>
+<li><strong>Hedef:</strong> &lt;%0.5</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="f-4-crawler-başarı-oranı">F-4: Crawler başarı oranı</h3>
+<ul>
+<li><strong>Tanım:</strong> Başarılı crawl / toplam</li>
+<li><strong>Hedef:</strong> &gt;%90</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="f-5-ml-servis-tahmin-latency">F-5: ML servis tahmin latency</h3>
+<ul>
+<li><strong>Tanım:</strong> Ortalama tahmin süresi (cache miss)</li>
+<li><strong>Hedef:</strong> &lt;500ms</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="f-6-llm-token-harcama">F-6: LLM token harcama</h3>
+<ul>
+<li><strong>Tanım:</strong> Aylık token / dolar</li>
+<li><strong>Hedef:</strong> Bütçe içinde (kategori G ile birlikte)</li>
+<li><strong>Yön:</strong> Bütçe içi</li>
+</ul>
+<h3 id="f-7-test-coverage">F-7: Test coverage</h3>
+<ul>
+<li><strong>Tanım:</strong> Backend kod coverage %</li>
+<li><strong>Hedef:</strong> &gt;%70 (kritik fonk %90+)</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="f-8-deploy-frekansı">F-8: Deploy frekansı</h3>
+<ul>
+<li><strong>Tanım:</strong> Aylık production deploy sayısı</li>
+<li><strong>Hedef:</strong> 4-8/ay (haftalık 1-2)</li>
+<li><strong>Yön:</strong> Sağlıklı bant</li>
+</ul>
+<h3 id="f-9-mttr-mean-time-to-recovery">F-9: MTTR (Mean Time To Recovery)</h3>
+<ul>
+<li><strong>Tanım:</strong> Hatadan toparlanma ortalama süresi</li>
+<li><strong>Hedef:</strong> &lt;30 dk (kritik), &lt;2 saat (yüksek)</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="f-10-audit-log-eksiksizliği">F-10: Audit log eksiksizliği</h3>
+<ul>
+<li><strong>Tanım:</strong> Risk 7+ aksiyonların audit’lendiği oran</li>
+<li><strong>Hedef:</strong> %100</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h2 id="kategori-g-mali-operasyonel-1">9. Kategori G — Mali (Operasyonel)</h2>
+<h3 id="g-1-aylık-operasyonel-maliyet-toplam">G-1: Aylık operasyonel maliyet (toplam)</h3>
+<ul>
+<li><strong>Tanım:</strong> Tüm SaaS + cloud + LLM</li>
+<li><strong>Hedef:</strong> Bütçe içinde (Senaryo A/B/C — Doc 08)</li>
+<li><strong>Yön:</strong> Bütçe içi</li>
+</ul>
+<h3 id="g-2-roi-operasyonel">G-2: ROI (operasyonel)</h3>
+<ul>
+<li><strong>Tanım:</strong> Aylık tasarruf / aylık maliyet</li>
+<li><strong>Hedef yıl 1:</strong> &gt;10x</li>
+<li><strong>Yön:</strong> Yüksek iyi</li>
+</ul>
+<h3 id="g-3-llm-maliyetsorgu">G-3: LLM maliyet/sorgu</h3>
+<ul>
+<li><strong>Tanım:</strong> Ortalama LLM çağrı maliyeti</li>
+<li><strong>Hedef:</strong> Cache + provider mix ile &lt;$0.01/sorgu</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h3 id="g-4-kullanıcı-başına-aylık-maliyet">G-4: Kullanıcı başına aylık maliyet</h3>
+<ul>
+<li><strong>Tanım:</strong> Aylık operasyonel / aktif user</li>
+<li><strong>Hedef:</strong> &lt;$5/user</li>
+<li><strong>Yön:</strong> Düşük iyi</li>
+</ul>
+<h2 id="kpi-dashboard">10. KPI Dashboard</h2>
+<h3 id="yönetici-dashboardu">10.1 Yönetici dashboard’u</h3>
+<pre><code>[Ekran: /admin/kpi-dashboard]
+
+  ÜST DÜZEY (4 boyut)
+  ┌──────────────┬──────────────┬─────────────┬──────────────┐
+  │ Bayi adopt   │ Tahmin       │ Operasyonel │ Stratejik    │
+  │              │              │             │              │
+  │ Portal: 65%  │ MAPE: %22    │ Sipariş     │ Churn: %3.2  │
+  │ ↑ +12% MoM   │ ↓ -3 puan    │ hatası: 2/ay│ ↓ %50 azaldı │
+  │              │              │ Sipariş     │ Yeni bayi:   │
+  │ Hedef: 70%   │ Hedef: %20   │ alma: 1.2hr │ 12/ay        │
+  └──────────────┴──────────────┴─────────────┴──────────────┘
+
+  Trend (son 12 ay): [GRAFİK]
+
+  Risk uyarıları (3): bkz risk dashboard
+  KPI sapma (2): A-2 (%65 vs hedef %70), B-1 (%22 vs hedef %20)</code></pre>
+<h3 id="detay-dashboard">10.2 Detay dashboard</h3>
+<p>Her kategori için ayrı dashboard: - /admin/kpi/bayi-adopt - /admin/kpi/tahmin - /admin/kpi/operasyonel - /admin/kpi/churn - /admin/kpi/lead - /admin/kpi/sistem - /admin/kpi/mali</p>
+<p>Her dashboard’da: trend grafiği + hedef çizgisi + son değer + sahip + son güncelleme.</p>
+<h2 id="raporlama-sıklığı">11. Raporlama Sıklığı</h2>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 30%" />
+<col style="width: 34%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Sıklık</th>
+<th>Hedef</th>
+<th>İçerik</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Anlık</td>
+<td>Yönetici dashboard</td>
+<td>F-* sistem sağlığı</td>
+</tr>
+<tr class="even">
+<td>Günlük</td>
+<td>Tech Lead</td>
+<td>F-3 hata, F-1 uptime, A-1 aktivite</td>
+</tr>
+<tr class="odd">
+<td>Haftalık</td>
+<td>Sales lead + ML eng</td>
+<td>A-* adopt, B-* tahmin, D-* churn</td>
+</tr>
+<tr class="even">
+<td>Aylık</td>
+<td>Promats yönetimi</td>
+<td>Tüm KPI’lar PDF özet</td>
+</tr>
+<tr class="odd">
+<td>Çeyreklik</td>
+<td>Üst yönetim + yatırımcı</td>
+<td>Stratejik review + roadmap güncelleme</td>
+</tr>
+<tr class="even">
+<td>Yıllık</td>
+<td>Yıllık review</td>
+<td>ROI, hedef revizyonu</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kpi-ownership-matrisi">12. KPI Ownership Matrisi</h2>
+<table>
+<thead>
+<tr class="header">
+<th>KPI Kategori</th>
+<th>Sahibi</th>
+<th>Yedekleyen</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>A — Bayi adopt</td>
+<td>Satış sorumlusu</td>
+<td>Yönetici</td>
+</tr>
+<tr class="even">
+<td>B — Tahmin</td>
+<td>ML Engineer</td>
+<td>Tech Lead</td>
+</tr>
+<tr class="odd">
+<td>C — Operasyonel</td>
+<td>Üretim planlama</td>
+<td>Tech Lead</td>
+</tr>
+<tr class="even">
+<td>D — Churn</td>
+<td>Satış sorumlusu</td>
+<td>Saha ekibi</td>
+</tr>
+<tr class="odd">
+<td>E — Lead</td>
+<td>Satış sorumlusu</td>
+<td>Pazarlama</td>
+</tr>
+<tr class="even">
+<td>F — Sistem</td>
+<td>Tech Lead</td>
+<td>DevOps</td>
+</tr>
+<tr class="odd">
+<td>G — Mali</td>
+<td>CFO/Yönetici</td>
+<td>Tech Lead</td>
+</tr>
+</tbody>
+</table>
+<h2 id="kpi-hedef-revizyonu">13. KPI Hedef Revizyonu</h2>
+<p>KPI hedefleri <strong>canlı</strong> belge: - Faz tamamlanmasıyla baseline ölçülür - Hedefler revize edilir - Promats yönetimi onayı</p>
+<p>Örnek revizyon: &gt; Faz 6 sonu: Pilot 5 bayide portal adopt %85. Hedef ay 12 %70 idi → %85’e güncelle.</p>
+<h2 id="başarısızlık-senaryoları">14. Başarısızlık Senaryoları</h2>
+<h3 id="faz-2-sonunda-mape-50-hedef-35-ne-yapılır">“Faz 2 sonunda MAPE %50, hedef %35” — ne yapılır?</h3>
+<ol type="1">
+<li>Root cause: veri yetersiz mi, model yanlış mı?</li>
+<li>Aksiyonlar:
+<ul>
+<li>Excel ile geçmiş veri yükleme acil</li>
+<li>Multivariate (kur+tatil) feature’lar Faz 7’den öne çekilebilir</li>
+<li>Naive baseline kullanılır, model yan üretilir</li>
+</ul></li>
+<li>Promats yönetimi rapor: “%50, hedefe ulaşmak için 4 hafta ek + Excel veri”</li>
+</ol>
+<h3 id="faz-6-sonunda-3-pilot-bayi-de-portalı-kullanmıyor">“Faz 6 sonunda 3 pilot bayi de portal’ı kullanmıyor”</h3>
+<ol type="1">
+<li>Root cause: UX, eğitim yeterli mi, bayinin gerçek ihtiyacı bu mu?</li>
+<li>Aksiyonlar:
+<ul>
+<li>Bireysel görüşme: ne gerekiyor?</li>
+<li>UI revizyonu (3 alternatif tasarım test)</li>
+<li>Onboarding canlı eğitim (saha ziyaret)</li>
+<li>“Portal’da %3 ek iskonto” teşviki</li>
+</ul></li>
+<li>Yaygın canlıya <strong>geçmez</strong>, pilot süresi uzar</li>
+</ol>
+<h3 id="yıl-1-sonunda-hiçbir-bayi-churn-radarına-göre-kurtarılmadı">“Yıl 1 sonunda hiçbir bayi churn radarına göre kurtarılmadı”</h3>
+<ol type="1">
+<li>Root cause: Sinyaller doğru mu, aksiyonlar etkili mi?</li>
+<li>Aksiyonlar:
+<ul>
+<li>Sinyal validasyonu (kim doğru kim yanlış pozitif)</li>
+<li>Aksiyon türleri çeşitlendirme</li>
+<li>Saha ekibi geri besleme: “ne işe yaradı”</li>
+</ul></li>
+<li>Faz 5 v2 öne çek: ML model iyileştirme</li>
+</ol>
+<h2 id="açık-karar-noktaları-kpi">15. Açık karar noktaları (KPI)</h2>
+<ol type="1">
+<li><strong>NPS anketi:</strong> Çeyreklik mi, yarıyıllık mı? (Önerim: çeyreklik pilot 6 ay sonra)</li>
+<li><strong>KPI dashboard erişim:</strong> Tüm yöneticiler mi, sadece üst yönetim mi? (Önerim: tüm yöneticiler — şeffaflık)</li>
+<li><strong>Faz 6 başarı eşiği:</strong> Pilot %80 mi yeterli, %50 mi? (Önerim: %80 — düşükse rollback)</li>
+<li><strong>MAPE hedefi:</strong> %20 (yıl 1) gerçekçi mi? (Önerim: kademeli — %35→25→20)</li>
+<li><strong>Lead → bayi dönüşüm:</strong> %5 düşük mü? (Önerim: sektörle revize, ilk 6 ay %3-5 hedefle başla)</li>
+<li><strong>Çeyreklik review katılımcılar:</strong> Kim? (Promats karar)</li>
+<li><strong>Başarısızlık eşiği:</strong> Faz red kriteri? (Önerim: Hedeflerin %50’sine ulaşılmıyorsa kapsam revizyonu)</li>
+<li><strong>Haftalık report otomatik mu, manuel mı?</strong> (Önerim: otomatik PDF + Slack/email)</li>
+<li><strong>KPI hedef revizyonu sıklığı:</strong> Çeyreklik mi yıllık mı? (Önerim: çeyreklik — esneklik için)</li>
+<li><strong>Yatırımcı raporu:</strong> Yıllık mı, çeyreklik mi? (Promats karar)</li>
+</ol>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("10 — Başarı Kriterleri ve KPI").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

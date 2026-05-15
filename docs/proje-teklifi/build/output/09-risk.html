@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>09 — Risk Yönetimi — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="tartisma/index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="tartisma/12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="tartisma/13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="tartisma/14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="tartisma/15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>09 — Risk Yönetimi</strong></div>
+  <div class="actions">
+    <a href="index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="risk-yönetimi">09 — Risk Yönetimi</h1>
+<p>Bu doküman MatPortal’ın <strong>teknik</strong>, <strong>iş</strong>, <strong>yasal</strong> ve <strong>güvenlik</strong> risklerini sıralar; her biri için <strong>olasılık × etki</strong> matrisi, <strong>erken sinyaller</strong> ve <strong>mitigation</strong> planı sunar. Risk yönetimi pasif bir liste değil — proje boyunca canlı izlenir.</p>
+<h2 id="risk-matrisi-üst-düzey">1. Risk Matrisi — Üst Düzey</h2>
+<pre><code>                    ETKİ
+                  Düşük  Orta  Yüksek  Kritik
+        Çok Yüksek  •     •      ★       ★★
+        Yüksek      •     ★      ★       ★
+OLASILIK Orta       •     •      ★       ★
+        Düşük       •     •      •       ★
+        Çok Düşük   •     •      •       •</code></pre>
+<p><strong>★</strong> = mitigation şart <strong>★★</strong> = projeyi durdurabilir</p>
+<h2 id="teknik-riskler">2. Teknik Riskler</h2>
+<h3 id="tr-1-tahmin-modeli-düşük-doğruluk">TR-1: Tahmin modeli düşük doğruluk</h3>
+<ul>
+<li><strong>Olasılık:</strong> Orta</li>
+<li><strong>Etki:</strong> Yüksek (yöneticinin güveni sarsılır, sistem terk edilir)</li>
+<li><strong>Erken sinyal:</strong> Faz 2 sonu MAPE &gt; %50 (kabul kriteri %35)</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Naive baseline ile karşılaştır → en azından ondan iyi olsun</li>
+<li>Champion/challenger otomatik seçim (Faz 7)</li>
+<li>Açıklanabilirlik ile yöneticinin “neden” sorusuna cevap</li>
+<li>İlk 3 ay tüm öneriler <strong>manuel onay</strong> — model olgunlaşana kadar</li>
+<li>Excel ile geçmiş veri yükleme (Faz 2 + 7) — model zenginleştirme</li>
+</ol></li>
+<li><strong>Triger:</strong> MAPE &gt; %35 ise model üretime alınmaz, manuel öneri devam</li>
+</ul>
+<h3 id="tr-2-python-bun-köprü-performans-sorunu">TR-2: Python ↔︎ Bun köprü performans sorunu</h3>
+<ul>
+<li><strong>Olasılık:</strong> Düşük</li>
+<li><strong>Etki:</strong> Orta (latency artışı, kullanıcı şikayeti)</li>
+<li><strong>Erken sinyal:</strong> Tahmin endpoint p95 &gt; 2s</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Redis cache (1 saat TTL) — tekrar sorgular cache’ten</li>
+<li>Batch tahmin (toplu çağrı) — tek tek değil</li>
+<li>Async queue (BullMQ) — kritik olmayan tahminler</li>
+<li>Python servis horizontal scale (3+ instance, load balancer)</li>
+</ol></li>
+<li><strong>Triger:</strong> p95 &gt; 1s sürekli → ek instance veya ML servis ayrı sunucu</li>
+</ul>
+<h3 id="tr-3-bayi-siteleri-scraping-engelliyor-cloudflare-captcha">TR-3: Bayi siteleri scraping engelliyor (Cloudflare, captcha)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Yüksek</li>
+<li><strong>Etki:</strong> Orta (Faz 5 etkilenir, alternatif sinyaller var)</li>
+<li><strong>Erken sinyal:</strong> Crawl başarı oranı &lt; %70</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>playwright-extra + stealth plugin (sınırlı, public veri için)</li>
+<li>Bright Data residential proxy (gerçek IP)</li>
+<li>Apify managed scraper (sosyal medya)</li>
+<li>Alternative: bayi sözleşmesinde “izin verilmiş” klozu (etik)</li>
+<li>Manuel sinyal girişi (saha ekibi telefon eder, “kapalı/açık”)</li>
+<li>Alternatif veri kaynakları (sanayim.net, Google Maps yorumları)</li>
+</ol></li>
+<li><strong>Triger:</strong> Scraping başarı &lt; %70 ise plan B (Apify + manuel)</li>
+</ul>
+<h3 id="tr-4-llm-api-kesintisi-rate-limit">TR-4: LLM API kesintisi / rate limit</h3>
+<ul>
+<li><strong>Olasılık:</strong> Orta</li>
+<li><strong>Etki:</strong> Orta (sohbet ve açıklama etkilenir, kritik değil)</li>
+<li><strong>Erken sinyal:</strong> API hata oranı &gt; %5</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Multi-provider: Claude → OpenAI → Groq fallback</li>
+<li>Cache (LLM sonucu deterministik prompt için 24 saat)</li>
+<li>Graceful degradation: LLM yoksa “açıklama mevcut değil” göster</li>
+<li>Kritik aksiyonlar LLM’e bağımlı değil (istatistiksel öncelikli)</li>
+</ol></li>
+<li><strong>Triger:</strong> Provider kesintisi → otomatik switch + bildirim</li>
+</ul>
+<h3 id="tr-5-mysql-ölçek-sorunu-100k-kayıt">TR-5: MySQL ölçek sorunu (100K+ kayıt)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Düşük (yıl 1)</li>
+<li><strong>Etki:</strong> Yüksek (sistem yavaşlar)</li>
+<li><strong>Erken sinyal:</strong> Slow query log artışı, p99 &gt; 1s</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Index stratejisi her sorgu pattern’ine göre</li>
+<li>Read replica (raporlama yükü ana DB’yi etkilemesin)</li>
+<li>Materialized view: <code>bayi_aylik_ozet</code> gibi denormalize</li>
+<li>Partitioning: <code>tahmin_calistirma</code>, <code>web_kazima_kayitlari</code> tarih bazlı</li>
+<li>Redis cache layer</li>
+</ol></li>
+<li><strong>Triger:</strong> Slow query &gt; %10 → optimize + replica</li>
+</ul>
+<h3 id="tr-6-excel-upload-kötü-veri-1000-satır-outlier">TR-6: Excel upload kötü veri (1000 satır outlier)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Yüksek</li>
+<li><strong>Etki:</strong> Orta (model bozulur, geri alma gerekli)</li>
+<li><strong>Erken sinyal:</strong> Yükleme sonrası MAPE düşüşü &gt; %20</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Outlier auto-flag (IQR × 3 üstü)</li>
+<li>Preview + manuel onay zorunlu</li>
+<li>Yükleme öncesi snapshot (rollback hazır)</li>
+<li>Champion/challenger A/B (eski model paralel test)</li>
+<li>Auto-rollback (MAPE %50 üstü → eski sürüm)</li>
+</ol></li>
+<li><strong>Triger:</strong> A/B test’te challenger %20 kötü → reddedilir</li>
+</ul>
+<h3 id="tr-7-multi-deployment-kod-kayması-gizli-saas-riski">TR-7: Multi-deployment kod kayması (gizli SaaS riski)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Düşük</li>
+<li><strong>Etki:</strong> Yüksek (Promats farklı müşteriden bug yaşarsa “kim diğer müşteri?”)</li>
+<li><strong>Erken sinyal:</strong> Müşteriye-özel hardcode artışı</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Tek codebase (matportal-core repo)</li>
+<li>Müşteri-özel ayarlar <strong>env</strong> + <strong>konfig JSON</strong></li>
+<li>Müşteri-özel branch’ler yasak; her şey trunk’ta</li>
+<li>Müşteri ayrımı için sadece deployment seviyesinde (DB, env)</li>
+<li>Promats için kullanılan repo → private + ayrı acces</li>
+</ol></li>
+<li><strong>Triger:</strong> Branch divergence görülürse merge</li>
+</ul>
+<h3 id="tr-8-test-coverage-düşüşü">TR-8: Test coverage düşüşü</h3>
+<ul>
+<li><strong>Olasılık:</strong> Orta</li>
+<li><strong>Etki:</strong> Orta (regresyon bug’ları, prod’da fark edilir)</li>
+<li><strong>Erken sinyal:</strong> Coverage &lt; %70</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>PR template’inde “test eklendi mi” checkbox</li>
+<li>Coverage gate: %70 altı PR merge olmaz (CI)</li>
+<li>Kritik fonksiyonlar (auth, sipariş) %90+ zorunlu</li>
+<li>E2E smoke test deploy sonrası</li>
+</ol></li>
+<li><strong>Triger:</strong> Coverage 2 ay ardarda düşerse: dedicated test sprint</li>
+</ul>
+<h2 id="iş-operasyonel-riskler">3. İş &amp; Operasyonel Riskler</h2>
+<h3 id="ir-1-bayi-portalı-kullanmıyor-adapt-sorunu">IR-1: Bayi portal’ı kullanmıyor (adapt sorunu)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Yüksek (alışkanlık)</li>
+<li><strong>Etki:</strong> Yüksek (Faz 6 değer üretmez)</li>
+<li><strong>Erken sinyal:</strong> Pilot bayilerin %50’si 2 hafta sonra giriş yapmıyor</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Pilot 5 bayi ile başla (yönetilebilir)</li>
+<li>Onboarding: canlı eğitim + video + saha desteği</li>
+<li>WhatsApp/telefon kanalı <strong>paralel açık</strong> kalır</li>
+<li>Yönetici “portalda sipariş ver, %3 ek iskonto” teşviki</li>
+<li>Bayinin kendi ekibinin portal’a alıştırılması (admin → operatör)</li>
+<li>UX iterasyon: pilot feedback → 2 haftada bir UI güncelleme</li>
+</ol></li>
+<li><strong>Triger:</strong> Pilot feedback olumsuzsa: 2 hafta süre uzatılır, UX revizyonu</li>
+</ul>
+<h3 id="ir-2-yönetici-ai-önerisine-güvenmiyor">IR-2: Yönetici AI önerisine güvenmiyor</h3>
+<ul>
+<li><strong>Olasılık:</strong> Yüksek (yeni teknoloji)</li>
+<li><strong>Etki:</strong> Orta (Faz 7-8 değer azalır)</li>
+<li><strong>Erken sinyal:</strong> Yöneticinin %80+ AI önerisini reddediyor</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>İlk 3 ay manuel onay zorunlu (öğrenme dönemi)</li>
+<li>Açıklanabilirlik: “neden bu öneri” doğal dilde</li>
+<li>Geri bildirim döngüsü: red sebebi kayıt, model öğrensin</li>
+<li>Naive baseline ile karşılaştırma: “AI seninle aynı kararı verdi” güven inşa eder</li>
+<li>Risk skorlu eşik: yüksek risk → her zaman manuel</li>
+<li>Audit + rollback: hata olursa anında geri alınır</li>
+</ol></li>
+<li><strong>Triger:</strong> Red oranı &gt; %50 → eşik yükselt, prompt iyileştir</li>
+</ul>
+<h3 id="ir-3-promats-yönetiminde-değişiklik-sponsor-kaybı">IR-3: Promats yönetiminde değişiklik (sponsor kaybı)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Düşük</li>
+<li><strong>Etki:</strong> Kritik</li>
+<li><strong>Erken sinyal:</strong> Yönetim toplantısı katılımı azalması, karar gecikmeleri</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Faz tamamlanmasıyla milestone belge teslim (her şey kayıtlı)</li>
+<li>Düzenli demo + raporlama (her 2 hafta)</li>
+<li>ROI metrikleri sürekli görünür</li>
+<li>Tek kişiye bağımlı olmayan onay süreci</li>
+<li>Yönetici eğitimi: en az 2 kişi sistemi tanır</li>
+</ol></li>
+<li><strong>Triger:</strong> 2 demo arka arkaya iptal → eskalasyon</li>
+</ul>
+<h3 id="ir-4-kapsam-genişliği-yönetilemez-scope-creep">IR-4: Kapsam genişliği yönetilemez (scope creep)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Yüksek</li>
+<li><strong>Etki:</strong> Yüksek (zaman+bütçe taşar)</li>
+<li><strong>Erken sinyal:</strong> “Bunu da ekleyebilir misin” sıklığı haftada 2+</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>11 fazlı net plan, her faz <strong>tek başına çalışır</strong></li>
+<li>Yeni istek → “hangi faza ait, hangi mevcut özellik kesilir” karşılığı</li>
+<li>Backlog: yeni istekler <strong>Faz 10+</strong> olarak kaydedilir</li>
+<li>Pazarlık: müşteri zorlarsa kapsam değil takvim genişler</li>
+<li>Aylık değerlendirme: yapılanlar + yapılmayanlar + öncelik revizyonu</li>
+</ol></li>
+<li><strong>Triger:</strong> Faz X tahmini süreden %20 uzun → durdur, gözden geçir</li>
+</ul>
+<h3 id="ir-5-personel-kaybı-kilit-dev-ayrılır">IR-5: Personel kaybı (kilit dev ayrılır)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Orta</li>
+<li><strong>Etki:</strong> Yüksek (bilgi kaybı, yavaşlama)</li>
+<li><strong>Erken sinyal:</strong> Tükenmişlik sinyalleri, gecikmeler</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Kod review + dokümantasyon (CLAUDE.md güncel)</li>
+<li>En az 2 kişi her modülü biliyor (knowledge sharing)</li>
+<li>Backup developer (yarı zamanlı destek)</li>
+<li>Tartışma dokümanları (mimari kararlar yazılı)</li>
+<li>Bus factor metriği: tek kişiye bağımlı modül azaltılır</li>
+</ol></li>
+<li><strong>Triger:</strong> Geliştirici 1 ay tatil/izin → yedek hazır</li>
+</ul>
+<h3 id="ir-6-veri-kalitesi-düşük-eksikyanlış-kayıtlar">IR-6: Veri kalitesi düşük (eksik/yanlış kayıtlar)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Yüksek</li>
+<li><strong>Etki:</strong> Orta (model hatalı)</li>
+<li><strong>Erken sinyal:</strong> Veri profil raporu — null %, outlier %, duplicate %</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Faz 0’da veri zenginleştirme (manuel + AI destekli)</li>
+<li>Validation rule’ları: zorunlu alanlar, format</li>
+<li>Veri kalite dashboard: yöneticiye haftalık rapor</li>
+<li>Outlier auto-flag (eğitim verisinden çıkarılır)</li>
+<li>Yönetici düzeltme aksiyonu kayıtlı</li>
+</ol></li>
+<li><strong>Triger:</strong> Null oran %20+ → veri temizleme sprint</li>
+</ul>
+<h3 id="ir-7-pilot-bayiler-temsili-değil">IR-7: Pilot bayiler temsili değil</h3>
+<ul>
+<li><strong>Olasılık:</strong> Orta</li>
+<li><strong>Etki:</strong> Orta (canlıda farklı sorunlar)</li>
+<li><strong>Erken sinyal:</strong> Pilot %100 başarılı ama daha geniş kullanım sorunlar</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Pilot bayi seçimi: 3 farklı segment (büyük/orta/küçük) + 2 farklı bölge</li>
+<li>Pilot süresi 4 hafta minimum</li>
+<li>Kademeli yaygınlaştırma (5 → 10 → 25)</li>
+<li>Her aşamada feedback toplama</li>
+<li>Geri çekilme prosedürü (Plan B hazır)</li>
+</ol></li>
+<li><strong>Triger:</strong> Yaygın canlıda kritik bug: kademeli rollback</li>
+</ul>
+<h2 id="yasal-compliance-riskleri">4. Yasal &amp; Compliance Riskleri</h2>
+<h3 id="yr-1-kvkk-uyumsuzluk-kişisel-veri">YR-1: KVKK uyumsuzluk (kişisel veri)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Orta</li>
+<li><strong>Etki:</strong> Kritik (ceza, operasyon durması)</li>
+<li><strong>Erken sinyal:</strong> Bayi şikayeti, yasal uyarı</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>KVKK aydınlatma metni (Faz 5 başı yazılı)</li>
+<li>Bayi sözleşmesinde scraping klozu (yazılı izin)</li>
+<li>Sadece <strong>firma verisi</strong> topluyoruz (kişisel değil)</li>
+<li>Telefon/email PII alanları erişim audit’li</li>
+<li>Silme talebi flow’u (KVKK madde 11 uyumlu)</li>
+<li>Avukat danışmanlığı (Faz 5 başı + yıllık)</li>
+</ol></li>
+<li><strong>Triger:</strong> Resmi KVKK uyarı → 30 gün içinde uyum</li>
+</ul>
+<h3 id="yr-2-gdpr-yurt-dışı-bayi">YR-2: GDPR (yurt dışı bayi)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Düşük (Faz 3 sonrası)</li>
+<li><strong>Etki:</strong> Yüksek (AB pazarı kapanır)</li>
+<li><strong>Erken sinyal:</strong> AB lead’lerden veri silme talebi</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Apollo.io / Cognism GDPR-uyumlu provider</li>
+<li>Veri saklama AB sınırı içinde (S3 EU region)</li>
+<li>“Right to be forgotten” otomatik flow</li>
+<li>Cookie banner (portal AB ziyaretçiye)</li>
+</ol></li>
+<li><strong>Triger:</strong> GDPR şikayet → veri silme + uyum güncelleme</li>
+</ul>
+<h3 id="yr-3-web-scraping-tos-ihlali">YR-3: Web scraping ToS ihlali</h3>
+<ul>
+<li><strong>Olasılık:</strong> Yüksek (siteler değişir)</li>
+<li><strong>Etki:</strong> Orta (yasal risk düşük, hesap kapanması orta)</li>
+<li><strong>Erken sinyal:</strong> Site User-Agent ban, 403 errors</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>robots.txt’e saygı (otomatik kontrol)</li>
+<li>Açık User-Agent (<code>MatPortalBot/1.0</code>)</li>
+<li>Rate limit (1 req / 2s / domain)</li>
+<li>LinkedIn yasak (ToS kesin)</li>
+<li>Apify ile sosyal medya (managed, ToS uyumlu)</li>
+<li>Avukat görüşü (toplam scraping politikası)</li>
+</ol></li>
+<li><strong>Triger:</strong> Site ban → o site listeden çıkar</li>
+</ul>
+<h3 id="yr-4-e-fatura-vergi-mevzuatı-değişiklikleri">YR-4: e-Fatura / vergi mevzuatı değişiklikleri</h3>
+<ul>
+<li><strong>Olasılık:</strong> Yüksek (Türkiye mevzuatı sık değişir)</li>
+<li><strong>Etki:</strong> Orta (entegrasyon güncellemesi)</li>
+<li><strong>Erken sinyal:</strong> GİB duyuru</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Mevcut e-Fatura sağlayıcı (Logo/Mikro) abstraction</li>
+<li>Mevzuat takip listesi</li>
+<li>Hızlı güncelleme prosedürü</li>
+</ol></li>
+<li><strong>Triger:</strong> Mevzuat değişikliği → 30 gün içinde uyum</li>
+</ul>
+<h3 id="yr-5-cbam-ab-karbon-sınır-vergisi">YR-5: CBAM (AB Karbon Sınır Vergisi)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Yüksek (2026’dan itibaren yürürlükte)</li>
+<li><strong>Etki:</strong> Orta (ihracat müşterisi raporu istiyor)</li>
+<li><strong>Erken sinyal:</strong> AB müşteri raporu talep</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Faz 10+ Sürdürülebilirlik modülü hazır</li>
+<li>LCA (Life Cycle Assessment) altyapısı</li>
+<li>Karbon ayakizi raporu (PDF) müşteriye otomatik</li>
+</ol></li>
+<li><strong>Triger:</strong> İlk AB müşteri talebi → modül acil aktivasyon</li>
+</ul>
+<h2 id="güvenlik-riskleri">5. Güvenlik Riskleri</h2>
+<h3 id="gr-1-authentication-zafiyeti-brute-force">GR-1: Authentication zafiyeti (brute force)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Yüksek (her sistem hedef)</li>
+<li><strong>Etki:</strong> Yüksek (bayi hesap çalınması)</li>
+<li><strong>Erken sinyal:</strong> Login attempt logları, başarısız oran</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Rate limit: 5 deneme/dk + 30 dk kilit</li>
+<li>CAPTCHA (3 başarısız sonrası)</li>
+<li>2FA (Faz 6 v2)</li>
+<li>Şifre policy: min 10 karakter + complexity</li>
+<li>Login alarm (yöneticiye email — şüpheli IP)</li>
+<li>Sentry alarm: brute force pattern</li>
+</ol></li>
+<li><strong>Triger:</strong> 1 saat içinde 100+ başarısız login → IP ban</li>
+</ul>
+<h3 id="gr-2-sql-injection-xss">GR-2: SQL injection / XSS</h3>
+<ul>
+<li><strong>Olasılık:</strong> Düşük (Drizzle ORM + React)</li>
+<li><strong>Etki:</strong> Kritik</li>
+<li><strong>Erken sinyal:</strong> Penetration test bulguları</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Drizzle ORM parametreli sorgu (raw SQL yasak)</li>
+<li>React 19 default escape</li>
+<li>Content Security Policy (CSP)</li>
+<li>Input validation (Zod schema)</li>
+<li>Pen test yıllık</li>
+</ol></li>
+<li><strong>Triger:</strong> Bulgu → 24 saat içinde fix</li>
+</ul>
+<h3 id="gr-3-secret-leak-api-key-gite-commit">GR-3: Secret leak (API key Git’e commit)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Orta (insan hatası)</li>
+<li><strong>Etki:</strong> Yüksek</li>
+<li><strong>Erken sinyal:</strong> GitHub secret scanning alarm</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li><code>.env</code> Git ignore</li>
+<li><code>.env.example</code> template (gerçek key yok)</li>
+<li>Pre-commit hook: secret pattern tarama</li>
+<li>GitHub Advanced Security</li>
+<li>Secret rotation prosedürü (compromise sonrası)</li>
+</ol></li>
+<li><strong>Triger:</strong> Secret leak → anında rotate</li>
+</ul>
+<h3 id="gr-4-llm-prompt-injection">GR-4: LLM prompt injection</h3>
+<ul>
+<li><strong>Olasılık:</strong> Orta</li>
+<li><strong>Etki:</strong> Orta (yanlış aksiyon)</li>
+<li><strong>Erken sinyal:</strong> Anormal aksiyon önerisi, audit log</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Kullanıcı girdisi <code>&lt;user&gt;...&lt;/user&gt;</code> tag içinde</li>
+<li>System prompt sabit + kullanıcı girdiden ayrı</li>
+<li>Risk skoru → kritik aksiyon her zaman insan onayı</li>
+<li>Aksiyon limit: tek mesajda max 1 aksiyon</li>
+<li>Audit log + rollback</li>
+</ol></li>
+<li><strong>Triger:</strong> Şüpheli payload → rule-based block</li>
+</ul>
+<h3 id="gr-5-ddos-saldırısı">GR-5: DDoS saldırısı</h3>
+<ul>
+<li><strong>Olasılık:</strong> Düşük</li>
+<li><strong>Etki:</strong> Yüksek (sistem erişilemez)</li>
+<li><strong>Erken sinyal:</strong> Trafik spike + 5xx oranı artışı</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Cloudflare proxy (DDoS protection ücretsiz tier)</li>
+<li>Rate limit per-IP (Redis)</li>
+<li>WAF (Web Application Firewall)</li>
+<li>CDN (statik asset)</li>
+<li>Auto-scaling (yüksek trafik bypass)</li>
+</ol></li>
+<li><strong>Triger:</strong> DDoS pattern → Cloudflare “Under Attack” mode</li>
+</ul>
+<h3 id="gr-6-veri-ihlali-data-breach">GR-6: Veri ihlali (data breach)</h3>
+<ul>
+<li><strong>Olasılık:</strong> Düşük</li>
+<li><strong>Etki:</strong> Kritik</li>
+<li><strong>Erken sinyal:</strong> Anormal DB query, dış erişim</li>
+<li><strong>Mitigation:</strong>
+<ol type="1">
+<li>Database encryption at rest (LUKS)</li>
+<li>TLS 1.3 in transit</li>
+<li>PII minimization (sadece gerekli)</li>
+<li>Access audit (kim ne zaman ne sorguladı)</li>
+<li>Backup encryption</li>
+<li>Penetration test</li>
+</ol></li>
+<li><strong>Triger:</strong> Breach tespit → 72 saat KVKK bildirim (yasal)</li>
+</ul>
+<h2 id="risk-toplama-ve-gözlem">6. Risk Toplama ve Gözlem</h2>
+<h3 id="risk-register">6.1 Risk register</h3>
+<p>Tüm riskler tek tabloda canlı tutulur:</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> risk_register (</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  kod <span class="dt">varchar</span>(<span class="dv">16</span>),                  <span class="co">-- &#39;TR-1&#39;, &#39;IR-3&#39; gibi</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  baslik <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  kategori ENUM(<span class="st">&#39;teknik&#39;</span>,<span class="st">&#39;is&#39;</span>,<span class="st">&#39;yasal&#39;</span>,<span class="st">&#39;guvenlik&#39;</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  olasilik ENUM(<span class="st">&#39;cok_dusuk&#39;</span>,<span class="st">&#39;dusuk&#39;</span>,<span class="st">&#39;orta&#39;</span>,<span class="st">&#39;yuksek&#39;</span>,<span class="st">&#39;cok_yuksek&#39;</span>),</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  etki ENUM(<span class="st">&#39;dusuk&#39;</span>,<span class="st">&#39;orta&#39;</span>,<span class="st">&#39;yuksek&#39;</span>,<span class="st">&#39;kritik&#39;</span>),</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;aktif&#39;</span>,<span class="st">&#39;azaltildi&#39;</span>,<span class="st">&#39;kapandi&#39;</span>,<span class="st">&#39;kabul_edildi&#39;</span>),</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  mitigation text,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  sahip_user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  son_inceleme datetime,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="aylık-risk-değerlendirmesi">6.2 Aylık risk değerlendirmesi</h3>
+<ul>
+<li>Tüm aktif riskler gözden geçirilir</li>
+<li>Yeni riskler eklenir</li>
+<li>Olasılık × etki güncellenir</li>
+<li>Mitigation etkinliği değerlendirilir</li>
+<li>Promats yönetimi raporu</li>
+</ul>
+<h3 id="risk-dashboard">6.3 Risk dashboard</h3>
+<pre><code>[Ekran: /admin/risk-dashboard]
+  Aktif risk sayısı: 23
+  ├─ Kritik: 2 (mitigation %80 hazır)
+  ├─ Yüksek: 8
+  ├─ Orta: 9
+  └─ Düşük: 4
+
+  Bu ay açılan: 3
+  Bu ay kapanan: 5
+  Üst-yönetim dikkat gereken: TR-1, IR-3</code></pre>
+<h2 id="acil-durum-prosedürleri">7. Acil Durum Prosedürleri</h2>
+<h3 id="sistem-çökmesi-downtime">7.1 Sistem çökmesi (downtime)</h3>
+<pre><code>1. Sentry alarm
+2. On-call dev dashboard&#39;u kontrol
+3. &lt; 15 dk: rollback son stable deploy
+4. &gt; 15 dk: yedek VPS&#39;te restore (DR prosedürü)
+5. Status page güncelleme
+6. Post-mortem 24 saat içinde</code></pre>
+<h3 id="veri-ihlali-suspected-breach">7.2 Veri ihlali (suspected breach)</h3>
+<pre><code>1. Log incele, etkilenen data sınırla
+2. Sistemi izole et (gerekiyorsa tüm sessions kill)
+3. KVKK bildirim (72 saat — yasal)
+4. Etkilenen müşteri bildirim
+5. Avukat + güvenlik danışmanı
+6. Forensic analysis
+7. Public disclosure (gerekirse)</code></pre>
+<h3 id="yasal-tebligat-kvkk-gdpr">7.3 Yasal tebligat (KVKK / GDPR)</h3>
+<pre><code>1. Avukat anında bilgilendir
+2. 30 gün içinde uyum action plan
+3. İlgili veri pause (silme/saklama askıya)
+4. Müşteriye proaktif iletişim</code></pre>
+<h3 id="llm-provider-çökmesi">7.4 LLM provider çökmesi</h3>
+<pre><code>1. Auto-fallback (Claude → OpenAI → Groq)
+2. Eğer hepsi çökmüş: AI özellikleri devre dışı, klasik UI
+3. Sentry alarm + Twitter/status takibi
+4. Provider haber gelene kadar bekle</code></pre>
+<h2 id="risk-kabul-eşikleri">8. Risk Kabul Eşikleri</h2>
+<p>Her risk için “kabul edilebilir maksimum” tanımlanır:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Risk</th>
+<th>Maks kabul edilebilir</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tahmin MAPE</td>
+<td>%35 (ilk 6 ay), %20 (yıl 1)</td>
+</tr>
+<tr class="even">
+<td>API uptime</td>
+<td>%99.5 (4.4 saat downtime/ay)</td>
+</tr>
+<tr class="odd">
+<td>Sipariş hatası</td>
+<td>&lt;%2 (önce %80 azalış)</td>
+</tr>
+<tr class="even">
+<td>Veri kayıp</td>
+<td>1 saat veri (saatlik binlog)</td>
+</tr>
+<tr class="odd">
+<td>Login başarısızlık</td>
+<td>&lt;%5 normal user</td>
+</tr>
+<tr class="even">
+<td>LLM bütçe aşımı</td>
+<td>%0 (kill-switch %100’de)</td>
+</tr>
+<tr class="odd">
+<td>KVKK uyum</td>
+<td>%100 (tolerans yok)</td>
+</tr>
+<tr class="even">
+<td>Pen test bulgu kritik</td>
+<td>0 (24 saat fix)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="açık-karar-noktaları-risk">9. Açık karar noktaları (Risk)</h2>
+<ol type="1">
+<li><strong>Risk register’ı kim yönetir:</strong> Tek dev mi, dedicated PM mi? (Önerim: Tech Lead, aylık review)</li>
+<li><strong>Pen test sıklığı:</strong> Yıllık mı, 6 ayda bir mi? (Önerim: ilk yıl 2 kez, sonra yıllık)</li>
+<li><strong>DR test:</strong> Hiç mi, yılda bir mi? (Önerim: 6 ayda bir tatbikat)</li>
+<li><strong>Sigorta:</strong> Siber sigorta gerekli mi? (Önerim: Yıl 2’de değerlendir, müşteri sayısı arttığında)</li>
+<li><strong>Avukat:</strong> Sürekli retainer mı, ihtiyaç anında mı? (Önerim: yıllık retainer, ufak danışmanlık)</li>
+<li><strong>Risk eşalasyon:</strong> Hangi risk Promats yönetimine bildirilir? (Önerim: olasılık × etki = 12+)</li>
+<li><strong>Bug bounty:</strong> Açık veya özel program mı? (Önerim: Yıl 2+ özel — düşük öncelik)</li>
+<li><strong>Compliance audit:</strong> Yıllık dış denetim mi? (Önerim: ilk yıl iç, sonra dış)</li>
+<li><strong>Insurance:</strong> Genel sorumluluk + siber? (Önerim: Yıl 2)</li>
+<li><strong>Risk dashboard:</strong> Her hafta yöneticiye email mi? (Önerim: aylık özet, kritik risk anında)</li>
+</ol>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("09 — Risk Yönetimi").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

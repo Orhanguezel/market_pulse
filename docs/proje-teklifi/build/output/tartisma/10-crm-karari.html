@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 — CRM Kararı: Paspas İçi mi, Ayrı CRM mi, Hiç mi? — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>10 — CRM Kararı: Paspas İçi mi, Ayrı CRM mi, Hiç mi?</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="crm-kararı-paspas-içi-mi-ayrı-crm-mi-hiç-mi">10 — CRM Kararı: Paspas İçi mi, Ayrı CRM mi, Hiç mi?</h1>
+<blockquote>
+<p><strong>Bağlam (v1.1):</strong> Bu doküman <strong>Faz 3 (Müşteri Keşif)</strong> kapsamında CRM seçenekleri analizini içerir. <strong>Karar: D — Hibrit</strong> (Paspas içi minimum modül + Apollo.io yurt dışı). Müşteri keşif felsefesi: <a href="./02-musteri-kesif.md"><code>02-musteri-kesif.md</code></a>. Bütçe: <a href="./08-saas-butce-analizi.md"><code>08-saas-butce-analizi.md</code></a>.</p>
+</blockquote>
+<h2 id="soru">Soru</h2>
+<blockquote>
+<p>Lead pipeline yönetimi (yeni müşteri keşif + outreach + dönüşüm) için ne kullanılsın?</p>
+</blockquote>
+<h2 id="seçenek">4 Seçenek</h2>
+<h3 id="a-paspas-içi-minimum-modül-adminlead-pipeline">A) Paspas içi minimum modül (<code>/admin/lead-pipeline</code>)</h3>
+<p><strong>Ne yapar:</strong> Mevcut Paspas DB’sine <code>lead_havuzu</code>, <code>lead_etkilesim</code>, <code>outreach_kampanya</code> tabloları + admin panelde kanban/liste UI.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Artı</th>
+<th>Eksi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tek doğruluk kaynağı (ERP+CRM aynı DB)</td>
+<td>UI fonksiyonu sınırlı (manuel kullanım için)</td>
+</tr>
+<tr class="even">
+<td>Mevcut auth/yetki ile entegre</td>
+<td>Sequence/email kampanya kendi yazılır</td>
+</tr>
+<tr class="odd">
+<td>0 SaaS maliyeti</td>
+<td>Geliştirici zamanı 2-3 hafta</td>
+</tr>
+<tr class="even">
+<td>Müşteri/sipariş ile direkt JOIN</td>
+<td>“CRM” değil “tablo” — satış ekibi standart CRM features bekleyebilir</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Kapsam:</strong> ~10-15 iş günü. Lead listesi, segment filtre, etkileşim notu, basit follow-up reminder.</p>
+<h3 id="b-ayrı-self-hosted-crm-espocrm-twenty-krayin">B) Ayrı self-hosted CRM (EspoCRM / Twenty / Krayin)</h3>
+<p><strong>Ne yapar:</strong> Bağımsız CRM sunucusu kur, REST API ile Paspas’la senkron.</p>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 22%" />
+<col style="width: 25%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>CRM</th>
+<th>Stack</th>
+<th>Lisans</th>
+<th>Öne çıkan</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>EspoCRM</strong></td>
+<td>PHP + MySQL</td>
+<td>GPL v3</td>
+<td>En olgun, hafif, REST API, Türkçe destek</td>
+</tr>
+<tr class="even">
+<td><strong>Twenty</strong></td>
+<td>TypeScript + GraphQL</td>
+<td>AGPL</td>
+<td>Modern UX, Notion-vari</td>
+</tr>
+<tr class="odd">
+<td><strong>Krayin</strong></td>
+<td>Laravel + MySQL</td>
+<td>MIT</td>
+<td>Modüler, Laravel ekosistemi</td>
+</tr>
+<tr class="even">
+<td><strong>SuiteCRM</strong></td>
+<td>PHP + MySQL</td>
+<td>AGPL</td>
+<td>Salesforce alternatifi (büyük)</td>
+</tr>
+<tr class="odd">
+<td><strong>Odoo</strong></td>
+<td>Python + PostgreSQL</td>
+<td>LGPL community</td>
+<td>Tam ERP+CRM, çok geniş</td>
+</tr>
+</tbody>
+</table>
+<table>
+<thead>
+<tr class="header">
+<th>Artı</th>
+<th>Eksi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Hazır UI (sequence, dashboard, takvim)</td>
+<td>İki sistem senkron yükü</td>
+</tr>
+<tr class="even">
+<td>Satış ekibi tanıdık arayüz</td>
+<td>Ayrı sunucu/maintenance</td>
+</tr>
+<tr class="odd">
+<td>Email kampanya altyapısı dahil</td>
+<td>Veri çift kaynak riski</td>
+</tr>
+<tr class="even">
+<td>Ücretsiz</td>
+<td>Geliştirici zamanı 4-8 hafta (entegrasyon)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Önerilen:</strong> EspoCRM (kurulum kolay, REST iyi) veya Twenty (modern stack).</p>
+<h3 id="c-apollo.io-uisı-sıfır-kod">C) Apollo.io UI’sı (sıfır kod)</h3>
+<p><strong>Ne yapar:</strong> Lead keşfi + email + sequence Apollo’da; Paspas’ta sadece “müşteriye dönüşen” lead’ler kayıt.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Artı</th>
+<th>Eksi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sıfır geliştirme zamanı</td>
+<td>Aylık abonelik ($59-99/ay)</td>
+</tr>
+<tr class="even">
+<td>Profesyonel CRM features</td>
+<td>Apollo’ya bağımlı</td>
+</tr>
+<tr class="odd">
+<td>Lead keşfi + outreach + sequence aynı yerde</td>
+<td>Veri Apollo’da kalır (export sınırlı)</td>
+</tr>
+<tr class="even">
+<td>1 günde başlanır</td>
+<td>TR sektör verisi zayıf (yurt dışı için iyi)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="d-hibrit-paspas-içi-minimum-apollo.io-ui">D) Hibrit — Paspas içi minimum + Apollo.io UI</h3>
+<p><strong>Ne yapar:</strong> Yurt içi lead → Paspas içi modül (TR verisi orada). Yurt dışı outreach → Apollo.io. Müşteriye dönüştürünce Paspas’a sync.</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Artı</th>
+<th>Eksi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Her bağlam için en uygun araç</td>
+<td>İki ayrı UI’da çalışmak</td>
+</tr>
+<tr class="even">
+<td>Geliştirme: yarısı (~1-2 hafta)</td>
+<td>Apollo $59-99/ay yine var</td>
+</tr>
+<tr class="odd">
+<td>Yurt dışı için profesyonel sequence</td>
+<td>Senkronizasyon kuralı yazılmalı</td>
+</tr>
+</tbody>
+</table>
+<h2 id="karşılaştırma-matrisi">Karşılaştırma matrisi</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Kriter</th>
+<th>A (içi)</th>
+<th>B (ayrı CRM)</th>
+<th>C (Apollo)</th>
+<th>D (hibrit)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Geliştirme süresi</td>
+<td>2-3 hafta</td>
+<td>4-8 hafta</td>
+<td>0 gün</td>
+<td>1-2 hafta</td>
+</tr>
+<tr class="even">
+<td>Aylık maliyet</td>
+<td>$0</td>
+<td>$0 (self-host) + sunucu</td>
+<td>$59-99</td>
+<td>$59-99</td>
+</tr>
+<tr class="odd">
+<td>UI kalitesi</td>
+<td>Orta</td>
+<td>Yüksek</td>
+<td>Çok yüksek</td>
+<td>Yüksek/Çok yüksek</td>
+</tr>
+<tr class="even">
+<td>TR yurt içi uyumu</td>
+<td>Çok iyi</td>
+<td>İyi</td>
+<td>Zayıf</td>
+<td>Çok iyi</td>
+</tr>
+<tr class="odd">
+<td>Yurt dışı outreach</td>
+<td>Zayıf</td>
+<td>İyi</td>
+<td>Çok iyi</td>
+<td>Çok iyi</td>
+</tr>
+<tr class="even">
+<td>Senkronizasyon yükü</td>
+<td>Yok</td>
+<td>Yüksek</td>
+<td>Düşük</td>
+<td>Orta</td>
+</tr>
+<tr class="odd">
+<td>Vendor lock-in</td>
+<td>Yok</td>
+<td>Yok</td>
+<td>Yüksek</td>
+<td>Orta</td>
+</tr>
+<tr class="even">
+<td>Ekosistem (sequence, dialer)</td>
+<td>Yok (kendin yaz)</td>
+<td>Var</td>
+<td>Var</td>
+<td>Karma</td>
+</tr>
+</tbody>
+</table>
+<h2 id="önerim">Önerim</h2>
+<p><strong>D — Hibrit.</strong> Aşağıdaki gerekçelerle:</p>
+<ol type="1">
+<li>Yurt içi lead için <strong>TR sektör verisi</strong> (TOBB, sanayim.net) Apollo’da yok → Paspas içi tutmalı</li>
+<li>Yurt dışı outreach için <strong>profesyonel sequence + GDPR uyumlu</strong> ortam = Apollo (yeniden yazmaya değmez)</li>
+<li>Geliştirme yükü ortalama (~1-2 hafta), B’nin yarısı kadar</li>
+<li>Apollo’dan vazgeçmek istersek Paspas içi modül zaten var → riski düşük</li>
+<li>Yurt dışı tarafı esnek olduğu için (kullanıcı kararı) Apollo aboneliği gerçekten ihtiyaç doğunca aktive edilir; ilk başta C’siz başlanabilir, gerekirse eklenir</li>
+</ol>
+<p><strong>Kademeli yaklaşım:</strong> - Faz 3: Paspas içi minimum modül + lokal crawler → yurt içi başlar - Faz 4: İhtiyaç çıkarsa Apollo Free tier başla → büyürse Apollo Basic $59/ay</p>
+<h2 id="karar-matrisinin-özeti">Karar matrisinin özeti</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Eğer öncelik…</th>
+<th>O zaman seç</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Tek doğruluk kaynağı + minimum maliyet</td>
+<td>A</td>
+</tr>
+<tr class="even">
+<td>Profesyonel CRM features + ekip rahatlığı</td>
+<td>B</td>
+</tr>
+<tr class="odd">
+<td>Sıfır geliştirme + hemen başlamak</td>
+<td>C</td>
+</tr>
+<tr class="even">
+<td>Yurt içi+dışı dengesi + esneklik</td>
+<td><strong>D</strong> ✅</td>
+</tr>
+</tbody>
+</table>
+<h2 id="açık-karar-noktaları">Açık karar noktaları</h2>
+<ol type="1">
+<li>A/B/C/D’den hangisi onaylanır?</li>
+<li>D seçilirse: Apollo aktif edilme zamanı <strong>şimdi mi</strong> (Faz 3’te) yoksa <strong>Faz 4’e</strong> mi bırakılsın?</li>
+<li>Eğer ileride B’ye geçilmek istenirse hangi CRM (EspoCRM mi Twenty mi)?</li>
+<li>Sequence/email kampanya altyapısı kim tarafından yazılsın (D’de)? Paspas mı Apollo mu yoksa Brevo gibi ayrı bir tool mu?</li>
+</ol>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("10 — CRM Kararı: Paspas İçi mi, Ayrı CRM mi, Hiç mi?").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

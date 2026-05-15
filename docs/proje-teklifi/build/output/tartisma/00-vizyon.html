@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>00 — Genel Vizyon: Tahminleyen ve Öğrenen ERP — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>00 — Genel Vizyon: Tahminleyen ve Öğrenen ERP</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="genel-vizyon-tahminleyen-ve-öğrenen-erp">00 — Genel Vizyon: Tahminleyen ve Öğrenen ERP</h1>
+<blockquote>
+<p><strong>Bağlam (v1.1 — 2026-05-01):</strong> Bu doküman ilk taslakta 5 motorlu vizyondu. Sonradan <strong>11 fazlı tam dijital dönüşüm</strong> olarak genişletildi. Güncel resmî yapı: <a href="../proje-teklifi/02-cozum-genel-bakis.md"><code>proje-teklifi/02-cozum-genel-bakis.md</code></a>. Bu doküman <strong>temel motorların felsefesini</strong> anlatır; faz haritası ve teslim sırası proje teklifi dokümanındadır.</p>
+</blockquote>
+<h2 id="mevcut-durum">Mevcut durum</h2>
+<p>Paspas ERP şu an <strong>operasyonel</strong> bir sistemdir: sipariş gelir → üretim emri açılır → makineye atanır → sevk edilir. İnsan kararları zincirin her adımında merkez. Sistem “olanı kaydeder”, <strong>olmayanı önermez</strong>.</p>
+<h2 id="hedef-tablo">Hedef tablo</h2>
+<p>Sıradaki kuşak ERP <strong>dört ek motor</strong> içermeli; her biri bir öğrenme döngüsüne bağlı:</p>
+<pre><code>                 ┌──────────────────────────────────┐
+                 │         PAZAR DİNLEMESİ          │
+                 │  (Talep + Müşteri + Tedarikçi)   │
+                 └──────────┬───────────────────────┘
+                            │
+              ┌─────────────┴─────────────┐
+              ▼                           ▼
+     ┌─────────────────┐         ┌──────────────────┐
+     │ TALEP MOTORU    │         │ KEŞIF MOTORU     │
+     │ - Form/email/   │         │ - Yeni müşteri   │
+     │   API&#39;den talep │         │ - Yeni tedarikçi │
+     │ - AI ile özet   │         │ - Profil eşleşme │
+     └────────┬────────┘         └────────┬─────────┘
+              │                           │
+              ▼                           ▼
+     ┌─────────────────────────────────────────┐
+     │        TAHMİN VE PLANLAMA MOTORU        │
+     │  - Bekleyen + tahmini taleple üretim    │
+     │    önceliklendirme                      │
+     │  - Stok tüketim hızı + güvenlik stoğu   │
+     │    → ne zaman/ne al sinyali             │
+     └─────────────────────┬───────────────────┘
+                           │
+                           ▼
+              ┌─────────────────────────┐
+              │   GERÇEKLEŞEN ÜRETİM    │  (mevcut ERP)
+              │  + sevkiyat + stok      │
+              └─────────┬───────────────┘
+                        │
+                        ▼
+              ┌─────────────────────────┐
+              │    GERİ BESLEME         │
+              │  Tahmin vs. gerçek →    │
+              │  modeli/kuralı düzelt   │
+              └─────────────────────────┘</code></pre>
+<h2 id="beş-motor">Beş motor</h2>
+<h3 id="talep-motoru-detay">1. Talep Motoru (<a href="./01-talep-tahmin-motoru.md">detay</a>)</h3>
+<p>Birden fazla kanaldan (form, email, telefon notu, B2B portal) gelen ham talepleri toplar, AI ile yapılandırır (ürün, miktar, termin, müşteri segmentı), sipariş havuzuna atar.</p>
+<h3 id="keşif-motoru-müşteri-tedarikçi">2. Keşif Motoru (<a href="./02-musteri-kesif.md">müşteri</a>, <a href="./03-tedarikci-yonetimi.md">tedarikçi</a>)</h3>
+<p>Mevcut müşteri profillerini analiz edip benzer yeni müşterileri arar — yurt içi (sektör rehberleri, B2B platformlar) ve yurt dışı (LinkedIn, Alibaba, sektörel fuarlar). Aynı yöntemi tedarikçi tarafına uygular.</p>
+<h3 id="tahminplanlama-motoru-üretim-talep-stok">3. Tahmin/Planlama Motoru (<a href="./01-talep-tahmin-motoru.md">üretim talep</a>, <a href="./04-stok-tahmin-otomasyonu.md">stok</a>)</h3>
+<ul>
+<li><strong>Üretim:</strong> Onaylanmış sipariş + tahmini sipariş (AI’nin önümüzdeki 30 günde gelmesini öngördüğü) → makine kapasitesi/önceliklendirme.</li>
+<li><strong>Stok:</strong> Geçmiş tüketim hızı + bekleyen üretim ihtiyacı + tedarikçi lead time → “X ürünü Y tarihinde Z adet al” sinyali.</li>
+</ul>
+<h3 id="geri-besleme">4. Geri Besleme</h3>
+<p>Her tahmin (talep, üretim, stok) bir gerçekleşme ile karşılaştırılır. Sapma metrikleri DB’de saklanır. Model/kural haftalık/aylık otomatik kalibre edilir. Bu olmadan motor “tahmin etmiş gibi yapan” ama hiç öğrenmeyen bir sistem olur.</p>
+<h3 id="konversasyonel-katman-detay">5. Konversasyonel Katman (<a href="./07-konversasyonel-katman.md">detay</a>)</h3>
+<p>Hem müşteri (B2B portal) hem yönetici (admin panel) ERP ile <strong>yazışarak</strong> iş yapar. Her aksiyon önce taslak olarak özetlenir, kullanıcı onaylar, sonra gerçekleşir, ardından sonuç geri raporlanır. Üç persona: müşteri asistanı (sınırlı), yönetici asistanı (geniş), saha asistanı (operatör — opsiyonel). Diğer 4 motor görünmez bir altyapı; konuşma katmanı görünür arayüz. OpenClaw’den ilham alındı — kopya değil, pattern.</p>
+<h2 id="veri-akışı-tek-doğruluk-kaynağı">Veri akışı: tek doğruluk kaynağı</h2>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 35%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Modül</th>
+<th>Üretiyor</th>
+<th>Tüketiyor</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Talep Motoru</td>
+<td>ham talep + AI özet</td>
+<td>müşteri segmenti, ürün katalogu</td>
+</tr>
+<tr class="even">
+<td>Müşteri Keşif</td>
+<td>lead listesi (skorlu)</td>
+<td>mevcut müşteri profili, talep paterni</td>
+</tr>
+<tr class="odd">
+<td>Tedarikçi Keşif</td>
+<td>tedarikçi listesi (skorlu)</td>
+<td>mevcut tedarikçi performansı, ürün ihtiyaç hızı</td>
+</tr>
+<tr class="even">
+<td>Üretim Tahmin</td>
+<td>önümüzdeki N günün üretim planı</td>
+<td>onaylı + tahmini siparişler, makine kapasitesi</td>
+</tr>
+<tr class="odd">
+<td>Stok Tahmin</td>
+<td>satın alma takvimi</td>
+<td>tüketim hızı, lead time, güvenlik stoğu</td>
+</tr>
+<tr class="even">
+<td>Geri Besleme</td>
+<td>sapma metrikleri</td>
+<td>tüm tahminlerin gerçekleşmiş sonuçları</td>
+</tr>
+</tbody>
+</table>
+<h2 id="yapılan-vs-öğrenen-çizgisi">“Yapılan vs öğrenen” çizgisi</h2>
+<p>Önce statik kurallar (heuristik), sonra ML/LLM destekli iyileştirme. Adım adım:</p>
+<ol type="1">
+<li><strong>Faz A — kuralcı:</strong> son 90 günün ortalaması, basit lineer regresyon, manuel eşikler. AI sadece talep özetinde (form text → yapılandırılmış kayıt).</li>
+<li><strong>Faz B — istatistiksel:</strong> mevsimsellik (haftalık/aylık desen), ARIMA/Prophet zaman serisi modeli, anomali tespiti.</li>
+<li><strong>Faz C — LLM destekli:</strong> “şu sipariş geldi, mevsim, müşteri geçmişi, üretim kapasitesi şu — önümüzdeki 4 hafta için planı öner”. Çıktı yapılandırılmış JSON, bizim tahmin modelinin yanında ek görüş.</li>
+</ol>
+<p>Faz A önce gelmeli. Faz C olmadan da değer üretir; LLM olmadan da çalışan bir tahmin motoru hedef.</p>
+<h2 id="açık-tasarım-soruları">Açık tasarım soruları</h2>
+<ol type="1">
+<li><strong>Sahiplik:</strong> her motor ayrı modül mü (<code>/admin/talep-motoru</code>, <code>/admin/musteri-kesif</code>…) yoksa tek bir “Pazar Zekası” başlığı altında tab’lar mı?</li>
+<li><strong>Öğrenme periyodu:</strong> geri besleme günlük, haftalık, aylık hangi sıklıkta çalışmalı? Maliyet vs. tazelik dengesi.</li>
+<li><strong>Manuel onay zinciri:</strong> AI’nın önerdiği üretim emri/stok siparişi otomatik mi açılsın, yoksa “önerilen” durumda kalıp insan onayı bekleyişin mi?</li>
+<li><strong>Veri saklama:</strong> keşfedilen lead/tedarikçi adayları ne kadar süre saklanır, kişisel veri (KVKK/GDPR) açısından dikkat edilecek noktalar?</li>
+</ol>
+<p>→ Yanıtlar netleştikçe ilgili modül dokümanlarına işlenir.</p>
+<h2 id="fazlı-yapıyla-eşleşme">11-Fazlı Yapıyla Eşleşme</h2>
+<table>
+<colgroup>
+<col style="width: 44%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Bu doc’taki motor</th>
+<th>11-fazlı yapıdaki yer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Talep Motoru</td>
+<td>Faz 1 — <a href="../proje-teklifi/02-cozum-genel-bakis.md#faz-1--talep-toplama-altyapisi"><code>proje-teklifi/02-cozum-genel-bakis.md</code></a></td>
+</tr>
+<tr class="even">
+<td>Müşteri Keşif</td>
+<td>Faz 3</td>
+</tr>
+<tr class="odd">
+<td>Tedarikçi Keşif</td>
+<td>Faz 4</td>
+</tr>
+<tr class="even">
+<td>Üretim Tahmin</td>
+<td>Faz 2 — <a href="./12-tahmin-motoru-derinlemesine.md"><code>12-tahmin-motoru-derinlemesine.md</code></a></td>
+</tr>
+<tr class="odd">
+<td>Stok Tahmin</td>
+<td>Faz 4</td>
+</tr>
+<tr class="even">
+<td>Geri Besleme</td>
+<td>Faz 7 — <a href="./14-egitilebilir-modeller-mlops.md"><code>14-egitilebilir-modeller-mlops.md</code></a></td>
+</tr>
+<tr class="odd">
+<td>Konversasyonel Katman</td>
+<td>Faz 8</td>
+</tr>
+<tr class="even">
+<td>(yeni) Bayi Scraping &amp; Churn</td>
+<td>Faz 5 — <a href="./13-bayi-scraping-churn.md"><code>13-bayi-scraping-churn.md</code></a></td>
+</tr>
+<tr class="odd">
+<td>(yeni) B2B Bayi Portalı</td>
+<td>Faz 6 — <a href="./11-b2b-bayi-portali.md"><code>11-b2b-bayi-portali.md</code></a></td>
+</tr>
+<tr class="even">
+<td>(yeni) Mobil &amp; Saha CRM</td>
+<td>Faz 9</td>
+</tr>
+<tr class="odd">
+<td>(yeni) Genişleme (10 ek sinyal)</td>
+<td>Faz 10+ — <a href="./15-genisletme-sinyalleri.md"><code>15-genisletme-sinyalleri.md</code></a></td>
+</tr>
+</tbody>
+</table>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("00 — Genel Vizyon: Tahminleyen ve Öğrenen ERP").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

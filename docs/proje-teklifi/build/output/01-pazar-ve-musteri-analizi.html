@@ -1,0 +1,784 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>01 — Pazar ve Müşteri Analizi — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="tartisma/index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="tartisma/12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="tartisma/13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="tartisma/14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="tartisma/15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>01 — Pazar ve Müşteri Analizi</strong></div>
+  <div class="actions">
+    <a href="index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="pazar-ve-müşteri-analizi">01 — Pazar ve Müşteri Analizi</h1>
+<p>Bu doküman MatPortal’ın hitap ettiği pazarın yapısını, mevcut müşteri/bayi tabanını, fırsat haritasını ve rakip durumunu analiz eder. Karar verme için <strong>veri-temelli zemin</strong> sunar; pazarlama broşürü değil.</p>
+<h2 id="pazar-plastik-enjeksiyon-otomotiv-aksesuar">1. Pazar — Plastik Enjeksiyon &amp; Otomotiv Aksesuar</h2>
+<h3 id="promats-konumu">1.1 Promats konumu</h3>
+<p>Promats, <strong>plastik enjeksiyon kalıplama</strong> üreticisi. Ana çıkış pazarı <strong>otomotiv aksesuarı</strong> (paspas, organizatör, koltuk arkası, vb.). Üretim alt tabanı: - Çok kalıplı enjeksiyon makineleri - Reçete bazlı üretim (ham madde + renk + makine + kalıp) - Vardiya bazlı operatör çalışması - Kalıp havuzu yönetimi</p>
+<h3 id="türkiye-otomotiv-aksesuar-pazarı">1.2 Türkiye otomotiv aksesuar pazarı</h3>
+<table>
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 51%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Gösterge</th>
+<th>Değer (2025-2026)</th>
+<th>Kaynak</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Toplam pazar büyüklüğü</td>
+<td>~12-15 milyar TL/yıl</td>
+<td>TOBB sektör raporu</td>
+</tr>
+<tr class="even">
+<td>OEM (orijinal üretim) payı</td>
+<td>~%30</td>
+<td>Tahmini</td>
+</tr>
+<tr class="odd">
+<td>Aftermarket (yedek/aksesuar) payı</td>
+<td>~%70</td>
+<td>Tahmini</td>
+</tr>
+<tr class="even">
+<td>Aktif distribütör sayısı</td>
+<td>~800-1.000</td>
+<td>Sahibinden + sanayim.net</td>
+</tr>
+<tr class="odd">
+<td>Yıllık büyüme</td>
+<td>%5-8 (TÜFE’nin biraz üzerinde)</td>
+<td>TÜİK perakende endeksi</td>
+</tr>
+<tr class="even">
+<td>İhracat oranı</td>
+<td>~%15 (sektör genelinde)</td>
+<td>TİM</td>
+</tr>
+</tbody>
+</table>
+<h3 id="pazar-segmenti">1.3 Pazar segmenti</h3>
+<pre><code>                  ┌────────────────────────────┐
+                  │   ÜRETİCİ (Promats)         │
+                  └─────────────┬───────────────┘
+                                ↓
+        ┌───────────────────────┼─────────────────────────┐
+        ↓                       ↓                         ↓
+┌────────────────┐    ┌──────────────────┐    ┌─────────────────────┐
+│ Bölgesel       │    │ Otomotiv         │    │ E-ticaret           │
+│ toptancı       │    │ yedek parça      │    │ platformları        │
+│ (büyük bayi)   │    │ mağazası         │    │ (Trendyol/HB/N11)   │
+└────────┬───────┘    └─────────┬────────┘    └──────────┬──────────┘
+         ↓                      ↓                        ↓
+┌────────────────┐    ┌──────────────────┐    ┌─────────────────────┐
+│ Alt bayi       │    │ Son tüketici     │    │ Son tüketici        │
+└────────────────┘    └──────────────────┘    └─────────────────────┘</code></pre>
+<p>Promats şu an <strong>ilk kademe</strong> üretici — bölgesel toptancılar + otomotiv mağazaları + e-ticaret platformlarına satar. Son tüketiciye doğrudan satış sınırlı.</p>
+<h3 id="sektör-trend-analizi">1.4 Sektör trend analizi</h3>
+<p><strong>Olumlu:</strong> - Yenilenen araç parkı: 2026’da Türkiye’de ~25 milyon araç → her 3-5 yılda paspas yenileme - E-ticaret büyümesi → online aksesuar talebi artıyor - Premium aksesuar payı (3D paspas, kauçuk havuz) artıyor (%20 yıllık büyüme) - İhracat fırsatı: AB pazarı, Orta Doğu, Kuzey Afrika</p>
+<p><strong>Olumsuz:</strong> - Çin ithalatı baskısı (ucuz alternatif) - Petrokimya bağımlılığı (ham madde fiyat dalgalanması) - KDV/ÖTV regülasyonu değişiklikleri - Lojistik maliyeti artışı</p>
+<p><strong>Kritik trendler:</strong> - <strong>CBAM (AB karbon vergisi)</strong>: 2026’dan itibaren ihracatçıyı doğrudan etkileyecek - <strong>Sürdürülebilir malzeme</strong>: geri dönüştürülmüş plastik talebi artıyor - <strong>Dijital sipariş</strong>: B2B müşteri 7/24 sipariş kanalı bekliyor</p>
+<h2 id="mevcut-bayi-tabanı-promats">2. Mevcut Bayi Tabanı (Promats)</h2>
+<h3 id="sayısal-görünüm">2.1 Sayısal görünüm</h3>
+<table>
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metrik</th>
+<th>Değer</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Aktif bayi sayısı</td>
+<td><strong>35</strong></td>
+</tr>
+<tr class="even">
+<td>Stratejik distribütör (büyük)</td>
+<td><strong>18</strong></td>
+</tr>
+<tr class="odd">
+<td>Orta ölçekli</td>
+<td><strong>12</strong></td>
+</tr>
+<tr class="even">
+<td>Küçük / fırsatçı alıcı</td>
+<td><strong>5</strong></td>
+</tr>
+<tr class="odd">
+<td>Coğrafi dağılım</td>
+<td>İstanbul (8), Ankara (5), İzmir (4), diğer iller (18)</td>
+</tr>
+<tr class="even">
+<td>Ortalama bayi yaşı</td>
+<td>~3-7 yıl</td>
+</tr>
+<tr class="odd">
+<td>En büyük bayinin pazar payı</td>
+<td>~%18</td>
+</tr>
+<tr class="even">
+<td>Top 5 bayi pazar payı</td>
+<td>~%55</td>
+</tr>
+</tbody>
+</table>
+<h3 id="bayi-segmentasyonu">2.2 Bayi segmentasyonu</h3>
+<h4 id="segment-a-stratejik-distribütör-18">Segment A — Stratejik distribütör (18)</h4>
+<ul>
+<li><strong>Profil:</strong> İl/bölge çapında toptancı, yıllık ciro 2M+ TL</li>
+<li><strong>Davranış:</strong> Düzenli sipariş (haftalık/aylık), büyük hacim</li>
+<li><strong>İletişim:</strong> WhatsApp + telefon + email karışık</li>
+<li><strong>Önem:</strong> Cironun %70’i bu segmentten</li>
+</ul>
+<h4 id="segment-b-orta-ölçekli-12">Segment B — Orta ölçekli (12)</h4>
+<ul>
+<li><strong>Profil:</strong> Küçük il toptancısı, perakende mağaza zinciri (3-5 dükkan)</li>
+<li><strong>Davranış:</strong> Aylık sipariş, orta hacim</li>
+<li><strong>İletişim:</strong> Çoğunlukla WhatsApp</li>
+<li><strong>Önem:</strong> Cironun ~%25’i</li>
+</ul>
+<h4 id="segment-c-fırsatçı-alıcı-5">Segment C — Fırsatçı alıcı (5)</h4>
+<ul>
+<li><strong>Profil:</strong> Küçük perakendeci, online satıcı, “ne zaman ihtiyaç olursa”</li>
+<li><strong>Davranış:</strong> Düzensiz, küçük hacim, düşük frekans</li>
+<li><strong>İletişim:</strong> Email/WhatsApp ad-hoc</li>
+<li><strong>Önem:</strong> Cironun ~%5’i</li>
+</ul>
+<h3 id="bayi-davranış-paterni">2.3 Bayi davranış paterni</h3>
+<table>
+<colgroup>
+<col style="width: 23%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+<col style="width: 25%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Davranış</th>
+<th>Segment A</th>
+<th>Segment B</th>
+<th>Segment C</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Aylık sipariş sıklığı</td>
+<td>4-8</td>
+<td>1-2</td>
+<td>0-1</td>
+</tr>
+<tr class="even">
+<td>Ortalama sepet</td>
+<td>50K-200K TL</td>
+<td>8K-25K TL</td>
+<td>1K-5K TL</td>
+</tr>
+<tr class="odd">
+<td>Vade tipi</td>
+<td>Vadeli (60-90 gün)</td>
+<td>Vadeli (30-60 gün)</td>
+<td>Peşin/havale</td>
+</tr>
+<tr class="even">
+<td>Sipariş kanalı</td>
+<td>Telefon (60%) + WA (40%)</td>
+<td>WA (80%) + Email (20%)</td>
+<td>Email/WA</td>
+</tr>
+<tr class="odd">
+<td>İade oranı</td>
+<td>&lt;%2</td>
+<td>%3-5</td>
+<td>%5-10</td>
+</tr>
+<tr class="even">
+<td>Kampanya duyarlılığı</td>
+<td>Düşük (zaten alıyor)</td>
+<td>Orta</td>
+<td>Yüksek</td>
+</tr>
+<tr class="odd">
+<td>Yeni ürün ilgisi</td>
+<td>Yüksek</td>
+<td>Orta</td>
+<td>Düşük</td>
+</tr>
+</tbody>
+</table>
+<h3 id="iletişim-kaosunun-maliyeti">2.4 İletişim kaosunun maliyeti</h3>
+<p>Mevcut WhatsApp/telefon/email modelinde ölçülebilir kayıplar:</p>
+<table>
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 63%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Kalem</th>
+<th>Aylık etki</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Satış ekibi sipariş alma zamanı</td>
+<td>3-4 saat × 22 iş günü × 2 kişi = ~150 saat</td>
+</tr>
+<tr class="even">
+<td>Yanlış fiyat/miktar siparişi</td>
+<td>8-12 hata × ortalama 5K TL düzeltme = ~50K TL</td>
+</tr>
+<tr class="odd">
+<td>Cari soru cevabı</td>
+<td>~30 dakika × 50 sorgu = ~25 saat</td>
+</tr>
+<tr class="even">
+<td>Kayıp sipariş (“aramadım, vermedim”)</td>
+<td>Tahmini %5-10 frekans kaybı</td>
+</tr>
+<tr class="odd">
+<td>Veri yok → körlemesine üretim</td>
+<td>Aylık fazla/eksik üretim ~%15 sapma</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Toplam yaklaşık aylık kayıp: 100-200K TL</strong> (zaman + hata + sapma).</p>
+<p>Bu rakamlar hesaplama temelli, gerçek ölçüm Faz 0 sonunda yapılacak. Ama mertebe doğrudur.</p>
+<h2 id="mevcut-müşteri-verisi-niye-yetersiz">3. Mevcut Müşteri Verisi — Niye Yetersiz?</h2>
+<h3 id="paspas-erpde-bulunanlar">3.1 Paspas ERP’de bulunanlar</h3>
+<ul>
+<li><code>musteriler</code> tablosu (firma adı, vergi no, adres, vade)</li>
+<li><code>satis_siparisleri</code> (geçmiş siparişler)</li>
+<li><code>siparis_kalemleri</code> (ürün detayı)</li>
+<li><code>hareketler</code> (cari hareket)</li>
+</ul>
+<h3 id="bulunmayanlar-kritik-eksikler">3.2 Bulunmayanlar (kritik eksikler)</h3>
+<ul>
+<li>Bayi <strong>iletişim kişileri</strong> (kim satınalma sorumlusu, kim muhasebe?)</li>
+<li>Bayi <strong>dijital varlığı</strong> (web sitesi, sosyal medya hesapları)</li>
+<li>Bayinin <strong>rakipleri kimler</strong> ve hangi markaları satıyor</li>
+<li>Bayi <strong>lokasyon ekosistemi</strong> (yakındaki rakipler, müşteri yoğunluğu)</li>
+<li>Bayinin <strong>stoklama davranışı</strong> (kaç gün stok tutar, ne zaman tükenir)</li>
+<li>Bayinin <strong>ödeme disiplini</strong> trendi (gecikme paterni)</li>
+<li>Bayinin <strong>mevsimselliği</strong> (yaz tekstil mi, kış inşaat mı)</li>
+<li>Bayinin <strong>müşteri tabanı</strong> (kime satıyor, B2B mi B2C mi)</li>
+<li>Bayi <strong>çalışan sayısı / ölçek</strong> trendi</li>
+</ul>
+<p>Bu veriler olmadan: - Tahmin motoru (Faz 2) yeterli özelliğe sahip olmaz - Churn radarı (Faz 5) sinyal toplayamaz - Lead skorlaması (Faz 3) yeni adayları doğru sıralayamaz</p>
+<h3 id="veri-zenginleştirme-stratejisi">3.3 Veri zenginleştirme stratejisi</h3>
+<p>Faz 0-1’de <strong>mevcut 35 bayi</strong> için aşağıdaki veriler tamamlanır:</p>
+<table>
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 34%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Veri</th>
+<th>Yöntem</th>
+<th>Sorumlu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>İletişim kişileri</td>
+<td>Manuel (saha satış)</td>
+<td>Saha ekibi</td>
+</tr>
+<tr class="even">
+<td>Web sitesi URL’i</td>
+<td>Google + manuel doğrulama</td>
+<td>Operasyon</td>
+</tr>
+<tr class="odd">
+<td>Sosyal medya hesapları</td>
+<td>Manuel + Faz 5 scraper</td>
+<td>Otomatik + onay</td>
+</tr>
+<tr class="even">
+<td>Sektör/segment etiketi</td>
+<td>LLM destekli sınıflandırma</td>
+<td>AI + yönetici onay</td>
+</tr>
+<tr class="odd">
+<td>Coğrafi koordinat</td>
+<td>Google Maps API</td>
+<td>Otomatik</td>
+</tr>
+<tr class="even">
+<td>Vergi mükellefi durumu</td>
+<td>GIB API</td>
+<td>Otomatik aylık</td>
+</tr>
+</tbody>
+</table>
+<p>Bu veri zenginleştirme, sonraki tüm fazların <strong>temelidir</strong>. Promats’ın sahip olduğu en değerli varlık şu an: <strong>35 bayi × 2-7 yıl sipariş geçmişi</strong>. Bu altın madeni şu an kullanılmıyor.</p>
+<h2 id="pazar-fırsat-haritası">4. Pazar Fırsat Haritası</h2>
+<h3 id="mevcut-bayi-içinden-fırsatlar-yeni-keşif-gerek-yok">4.1 Mevcut bayi içinden fırsatlar (yeni keşif gerek yok)</h3>
+<table>
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 38%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Fırsat</th>
+<th>Tahmini etki</th>
+<th>Hangi modül?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Sipariş frekansı artışı (portal)</td>
+<td>%30-40</td>
+<td>Faz 6</td>
+</tr>
+<tr class="even">
+<td>Sepet büyümesi (cross-sell)</td>
+<td>%15-25</td>
+<td>Faz 6 + Faz 2</td>
+</tr>
+<tr class="odd">
+<td>Churn’dan korunma</td>
+<td>Bayi başına 50K-300K TL/yıl</td>
+<td>Faz 5</td>
+</tr>
+<tr class="even">
+<td>Cari ödeme hızlanması</td>
+<td>Likidite +%15</td>
+<td>Faz 6 (Modül 4)</td>
+</tr>
+<tr class="odd">
+<td>Yeni ürün talebi tespiti</td>
+<td>“En çok aranan ama olmayan”</td>
+<td>Faz 6 (Modül 10)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="yeni-bayi-keşfi-fırsatları">4.2 Yeni bayi keşfi fırsatları</h3>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 50%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Pazar</th>
+<th>Tahmini lead havuzu</th>
+<th>Hangi modül?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Türkiye yurt içi (TOBB + sanayim.net + Google)</td>
+<td>3-5K aday</td>
+<td>Faz 3</td>
+</tr>
+<tr class="even">
+<td>Yurt dışı yakın pazar (Balkan, MENA)</td>
+<td>1-2K aday</td>
+<td>Faz 3 (Apollo)</td>
+</tr>
+<tr class="odd">
+<td>Yurt dışı uzak pazar (AB, Orta Asya)</td>
+<td>5-10K aday</td>
+<td>Faz 3 (Apollo + Hunter)</td>
+</tr>
+<tr class="even">
+<td>E-ticaret platformları (Trendyol satıcı listesi)</td>
+<td>~500 aday</td>
+<td>Faz 5 (scraping)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Önemli:</strong> Yeni bayi keşfi tek başına yeterli değil — keşfettiği lead’i besleyen, takip eden, dönüştüren bir <strong>pipeline</strong> lazım. Faz 3 + Saha CRM (Faz 9) birlikte çalışır.</p>
+<h3 id="yeni-ürünsegment-fırsatları">4.3 Yeni ürün/segment fırsatları</h3>
+<p>Tahmin motoru (Faz 2) ve sepet terk analizi (Faz 6 Modül 10) verisinden çıkarılacak yeni ürün sinyalleri:</p>
+<ul>
+<li>Hangi araç modeli için paspas talep edilip de bulunamadı?</li>
+<li>Hangi premium segment (3D, kauçuk havuz) büyüyor?</li>
+<li>Yan ürün fırsatları: koltuk kılıfı, oto kozmetik, organizatör</li>
+</ul>
+<p>Bu fırsatlar <strong>dönüşüm projesinin yan ürünüdür</strong> — veri olmadan görülmez, MatPortal kurulduktan sonra her ay yöneticiye otomatik raporla gelir.</p>
+<h2 id="rakip-analizi">5. Rakip Analizi</h2>
+<h3 id="doğrudan-rakipler-türkiye-plastik-enjeksiyon-paspas">5.1 Doğrudan rakipler (Türkiye plastik enjeksiyon paspas)</h3>
+<p>Belirli isim vermek için saha doğrulama gerekir; ama tipik rakip profilleri:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Tip</th>
+<th>Sayı (tahmini)</th>
+<th>Promats konumu</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Lider üretici (Promats dahil)</td>
+<td>4-6</td>
+<td>Üst düzey</td>
+</tr>
+<tr class="even">
+<td>Orta ölçekli üretici</td>
+<td>15-20</td>
+<td>Rekabetçi</td>
+</tr>
+<tr class="odd">
+<td>Küçük atölye</td>
+<td>50+</td>
+<td>Daha kaliteli</td>
+</tr>
+<tr class="even">
+<td>İthalatçı (Çin)</td>
+<td>20+</td>
+<td>Üst kalite, fiyatla rekabet zor</td>
+</tr>
+</tbody>
+</table>
+<h3 id="dolaylı-rakipler">5.2 Dolaylı rakipler</h3>
+<ul>
+<li>E-ticaret platformlarında Çin direct-import satıcıları</li>
+<li>Tekstil/halı paspas üreticileri (alt segment)</li>
+<li>Yan ürün üreticileri (organizatör, kılıf) — dikkat dağıtıcı</li>
+</ul>
+<h3 id="rekabette-matportalın-avantajı">5.3 Rekabette MatPortal’ın avantajı</h3>
+<p>Çoğu Türk plastik üreticisi <strong>dijital olgunluk düşük</strong>. WhatsApp + Excel + telefon. MatPortal Promats’a: - <strong>2-3 yıl önde</strong> dijital altyapı - <strong>Bayi sadakati</strong> (portal alışkanlık yaratır, kayma zorlaşır) - <strong>Veri-temelli planlama</strong> (rakip “hissiyat” ile çalışırken) - <strong>AI destekli açıklanabilir öneri</strong> (rakip “yıllık deneyim” ile) - <strong>Multi-deployment hazır kod</strong> (Promats için tek müşteriye, ama paslama yok)</p>
+<p>Bu avantajlar <strong>kalıcı</strong> — rakip 2 yılda yetişmez, çünkü altyapı + veri birikimi gerektirir.</p>
+<h3 id="rekabet-riski">5.4 Rekabet riski</h3>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 34%" />
+<col style="width: 20%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Risk</th>
+<th>Olasılık</th>
+<th>Etki</th>
+<th>Önlem</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Büyük ithalatçı fiyat kırarsa</td>
+<td>Orta</td>
+<td>Yüksek</td>
+<td>Premium segment + hızlı teslim avantajı</td>
+</tr>
+<tr class="even">
+<td>Çin direct-to-customer modeli</td>
+<td>Yüksek</td>
+<td>Orta</td>
+<td>B2B kanal güçlendirme (portal)</td>
+</tr>
+<tr class="odd">
+<td>Yeni rakip lideri MatPortal’ın kopyası</td>
+<td>Düşük</td>
+<td>Yüksek</td>
+<td>Veri birikimi + bayi sadakati moat</td>
+</tr>
+<tr class="even">
+<td>Petrokimya hammadde krizi</td>
+<td>Orta</td>
+<td>Yüksek</td>
+<td>Alternatif tedarikçi modülü (Faz 4)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="bayi-beklentileri-saha-saha-anketinden">6. Bayi Beklentileri (Saha Saha Anketinden)</h2>
+<blockquote>
+<p>Not: Bu beklentiler Promats yönetimi ile yapılan saha sezgisi temelli değerlendirmeyle hazırlanmıştır. Faz 0 sonunda 5 pilot bayi ile resmi anket yapılacak ve doğrulanacak.</p>
+</blockquote>
+<h3 id="bayilerin-şu-an-istediklerinin-tahmini-sıralaması">Bayilerin “şu an istediklerinin” tahmini sıralaması</h3>
+<table>
+<colgroup>
+<col style="width: 4%" />
+<col style="width: 11%" />
+<col style="width: 41%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>İstek</th>
+<th>Frekans (35 bayi tahmin)</th>
+<th>Hangi fazla karşılanır?</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Cari bakiyemi anlık göreyim</td>
+<td>~30</td>
+<td>Faz 6 — Modül 4</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Geceleyin de sipariş verebileyim</td>
+<td>~25</td>
+<td>Faz 6 — Modül 3</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Aldığım ürünleri unutmayayım, geçmişi göreyim</td>
+<td>~22</td>
+<td>Faz 6 — Modül 5</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Hangi paspas hangi araca uyar bilebileyim</td>
+<td>~20</td>
+<td>Faz 6 — Modül 2</td>
+</tr>
+<tr class="odd">
+<td>5</td>
+<td>“Şu an stokta ne var” görebileyim</td>
+<td>~18</td>
+<td>Faz 6 — Modül 2</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>Sipariş nerede, ne zaman gelecek izleyeyim</td>
+<td>~15</td>
+<td>Faz 6 — Modül 5</td>
+</tr>
+<tr class="odd">
+<td>7</td>
+<td>Acil ihtiyaçta hızlı sipariş verebileyim</td>
+<td>~12</td>
+<td>Faz 6 — Modül 3</td>
+</tr>
+<tr class="even">
+<td>8</td>
+<td>Mobilden de işlem yapabileyim</td>
+<td>~10</td>
+<td>Faz 9</td>
+</tr>
+<tr class="odd">
+<td>9</td>
+<td>İade işlemi çabuk olsun</td>
+<td>~8</td>
+<td>Faz 6 — Modül 6</td>
+</tr>
+<tr class="even">
+<td>10</td>
+<td>WhatsApp’a alışkınım, oradan da olsun</td>
+<td>~7</td>
+<td>Faz 8 — bayi sohbeti</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Karar:</strong> İlk 6 başlık (top 80% beklenti) Faz 6 MVP’de karşılanıyor. Mobil + WhatsApp Faz 9-8 ile.</p>
+<h2 id="swot-promats-matportal">7. SWOT — Promats × MatPortal</h2>
+<h3 id="güçlü-yanlar-s">Güçlü yanlar (S)</h3>
+<ul>
+<li>35 bayilik tabanı (3-7 yıl ilişki)</li>
+<li>Üretim altyapısı tamam (Paspas ERP çalışıyor)</li>
+<li>Reçete bazlı esnek üretim</li>
+<li>Kalıp havuzu güçlü</li>
+<li>Stratejik yönetim AI/dijital açık</li>
+</ul>
+<h3 id="zayıf-yanlar-w">Zayıf yanlar (W)</h3>
+<ul>
+<li>Bayi verisi parçalı / eksik</li>
+<li>Sipariş kanalı dağınık (WA/tel/email)</li>
+<li>Tahmin/planlama veri olmadan yapılıyor</li>
+<li>Bayi davranışı hakkında veri yok</li>
+<li>Lead/keşif sistemli değil</li>
+</ul>
+<h3 id="fırsatlar-o">Fırsatlar (O)</h3>
+<ul>
+<li>E-ticaret büyümesi</li>
+<li>AB ihracat fırsatı (CBAM uyumlu üretici talebi)</li>
+<li>Yenilenen araç parkı (paspas yenileme döngüsü)</li>
+<li>B2B portal Türkiye’de hala olgunlaşmamış (avantaj)</li>
+<li>AI maliyetlerinin düşmesi (Groq, Llama)</li>
+</ul>
+<h3 id="tehditler-t">Tehditler (T)</h3>
+<ul>
+<li>Çin ithalatı baskısı</li>
+<li>Petrokimya hammadde fiyat dalgalanması</li>
+<li>KVKK/CBAM gibi regülasyonlar</li>
+<li>Bayi bağlılığını çoğu rakip de fark etmeye başlıyor</li>
+<li>Dijital olgunlaşma rakibi 2-3 yılda yakalayabilir</li>
+</ul>
+<h2 id="kritik-sayısal-hedefler-kpi">8. Kritik Sayısal Hedefler (KPI)</h2>
+<p>12 ay sonunda hedeflenen değişimler:</p>
+<table>
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 21%" />
+<col style="width: 35%" />
+<col style="width: 21%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Metrik</th>
+<th>Mevcut</th>
+<th>12 ay hedef</th>
+<th>Kazanç</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Aktif bayi sayısı</td>
+<td>35</td>
+<td>50-65</td>
+<td>+%50-85</td>
+</tr>
+<tr class="even">
+<td>Aylık sipariş sayısı</td>
+<td>tahmini ~150</td>
+<td>250-300</td>
+<td>+%70-100</td>
+</tr>
+<tr class="odd">
+<td>Ortalama sepet büyüklüğü</td>
+<td>tahmini ~40K TL</td>
+<td>50-55K TL</td>
+<td>+%25-40</td>
+</tr>
+<tr class="even">
+<td>Sipariş hatası (aylık)</td>
+<td>8-12</td>
+<td>&lt;3</td>
+<td>-%75</td>
+</tr>
+<tr class="odd">
+<td>Satış ekibi sipariş alma süresi</td>
+<td>3-4 saat/gün</td>
+<td>1-1.5 saat/gün</td>
+<td>-%65</td>
+</tr>
+<tr class="even">
+<td>Tahmin doğruluğu (MAPE)</td>
+<td>yok (tahmin yok)</td>
+<td>%25-35</td>
+<td>yeni metrik</td>
+</tr>
+<tr class="odd">
+<td>Churn oranı</td>
+<td>bilinmiyor</td>
+<td>&lt;%5 yıllık</td>
+<td>yeni metrik</td>
+</tr>
+<tr class="even">
+<td>Bayi NPS</td>
+<td>bilinmiyor</td>
+<td>&gt;40</td>
+<td>yeni metrik</td>
+</tr>
+</tbody>
+</table>
+<p>Bu hedefler <strong>doğrulanmamış varsayımlardır</strong>. Faz 0 sonunda baseline ölçümü yapılır, sonra revize edilir.</p>
+<h2 id="açık-karar-noktaları-pazarmüşteri">9. Açık karar noktaları (Pazar/Müşteri)</h2>
+<ol type="1">
+<li><strong>Yurt dışı pazar:</strong> Faz 3’te yurt dışı baştan mı (paralel), yoksa yurt içi olgunlaşınca mı? (Önerim: yurt içi önce, Faz 4 sonrası yurt dışı)</li>
+<li><strong>Hedef yeni bayi sayısı:</strong> 12 ayda +15 bayi gerçekçi mi? (Saha ekibi kapasitesi belirler)</li>
+<li><strong>Top 5 stratejik bayi:</strong> Pilot olarak hangileri? (Yönetimle netleştirilir)</li>
+<li><strong>Bayi anketi:</strong> Faz 0’da resmi anket var mı, sezgi yeter mi? (Önerim: 5 bayi yapısallı görüşme)</li>
+<li><strong>CBAM hazırlığı:</strong> Sürdürülebilirlik modülü (Faz 10) ne zaman? (Önerim: 2026 sonu — hâlâ erken; ama hazırlık başlasın)</li>
+<li><strong>Çin rekabeti:</strong> Premium segment’e mi yönelelim, fiyat rekabetine mi? (Önerim: Premium + lokal hızlı teslim avantajı)</li>
+</ol>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("01 — Pazar ve Müşteri Analizi").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

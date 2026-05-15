@@ -1,0 +1,807 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>13 — Bayi Scraping &amp; Churn Tahmini: Derinlemesine (Faz 5) — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>13 — Bayi Scraping &amp; Churn Tahmini: Derinlemesine (Faz 5)</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="bayi-scraping-churn-tahmini-derinlemesine-faz-5">13 — Bayi Scraping &amp; Churn Tahmini: Derinlemesine (Faz 5)</h1>
+<blockquote>
+<p><strong>Felsefe:</strong> Veriyi rakipten önce gör. Bayi siparişi azalmadan <strong>3 ay önce</strong> sinyali yakala. Bayi hareketlerini sosyal medya ve web sitesinden okuyarak rakibe <strong>kaymadan</strong> önce müdahale et.</p>
+</blockquote>
+<hr />
+<h2 id="niye-scraping">1. Niye scraping?</h2>
+<h3 id="soru">1.1 Soru</h3>
+<blockquote>
+<p>“Bayi X siparişi azaltmadan, hatta hesabı kapamadan, gidişatın bozulduğunu nasıl anlarız?”</p>
+</blockquote>
+<p>Klasik ERP sadece <strong>olduktan sonra</strong> görür: “geçen ay sipariş yoktu”. O zaman çoktan rakibe kaymıştır.</p>
+<p><strong>Erken sinyal kaynakları:</strong> 1. Bayi web sitesi: yeni ürün eklenmesi (rakip ürünü mü?), fiyat değişikliği, kampanya 2. Sosyal medya: Instagram/Facebook post sıklığı, etiketlenen markalar 3. Google Maps: yorum sayısı (bayi ne kadar aktif?) 4. E-ticaret: online satış var mı, hangi markalar görünür? 5. KVKK kayıtları, vergi kaydı, çağrı merkezi durumu (kapanmış mı?) 6. Sektör portalları: sanayim.net, bayi.net listelerinde değişiklik</p>
+<h3 id="stratejik-kazanım">1.2 Stratejik kazanım</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Sinyal</th>
+<th>Etki</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bayi sitesinde rakip ürün belirdi</td>
+<td>Churn riski +30 puan</td>
+</tr>
+<tr class="even">
+<td>60 gün post atılmamış</td>
+<td>Aktivite düşük, +20 puan</td>
+</tr>
+<tr class="odd">
+<td>Yeni distribütörlük etiketi</td>
+<td>Olası başka markaya geçti +50 puan</td>
+</tr>
+<tr class="even">
+<td>Yorumlarda “kapandı”, “yok”</td>
+<td>Operasyonel sorun +40 puan</td>
+</tr>
+<tr class="odd">
+<td>Sitenin .com → .com.tr değişimi</td>
+<td>Şirket yeniden yapılanma +15 puan</td>
+</tr>
+<tr class="even">
+<td>Site ssl süresi geçti</td>
+<td>Aktiflik düştü +10 puan</td>
+</tr>
+</tbody>
+</table>
+<p>Toplam churn skoru = 0-100 arası → 70+ bayi acil müdahale listesine.</p>
+<hr />
+<h2 id="yasal-sınırlar-kvkk-robots.txt-tos">2. Yasal sınırlar — KVKK, robots.txt, ToS</h2>
+<h3 id="yasal-çerçeve">2.1 Yasal çerçeve</h3>
+<table>
+<colgroup>
+<col style="width: 30%" />
+<col style="width: 26%" />
+<col style="width: 43%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Mevzuat</th>
+<th>Kapsam</th>
+<th>Bizim durum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>KVKK (TR)</strong></td>
+<td>Kişisel veri (isim, telefon, email)</td>
+<td>Sadece <strong>firma verisi</strong> topluyoruz, kişisel değil</td>
+</tr>
+<tr class="even">
+<td><strong>GDPR (AB)</strong></td>
+<td>Kişisel veri</td>
+<td>AB bayileri için aynı kural</td>
+</tr>
+<tr class="odd">
+<td><strong>TCK 245-A</strong></td>
+<td>Bilgi sistemine yetkisiz erişim</td>
+<td><strong>Sadece public veri</strong>, login arkasına geçmiyoruz</td>
+</tr>
+<tr class="even">
+<td><strong>TBK 49</strong></td>
+<td>Haksız fiyat</td>
+<td>Bayinin fiyatını kopyalayıp altına satmıyoruz; sadece sinyal</td>
+</tr>
+<tr class="odd">
+<td><strong>robots.txt</strong></td>
+<td>Yasal değil ama etik</td>
+<td><strong>Saygı gösteriyoruz</strong> — Disallow olan yere bakmıyoruz</td>
+</tr>
+<tr class="even">
+<td><strong>Site ToS</strong></td>
+<td>Sözleşme</td>
+<td>Public içerikte tipik olarak ToS’a aykırı değil; case-by-case</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kırmızı-çizgiler-asla">2.2 Kırmızı çizgiler (asla)</h3>
+<ul>
+<li>❌ Login arkasına geçmek (bayi paneli, e-ticaret panel)</li>
+<li>❌ Captcha bypass (reCAPTCHA, Cloudflare)</li>
+<li>❌ Telefon numarası listesi çıkarmak (KVKK kişisel veri)</li>
+<li>❌ Email harvesting (KVKK)</li>
+<li>❌ Saniyede 10 isteği geçmek (DDoS algılama riski)</li>
+<li>❌ User-agent gizleme/sahte (etik dışı)</li>
+</ul>
+<h3 id="etik-kurallar-yapılır">2.3 Etik kurallar (yapılır)</h3>
+<ul>
+<li>✅ User-Agent: <code>MatPortalBot/1.0 (+https://matportal.com.tr/bot)</code> — açık kimlik</li>
+<li>✅ robots.txt’e saygı (<code>robotparser</code> zorunlu)</li>
+<li>✅ Crawl rate: domain başına <strong>maks 1 istek/2 saniye</strong></li>
+<li>✅ İçeriği saklarken <strong>kaynak URL + scrape tarihi</strong> birlikte</li>
+<li>✅ Bayi açıkça “veri toplamasın” derse → silinir + blacklist</li>
+<li>✅ KVKK aydınlatma metninde “rakip ve müşteri sitelerinden public veri topluyoruz” beyanı</li>
+</ul>
+<h3 id="açıklığımız">2.4 Açıklığımız</h3>
+<p>Bayi sözleşmesine eklenir: &gt; “MatPortal hizmetinin geliştirilmesi amacıyla bayinin <strong>public</strong> web ve sosyal medya hesapları izlenir. Toplanan veri sadece dahili kullanım içindir, üçüncü tarafa paylaşılmaz.”</p>
+<hr />
+<h2 id="teknik-altyapı">3. Teknik altyapı</h2>
+<h3 id="stack">3.1 Stack</h3>
+<table>
+<colgroup>
+<col style="width: 38%" />
+<col style="width: 28%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Katman</th>
+<th>Araç</th>
+<th>Neden</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Crawler framework</td>
+<td><strong>Crawlee</strong> (TypeScript)</td>
+<td>Paspas backend ile uyumlu, queue/retry built-in</td>
+</tr>
+<tr class="even">
+<td>Browser automation</td>
+<td><strong>Playwright</strong></td>
+<td>JS-rendered siteler için</td>
+</tr>
+<tr class="odd">
+<td>HTML parser</td>
+<td><strong>Cheerio</strong></td>
+<td>Static HTML için hızlı</td>
+</tr>
+<tr class="even">
+<td>Headless detection bypass</td>
+<td><strong>playwright-extra</strong> + stealth plugin</td>
+<td>Sadece publicly erişilebilir siteler için</td>
+</tr>
+<tr class="odd">
+<td>Proxy</td>
+<td><strong>Bright Data</strong> veya <strong>Apify proxy</strong></td>
+<td>IP banlanmamak için</td>
+</tr>
+<tr class="even">
+<td>Queue</td>
+<td><strong>BullMQ</strong> (Redis)</td>
+<td>Iş kuyruğu, retry, scheduling</td>
+</tr>
+<tr class="odd">
+<td>Storage</td>
+<td>MySQL (<code>web_kazima_kayitlari</code>) + S3 (HTML snapshot)</td>
+<td>Tutarlılık + audit</td>
+</tr>
+</tbody>
+</table>
+<h3 id="mimari">3.2 Mimari</h3>
+<pre><code>┌─────────────────────────────────────────────────┐
+│  /admin/web-kazima — yönetici UI                │
+│  - hedef listesi yönet                          │
+│  - manual çalıştır                              │
+│  - sonuç incele                                 │
+└──────────────────────┬──────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────┐
+│  Scheduler (BullMQ + cron)                      │
+│  - haftalık tarama: tüm bayi siteleri           │
+│  - günlük: yüksek öncelik bayilerin sosyal      │
+│  - tetikli: yeni bayi eklendiğinde ilk tarama   │
+└──────────────────────┬──────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────┐
+│  Crawler workers (Crawlee)                      │
+│  - robots.txt kontrolü                          │
+│  - rate limit (1 req / 2 sec / domain)         │
+│  - retry (max 3, exponential backoff)          │
+│  - HTML snapshot S3&#39;e                           │
+│  - Parse → structured data                      │
+└──────────────────────┬──────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────┐
+│  Sinyal Çıkarıcı (LLM destekli)                 │
+│  - HTML → &quot;bu sayfada hangi markalar var?&quot;      │
+│  - Önceki snapshot ile diff                     │
+│  - Sinyal listesi → DB                          │
+└──────────────────────┬──────────────────────────┘
+                       ↓
+┌─────────────────────────────────────────────────┐
+│  Churn Tahmin Motoru                            │
+│  - Sinyal × ağırlık → churn skoru               │
+│  - Eşik üstü → uyarı + dashboard                │
+└─────────────────────────────────────────────────┘</code></pre>
+<h3 id="crawl-edilebilir-kaynaklar">3.3 Crawl edilebilir kaynaklar</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Kaynak</th>
+<th>Tip</th>
+<th>Sıklık</th>
+<th>Yasal</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bayi web sitesi</td>
+<td>Direkt URL</td>
+<td>Haftalık</td>
+<td>✅ public</td>
+</tr>
+<tr class="even">
+<td>Instagram (public)</td>
+<td>Profil sayfası</td>
+<td>Günlük</td>
+<td>⚠️ ToS dikkat</td>
+</tr>
+<tr class="odd">
+<td>Facebook page</td>
+<td>Public sayfa</td>
+<td>Haftalık</td>
+<td>⚠️ ToS dikkat</td>
+</tr>
+<tr class="even">
+<td>Google Maps</td>
+<td>Place Details API</td>
+<td>Haftalık</td>
+<td>✅ resmi API</td>
+</tr>
+<tr class="odd">
+<td>Sahibinden.com bayi listesi</td>
+<td>Public liste</td>
+<td>Aylık</td>
+<td>⚠️ ToS dikkat</td>
+</tr>
+<tr class="even">
+<td>sanayim.net</td>
+<td>Public liste</td>
+<td>Aylık</td>
+<td>✅ public</td>
+</tr>
+<tr class="odd">
+<td>TOBB üye listesi</td>
+<td>Public</td>
+<td>Aylık</td>
+<td>✅ public</td>
+</tr>
+<tr class="even">
+<td>LinkedIn</td>
+<td>Profil sayfası</td>
+<td>—</td>
+<td>❌ ToS izin vermiyor</td>
+</tr>
+</tbody>
+</table>
+<p><strong>LinkedIn:</strong> Yasal risk yüksek — kullanmıyoruz. Hunter.io / Apollo.io aracılığıyla zaten erişim var.</p>
+<hr />
+<h2 id="sinyal-türleri-ve-ağırlıklar">4. Sinyal türleri ve ağırlıklar</h2>
+<h3 id="tablo">4.1 Tablo</h3>
+<table>
+<colgroup>
+<col style="width: 11%" />
+<col style="width: 11%" />
+<col style="width: 21%" />
+<col style="width: 30%" />
+<col style="width: 24%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Sinyal</th>
+<th>Kaynak</th>
+<th>Tespit yöntemi</th>
+<th>Churn etkisi (puan)</th>
+<th>Doğrulama gerek</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Yeni rakip ürün listesinde</td>
+<td>Bayi sitesi</td>
+<td>Önceki vs şu anki HTML diff</td>
+<td>+30</td>
+<td>Yöneticiyle teyit</td>
+</tr>
+<tr class="even">
+<td>60+ gün post yok</td>
+<td>Instagram/Facebook</td>
+<td>Son post tarihi</td>
+<td>+20</td>
+<td>Mevsim mi normal mi?</td>
+</tr>
+<tr class="odd">
+<td>Stok azalan kategorilerde “stokta yok”</td>
+<td>Bayi e-ticaret</td>
+<td>Ürün sayfası HTML</td>
+<td>+25</td>
+<td>Doğrulama yok</td>
+</tr>
+<tr class="even">
+<td>Müşteri yorum sayısı düşüşü</td>
+<td>Google Maps</td>
+<td>Aylık review count</td>
+<td>+15</td>
+<td>Mevsimsel kontrol</td>
+</tr>
+<tr class="odd">
+<td>Negatif yorum oranı arttı</td>
+<td>Google Maps</td>
+<td>Sentiment analizi (LLM)</td>
+<td>+20</td>
+<td>LLM güven &lt; 0.8 ise atla</td>
+</tr>
+<tr class="even">
+<td>Site SSL geçmiş</td>
+<td>SSL kontrol</td>
+<td>TLS handshake</td>
+<td>+10</td>
+<td>Otomatik</td>
+</tr>
+<tr class="odd">
+<td>Domain expired</td>
+<td>DNS</td>
+<td>WHOIS</td>
+<td>+50</td>
+<td>Doğrulama yok</td>
+</tr>
+<tr class="even">
+<td>Çağrı merkezi otomatik mesaj</td>
+<td>Telefon (manuel)</td>
+<td>İnsan girişi</td>
+<td>+40</td>
+<td>İnsan onayı</td>
+</tr>
+<tr class="odd">
+<td>Yeni distribütörlük markası</td>
+<td>Sitedeki “markalarımız” sayfası</td>
+<td>Diff</td>
+<td>+50</td>
+<td>Yöneticiyle teyit</td>
+</tr>
+<tr class="even">
+<td>Çalışan azalması (LinkedIn’siz)</td>
+<td>İş ilanları portallarında bayi adı yok</td>
+<td>Aylık tarama</td>
+<td>+15</td>
+<td>Doğrulama yok</td>
+</tr>
+<tr class="odd">
+<td>Vergi mükellefi sorgu — kapalı</td>
+<td>GIB API</td>
+<td>Aylık</td>
+<td>+60</td>
+<td>Otomatik (kritik)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="skor-toplama">4.2 Skor toplama</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">churnSkoruHesapla</span>(sinyaller<span class="op">:</span> Sinyal[])<span class="op">:</span> {skor<span class="op">:</span> <span class="dt">number</span><span class="op">;</span> risk<span class="op">:</span> <span class="st">&#39;düşük&#39;</span><span class="op">|</span><span class="st">&#39;orta&#39;</span><span class="op">|</span><span class="st">&#39;yüksek&#39;</span><span class="op">|</span><span class="st">&#39;kritik&#39;</span>} {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> ham <span class="op">=</span> sinyaller<span class="op">.</span><span class="fu">reduce</span>((acc<span class="op">,</span> s) <span class="kw">=&gt;</span> acc <span class="op">+</span> s<span class="op">.</span><span class="at">puan</span> <span class="op">*</span> s<span class="op">.</span><span class="at">guven</span><span class="op">,</span> <span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> skor <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">min</span>(<span class="dv">100</span><span class="op">,</span> ham)<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (skor <span class="op">&gt;=</span> <span class="dv">70</span>) <span class="cf">return</span> {skor<span class="op">,</span> risk<span class="op">:</span> <span class="st">&#39;kritik&#39;</span>}<span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (skor <span class="op">&gt;=</span> <span class="dv">50</span>) <span class="cf">return</span> {skor<span class="op">,</span> risk<span class="op">:</span> <span class="st">&#39;yüksek&#39;</span>}<span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (skor <span class="op">&gt;=</span> <span class="dv">30</span>) <span class="cf">return</span> {skor<span class="op">,</span> risk<span class="op">:</span> <span class="st">&#39;orta&#39;</span>}<span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {skor<span class="op">,</span> risk<span class="op">:</span> <span class="st">&#39;düşük&#39;</span>}<span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p><code>guven</code>: 0.0-1.0. LLM’in sinyalden ne kadar emin olduğu. Düşük güven → puan azaltılır.</p>
+<h3 id="aksiyon-eşikleri">4.3 Aksiyon eşikleri</h3>
+<table>
+<colgroup>
+<col style="width: 40%" />
+<col style="width: 60%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Risk</th>
+<th>Aksiyon</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Düşük (0-29)</td>
+<td>Sessiz, dashboard’da yeşil</td>
+</tr>
+<tr class="even">
+<td>Orta (30-49)</td>
+<td>Yöneticinin haftalık raporunda görünür</td>
+</tr>
+<tr class="odd">
+<td>Yüksek (50-69)</td>
+<td>Anlık email + dashboard sarı</td>
+</tr>
+<tr class="even">
+<td>Kritik (70+)</td>
+<td>Anlık email + telefon araması listesi + dashboard kırmızı + AI öneri: “ne yapılmalı?”</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="html-diff-değişiklik-yakalama">5. HTML diff — değişiklik yakalama</h2>
+<h3 id="strateji">5.1 Strateji</h3>
+<p>Her crawl sonunda HTML S3’e kaydedilir + structured parse DB’ye. Önceki versiyon ile karşılaştırılır.</p>
+<h3 id="parse-hedefleri-bayi-sitesi">5.2 Parse hedefleri (bayi sitesi)</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 43%" />
+<col style="width: 39%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Bölüm</th>
+<th>Selector örneği</th>
+<th>Çıkarılan veri</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Markalarımız</td>
+<td><code>.brands a, .markalar img</code></td>
+<td>Marka isimleri listesi</td>
+</tr>
+<tr class="even">
+<td>Ürün kategorileri</td>
+<td><code>.product-category, nav.menu li</code></td>
+<td>Kategori adları</td>
+</tr>
+<tr class="odd">
+<td>Kampanya bandı</td>
+<td><code>.banner-promo, .campaign-text</code></td>
+<td>Kampanya başlığı</td>
+</tr>
+<tr class="even">
+<td>İletişim</td>
+<td><code>[itemtype*="ContactPoint"], .contact-info</code></td>
+<td>Adres, telefon (KVKK için saklamaz)</td>
+</tr>
+<tr class="odd">
+<td>Sosyal medya linkleri</td>
+<td><code>a[href*="instagram"], a[href*="facebook"]</code></td>
+<td>Hesap username’leri</td>
+</tr>
+<tr class="even">
+<td>Footer “powered by”</td>
+<td><code>footer .powered, .copyright</code></td>
+<td>Yazılım sağlayıcı (Shopify, WooCommerce vs.)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="llm-destekli-sinyal-çıkarımı">5.3 LLM destekli sinyal çıkarımı</h3>
+<p>HTML &gt; 50KB için doğrudan LLM’e atılmaz, önce structured parse yapılır. Sonra:</p>
+<pre><code>PROMPT: &quot;Aşağıda bir bayi web sitesinin önceki ve şu anki versiyonu var.
+         Önemli değişiklikleri (yeni markalar, kampanyalar, kapanış uyarıları,
+         operasyonel sorun belirtileri) JSON listesi olarak döndür.&quot;
+
+GİRİŞ:  { onceki_markalar: [...], simdi_markalar: [...], kampanya_bandi: &#39;...&#39; }
+
+ÇIKTI:
+[
+  {
+    &quot;tip&quot;: &quot;yeni_marka&quot;,
+    &quot;deger&quot;: &quot;RakipMarkaA&quot;,
+    &quot;guven&quot;: 0.95,
+    &quot;kanit&quot;: &quot;markalar bölümünde önceden yoktu, şimdi var&quot;
+  },
+  {
+    &quot;tip&quot;: &quot;kampanya&quot;,
+    &quot;deger&quot;: &quot;Yaz indirimi %30&quot;,
+    &quot;guven&quot;: 0.90
+  }
+]</code></pre>
+<p>LLM provider: <strong>Groq (llama-3.1-70b)</strong> — ucuz ve hızlı, structured output.</p>
+<h3 id="false-positive-kontrolü">5.4 False positive kontrolü</h3>
+<ul>
+<li>LLM güven &lt; 0.8 → manuel onay kuyruğuna</li>
+<li>Aynı sinyal 2 hafta üst üste tekrarlanıyor → “doğrulanmış”</li>
+<li>Tek seferlik anomali → “şüpheli, gözle”</li>
+<li>Yöneticinin manuel “yanlış pozitif” işareti → modelden öğren</li>
+</ul>
+<hr />
+<h2 id="sosyal-medya-özel-durum">6. Sosyal medya — özel durum</h2>
+<h3 id="instagram-public">6.1 Instagram (public)</h3>
+<p><strong>Yasal:</strong> Public profil görüntülemek serbest. Login gerek olmadan görülebilen veri.</p>
+<p><strong>Teknik:</strong> - Doğrudan scraping zor (Instagram aktif olarak engelliyor) - Resmi Graph API: bayi izin vermek zorunda → düşük olasılık - <strong>Pratik:</strong> Apify “Instagram Scraper” actor → $0.50/1000 profil, ToS uyumlu</p>
+<p><strong>Toplanan:</strong> - Son post tarihi (60+ gün → aktivite düşük) - Takipçi sayısı trendi (3 ay düşüyor → aktiflik azaldı) - Etiketlenen markalar (rakip marka etiketi → kayma sinyali) - Hashtag kullanımı (#rakipmarka)</p>
+<h3 id="facebook-public-page">6.2 Facebook (public page)</h3>
+<p><strong>Aynı yaklaşım:</strong> Apify Facebook Page Scraper.</p>
+<h3 id="limit">6.3 Limit</h3>
+<ul>
+<li>Bayi başına ayda <strong>5 dakika scraping</strong></li>
+<li>Toplam 100 bayi × 5dk = 500dk/ay = 8 saat/ay (Apify ücreti ~$10/ay)</li>
+</ul>
+<hr />
+<h2 id="çağrı-merkezi-insan-girişi">7. Çağrı merkezi &amp; insan girişi</h2>
+<p>Otomatik scraping’in göremediği sinyaller için <strong>manuel form</strong>:</p>
+<pre><code>/admin/bayi/{id}/manuel-sinyal
+- &quot;Bayiyi aradım: kapalı / cevap yok / yeni numara&quot;  → puan +40
+- &quot;Bayi şubeleştiğini söyledi&quot;  → +30 puan (negatif olmayan ama dikkat)
+- &quot;Bayi rakibe geçtiğini söyledi&quot;  → +100 (kritik, bağlantıyı sonlandır)</code></pre>
+<p>Saha ekibi mobil uygulamadan giriş yapar. Herhangi bir formal sinyal LLM’in göremediği bilgiyi yakalar.</p>
+<hr />
+<h2 id="churn-tahmin-modelinin-kendisi">8. Churn tahmin modelinin kendisi</h2>
+<h3 id="yaklaşım-iki-katmanlı">8.1 Yaklaşım iki katmanlı</h3>
+<table>
+<colgroup>
+<col style="width: 34%" />
+<col style="width: 34%" />
+<col style="width: 30%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Katman</th>
+<th>Yöntem</th>
+<th>Çıktı</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Kural bazlı</strong></td>
+<td>Sinyal × ağırlık toplamı</td>
+<td>Anlık churn skoru</td>
+</tr>
+<tr class="even">
+<td><strong>ML bazlı</strong></td>
+<td>Lojistik regresyon → XGBoost</td>
+<td>“30/60/90 gün içinde sipariş kesilme olasılığı”</td>
+</tr>
+</tbody>
+</table>
+<h3 id="ml-modeli">8.2 ML modeli</h3>
+<p><strong>Hedef değişken:</strong> “60 gün içinde sipariş gelmeyecek mi?” (binary)</p>
+<p><strong>Özellikler:</strong> - Son 90 gün sipariş sayısı - Son 90 gün ciro - Sipariş aralığı standart sapması (düzensizleşiyor mu?) - Web kazıma sinyalleri (one-hot) - Sektör, bölge, ölçek (bayi metadata) - Son fatura yaşı - Ödeme gecikme sayısı</p>
+<p><strong>Algoritma:</strong> XGBoost classifier (binary)</p>
+<p><strong>Çıktı:</strong></p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode ts"><code class="sourceCode typescript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>{</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  bayi_id<span class="op">:</span> <span class="st">&#39;BAY-042&#39;</span><span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  churn_olasilik_30gun<span class="op">:</span> <span class="fl">0.72</span><span class="op">,</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  churn_olasilik_60gun<span class="op">:</span> <span class="fl">0.85</span><span class="op">,</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  churn_olasilik_90gun<span class="op">:</span> <span class="fl">0.91</span><span class="op">,</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  en_etkili_3_sinyal<span class="op">:</span> [<span class="st">&#39;site_yeni_marka&#39;</span><span class="op">,</span> <span class="st">&#39;instagram_post_yok&#39;</span><span class="op">,</span> <span class="st">&#39;odeme_gecikti&#39;</span>]<span class="op">,</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  oneri<span class="op">:</span> <span class="st">&#39;Bu hafta içinde telefon araması + indirim teklifi&#39;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="validasyon">8.3 Validasyon</h3>
+<ul>
+<li>6 ay sonra “gerçekten churn etti mi?” check</li>
+<li>Confusion matrix: precision, recall, F1</li>
+<li>Hedef: precision &gt; 0.7 (yanlış alarm az)</li>
+<li>Recall &lt; 0.5 olabilir (kaçırdıklarımız manuel sinyalle yakalanır)</li>
+</ul>
+<hr />
+<h2 id="ui-adminbayi-radari">9. UI — <code>/admin/bayi-radari</code></h2>
+<h3 id="ana-ekran">9.1 Ana ekran</h3>
+<p><strong>Heatmap matrisi:</strong> - Y ekseni: tüm bayiler - X ekseni: son 12 hafta - Hücre rengi: churn skoru</p>
+<p><strong>Top liste:</strong> 1. <strong>Acil müdahale gereken</strong> (kritik): bayi adı + sebep + öneri 2. <strong>Riskli</strong> (yüksek): yöneticinin haftalık takibi 3. <strong>Stabil</strong>: yeşil</p>
+<h3 id="bayi-detay-adminbayiidradar">9.2 Bayi detay (<code>/admin/bayi/{id}/radar</code>)</h3>
+<ul>
+<li>Sinyal timeline (son 12 hafta)</li>
+<li>HTML snapshot karşılaştırma (öncesi / sonrası)</li>
+<li>Sosyal medya post timeline</li>
+<li>Önerilen aksiyonlar</li>
+<li>Aksiyon log: “20 Mart: arandı, kampanya teklif edildi → siparişler %20 arttı”</li>
+</ul>
+<h3 id="aksiyon-önerisi-llm">9.3 Aksiyon önerisi (LLM)</h3>
+<pre><code>PROMPT: &quot;Bayi BAY-042 için churn skoru 78. Sinyaller: rakip marka eklendi,
+         60 gün post yok. Son 6 ayın sipariş geçmişi: ... Öneri ver:
+         3 alternatif aksiyon, her biri için tahmini etkisi.&quot;
+
+ÇIKTI:
+[
+  { aksiyon: &#39;Telefon araması + %5 ek iskonto&#39;, tahmini_etki: &#39;churn riski %78 → %50&#39;, maliyet: &#39;5 dk + 8K TL/ay&#39; },
+  { aksiyon: &#39;Saha ziyareti + ürün eğitimi&#39;, tahmini_etki: &#39;churn riski %78 → %35&#39;, maliyet: &#39;tam gün + ulaşım&#39; },
+  { aksiyon: &#39;Bayi-spesifik kampanya&#39;, tahmini_etki: &#39;churn riski %78 → %60&#39;, maliyet: &#39;15K TL kampanya bütçesi&#39; }
+]</code></pre>
+<hr />
+<h2 id="db-şeması">10. DB şeması</h2>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> web_kazima_hedefleri (</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  bayi_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  url <span class="dt">varchar</span>(<span class="dv">500</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  tip ENUM(<span class="st">&#39;site&#39;</span>,<span class="st">&#39;instagram&#39;</span>,<span class="st">&#39;facebook&#39;</span>,<span class="st">&#39;google_maps&#39;</span>,<span class="st">&#39;linkedin&#39;</span>),</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  oncelik ENUM(<span class="st">&#39;düşük&#39;</span>,<span class="st">&#39;orta&#39;</span>,<span class="st">&#39;yüksek&#39;</span>,<span class="st">&#39;kritik&#39;</span>),</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  sıklık ENUM(<span class="st">&#39;günlük&#39;</span>,<span class="st">&#39;haftalık&#39;</span>,<span class="st">&#39;aylık&#39;</span>),</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  son_kazima datetime,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  sonraki_kazima datetime,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  aktif tinyint,</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  notlar text</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> web_kazima_kayitlari (</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  hedef_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>  baslangic datetime,</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>  bitis datetime,</span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>  http_durum <span class="dt">int</span>,</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  yanit_boyutu <span class="dt">int</span>,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  s3_yol text,                 <span class="co">-- HTML snapshot S3 yolu</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  parse_basarili tinyint,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  hata text,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  parsed_data JSON</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> bayi_sinyalleri (</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  bayi_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>  tip <span class="dt">varchar</span>(<span class="dv">64</span>),               <span class="co">-- &#39;yeni_marka&#39;, &#39;instagram_pasif&#39; vb.</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>  deger <span class="dt">varchar</span>(<span class="dv">500</span>),</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  kanit text,</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  guven <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  puan <span class="dt">int</span>,</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  kaynak ENUM(<span class="st">&#39;web&#39;</span>,<span class="st">&#39;sosyal&#39;</span>,<span class="st">&#39;manuel&#39;</span>,<span class="st">&#39;vergi&#39;</span>,<span class="st">&#39;ml_model&#39;</span>),</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  kaynak_kayit_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  tespit_tarihi datetime,</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;yeni&#39;</span>,<span class="st">&#39;dogrulandi&#39;</span>,<span class="st">&#39;red&#39;</span>,<span class="st">&#39;gozardi&#39;</span>),</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  manuel_yorum text</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> churn_skor_gecmisi (</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>  bayi_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a>  tarih <span class="dt">date</span>,</span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a>  skor <span class="dt">decimal</span>(<span class="dv">5</span>,<span class="dv">2</span>),</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  risk ENUM(<span class="st">&#39;düşük&#39;</span>,<span class="st">&#39;orta&#39;</span>,<span class="st">&#39;yüksek&#39;</span>,<span class="st">&#39;kritik&#39;</span>),</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  aktif_sinyaller JSON,</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>  ml_olasilik_30 <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>  ml_olasilik_60 <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  ml_olasilik_90 <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (bayi_id, tarih)</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> churn_aksiyon_log (</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a>  bayi_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>  user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>  aksiyon_tipi <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>  detay text,</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>  oncesi_skor <span class="dt">decimal</span>(<span class="dv">5</span>,<span class="dv">2</span>),</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>  sonrasi_skor <span class="dt">decimal</span>(<span class="dv">5</span>,<span class="dv">2</span>),</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>  yapildi_at datetime</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<hr />
+<h2 id="performans-maliyet">11. Performans &amp; maliyet</h2>
+<h3 id="ölçek">11.1 Ölçek</h3>
+<p>100 bayi × 5 hedef (site + 2 sosyal + Google Maps + e-ticaret) = 500 hedef Haftalık tarama × 4 hafta = 2000 kazıma/ay</p>
+<h3 id="maliyet">11.2 Maliyet</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Kalem</th>
+<th>Aylık</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Apify (Instagram + Facebook)</td>
+<td>$10-20</td>
+</tr>
+<tr class="even">
+<td>Bright Data proxy</td>
+<td>$15</td>
+</tr>
+<tr class="odd">
+<td>S3 storage (1GB HTML snapshot)</td>
+<td>$0.50</td>
+</tr>
+<tr class="even">
+<td>LLM (sinyal çıkarımı, Groq)</td>
+<td>$5-10</td>
+</tr>
+<tr class="odd">
+<td><strong>Toplam</strong></td>
+<td><strong>~$30-45/ay</strong></td>
+</tr>
+</tbody>
+</table>
+<h3 id="ölçeklendirme">11.3 Ölçeklendirme</h3>
+<ul>
+<li>500 bayi → 2500 hedef → ~$100/ay</li>
+<li>1000 bayi → 5000 hedef → ~$200/ay</li>
+</ul>
+<hr />
+<h2 id="açık-karar-noktaları-faz-5">12. Açık karar noktaları (Faz 5)</h2>
+<ol type="1">
+<li><strong>LinkedIn:</strong> ToS yüzünden sıfır mı, Hunter.io üzerinden dolaylı mı? (Önerim: dolaylı)</li>
+<li><strong>Instagram:</strong> Apify $20/ay olur mu, manuel mi? (Önerim: Apify)</li>
+<li><strong>Bayi ToS:</strong> Sözleşmeye scraping maddesi koymak şart mı? (Önerim: koy)</li>
+<li><strong>Churn ML eşiği:</strong> 0.5 mi, 0.7 mi? (Önerim: 0.6 ortayolu)</li>
+<li><strong>Sosyal medya kapsam:</strong> sadece bayi mi, müşteri de mi? (Önerim: ilk faz bayi)</li>
+<li><strong>HTML snapshot saklama süresi:</strong> 90 gün mü, 1 yıl mı? (Önerim: 90 gün; sonra metadata sadece)</li>
+</ol>
+<hr />
+<h2 id="faz-5-çıktı-listesi">13. Faz 5 çıktı listesi</h2>
+<p>✅ Crawlee + Playwright kurulu, robots.txt + rate limit aktif ✅ DB tabloları ✅ <code>/admin/web-kazima</code> UI: hedef yönetimi ✅ Haftalık cron ile tüm bayi siteleri taranır ✅ HTML diff → sinyal çıkarımı (LLM) ✅ Sinyal × ağırlık → churn skoru (kural bazlı) ✅ ML modeli (XGBoost) eğitilmiş, validasyon raporu ✅ <code>/admin/bayi-radari</code> heatmap + top liste ✅ Saha aksiyon log: önce/sonra ölçümleme ✅ Aydınlatma metni + bayi sözleşme maddesi yazılı</p>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("13 — Bayi Scraping &amp; Churn Tahmini: Derinlemesine (Faz 5)").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

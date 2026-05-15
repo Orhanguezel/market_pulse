@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>14 — Eğitilebilir Modeller &amp; MLOps: Derinlemesine (Faz 7) — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>14 — Eğitilebilir Modeller &amp; MLOps: Derinlemesine (Faz 7)</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="eğitilebilir-modeller-mlops-derinlemesine-faz-7">14 — Eğitilebilir Modeller &amp; MLOps: Derinlemesine (Faz 7)</h1>
+<blockquote>
+<p><strong>Felsefe:</strong> Aynı kod, farklı şirketler. Her şirketin kendi verisi var, kendi modelini eğitir. Modeli versiyonla, A/B test et, geriye al. Yöneticiler “Excel yükle, model güncellesin” yapabilsin.</p>
+</blockquote>
+<hr />
+<h2 id="niye-eğitilebilir-model">1. Niye eğitilebilir model?</h2>
+<h3 id="soru">1.1 Soru</h3>
+<blockquote>
+<p>“Tek bir model her şirkete uyar mı?”</p>
+</blockquote>
+<p><strong>Hayır.</strong> Her şirketin: - Sektörü farklı (plastik enjeksiyon, tekstil, gıda) - Bayi yapısı farklı (5 büyük bayi vs 200 küçük bayi) - Mevsimselliği farklı (yaz/kış, bayram öncesi) - Ürün karması farklı (10 ürün vs 1000 ürün)</p>
+<p>Tek bir “MatPortal modeli” satarsak, her müşteride %30-40 hata vermeye mahkum.</p>
+<h3 id="çözüm">1.2 Çözüm</h3>
+<p><strong>Paylaşılan kod, müşteriye özel veri &amp; model.</strong></p>
+<pre><code>matportal-core (paketlenmiş kod)
+├── tahmin/algoritmalar/      ← naive, prophet, xgboost, lstm (ortak)
+├── ozellik_muhendisligi/     ← feature engineering modülleri (ortak)
+└── deploy/
+
+paspas-deploy/                 ← Promats için
+├── data/                      ← Promats verisi
+├── modeller/                  ← Promats için eğitilmiş modeller
+└── konfig.json                ← sektör=plastik, mevsim=yıllık vs.
+
+ornek-tekstil-deploy/          ← başka müşteri
+├── data/
+├── modeller/
+└── konfig.json                ← sektör=tekstil, mevsim=sezonsal</code></pre>
+<hr />
+<h2 id="mlops-altyapısı">2. MLOps altyapısı</h2>
+<h3 id="sorumluluk-dağılımı">2.1 Sorumluluk dağılımı</h3>
+<table>
+<colgroup>
+<col style="width: 52%" />
+<col style="width: 21%" />
+<col style="width: 26%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Sorumluluk</th>
+<th>Kim</th>
+<th>Araç</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Veri toplama</td>
+<td>Paspas backend (cron)</td>
+<td>Drizzle ORM</td>
+</tr>
+<tr class="even">
+<td>Veri kalite kontrol</td>
+<td><code>data_quality</code> modülü</td>
+<td>Custom + great-expectations</td>
+</tr>
+<tr class="odd">
+<td>Feature engineering</td>
+<td><code>feature_pipeline</code> modülü</td>
+<td>Pandas + numpy</td>
+</tr>
+<tr class="even">
+<td>Model eğitim</td>
+<td><code>training_service</code></td>
+<td>Python (Bun → spawn)</td>
+</tr>
+<tr class="odd">
+<td>Model versiyonlama</td>
+<td>DB + S3</td>
+<td><code>tahmin_modelleri</code> tablosu</td>
+</tr>
+<tr class="even">
+<td>Model deploy</td>
+<td>API üzerinden yükle</td>
+<td>FastAPI (Python serving)</td>
+</tr>
+<tr class="odd">
+<td>A/B test</td>
+<td><code>ab_test_router</code></td>
+<td>Custom</td>
+</tr>
+<tr class="even">
+<td>İzleme</td>
+<td>Grafana + custom metrik</td>
+<td>Prometheus</td>
+</tr>
+<tr class="odd">
+<td>Geriye alma (rollback)</td>
+<td>UI button</td>
+<td>DB transaction</td>
+</tr>
+</tbody>
+</table>
+<h3 id="hibrit-stack-bun-python">2.2 Hibrit stack — Bun + Python</h3>
+<p>Paspas backend Bun/TypeScript. ML kütüphaneleri (scikit-learn, prophet, xgboost) Python ekosisteminde. Köprü:</p>
+<pre><code>┌──────────────────────────────────────────┐
+│  Paspas Backend (Bun)                    │
+│  - REST API                              │
+│  - DB CRUD                               │
+│  - UI integrasyon                        │
+└──────────┬───────────────────────────────┘
+           ↓ HTTP / queue
+┌──────────────────────────────────────────┐
+│  ML Service (Python FastAPI)             │
+│  - /train  (POST)                        │
+│  - /predict (POST)                       │
+│  - /evaluate (POST)                      │
+│  - /model/{id} (GET, DELETE)             │
+└──────────┬───────────────────────────────┘
+           ↓
+┌──────────────────────────────────────────┐
+│  MLflow (deneme takibi)                  │
+│  + S3 (model artifacts)                  │
+└──────────────────────────────────────────┘</code></pre>
+<h3 id="ml-service-özellik-listesi">2.3 ML Service — özellik listesi</h3>
+<ul>
+<li><strong>/train</strong>: model eğitimi başlat. Asenkron. İş kuyruğuna gider, BullMQ/Celery.</li>
+<li><strong>/predict</strong>: production tahmin. Düşük latency (&lt;100ms hedef).</li>
+<li><strong>/evaluate</strong>: backtest. Geçmiş veride model performansı.</li>
+<li><strong>/model/{id}/promote</strong>: A → B’ye geçir (champion).</li>
+<li><strong>/model/{id}/rollback</strong>: önceki stabile dön.</li>
+</ul>
+<hr />
+<h2 id="model-versiyonlama">3. Model versiyonlama</h2>
+<h3 id="versiyonlama-şeması">3.1 Versiyonlama şeması</h3>
+<p>Her model bir <strong>artifact</strong>:</p>
+<pre><code>matportal-models/
+├── promats/
+│   ├── tahmin/
+│   │   ├── prophet-bayi-042-urun-star-siyah/
+│   │   │   ├── v1.0/  # ilk eğitilmiş
+│   │   │   ├── v1.1/  # haftalık güncelleme
+│   │   │   ├── v1.2/  # 2 hafta önce
+│   │   │   └── v1.3/  # şu anki champion
+│   │   └── xgboost-genel-tum-bayi/
+│   └── churn/
+│       └── xgboost-bayi-churn-60gun/</code></pre>
+<h3 id="versiyon-metadata">3.2 Versiyon metadata</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> model_versiyonlari (</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  model_ailesi <span class="dt">varchar</span>(<span class="dv">128</span>),     <span class="co">-- &#39;prophet-bayi-042-urun-star-siyah&#39;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  versiyon <span class="dt">varchar</span>(<span class="dv">32</span>),           <span class="co">-- &#39;v1.3&#39;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  egitim_baslangic datetime,</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  egitim_bitis datetime,</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  egitim_kayit_sayisi <span class="dt">int</span>,</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  hyperparametreler JSON,</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  metrikler JSON,                 <span class="co">-- { mape, rmse, bias, coverage }</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  artifact_yolu text,             <span class="co">-- s3://matportal-models/.../v1.3/</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;egitiliyor&#39;</span>,<span class="st">&#39;hazir&#39;</span>,<span class="st">&#39;champion&#39;</span>,<span class="st">&#39;retired&#39;</span>,<span class="st">&#39;hatali&#39;</span>),</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  champion_olma_tarihi datetime,</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  retired_tarih datetime,</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  egiten_user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  notlar text</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="championchallenger-pattern">3.3 Champion/Challenger pattern</h3>
+<ul>
+<li><strong>Champion</strong>: production’a veriyor. Her tahmin bunu kullanıyor.</li>
+<li><strong>Challenger</strong>: yeni eğitim. Production trafiğinin <strong>%5’i</strong> ile test ediliyor.</li>
+<li>7 gün sonra: challenger’ın MAPE’si champion’dan iyi ise → promote.</li>
+<li>Promote edilince eski champion <strong>retired</strong> olur ama silinmez (rollback için).</li>
+</ul>
+<hr />
+<h2 id="ab-test">4. A/B test</h2>
+<h3 id="trafik-bölme">4.1 Trafik bölme</h3>
+<pre><code>Bayi X için tahmin isteği geldi
+  ├─ %95 → champion v1.3 → tahmin döner
+  └─ %5  → challenger v1.4 → tahmin döner (sessiz, log)
+
+Her iki tahminin gerçekleşen değerle karşılaştırması yapılır.</code></pre>
+<h3 id="istatistiksel-anlamlılık">4.2 İstatistiksel anlamlılık</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ab_test_anlamli_mi(</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  champion_mape: <span class="bu">list</span>[<span class="bu">float</span>],</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  challenger_mape: <span class="bu">list</span>[<span class="bu">float</span>],</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  alfa: <span class="bu">float</span> <span class="op">=</span> <span class="fl">0.05</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>) <span class="op">-&gt;</span> <span class="bu">bool</span>:</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="im">from</span> scipy <span class="im">import</span> stats</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  t_stat, p_value <span class="op">=</span> stats.ttest_ind(champion_mape, challenger_mape)</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> p_value <span class="op">&lt;</span> alfa <span class="kw">and</span> challenger_mape.mean() <span class="op">&lt;</span> champion_mape.mean()</span></code></pre></div>
+<h3 id="karar-kuralı">4.3 Karar kuralı</h3>
+<table>
+<colgroup>
+<col style="width: 53%" />
+<col style="width: 46%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Kriter</th>
+<th>Karar</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Challenger MAPE &gt; %20 daha iyi + p &lt; 0.05</td>
+<td><strong>Promote</strong> (challenger → champion)</td>
+</tr>
+<tr class="even">
+<td>Eşit veya kötü + p &gt;= 0.05</td>
+<td>Reddedilir, retire edilir</td>
+</tr>
+<tr class="odd">
+<td>Sınır durumda + örnek sayısı az</td>
+<td>Test devam eder, 7 gün ek</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="excel-upload-ux">5. Excel upload UX</h2>
+<h3 id="iki-senaryo">5.1 İki senaryo</h3>
+<h4 id="senaryo-a-tarihsel-veri-ekleme">Senaryo A — Tarihsel veri ekleme</h4>
+<p>Yönetici geçmiş 2 yılın siparişlerini başka sistemden ihraç etmiş, Excel olarak elinde.</p>
+<h4 id="senaryo-b-yeni-özellik-ekleme">Senaryo B — Yeni özellik ekleme</h4>
+<p>Yönetici “kampanyalarımız” Excel’i tutuyor — kampanyaları model’e tanıtmak istiyor.</p>
+<h3 id="akış">5.2 Akış</h3>
+<pre><code>1. /admin/tahmin-motoru/veri/yukle
+2. Şablon indir butonu (siparis_v1.xlsx, kampanya_v1.xlsx, ham_madde_v1.xlsx)
+3. Drag-drop dosya yükle
+4. Sistem doğrulama:
+   - Kolon eşleştirme (önce otomatik, sonra manuel onay)
+   - Veri tipi kontrolü
+   - Referans bütünlüğü (bayi_kod, urun_kod var mı?)
+   - Outlier tespit
+5. Preview: &quot;150 satır okundu, 142 geçerli, 8 hata&quot;
+6. &quot;Hatalı satırları indir&quot; + &quot;Geçerlileri kaydet&quot;
+7. DB&#39;ye yazılır → &quot;Modeli yeniden eğit&quot; butonu aktifleşir
+8. Buton tıklanır → arka plan eğitim başlar
+9. Tamamlanma: bildirim + email + &quot;yeni model X performans Y&quot; raporu</code></pre>
+<h3 id="kolon-eşleştirme-ui">5.3 Kolon eşleştirme UI</h3>
+<pre><code>Yüklenen dosya kolonları:    →    Sistem kolonları
+&quot;Tarih&quot;                       →    [tarih ▼]            ✓ otomatik tespit
+&quot;Bayi Adı&quot;                    →    [bayi_kod ▼]         ⚠ &quot;ad&quot; mı &quot;kod&quot; mu?
+&quot;Ürün Kodu&quot;                   →    [urun_kod ▼]         ✓
+&quot;Adet&quot;                        →    [adet ▼]             ✓
+&quot;Liste Fiyatı&quot;                →    [birim_fiyat ▼]      ✓
+&quot;İskonto %&quot;                   →    [iskonto_yuzde ▼]    ✓ (5 = %5)
+&quot;Kampanya&quot;                    →    [kampanya_kodu ▼]    ✓
+&quot;Açıklama&quot;                    →    [notlar ▼]           ✓</code></pre>
+<h3 id="hata-düzeltme-inline">5.4 Hata düzeltme inline</h3>
+<pre><code>Satır 42: bayi_kod &quot;BAY-XYZ&quot; bulunamadı
+  ▼ Çözüm seçin:
+    [ Yeni bayi olarak oluştur ]
+    [ Mevcut bayiye eşle ]
+    [ Bu satırı atla ]</code></pre>
+<hr />
+<h2 id="çok-değişkenli-model-multivariate">6. Çok değişkenli model — multivariate</h2>
+<h3 id="tek-değişkenli-vs-çok-değişkenli">6.1 Tek değişkenli vs çok değişkenli</h3>
+<p><strong>Tek değişkenli (univariate):</strong> Sadece geçmiş sipariş adedinden tahmin. - Naive, ARIMA, basit Prophet</p>
+<p><strong>Çok değişkenli (multivariate):</strong> Sipariş + ek faktörler. - Prophet (regressors), XGBoost, LSTM</p>
+<h3 id="eklenecek-özellikler">6.2 Eklenecek özellikler</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Kategori</th>
+<th>Özellik</th>
+<th>Veri kaynağı</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Makro</strong></td>
+<td>USD/TRY kuru</td>
+<td>TCMB API (geçmiş 5 yıl)</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>EUR/TRY kuru</td>
+<td>TCMB API</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Enflasyon (TÜFE)</td>
+<td>TÜİK</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Petrol fiyatı (Brent)</td>
+<td>Yahoo Finance</td>
+</tr>
+<tr class="odd">
+<td><strong>Takvim</strong></td>
+<td>Resmi tatil</td>
+<td>Sabit JSON</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Dini tatil</td>
+<td>Sabit JSON</td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Hafta sonu</td>
+<td>Hesaplama</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Ay başı/sonu</td>
+<td>Hesaplama</td>
+</tr>
+<tr class="odd">
+<td><strong>Hava</strong></td>
+<td>Sıcaklık (sezonsal sektör için)</td>
+<td>OpenWeather Historical</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Yağış</td>
+<td>OpenWeather</td>
+</tr>
+<tr class="odd">
+<td><strong>Kampanya</strong></td>
+<td>Aktif kampanya</td>
+<td><code>kampanyalar</code> tablosu</td>
+</tr>
+<tr class="even">
+<td></td>
+<td>İskonto oranı</td>
+<td><code>siparis_kalemleri.iskonto_yuzde</code></td>
+</tr>
+<tr class="odd">
+<td><strong>Stok</strong></td>
+<td>Bayi stoku (tahmini)</td>
+<td>Web kazıma + manuel</td>
+</tr>
+<tr class="even">
+<td><strong>Bayi profil</strong></td>
+<td>Sektör (one-hot)</td>
+<td><code>musteriler.sektor</code></td>
+</tr>
+<tr class="odd">
+<td></td>
+<td>Ölçek (küçük/orta/büyük)</td>
+<td><code>musteriler.calisan_sayisi</code></td>
+</tr>
+<tr class="even">
+<td></td>
+<td>Bölge</td>
+<td><code>musteriler.il</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="feature-engineering-pipeline">6.3 Feature engineering pipeline</h3>
+<div class="sourceCode" id="cb10"><pre class="sourceCode python"><code class="sourceCode python"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> ozellik_uret(bayi_id, donem_baslangic, donem_bitis):</span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> get_siparis_history(bayi_id, donem_baslangic <span class="op">-</span> <span class="dv">365</span>, donem_bitis)</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Lag features</span></span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;siparis_t_minus_1&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;adet&#39;</span>].shift(<span class="dv">1</span>)</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;siparis_t_minus_7&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;adet&#39;</span>].shift(<span class="dv">7</span>)</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;siparis_t_minus_30&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;adet&#39;</span>].shift(<span class="dv">30</span>)</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Rolling features</span></span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;7gun_ortalama&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;adet&#39;</span>].rolling(<span class="dv">7</span>).mean()</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;30gun_ortalama&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;adet&#39;</span>].rolling(<span class="dv">30</span>).mean()</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;7gun_std&#39;</span>] <span class="op">=</span> df[<span class="st">&#39;adet&#39;</span>].rolling(<span class="dv">7</span>).std()</span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Calendar features</span></span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;ay&#39;</span>] <span class="op">=</span> df.index.month</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;hafta&#39;</span>] <span class="op">=</span> df.index.isocalendar().week</span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;gun_ay_ici&#39;</span>] <span class="op">=</span> df.index.day</span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;hafta_gunu&#39;</span>] <span class="op">=</span> df.index.dayofweek</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;tatil_mi&#39;</span>] <span class="op">=</span> df.index.isin(turk_tatilleri)</span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>    df[<span class="st">&#39;ramazan_mi&#39;</span>] <span class="op">=</span> df.index.isin(ramazan_donemi)</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-22"><a href="#cb10-22" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Macro features (left join)</span></span>
+<span id="cb10-23"><a href="#cb10-23" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.merge(usd_try_history, left_index<span class="op">=</span><span class="va">True</span>, right_index<span class="op">=</span><span class="va">True</span>, how<span class="op">=</span><span class="st">&#39;left&#39;</span>)</span>
+<span id="cb10-24"><a href="#cb10-24" aria-hidden="true" tabindex="-1"></a>    df <span class="op">=</span> df.merge(weather_history, left_index<span class="op">=</span><span class="va">True</span>, right_index<span class="op">=</span><span class="va">True</span>, how<span class="op">=</span><span class="st">&#39;left&#39;</span>)</span>
+<span id="cb10-25"><a href="#cb10-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-26"><a href="#cb10-26" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Bayi profili (sabit)</span></span>
+<span id="cb10-27"><a href="#cb10-27" aria-hidden="true" tabindex="-1"></a>    bayi_profile <span class="op">=</span> get_bayi_profile(bayi_id)</span>
+<span id="cb10-28"><a href="#cb10-28" aria-hidden="true" tabindex="-1"></a>    <span class="cf">for</span> col <span class="kw">in</span> [<span class="st">&#39;sektor&#39;</span>, <span class="st">&#39;olcek&#39;</span>, <span class="st">&#39;bolge&#39;</span>]:</span>
+<span id="cb10-29"><a href="#cb10-29" aria-hidden="true" tabindex="-1"></a>        df[col] <span class="op">=</span> bayi_profile[col]</span>
+<span id="cb10-30"><a href="#cb10-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-31"><a href="#cb10-31" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> df</span></code></pre></div>
+<hr />
+<h2 id="active-learning-kullanıcı-düzeltmesinden-öğrenme">7. Active learning — kullanıcı düzeltmesinden öğrenme</h2>
+<h3 id="senaryo">7.1 Senaryo</h3>
+<pre><code>SİSTEM: &quot;Önümüzdeki 30 gün BAY-042 → 250 adet tahmin&quot;
+YÖNETİCİ: &quot;Hayır, geçen ayın aynısı 180 olacak. Pazar zayıf.&quot;</code></pre>
+<p>Bu <strong>değerli sinyal</strong>. Yönetici bilgi sahibi (saha sezgisi). Modele geri besleme yapılır:</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> tahmin_geri_besleme (</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>  tahmin_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb12-4"><a href="#cb12-4" aria-hidden="true" tabindex="-1"></a>  user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb12-5"><a href="#cb12-5" aria-hidden="true" tabindex="-1"></a>  duzeltilen_deger <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb12-6"><a href="#cb12-6" aria-hidden="true" tabindex="-1"></a>  sebep text,                  <span class="co">-- &quot;pazar zayıf&quot;, &quot;müşteri kapanış&quot;</span></span>
+<span id="cb12-7"><a href="#cb12-7" aria-hidden="true" tabindex="-1"></a>  guven_dusuk_mu tinyint,      <span class="co">-- yönetici &quot;emin değilim&quot; işaretledi mi?</span></span>
+<span id="cb12-8"><a href="#cb12-8" aria-hidden="true" tabindex="-1"></a>  geri_besleme_tarihi datetime</span>
+<span id="cb12-9"><a href="#cb12-9" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="modele-entegrasyon">7.2 Modele entegrasyon</h3>
+<p>3 strateji:</p>
+<h4 id="a-online-learning">A — Online learning</h4>
+<p>Düzeltme anında modele yedirilir. <strong>Risk:</strong> Yanlış düzeltme modeli bozar.</p>
+<h4 id="b-batch-learning-ağırlık">B — Batch learning + ağırlık</h4>
+<p>Hafta sonunda toplu yeniden eğitim. Düzeltme verisi normal veriden <strong>2× ağırlık</strong> alır.</p>
+<h4 id="c-calibration-layer">C — Calibration layer</h4>
+<p>Model olduğu gibi kalır, üstüne “calibration” katmanı eklenir.</p>
+<pre><code>final_tahmin = ham_model_tahmin × (1 + calibration_factor)
+calibration_factor = ortalama (yönetici_düzeltmeleri / ham_tahminler)</code></pre>
+<p><strong>Önerim: B + C kombinasyonu.</strong> Ana model toplu öğrenir, calibration anlık esnetir.</p>
+<h3 id="yönetici-güvenliği">7.3 Yönetici güvenliği</h3>
+<ul>
+<li>Tüm düzeltmeler <strong>audit log</strong>.</li>
+<li>Aşırı düzeltme yapan kullanıcı <strong>flag</strong> (model bozulmasın).</li>
+<li>Çakışan düzeltme (2 yönetici farklı düzeltme) → ortalama veya sonuncu.</li>
+</ul>
+<hr />
+<h2 id="açıklanabilirlik-explainability">8. Açıklanabilirlik — explainability</h2>
+<h3 id="niye">8.1 Niye?</h3>
+<p>Yönetici “neden 250 dedin?” sorduğunda <strong>anlamlı cevap</strong> alabilmeli. Yoksa sistem siyah kutu olur, güven azalır.</p>
+<h3 id="yöntemler">8.2 Yöntemler</h3>
+<table>
+<colgroup>
+<col style="width: 25%" />
+<col style="width: 46%" />
+<col style="width: 28%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Yöntem</th>
+<th>Hangi modelde</th>
+<th>Avantaj</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Feature importance</strong></td>
+<td>Tüm tree-based (XGBoost, LGBM, RF)</td>
+<td>Hızlı, basit</td>
+</tr>
+<tr class="even">
+<td><strong>SHAP values</strong></td>
+<td>Herhangi model</td>
+<td>Tahmin başına detaylı</td>
+</tr>
+<tr class="odd">
+<td><strong>Permutation importance</strong></td>
+<td>Herhangi model</td>
+<td>Yavaş ama tutarlı</td>
+</tr>
+<tr class="even">
+<td><strong>Partial Dependence Plot</strong></td>
+<td>Tüm modeller</td>
+<td>“Şu özellik artarsa tahmin nasıl değişir?”</td>
+</tr>
+<tr class="odd">
+<td><strong>LIME</strong></td>
+<td>Herhangi model</td>
+<td>Tek tahmini açıklamak için</td>
+</tr>
+</tbody>
+</table>
+<h3 id="uida-gösterim">8.3 UI’da gösterim</h3>
+<pre><code>Tahmin: 250 adet
+↓ neden bu tahmin?
+┌────────────────────────────────────────────┐
+│ Geçen yıl aynı ay      ████████  +40       │
+│ Son 30 gün ortalama    ██████    +30       │
+│ Mayıs ay-içi yüksek    ████      +20       │
+│ Tatil yakın             ███      +15       │
+│ USD/TRY artış          ██       -10        │
+│ Bayi son 30 gün durgun ██       -15        │
+│ Kampanya aktif değil   █         -10       │
+└────────────────────────────────────────────┘
+Net: 250 (220-285 güven aralığı %95)</code></pre>
+<h3 id="doğal-dil-açıklama-llm">8.4 Doğal dil açıklama (LLM)</h3>
+<pre><code>PROMPT: &quot;Şu SHAP değerlerini doğal dile çevir:
+{geçen_yıl: +40, son_30gün: +30, mayıs: +20, ...}
+Yöneticiye anlamlı 2-3 cümle açıklama ver.&quot;
+
+ÇIKTI: &quot;Geçen yıl Mayıs ayında bu bayi 240 adet sipariş vermişti.
+Son 30 günde aktivite normalin %15 üstünde, ama kur artışı küçük
+düşüş etkisi yapıyor. Bayinin geçen 30 gün durgunluğu hesaba katılmış.&quot;</code></pre>
+<hr />
+<h2 id="model-deployment-canary">9. Model deployment — canary</h2>
+<h3 id="yeni-model-çıkışı">9.1 Yeni model çıkışı</h3>
+<ol type="1">
+<li>Eğitim tamamlandı (offline)</li>
+<li>Backtest geçti (MAPE eşik altı)</li>
+<li>Staging’de 24 saat çalıştı (canary)</li>
+<li>%5 production trafiğine açıldı (challenger)</li>
+<li>7 gün izlendi</li>
+<li>Champion’a göre iyi → promote</li>
+<li>Eski champion 30 gün retired tut</li>
+<li>30 gün hata yoksa silinebilir (S3 maliyet)</li>
+</ol>
+<h3 id="hata-durumunda">9.2 Hata durumunda</h3>
+<ul>
+<li>Auto-rollback eşiği: gerçek MAPE &gt; %50 olursa <strong>otomatik</strong> önceki stabil sürüme dön</li>
+<li>Yöneticiye email + dashboard kırmızı</li>
+</ul>
+<hr />
+<h2 id="çok-müşteri-multi-tenant-izolasyon">10. Çok-müşteri (multi-tenant) izolasyon</h2>
+<h3 id="senaryo-1">10.1 Senaryo</h3>
+<p>Promats için MatPortal canlı. Sonra başka bir plastik fabrikasına da satıldı. <strong>İki müşterinin verisi karışmamalı.</strong></p>
+<h3 id="yaklaşım-separate-deployment">10.2 Yaklaşım — separate deployment</h3>
+<p>Tek codebase, <strong>iki ayrı VPS / iki ayrı DB</strong>.</p>
+<pre><code>matportal-promats.com.tr   ← Promats deployment
+matportal-firma2.com.tr    ← İkinci müşteri</code></pre>
+<ul>
+<li>DB ayrı: <code>promats_erp</code>, <code>firma2_erp</code></li>
+<li>Model storage ayrı: <code>s3://matportal/promats/</code>, <code>s3://matportal/firma2/</code></li>
+<li>LLM API key ayrı (her müşteri kendi limit’i)</li>
+<li>Konfig farklı (sektör, ölçek, mevsimsellik)</li>
+</ul>
+<h3 id="federated-learning-uzun-vadeli">10.3 Federated learning (uzun vadeli)</h3>
+<p>Çok müşteri olduğunda <strong>anonim</strong> federated model: - Her müşterinin lokal modeli kendi verisinde eğitilir - Sadece <strong>ağırlıklar</strong> merkez sunucuya gönderilir (veri gönderilmez) - Merkezi “meta-model” oluşur - Yeni müşterinin “ilk gün” performansı meta-model sayesinde iyi başlar</p>
+<p><strong>Faz 7’de değil, Faz 11+ vizyonu.</strong></p>
+<hr />
+<h2 id="maliyet-ve-performans">11. Maliyet ve performans</h2>
+<h3 id="eğitim-maliyeti">11.1 Eğitim maliyeti</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Model türü</th>
+<th>Eğitim süresi</th>
+<th>RAM</th>
+<th>CPU</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Naive</td>
+<td>&lt;1 sn</td>
+<td>100MB</td>
+<td>1 vCPU</td>
+</tr>
+<tr class="even">
+<td>Mevsimsel</td>
+<td>1 sn</td>
+<td>100MB</td>
+<td>1 vCPU</td>
+</tr>
+<tr class="odd">
+<td>Lineer regresyon</td>
+<td>5-10 sn</td>
+<td>200MB</td>
+<td>1 vCPU</td>
+</tr>
+<tr class="even">
+<td>Prophet</td>
+<td>30-60 sn / model</td>
+<td>500MB</td>
+<td>1-2 vCPU</td>
+</tr>
+<tr class="odd">
+<td>XGBoost</td>
+<td>1-3 dk / model</td>
+<td>1GB</td>
+<td>2-4 vCPU</td>
+</tr>
+<tr class="even">
+<td>LSTM</td>
+<td>5-30 dk / model</td>
+<td>2-4GB</td>
+<td>GPU önerilir</td>
+</tr>
+</tbody>
+</table>
+<p>500 bayi-ürün modeli × 1 dk Prophet = 8 saat. Pazartesi 03:00 cron’da bitsin diye <strong>paralel</strong> eğitim (8 worker × 1 saat).</p>
+<h3 id="tahmin-inference-maliyeti">11.2 Tahmin (inference) maliyeti</h3>
+<ul>
+<li>Prophet: 50-100ms/tahmin</li>
+<li>XGBoost: 5-10ms/tahmin</li>
+<li>Cache: 1 saatlik tahmin sonucu Redis’te → tekrar istenirse anlık</li>
+</ul>
+<h3 id="storage">11.3 Storage</h3>
+<ul>
+<li>Model artifact: 1-50MB / model</li>
+<li>500 model × 30MB = 15GB</li>
+<li>12 versiyon × 15GB = 180GB</li>
+<li>S3 ~$4/ay</li>
+</ul>
+<hr />
+<h2 id="db-şeması-ek-tablolar">12. DB şeması — ek tablolar</h2>
+<div class="sourceCode" id="cb17"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> feature_pipeline_kayitlari (</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  pipeline_versiyonu <span class="dt">varchar</span>(<span class="dv">32</span>),</span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>  girdi_tablo <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb17-5"><a href="#cb17-5" aria-hidden="true" tabindex="-1"></a>  feature_count <span class="dt">int</span>,</span>
+<span id="cb17-6"><a href="#cb17-6" aria-hidden="true" tabindex="-1"></a>  null_oran <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb17-7"><a href="#cb17-7" aria-hidden="true" tabindex="-1"></a>  outlier_count <span class="dt">int</span>,</span>
+<span id="cb17-8"><a href="#cb17-8" aria-hidden="true" tabindex="-1"></a>  calistirma_zamani datetime,</span>
+<span id="cb17-9"><a href="#cb17-9" aria-hidden="true" tabindex="-1"></a>  basarili tinyint</span>
+<span id="cb17-10"><a href="#cb17-10" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb17-11"><a href="#cb17-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-12"><a href="#cb17-12" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> ab_test_calistirma (</span>
+<span id="cb17-13"><a href="#cb17-13" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb17-14"><a href="#cb17-14" aria-hidden="true" tabindex="-1"></a>  champion_model_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb17-15"><a href="#cb17-15" aria-hidden="true" tabindex="-1"></a>  challenger_model_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb17-16"><a href="#cb17-16" aria-hidden="true" tabindex="-1"></a>  baslangic datetime,</span>
+<span id="cb17-17"><a href="#cb17-17" aria-hidden="true" tabindex="-1"></a>  bitis datetime,</span>
+<span id="cb17-18"><a href="#cb17-18" aria-hidden="true" tabindex="-1"></a>  champion_mape <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">4</span>),</span>
+<span id="cb17-19"><a href="#cb17-19" aria-hidden="true" tabindex="-1"></a>  challenger_mape <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">4</span>),</span>
+<span id="cb17-20"><a href="#cb17-20" aria-hidden="true" tabindex="-1"></a>  p_value <span class="dt">decimal</span>(<span class="dv">10</span>,<span class="dv">8</span>),</span>
+<span id="cb17-21"><a href="#cb17-21" aria-hidden="true" tabindex="-1"></a>  istatistiksel_anlamli tinyint,</span>
+<span id="cb17-22"><a href="#cb17-22" aria-hidden="true" tabindex="-1"></a>  sonuc ENUM(<span class="st">&#39;beklemede&#39;</span>,<span class="st">&#39;promote&#39;</span>,<span class="st">&#39;retire&#39;</span>,<span class="st">&#39;sürer&#39;</span>)</span>
+<span id="cb17-23"><a href="#cb17-23" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb17-24"><a href="#cb17-24" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb17-25"><a href="#cb17-25" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> excel_yukleme_gecmisi (</span>
+<span id="cb17-26"><a href="#cb17-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb17-27"><a href="#cb17-27" aria-hidden="true" tabindex="-1"></a>  user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb17-28"><a href="#cb17-28" aria-hidden="true" tabindex="-1"></a>  dosya_tipi ENUM(<span class="st">&#39;siparis&#39;</span>,<span class="st">&#39;kampanya&#39;</span>,<span class="st">&#39;ham_madde&#39;</span>,<span class="st">&#39;musteri&#39;</span>,<span class="st">&#39;urun&#39;</span>),</span>
+<span id="cb17-29"><a href="#cb17-29" aria-hidden="true" tabindex="-1"></a>  dosya_adi <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb17-30"><a href="#cb17-30" aria-hidden="true" tabindex="-1"></a>  satir_sayisi <span class="dt">int</span>,</span>
+<span id="cb17-31"><a href="#cb17-31" aria-hidden="true" tabindex="-1"></a>  basarili <span class="dt">int</span>,</span>
+<span id="cb17-32"><a href="#cb17-32" aria-hidden="true" tabindex="-1"></a>  hata <span class="dt">int</span>,</span>
+<span id="cb17-33"><a href="#cb17-33" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;isleniyor&#39;</span>,<span class="st">&#39;tamamlandi&#39;</span>,<span class="st">&#39;hatali&#39;</span>),</span>
+<span id="cb17-34"><a href="#cb17-34" aria-hidden="true" tabindex="-1"></a>  hata_log JSON,</span>
+<span id="cb17-35"><a href="#cb17-35" aria-hidden="true" tabindex="-1"></a>  yeniden_egitim_tetikledi tinyint,</span>
+<span id="cb17-36"><a href="#cb17-36" aria-hidden="true" tabindex="-1"></a>  yuklendi_at datetime</span>
+<span id="cb17-37"><a href="#cb17-37" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<hr />
+<h2 id="ui-adminml-laboratuvari">13. UI — <code>/admin/ml-laboratuvari</code></h2>
+<h3 id="dashboard">13.1 Dashboard</h3>
+<ul>
+<li><strong>Aktif modeller</strong>: liste (model ailesi, versiyon, MAPE, son eğitim)</li>
+<li><strong>Eğitim kuyruğu</strong>: “şu anda 5 model eğitiliyor”</li>
+<li><strong>A/B testler</strong>: aktif test listesi, sonuç bekleniyor</li>
+<li><strong>Veri sağlığı</strong>: outlier %, eksik %, duplicate %</li>
+</ul>
+<h3 id="model-detay">13.2 Model detay</h3>
+<ul>
+<li>Eğitim geçmişi (versiyonlar tablosu)</li>
+<li>Performance trend grafiği</li>
+<li>Feature importance bar chart</li>
+<li>“Yeniden eğit” butonu</li>
+<li>“Rollback” butonu</li>
+<li>Hyperparameter geçmişi</li>
+</ul>
+<h3 id="yönetici-geri-besleme">13.3 Yönetici geri besleme</h3>
+<ul>
+<li>Bayi-ürün tahmini gösterilir</li>
+<li>“Düzelt” butonu</li>
+<li>Düzeltme nedeni metin alanı</li>
+<li>“Modeli yenile” butonu (calibration sürer)</li>
+</ul>
+<hr />
+<h2 id="açık-karar-noktaları-faz-7">14. Açık karar noktaları (Faz 7)</h2>
+<ol type="1">
+<li><strong>Python ML service:</strong> ayrı container mı, Bun process mi spawn? (Önerim: ayrı container, FastAPI)</li>
+<li><strong>MLflow vs custom:</strong> açık kaynak çözüm mi yazıyoruz mu? (Önerim: MLflow başla, gerekirse custom)</li>
+<li><strong>Federated learning:</strong> Faz 7’de mi, sonraki faz mı? (Önerim: sonraki)</li>
+<li><strong>Excel upload kolon mapping:</strong> otomatik tespit ne kadar gelişmiş? (Önerim: önce manuel, AI sonra)</li>
+<li><strong>GPU gerek olur mu:</strong> LSTM için VPS yetersiz, cloud GPU mu? (Önerim: ihtiyaç doğunca AWS Sagemaker)</li>
+<li><strong>Calibration vs full retrain:</strong> ne sıklıkla kalibrasyon? (Önerim: günlük inkremental, haftalık tam)</li>
+<li><strong>Audit retention:</strong> model versiyon kaç yıl saklanır? (Önerim: 3 yıl + retired sonra silinir)</li>
+</ol>
+<hr />
+<h2 id="faz-7-çıktı-listesi">15. Faz 7 çıktı listesi</h2>
+<p>✅ Python ML service (FastAPI) ayağa kalktı ✅ MLflow + S3 model storage ✅ Excel upload UX (kolon mapping + preview + hata düzeltme) ✅ Multivariate feature pipeline ✅ XGBoost + Prophet modelleri çok değişkenli eğitilebiliyor ✅ A/B test mekanizması (champion/challenger) ✅ Active learning (yönetici düzeltmesi → calibration) ✅ Açıklanabilirlik (SHAP UI + LLM doğal dil) ✅ Auto-rollback (MAPE &gt; %50 → eski modele dön) ✅ Multi-deployment ready (env-based config) ✅ Audit log: her eğitim, her tahmin, her geri besleme</p>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("14 — Eğitilebilir Modeller &amp; MLOps: Derinlemesine (Faz 7)").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

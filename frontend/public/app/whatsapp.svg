@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="48"
+  height="48"
+  viewBox="0 0 48 48"
+  fill="none"
+>
+  <!-- Outer circle (matches other sidebar icon style) -->
+  <circle
+    cx="24"
+    cy="24"
+    r="22"
+    stroke="#0F172A"
+    stroke-opacity="0.25"
+    stroke-width="2"
+  />
+
+  <!-- WhatsApp bubble -->
+  <path
+    d="M24 10.5C16.96 10.5 11.25 16.21 11.25 23.25C11.25 25.75 11.96 28.09 13.2 30.08L12 36.75L18.8 35.62C20.66 36.63 22.79 37.2 25.05 37.2C32.09 37.2 37.8 31.49 37.8 24.45C37.8 17.41 31.99 10.5 24 10.5Z"
+    stroke="#0F172A"
+    stroke-width="2"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+    opacity="0.9"
+  />
+
+  <!-- Phone handset inside bubble -->
+  <path
+    d="M20.2 19.2c.3-.7.7-.8 1.1-.8h1c.3 0 .7.1.8.6l.8 2c.1.4.1.7-.2 1l-.7.8c-.2.2-.2.6 0 .9c.7 1.4 2 2.7 3.5 3.5c.3.2.7.2.9 0l.9-.7c.3-.3.7-.3 1.1-.2l2 .8c.4.2.6.5.6.9v1c0 .5-.2.9-.8 1.1c-.8.3-2.4.5-4.8-.6c-2.7-1.2-5.2-3.7-6.4-6.4c-1.1-2.4-.9-4-.6-4.8Z"
+    stroke="#0F172A"
+    stroke-width="2"
+    stroke-linejoin="round"
+    stroke-linecap="round"
+    opacity="0.9"
+  />
+</svg>

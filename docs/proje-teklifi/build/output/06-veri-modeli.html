@@ -1,0 +1,1020 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>06 — Veri Modeli — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="tartisma/index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="tartisma/12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="tartisma/13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="tartisma/14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="tartisma/15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>06 — Veri Modeli</strong></div>
+  <div class="actions">
+    <a href="index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="veri-modeli">06 — Veri Modeli</h1>
+<p>Bu doküman MatPortal’ın <strong>eklenen 30+ tabloyu</strong>, mevcut Paspas tablolarıyla <strong>ilişkilerini</strong>, <strong>migration stratejisini</strong> ve <strong>veri yaşam döngüsünü</strong> anlatır. Detaylı SQL şemaları her fazın derinlemesine dokümanında; burada <strong>bütünlük resmi</strong> vardır.</p>
+<h2 id="genel-prensipler">1. Genel Prensipler</h2>
+<h3 id="konvansiyonlar">1.1 Konvansiyonlar</h3>
+<ul>
+<li><strong>PK:</strong> <code>char(36)</code> UUID v4 (Promats projeleri standardı)</li>
+<li><strong>Tablo isimleri:</strong> Türkçe + snake_case (<code>musteriler</code>, <code>tahmin_calistirma</code>)</li>
+<li><strong>Audit kolonları:</strong> <code>created_at datetime</code>, <code>updated_at datetime</code>, <code>created_by char(36)</code>, <code>updated_by char(36)</code></li>
+<li><strong>Soft delete:</strong> <code>deleted_at datetime NULL</code> (kritik tablolarda)</li>
+<li><strong>JSON kolonları:</strong> MySQL 8 native JSON, schema validation Drizzle/Zod ile</li>
+<li><strong>Index:</strong> kompozit index sorgu pattern’lerine göre, <code>EXPLAIN</code> ile doğrulanır</li>
+<li><strong>FK:</strong> <code>ON DELETE RESTRICT</code> varsayılan (kasıtlı CASCADE açık tanımlanır)</li>
+</ul>
+<h3 id="migration-kuralı">1.2 Migration kuralı</h3>
+<p><strong>Kritik:</strong> <a href="../../CLAUDE.md">CLAUDE.md</a> gereği <code>ALTER TABLE</code> lokal ortamda yasak. Schema değişikliği <strong>seed dosyası</strong> (<code>backend/src/db/seed/sql/0XX_*.sql</code>) güncellenip <code>db:seed:fresh</code> ile sıfırdan kurulur. Production’da migration script ayrı yönetilir.</p>
+<p>Bu doküman seed dosyalarına eklenen <strong>yeni 30+ tabloyu</strong> listeler.</p>
+<h2 id="mevcut-paspas-tabloları-paylaşılan">2. Mevcut Paspas Tabloları (paylaşılan)</h2>
+<p>MatPortal’ın <strong>read</strong> ve sınırlı <strong>write</strong> yaptığı mevcut tablolar:</p>
+<table>
+<colgroup>
+<col style="width: 18%" />
+<col style="width: 26%" />
+<col style="width: 55%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tablo</th>
+<th>Açıklama</th>
+<th>MatPortal kullanımı</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>musteriler</code></td>
+<td>Bayi/müşteri ana kayıt</td>
+<td><code>portal_kullanicilari.musteri_id</code> FK</td>
+</tr>
+<tr class="even">
+<td><code>urunler</code></td>
+<td>Ürün katalog</td>
+<td><code>portal_sepet_kalemleri</code>, <code>tahmin_calistirma</code> FK</td>
+</tr>
+<tr class="odd">
+<td><code>urun_kategorileri</code></td>
+<td>Kategori</td>
+<td>Faz 6 katalog filtre</td>
+</tr>
+<tr class="even">
+<td><code>satis_siparisleri</code></td>
+<td>Sipariş</td>
+<td>Portal’dan <code>repoCreate</code> çağrıyla yazılır</td>
+</tr>
+<tr class="odd">
+<td><code>siparis_kalemleri</code></td>
+<td>Sipariş kalemi</td>
+<td>Portal’dan dolaylı yazılır</td>
+</tr>
+<tr class="even">
+<td><code>uretim_emirleri</code></td>
+<td>Üretim emri</td>
+<td>Portal sipariş takip read</td>
+</tr>
+<tr class="odd">
+<td><code>sevkiyat_emirleri</code></td>
+<td>Sevkiyat</td>
+<td>Portal sipariş takip read</td>
+</tr>
+<tr class="even">
+<td><code>hareketler</code></td>
+<td>Cari hareket</td>
+<td>Portal cari read</td>
+</tr>
+<tr class="odd">
+<td><code>stoklar</code></td>
+<td>Stok</td>
+<td>Faz 4 + portal rezervasyon</td>
+</tr>
+<tr class="even">
+<td><code>recete_*</code></td>
+<td>Reçete</td>
+<td>Faz 4 hammadde projeksiyon</td>
+</tr>
+<tr class="odd">
+<td><code>makine_havuzu</code></td>
+<td>Makine</td>
+<td>Faz 2 kapasite</td>
+</tr>
+<tr class="even">
+<td><code>vardiya_*</code></td>
+<td>Vardiya</td>
+<td>Faz 2 üretim hacmi</td>
+</tr>
+<tr class="odd">
+<td><code>kullanicilar</code></td>
+<td>Kullanıcı</td>
+<td>Tüm yeni modüller auth</td>
+</tr>
+<tr class="even">
+<td><code>kategoriler</code>, <code>tanimlar</code></td>
+<td>Tanım tabloları</td>
+<td>Faz 6</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Kritik prensip:</strong> MatPortal Paspas tablolarına <strong>doğrudan INSERT/UPDATE/DELETE yapmaz</strong>. Yazma işlemleri Paspas’ın repository fonksiyonlarını çağırır (örn. <code>satis_siparisleri/repository.ts:repoCreate</code>). Bu sayede iş kuralları korunur.</p>
+<p>İstisna: <code>musteriler.son_giris_at</code>, <code>musteriler.portal_aktif_mi</code> gibi portal-spesifik kolonlar. Bunlar <code>musteriler</code> tablosuna eklenir ve portal yazar.</p>
+<h2 id="yeni-tablolar-faz-bazlı">3. Yeni Tablolar — Faz Bazlı</h2>
+<h3 id="faz-1-talep-toplama-altyapısı-3-tablo">Faz 1 — Talep Toplama Altyapısı (3 tablo)</h3>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> talep_havuzu (</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  kaynak ENUM(<span class="st">&#39;whatsapp&#39;</span>,<span class="st">&#39;telefon&#39;</span>,<span class="st">&#39;email&#39;</span>,<span class="st">&#39;portal&#39;</span>,<span class="st">&#39;manuel&#39;</span>,<span class="st">&#39;sohbet&#39;</span>,<span class="st">&#39;saha&#39;</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  kaynak_referans <span class="dt">varchar</span>(<span class="dv">255</span>),    <span class="co">-- WA mesaj ID, email subject, vb.</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  musteri_id <span class="dt">char</span>(<span class="dv">36</span>) FK musteriler.<span class="kw">id</span> <span class="kw">NULL</span>,  <span class="co">-- bilinen müşteri</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  ham_metin text,                  <span class="co">-- orijinal mesaj/not</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  yapilandirilmis_json JSON,       <span class="co">-- LLM çıktı: { urunler: [...], vade, vb. }</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;yeni&#39;</span>,<span class="st">&#39;isleniyor&#39;</span>,<span class="st">&#39;siparise_donustu&#39;</span>,<span class="st">&#39;reddedildi&#39;</span>,<span class="st">&#39;kapatildi&#39;</span>),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  oncelik ENUM(<span class="st">&#39;düşük&#39;</span>,<span class="st">&#39;orta&#39;</span>,<span class="st">&#39;yüksek&#39;</span>,<span class="st">&#39;kritik&#39;</span>),</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  ai_guven_skoru <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  atanan_user_id <span class="dt">char</span>(<span class="dv">36</span>) FK kullanicilar.<span class="kw">id</span> <span class="kw">NULL</span>,</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  donusturulen_siparis_id <span class="dt">char</span>(<span class="dv">36</span>) <span class="kw">NULL</span>,  <span class="co">-- siparise dönüştüyse</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>  created_at datetime,</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  created_by <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  updated_at datetime,</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (durum, oncelik, created_at),</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (musteri_id)</span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> talep_kalemleri (</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  talep_id <span class="dt">char</span>(<span class="dv">36</span>) FK talep_havuzu.<span class="kw">id</span>,</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  urun_id <span class="dt">char</span>(<span class="dv">36</span>) FK urunler.<span class="kw">id</span> <span class="kw">NULL</span>,</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  urun_metin <span class="dt">varchar</span>(<span class="dv">255</span>),         <span class="co">-- LLM çıkardı ama eşleştirilmediyse</span></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>  miktar <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a>  birim_fiyat_beklenti <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>) <span class="kw">NULL</span>,</span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>  notlar text</span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-31"><a href="#cb1-31" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> talep_etkilesim (</span>
+<span id="cb1-32"><a href="#cb1-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb1-33"><a href="#cb1-33" aria-hidden="true" tabindex="-1"></a>  talep_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb1-34"><a href="#cb1-34" aria-hidden="true" tabindex="-1"></a>  etkilesim_tipi ENUM(<span class="st">&#39;not&#39;</span>,<span class="st">&#39;arama&#39;</span>,<span class="st">&#39;email&#39;</span>,<span class="st">&#39;toplanti&#39;</span>,<span class="st">&#39;statu_degisikligi&#39;</span>),</span>
+<span id="cb1-35"><a href="#cb1-35" aria-hidden="true" tabindex="-1"></a>  user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb1-36"><a href="#cb1-36" aria-hidden="true" tabindex="-1"></a>  detay text,</span>
+<span id="cb1-37"><a href="#cb1-37" aria-hidden="true" tabindex="-1"></a>  ekler JSON,</span>
+<span id="cb1-38"><a href="#cb1-38" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb1-39"><a href="#cb1-39" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="faz-2-sipariş-tahmin-motoru-4-tablo">Faz 2 — Sipariş Tahmin Motoru (4 tablo)</h3>
+<div class="sourceCode" id="cb2"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> tahmin_modelleri (</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">scope</span> ENUM(<span class="st">&#39;genel&#39;</span>,<span class="st">&#39;segment&#39;</span>,<span class="st">&#39;bayi&#39;</span>,<span class="st">&#39;bayi_urun&#39;</span>),</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  scope_value <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  algoritma <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  egitim_tarihi datetime,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  egitim_verisi_baslangic <span class="dt">date</span>,</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  egitim_verisi_bitis <span class="dt">date</span>,</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  egitim_kayit_sayisi <span class="dt">int</span>,</span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>  dogruluk_metrikleri JSON,        <span class="co">-- { mape, rmse, mae, bias, coverage }</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  hyperparametreler JSON,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  model_dosyasi_yolu text,</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  aktif tinyint,</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>  created_at datetime,</span>
+<span id="cb2-16"><a href="#cb2-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (<span class="kw">scope</span>, scope_value, aktif)</span>
+<span id="cb2-17"><a href="#cb2-17" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-18"><a href="#cb2-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-19"><a href="#cb2-19" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> tahmin_calistirma (</span>
+<span id="cb2-20"><a href="#cb2-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb2-21"><a href="#cb2-21" aria-hidden="true" tabindex="-1"></a>  bayi_id <span class="dt">char</span>(<span class="dv">36</span>) FK musteriler.<span class="kw">id</span>,</span>
+<span id="cb2-22"><a href="#cb2-22" aria-hidden="true" tabindex="-1"></a>  urun_id <span class="dt">char</span>(<span class="dv">36</span>) FK urunler.<span class="kw">id</span>,</span>
+<span id="cb2-23"><a href="#cb2-23" aria-hidden="true" tabindex="-1"></a>  donem_baslangic <span class="dt">date</span>,</span>
+<span id="cb2-24"><a href="#cb2-24" aria-hidden="true" tabindex="-1"></a>  donem_bitis <span class="dt">date</span>,</span>
+<span id="cb2-25"><a href="#cb2-25" aria-hidden="true" tabindex="-1"></a>  tahmini_adet <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb2-26"><a href="#cb2-26" aria-hidden="true" tabindex="-1"></a>  guven_alt <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb2-27"><a href="#cb2-27" aria-hidden="true" tabindex="-1"></a>  guven_ust <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb2-28"><a href="#cb2-28" aria-hidden="true" tabindex="-1"></a>  guven_yuzdesi <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb2-29"><a href="#cb2-29" aria-hidden="true" tabindex="-1"></a>  guven_skoru <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb2-30"><a href="#cb2-30" aria-hidden="true" tabindex="-1"></a>  metod <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb2-31"><a href="#cb2-31" aria-hidden="true" tabindex="-1"></a>  model_id <span class="dt">char</span>(<span class="dv">36</span>) FK tahmin_modelleri.<span class="kw">id</span>,</span>
+<span id="cb2-32"><a href="#cb2-32" aria-hidden="true" tabindex="-1"></a>  sinyaller JSON,</span>
+<span id="cb2-33"><a href="#cb2-33" aria-hidden="true" tabindex="-1"></a>  uyari_bayraklari JSON,</span>
+<span id="cb2-34"><a href="#cb2-34" aria-hidden="true" tabindex="-1"></a>  calistirma_zamani datetime,</span>
+<span id="cb2-35"><a href="#cb2-35" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (bayi_id, urun_id, donem_baslangic),</span>
+<span id="cb2-36"><a href="#cb2-36" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (calistirma_zamani)</span>
+<span id="cb2-37"><a href="#cb2-37" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-38"><a href="#cb2-38" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-39"><a href="#cb2-39" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> tahmin_dogruluk (</span>
+<span id="cb2-40"><a href="#cb2-40" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb2-41"><a href="#cb2-41" aria-hidden="true" tabindex="-1"></a>  tahmin_id <span class="dt">char</span>(<span class="dv">36</span>) FK tahmin_calistirma.<span class="kw">id</span>,</span>
+<span id="cb2-42"><a href="#cb2-42" aria-hidden="true" tabindex="-1"></a>  gercek_adet <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb2-43"><a href="#cb2-43" aria-hidden="true" tabindex="-1"></a>  mape <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">4</span>),</span>
+<span id="cb2-44"><a href="#cb2-44" aria-hidden="true" tabindex="-1"></a>  rmse <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">4</span>),</span>
+<span id="cb2-45"><a href="#cb2-45" aria-hidden="true" tabindex="-1"></a>  bias <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">4</span>),</span>
+<span id="cb2-46"><a href="#cb2-46" aria-hidden="true" tabindex="-1"></a>  hesaplandi_at datetime</span>
+<span id="cb2-47"><a href="#cb2-47" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb2-48"><a href="#cb2-48" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-49"><a href="#cb2-49" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> siparis_gecmisi_yuklenen (</span>
+<span id="cb2-50"><a href="#cb2-50" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb2-51"><a href="#cb2-51" aria-hidden="true" tabindex="-1"></a>  yukleyen_user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb2-52"><a href="#cb2-52" aria-hidden="true" tabindex="-1"></a>  dosya_adi <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb2-53"><a href="#cb2-53" aria-hidden="true" tabindex="-1"></a>  satir_sayisi <span class="dt">int</span>,</span>
+<span id="cb2-54"><a href="#cb2-54" aria-hidden="true" tabindex="-1"></a>  basarili <span class="dt">int</span>,</span>
+<span id="cb2-55"><a href="#cb2-55" aria-hidden="true" tabindex="-1"></a>  hata <span class="dt">int</span>,</span>
+<span id="cb2-56"><a href="#cb2-56" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;yuklendi&#39;</span>,<span class="st">&#39;isleniyor&#39;</span>,<span class="st">&#39;tamamlandi&#39;</span>,<span class="st">&#39;hatali&#39;</span>),</span>
+<span id="cb2-57"><a href="#cb2-57" aria-hidden="true" tabindex="-1"></a>  hata_log JSON,</span>
+<span id="cb2-58"><a href="#cb2-58" aria-hidden="true" tabindex="-1"></a>  yuklendi_at datetime</span>
+<span id="cb2-59"><a href="#cb2-59" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/12-tahmin-motoru-derinlemesine.md"><code>tartisma/12-tahmin-motoru-derinlemesine.md</code></a></p>
+</blockquote>
+<h3 id="faz-3-müşteri-keşif-3-tablo">Faz 3 — Müşteri Keşif (3 tablo)</h3>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> lead_havuzu (</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  kaynak ENUM(<span class="st">&#39;tobb&#39;</span>,<span class="st">&#39;sanayim_net&#39;</span>,<span class="st">&#39;google_places&#39;</span>,<span class="st">&#39;apollo&#39;</span>,<span class="st">&#39;hunter&#39;</span>,<span class="st">&#39;manuel&#39;</span>,<span class="st">&#39;onerilen&#39;</span>),</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  firma_adi <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  vergi_no <span class="dt">varchar</span>(<span class="dv">20</span>),</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  sektor <span class="dt">varchar</span>(<span class="dv">128</span>),</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  alt_sektor <span class="dt">varchar</span>(<span class="dv">128</span>),</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  sehir <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  ilce <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>  adres text,</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  enlem <span class="dt">decimal</span>(<span class="dv">10</span>,<span class="dv">7</span>),</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>  boylam <span class="dt">decimal</span>(<span class="dv">10</span>,<span class="dv">7</span>),</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>  web_sitesi <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>  telefon <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  email <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  calisan_sayisi <span class="dt">int</span> <span class="kw">NULL</span>,</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  ciro_tahmini <span class="dt">decimal</span>(<span class="dv">15</span>,<span class="dv">2</span>) <span class="kw">NULL</span>,</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>  benzerlik_skoru <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),    <span class="co">-- mevcut bayilere ML benzerlik</span></span>
+<span id="cb3-19"><a href="#cb3-19" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;yeni&#39;</span>,<span class="st">&#39;arastiriliyor&#39;</span>,<span class="st">&#39;temas&#39;</span>,<span class="st">&#39;gorusme&#39;</span>,<span class="st">&#39;kazanildi&#39;</span>,<span class="st">&#39;kayip&#39;</span>,<span class="st">&#39;reddedildi&#39;</span>),</span>
+<span id="cb3-20"><a href="#cb3-20" aria-hidden="true" tabindex="-1"></a>  atanan_user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb3-21"><a href="#cb3-21" aria-hidden="true" tabindex="-1"></a>  donusturulen_musteri_id <span class="dt">char</span>(<span class="dv">36</span>) <span class="kw">NULL</span>,</span>
+<span id="cb3-22"><a href="#cb3-22" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb3-23"><a href="#cb3-23" aria-hidden="true" tabindex="-1"></a>  ham_veri JSON,                   <span class="co">-- kaynak API response</span></span>
+<span id="cb3-24"><a href="#cb3-24" aria-hidden="true" tabindex="-1"></a>  created_at datetime,</span>
+<span id="cb3-25"><a href="#cb3-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (kaynak, durum),</span>
+<span id="cb3-26"><a href="#cb3-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (sehir, sektor),</span>
+<span id="cb3-27"><a href="#cb3-27" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (benzerlik_skoru <span class="kw">DESC</span>)</span>
+<span id="cb3-28"><a href="#cb3-28" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb3-29"><a href="#cb3-29" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-30"><a href="#cb3-30" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> lead_etkilesim (</span>
+<span id="cb3-31"><a href="#cb3-31" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb3-32"><a href="#cb3-32" aria-hidden="true" tabindex="-1"></a>  lead_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb3-33"><a href="#cb3-33" aria-hidden="true" tabindex="-1"></a>  user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb3-34"><a href="#cb3-34" aria-hidden="true" tabindex="-1"></a>  etkilesim_tipi ENUM(<span class="st">&#39;not&#39;</span>,<span class="st">&#39;arama&#39;</span>,<span class="st">&#39;email&#39;</span>,<span class="st">&#39;toplanti&#39;</span>,<span class="st">&#39;demo&#39;</span>,<span class="st">&#39;teklif&#39;</span>),</span>
+<span id="cb3-35"><a href="#cb3-35" aria-hidden="true" tabindex="-1"></a>  detay text,</span>
+<span id="cb3-36"><a href="#cb3-36" aria-hidden="true" tabindex="-1"></a>  sonuc <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb3-37"><a href="#cb3-37" aria-hidden="true" tabindex="-1"></a>  ekler JSON,</span>
+<span id="cb3-38"><a href="#cb3-38" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb3-39"><a href="#cb3-39" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb3-40"><a href="#cb3-40" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-41"><a href="#cb3-41" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> outreach_kampanya (</span>
+<span id="cb3-42"><a href="#cb3-42" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb3-43"><a href="#cb3-43" aria-hidden="true" tabindex="-1"></a>  ad <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb3-44"><a href="#cb3-44" aria-hidden="true" tabindex="-1"></a>  hedef_segment JSON,              <span class="co">-- { sektor, sehir, calisan_min, ... }</span></span>
+<span id="cb3-45"><a href="#cb3-45" aria-hidden="true" tabindex="-1"></a>  email_sablonu_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb3-46"><a href="#cb3-46" aria-hidden="true" tabindex="-1"></a>  baslangic_tarihi datetime,</span>
+<span id="cb3-47"><a href="#cb3-47" aria-hidden="true" tabindex="-1"></a>  bitis_tarihi datetime,</span>
+<span id="cb3-48"><a href="#cb3-48" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;taslak&#39;</span>,<span class="st">&#39;aktif&#39;</span>,<span class="st">&#39;tamamlandi&#39;</span>,<span class="st">&#39;iptal&#39;</span>),</span>
+<span id="cb3-49"><a href="#cb3-49" aria-hidden="true" tabindex="-1"></a>  metrikler JSON,                  <span class="co">-- { gonderilen, acilan, tiklanan, donusum }</span></span>
+<span id="cb3-50"><a href="#cb3-50" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb3-51"><a href="#cb3-51" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="faz-4-stok-tedarik-4-tablo-mevcut-genişler">Faz 4 — Stok &amp; Tedarik (4 tablo + mevcut genişler)</h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> tuketim_hizi (</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  urun_id <span class="dt">char</span>(<span class="dv">36</span>) FK urunler.<span class="kw">id</span>,</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  donem <span class="dt">date</span>,                      <span class="co">-- ay başı</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  toplam_tuketim <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  ortalama_gunluk <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">4</span>),</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>  std_sapma <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">4</span>),</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  min_gunluk <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  max_gunluk <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  hesaplandi_at datetime,</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">UNIQUE</span> (urun_id, donem)</span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> rop_ayarlari (</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>  urun_id <span class="dt">char</span>(<span class="dv">36</span>) FK urunler.<span class="kw">id</span>,</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  reorder_point <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),     <span class="co">-- bu seviye altına düşünce sipariş aç</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  guvenli_stok <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  max_stok <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>  lead_time_gun <span class="dt">int</span>,</span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>  hesap_metodu ENUM(<span class="st">&#39;manuel&#39;</span>,<span class="st">&#39;otomatik&#39;</span>,<span class="st">&#39;hibrit&#39;</span>),</span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>  son_hesap_tarihi datetime,</span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>  notlar text</span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> tedarikci_skor (</span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>  tedarikci_id <span class="dt">char</span>(<span class="dv">36</span>) FK musteriler.<span class="kw">id</span>,  <span class="co">-- musteriler tablosu (tedarikçi de orada)</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>  donem <span class="dt">date</span>,</span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>  zamaninda_teslim_orani <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>  kalite_skoru <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>  fiyat_rekabet_skoru <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>  iletisim_skoru <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>  toplam_skor <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>  hesaplandi_at datetime</span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> po_taslaklari (</span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>  tedarikci_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>  alternatif_tedarikci_ids JSON,</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>  kalemler JSON,                   <span class="co">-- [{urun_id, miktar, fiyat}]</span></span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>  toplam_tutar <span class="dt">decimal</span>(<span class="dv">15</span>,<span class="dv">2</span>),</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>  ai_gerekce text,                 <span class="co">-- LLM&#39;in açıklaması</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;taslak&#39;</span>,<span class="st">&#39;onayli&#39;</span>,<span class="st">&#39;reddedildi&#39;</span>,<span class="st">&#39;gonderildi&#39;</span>),</span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>  onaylayan_user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>  onay_tarihi datetime,</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>  donusturulen_satinalma_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="faz-5-bayi-scraping-churn-5-tablo">Faz 5 — Bayi Scraping &amp; Churn (5 tablo)</h3>
+<div class="sourceCode" id="cb5"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> web_kazima_hedefleri (</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  bayi_id <span class="dt">char</span>(<span class="dv">36</span>) FK musteriler.<span class="kw">id</span> <span class="kw">NULL</span>,  <span class="co">-- rakip de olabilir, NULL</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>  url <span class="dt">varchar</span>(<span class="dv">500</span>),</span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>  tip ENUM(<span class="st">&#39;site&#39;</span>,<span class="st">&#39;instagram&#39;</span>,<span class="st">&#39;facebook&#39;</span>,<span class="st">&#39;google_maps&#39;</span>,<span class="st">&#39;linkedin&#39;</span>,<span class="st">&#39;rakip&#39;</span>),</span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>  oncelik ENUM(<span class="st">&#39;düşük&#39;</span>,<span class="st">&#39;orta&#39;</span>,<span class="st">&#39;yüksek&#39;</span>,<span class="st">&#39;kritik&#39;</span>),</span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>  sıklık ENUM(<span class="st">&#39;günlük&#39;</span>,<span class="st">&#39;haftalık&#39;</span>,<span class="st">&#39;aylık&#39;</span>),</span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>  son_kazima datetime,</span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>  sonraki_kazima datetime,</span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>  aktif tinyint,</span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (sonraki_kazima, aktif)</span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> web_kazima_kayitlari (</span>
+<span id="cb5-16"><a href="#cb5-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb5-17"><a href="#cb5-17" aria-hidden="true" tabindex="-1"></a>  hedef_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb5-18"><a href="#cb5-18" aria-hidden="true" tabindex="-1"></a>  baslangic datetime,</span>
+<span id="cb5-19"><a href="#cb5-19" aria-hidden="true" tabindex="-1"></a>  bitis datetime,</span>
+<span id="cb5-20"><a href="#cb5-20" aria-hidden="true" tabindex="-1"></a>  http_durum <span class="dt">int</span>,</span>
+<span id="cb5-21"><a href="#cb5-21" aria-hidden="true" tabindex="-1"></a>  yanit_boyutu <span class="dt">int</span>,</span>
+<span id="cb5-22"><a href="#cb5-22" aria-hidden="true" tabindex="-1"></a>  s3_yol text,</span>
+<span id="cb5-23"><a href="#cb5-23" aria-hidden="true" tabindex="-1"></a>  parse_basarili tinyint,</span>
+<span id="cb5-24"><a href="#cb5-24" aria-hidden="true" tabindex="-1"></a>  hata text,</span>
+<span id="cb5-25"><a href="#cb5-25" aria-hidden="true" tabindex="-1"></a>  parsed_data JSON,</span>
+<span id="cb5-26"><a href="#cb5-26" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (hedef_id, baslangic <span class="kw">DESC</span>)</span>
+<span id="cb5-27"><a href="#cb5-27" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb5-28"><a href="#cb5-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-29"><a href="#cb5-29" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> bayi_sinyalleri (</span>
+<span id="cb5-30"><a href="#cb5-30" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb5-31"><a href="#cb5-31" aria-hidden="true" tabindex="-1"></a>  bayi_id <span class="dt">char</span>(<span class="dv">36</span>) FK musteriler.<span class="kw">id</span>,</span>
+<span id="cb5-32"><a href="#cb5-32" aria-hidden="true" tabindex="-1"></a>  tip <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb5-33"><a href="#cb5-33" aria-hidden="true" tabindex="-1"></a>  deger <span class="dt">varchar</span>(<span class="dv">500</span>),</span>
+<span id="cb5-34"><a href="#cb5-34" aria-hidden="true" tabindex="-1"></a>  kanit text,</span>
+<span id="cb5-35"><a href="#cb5-35" aria-hidden="true" tabindex="-1"></a>  guven <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb5-36"><a href="#cb5-36" aria-hidden="true" tabindex="-1"></a>  puan <span class="dt">int</span>,</span>
+<span id="cb5-37"><a href="#cb5-37" aria-hidden="true" tabindex="-1"></a>  kaynak ENUM(<span class="st">&#39;web&#39;</span>,<span class="st">&#39;sosyal&#39;</span>,<span class="st">&#39;manuel&#39;</span>,<span class="st">&#39;vergi&#39;</span>,<span class="st">&#39;ml_model&#39;</span>),</span>
+<span id="cb5-38"><a href="#cb5-38" aria-hidden="true" tabindex="-1"></a>  kaynak_kayit_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb5-39"><a href="#cb5-39" aria-hidden="true" tabindex="-1"></a>  tespit_tarihi datetime,</span>
+<span id="cb5-40"><a href="#cb5-40" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;yeni&#39;</span>,<span class="st">&#39;dogrulandi&#39;</span>,<span class="st">&#39;red&#39;</span>,<span class="st">&#39;gozardi&#39;</span>),</span>
+<span id="cb5-41"><a href="#cb5-41" aria-hidden="true" tabindex="-1"></a>  manuel_yorum text,</span>
+<span id="cb5-42"><a href="#cb5-42" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (bayi_id, tespit_tarihi <span class="kw">DESC</span>)</span>
+<span id="cb5-43"><a href="#cb5-43" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb5-44"><a href="#cb5-44" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-45"><a href="#cb5-45" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> churn_skor_gecmisi (</span>
+<span id="cb5-46"><a href="#cb5-46" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb5-47"><a href="#cb5-47" aria-hidden="true" tabindex="-1"></a>  bayi_id <span class="dt">char</span>(<span class="dv">36</span>) FK musteriler.<span class="kw">id</span>,</span>
+<span id="cb5-48"><a href="#cb5-48" aria-hidden="true" tabindex="-1"></a>  tarih <span class="dt">date</span>,</span>
+<span id="cb5-49"><a href="#cb5-49" aria-hidden="true" tabindex="-1"></a>  skor <span class="dt">decimal</span>(<span class="dv">5</span>,<span class="dv">2</span>),</span>
+<span id="cb5-50"><a href="#cb5-50" aria-hidden="true" tabindex="-1"></a>  risk ENUM(<span class="st">&#39;düşük&#39;</span>,<span class="st">&#39;orta&#39;</span>,<span class="st">&#39;yüksek&#39;</span>,<span class="st">&#39;kritik&#39;</span>),</span>
+<span id="cb5-51"><a href="#cb5-51" aria-hidden="true" tabindex="-1"></a>  aktif_sinyaller JSON,</span>
+<span id="cb5-52"><a href="#cb5-52" aria-hidden="true" tabindex="-1"></a>  ml_olasilik_30 <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb5-53"><a href="#cb5-53" aria-hidden="true" tabindex="-1"></a>  ml_olasilik_60 <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb5-54"><a href="#cb5-54" aria-hidden="true" tabindex="-1"></a>  ml_olasilik_90 <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb5-55"><a href="#cb5-55" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (bayi_id, tarih <span class="kw">DESC</span>),</span>
+<span id="cb5-56"><a href="#cb5-56" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (risk, tarih <span class="kw">DESC</span>)</span>
+<span id="cb5-57"><a href="#cb5-57" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb5-58"><a href="#cb5-58" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-59"><a href="#cb5-59" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> churn_aksiyon_log (</span>
+<span id="cb5-60"><a href="#cb5-60" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb5-61"><a href="#cb5-61" aria-hidden="true" tabindex="-1"></a>  bayi_id <span class="dt">char</span>(<span class="dv">36</span>) FK musteriler.<span class="kw">id</span>,</span>
+<span id="cb5-62"><a href="#cb5-62" aria-hidden="true" tabindex="-1"></a>  user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb5-63"><a href="#cb5-63" aria-hidden="true" tabindex="-1"></a>  aksiyon_tipi <span class="dt">varchar</span>(<span class="dv">64</span>),        <span class="co">-- &#39;telefon&#39;,&#39;saha&#39;,&#39;kampanya&#39;,&#39;iskonto&#39;</span></span>
+<span id="cb5-64"><a href="#cb5-64" aria-hidden="true" tabindex="-1"></a>  detay text,</span>
+<span id="cb5-65"><a href="#cb5-65" aria-hidden="true" tabindex="-1"></a>  oncesi_skor <span class="dt">decimal</span>(<span class="dv">5</span>,<span class="dv">2</span>),</span>
+<span id="cb5-66"><a href="#cb5-66" aria-hidden="true" tabindex="-1"></a>  sonrasi_skor <span class="dt">decimal</span>(<span class="dv">5</span>,<span class="dv">2</span>),       <span class="co">-- 30 gün sonra otomatik dolar</span></span>
+<span id="cb5-67"><a href="#cb5-67" aria-hidden="true" tabindex="-1"></a>  basarili tinyint <span class="kw">NULL</span>,           <span class="co">-- skor düştüyse 1</span></span>
+<span id="cb5-68"><a href="#cb5-68" aria-hidden="true" tabindex="-1"></a>  yapildi_at datetime,</span>
+<span id="cb5-69"><a href="#cb5-69" aria-hidden="true" tabindex="-1"></a>  olcum_tarihi datetime</span>
+<span id="cb5-70"><a href="#cb5-70" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/13-bayi-scraping-churn.md"><code>tartisma/13-bayi-scraping-churn.md</code></a></p>
+</blockquote>
+<h3 id="faz-6-bayi-portalı-11-tablo">Faz 6 — Bayi Portalı (11 tablo)</h3>
+<div class="sourceCode" id="cb6"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> portal_kullanicilari (</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  musteri_id <span class="dt">char</span>(<span class="dv">36</span>) FK musteriler.<span class="kw">id</span>,    <span class="co">-- bayi</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  email <span class="dt">varchar</span>(<span class="dv">255</span>) <span class="kw">UNIQUE</span>,</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  sifre_hash <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  ad <span class="dt">varchar</span>(<span class="dv">128</span>),</span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  soyad <span class="dt">varchar</span>(<span class="dv">128</span>),</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  telefon <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  rol ENUM(<span class="st">&#39;bayi_admin&#39;</span>,<span class="st">&#39;bayi_operator&#39;</span>,<span class="st">&#39;bayi_goruntu&#39;</span>),</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  aktif tinyint,</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>  must_change_pw tinyint,</span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  son_giris datetime,</span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  son_giris_ip <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>  iki_faktor_aktif tinyint,</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>  iki_faktor_secret <span class="dt">varchar</span>(<span class="dv">128</span>) <span class="kw">NULL</span>,</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  created_at datetime,</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (musteri_id, aktif)</span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> portal_oturumlari (</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>  user_id <span class="dt">char</span>(<span class="dv">36</span>) FK portal_kullanicilari.<span class="kw">id</span>,</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>  refresh_token_hash <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  ip <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>  user_agent text,</span>
+<span id="cb6-26"><a href="#cb6-26" aria-hidden="true" tabindex="-1"></a>  expire_at datetime,</span>
+<span id="cb6-27"><a href="#cb6-27" aria-hidden="true" tabindex="-1"></a>  iptal_at datetime <span class="kw">NULL</span>,</span>
+<span id="cb6-28"><a href="#cb6-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (user_id, expire_at)</span>
+<span id="cb6-29"><a href="#cb6-29" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-30"><a href="#cb6-30" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-31"><a href="#cb6-31" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> portal_sepet (</span>
+<span id="cb6-32"><a href="#cb6-32" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb6-33"><a href="#cb6-33" aria-hidden="true" tabindex="-1"></a>  portal_user_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb6-34"><a href="#cb6-34" aria-hidden="true" tabindex="-1"></a>  ad <span class="dt">varchar</span>(<span class="dv">255</span>),                 <span class="co">-- &quot;Ana Mağaza&quot;, &quot;Şube&quot; vb.</span></span>
+<span id="cb6-35"><a href="#cb6-35" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;aktif&#39;</span>,<span class="st">&#39;tamamlandi&#39;</span>,<span class="st">&#39;terk&#39;</span>,<span class="st">&#39;silindi&#39;</span>),</span>
+<span id="cb6-36"><a href="#cb6-36" aria-hidden="true" tabindex="-1"></a>  toplam_tutar <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb6-37"><a href="#cb6-37" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb6-38"><a href="#cb6-38" aria-hidden="true" tabindex="-1"></a>  created_at datetime,</span>
+<span id="cb6-39"><a href="#cb6-39" aria-hidden="true" tabindex="-1"></a>  updated_at datetime,</span>
+<span id="cb6-40"><a href="#cb6-40" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (portal_user_id, durum)</span>
+<span id="cb6-41"><a href="#cb6-41" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-42"><a href="#cb6-42" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-43"><a href="#cb6-43" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> portal_sepet_kalemleri (</span>
+<span id="cb6-44"><a href="#cb6-44" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb6-45"><a href="#cb6-45" aria-hidden="true" tabindex="-1"></a>  sepet_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb6-46"><a href="#cb6-46" aria-hidden="true" tabindex="-1"></a>  urun_id <span class="dt">char</span>(<span class="dv">36</span>) FK urunler.<span class="kw">id</span>,</span>
+<span id="cb6-47"><a href="#cb6-47" aria-hidden="true" tabindex="-1"></a>  arac_model_id <span class="dt">char</span>(<span class="dv">36</span>) FK arac_modelleri.<span class="kw">id</span> <span class="kw">NULL</span>,</span>
+<span id="cb6-48"><a href="#cb6-48" aria-hidden="true" tabindex="-1"></a>  miktar <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb6-49"><a href="#cb6-49" aria-hidden="true" tabindex="-1"></a>  birim_fiyat <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb6-50"><a href="#cb6-50" aria-hidden="true" tabindex="-1"></a>  iskonto_yuzde <span class="dt">decimal</span>(<span class="dv">5</span>,<span class="dv">2</span>),</span>
+<span id="cb6-51"><a href="#cb6-51" aria-hidden="true" tabindex="-1"></a>  toplam <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb6-52"><a href="#cb6-52" aria-hidden="true" tabindex="-1"></a>  eklendi_at datetime,</span>
+<span id="cb6-53"><a href="#cb6-53" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (sepet_id)</span>
+<span id="cb6-54"><a href="#cb6-54" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-55"><a href="#cb6-55" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-56"><a href="#cb6-56" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> portal_audit (</span>
+<span id="cb6-57"><a href="#cb6-57" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb6-58"><a href="#cb6-58" aria-hidden="true" tabindex="-1"></a>  portal_user_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb6-59"><a href="#cb6-59" aria-hidden="true" tabindex="-1"></a>  aksiyon <span class="dt">varchar</span>(<span class="dv">64</span>),             <span class="co">-- &#39;login&#39;,&#39;logout&#39;,&#39;sepet_ekle&#39;,&#39;sipariş_aç&#39;</span></span>
+<span id="cb6-60"><a href="#cb6-60" aria-hidden="true" tabindex="-1"></a>  hedef_tip <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb6-61"><a href="#cb6-61" aria-hidden="true" tabindex="-1"></a>  hedef_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb6-62"><a href="#cb6-62" aria-hidden="true" tabindex="-1"></a>  detay JSON,</span>
+<span id="cb6-63"><a href="#cb6-63" aria-hidden="true" tabindex="-1"></a>  ip <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb6-64"><a href="#cb6-64" aria-hidden="true" tabindex="-1"></a>  user_agent text,</span>
+<span id="cb6-65"><a href="#cb6-65" aria-hidden="true" tabindex="-1"></a>  created_at datetime,</span>
+<span id="cb6-66"><a href="#cb6-66" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (portal_user_id, created_at <span class="kw">DESC</span>)</span>
+<span id="cb6-67"><a href="#cb6-67" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-68"><a href="#cb6-68" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-69"><a href="#cb6-69" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> portal_bildirimler (</span>
+<span id="cb6-70"><a href="#cb6-70" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb6-71"><a href="#cb6-71" aria-hidden="true" tabindex="-1"></a>  portal_user_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb6-72"><a href="#cb6-72" aria-hidden="true" tabindex="-1"></a>  tip ENUM(<span class="st">&#39;siparis&#39;</span>,<span class="st">&#39;odeme&#39;</span>,<span class="st">&#39;kampanya&#39;</span>,<span class="st">&#39;genel&#39;</span>,<span class="st">&#39;uyari&#39;</span>),</span>
+<span id="cb6-73"><a href="#cb6-73" aria-hidden="true" tabindex="-1"></a>  baslik <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb6-74"><a href="#cb6-74" aria-hidden="true" tabindex="-1"></a>  govde text,</span>
+<span id="cb6-75"><a href="#cb6-75" aria-hidden="true" tabindex="-1"></a>  <span class="kw">link</span> <span class="dt">varchar</span>(<span class="dv">500</span>),</span>
+<span id="cb6-76"><a href="#cb6-76" aria-hidden="true" tabindex="-1"></a>  okundu tinyint,</span>
+<span id="cb6-77"><a href="#cb6-77" aria-hidden="true" tabindex="-1"></a>  gonderildi_email tinyint,</span>
+<span id="cb6-78"><a href="#cb6-78" aria-hidden="true" tabindex="-1"></a>  gonderildi_push tinyint,</span>
+<span id="cb6-79"><a href="#cb6-79" aria-hidden="true" tabindex="-1"></a>  created_at datetime,</span>
+<span id="cb6-80"><a href="#cb6-80" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (portal_user_id, okundu, created_at <span class="kw">DESC</span>)</span>
+<span id="cb6-81"><a href="#cb6-81" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-82"><a href="#cb6-82" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-83"><a href="#cb6-83" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> portal_not_defteri (</span>
+<span id="cb6-84"><a href="#cb6-84" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb6-85"><a href="#cb6-85" aria-hidden="true" tabindex="-1"></a>  thread_id <span class="dt">char</span>(<span class="dv">36</span>),              <span class="co">-- aynı bayi-yönetici thread</span></span>
+<span id="cb6-86"><a href="#cb6-86" aria-hidden="true" tabindex="-1"></a>  yazan_tip ENUM(<span class="st">&#39;bayi&#39;</span>,<span class="st">&#39;yonetici&#39;</span>),</span>
+<span id="cb6-87"><a href="#cb6-87" aria-hidden="true" tabindex="-1"></a>  yazan_user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb6-88"><a href="#cb6-88" aria-hidden="true" tabindex="-1"></a>  mesaj text,</span>
+<span id="cb6-89"><a href="#cb6-89" aria-hidden="true" tabindex="-1"></a>  ekler JSON,</span>
+<span id="cb6-90"><a href="#cb6-90" aria-hidden="true" tabindex="-1"></a>  okundu_at datetime <span class="kw">NULL</span>,</span>
+<span id="cb6-91"><a href="#cb6-91" aria-hidden="true" tabindex="-1"></a>  created_at datetime,</span>
+<span id="cb6-92"><a href="#cb6-92" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (thread_id, created_at)</span>
+<span id="cb6-93"><a href="#cb6-93" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-94"><a href="#cb6-94" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-95"><a href="#cb6-95" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> arac_modelleri (</span>
+<span id="cb6-96"><a href="#cb6-96" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb6-97"><a href="#cb6-97" aria-hidden="true" tabindex="-1"></a>  marka <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb6-98"><a href="#cb6-98" aria-hidden="true" tabindex="-1"></a>  model <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb6-99"><a href="#cb6-99" aria-hidden="true" tabindex="-1"></a>  yil_baslangic <span class="dt">int</span>,</span>
+<span id="cb6-100"><a href="#cb6-100" aria-hidden="true" tabindex="-1"></a>  yil_bitis <span class="dt">int</span>,</span>
+<span id="cb6-101"><a href="#cb6-101" aria-hidden="true" tabindex="-1"></a>  govde_tipi ENUM(<span class="st">&#39;sedan&#39;</span>,<span class="st">&#39;hatchback&#39;</span>,<span class="st">&#39;wagon&#39;</span>,<span class="st">&#39;suv&#39;</span>,<span class="st">&#39;coupe&#39;</span>,<span class="st">&#39;convertible&#39;</span>,<span class="st">&#39;pickup&#39;</span>,<span class="st">&#39;van&#39;</span>),</span>
+<span id="cb6-102"><a href="#cb6-102" aria-hidden="true" tabindex="-1"></a>  motor_tipi <span class="dt">varchar</span>(<span class="dv">64</span>) <span class="kw">NULL</span>,</span>
+<span id="cb6-103"><a href="#cb6-103" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb6-104"><a href="#cb6-104" aria-hidden="true" tabindex="-1"></a>  <span class="kw">UNIQUE</span> (marka, model, yil_baslangic, yil_bitis, govde_tipi),</span>
+<span id="cb6-105"><a href="#cb6-105" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (marka, model)</span>
+<span id="cb6-106"><a href="#cb6-106" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-107"><a href="#cb6-107" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-108"><a href="#cb6-108" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> urun_arac_uyumlulugu (</span>
+<span id="cb6-109"><a href="#cb6-109" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb6-110"><a href="#cb6-110" aria-hidden="true" tabindex="-1"></a>  urun_id <span class="dt">char</span>(<span class="dv">36</span>) FK urunler.<span class="kw">id</span>,</span>
+<span id="cb6-111"><a href="#cb6-111" aria-hidden="true" tabindex="-1"></a>  arac_model_id <span class="dt">char</span>(<span class="dv">36</span>) FK arac_modelleri.<span class="kw">id</span>,</span>
+<span id="cb6-112"><a href="#cb6-112" aria-hidden="true" tabindex="-1"></a>  uyumluluk ENUM(<span class="st">&#39;tam&#39;</span>,<span class="st">&#39;kismi&#39;</span>,<span class="st">&#39;garanti&#39;</span>),</span>
+<span id="cb6-113"><a href="#cb6-113" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb6-114"><a href="#cb6-114" aria-hidden="true" tabindex="-1"></a>  <span class="kw">UNIQUE</span> (urun_id, arac_model_id),</span>
+<span id="cb6-115"><a href="#cb6-115" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (arac_model_id),</span>
+<span id="cb6-116"><a href="#cb6-116" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (urun_id)</span>
+<span id="cb6-117"><a href="#cb6-117" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-118"><a href="#cb6-118" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-119"><a href="#cb6-119" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> portal_numune_talepleri (</span>
+<span id="cb6-120"><a href="#cb6-120" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb6-121"><a href="#cb6-121" aria-hidden="true" tabindex="-1"></a>  portal_user_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb6-122"><a href="#cb6-122" aria-hidden="true" tabindex="-1"></a>  urun_id <span class="dt">char</span>(<span class="dv">36</span>) FK urunler.<span class="kw">id</span>,</span>
+<span id="cb6-123"><a href="#cb6-123" aria-hidden="true" tabindex="-1"></a>  miktar <span class="dt">int</span>,</span>
+<span id="cb6-124"><a href="#cb6-124" aria-hidden="true" tabindex="-1"></a>  adres text,</span>
+<span id="cb6-125"><a href="#cb6-125" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb6-126"><a href="#cb6-126" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;yeni&#39;</span>,<span class="st">&#39;onayli&#39;</span>,<span class="st">&#39;gonderildi&#39;</span>,<span class="st">&#39;tamamlandi&#39;</span>,<span class="st">&#39;reddedildi&#39;</span>),</span>
+<span id="cb6-127"><a href="#cb6-127" aria-hidden="true" tabindex="-1"></a>  onaylayan_user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb6-128"><a href="#cb6-128" aria-hidden="true" tabindex="-1"></a>  gonderim_takip_no <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb6-129"><a href="#cb6-129" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb6-130"><a href="#cb6-130" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb6-131"><a href="#cb6-131" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-132"><a href="#cb6-132" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> portal_iadeler (</span>
+<span id="cb6-133"><a href="#cb6-133" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb6-134"><a href="#cb6-134" aria-hidden="true" tabindex="-1"></a>  portal_user_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb6-135"><a href="#cb6-135" aria-hidden="true" tabindex="-1"></a>  siparis_id <span class="dt">char</span>(<span class="dv">36</span>) FK satis_siparisleri.<span class="kw">id</span>,</span>
+<span id="cb6-136"><a href="#cb6-136" aria-hidden="true" tabindex="-1"></a>  kalemler JSON,                   <span class="co">-- [{kalem_id, miktar, sebep}]</span></span>
+<span id="cb6-137"><a href="#cb6-137" aria-hidden="true" tabindex="-1"></a>  sebep_kategori ENUM(<span class="st">&#39;kalite&#39;</span>,<span class="st">&#39;yanlis_model&#39;</span>,<span class="st">&#39;fazla_teslim&#39;</span>,<span class="st">&#39;hasarli&#39;</span>,<span class="st">&#39;diger&#39;</span>),</span>
+<span id="cb6-138"><a href="#cb6-138" aria-hidden="true" tabindex="-1"></a>  aciklama text,</span>
+<span id="cb6-139"><a href="#cb6-139" aria-hidden="true" tabindex="-1"></a>  ekler JSON,                      <span class="co">-- foto/PDF</span></span>
+<span id="cb6-140"><a href="#cb6-140" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;yeni&#39;</span>,<span class="st">&#39;inceleniyor&#39;</span>,<span class="st">&#39;onayli&#39;</span>,<span class="st">&#39;reddedildi&#39;</span>,<span class="st">&#39;tamamlandi&#39;</span>),</span>
+<span id="cb6-141"><a href="#cb6-141" aria-hidden="true" tabindex="-1"></a>  onaylayan_user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb6-142"><a href="#cb6-142" aria-hidden="true" tabindex="-1"></a>  iade_etiket_no <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb6-143"><a href="#cb6-143" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb6-144"><a href="#cb6-144" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="faz-7-mlops-5-tablo">Faz 7 — MLOps (5 tablo)</h3>
+<div class="sourceCode" id="cb7"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> model_versiyonlari (</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  model_ailesi <span class="dt">varchar</span>(<span class="dv">128</span>),</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>  versiyon <span class="dt">varchar</span>(<span class="dv">32</span>),</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  egitim_baslangic datetime,</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  egitim_bitis datetime,</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>  egitim_kayit_sayisi <span class="dt">int</span>,</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>  hyperparametreler JSON,</span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>  metrikler JSON,</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  artifact_yolu text,              <span class="co">-- s3://...</span></span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;egitiliyor&#39;</span>,<span class="st">&#39;hazir&#39;</span>,<span class="st">&#39;champion&#39;</span>,<span class="st">&#39;retired&#39;</span>,<span class="st">&#39;hatali&#39;</span>),</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>  champion_olma_tarihi datetime <span class="kw">NULL</span>,</span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>  retired_tarih datetime <span class="kw">NULL</span>,</span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>  egiten_user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (model_ailesi, durum)</span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> ab_test_calistirma (</span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>  champion_model_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>  challenger_model_id <span class="dt">char</span>(<span class="dv">36</span>) FK,</span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>  baslangic datetime,</span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>  bitis datetime,</span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>  champion_mape <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">4</span>),</span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>  challenger_mape <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">4</span>),</span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>  p_value <span class="dt">decimal</span>(<span class="dv">10</span>,<span class="dv">8</span>),</span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>  istatistiksel_anlamli tinyint,</span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>  sonuc ENUM(<span class="st">&#39;beklemede&#39;</span>,<span class="st">&#39;promote&#39;</span>,<span class="st">&#39;retire&#39;</span>,<span class="st">&#39;sürer&#39;</span>)</span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> excel_yukleme_gecmisi (</span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb7-34"><a href="#cb7-34" aria-hidden="true" tabindex="-1"></a>  user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb7-35"><a href="#cb7-35" aria-hidden="true" tabindex="-1"></a>  dosya_tipi ENUM(<span class="st">&#39;siparis&#39;</span>,<span class="st">&#39;kampanya&#39;</span>,<span class="st">&#39;ham_madde&#39;</span>,<span class="st">&#39;musteri&#39;</span>,<span class="st">&#39;urun&#39;</span>),</span>
+<span id="cb7-36"><a href="#cb7-36" aria-hidden="true" tabindex="-1"></a>  dosya_adi <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb7-37"><a href="#cb7-37" aria-hidden="true" tabindex="-1"></a>  satir_sayisi <span class="dt">int</span>,</span>
+<span id="cb7-38"><a href="#cb7-38" aria-hidden="true" tabindex="-1"></a>  basarili <span class="dt">int</span>,</span>
+<span id="cb7-39"><a href="#cb7-39" aria-hidden="true" tabindex="-1"></a>  hata <span class="dt">int</span>,</span>
+<span id="cb7-40"><a href="#cb7-40" aria-hidden="true" tabindex="-1"></a>  durum ENUM(<span class="st">&#39;isleniyor&#39;</span>,<span class="st">&#39;tamamlandi&#39;</span>,<span class="st">&#39;hatali&#39;</span>),</span>
+<span id="cb7-41"><a href="#cb7-41" aria-hidden="true" tabindex="-1"></a>  hata_log JSON,</span>
+<span id="cb7-42"><a href="#cb7-42" aria-hidden="true" tabindex="-1"></a>  yeniden_egitim_tetikledi tinyint,</span>
+<span id="cb7-43"><a href="#cb7-43" aria-hidden="true" tabindex="-1"></a>  yuklendi_at datetime</span>
+<span id="cb7-44"><a href="#cb7-44" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-45"><a href="#cb7-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-46"><a href="#cb7-46" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> feature_pipeline_kayitlari (</span>
+<span id="cb7-47"><a href="#cb7-47" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb7-48"><a href="#cb7-48" aria-hidden="true" tabindex="-1"></a>  pipeline_versiyonu <span class="dt">varchar</span>(<span class="dv">32</span>),</span>
+<span id="cb7-49"><a href="#cb7-49" aria-hidden="true" tabindex="-1"></a>  girdi_tablo <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb7-50"><a href="#cb7-50" aria-hidden="true" tabindex="-1"></a>  feature_count <span class="dt">int</span>,</span>
+<span id="cb7-51"><a href="#cb7-51" aria-hidden="true" tabindex="-1"></a>  null_oran <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb7-52"><a href="#cb7-52" aria-hidden="true" tabindex="-1"></a>  outlier_count <span class="dt">int</span>,</span>
+<span id="cb7-53"><a href="#cb7-53" aria-hidden="true" tabindex="-1"></a>  calistirma_zamani datetime,</span>
+<span id="cb7-54"><a href="#cb7-54" aria-hidden="true" tabindex="-1"></a>  basarili tinyint</span>
+<span id="cb7-55"><a href="#cb7-55" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb7-56"><a href="#cb7-56" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-57"><a href="#cb7-57" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> tahmin_geri_besleme (</span>
+<span id="cb7-58"><a href="#cb7-58" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb7-59"><a href="#cb7-59" aria-hidden="true" tabindex="-1"></a>  tahmin_id <span class="dt">char</span>(<span class="dv">36</span>) FK tahmin_calistirma.<span class="kw">id</span>,</span>
+<span id="cb7-60"><a href="#cb7-60" aria-hidden="true" tabindex="-1"></a>  user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb7-61"><a href="#cb7-61" aria-hidden="true" tabindex="-1"></a>  duzeltilen_deger <span class="dt">decimal</span>(<span class="dv">12</span>,<span class="dv">2</span>),</span>
+<span id="cb7-62"><a href="#cb7-62" aria-hidden="true" tabindex="-1"></a>  sebep text,</span>
+<span id="cb7-63"><a href="#cb7-63" aria-hidden="true" tabindex="-1"></a>  guven_dusuk_mu tinyint,</span>
+<span id="cb7-64"><a href="#cb7-64" aria-hidden="true" tabindex="-1"></a>  geri_besleme_tarihi datetime</span>
+<span id="cb7-65"><a href="#cb7-65" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<blockquote>
+<p><strong>Detay:</strong> <a href="../tartisma/14-egitilebilir-modeller-mlops.md"><code>tartisma/14-egitilebilir-modeller-mlops.md</code></a></p>
+</blockquote>
+<h3 id="faz-8-konversasyonel-3-tablo">Faz 8 — Konversasyonel (3 tablo)</h3>
+<div class="sourceCode" id="cb8"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> ai_aksiyon_audit (</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>  aksiyon_tipi <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>  tetikleyen ENUM(<span class="st">&#39;ai_otomatik&#39;</span>,<span class="st">&#39;ai_onerili&#39;</span>,<span class="st">&#39;insan_manuel&#39;</span>),</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>  ai_oneri_id <span class="dt">char</span>(<span class="dv">36</span>) <span class="kw">NULL</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>  insan_user_id <span class="dt">char</span>(<span class="dv">36</span>) <span class="kw">NULL</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>  payload JSON,</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>  oncesi_state JSON,</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>  sonrasi_state JSON,</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>  rollback_mumkun tinyint,</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>  rollback_yapildi_at datetime <span class="kw">NULL</span>,</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>  created_at datetime,</span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (aksiyon_tipi, created_at)</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> ai_otomasyon_ayarlari (</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>  <span class="kw">scope</span> ENUM(<span class="st">&#39;global&#39;</span>,<span class="st">&#39;aksiyon_tipi&#39;</span>,<span class="st">&#39;provider&#39;</span>),</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>  scope_value <span class="dt">varchar</span>(<span class="dv">128</span>),</span>
+<span id="cb8-21"><a href="#cb8-21" aria-hidden="true" tabindex="-1"></a>  enabled tinyint,</span>
+<span id="cb8-22"><a href="#cb8-22" aria-hidden="true" tabindex="-1"></a>  notlar text,</span>
+<span id="cb8-23"><a href="#cb8-23" aria-hidden="true" tabindex="-1"></a>  updated_by <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb8-24"><a href="#cb8-24" aria-hidden="true" tabindex="-1"></a>  updated_at datetime</span>
+<span id="cb8-25"><a href="#cb8-25" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb8-26"><a href="#cb8-26" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-27"><a href="#cb8-27" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> ai_oneri_geri_besleme (</span>
+<span id="cb8-28"><a href="#cb8-28" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb8-29"><a href="#cb8-29" aria-hidden="true" tabindex="-1"></a>  oneri_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb8-30"><a href="#cb8-30" aria-hidden="true" tabindex="-1"></a>  oneri_tipi <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb8-31"><a href="#cb8-31" aria-hidden="true" tabindex="-1"></a>  ai_guven_skoru <span class="dt">decimal</span>(<span class="dv">4</span>,<span class="dv">2</span>),</span>
+<span id="cb8-32"><a href="#cb8-32" aria-hidden="true" tabindex="-1"></a>  risk_skoru <span class="dt">int</span>,</span>
+<span id="cb8-33"><a href="#cb8-33" aria-hidden="true" tabindex="-1"></a>  insan_karari ENUM(<span class="st">&#39;onayli&#39;</span>,<span class="st">&#39;red&#39;</span>,<span class="st">&#39;revize&#39;</span>,<span class="st">&#39;iptal&#39;</span>),</span>
+<span id="cb8-34"><a href="#cb8-34" aria-hidden="true" tabindex="-1"></a>  red_sebebi text,</span>
+<span id="cb8-35"><a href="#cb8-35" aria-hidden="true" tabindex="-1"></a>  manual_alternatif JSON,</span>
+<span id="cb8-36"><a href="#cb8-36" aria-hidden="true" tabindex="-1"></a>  created_at datetime</span>
+<span id="cb8-37"><a href="#cb8-37" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h3 id="faz-9-mobil-saha-3-tablo">Faz 9 — Mobil &amp; Saha (3 tablo)</h3>
+<div class="sourceCode" id="cb9"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> ziyaret_kayitlari (</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  saha_user_id <span class="dt">char</span>(<span class="dv">36</span>) FK kullanicilar.<span class="kw">id</span>,</span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  bayi_id <span class="dt">char</span>(<span class="dv">36</span>) FK musteriler.<span class="kw">id</span>,</span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  ziyaret_tipi ENUM(<span class="st">&#39;saha_satis&#39;</span>,<span class="st">&#39;sikayet&#39;</span>,<span class="st">&#39;rutin&#39;</span>,<span class="st">&#39;egitim&#39;</span>,<span class="st">&#39;tahsilat&#39;</span>),</span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  baslangic_zamani datetime,</span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  bitis_zamani datetime,</span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>  konum_enlem <span class="dt">decimal</span>(<span class="dv">10</span>,<span class="dv">7</span>),</span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>  konum_boylam <span class="dt">decimal</span>(<span class="dv">10</span>,<span class="dv">7</span>),</span>
+<span id="cb9-10"><a href="#cb9-10" aria-hidden="true" tabindex="-1"></a>  konum_dogrulandi tinyint,</span>
+<span id="cb9-11"><a href="#cb9-11" aria-hidden="true" tabindex="-1"></a>  katilimcilar JSON,</span>
+<span id="cb9-12"><a href="#cb9-12" aria-hidden="true" tabindex="-1"></a>  ses_kaydi_yolu text <span class="kw">NULL</span>,        <span class="co">-- s3://</span></span>
+<span id="cb9-13"><a href="#cb9-13" aria-hidden="true" tabindex="-1"></a>  ses_metni text <span class="kw">NULL</span>,             <span class="co">-- Whisper çıktı</span></span>
+<span id="cb9-14"><a href="#cb9-14" aria-hidden="true" tabindex="-1"></a>  llm_ozet text <span class="kw">NULL</span>,</span>
+<span id="cb9-15"><a href="#cb9-15" aria-hidden="true" tabindex="-1"></a>  fotograf_yollari JSON,</span>
+<span id="cb9-16"><a href="#cb9-16" aria-hidden="true" tabindex="-1"></a>  sonuc_etiketleri JSON,           <span class="co">-- [&#39;memnun_değil&#39;,&#39;rakip_teklif&#39;,&#39;sipariş_aldı&#39;]</span></span>
+<span id="cb9-17"><a href="#cb9-17" aria-hidden="true" tabindex="-1"></a>  sonraki_adim text,</span>
+<span id="cb9-18"><a href="#cb9-18" aria-hidden="true" tabindex="-1"></a>  yeni_siparis_id <span class="dt">char</span>(<span class="dv">36</span>) <span class="kw">NULL</span>,</span>
+<span id="cb9-19"><a href="#cb9-19" aria-hidden="true" tabindex="-1"></a>  cretaed_at datetime,</span>
+<span id="cb9-20"><a href="#cb9-20" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (saha_user_id, baslangic_zamani <span class="kw">DESC</span>),</span>
+<span id="cb9-21"><a href="#cb9-21" aria-hidden="true" tabindex="-1"></a>  <span class="kw">INDEX</span> (bayi_id, baslangic_zamani <span class="kw">DESC</span>)</span>
+<span id="cb9-22"><a href="#cb9-22" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb9-23"><a href="#cb9-23" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-24"><a href="#cb9-24" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> push_bildirim_log (</span>
+<span id="cb9-25"><a href="#cb9-25" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb9-26"><a href="#cb9-26" aria-hidden="true" tabindex="-1"></a>  user_id <span class="dt">char</span>(<span class="dv">36</span>),                <span class="co">-- portal veya admin user</span></span>
+<span id="cb9-27"><a href="#cb9-27" aria-hidden="true" tabindex="-1"></a>  user_tip ENUM(<span class="st">&#39;admin&#39;</span>,<span class="st">&#39;bayi&#39;</span>,<span class="st">&#39;saha&#39;</span>),</span>
+<span id="cb9-28"><a href="#cb9-28" aria-hidden="true" tabindex="-1"></a>  cihaz_token <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb9-29"><a href="#cb9-29" aria-hidden="true" tabindex="-1"></a>  baslik <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb9-30"><a href="#cb9-30" aria-hidden="true" tabindex="-1"></a>  govde text,</span>
+<span id="cb9-31"><a href="#cb9-31" aria-hidden="true" tabindex="-1"></a>  payload JSON,</span>
+<span id="cb9-32"><a href="#cb9-32" aria-hidden="true" tabindex="-1"></a>  gonderildi_at datetime,</span>
+<span id="cb9-33"><a href="#cb9-33" aria-hidden="true" tabindex="-1"></a>  teslim_at datetime <span class="kw">NULL</span>,</span>
+<span id="cb9-34"><a href="#cb9-34" aria-hidden="true" tabindex="-1"></a>  acildi_at datetime <span class="kw">NULL</span>,</span>
+<span id="cb9-35"><a href="#cb9-35" aria-hidden="true" tabindex="-1"></a>  hata text <span class="kw">NULL</span></span>
+<span id="cb9-36"><a href="#cb9-36" aria-hidden="true" tabindex="-1"></a>);</span>
+<span id="cb9-37"><a href="#cb9-37" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb9-38"><a href="#cb9-38" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> mobil_oturumlari (</span>
+<span id="cb9-39"><a href="#cb9-39" aria-hidden="true" tabindex="-1"></a>  <span class="kw">id</span> <span class="dt">char</span>(<span class="dv">36</span>) PK,</span>
+<span id="cb9-40"><a href="#cb9-40" aria-hidden="true" tabindex="-1"></a>  user_id <span class="dt">char</span>(<span class="dv">36</span>),</span>
+<span id="cb9-41"><a href="#cb9-41" aria-hidden="true" tabindex="-1"></a>  user_tip ENUM(<span class="st">&#39;admin&#39;</span>,<span class="st">&#39;bayi&#39;</span>,<span class="st">&#39;saha&#39;</span>),</span>
+<span id="cb9-42"><a href="#cb9-42" aria-hidden="true" tabindex="-1"></a>  cihaz_id <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb9-43"><a href="#cb9-43" aria-hidden="true" tabindex="-1"></a>  cihaz_modeli <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb9-44"><a href="#cb9-44" aria-hidden="true" tabindex="-1"></a>  os <span class="dt">varchar</span>(<span class="dv">64</span>),</span>
+<span id="cb9-45"><a href="#cb9-45" aria-hidden="true" tabindex="-1"></a>  app_versiyonu <span class="dt">varchar</span>(<span class="dv">32</span>),</span>
+<span id="cb9-46"><a href="#cb9-46" aria-hidden="true" tabindex="-1"></a>  push_token <span class="dt">varchar</span>(<span class="dv">255</span>),</span>
+<span id="cb9-47"><a href="#cb9-47" aria-hidden="true" tabindex="-1"></a>  son_aktif datetime,</span>
+<span id="cb9-48"><a href="#cb9-48" aria-hidden="true" tabindex="-1"></a>  iptal_at datetime <span class="kw">NULL</span></span>
+<span id="cb9-49"><a href="#cb9-49" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<h2 id="mevcut-tablolara-eklenen-kolonlar">4. Mevcut Tablolara Eklenen Kolonlar</h2>
+<p>Bazı yeni özellikler <strong>mevcut tablolara kolon ekler</strong> (yine seed dosyası güncellenir):</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="co">-- musteriler tablosu (Faz 5 + Faz 6)</span></span>
+<span id="cb10-2"><a href="#cb10-2" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> portal_aktif_mi tinyint <span class="kw">DEFAULT</span> <span class="dv">0</span>;</span>
+<span id="cb10-3"><a href="#cb10-3" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> son_portal_giris datetime <span class="kw">NULL</span>;</span>
+<span id="cb10-4"><a href="#cb10-4" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> web_sitesi <span class="dt">varchar</span>(<span class="dv">255</span>) <span class="kw">NULL</span>;</span>
+<span id="cb10-5"><a href="#cb10-5" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> sosyal_medya_json JSON <span class="kw">NULL</span>;</span>
+<span id="cb10-6"><a href="#cb10-6" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> sektor_etiketi <span class="dt">varchar</span>(<span class="dv">128</span>) <span class="kw">NULL</span>;</span>
+<span id="cb10-7"><a href="#cb10-7" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> <span class="kw">segment</span> ENUM(<span class="st">&#39;A&#39;</span>,<span class="st">&#39;B&#39;</span>,<span class="st">&#39;C&#39;</span>) <span class="kw">NULL</span>;</span>
+<span id="cb10-8"><a href="#cb10-8" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> konum_enlem <span class="dt">decimal</span>(<span class="dv">10</span>,<span class="dv">7</span>) <span class="kw">NULL</span>;</span>
+<span id="cb10-9"><a href="#cb10-9" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> konum_boylam <span class="dt">decimal</span>(<span class="dv">10</span>,<span class="dv">7</span>) <span class="kw">NULL</span>;</span>
+<span id="cb10-10"><a href="#cb10-10" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> churn_son_skor <span class="dt">decimal</span>(<span class="dv">5</span>,<span class="dv">2</span>) <span class="kw">NULL</span>;</span>
+<span id="cb10-11"><a href="#cb10-11" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> musteriler <span class="kw">ADD</span> <span class="kw">COLUMN</span> churn_son_skor_tarihi datetime <span class="kw">NULL</span>;</span>
+<span id="cb10-12"><a href="#cb10-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-13"><a href="#cb10-13" aria-hidden="true" tabindex="-1"></a><span class="co">-- urunler tablosu (Faz 6)</span></span>
+<span id="cb10-14"><a href="#cb10-14" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> urunler <span class="kw">ADD</span> <span class="kw">COLUMN</span> portal_gorunur tinyint <span class="kw">DEFAULT</span> <span class="dv">1</span>;</span>
+<span id="cb10-15"><a href="#cb10-15" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> urunler <span class="kw">ADD</span> <span class="kw">COLUMN</span> sezon_etiketi <span class="dt">varchar</span>(<span class="dv">64</span>) <span class="kw">NULL</span>;</span>
+<span id="cb10-16"><a href="#cb10-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb10-17"><a href="#cb10-17" aria-hidden="true" tabindex="-1"></a><span class="co">-- satis_siparisleri tablosu (Faz 6)</span></span>
+<span id="cb10-18"><a href="#cb10-18" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> satis_siparisleri <span class="kw">ADD</span> <span class="kw">COLUMN</span> kaynak ENUM(</span>
+<span id="cb10-19"><a href="#cb10-19" aria-hidden="true" tabindex="-1"></a>  <span class="st">&#39;admin_panel&#39;</span>,<span class="st">&#39;portal&#39;</span>,<span class="st">&#39;sohbet&#39;</span>,<span class="st">&#39;telefon&#39;</span>,<span class="st">&#39;email&#39;</span>,<span class="st">&#39;whatsapp&#39;</span>,<span class="st">&#39;manuel&#39;</span></span>
+<span id="cb10-20"><a href="#cb10-20" aria-hidden="true" tabindex="-1"></a>) <span class="kw">DEFAULT</span> <span class="st">&#39;admin_panel&#39;</span>;</span>
+<span id="cb10-21"><a href="#cb10-21" aria-hidden="true" tabindex="-1"></a><span class="kw">ALTER</span> <span class="kw">TABLE</span> satis_siparisleri <span class="kw">ADD</span> <span class="kw">COLUMN</span> portal_sepet_id <span class="dt">char</span>(<span class="dv">36</span>) <span class="kw">NULL</span>;</span></code></pre></div>
+<blockquote>
+<p><strong>Not:</strong> Yukarıdaki ALTER ifadeleri <strong>gösterim amaçlıdır</strong>. Gerçek implementasyonda seed SQL dosyaları (<code>0XX_*.sql</code>) doğrudan güncellenir, fresh deploy ile uygulanır. Production migration ayrı yönetilir.</p>
+</blockquote>
+<h2 id="er-ilişki-görünümü-özet">5. ER İlişki Görünümü (özet)</h2>
+<pre><code>                    musteriler
+                        │
+                ┌───────┼─────────────────────────────────┐
+                ↓       ↓                                 ↓
+      portal_kullanicilari   churn_skor_gecmisi      satis_siparisleri
+                │              │                          │
+                ↓              ↓                          ↓
+         portal_sepet     bayi_sinyalleri          siparis_kalemleri
+                │              ↑                          │
+                ↓              │                          ↓
+      portal_sepet_kalemleri   web_kazima_kayitlari   uretim_emirleri
+                │
+                ↓
+              urunler ──────── urun_arac_uyumlulugu
+                │                       │
+                ↓                       ↓
+         tahmin_calistirma         arac_modelleri
+                │
+                ↓
+         tahmin_modelleri ── model_versiyonlari ── ab_test_calistirma
+                │
+                ↓
+         tahmin_dogruluk</code></pre>
+<h2 id="veri-yaşam-döngüsü">6. Veri Yaşam Döngüsü</h2>
+<h3 id="retention-politikası">6.1 Retention politikası</h3>
+<table>
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 41%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Tablo</th>
+<th>Saklama süresi</th>
+<th>Sonra ne olur</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>portal_audit</code></td>
+<td>7 yıl</td>
+<td>Arşive (S3 cold)</td>
+</tr>
+<tr class="even">
+<td><code>ai_aksiyon_audit</code></td>
+<td>7 yıl</td>
+<td>Arşive</td>
+</tr>
+<tr class="odd">
+<td><code>web_kazima_kayitlari</code></td>
+<td>90 gün (HTML), 2 yıl (parse)</td>
+<td>HTML silinir, metadata kalır</td>
+</tr>
+<tr class="even">
+<td><code>tahmin_calistirma</code></td>
+<td>3 yıl</td>
+<td>Aggregate’ye dönüşür</td>
+</tr>
+<tr class="odd">
+<td><code>tahmin_dogruluk</code></td>
+<td>Sınırsız</td>
+<td>Modelin tarihçesi</td>
+</tr>
+<tr class="even">
+<td><code>model_versiyonlari</code> (retired)</td>
+<td>3 yıl</td>
+<td>S3’ten silinir</td>
+</tr>
+<tr class="odd">
+<td><code>push_bildirim_log</code></td>
+<td>6 ay</td>
+<td>Silinir</td>
+</tr>
+<tr class="even">
+<td><code>portal_oturumlari</code> (iptal)</td>
+<td>90 gün</td>
+<td>Silinir</td>
+</tr>
+<tr class="odd">
+<td><code>talep_havuzu</code> (kapanan)</td>
+<td>5 yıl</td>
+<td>Aggregate</td>
+</tr>
+<tr class="even">
+<td><code>lead_havuzu</code> (kayıp)</td>
+<td>3 yıl</td>
+<td>Anonimleştirilir</td>
+</tr>
+<tr class="odd">
+<td><code>ziyaret_kayitlari</code></td>
+<td>Sınırsız</td>
+<td>(saha tarihi değerli)</td>
+</tr>
+</tbody>
+</table>
+<h3 id="kvkk-silme-talebi-akışı">6.2 KVKK silme talebi akışı</h3>
+<p>Bayi silme talebi gönderirse: 1. <code>musteriler</code> → <code>kvkk_silme_at</code> damgası 2. PII alanları (telefon, email, ad-soyad) anonimleştirilir 3. İlişkili tablolar: portal_kullanicilari pasifleştirilir 4. Sipariş geçmişi anonim kalır (ticari kayıt yasal zorunlu) 5. Audit log: silme talebi + uygulanan aksiyon</p>
+<h3 id="backup-stratejisi">6.3 Backup stratejisi</h3>
+<table>
+<thead>
+<tr class="header">
+<th>Veri</th>
+<th>Sıklık</th>
+<th>Yer</th>
+<th>Süre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>MySQL tam dump</td>
+<td>Günlük 03:00</td>
+<td>S3 (encrypted)</td>
+<td>30 gün</td>
+</tr>
+<tr class="even">
+<td>MySQL binlog</td>
+<td>Saatlik</td>
+<td>S3</td>
+<td>7 gün</td>
+</tr>
+<tr class="odd">
+<td>S3 object storage</td>
+<td>Cross-region replica</td>
+<td>AWS</td>
+<td>Sürekli</td>
+</tr>
+<tr class="even">
+<td>Konfig + secrets</td>
+<td>Manuel</td>
+<td>Şifreli vault</td>
+<td>Sürekli</td>
+</tr>
+<tr class="odd">
+<td>Kod</td>
+<td>Git push</td>
+<td>GitHub/GitLab</td>
+<td>Sürekli</td>
+</tr>
+</tbody>
+</table>
+<h2 id="performans-index-stratejisi">7. Performans — Index Stratejisi</h2>
+<h3 id="yüksek-trafik-sorguları">7.1 Yüksek-trafik sorguları</h3>
+<table>
+<colgroup>
+<col style="width: 46%" />
+<col style="width: 53%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Sorgu</th>
+<th>İndeks</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Bayi sipariş geçmişi (son 90 gün)</td>
+<td><code>(bayi_id, created_at DESC)</code></td>
+</tr>
+<tr class="even">
+<td>Çok satan ürün (son 30 gün)</td>
+<td><code>(urun_id, created_at DESC)</code></td>
+</tr>
+<tr class="odd">
+<td>Portal sepet aktif</td>
+<td><code>(portal_user_id, durum)</code> WHERE <code>durum='aktif'</code></td>
+</tr>
+<tr class="even">
+<td>Tahmin sonuç (bayi-ürün-dönem)</td>
+<td><code>(bayi_id, urun_id, donem_baslangic)</code></td>
+</tr>
+<tr class="odd">
+<td>Churn risk top liste</td>
+<td><code>(risk, tarih DESC)</code> WHERE <code>risk IN ('yüksek','kritik')</code></td>
+</tr>
+<tr class="even">
+<td>Web kazıma sıradaki</td>
+<td><code>(sonraki_kazima, aktif)</code> WHERE <code>aktif=1</code></td>
+</tr>
+<tr class="odd">
+<td>Lead skor sıralı</td>
+<td><code>(benzerlik_skoru DESC, durum)</code> WHERE <code>durum IN ('yeni','araştırılıyor')</code></td>
+</tr>
+</tbody>
+</table>
+<h3 id="tahmin-yapan-sorgular-denormalize-gerekirse">7.2 Tahmin yapan sorgular (denormalize gerekirse)</h3>
+<p>İlerde performans sorunu çıkarsa: - <code>bayi_aylik_ozet</code> materialized view (toplam sipariş, ciro, churn skoru) - Redis cache layer (her sorgu cache’lenmeden önce ölçüm) - Read replica (raporlama yükü ana DB’yi etkilemesin)</p>
+<h2 id="test-verisi">8. Test verisi</h2>
+<p>Faz 0 sonunda <strong>realistic test verisi</strong> üretilir: - 5 pilot bayi anonim seed - 6 ay sipariş geçmişi (gerçekleşen + sentetik) - Test ortamında promats_erp_test ayrı DB - E2E testler bu seed üzerinde koşar</p>
+<h2 id="açık-karar-noktaları-veri-modeli">9. Açık karar noktaları (Veri Modeli)</h2>
+<ol type="1">
+<li><strong>char(36) UUID vs auto-increment INT:</strong> mevcut Promats konvansiyonu UUID, devam ediyoruz. (Karar: UUID)</li>
+<li><strong>JSON kolonları vs ayrı tablo:</strong> sinyaller, parametreler vb. JSON’da mı tablolaştırma? (Önerim: JSON, sorgulanmıyorsa)</li>
+<li><strong>Soft delete:</strong> her tabloya mı, sadece kritiklere mi? (Önerim: kritiklere — <code>musteriler</code>, <code>urunler</code>, <code>siparisler</code>)</li>
+<li><strong>Audit log seviyesi:</strong> her INSERT/UPDATE’i mi loglayalım? (Önerim: risk 7+ aksiyonlar)</li>
+<li><strong>Read replica:</strong> ne zaman gerek? (Önerim: 100K+ aylık sipariş)</li>
+<li><strong>MySQL partitioning:</strong> <code>tahmin_calistirma</code> ve <code>web_kazima_kayitlari</code> için? (Önerim: 1 yıl sonra, tarih bazlı)</li>
+<li><strong>Encryption at rest:</strong> sadece DB volume mu, kolon-bazlı mı? (Önerim: volume — yeterli)</li>
+<li><strong>PII şifreleme:</strong> telefon/email DB’de plain mi şifreli mi? (Önerim: plain ama erişim audit’li, KVKK uyumlu)</li>
+<li><strong><code>musteriler</code> aşırı yükleniyor:</strong> ayrı <code>bayi_metadata</code> tablosu mu? (Önerim: önce kolonlar, 50+ kolon olunca ayrıştır)</li>
+<li><strong>Drizzle vs raw SQL migration:</strong> seed dosyalarına raw SQL devam (Promats konvansiyonu)</li>
+</ol>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("06 — Veri Modeli").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,527 @@
+@import 'tailwindcss';
+
+@theme {
+  /* Runtime tokenlar: tokensToCSS → --gm-* */
+
+  /* Tailwind `gold-*` sınıf adları korunur; değerler yeşil skala (seed ile uyumlu). */
+  --color-gold-50:  var(--gm-gold-50, #f0fdf4);
+  --color-gold-100: var(--gm-gold-100, #dcfce7);
+  --color-gold-200: var(--gm-gold-200, #bbf7d0);
+  --color-gold-300: var(--gm-gold-300, #86efac);
+  --color-gold-400: var(--gm-gold-400, #4ade80);
+  --color-gold-500: var(--gm-gold-500, #22c55e);
+  --color-gold-600: var(--gm-gold-600, #16a34a);
+  --color-gold-700: var(--gm-gold-700, #15803d);
+  --color-gold-800: var(--gm-gold-800, #166534);
+  --color-gold-900: var(--gm-gold-900, #14532d);
+
+  --color-sand-50:  var(--gm-sand-50, #fafaf9);
+  --color-sand-100: var(--gm-sand-100, #f5f5f4);
+  --color-sand-200: var(--gm-sand-200, #e7e5e4);
+  --color-sand-300: var(--gm-sand-300, #d6d3d1);
+  --color-sand-400: var(--gm-sand-400, #a8a29e);
+  --color-sand-500: var(--gm-sand-500, #78716c);
+  --color-sand-600: var(--gm-sand-600, #57534e);
+  --color-sand-700: var(--gm-sand-700, #44403c);
+  --color-sand-800: var(--gm-sand-800, #292524);
+  --color-sand-900: var(--gm-sand-900, #1c1917);
+
+  --color-deep:       #14532d;
+  --color-dark:       #052e16;
+  --color-card:       var(--gm-surface, #ffffff);
+  --color-card-hover: var(--gm-surface-high, #f0fdf4);
+
+  --color-plum:      var(--gm-accent, #854d0e);
+  --color-plum-soft: #a16207;
+
+  --color-bg-primary:      var(--gm-bg, #f7fee7);
+  --color-bg-secondary:    var(--gm-bg-deep, #ecfccb);
+  --color-bg-card:         var(--gm-surface, #ffffff);
+  --color-bg-card-hover:   var(--gm-surface-high, #f0fdf4);
+  --color-bg-accent:       color-mix(in srgb, var(--gm-primary, #16a34a) 10%, transparent);
+  --color-bg-dark:         var(--color-deep);
+
+  --color-background:      var(--gm-bg, #f7fee7);
+  --color-foreground:      var(--gm-text, #14532d);
+
+  --color-text-primary:    var(--gm-text, #14532d);
+  --color-text-secondary:  var(--gm-text-dim, #365314);
+  --color-text-muted:      var(--gm-muted, #64748b);
+  --color-text-on-dark:    #ecfdf5;
+
+  --color-brand-primary:   var(--gm-primary, #16a34a);
+  --color-brand-hover:     var(--gm-primary-hover, #15803d);
+  --color-brand-dark:      var(--gm-primary-dark, #15803d);
+  --color-brand-light:     color-mix(in srgb, var(--gm-primary, #16a34a) 14%, transparent);
+
+  /* Eski adlar: artık ikincil yeşil tonları (altın değil). */
+  --color-brand-gold:      var(--gm-gold, #22c55e);
+  --color-brand-gold-deep: var(--gm-gold-deep, #15803d);
+  --color-brand-gold-dim:  var(--gm-gold-dim, #166534);
+
+  --color-bg-base:         var(--gm-bg, #f7fee7);
+  --color-bg-deep:         var(--gm-bg-deep, #ecfccb);
+  --color-surface:         var(--gm-surface, #ffffff);
+  --color-surface-high:    var(--gm-surface-high, #f0fdf4);
+
+  --color-primary:         var(--color-brand-primary);
+  --color-primary-hover:   var(--color-brand-hover);
+
+  --color-accent-gold:      var(--gm-gold, #22c55e);
+  --color-accent-spiritual: var(--gm-accent, #854d0e);
+
+  --color-border-light:  var(--gm-border-soft, rgba(22, 101, 52, 0.12));
+  --color-border-medium: var(--gm-border, rgba(22, 101, 52, 0.22));
+  --color-border-hover:  color-mix(in srgb, var(--gm-primary, #16a34a) 38%, transparent);
+
+  --color-success: var(--gm-success, #16a34a);
+  --color-warning: var(--gm-warning, #ca8a04);
+  --color-error:   var(--gm-error, #dc2626);
+  --color-info:    var(--gm-info, #0d9488);
+
+  --font-sans:    var(--gm-font-sans, var(--font-pj), 'Plus Jakarta Sans', system-ui, sans-serif);
+  --font-serif:   var(--gm-font-serif, var(--font-source-serif), Georgia, 'Times New Roman', serif);
+  --font-display: var(--gm-font-display, var(--font-pj), 'Plus Jakarta Sans', system-ui, sans-serif);
+}
+
+/* ─── SHADOWS (LIGHT) ─── */
+:root {
+  --shadow-soft:   var(--gm-shadow-soft,   0 2px 20px rgba(22, 163, 74, 0.08));
+  --shadow-medium: var(--gm-shadow-card,   0 8px 40px rgba(22, 163, 74, 0.12));
+  --shadow-glow:   var(--gm-shadow-glow,   0 0 60px rgba(22, 163, 74, 0.18));
+  --shadow-gold:   var(--gm-shadow-gold,   0 0 30px rgba(22, 163, 74, 0.14));
+
+  /* ─── MYSTICAL ACCENTS (requested colors) ─── */
+  --color-mystic-mint: #F0FFDF;
+  --color-mystic-cyan: #B0FFFA;
+  --color-mystic-rose: #FBEFEF;
+}
+
+/* ============================================================
+   DARK THEME — [data-theme="dark"] (token tabanlı yeşil gece)
+   ============================================================ */
+[data-theme="dark"] {
+  --color-bg-primary:      var(--gm-bg, #052e16);
+  --color-bg-secondary:    var(--gm-bg-deep, #022c22);
+  --color-bg-card:         var(--gm-surface, #134e4a);
+  --color-bg-card-hover:   var(--gm-surface-high, #115e59);
+  --color-bg-accent:       rgba(34, 197, 94, 0.12);
+  --color-bg-dark:         var(--gm-bg-deep, #022c22);
+
+  --color-text-primary:    var(--gm-text, #ecfdf5);
+  --color-text-secondary:  var(--gm-text-dim, #bbf7d0);
+  --color-text-muted:      var(--gm-muted, #86efac);
+  --color-text-on-dark:    var(--gm-text, #ecfdf5);
+
+  --color-brand-primary:   var(--gm-primary, #4ade80);
+  --color-brand-hover:     var(--gm-primary-light, #86efac);
+  --color-brand-dark:      var(--gm-primary-dark, #22c55e);
+  --color-brand-light:     rgba(74, 222, 128, 0.18);
+
+  --color-primary:         var(--gm-primary, #4ade80);
+  --color-primary-hover:   var(--gm-primary-light, #86efac);
+
+  --color-border-light:    var(--gm-border-soft, rgba(167, 243, 208, 0.12));
+  --color-border-medium:   var(--gm-border, rgba(167, 243, 208, 0.22));
+  --color-border-hover:    rgba(74, 222, 128, 0.45);
+
+  --shadow-soft:           var(--gm-shadow-soft, 0 2px 20px rgba(0, 0, 0, 0.40));
+  --shadow-medium:         var(--gm-shadow-card, 0 8px 40px rgba(0, 0, 0, 0.55));
+  --shadow-glow:           var(--gm-shadow-glow, 0 0 60px rgba(74, 222, 128, 0.15));
+  --shadow-gold:           var(--gm-shadow-gold, 0 0 30px rgba(74, 222, 128, 0.2));
+}
+
+/* ============================================================
+   BACKWARDS COMPATIBILITY — [data-theme="light"]
+   Kept as an explicit alias for the default light theme, in
+   case existing code forces light mode somewhere.
+   ============================================================ */
+[data-theme="light"] {
+  --color-bg-primary:      #f7fee7;
+  --color-bg-secondary:    #ecfccb;
+  --color-bg-card:         #ffffff;
+  --color-bg-card-hover:   #f0fdf4;
+  --color-bg-accent:       rgba(22, 163, 74, 0.08);
+  --color-bg-dark:         #14532d;
+
+  --color-text-primary:    #14532d;
+  --color-text-secondary:  #365314;
+  --color-text-muted:      #64748b;
+  --color-text-on-dark:    #ecfdf5;
+
+  --color-brand-primary:   #16a34a;
+  --color-brand-hover:     #15803d;
+  --color-brand-dark:      #15803d;
+  --color-brand-light:     rgba(22, 163, 74, 0.14);
+
+  --color-primary:         #16a34a;
+  --color-primary-hover:   #15803d;
+
+  --color-border-light:    rgba(22, 101, 52, 0.12);
+  --color-border-medium:   rgba(22, 101, 52, 0.22);
+  --color-border-hover:    rgba(22, 101, 52, 0.38);
+
+  --shadow-soft:           0 2px 20px rgba(22, 163, 74, 0.08);
+  --shadow-medium:         0 8px 40px rgba(22, 163, 74, 0.12);
+  --shadow-glow:           0 0 60px rgba(22, 163, 74, 0.18);
+  --shadow-gold:           0 0 30px rgba(22, 163, 74, 0.14);
+}
+
+@layer base {
+  html {
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-gold-600) var(--color-bg-secondary);
+  }
+
+  body {
+    background-color: var(--color-bg-primary);
+    color: var(--color-text-primary);
+    font-family: var(--font-serif);
+    font-weight: 400;
+    line-height: 1.7;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+  }
+
+  /* Subtle film grain over everything */
+  body::before {
+    content: "";
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 9999;
+    opacity: 0.35;
+    mix-blend-mode: multiply;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='200' height='200'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.66 0 0 0 0 0.53 0 0 0 0 0.29 0 0 0 0.08 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  ::selection {
+    background: var(--color-gold-300);
+    color: #14532d;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-display);
+    color: var(--color-text-primary);
+    font-weight: 500;
+    line-height: 1.2;
+    letter-spacing: 0.01em;
+  }
+
+  /* İtalik vurgu — marka yeşili */
+  h1 em, h2 em, h3 em {
+    font-family: var(--font-serif);
+    font-style: italic;
+    color: var(--color-gold-600);
+    font-weight: 400;
+    font-variation-settings: "SOFT" 100;
+  }
+
+  p, .prose, .prose p, .prose li {
+    color: var(--color-text-secondary);
+    font-family: var(--font-serif);
+  }
+
+  main li {
+    color: var(--color-text-secondary);
+  }
+
+  a {
+    color: var(--color-brand-primary);
+    transition: color 0.3s ease;
+  }
+  a:hover {
+    color: var(--color-brand-hover);
+  }
+}
+
+@layer utilities {
+  .shadow-soft   { box-shadow: var(--shadow-soft); }
+  .shadow-medium { box-shadow: var(--shadow-medium); }
+  .shadow-glow   { box-shadow: var(--shadow-glow); }
+  .shadow-gold   { box-shadow: var(--shadow-gold); }
+
+  /* ─── PREMIUM COMPONENTS ─── */
+
+  .skip-link {
+    position: fixed;
+    left: 1rem;
+    top: 1rem;
+    z-index: 100000;
+    transform: translateY(-150%);
+    border-radius: var(--gm-radius-pill, 9999px);
+    background: var(--gm-text, #14532d);
+    color: var(--gm-bg, #f7fee7);
+    padding: 0.75rem 1rem;
+    font-weight: 700;
+    text-decoration: none;
+    transition: transform 0.2s ease;
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+    outline: 2px solid var(--gm-primary, #16a34a);
+    outline-offset: 3px;
+  }
+
+  .section-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 1rem;
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    letter-spacing: 0.42em;
+    text-transform: uppercase;
+    color: var(--color-gold-600);
+    margin-bottom: 1.5rem;
+  }
+  .section-label::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--color-gold-400);
+  }
+
+  .btn-premium {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem 2.6rem;
+    background: var(--color-sand-800);          /* ink button — premium feel */
+    color: var(--color-sand-50);
+    text-decoration: none;
+    font-family: var(--font-serif);
+    font-size: 0.78rem;
+    font-weight: 500;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: none;
+  }
+  .btn-premium:hover {
+    background: var(--color-gold-400);
+    color: var(--color-sand-800);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-gold);
+  }
+
+  .btn-outline-premium {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.7rem;
+    padding: 1rem 2.6rem;
+    background: transparent;
+    border: 1px solid var(--color-border-medium);
+    color: var(--color-text-primary);
+    text-decoration: none;
+    font-family: var(--font-serif);
+    font-size: 0.78rem;
+    font-weight: 400;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    border-radius: 999px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+  }
+  .btn-outline-premium:hover {
+    border-color: var(--color-gold-400);
+    color: var(--color-gold-600);
+    background: var(--color-bg-accent);
+  }
+
+  /* ─── SCROLL REVEAL ───
+     Hydration-safe: `.reveal` SSR'da görünür kalır. `body.scroll-reveal-ready`
+     hydration tamamlanınca eklenir; sadece o noktadan sonra fade/translate
+     başlar. Bu, server HTML'deki class listesinin client hydrate sırasında
+     mutate edilmesini engeller (no .visible toggle race). */
+  .reveal {
+    transition: opacity 0.8s cubic-bezier(0.22, 1, 0.36, 1),
+                transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  body.scroll-reveal-ready .reveal:not(.visible) {
+    opacity: 0;
+    transform: translateY(40px);
+  }
+  body.scroll-reveal-ready .reveal.visible {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  .reveal-delay-1 { transition-delay: 0.1s; }
+  .reveal-delay-2 { transition-delay: 0.2s; }
+  .reveal-delay-3 { transition-delay: 0.3s; }
+  .reveal-delay-4 { transition-delay: 0.4s; }
+
+  /* ─── HERO ANIMATIONS ─── */
+  @keyframes heroFadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  .hero-fade-up    { opacity: 0; animation: heroFadeUp 1s ease forwards; }
+  .hero-fade-up-1  { animation-delay: 0.5s; }
+  .hero-fade-up-2  { animation-delay: 0.7s; }
+  .hero-fade-up-3  { animation-delay: 0.9s; }
+  .hero-fade-up-4  { animation-delay: 1.1s; }
+  .hero-critical   { opacity: 1; transform: none; animation: none; }
+
+  @keyframes dotPulse {
+    0%, 100% { opacity: 0.4; transform: scale(0.8); }
+    50%      { opacity: 1;   transform: scale(1.2); }
+  }
+  .dot-pulse { animation: dotPulse 2s ease-in-out infinite; }
+
+  @keyframes scrollLine {
+    0%, 100% { transform: scaleY(1);   opacity: 0.5; }
+    50%      { transform: scaleY(0.5); opacity: 1; }
+  }
+
+  /* ─── SUBTLE TWINKLE (used in mystical hero sections) ─── */
+  @keyframes twinkle {
+    0%, 100% { opacity: 0;   transform: scale(0.5); }
+    50%      { opacity: 0.7; transform: scale(1); }
+  }
+  .twinkle { animation: twinkle 4s ease-in-out infinite; }
+
+  /* ─── SLOW ROTATE (used for orbital decorative SVGs) ─── */
+  @keyframes rotateSlow {
+    to { transform: rotate(360deg); }
+  }
+  .rotate-slow         { animation: rotateSlow 80s linear infinite; }
+  .rotate-slow-reverse { animation: rotateSlow 120s linear infinite reverse; }
+
+  /* ─── Yumuşak marka parıltısı (hero) ─── */
+  @keyframes goldReflection {
+    0%, 100% { transform: scale(1) translateY(0); opacity: 0.3; filter: blur(40px); }
+    50%      { transform: scale(1.1) translateY(-10px); opacity: 0.5; filter: blur(50px); }
+  }
+  .gold-reflection {
+    position: absolute;
+    bottom: -150px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 140%;
+    height: 400px;
+    background: radial-gradient(circle at center, var(--color-gold-400) 0%, transparent 70%);
+    mix-blend-mode: plus-lighter;
+    pointer-events: none;
+    z-index: 1;
+    animation: goldReflection 8s ease-in-out infinite;
+    opacity: 0.4;
+  }
+
+  /* ─── MYSTICAL AURA GLOWS ─── */
+  .aura-mint { background: radial-gradient(circle at center, var(--color-mystic-mint) 0%, transparent 70%); }
+  .aura-cyan { background: radial-gradient(circle at center, var(--color-mystic-cyan) 0%, transparent 70%); }
+  .aura-rose { background: radial-gradient(circle at center, var(--color-mystic-rose) 0%, transparent 70%); }
+
+  /* ─── HERO ANIMATIONS ─── */
+  @keyframes heroFloat {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(2deg); }
+  }
+  .animate-hero-float {
+    animation: heroFloat 7s ease-in-out infinite;
+  }
+
+  .text-gradient-brand {
+    display: block;
+    color: transparent;
+    background: linear-gradient(135deg, #15803d, #22c55e 58%, #84cc16);
+    -webkit-background-clip: text;
+    background-clip: text;
+  }
+
+  .hero-eyebrow-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 12px;
+    border: 1px solid rgba(22, 163, 74, 0.18);
+    border-radius: 999px;
+    background: rgba(240, 253, 244, 0.75);
+    color: #15803d;
+    font-weight: 800;
+    font-size: 13px;
+    box-shadow: 0 12px 30px rgba(22, 163, 74, 0.1);
+  }
+
+  .hero-eyebrow-dot {
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: #fbbf24;
+    box-shadow: 0 0 0 6px rgba(251, 191, 36, 0.18);
+    flex-shrink: 0;
+  }
+
+  .btn-hero-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 46px;
+    padding: 13px 20px;
+    border-radius: 999px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: #fff;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    box-shadow: 0 14px 28px rgba(22, 163, 74, 0.28);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    text-decoration: none;
+    border: none;
+  }
+  .btn-hero-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 18px 38px rgba(22, 163, 74, 0.34);
+  }
+
+  .btn-hero-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    min-height: 46px;
+    padding: 13px 20px;
+    border-radius: 999px;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+    color: #334155;
+    background: rgba(255, 255, 255, 0.72);
+    border: 1px solid rgba(15, 23, 42, 0.1);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    transition: transform 0.2s ease, border-color 0.2s ease, color 0.2s ease, background 0.2s ease;
+    text-decoration: none;
+  }
+  .btn-hero-secondary:hover {
+    transform: translateY(-2px);
+    border-color: rgba(22, 163, 74, 0.35);
+    color: #15803d;
+    background: rgba(240, 253, 244, 0.92);
+  }
+
+  .hero-metric-card {
+    padding: 18px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.78);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    box-shadow: 0 18px 48px rgba(15, 23, 42, 0.06);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+  }
+}
+
+@utility container {
+  margin-inline: auto;
+  padding-inline: 1rem;
+  max-width: 1300px;
+}

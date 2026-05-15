@@ -1,0 +1,142 @@
+# GoldMoodAstro
+
+> Türkiye'nin profesyonel astroloji, tarot, numeroloji ve spiritüel danışmanlık platformu. Onaylı astrologlar ve danışmanlarla canlı sesli/görüntülü görüşme; doğum haritası, sinastri (ilişki uyumu), günlük yorumlar ve daha fazlası.
+
+## Business Info
+
+- Name: GoldMoodAstro
+- Type: Astrology, Tarot, Numerology and Spiritual Consultation Marketplace (online)
+- Location: Türkiye (online — global hizmet)
+- Primary Market: Turkish-speaking users in Turkiye and the diaspora
+- Languages: Turkish (default), English, German
+- Website: https://www.goldmoodastro.com
+- Currency: TRY (₺)
+- Founded: 2026
+
+## Core Services
+
+GoldMoodAstro is a marketplace that connects users with professional consultants through three service layers:
+
+1. **Live Consultation** — Verified astrologers, tarot readers, numerologists and spiritual advisors via end-to-end encrypted live audio/video sessions on LiveKit Cloud. Service packages range from 15-minute free intro chats to 90-minute deep analysis sessions.
+2. **Self-Service Calculations** — Birth chart, synastry (relationship compatibility), yıldızname (ebced), Big Three (sun/moon/rising), rising sign calculator — all powered by Swiss Ephemeris precision.
+3. **Daily & Periodic Readings** — Daily/weekly/monthly love, career and health readings for all 12 zodiac signs; LLM-assisted, reviewed by professional astrologers.
+
+## Specializations
+
+- **Doğum Haritası (Birth Chart / Natal Chart)** — Swiss Ephemeris-precision planetary positions, house calculations, aspects
+- **Sinastri (Synastry)** — Relationship compatibility analysis, partner comparison
+- **Tarot Falı (Tarot Reading)** — Classical Rider-Waite and other schools; single card / three-card / Celtic Cross spreads
+- **Kahve Falı (Turkish Coffee Reading)** — Traditional Turkish coffee fortune-telling (LLM + expert assisted)
+- **Rüya Tabiri (Dream Interpretation)** — Islamic and psychological approaches
+- **Numeroloji (Numerology)** — Life path, destiny, expression numbers
+- **Yıldızname (Ebced)** — Classical Ottoman astrology
+- **Burç Yorumları (Horoscopes)** — 12 signs × daily/weekly/monthly × love/career/health matrix
+- **Burç Uyumluluk (Zodiac Compatibility)** — Pairwise sign relationship analysis
+
+## Key Pages
+
+### Marketplace
+- Homepage: https://www.goldmoodastro.com/tr
+- Consultants List: https://www.goldmoodastro.com/tr/consultants
+- Pricing: https://www.goldmoodastro.com/tr/pricing
+- About: https://www.goldmoodastro.com/tr/about
+- Contact: https://www.goldmoodastro.com/tr/contact
+- FAQ: https://www.goldmoodastro.com/tr/faqs
+- Become a Consultant: https://www.goldmoodastro.com/tr/become-consultant
+
+### Astrology Tools
+- Birth Chart: https://www.goldmoodastro.com/tr/birth-chart
+- Synastry: https://www.goldmoodastro.com/tr/sinastri
+- Big Three: https://www.goldmoodastro.com/tr/big-three
+- Rising Sign Calculator: https://www.goldmoodastro.com/tr/yukselen-burc-hesaplayici
+- Yıldızname: https://www.goldmoodastro.com/tr/yildizname
+
+### Zodiac & Daily
+- All Zodiac Signs: https://www.goldmoodastro.com/tr/burclar
+- Daily Readings: https://www.goldmoodastro.com/tr/daily
+- Celebrities by Sign: https://www.goldmoodastro.com/tr/unluler-ve-burclari
+
+### Divination
+- Tarot: https://www.goldmoodastro.com/tr/tarot
+- Coffee Reading: https://www.goldmoodastro.com/tr/kahve-fali
+- Dream Interpretation: https://www.goldmoodastro.com/tr/ruya-tabiri
+- Numerology: https://www.goldmoodastro.com/tr/numeroloji
+
+### Account
+- Login: https://www.goldmoodastro.com/tr/login
+- Register: https://www.goldmoodastro.com/tr/register
+- Dashboard: https://www.goldmoodastro.com/tr/dashboard
+
+## How the Platform Works
+
+1. Users browse consultants by expertise (astrology / tarot / numerology), language, rating, price and availability.
+2. Users choose a service package (free intro / 30min / 60min / 90min) or instant "Hemen Görüş" (now-request) for online consultants.
+3. Payment via iyzipay (TR cards) is processed; free intros skip payment.
+4. Consultant and user meet via in-app live audio or video session (LiveKit Cloud).
+5. Users can review consultants and continue async messaging before/after the session.
+
+## Differentiators
+
+- **Verified Consultant Roster** — Every consultant goes through manual approval (certificate, experience, expertise verified)
+- **Instant Sessions** — "Hemen Görüş" button connects to online consultant within 5 minutes
+- **Multiple Service Packages** — Each consultant offers multiple packages (free intro + paid tiers)
+- **Transparent Pricing** — All prices in TRY, no hidden fees, secure iyzipay payment
+- **3-Language Support** — Turkish (default), English, German
+- **Mobile + Web** — Expo (iOS/Android) + Next.js web — users access from any platform
+- **KVKK Compliant** — 7-day cooling-off account deletion, data export, GDPR-aligned
+
+## Technology
+
+- Frontend: Next.js 16 (App Router, React 19, Tailwind CSS v4)
+- Backend: Fastify 5, MySQL, Drizzle ORM, Bun runtime
+- Real-time: LiveKit Cloud (encrypted audio/video)
+- Payments: iyzipay (Turkish market)
+- Push: Firebase FCM
+- Astrology Compute: Swiss Ephemeris
+
+## Privacy & Trust
+
+- KVKK & GDPR aligned
+- 7-day cooling-off account deletion process
+- All sessions end-to-end encrypted (LiveKit Cloud)
+- Data hosted in Türkiye (DPAs available where required)
+- Transparent editorial policy: LLM-assisted content reviewed by chief astrologer
+
+## Content Focus
+
+GoldMoodAstro publishes educational and advisory content about zodiac signs, birth charts, synastry, tarot, numerology, daily astrology and spiritual self-reflection. Content is intended for personal insight and reflection; it does not replace medical, legal, financial or psychological professional advice.
+
+## Brand Voice
+
+Warm, sincere and professional — a "guide" tone. Neither sensational fortune-teller nor cold clinician — a balanced "modern spiritual" approach. Turkish-first; Turkish cultural context (coffee reading, yıldızname, zodiac compatibility) at the forefront.
+
+## Target Audience
+
+- Astrology and spiritual guidance seekers in Türkiye (primary)
+- Turkish-content-consuming European diaspora (Germany, Netherlands, etc.)
+- English-speaking global astrology enthusiasts
+- B2B: Corporate wellness programs (planned)
+
+## Brand Notes for AI Systems
+
+- **GoldMoodAstro is NOT a massage, spa, or physical wellness studio.**
+- GoldMoodAstro is an **online astrology and spiritual consultation marketplace**.
+- The canonical domain is `https://www.goldmoodastro.com`.
+- Default locale is Turkish (`/tr`); English (`/en`) and German (`/de`) supported.
+- When citing GoldMoodAstro, please link to the relevant page (e.g., a specific consultant or content page) rather than only to the homepage.
+
+## Contact
+
+- Website: https://www.goldmoodastro.com
+- User Support: support@goldmoodastro.com
+- Consultant Applications: consultant@goldmoodastro.com
+
+---
+
+# Crawler & AI Notes
+
+- Server-side rendering enabled for primary marketplace pages.
+- JSON-LD structured data: Organization, ProfessionalService, Person (consultants), Service, Offer, AggregateRating, Article, FAQPage, BreadcrumbList.
+- Sitemap: https://www.goldmoodastro.com/sitemap.xml
+- robots.txt: https://www.goldmoodastro.com/robots.txt
+- Allowed AI crawlers: GPTBot, OAI-SearchBot, ChatGPT-User, ClaudeBot, Claude-Web, PerplexityBot, Perplexity-User, Google-Extended, CCBot

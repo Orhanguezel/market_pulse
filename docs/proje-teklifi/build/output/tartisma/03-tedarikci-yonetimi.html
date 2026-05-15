@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>03 — Tedarikçi Analizi &amp; Alternatif Tedarikçi Keşfi — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>03 — Tedarikçi Analizi &amp; Alternatif Tedarikçi Keşfi</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="tedarikçi-analizi-alternatif-tedarikçi-keşfi">03 — Tedarikçi Analizi &amp; Alternatif Tedarikçi Keşfi</h1>
+<blockquote>
+<p><strong>Bağlam (v1.1):</strong> Bu doküman <strong>Faz 4 — Stok &amp; Tedarik Otomasyonu</strong>’nun tedarikçi tarafını anlatır. Stok tarafı: <a href="./04-stok-tahmin-otomasyonu.md"><code>04-stok-tahmin-otomasyonu.md</code></a>. Güncel resmî yapı: <a href="../proje-teklifi/02-cozum-genel-bakis.md#faz-4--stok--tedarik-otomasyonu"><code>proje-teklifi/02-cozum-genel-bakis.md</code></a>.</p>
+</blockquote>
+<h2 id="hipotez">Hipotez</h2>
+<blockquote>
+<p>Mevcut tedarikçilerin performans verisi (lead time, fiyat, kalite, gecikme) sistematik tutulursa: (a) <strong>kötü performans gören tedarikçiler</strong> açıkça görünür, (b) hangi ürün için <strong>alternatif aramak</strong> gerektiği otomatik tespit edilir, (c) AI tabanlı keşif ile yeni tedarikçi adayları çıkarılabilir.</p>
+</blockquote>
+<h2 id="sorun-tanımı">Sorun tanımı</h2>
+<p>Bugün: - <code>tedarikci</code> modülü iletişim bilgisinden ibaret. Performans verisi yok. - Mal kabul tablosu var ama <strong>tedarikçi-ürün-fiyat geçmişi</strong> ayrıştırılmamış. - Tek tedarikçili ürünler için <strong>risk paneli yok</strong> (X tedarikçi düşerse hangi ürünler kalır?). - Yeni tedarikçi araması = Google’a girip arama yapmak.</p>
+<h2 id="önerilen-mimari-üç-ayak">Önerilen mimari — üç ayak</h2>
+<h3 id="ayak-1-tedarikçi-performans-skorlama">Ayak 1 — Tedarikçi performans skorlama</h3>
+<p>Yeni veriler <code>mal_kabul_kayitlari</code> üzerinden hesaplanır (mevcut <code>kalite_durumu</code>, <code>gelen_miktar</code>, satın alma siparişi termin tarihi):</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">TABLE</span> tedarikci_performans (</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  tedarikci_id <span class="dt">char</span>(<span class="dv">36</span>) PK FK,</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  toplam_satin_alma_tutari <span class="dt">decimal</span>(<span class="dv">14</span>,<span class="dv">2</span>),</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  toplam_kalem_sayisi <span class="dt">int</span>,</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Termin uyumu</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>  zamanindaki_teslim_yuzdesi <span class="dt">decimal</span>(<span class="dv">5</span>,<span class="dv">2</span>),</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  ortalama_gecikme_gun <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">2</span>),</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Kalite</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  kabul_edilen_miktar <span class="dt">decimal</span>(<span class="dv">14</span>,<span class="dv">4</span>),</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>  reddedilen_miktar <span class="dt">decimal</span>(<span class="dv">14</span>,<span class="dv">4</span>),</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>  red_orani <span class="dt">decimal</span>(<span class="dv">5</span>,<span class="dv">2</span>),</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Lead time</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  ortalama_lead_time_gun <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">2</span>),</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  lead_time_std_sapma <span class="dt">decimal</span>(<span class="dv">8</span>,<span class="dv">2</span>),</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Fiyat trendi</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>  son_alis_fiyatlari JSON,           <span class="co">-- son 6 alımın {tarih, urun, birim_fiyat}</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  <span class="co">-- Skor</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>  performans_skoru <span class="dt">decimal</span>(<span class="dv">5</span>,<span class="dv">2</span>),     <span class="co">-- 0-100 ağırlıklı</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a>  recalc_at datetime</span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>);</span></code></pre></div>
+<p>Skor formülü (başlangıç):</p>
+<pre><code>performans = 0.35 * (100 - red_orani)
+           + 0.30 * zamanindaki_teslim_yuzdesi
+           + 0.20 * lead_time_skoru   (kısa &amp; istikrarlı = yüksek)
+           + 0.15 * fiyat_skoru        (rakip ortalamasının altında ise yüksek)</code></pre>
+<p>Bu rakam <code>tedarikci</code> listesinde renkli badge ile gösterilir: yeşil/sarı/kırmızı.</p>
+<h3 id="ayak-2-risk-haritası">Ayak 2 — Risk haritası</h3>
+<p>Her hammadde/ambalaj ürünü için kaç tedarikçiden alındığını çıkar:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode sql"><code class="sourceCode sql"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">CREATE</span> <span class="kw">VIEW</span> v_urun_tedarikci_dagilimi <span class="kw">AS</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">SELECT</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  u.<span class="kw">id</span>, u.kod, u.ad, u.kategori,</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> sa.tedarikci_id) <span class="kw">AS</span> tedarikci_sayisi,</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">SUM</span>(sak.miktar) <span class="kw">AS</span> toplam_alim_son_yil,</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  GROUP_CONCAT(<span class="kw">DISTINCT</span> t.ad SEPARATOR <span class="st">&#39;, &#39;</span>) <span class="kw">AS</span> tedarikciler,</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="cf">CASE</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> sa.tedarikci_id) <span class="op">=</span> <span class="dv">1</span> <span class="cf">THEN</span> <span class="st">&#39;risk:tek_kaynak&#39;</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">WHEN</span> <span class="fu">COUNT</span>(<span class="kw">DISTINCT</span> sa.tedarikci_id) <span class="op">=</span> <span class="dv">2</span> <span class="cf">THEN</span> <span class="st">&#39;risk:ikili_kaynak&#39;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    <span class="cf">ELSE</span> <span class="st">&#39;guvenli:cok_kaynak&#39;</span></span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a>  <span class="cf">END</span> <span class="kw">AS</span> risk_durumu</span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a><span class="kw">FROM</span> urunler u</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> satin_alma_kalemleri sak <span class="kw">ON</span> sak.urun_id <span class="op">=</span> u.<span class="kw">id</span></span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> satin_alma_siparisleri sa <span class="kw">ON</span> sa.<span class="kw">id</span> <span class="op">=</span> sak.siparis_id</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>  <span class="kw">AND</span> sa.created_at <span class="op">&gt;</span> NOW() <span class="op">-</span> <span class="dt">INTERVAL</span> <span class="dv">365</span> <span class="dt">DAY</span></span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a><span class="kw">LEFT</span> <span class="kw">JOIN</span> tedarikci t <span class="kw">ON</span> t.<span class="kw">id</span> <span class="op">=</span> sa.tedarikci_id</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a><span class="kw">WHERE</span> u.kategori <span class="kw">IN</span> (<span class="st">&#39;hammadde&#39;</span>,<span class="st">&#39;yarimamul&#39;</span>)</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a><span class="kw">GROUP</span> <span class="kw">BY</span> u.<span class="kw">id</span>;</span></code></pre></div>
+<p>Dashboard: “tek tedarikçili kritik 12 ürün” listesi → “alternatif ara” butonu.</p>
+<h3 id="ayak-3-alternatif-tedarikçi-keşfi">Ayak 3 — Alternatif tedarikçi keşfi</h3>
+<p>Müşteri keşif modülü ile aynı altyapıyı kullanır (Crawlee + Apollo + Google Places + sektörel B2B). Tedarikçi tarafında ek kaynaklar:</p>
+<table>
+<colgroup>
+<col style="width: 50%" />
+<col style="width: 50%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Kaynak</th>
+<th>Yararı</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>TOBB Sanayi Sicili</strong></td>
+<td>Üretici firma listesi, NACE kodu ile filtrelenebilir</td>
+</tr>
+<tr class="even">
+<td><strong>Türkiye İhracatçılar Meclisi (TİM)</strong></td>
+<td>İhracatçı tedarikçi (kalite genelde daha yüksek)</td>
+</tr>
+<tr class="odd">
+<td><strong>Alibaba.com</strong></td>
+<td>Çin/uzakdoğu tedarikçi, MOQ, sertifika bilgisi var</td>
+</tr>
+<tr class="even">
+<td><strong>Tradewheel / Made-in-China</strong></td>
+<td>Alibaba alternatifi</td>
+</tr>
+<tr class="odd">
+<td><strong>Sektörel fuar katılımcı listeleri</strong></td>
+<td>Yıllık etkinliklerden taraflı veri</td>
+</tr>
+<tr class="even">
+<td><strong>EU Trade Helpdesk</strong></td>
+<td>AB tedarikçileri (CE belgeli)</td>
+</tr>
+<tr class="odd">
+<td><strong>Mevcut tedarikçinin müşteri listesi</strong></td>
+<td>“Bu tedarikçi başka kime satıyor” — ortak müşteri sektörel ipucu</td>
+</tr>
+</tbody>
+</table>
+<p>AI destekli outreach: 1. Yeni hammadde fiyat sorgu maili: “Şu ürün için MOQ X, teslim Y gün, fiyat Z TL/USD altında istiyoruz” — Türkçe + İngilizce + Çince. 2. Cevap geldiğinde otomatik karşılaştırma tablosu (mevcut tedarikçi vs aday).</p>
+<h2 id="lead-time-bazlı-yeniden-sipariş-tetiklemesi">Lead time bazlı yeniden sipariş tetiklemesi</h2>
+<p>Bu modül <a href="./04-stok-tahmin-otomasyonu.md"><code>04-stok-tahmin-otomasyonu.md</code></a> ile sıkı bağlı: tedarikçi <code>lead_time_gun</code> bilgisini kullanır → “stok tüketim hızı + güvenlik stoğu + lead time” formülü ile <strong>otomatik satın alma siparişi taslağı</strong> açar.</p>
+<h2 id="açık-sorular">Açık sorular</h2>
+<ol type="1">
+<li><strong>Performans hesaplama sıklığı:</strong> günlük cron mu, her mal kabul sonrası tetikleyici mi?</li>
+<li><strong>Kalite verisi:</strong> şu an <code>kalite_durumu = red</code> kayıtları detayı yok (“hangi nedenle red?”). Red sebepleri taxonomi’si gerek mi (boyut, yüzey, eksik miktar, gecikme)?</li>
+<li><strong>Fiyat karşılaştırma:</strong> rakip tedarikçi fiyatı için pazar verisi yok; manuel girilecek mi yoksa Apollo/sektör API’larından mı?</li>
+<li><strong>Outreach dili:</strong> Çin tedarikçilerine Mandarin metni AI ile mi yazdırılsın?</li>
+<li><strong>Sertifika gereksinimi:</strong> ISO/CE/FDA sertifikası şart koşulan ürünler var mı? Aday tedarikçi filtresi.</li>
+</ol>
+<h2 id="bağımlılıklar">Bağımlılıklar</h2>
+<ul>
+<li>✅ <code>tedarikci</code>, <code>mal_kabul_kayitlari</code>, <code>satin_alma_*</code> tabloları mevcut</li>
+<li>⚠️ Termin tarihi mal_kabul üzerinde tracking yok (tahmini terminle gerçek teslim arası fark)</li>
+<li>⚠️ Fiyat tarihçesi <code>satin_alma_kalemleri.birim_fiyat</code>’ta tek seferlik; trendi rapor edecek view yok</li>
+</ul>
+<h2 id="tahmini-iş-büyüklüğü">Tahmini iş büyüklüğü</h2>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 26%" />
+<col style="width: 42%" />
+<col style="width: 31%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Faz</th>
+<th>İçerik</th>
+<th>Süre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>Performans tablosu + cron + UI badge</td>
+<td>~3-4 gün</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>Risk haritası view + alternatif arama butonu</td>
+<td>~2 gün</td>
+</tr>
+<tr class="odd">
+<td>3</td>
+<td>Tedarikçi keşif crawler (müşteri keşfi ile ortak altyapı)</td>
+<td>Müşteri keşfi tarafına dahil; +3 gün özelleşme</td>
+</tr>
+<tr class="even">
+<td>4</td>
+<td>Otomatik satın alma siparişi taslağı (stok modülü ile)</td>
+<td>Stok dokümanına bakın; +2 gün entegrasyon</td>
+</tr>
+<tr class="odd">
+<td><strong>Toplam</strong></td>
+<td></td>
+<td><strong>~10-15 iş günü</strong> (müşteri keşif altyapısı varsa daha kısa)</td>
+</tr>
+</tbody>
+</table>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("03 — Tedarikçi Analizi &amp; Alternatif Tedarikçi Keşfi").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

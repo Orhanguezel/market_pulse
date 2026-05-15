@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>05 — Veri Toplama Altyapısı (Crawler, CRM, AI Entegrasyonları) — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>05 — Veri Toplama Altyapısı (Crawler, CRM, AI Entegrasyonları)</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="veri-toplama-altyapısı-crawler-crm-ai-entegrasyonları">05 — Veri Toplama Altyapısı (Crawler, CRM, AI Entegrasyonları)</h1>
+<blockquote>
+<p><strong>Bağlam (v1.1):</strong> Bu doküman scraping ve veri toplama altyapısının <strong>genel tartışmasıdır</strong>. Bayi-spesifik scraping ve churn radarı <strong>Faz 5</strong> olarak kristalize edildi — derinlemesine teknik tasarım: <a href="./13-bayi-scraping-churn.md"><code>13-bayi-scraping-churn.md</code></a> (KVKK çerçevesi, Crawlee+Playwright stack, 11 sinyal, churn ML modeli).</p>
+</blockquote>
+<h2 id="amaç">Amaç</h2>
+<p>Müşteri/tedarikçi keşfi, talep toplama, fiyat takibi gibi modüllerin <strong>dış dünyadan veri çekme</strong> ihtiyacı için ortak altyapı. Bu doküman teknoloji seçimini ve “openclaw” kelimesinin olası yorumlarını netleştirir.</p>
+<h2 id="openclaw-kullanıcı-netleştirmesi-gerekli">“openclaw” — Kullanıcı netleştirmesi gerekli</h2>
+<p>Aşağıdaki adaylardan hangisi kastedildi?</p>
+<h3 id="aday-a-open-source-crm-en-olası">Aday A — Open Source CRM (en olası)</h3>
+<blockquote>
+<p>Eğer “satış pipeline’ı, lead yönetimi, müşteri etkileşim geçmişi” istenen şey ise:</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 16%" />
+<col style="width: 25%" />
+<col style="width: 22%" />
+<col style="width: 35%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>CRM</th>
+<th>Lisans</th>
+<th>Stack</th>
+<th>Öne çıkan</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>EspoCRM</strong></td>
+<td>GPL v3</td>
+<td>PHP + MySQL</td>
+<td>Hafif, REST API, kolay self-host</td>
+</tr>
+<tr class="even">
+<td><strong>SuiteCRM</strong></td>
+<td>AGPL</td>
+<td>PHP + MySQL</td>
+<td>Salesforce alternatifi, geniş özellik</td>
+</tr>
+<tr class="odd">
+<td><strong>VTiger</strong></td>
+<td>Apache 2.0</td>
+<td>PHP + MySQL</td>
+<td>Sektör temalı, e-mail kampanya dahil</td>
+</tr>
+<tr class="even">
+<td><strong>CiviCRM</strong></td>
+<td>AGPL</td>
+<td>PHP, WordPress/Drupal eklenti</td>
+<td>Üye yönetimi/STK odaklı</td>
+</tr>
+<tr class="odd">
+<td><strong>Odoo CRM</strong></td>
+<td>LGPL (community)</td>
+<td>Python + PostgreSQL</td>
+<td>ERP + CRM tek paket, geniş ekosistem</td>
+</tr>
+<tr class="even">
+<td><strong>Twenty</strong></td>
+<td>AGPL</td>
+<td>TypeScript + GraphQL</td>
+<td>Modern UX, yeni nesil</td>
+</tr>
+<tr class="odd">
+<td><strong>Krayin CRM</strong></td>
+<td>MIT</td>
+<td>Laravel + MySQL</td>
+<td>Modüler, hafif</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Önerim:</strong> EspoCRM veya Twenty. EspoCRM kurulum kolay + REST API; Twenty modern stack ve TypeScript ekosistemi.</p>
+<p><strong>Entegrasyon yolu:</strong> Paspas ERP’nin <code>musteriler</code>, <code>lead_havuzu</code>, <code>lead_etkilesim</code> tabloları <strong>tek doğruluk kaynağı</strong> kalır; CRM senkron edilir (uçak rezervasyon sistemleri gibi). Veya CRM dış arayüz, Paspas back-office. Karar bekliyor.</p>
+<h3 id="aday-b-web-crawler-scraper">Aday B — Web Crawler / Scraper</h3>
+<blockquote>
+<p>Eğer “internetten firma bilgisi toplama” araç istenen şey ise:</p>
+</blockquote>
+<table>
+<colgroup>
+<col style="width: 20%" />
+<col style="width: 16%" />
+<col style="width: 26%" />
+<col style="width: 36%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Araç</th>
+<th>Tip</th>
+<th>Diller</th>
+<th>Öne çıkan</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><strong>Crawlee</strong></td>
+<td>Library</td>
+<td>Node.js / Python</td>
+<td>Apify ekosistemi, headless browser dahil</td>
+</tr>
+<tr class="even">
+<td><strong>Apache Nutch</strong></td>
+<td>Distributed</td>
+<td>Java</td>
+<td>Büyük ölçekli, Hadoop entegrasyon</td>
+</tr>
+<tr class="odd">
+<td><strong>Crawl4AI</strong></td>
+<td>LLM-first</td>
+<td>Python</td>
+<td>LLM ile yapılandırılmış çıktı</td>
+</tr>
+<tr class="even">
+<td><strong>Firecrawl</strong></td>
+<td>API/SaaS + OSS</td>
+<td>TypeScript</td>
+<td>Markdown çıktı, LLM dostu</td>
+</tr>
+<tr class="odd">
+<td><strong>Scrapy</strong></td>
+<td>Framework</td>
+<td>Python</td>
+<td>En olgun, geniş community</td>
+</tr>
+<tr class="even">
+<td><strong>Playwright</strong></td>
+<td>Browser auto</td>
+<td>Multi</td>
+<td>Modern JS-render eden siteler için (mevcutta var, e2e testten)</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Önerim:</strong> Crawlee + Playwright (Node.js stack — Paspas backend ile aynı runtime). Yapılandırılmış çıktı için Crawl4AI yardımcı olabilir ama opsiyonel.</p>
+<h3 id="aday-c-openwebui-lokal-llm-frontend">Aday C — OpenWebUI / Lokal LLM Frontend</h3>
+<blockquote>
+<p>Eğer “lokal AI asistan ile sohbet” arayüz istenen şey ise:</p>
+</blockquote>
+<ul>
+<li><strong>OpenWebUI</strong> — Ollama backend ile sohbet UI’ı, kendi sunucunda çalışır</li>
+<li><strong>LibreChat</strong> — ChatGPT alternatifi, çoklu model (OpenAI, Anthropic, Ollama)</li>
+<li><strong>AnythingLLM</strong> — Doküman tabanlı RAG + chat</li>
+</ul>
+<p><strong>Not:</strong> Test merkezindeki AI analiz modülü zaten Anthropic/OpenAI/Groq destekliyor. Bunlardan biri sadece “kendi LLM’ini barındır” ihtiyacı çıkarsa anlamlı.</p>
+<h3 id="aday-d-yazım-hatası">Aday D — Yazım hatası</h3>
+<p>“OpenClaw” diye spesifik bir tool internette yok. Kullanıcı: “OpenCRM” mi yoksa “Crawl” türevi bir şey mi yoksa başka bir araç mı kastettiğini netleştirsin.</p>
+<h2 id="önerilen-veri-toplama-stacki-crm-seçiminden-bağımsız">Önerilen “veri toplama stack’i” (CRM seçiminden bağımsız)</h2>
+<h3 id="katman-1-crawler-runtime">Katman 1 — Crawler runtime</h3>
+<ul>
+<li><strong>Crawlee + Playwright (Node.js)</strong> — Paspas backend ile aynı dil, bun runtime’a uyumlu</li>
+<li>Bot algılama bypass için <strong>playwright-extra + stealth plugin</strong></li>
+<li>Proxy rotasyonu: <strong>Bright Data / Oxylabs / Smartproxy</strong> ($75-200/ay) veya başlangıçta proxy’siz</li>
+</ul>
+<h3 id="katman-2-yapılandırma">Katman 2 — Yapılandırma</h3>
+<ul>
+<li>HTML parse: Crawlee yerleşik</li>
+<li>LLM çıkarımı: mevcut <code>test_center/ai_provider.ts</code> (Claude/OpenAI/Groq)</li>
+<li><strong>Crawl4AI</strong> ile direkt “URL → JSON schema’lı çıktı” alınabilir (Python servisi olarak)</li>
+</ul>
+<h3 id="katman-3-api-entegrasyonları-resmi-kanallar">Katman 3 — API entegrasyonları (resmi kanallar)</h3>
+<table>
+<colgroup>
+<col style="width: 29%" />
+<col style="width: 37%" />
+<col style="width: 33%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Servis</th>
+<th>Kullanım</th>
+<th>Maliyet</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Google Places API</td>
+<td>Konum + sektör</td>
+<td>$17 / 1000</td>
+</tr>
+<tr class="even">
+<td>Hunter.io</td>
+<td>Email bulma + doğrulama</td>
+<td>$49/ay</td>
+</tr>
+<tr class="odd">
+<td>Apollo.io</td>
+<td>İletişim enrichment, B2B</td>
+<td>Free 50 lead, $59/ay 5K</td>
+</tr>
+<tr class="even">
+<td>Clearbit</td>
+<td>Firma profili (Salesforce’a satıldı, fiyatlama belirsiz)</td>
+<td>—</td>
+</tr>
+<tr class="odd">
+<td>LinkedIn Sales Navigator</td>
+<td>Manuel (resmi API yok)</td>
+<td>$99/ay/kullanıcı</td>
+</tr>
+<tr class="even">
+<td>ZoomInfo</td>
+<td>Premium B2B</td>
+<td>$$$</td>
+</tr>
+<tr class="odd">
+<td>Türkiye TOBB üye sorgu</td>
+<td>Public web</td>
+<td>Ücretsiz</td>
+</tr>
+<tr class="even">
+<td>TİM ihracatçı listesi</td>
+<td>Public web</td>
+<td>Ücretsiz</td>
+</tr>
+</tbody>
+</table>
+<h3 id="katman-4-job-queue">Katman 4 — Job queue</h3>
+<ul>
+<li><strong>BullMQ</strong> (Redis tabanlı) — büyük scrape işlerini arka planda çalıştırma</li>
+<li>Yoksa basit <code>setInterval</code> cron + queue tablosu (DB tabanlı)</li>
+</ul>
+<h3 id="katman-5-izleme">Katman 5 — İzleme</h3>
+<ul>
+<li>Hata oranı, başarı oranı, ortalama latency</li>
+<li>Domain başına rate limiting (1 req/2sn varsayılan)</li>
+<li>robots.txt uyumu</li>
+</ul>
+<h2 id="yasal-etik-notlar">Yasal / etik notlar</h2>
+<table>
+<colgroup>
+<col style="width: 37%" />
+<col style="width: 62%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Konu</th>
+<th>Yaklaşım</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>robots.txt</td>
+<td>Kabul edilmesi şart. Disallow path’ler ziyaret edilmesin.</td>
+</tr>
+<tr class="even">
+<td>Rate limit</td>
+<td>Aynı domaine paralel istek sayısı sınırlı, randomized delay</td>
+</tr>
+<tr class="odd">
+<td>KVKK (TR)</td>
+<td>Kişisel veri (isim/email) toplandığında saklama süresi tanımlı + opt-out yolu</td>
+</tr>
+<tr class="even">
+<td>GDPR (AB)</td>
+<td>Avrupa lead’leri için: legitimate interest gerekçesi + opt-out + DSR (data subject request) süreci</td>
+</tr>
+<tr class="odd">
+<td>CFAA (ABD)</td>
+<td>Login arkasındaki sayfaları scrape etme — ABD lead’lerinde riskli</td>
+</tr>
+<tr class="even">
+<td>Site ToS</td>
+<td>LinkedIn vb. resmi olarak yasaklı; manual research alternatifi</td>
+</tr>
+</tbody>
+</table>
+<h2 id="açık-sorular">Açık sorular</h2>
+<ol type="1">
+<li><strong>CRM kararı:</strong> Aşağıdakilerden hangisi?
+<ul>
+<li><ol type="a">
+<li>Paspas ERP içinde basit lead pipeline tab’ı (1-2 hafta)</li>
+</ol></li>
+<li><ol start="2" type="a">
+<li>EspoCRM/Twenty kur, Paspas ile senkron (4-6 hafta)</li>
+</ol></li>
+<li><ol start="3" type="a">
+<li>Şimdilik CRM yok, Apollo.io UI’ı kullanılır (sıfır kod, $59/ay)</li>
+</ol></li>
+</ul></li>
+<li><strong>Crawler hosting:</strong> Backend ile aynı sunucuda mı, ayrı VPS mi?</li>
+<li><strong>Proxy bütçe:</strong> $75-200/ay proxy maliyeti onaylanır mı?</li>
+<li><strong>API maliyeti:</strong> Hunter.io + Apollo.io + Google Places ≈ $150-200/ay sabit</li>
+<li><strong>Yurt dışı odak ülke:</strong> AB (Almanya, Hollanda, İngiltere) mı, Orta Doğu (Suudi, BAE) mı, ABD mi?</li>
+</ol>
+<h2 id="bağımlılıklar">Bağımlılıklar</h2>
+<ul>
+<li>✅ <code>test_center/ai_provider.ts</code> — AI altyapısı hazır</li>
+<li>✅ Playwright kuruluk (e2e için), crawler için yeniden kullanılabilir</li>
+<li>⚠️ Job queue altyapısı yok (BullMQ veya alternatif)</li>
+<li>⚠️ Lead/firma şemaları henüz tanımsız</li>
+<li>⚠️ CRM seçim kararı bekleniyor</li>
+</ul>
+<h2 id="tahmini-iş-büyüklüğü">Tahmini iş büyüklüğü</h2>
+<table>
+<thead>
+<tr class="header">
+<th>Bileşen</th>
+<th>Süre</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Crawlee setup + ilk crawler (Google Places)</td>
+<td>~3-4 gün</td>
+</tr>
+<tr class="even">
+<td>Job queue (DB tabanlı veya BullMQ)</td>
+<td>~2-3 gün</td>
+</tr>
+<tr class="odd">
+<td>AI tabanlı yapılandırma (Crawl4AI veya inline LLM)</td>
+<td>~3 gün</td>
+</tr>
+<tr class="even">
+<td>API entegrasyonları (Hunter, Apollo)</td>
+<td>~2 gün her biri</td>
+</tr>
+<tr class="odd">
+<td>CRM entegrasyonu (seçilen ürüne göre)</td>
+<td>5-15 gün</td>
+</tr>
+<tr class="even">
+<td><strong>Toplam (CRM hariç)</strong></td>
+<td><strong>~12-15 iş günü</strong></td>
+</tr>
+<tr class="odd">
+<td><strong>Toplam (CRM dahil)</strong></td>
+<td><strong>~20-30 iş günü</strong></td>
+</tr>
+</tbody>
+</table>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("05 — Veri Toplama Altyapısı (Crawler, CRM, AI Entegrasyonları)").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

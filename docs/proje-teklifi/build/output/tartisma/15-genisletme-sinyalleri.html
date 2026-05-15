@@ -1,0 +1,600 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>15 — Genişletme Sinyalleri (Faz 8+ Vizyonu) — MatPortal Proje Teklifi</title>
+<link rel="stylesheet" href="../style.css">
+</head>
+<body>
+
+<aside class="sidebar">
+  <a href="../index.html" class="brand">
+    MatPortal
+    <small>Proje Teklifi v1.1</small>
+  </a>
+
+  <h2>Ana Bölümler</h2>
+  <nav>
+    <ul>
+      <li><a href="../index.html" data-id="index">Ana Sayfa</a></li>
+      <li><a href="../tek-sayfa-ozet.html" data-id="ozet">Tek Sayfa Özet</a></li>
+      <li><a href="../00-yonetici-ozeti.html" data-id="00">00 — Yönetici Özeti</a></li>
+      <li><a href="../01-pazar-ve-musteri-analizi.html" data-id="01">01 — Pazar ve Müşteri</a></li>
+      <li><a href="../02-cozum-genel-bakis.html" data-id="02">02 — Çözüm Genel Bakış</a></li>
+      <li><a href="../03-mimari-ve-teknoloji.html" data-id="03">03 — Mimari ve Teknoloji</a></li>
+      <li><a href="../04-kullanici-yolculuklari.html" data-id="04">04 — Kullanıcı Yolculukları</a></li>
+      <li><a href="../05-fonksiyonel-kapsam.html" data-id="05">05 — Fonksiyonel Kapsam</a></li>
+      <li><a href="../06-veri-modeli.html" data-id="06">06 — Veri Modeli</a></li>
+      <li><a href="../07-yol-haritasi.html" data-id="07">07 — Yol Haritası</a></li>
+      <li><a href="../08-butce-kaynak.html" data-id="08">08 — Bütçe ve Kaynak</a></li>
+      <li><a href="../09-risk.html" data-id="09">09 — Risk Yönetimi</a></li>
+      <li><a href="../10-basari-kpi.html" data-id="10">10 — Başarı ve KPI</a></li>
+      <li><a href="../11-ek-belgeler.html" data-id="11">11 — Ek Belgeler</a></li>
+    </ul>
+  </nav>
+
+  <h2>Tartışma Dokümanları</h2>
+  <nav>
+    <ul>
+      <li><a href="index.html">Genel Tartışma İndeksi</a></li>
+      <li><a href="12-tahmin-motoru-derinlemesine.html">Faz 2 Derinlemesine</a></li>
+      <li><a href="13-bayi-scraping-churn.html">Faz 5 Derinlemesine</a></li>
+      <li><a href="14-egitilebilir-modeller-mlops.html">Faz 7 Derinlemesine</a></li>
+      <li><a href="15-genisletme-sinyalleri.html">Faz 8+ Genişleme</a></li>
+    </ul>
+  </nav>
+
+  <h2>Eylemler</h2>
+  <nav>
+    <ul>
+      <li><a href="#" onclick="window.print(); return false;">Yazdır / PDF olarak kaydet</a></li>
+    </ul>
+  </nav>
+</aside>
+
+<div>
+<div class="top-banner">
+  <div class="breadcrumb">MatPortal · Proje Teklifi · <strong>15 — Genişletme Sinyalleri (Faz 8+ Vizyonu)</strong></div>
+  <div class="actions">
+    <a href="../index.html">← Ana Sayfa</a>
+  </div>
+</div>
+
+<main>
+  <div class="doc-meta">
+    Versiyon 1.1 · 2026-05-01 · MatPortal Proje Teklifi
+  </div>
+
+<h1 id="genişletme-sinyalleri-faz-8-vizyonu">15 — Genişletme Sinyalleri (Faz 8+ Vizyonu)</h1>
+<blockquote>
+<p>Faz 0-7 ana iskelet. Bu dokümandaki 10 sinyal <strong>dah sonraki fazlar</strong> için potansiyel modüller. Her biri ayrı tartışma + derinlemesine doküman gerektirir. Şu an <strong>kayıt amaçlı</strong> — yol haritası genişlemesi için referans.</p>
+</blockquote>
+<hr />
+<h2 id="sinyal-1-rakip-pazar-istihbaratı-competitor-intelligence">Sinyal #1 — Rakip &amp; Pazar İstihbaratı (Competitor Intelligence)</h2>
+<h3 id="soru">Soru</h3>
+<blockquote>
+<p>“Rakiplerimiz ne yapıyor? Hangi yeni ürünleri çıkardı, fiyatları nereye gitti?”</p>
+</blockquote>
+<h3 id="kapsam">Kapsam</h3>
+<ul>
+<li>Rakip web sitelerini düzenli tarama (<code>competitor_radar</code> modülü)</li>
+<li>Yeni ürün lansmanları</li>
+<li>Fiyat değişiklikleri</li>
+<li>Kampanya paterni</li>
+<li>B2B fiyat listeleri (public olanlar)</li>
+<li>E-ihale kayıtları (kamu ihaleleri açık)</li>
+<li>Patent başvuruları (Türkpatent API)</li>
+</ul>
+<h3 id="veri-kaynakları">Veri kaynakları</h3>
+<ul>
+<li>Rakip e-ticaret siteleri</li>
+<li>B2B portallar (sahibinden, sanayim.net, gibi)</li>
+<li>Kamu İhale Kurumu</li>
+<li>Türkpatent (yeni patent başvuruları)</li>
+<li>Vergi mükellefi sorgulama (yeni şirket kuruluşları)</li>
+</ul>
+<h3 id="çıktı">Çıktı</h3>
+<ul>
+<li>“Rakip A şu hafta 3 yeni ürün lansman yaptı”</li>
+<li>“Rakip B fiyatlarını ortalama %8 indirdi (geçen ay)”</li>
+<li>“Kamu ihale X-Y-Z’de rakip C kazandı, bizim teklifimizi geçti”</li>
+<li>Pazar payı tahmini (search query share + scraping toplam)</li>
+</ul>
+<h3 id="bağımlılık">Bağımlılık</h3>
+<ul>
+<li>Faz 5’in scraping altyapısı zaten var → reuse</li>
+<li>Yeni: rakip listesi yönetimi, sektör tanım</li>
+</ul>
+<h3 id="tahmini-iş-yükü">Tahmini iş yükü</h3>
+<ul>
+<li>Backend modül: 2-3 hafta</li>
+<li>UI: 1 hafta</li>
+</ul>
+<hr />
+<h2 id="sinyal-2-müşteri-churn-tahmini-customer-churn">Sinyal #2 — Müşteri Churn Tahmini (Customer Churn)</h2>
+<h3 id="soru-1">Soru</h3>
+<blockquote>
+<p>“Hangi müşterimizi (B2B değil B2C son kullanıcı) kaybetme riskimiz var?”</p>
+</blockquote>
+<p>Faz 5 <strong>bayi</strong> churn’una odaklı. Bu farklı: <strong>son kullanıcı / direkt müşteri</strong> churn’u.</p>
+<h3 id="hedef-tabaka">Hedef tabaka</h3>
+<ul>
+<li>Direkt sipariş veren müşteriler (bayisiz)</li>
+<li>Online sipariş geçmişi olanlar</li>
+<li>Sürekli müşteri (subscription benzeri tekrar alıcı)</li>
+</ul>
+<h3 id="sinyaller">Sinyaller</h3>
+<ul>
+<li>Sipariş aralığı uzaması</li>
+<li>Sepet terk etme</li>
+<li>Email açmama / tıklama düşüşü</li>
+<li>Destek talebi sıklığı</li>
+<li>Geri ödeme/iade sayısı</li>
+<li>NPS skoru düşüşü (anket)</li>
+</ul>
+<h3 id="model">Model</h3>
+<ul>
+<li>Survival analysis (Kaplan-Meier, Cox regression)</li>
+<li>XGBoost classifier (kullanıcı 90 gün içinde sipariş kesecek mi?)</li>
+</ul>
+<h3 id="aksiyon">Aksiyon</h3>
+<ul>
+<li>Risk eşiği üstü → otomatik retention email</li>
+<li>Yüksek skorlu → custom indirim teklifi</li>
+<li>Kritik → satış ekibine bildirim (manuel temas)</li>
+</ul>
+<h3 id="tahmini-iş-yükü-1">Tahmini iş yükü</h3>
+<ul>
+<li>2-3 hafta (survival analysis öğrenme eğrisi var)</li>
+</ul>
+<hr />
+<h2 id="sinyal-3-fiyat-optimizasyonu-dynamic-pricing">Sinyal #3 — Fiyat Optimizasyonu (Dynamic Pricing)</h2>
+<h3 id="soru-2">Soru</h3>
+<blockquote>
+<p>“Ürün X için optimum fiyat ne? Bayi Y’ye hangi iskonto?”</p>
+</blockquote>
+<h3 id="iki-katman">İki katman</h3>
+<h4 id="a-b2b-iskonto-optimizasyonu">A — B2B iskonto optimizasyonu</h4>
+<ul>
+<li>Bayi profili × ürün × dönem → optimum iskonto</li>
+<li>“Bu bayi %5 iskontoyla sipariş verir, %3’te de verir → %3 öner”</li>
+<li>Reinforcement learning (bandit problem)</li>
+<li>A/B test ile öğren</li>
+</ul>
+<h4 id="b-liste-fiyatı-optimizasyonu">B — Liste fiyatı optimizasyonu</h4>
+<ul>
+<li>Talep elastikiyeti analizi</li>
+<li>Rakip fiyatları + maliyet + kar marjı</li>
+<li>Fiyat elastikiyet modeli (econometric)</li>
+</ul>
+<h3 id="veri-ihtiyacı">Veri ihtiyacı</h3>
+<ul>
+<li>En az 12 ay fiyat × satış geçmişi</li>
+<li>Rakip fiyat verisi (Sinyal #1)</li>
+<li>Maliyet bilgisi (<code>receteler</code> × ham madde fiyatları)</li>
+</ul>
+<h3 id="risk">Risk</h3>
+<ul>
+<li>Yanlış öneri → kar kaybı veya müşteri kaybı</li>
+<li>Otomasyon eşikleri (Doc 09) yüksek olmalı, manuel onay zorunlu</li>
+</ul>
+<h3 id="tahmini-iş-yükü-2">Tahmini iş yükü</h3>
+<ul>
+<li>4-6 hafta (econometric modelleme zaman alır)</li>
+</ul>
+<hr />
+<h2 id="sinyal-4-ai-belge-işleme-ocr-llm">Sinyal #4 — AI Belge İşleme (OCR + LLM)</h2>
+<h3 id="soru-3">Soru</h3>
+<blockquote>
+<p>“Tedarikçi faturası, müşteri PO’su, irsaliye gibi PDF’leri otomatik DB’ye yaz.”</p>
+</blockquote>
+<h3 id="kapsam-1">Kapsam</h3>
+<ul>
+<li><strong>Gelen fatura</strong> (e-fatura olmayan, kağıt scan veya PDF)</li>
+<li><strong>Müşteri PO</strong> (manuel order, fax, email PDF)</li>
+<li><strong>İrsaliye</strong> (sevkiyat doğrulama)</li>
+<li><strong>Sözleşme</strong> (bayi/müşteri sözleşme klozları çıkarımı)</li>
+<li><strong>Test raporu / kalite sertifikası</strong></li>
+</ul>
+<h3 id="stack">Stack</h3>
+<ul>
+<li>OCR: Tesseract (open source) veya Google Cloud Vision ($1.50/1000 sayfa)</li>
+<li>LLM extraction: Claude / GPT-4 (yapılandırılmış JSON çıkar)</li>
+<li>Validasyon: Zod schema + ham OCR ile karşılaştırma</li>
+</ul>
+<h3 id="akış">Akış</h3>
+<pre><code>PDF yükle → OCR → ham metin
+  → LLM &quot;bu bir tedarikçi faturası, alanları çıkar&quot;
+  → JSON: { tedarikci, fatura_no, tarih, kalemler: [...] }
+  → Validation: Zod
+  → DB&#39;ye yaz veya manuel onay kuyruğuna</code></pre>
+<h3 id="doğruluk-hedefi">Doğruluk hedefi</h3>
+<ul>
+<li>Faturada ≥ %95 alan doğruluğu (yanlış tutar = ciddi sorun)</li>
+<li>İnsan onayı: ilk 1000 evrak, sonra eşik altı geçenler</li>
+</ul>
+<h3 id="tahmini-iş-yükü-3">Tahmini iş yükü</h3>
+<ul>
+<li>3-4 hafta (entegrasyon, validation, UI)</li>
+</ul>
+<h3 id="bağımlı-sistem">Bağımlı sistem</h3>
+<ul>
+<li>Şu an Paspas’ta <code>gelen_evrak</code> tablosu yok → eklenmeli</li>
+</ul>
+<hr />
+<h2 id="sinyal-5-lojistik-rota-optimizasyonu">Sinyal #5 — Lojistik &amp; Rota Optimizasyonu</h2>
+<h3 id="soru-4">Soru</h3>
+<blockquote>
+<p>“Sevkiyat aracını hangi sırayla durduralım? Hangi araç hangi siparişe?”</p>
+</blockquote>
+<h3 id="kapsam-2">Kapsam</h3>
+<ul>
+<li>VRP (Vehicle Routing Problem)</li>
+<li>Çoklu araç + çoklu durak optimizasyonu</li>
+<li>Trafik durumu (Google Maps API)</li>
+<li>Araç kapasitesi + ürün hacmi</li>
+<li>Müşteri zaman penceresi (sabah/öğleden sonra teslimat)</li>
+</ul>
+<h3 id="algoritma">Algoritma</h3>
+<ul>
+<li>OR-Tools (Google) — VRP solver</li>
+<li>Genetic algorithm</li>
+<li>Kısıtlı durumda nearest neighbor heuristic</li>
+</ul>
+<h3 id="veri">Veri</h3>
+<ul>
+<li>Sevkiyat adres geocoding</li>
+<li>Araç bilgisi (kapasite, max yük)</li>
+<li>Trafik geçmişi</li>
+<li>Yakıt fiyatı</li>
+</ul>
+<h3 id="çıktı-1">Çıktı</h3>
+<ul>
+<li>Günlük sevkiyat planı</li>
+<li>Rota harita üzerinde (Mapbox / Leaflet)</li>
+<li>Tahmini varış zamanı</li>
+<li>Yakıt + zaman maliyeti</li>
+</ul>
+<h3 id="bağımlı-modül">Bağımlı modül</h3>
+<ul>
+<li>Paspas’ta sevkiyat modülü (zaten var: <code>sevkiyat_emirleri</code>)</li>
+<li>Adres geocoding altyapısı</li>
+</ul>
+<h3 id="tahmini-iş-yükü-4">Tahmini iş yükü</h3>
+<ul>
+<li>4-6 hafta</li>
+</ul>
+<hr />
+<h2 id="sinyal-6-mobil-uygulama-saha-ekibi-operatör-bayi">Sinyal #6 — Mobil Uygulama (Saha Ekibi + Operatör + Bayi)</h2>
+<h3 id="soru-5">Soru</h3>
+<blockquote>
+<p>“Saha satış elemanı, üretim operatörü, bayinin kendisi mobilden ne yapsın?”</p>
+</blockquote>
+<h3 id="farklı-uygulama-role">3 farklı uygulama / role</h3>
+<h4 id="a-saha-satış-mobil">A — Saha Satış Mobil</h4>
+<ul>
+<li>Bayi ziyaret kaydı (tarih, lokasyon, foto)</li>
+<li>Sipariş oluşturma (offline çalışsın)</li>
+<li>Bayi metadata güncelleme</li>
+<li>Churn radarı (bayi başına risk göstergesi)</li>
+<li>Sesli not → metin (Whisper API)</li>
+</ul>
+<h4 id="b-operatör-mobil-faz-1de-halihazırda-var-kontrol-edilmeli">B — Operatör Mobil (Faz 1’de halihazırda var? — kontrol edilmeli)</h4>
+<ul>
+<li>İş emri durumu güncelleme</li>
+<li>Hata raporu (foto + açıklama)</li>
+<li>Vardiya teslim formu</li>
+</ul>
+<h4 id="c-bayi-mobil-b2b-portal-mobil-versiyonu">C — Bayi Mobil (B2B Portal mobil versiyonu)</h4>
+<ul>
+<li>Sipariş ver</li>
+<li>Stok bak</li>
+<li>Cari hesap</li>
+<li>Push bildirim (sipariş durumu, kampanya)</li>
+</ul>
+<h3 id="stack-seçimi">Stack seçimi</h3>
+<ul>
+<li>Flutter (zaten projeler kullanıyor) veya React Native</li>
+<li>Offline-first (PowerSync / WatermelonDB)</li>
+<li>Push: Firebase Cloud Messaging</li>
+</ul>
+<h3 id="tahmini-iş-yükü-5">Tahmini iş yükü</h3>
+<ul>
+<li>Saha satış: 4-6 hafta</li>
+<li>Operatör: 3-4 hafta (zaten varsa polish)</li>
+<li>Bayi: 6-8 hafta (web portal mobile olarak da düşünülebilir → PWA)</li>
+</ul>
+<hr />
+<h2 id="sinyal-7-dış-veri-sektör-trendleri">Sinyal #7 — Dış Veri &amp; Sektör Trendleri</h2>
+<h3 id="soru-6">Soru</h3>
+<blockquote>
+<p>“Sektörümüzün geneli ne yapıyor? Talep değişiyor mu?”</p>
+</blockquote>
+<h3 id="kaynaklar">Kaynaklar</h3>
+<ul>
+<li>TÜİK (üretim endeksleri, perakende satış)</li>
+<li>TCMB (kredi büyümesi, faiz, kur)</li>
+<li>TOBB (üye sayısı, sektör raporları)</li>
+<li>Google Trends (sektör arama hacmi)</li>
+<li>Sosyal medya tarifi (sentiment / volume)</li>
+<li>News scraping (sektör haberleri → LLM özet)</li>
+</ul>
+<h3 id="çıktı-2">Çıktı</h3>
+<ul>
+<li>Aylık “sektör nabzı” raporu (otomatik)</li>
+<li>Anomali tespiti: “geçen ay sektör endeksi -%5, sizin satışınız +%2 → outperformance”</li>
+<li>Tahmin motoruna ek özellik (sektör endeksi)</li>
+</ul>
+<h3 id="tahmini-iş-yükü-6">Tahmini iş yükü</h3>
+<ul>
+<li>2-3 hafta (data pipeline + dashboard)</li>
+</ul>
+<hr />
+<h2 id="sinyal-8-api-sistem-entegrasyonları">Sinyal #8 — API &amp; Sistem Entegrasyonları</h2>
+<h3 id="soru-7">Soru</h3>
+<blockquote>
+<p>“Müşteri ERP’mizle başka sistemlerle nasıl konuşur?”</p>
+</blockquote>
+<h3 id="hedef-entegrasyonlar">Hedef entegrasyonlar</h3>
+<ul>
+<li><strong>e-Fatura</strong> (Logo, Mikro, GİB direct)</li>
+<li><strong>e-Arşiv</strong> GİB API</li>
+<li><strong>Banka entegrasyonu</strong> (mutabakat, otomatik tahsilat)</li>
+<li><strong>Kargo API</strong> (Aras, Yurtiçi, MNG, PTT)</li>
+<li><strong>e-Ticaret platformları</strong> (Trendyol, Hepsiburada, N11) — ürün katalog senk</li>
+<li><strong>WhatsApp Business API</strong> (sipariş bildirim, müşteri destek)</li>
+<li><strong>SMS Gateway</strong> (Netgsm, İletimerkezi)</li>
+<li><strong>Muhasebe yazılımı</strong> (Logo, Mikro, Netsis senk)</li>
+</ul>
+<h3 id="mimari">Mimari</h3>
+<ul>
+<li>Webhook receiver</li>
+<li>Event bus (BullMQ ile)</li>
+<li>Dış API client soyutlaması (<code>integrations/</code>)</li>
+<li>Retry + dead letter queue</li>
+<li>Mapping katmanı (Paspas DB ↔︎ dış sistem)</li>
+</ul>
+<h3 id="tahmini-iş-yükü-7">Tahmini iş yükü</h3>
+<ul>
+<li>Her entegrasyon: 1-3 hafta</li>
+<li>Genel altyapı: 2 hafta</li>
+</ul>
+<hr />
+<h2 id="sinyal-9-saha-ziyaret-notları-field-crm">Sinyal #9 — Saha Ziyaret Notları + Field CRM</h2>
+<h3 id="soru-8">Soru</h3>
+<blockquote>
+<p>“Saha satış elemanı bayiyi ziyaret etti, ne konuşuldu? Bu bilgi modele girsin.”</p>
+</blockquote>
+<h3 id="kapsam-3">Kapsam</h3>
+<ul>
+<li>Ziyaret kaydı (tarih, lokasyon, kim)</li>
+<li>Sesli not → metin (Whisper)</li>
+<li>LLM özet: “ziyaret notunda kritik bilgi var mı?”</li>
+<li>Anahtar kelimeler: “rakibe geçecek”, “indirim istiyor”, “yeni ürün ilgili”</li>
+<li>Notlar Sinyal #1’e (churn) feed-in</li>
+</ul>
+<h3 id="yapılandırma">Yapılandırma</h3>
+<ul>
+<li>Form: ziyaret tipi (rutin/satış/şikayet), katılımcılar, sonuç</li>
+<li>Foto/video upload</li>
+<li>Aksiyon takibi (next steps + due date)</li>
+<li>Otomatik follow-up reminder</li>
+</ul>
+<h3 id="bağımlı-modül-1">Bağımlı modül</h3>
+<ul>
+<li>Mobile uygulama (Sinyal #6)</li>
+<li>Ses kaydı + Whisper API integration</li>
+</ul>
+<h3 id="tahmini-iş-yükü-8">Tahmini iş yükü</h3>
+<ul>
+<li>3-4 hafta</li>
+</ul>
+<hr />
+<h2 id="sinyal-10-sürdürülebilirlik-karbon-ayakizi">Sinyal #10 — Sürdürülebilirlik &amp; Karbon Ayakizi</h2>
+<h3 id="soru-9">Soru</h3>
+<blockquote>
+<p>“Üretimimizin karbon ayakizi ne, müşteriye nasıl raporluyoruz?”</p>
+</blockquote>
+<h3 id="niye">Niye?</h3>
+<ul>
+<li>AB CBAM (Carbon Border Adjustment Mechanism) — 2026’dan itibaren ihracatçıya karbon vergisi</li>
+<li>Büyük müşterilerin tedarikçi karbon raporu istemesi</li>
+<li>ESG yatırım kriterlerinin yaygınlaşması</li>
+<li>AB Yeşil Mutabakat uyumu</li>
+</ul>
+<h3 id="kapsam-4">Kapsam</h3>
+<ul>
+<li>Hammadde başına karbon emisyonu (LCA - Life Cycle Assessment)</li>
+<li>Üretim makinesi enerji tüketimi (kWh / parça)</li>
+<li>Sevkiyat emisyonu (km × araç tipi)</li>
+<li>Toplam ürün karbon ayakizi (kg CO2e / parça)</li>
+<li>Müşteriye otomatik karbon raporu (sertifika benzeri PDF)</li>
+</ul>
+<h3 id="veri-1">Veri</h3>
+<ul>
+<li>Enerji faturası (manuel veya IoT meter)</li>
+<li>Hammadde tedarikçi verisi (bazı tedarikçiler veriyor)</li>
+<li>Sevkiyat km × araç tipi</li>
+<li>Sektör veritabanı (Ecoinvent, GHG Protocol)</li>
+</ul>
+<h3 id="çıktı-3">Çıktı</h3>
+<ul>
+<li>Ürün başına karbon raporu</li>
+<li>Aylık fabrika emisyon dashboard</li>
+<li>Müşteriye PDF (carbon footprint certificate)</li>
+<li>Azaltma önerileri (LLM destekli)</li>
+</ul>
+<h3 id="tahmini-iş-yükü-9">Tahmini iş yükü</h3>
+<ul>
+<li>6-8 hafta (LCA hesaplama metodolojisi öğrenme + veri toplama altyapısı)</li>
+</ul>
+<hr />
+<h2 id="genel-toparlama">Genel Toparlama</h2>
+<h3 id="sinyal-7-ana-faz-17-modül">10 sinyal + 7 ana faz = 17 modül</h3>
+<table>
+<thead>
+<tr class="header">
+<th>#</th>
+<th>Modül</th>
+<th>Faz</th>
+<th>Bağımlılık</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>0</td>
+<td>Paspas tamamlanma</td>
+<td>0</td>
+<td>—</td>
+</tr>
+<tr class="even">
+<td>1</td>
+<td>Talep tahmin motoru</td>
+<td>2</td>
+<td>Paspas</td>
+</tr>
+<tr class="odd">
+<td>2</td>
+<td>Stok tahmin otomasyonu</td>
+<td>4</td>
+<td>Talep tahmin</td>
+</tr>
+<tr class="even">
+<td>3</td>
+<td>B2B Bayi Portalı</td>
+<td>6</td>
+<td>Paspas</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>Bayi scraping &amp; churn</td>
+<td>5</td>
+<td>Bayi listesi</td>
+</tr>
+<tr class="even">
+<td>5</td>
+<td>Eğitilebilir modeller (MLOps)</td>
+<td>7</td>
+<td>Talep tahmin</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>Konversasyonel katman</td>
+<td>8</td>
+<td>Tüm modeller</td>
+</tr>
+<tr class="even">
+<td>7</td>
+<td>Rakip istihbaratı</td>
+<td>9</td>
+<td>Scraping altyapı</td>
+</tr>
+<tr class="odd">
+<td>8</td>
+<td>Müşteri churn (B2C)</td>
+<td>10</td>
+<td>Müşteri verisi</td>
+</tr>
+<tr class="even">
+<td>9</td>
+<td>Fiyat optimizasyonu</td>
+<td>10</td>
+<td>12 ay veri</td>
+</tr>
+<tr class="odd">
+<td>10</td>
+<td>AI belge işleme</td>
+<td>8</td>
+<td>OCR + LLM</td>
+</tr>
+<tr class="even">
+<td>11</td>
+<td>Lojistik &amp; rota</td>
+<td>11</td>
+<td>Sevkiyat modülü</td>
+</tr>
+<tr class="odd">
+<td>12</td>
+<td>Mobil uygulamalar</td>
+<td>9</td>
+<td>Web stable</td>
+</tr>
+<tr class="even">
+<td>13</td>
+<td>Dış veri / sektör</td>
+<td>9</td>
+<td>API access</td>
+</tr>
+<tr class="odd">
+<td>14</td>
+<td>API entegrasyonları</td>
+<td>8-12</td>
+<td>Her biri ayrı</td>
+</tr>
+<tr class="even">
+<td>15</td>
+<td>Saha CRM (Field)</td>
+<td>10</td>
+<td>Mobile</td>
+</tr>
+<tr class="odd">
+<td>16</td>
+<td>Sürdürülebilirlik / karbon</td>
+<td>12+</td>
+<td>LCA verisi</td>
+</tr>
+</tbody>
+</table>
+<h3 id="toplam-zaman-tahmini">Toplam zaman tahmini</h3>
+<ul>
+<li>Faz 0-7 (ana iskelet): ~14-15 ay</li>
+<li>Faz 8-12 (genişleme): ~6-12 ay daha</li>
+<li><strong>Toplam vizyon:</strong> 2-2.5 yıl</li>
+</ul>
+<h3 id="aşamalı-karar">Aşamalı karar</h3>
+<p>Bu dokümandaki sinyallerin <strong>hangisi</strong>, <strong>ne zaman</strong>, <strong>hangi sırada</strong> açılacağı her fazın bitiminde Promats yönetimi ile karar verilir. Bütçe + ihtiyaç + müşteri talebi belirleyici.</p>
+<hr />
+<h2 id="açık-karar-noktaları">Açık karar noktaları</h2>
+<ol type="1">
+<li>Bu 10 sinyalin <strong>hangileri</strong> Faz 8’den başlasın?</li>
+<li><strong>Sürdürülebilirlik (Sinyal 10)</strong>: 2026’da CBAM kritik mi? Şimdiden başlanmalı mı?</li>
+<li><strong>Mobil (Sinyal 6)</strong>: Web olgunlaşmadan mobil başlamak hata mı?</li>
+<li><strong>API entegrasyonları (Sinyal 8)</strong>: hangi öncelikli? (Önerim: e-Fatura &gt; Kargo &gt; WhatsApp)</li>
+<li><strong>Field CRM (Sinyal 9)</strong> ve <strong>Mobil (Sinyal 6)</strong> birleşik mi ayrı mı?</li>
+<li>Promats için ilk genişleme <strong>Sinyal 4 (AI Belge)</strong> olabilir mi (hemen değer üretir)?</li>
+</ol>
+
+  <!--
+    Yorum/not paneli artık Paspas admin panelinde native React component olarak
+    render ediliyor. /admin/proje-teklifi sayfasında, iframe'in altında
+    "Yazılımcı Notları" başlığı altında DB-tabanlı not sistemi kullanılır.
+    Statik HTML modunda gösterim yok.
+  -->
+  <div style="margin-top: 48px; padding: 16px; border: 1px dashed var(--border); border-radius: 8px; background: var(--code-bg); font-size: 13px; color: var(--fg-muted);">
+    📝 <strong>Not:</strong> Bu doküman Paspas admin panelinde
+    <a href="/admin/proje-teklifi" target="_top">/admin/proje-teklifi</a> sayfası üzerinden açıldığında,
+    altta DB-tabanlı yazılımcı notları paneli görünür.
+  </div>
+</main>
+</div>
+
+<script>
+  // Pandoc bazen uzun basligi multi-line yaziyor; once whitespace'leri tek
+  // bosluga indirgeyip sonra slug uret. Aksi halde JS literal newline hatasi.
+  window.DOC_ID = ("15 — Genişletme Sinyalleri (Faz 8+ Vizyonu)").replace(/\s+/g, ' ').replace(/[^a-zA-Z0-9]/g, '_').toLowerCase();
+  // Aktif sidebar linki
+  document.addEventListener('DOMContentLoaded', function() {
+    var path = window.location.pathname.split('/').pop().replace('.html', '');
+    var links = document.querySelectorAll('aside.sidebar nav a');
+    links.forEach(function(a) {
+      var href = a.getAttribute('href') || '';
+      if (href.replace('.html', '') === path) {
+        a.classList.add('active');
+      }
+    });
+  });
+</script>
+
+</body>
+</html>

@@ -1,0 +1,181 @@
+{
+  "rootLayout": {
+    "titleDefault": "{{appName}} — Amazon Pazar Analizi",
+    "titleTemplate": "%s | {{appName}}"
+  },
+  "brand": {
+    "appName": "MarketPulse",
+    "taglineTr": "Amazon'da doğru kategoriye gir",
+    "taglineEn": "Enter the right Amazon category",
+    "wordMarkLine1": "{{appName}}",
+    "wordMarkLine2": "",
+    "shortName": "{{appName}}",
+    "copyrightHolder": "{{appName}}",
+    "defaultLogoAlt": "{{appName}} logo"
+  },
+  "site": {
+    "originFallback": "http://localhost:3077",
+    "apiBaseFallback": "http://127.0.0.1:8086/api/v1"
+  },
+  "i18n": {
+    "defaultLocale": "tr"
+  },
+  "seo": {
+    "global": {
+      "site_name": "{{appName}}",
+      "title_default": "{{appName}} — Amazon Pazar Analizi",
+      "title_template": "%s | {{appName}}",
+      "description": "{{appName}} ile Amazon kategorilerini analiz edin, pazar riskini ölçün ve doğru kararı alın.",
+      "open_graph": {
+        "type": "website",
+        "images": ["/img/og-default.jpg"]
+      },
+      "twitter": {
+        "card": "summary_large_image",
+        "site": "",
+        "creator": ""
+      },
+      "robots": {
+        "noindex": false,
+        "index": true,
+        "follow": true
+      }
+    },
+    "siteMetaByLocale": {
+      "tr": {
+        "title": "{{appName}} — Amazon Pazar Analizi ve Risk Skorlama",
+        "description": "Keyword bazlı risk analizi, 5 boyutlu skorlama ve pazar verisiyle Amazon'da bilinçli karar alın.",
+        "keywords": "{{appName}}, amazon analizi, pazar riski, keyword analizi, amazon fba, e-ticaret"
+      },
+      "en": {
+        "title": "{{appName}} — Amazon Market Analysis & Risk Scoring",
+        "description": "Keyword-based risk analysis, 5-dimensional scoring and market data for smart Amazon decisions.",
+        "keywords": "{{appName}}, amazon analysis, market risk, keyword analysis, amazon fba, ecommerce"
+      },
+      "de": {
+        "title": "{{appName}} — Amazon Marktanalyse & Risikobewertung",
+        "description": "Keywordbasierte Risikoanalyse und Marktdaten für fundierte Amazon-Entscheidungen.",
+        "keywords": "{{appName}}, amazon analyse, marktrisiko, keyword analyse, amazon fba"
+      }
+    },
+    "localeDescriptionFallback": {
+      "tr": "{{appName}} — Amazon kategori riski analizi ve pazar skorlama platformu.",
+      "en": "{{appName}} — Amazon category risk analysis and market scoring platform.",
+      "de": "{{appName}} — Amazon-Kategorierisikoanalyse und Marktbewertungsplattform."
+    },
+    "htmlMetaDescriptionByLocale": {
+      "tr": "{{appName}} — Amazon'da doğru kategoriye girmeden önce riski ölçün.",
+      "en": "{{appName}} — Measure the risk before entering an Amazon category.",
+      "de": "{{appName}} — Messen Sie das Risiko, bevor Sie eine Amazon-Kategorie betreten."
+    }
+  },
+  "jsonLd": {
+    "organizationDescription": {
+      "tr": "Amazon pazar analizi ve risk skorlama platformu.",
+      "en": "Amazon market analysis and risk scoring platform.",
+      "de": "Amazon-Marktanalyse- und Risikobewertungsplattform."
+    },
+    "placeholderSameAs": []
+  },
+  "editorial": {
+    "teamNameTemplate": "{{appName}} Editorial Team"
+  },
+  "manifest": {
+    "nameKey": "manifest.name",
+    "shortNameKey": "manifest.shortName",
+    "descriptionKey": "manifest.description",
+    "name": "{{appName}}",
+    "shortName": "{{appName}}",
+    "description": "Amazon pazar analizi ve risk skorlama platformu.",
+    "startLocalePath": "/tr"
+  },
+  "navigation": {
+    "headerFallbackMenu": [
+      {
+        "id": "fb-home",
+        "url": "/",
+        "label": { "tr": "Ana Sayfa", "en": "Home", "de": "Startseite" }
+      },
+      {
+        "id": "fb-pricing",
+        "url": "/pricing",
+        "label": { "tr": "Fiyatlandırma", "en": "Pricing", "de": "Preise" }
+      },
+      {
+        "id": "fb-blog",
+        "url": "/blog",
+        "label": { "tr": "Blog", "en": "Blog", "de": "Blog" }
+      },
+      {
+        "id": "fb-contact",
+        "url": "/contact",
+        "label": { "tr": "İletişim", "en": "Contact", "de": "Kontakt" }
+      }
+    ],
+    "footerFallbackSections": [
+      {
+        "id": "fb-product",
+        "title": { "tr": "Ürün", "en": "Product", "de": "Produkt" },
+        "items": [
+          {
+            "id": "fb-pricing",
+            "url": "/pricing",
+            "label": { "tr": "Fiyatlandırma", "en": "Pricing", "de": "Preise" }
+          },
+          {
+            "id": "fb-blog",
+            "url": "/blog",
+            "label": { "tr": "Blog", "en": "Blog", "de": "Blog" }
+          },
+          {
+            "id": "fb-faq",
+            "url": "/faqs",
+            "label": { "tr": "SSS", "en": "FAQ", "de": "FAQ" }
+          }
+        ]
+      },
+      {
+        "id": "fb-company",
+        "title": { "tr": "Şirket", "en": "Company", "de": "Unternehmen" },
+        "items": [
+          {
+            "id": "fb-about",
+            "url": "/about",
+            "label": { "tr": "Hakkımızda", "en": "About", "de": "Über uns" }
+          },
+          {
+            "id": "fb-contact",
+            "url": "/contact",
+            "label": { "tr": "İletişim", "en": "Contact", "de": "Kontakt" }
+          }
+        ]
+      },
+      {
+        "id": "fb-legal",
+        "title": { "tr": "Yasal", "en": "Legal", "de": "Rechtliches" },
+        "items": [
+          {
+            "id": "fb-kvkk",
+            "url": "/kvkk",
+            "label": { "tr": "KVKK", "en": "Privacy (TR)", "de": "Datenschutz (TR)" }
+          },
+          {
+            "id": "fb-privacy",
+            "url": "/gizlilik",
+            "label": { "tr": "Gizlilik Politikası", "en": "Privacy Policy", "de": "Datenschutz" }
+          },
+          {
+            "id": "fb-terms",
+            "url": "/kullanim-sartlari",
+            "label": { "tr": "Kullanım Şartları", "en": "Terms of Use", "de": "Nutzungsbedingungen" }
+          },
+          {
+            "id": "fb-cookie",
+            "url": "/cerez-politikasi",
+            "label": { "tr": "Çerez Politikası", "en": "Cookie Policy", "de": "Cookie-Richtlinie" }
+          }
+        ]
+      }
+    ]
+  }
+}
