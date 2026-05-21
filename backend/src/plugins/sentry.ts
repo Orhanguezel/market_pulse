@@ -4,6 +4,10 @@ import { env } from '@/core/env';
 
 let sentryEnabled = false;
 
+export function isSentryEnabled() {
+  return sentryEnabled;
+}
+
 export function captureServerException(err: unknown, extras?: Record<string, unknown>) {
   if (!sentryEnabled) return;
   Sentry.withScope((scope) => {

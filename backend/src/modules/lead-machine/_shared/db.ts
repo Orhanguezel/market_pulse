@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
 
-export type LeadChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'icp_match';
+export type LeadChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match';
 export type JobStatus = 'pending' | 'running' | 'done' | 'failed';
 export type CandidateStatus = 'pending' | 'approved' | 'rejected' | 'favorite';
 

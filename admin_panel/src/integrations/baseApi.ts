@@ -121,6 +121,10 @@ function safeRemoveLocalStorageItem(key: string) {
   }
 }
 
+function hasAccessToken(): boolean {
+  return Boolean(tokenStore.get() || safeGetLocalStorageItem('mh_access_token'));
+}
+
 /* -------------------- Base Query -------------------- */
 
 type RBQ = BaseQueryFn<
@@ -227,7 +231,7 @@ const baseQueryWithReauth: RBQ = async (args, api, extra) => {
   let result = await rawBaseQuery(req, api, extra);
   result = await coerceSerializableError(result);
 
-  if (result.error?.status === 401 && !AUTH_SKIP_REAUTH.has(cleanPath)) {
+  if (result.error?.status === 401 && !AUTH_SKIP_REAUTH.has(cleanPath) && hasAccessToken()) {
     const refreshRes = await rawBaseQuery(
       {
         url: '/auth/token/refresh',

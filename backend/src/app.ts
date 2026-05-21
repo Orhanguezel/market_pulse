@@ -19,6 +19,7 @@ import { registerAllRoutes } from './routes';
 import { parseCorsOrigins, pickUploadsRoot, pickUploadsPrefix } from './app.helpers';
 import { registerChurnJob } from '@/jobs/churn.job';
 import { registerReportJob } from '@/jobs/report.job';
+import { registerLeadMachineJobs } from '@/jobs/lead-machine.job';
 
 export async function createApp() {
   const { default: buildFastify } =
@@ -87,6 +88,7 @@ export async function createApp() {
   registerErrorHandlers(app);
   registerChurnJob(app);
   registerReportJob(app);
+  registerLeadMachineJobs(app);
 
   return app;
 }

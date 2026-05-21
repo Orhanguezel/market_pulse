@@ -2,16 +2,14 @@
 
 import * as React from 'react';
 import Link from 'next/link';
-import { Pencil, Trash2, Database, Search } from 'lucide-react';
+import { Pencil, Trash2, Database } from 'lucide-react';
 
 import type { SiteSetting, SettingValue } from '@/integrations/shared';
 import { useAdminT } from '@/app/(main)/admin/_components/common/useAdminT';
 import { usePreferencesStore } from '@/stores/preferences/preferences-provider';
-import { cn } from '@/lib/utils';
-
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent } from '@/components/ui/card';
 import {
   Table,
   TableBody,
@@ -140,7 +138,7 @@ export const SiteSettingsList: React.FC<SiteSettingsListProps> = ({
 
     if (href) {
       return (
-        <Button asChild size="sm" variant="ghost" className="rounded-full hover:bg-gm-gold/10 hover:text-gm-gold h-10 px-6 text-[10px] font-bold tracking-widest uppercase">
+        <Button asChild size="sm" variant="ghost" className="h-8 rounded-md px-3 text-xs font-medium hover:bg-gm-surface/30">
           <Link prefetch={false} href={href}>
             <Pencil className="mr-2 size-4" />
             {t('admin.common.edit', null, 'Düzenle')}
@@ -151,7 +149,7 @@ export const SiteSettingsList: React.FC<SiteSettingsListProps> = ({
 
     if (onEdit) {
       return (
-        <Button type="button" variant="ghost" size="sm" onClick={() => onEdit(s)} className="rounded-full hover:bg-gm-gold/10 hover:text-gm-gold h-10 px-6 text-[10px] font-bold tracking-widest uppercase">
+        <Button type="button" variant="ghost" size="sm" onClick={() => onEdit(s)} className="h-8 rounded-md px-3 text-xs font-medium hover:bg-gm-surface/30">
           <Pencil className="mr-2 size-4" />
           {t('admin.common.edit', null, 'Düzenle')}
         </Button>
@@ -165,53 +163,53 @@ export const SiteSettingsList: React.FC<SiteSettingsListProps> = ({
     <Card className="bg-gm-surface/20 border-gm-border-soft rounded-[32px] overflow-hidden backdrop-blur-sm shadow-xl">
       <CardContent className="p-0">
         <Table>
-          <TableHeader className="bg-gm-surface/40">
+          <TableHeader className="bg-gm-surface/20">
             <TableRow className="border-gm-border-soft hover:bg-transparent">
-              <TableHead className="w-[25%] py-6 px-8 text-[10px] font-bold uppercase tracking-widest text-gm-muted">Ayar Anahtarı</TableHead>
-              <TableHead className="w-[8%] py-6 text-[10px] font-bold uppercase tracking-widest text-gm-muted">Dil</TableHead>
-              <TableHead className="w-[35%] py-6 text-[10px] font-bold uppercase tracking-widest text-gm-muted">Değer Özeti</TableHead>
-              <TableHead className="w-[15%] py-6 text-[10px] font-bold uppercase tracking-widest text-gm-muted">Son Güncelleme</TableHead>
-              <TableHead className="w-[17%] py-6 px-8 text-right text-[10px] font-bold uppercase tracking-widest text-gm-muted">İşlemler</TableHead>
+              <TableHead className="w-[25%] px-4 py-3 text-xs font-semibold text-gm-muted">Ayar Anahtarı</TableHead>
+              <TableHead className="w-[8%] py-3 text-xs font-semibold text-gm-muted">Dil</TableHead>
+              <TableHead className="w-[35%] py-3 text-xs font-semibold text-gm-muted">Değer Özeti</TableHead>
+              <TableHead className="w-[15%] py-3 text-xs font-semibold text-gm-muted">Son Güncelleme</TableHead>
+              <TableHead className="w-[17%] px-4 py-3 text-right text-xs font-semibold text-gm-muted">İşlemler</TableHead>
             </TableRow>
           </TableHeader>
 
           <TableBody>
             {hasData ? (
               filtered.map((s) => (
-                <TableRow key={`${s.key}_${s.locale || 'none'}`} className="border-gm-border-soft hover:bg-gm-primary/[0.03] transition-colors group">
-                  <TableCell className="py-6 px-8 font-mono text-sm text-gm-text">
+                <TableRow key={`${s.key}_${s.locale || 'none'}`} className="group border-gm-border-soft transition-colors hover:bg-gm-surface/10">
+                  <TableCell className="px-4 py-4 font-mono text-sm text-gm-text">
                     {s.key}
                   </TableCell>
 
-                  <TableCell className="py-6">
+                  <TableCell className="py-4">
                     {s.locale ? (
-                      <Badge variant="outline" className="border-gm-gold/30 bg-gm-gold/5 text-gm-gold px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em]">{s.locale}</Badge>
+                      <Badge variant="outline" className="rounded-md border-gm-border-soft bg-gm-surface/10 px-2 py-0.5 text-xs font-medium text-gm-text">{s.locale}</Badge>
                     ) : (
-                      <Badge variant="outline" className="border-gm-muted/30 bg-gm-muted/5 text-gm-muted px-3 py-1 text-[9px] font-bold uppercase tracking-[0.2em]">GLOBAL</Badge>
+                      <Badge variant="outline" className="rounded-md border-gm-border-soft bg-gm-surface/10 px-2 py-0.5 text-xs font-medium text-gm-muted">GLOBAL</Badge>
                     )}
                   </TableCell>
 
-                  <TableCell className="py-6">
+                  <TableCell className="py-4">
                     <div className="max-w-md overflow-hidden text-ellipsis text-xs text-gm-muted">
-                      <code className="rounded-lg bg-gm-surface/40 px-2.5 py-1.5 font-mono opacity-80 border border-gm-border-soft/50">
+                      <code className="rounded-md border border-gm-border-soft/50 bg-gm-surface/20 px-2 py-1 font-mono">
                         {formatValuePreviewI18n(s.value)}
                       </code>
                     </div>
                   </TableCell>
 
-                  <TableCell className="py-6">
-                    <span className="text-[10px] text-gm-muted font-mono opacity-70">
+                  <TableCell className="py-4">
+                    <span className="font-mono text-xs text-gm-muted">
                       {formatDateI18n(s.updated_at)}
                     </span>
                   </TableCell>
 
-                  <TableCell className="py-6 px-8 text-right">
-                    <div className="flex justify-end gap-2 opacity-20 group-hover:opacity-100 transition-all duration-300">
+                  <TableCell className="px-4 py-4 text-right">
+                    <div className="flex justify-end gap-2">
                       {renderEditAction(s)}
                       {onDelete ? (
                         <button
                           type="button"
-                          className="p-2.5 rounded-full hover:bg-gm-error/10 text-gm-error/40 hover:text-gm-error transition-all border border-transparent hover:border-gm-error/20"
+                          className="rounded-md border border-transparent p-2 text-gm-error/70 transition-colors hover:border-gm-error/20 hover:bg-gm-error/10 hover:text-gm-error"
                           onClick={() => onDelete(s)}
                         >
                           <Trash2 className="size-4" />
@@ -223,10 +221,10 @@ export const SiteSettingsList: React.FC<SiteSettingsListProps> = ({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={5} className="py-32 text-center">
-                  <div className="flex flex-col items-center gap-6 opacity-30 animate-pulse">
-                    <Database className="w-20 h-20 text-gm-gold/50" />
-                    <span className="font-serif italic text-xl text-gm-muted">{loading ? 'Yükleniyor...' : 'Kayıt bulunamadı.'}</span>
+                <TableCell colSpan={5} className="py-20 text-center">
+                  <div className="flex flex-col items-center gap-4 text-gm-muted">
+                    <Database className="h-10 w-10" />
+                    <span className="text-sm">{loading ? 'Yükleniyor...' : 'Kayıt bulunamadı.'}</span>
                   </div>
                 </TableCell>
               </TableRow>

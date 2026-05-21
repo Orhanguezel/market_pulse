@@ -8,7 +8,8 @@
     "test": "bun test",
     "start:bun": "bun dist/index.js",
     "db:seed": "bun src/db/seed/index.ts",
-    "db:seed:nodrop": "bun src/db/seed/index.ts --no-drop"
+    "db:seed:nodrop": "bun src/db/seed/index.ts --no-drop",
+    "fair:import-cards": "bun src/scripts/import-fair-in-person-leads.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^11",

@@ -288,20 +288,16 @@ function LeadChannelPicker({
 type IcpFormState = {
   name: string;
   isActive: boolean;
-  definition: Required<
-    Pick<
-      IcpDefinition,
-      | 'sectors'
-      | 'sub_sectors'
-      | 'firm_types'
-      | 'geographies'
-      | 'sales_types'
-      | 'sales_channels'
-      | 'exclude_countries'
-      | 'exclude_patterns'
-      | 'lead_channels'
-    >
-  > & {
+  definition: IcpDefinition & {
+    sectors: string[];
+    sub_sectors: string[];
+    firm_types: string[];
+    geographies: string[];
+    sales_types: string[];
+    sales_channels: string[];
+    exclude_countries: string[];
+    exclude_patterns: string[];
+    lead_channels: string[];
     price_segment: string;
     min_employees: number | null;
     max_employees: number | null;
@@ -620,6 +616,206 @@ function IcpDialog({
               className="rounded-2xl border-gm-border-soft bg-gm-surface/30 text-gm-text placeholder:text-gm-muted/60"
             />
           </div>
+
+          {/* ─── v3 Gelişmiş Ayarlar ─── */}
+          <Collapsible>
+            <CollapsibleTrigger className="flex w-full items-center justify-between rounded-2xl border border-gm-border-soft bg-gm-surface/20 px-4 py-3 text-left hover:bg-gm-surface/40">
+              <span className="font-bold uppercase tracking-widest text-xs text-gm-primary-light">
+                🔧 v3 Gelişmiş Eşleşme + Skor Ayarları
+              </span>
+              <ChevronDown className="size-4 text-gm-muted transition-transform data-[state=open]:rotate-180" />
+            </CollapsibleTrigger>
+            <CollapsibleContent className="mt-3 space-y-4 rounded-2xl border border-gm-border-soft bg-gm-surface/10 p-4">
+
+              {/* Strong / Weak match sektörler */}
+              <div className="grid gap-3 md:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label className={LABEL_CAPS}>
+                    Güçlü eşleşme sektörleri
+                    <span className="ml-2 font-normal normal-case text-[10px] tracking-normal text-gm-muted">
+                      Match skoru +0.5 (virgülle ayır)
+                    </span>
+                  </Label>
+                  <Textarea
+                    rows={2}
+                    value={(form.definition.strong_match_sectors ?? []).join(', ')}
+                    onChange={(e) => setDef('strong_match_sectors', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))}
+                    placeholder="floor mats, car mats, rubber mats, boot liners"
+                    className="rounded-xl border-gm-border-soft bg-gm-surface/30 text-xs font-mono text-gm-text"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className={LABEL_CAPS}>
+                    Zayıf eşleşme sektörleri
+                    <span className="ml-2 font-normal normal-case text-[10px] tracking-normal text-gm-muted">
+                      Match skoru +0.1 (virgülle ayır)
+                    </span>
+                  </Label>
+                  <Textarea
+                    rows={2}
+                    value={(form.definition.weak_match_sectors ?? []).join(', ')}
+                    onChange={(e) => setDef('weak_match_sectors', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))}
+                    placeholder="automotive accessories, car care, interior accessories"
+                    className="rounded-xl border-gm-border-soft bg-gm-surface/30 text-xs font-mono text-gm-text"
+                  />
+                </div>
+              </div>
+
+              {/* Domain + Brand exclude */}
+              <div className="grid gap-3 md:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label className={LABEL_CAPS}>
+                    Domain substring eleme
+                    <span className="ml-2 font-normal normal-case text-[10px] tracking-normal text-gm-muted">
+                      Mail/website'de geçerse aday elenir
+                    </span>
+                  </Label>
+                  <Textarea
+                    rows={2}
+                    value={(form.definition.exclude_domain_substrings ?? []).join(', ')}
+                    onChange={(e) => setDef('exclude_domain_substrings', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))}
+                    placeholder="cooling, battery, lighting, brake, filter"
+                    className="rounded-xl border-gm-border-soft bg-gm-surface/30 text-xs font-mono text-gm-text"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className={LABEL_CAPS}>
+                    OEM/Brand eleme
+                    <span className="ml-2 font-normal normal-case text-[10px] tracking-normal text-gm-muted">
+                      Firma adında geçerse aday elenir
+                    </span>
+                  </Label>
+                  <Textarea
+                    rows={2}
+                    value={(form.definition.exclude_brands ?? []).join(', ')}
+                    onChange={(e) => setDef('exclude_brands', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))}
+                    placeholder="bosch, zf, schaeffler, continental, thyssenkrupp"
+                    className="rounded-xl border-gm-border-soft bg-gm-surface/30 text-xs font-mono text-gm-text"
+                  />
+                </div>
+              </div>
+
+              {/* Pozitif / Negatif sinyaller */}
+              <div className="grid gap-3 md:grid-cols-2">
+                <div className="space-y-1.5">
+                  <Label className={LABEL_CAPS}>
+                    Pozitif sinyaller (skor +)
+                  </Label>
+                  <Textarea
+                    rows={2}
+                    value={(form.definition.positive_signals ?? []).join(', ')}
+                    onChange={(e) => setDef('positive_signals', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))}
+                    placeholder="private label, ODM, wholesale, distributor"
+                    className="rounded-xl border-gm-border-soft bg-gm-surface/30 text-xs font-mono text-gm-text"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className={LABEL_CAPS}>
+                    Negatif sinyaller (skor −)
+                  </Label>
+                  <Textarea
+                    rows={2}
+                    value={(form.definition.negative_signals ?? []).join(', ')}
+                    onChange={(e) => setDef('negative_signals', e.target.value.split(',').map((s) => s.trim()).filter(Boolean))}
+                    placeholder="in-house production, single OEM contract"
+                    className="rounded-xl border-gm-border-soft bg-gm-surface/30 text-xs font-mono text-gm-text"
+                  />
+                </div>
+              </div>
+
+              {/* Skor eşikleri */}
+              <div className="grid gap-3 md:grid-cols-3">
+                <div className="space-y-1.5">
+                  <Label className={LABEL_CAPS}>Min skor (aday kabul)</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={form.definition.min_lead_score_for_candidate ?? 5.5}
+                    onChange={(e) => setDef('min_lead_score_for_candidate', Number(e.target.value))}
+                    className="rounded-xl border-gm-border-soft bg-gm-surface/30 text-gm-text"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className={LABEL_CAPS}>Auto-approve skor eşiği</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={form.definition.auto_approve_threshold ?? 7.0}
+                    onChange={(e) => setDef('auto_approve_threshold', Number(e.target.value))}
+                    className="rounded-xl border-gm-border-soft bg-gm-surface/30 text-gm-text"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className={LABEL_CAPS}>Komşu stand bonusu</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={form.definition.neighbor_bonus ?? 0.5}
+                    onChange={(e) => setDef('neighbor_bonus', Number(e.target.value))}
+                    className="rounded-xl border-gm-border-soft bg-gm-surface/30 text-gm-text"
+                  />
+                </div>
+              </div>
+
+              {/* Öncelikli coğrafyalar */}
+              <div className="grid gap-3 md:grid-cols-[2fr_1fr]">
+                <div className="space-y-1.5">
+                  <Label className={LABEL_CAPS}>
+                    Öncelikli ülkeler (ISO 2)
+                    <span className="ml-2 font-normal normal-case text-[10px] tracking-normal text-gm-muted">
+                      Pilot pazarlar (virgülle ayır)
+                    </span>
+                  </Label>
+                  <Input
+                    value={(form.definition.priority_geographies ?? []).join(', ')}
+                    onChange={(e) => setDef('priority_geographies', e.target.value.split(',').map((s) => s.trim().toUpperCase()).filter(Boolean))}
+                    placeholder="DE, POL, AT, NL, FR"
+                    className="rounded-xl border-gm-border-soft bg-gm-surface/30 text-gm-text font-mono"
+                  />
+                </div>
+                <div className="space-y-1.5">
+                  <Label className={LABEL_CAPS}>Öncelik skor boost</Label>
+                  <Input
+                    type="number"
+                    step="0.1"
+                    value={form.definition.priority_boost ?? 1.0}
+                    onChange={(e) => setDef('priority_boost', Number(e.target.value))}
+                    className="rounded-xl border-gm-border-soft bg-gm-surface/30 text-gm-text"
+                  />
+                </div>
+              </div>
+
+              {/* Raw JSON editor — uzman kullanıcı için */}
+              <Collapsible>
+                <CollapsibleTrigger className="flex w-full items-center justify-between rounded-xl border border-dashed border-gm-border-soft bg-gm-surface/10 px-3 py-2 text-left hover:bg-gm-surface/30">
+                  <span className="font-bold uppercase tracking-widest text-[10px] text-gm-muted">
+                    🛠️ Raw JSON (business_model_signals, scoring_weights, vs.)
+                  </span>
+                  <ChevronDown className="size-3 text-gm-muted" />
+                </CollapsibleTrigger>
+                <CollapsibleContent className="mt-2">
+                  <Textarea
+                    rows={12}
+                    value={JSON.stringify(form.definition, null, 2)}
+                    onChange={(e) => {
+                      try {
+                        const parsed = JSON.parse(e.target.value);
+                        if (parsed && typeof parsed === 'object') {
+                          setForm((cur) => ({ ...cur, definition: parsed }));
+                        }
+                      } catch {
+                        // sessizce devam — kullanıcı henüz yazıyor
+                      }
+                    }}
+                    className="rounded-xl border-gm-border-soft bg-gm-bg/40 text-xs font-mono text-gm-text"
+                  />
+                  <p className="mt-1 text-[10px] text-gm-muted/80">
+                    ⚠️ Geçersiz JSON yazılırsa form alanlarına yansımaz. Form alanlarındaki değişiklikler buraya yansır.
+                  </p>
+                </CollapsibleContent>
+              </Collapsible>
+            </CollapsibleContent>
+          </Collapsible>
 
           <div className="flex justify-end gap-2 pt-2">
             <Button

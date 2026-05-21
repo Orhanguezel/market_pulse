@@ -89,6 +89,58 @@ export async function getRejectionStats(): Promise<RejectionTagStat[]> {
   }));
 }
 
+export interface RejectionPatternAggregateResult {
+  patterns: number;
+}
+
+export async function aggregateRejectionPatterns(): Promise<RejectionPatternAggregateResult> {
+  await pool.execute(`
+    INSERT INTO lead_rejection_patterns (id, channel, pattern, count, last_seen)
+    SELECT
+      UUID(),
+      channel,
+      pattern,
+      COUNT(*) AS count,
+      MAX(reviewed_at) AS last_seen
+    FROM (
+      SELECT
+        lc.channel,
+        TRIM(jt.tag) AS pattern,
+        lc.reviewed_at
+      FROM lead_candidates lc
+      JOIN JSON_TABLE(
+        COALESCE(lc.reject_tags, '[]'),
+        '$[*]' COLUMNS (tag VARCHAR(200) PATH '$')
+      ) AS jt
+      WHERE lc.status = 'rejected'
+        AND lc.reject_tags IS NOT NULL
+        AND TRIM(jt.tag) <> ''
+
+      UNION ALL
+
+      SELECT
+        lc.channel,
+        LOWER(TRIM(lc.reject_reason)) AS pattern,
+        lc.reviewed_at
+      FROM lead_candidates lc
+      WHERE lc.status = 'rejected'
+        AND (lc.reject_tags IS NULL OR JSON_LENGTH(lc.reject_tags) = 0)
+        AND lc.reject_reason IS NOT NULL
+        AND TRIM(lc.reject_reason) <> ''
+    ) AS source
+    GROUP BY channel, pattern
+    ON DUPLICATE KEY UPDATE
+      count = VALUES(count),
+      last_seen = GREATEST(lead_rejection_patterns.last_seen, VALUES(last_seen))
+  `);
+
+  const [rows] = await pool.execute(
+    'SELECT COUNT(*) AS count FROM lead_rejection_patterns',
+  );
+  const row = (rows as Array<Record<string, unknown>>)[0] ?? {};
+  return { patterns: Number(row.count ?? 0) };
+}
+
 export interface ApprovedStats {
   total_approved: number;
   total_favorite: number;

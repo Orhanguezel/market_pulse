@@ -51,6 +51,7 @@ const CHANNEL_LABELS: Record<string, string> = {
   amazon: 'Amazon',
   b2b_directory: 'B2B Dizin',
   trade_fair: 'Fuar',
+  trade_fair_in_person: 'Fuar Kartvizit',
   icp_match: 'ICP',
 };
 
@@ -58,6 +59,7 @@ const CHANNEL_BADGE_CLS: Record<string, string> = {
   amazon: 'border-gm-gold/40 bg-gm-gold/10 text-gm-gold',
   b2b_directory: 'border-gm-primary/40 bg-gm-primary/10 text-gm-primary-light',
   trade_fair: 'border-purple-500/40 bg-purple-500/10 text-purple-400',
+  trade_fair_in_person: 'border-gm-success/40 bg-gm-success/10 text-gm-success',
   icp_match: 'border-gm-success/40 bg-gm-success/10 text-gm-success',
 };
 
@@ -122,6 +124,70 @@ function rawValue(candidate: LeadCandidate, key: string) {
   return typeof value === 'string' || typeof value === 'number' ? String(value) : '';
 }
 
+function formatFairInfo(candidate: LeadCandidate): string {
+  const data = candidate.raw_data;
+  if (!data || typeof data !== 'object') return '';
+  const fi = (data as Record<string, unknown>).fair_info;
+  if (!fi || typeof fi !== 'object') return '';
+  const f = fi as Record<string, unknown>;
+  const parts: string[] = [];
+  const hallStr = typeof f.hall === 'string' || typeof f.hall === 'number' ? String(f.hall) : null;
+  if (hallStr) parts.push(`Hall ${hallStr}`);
+  if (typeof f.booth_number === 'string') {
+    // "3.1 C31" → "C31"   (booth_number hall prefix'ini içeriyorsa at)
+    let booth = f.booth_number;
+    if (hallStr && booth.startsWith(hallStr)) {
+      booth = booth.slice(hallStr.length).trim();
+    }
+    if (booth) parts.push(`Stand ${booth}`);
+  }
+  if (typeof f.fair_name === 'string') parts.push(String(f.fair_name));
+  if (typeof f.fair_date === 'string') parts.push(String(f.fair_date));
+  if (f.is_neighbor === true) parts.push('🎯 Komşu stand');
+  return parts.join(' · ');
+}
+
+type Recommendation = { action: string; badge: string; reasoning: string };
+
+function getRecommendation(candidate: LeadCandidate): Recommendation | null {
+  const data = candidate.raw_data;
+  if (!data || typeof data !== 'object') return null;
+  const r = (data as Record<string, unknown>).recommendation;
+  if (!r || typeof r !== 'object') return null;
+  const rec = r as Record<string, unknown>;
+  if (typeof rec.action !== 'string') return null;
+  return {
+    action: rec.action,
+    badge: typeof rec.badge === 'string' ? rec.badge : '',
+    reasoning: typeof rec.reasoning === 'string' ? rec.reasoning : '',
+  };
+}
+
+function recommendationStyle(action: string): string {
+  if (action === 'APPROVE_FAVORITE') return 'border-gm-gold/40 bg-gm-gold/20 text-gm-gold';
+  if (action === 'APPROVE_DIRECT') return 'border-gm-success/40 bg-gm-success/15 text-gm-success';
+  if (action === 'APPROVE_WITH_REVIEW') return 'border-gm-warning/40 bg-gm-warning/15 text-gm-warning';
+  if (action === 'RESEARCH') return 'border-gm-primary/40 bg-gm-primary/15 text-gm-primary-light';
+  if (action === 'LOW_PRIORITY') return 'border-gm-border-soft bg-gm-surface/30 text-gm-muted';
+  if (action === 'REJECT') return 'border-gm-error/40 bg-gm-error/15 text-gm-error';
+  return 'border-gm-border-soft bg-gm-surface/30 text-gm-muted';
+}
+
+function formatMailType(candidate: LeadCandidate): string {
+  const data = candidate.raw_data;
+  if (!data || typeof data !== 'object') return '';
+  const mc = (data as Record<string, unknown>).mail_classification;
+  if (!mc || typeof mc !== 'object') return '';
+  const t = (mc as Record<string, unknown>).type;
+  if (t === 'personal_fl') return '👤 Karar verici e-postası';
+  if (t === 'personal_il') return '👤 Karar verici e-postası';
+  if (t === 'personal_single') return '👤 Şahsi e-posta';
+  if (t === 'personal_dept') return '📨 Departman e-postası';
+  if (t === 'personal_role') return '📨 Rol-bazlı e-posta';
+  if (t === 'generic') return '📭 Generic (info/sales) — düşük yanıt';
+  return '';
+}
+
 function b2bAnalysis(candidate: LeadCandidate) {
   const data = candidate.raw_data;
   if (!data || typeof data !== 'object') return null;
@@ -182,8 +248,10 @@ function CandidateCard({
     candidate.channel === 'amazon'
       ? rawValue(candidate, 'problem_score') || rawValue(candidate, 'review_flags')
       : candidate.channel === 'trade_fair'
-        ? rawValue(candidate, 'fair_info')
+        ? formatFairInfo(candidate)
         : null;
+  const mailTypeBadge = candidate.channel === 'trade_fair' ? formatMailType(candidate) : '';
+  const recommendation = candidate.channel === 'trade_fair' ? getRecommendation(candidate) : null;
 
   const analysis = candidate.channel === 'b2b_directory' ? b2bAnalysis(candidate) : null;
   const match = candidate.channel === 'b2b_directory' ? b2bMatch(candidate) : null;
@@ -310,6 +378,20 @@ function CandidateCard({
           </div>
         </div>
 
+        {recommendation && (
+          <div className={`rounded-2xl border-2 p-4 ${recommendationStyle(recommendation.action)}`}>
+            <div className="flex items-center justify-between gap-3">
+              <span className="font-bold text-base">{recommendation.badge}</span>
+              <span className="text-[10px] font-mono uppercase tracking-widest opacity-60">
+                {recommendation.action}
+              </span>
+            </div>
+            <p className="mt-1.5 text-sm leading-5 opacity-90">
+              {recommendation.reasoning}
+            </p>
+          </div>
+        )}
+
         {candidate.ai_summary && (
           <p className="rounded-2xl border border-gm-border-soft bg-gm-surface/20 p-4 text-sm leading-6 text-gm-muted">
             {candidate.ai_summary}
@@ -317,9 +399,15 @@ function CandidateCard({
         )}
 
         {channelSpecific && (
-          <div className="text-xs text-gm-muted">
-            <span className="font-bold uppercase tracking-widest text-gm-text/50">Kanal verisi: </span>
-            <span className="font-mono">{channelSpecific}</span>
+          <div className="flex flex-wrap items-center gap-2 text-xs">
+            <span className="rounded-full border border-gm-border-soft bg-gm-surface/40 px-3 py-1 text-gm-text">
+              {channelSpecific}
+            </span>
+            {mailTypeBadge && (
+              <span className="rounded-full border border-gm-border-soft bg-gm-surface/20 px-3 py-1 text-gm-muted">
+                {mailTypeBadge}
+              </span>
+            )}
           </div>
         )}
 
@@ -459,10 +547,24 @@ function CandidateCard({
   );
 }
 
-export default function LeadCandidatesPanel() {
+interface LeadCandidatesPanelProps {
+  initialChannel?: LeadCandidateChannel | 'all';
+  initialStatus?: LeadCandidateStatus | 'all';
+  lockChannel?: boolean;
+  title?: string;
+  description?: string;
+}
+
+export default function LeadCandidatesPanel({
+  initialChannel = 'all',
+  initialStatus = 'pending',
+  lockChannel = false,
+  title = 'Lead Adayları',
+  description = "Otomatik kanallardan gelen firmaları inceleyin, uygun olanları satış pipeline'ına aktarın.",
+}: LeadCandidatesPanelProps = {}) {
   const [q, setQ] = React.useState('');
-  const [channel, setChannel] = React.useState<LeadCandidateChannel | 'all'>('all');
-  const [status, setStatus] = React.useState<LeadCandidateStatus | 'all'>('pending');
+  const [channel, setChannel] = React.useState<LeadCandidateChannel | 'all'>(initialChannel);
+  const [status, setStatus] = React.useState<LeadCandidateStatus | 'all'>(initialStatus);
   const [selectedIds, setSelectedIds] = React.useState<Set<string>>(() => new Set());
   const [bulkRejectOpen, setBulkRejectOpen] = React.useState(false);
   const [bulkTags, setBulkTags] = React.useState<string[]>([]);
@@ -471,7 +573,7 @@ export default function LeadCandidatesPanel() {
   const { data, isLoading, isFetching, refetch } = useListLeadCandidatesQuery({
     channel,
     status,
-    limit: 100,
+    limit: 500,
     page: 1,
   });
   const { data: icpProfiles = [] } = useListIcpProfilesQuery();
@@ -621,9 +723,9 @@ export default function LeadCandidatesPanel() {
             <span className="h-px w-8 bg-gm-gold" />
             <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gm-gold">Lead Machine</span>
           </div>
-          <h1 className="font-serif text-4xl text-gm-text">Lead Adayları</h1>
+          <h1 className="font-serif text-4xl text-gm-text">{title}</h1>
           <p className="max-w-xl font-serif text-sm italic text-gm-muted">
-            Otomatik kanallardan gelen firmaları inceleyin, uygun olanları satış pipeline'ına aktarın.
+            {description}
           </p>
         </div>
 
@@ -654,21 +756,32 @@ export default function LeadCandidatesPanel() {
             </div>
           </div>
 
-          <div className="space-y-2">
-            <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Kanal</label>
-            <Select value={channel} onValueChange={(v) => setChannel(v as LeadCandidateChannel | 'all')}>
-              <SelectTrigger className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="rounded-2xl border-gm-border-soft bg-gm-surface text-gm-text">
-                <SelectItem value="all">Tüm Kanallar</SelectItem>
-                <SelectItem value="amazon">Amazon</SelectItem>
-                <SelectItem value="b2b_directory">B2B Dizin</SelectItem>
-                <SelectItem value="trade_fair">Fuar</SelectItem>
-                <SelectItem value="icp_match">ICP</SelectItem>
-              </SelectContent>
-            </Select>
-          </div>
+          {lockChannel ? (
+            <div className="space-y-2">
+              <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Kanal</label>
+              <div className="flex h-12 items-center rounded-2xl border border-gm-border-soft bg-gm-surface/30 px-4 text-sm font-medium text-gm-text">
+                <Badge variant="outline" className={cn('rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest', channelBadgeCls(channel))}>
+                  {CHANNEL_LABELS[channel] ?? channel}
+                </Badge>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Kanal</label>
+              <Select value={channel} onValueChange={(v) => setChannel(v as LeadCandidateChannel | 'all')}>
+                <SelectTrigger className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl border-gm-border-soft bg-gm-surface text-gm-text">
+                  <SelectItem value="all">Tüm Kanallar</SelectItem>
+                  <SelectItem value="amazon">Amazon</SelectItem>
+                  <SelectItem value="b2b_directory">B2B Dizin</SelectItem>
+                  <SelectItem value="trade_fair">Fuar</SelectItem>
+                  <SelectItem value="icp_match">ICP</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+          )}
 
           <div className="space-y-2">
             <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Durum</label>

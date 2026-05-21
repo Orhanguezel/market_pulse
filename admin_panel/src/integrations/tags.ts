@@ -32,6 +32,7 @@ export const tags = [
   'IcpProfiles',
   'LeadEnrichment',
   'OutreachDrafts',
+  'OutreachCampaigns',
   'MarketTestRuns',
   'MarketDeveloperNotes',
   'ScanRules',

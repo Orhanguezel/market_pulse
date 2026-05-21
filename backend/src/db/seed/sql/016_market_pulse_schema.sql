@@ -24,12 +24,29 @@ CREATE TABLE IF NOT EXISTS `market_targets` (
   UNIQUE KEY `uq_market_targets_paspas_id` (`paspas_customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
--- Eski dev veritabanlarında CREATE TABLE IF NOT EXISTS mevcut tabloyu genişletmez.
-ALTER TABLE `market_targets`
-  ADD COLUMN IF NOT EXISTS `paspas_customer_id` char(36) DEFAULT NULL;
+SET @add_market_targets_paspas_customer_id := IF(
+  (SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'market_targets'
+     AND COLUMN_NAME = 'paspas_customer_id') = 0,
+  'ALTER TABLE `market_targets` ADD COLUMN `paspas_customer_id` char(36) DEFAULT NULL',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_market_targets_paspas_customer_id;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
-CREATE UNIQUE INDEX IF NOT EXISTS `uq_market_targets_paspas_id`
-  ON `market_targets` (`paspas_customer_id`);
+SET @add_market_targets_paspas_index := IF(
+  (SELECT COUNT(*) FROM information_schema.STATISTICS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'market_targets'
+     AND INDEX_NAME = 'uq_market_targets_paspas_id') = 0,
+  'CREATE UNIQUE INDEX `uq_market_targets_paspas_id` ON `market_targets` (`paspas_customer_id`)',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_market_targets_paspas_index;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
 CREATE TABLE IF NOT EXISTS `market_leads` (
   `id`           char(36)     NOT NULL,

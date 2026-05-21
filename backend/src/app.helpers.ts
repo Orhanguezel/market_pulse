@@ -20,7 +20,10 @@ export function parseCorsOrigins(v?: string | string[]): boolean | string[] {
 export function pickUploadsRoot(rawFromSettings?: string | null): string {
   const fallback = path.join(process.cwd(), 'uploads');
   const envRoot = env.LOCAL_STORAGE_ROOT && String(env.LOCAL_STORAGE_ROOT).trim();
-  const candidate = envRoot || (rawFromSettings || '').trim() || fallback;
+  const candidateRaw = envRoot || (rawFromSettings || '').trim() || fallback;
+  const candidate = path.isAbsolute(candidateRaw)
+    ? candidateRaw
+    : path.resolve(process.cwd(), candidateRaw);
 
   const ensureDir = (p: string): string => {
     try {

@@ -105,7 +105,7 @@ describe('lead machine controller candidates', () => {
       body: { action: 'reject', reject_reason: 'wrong_segment' },
     });
 
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['rejected', 'wrong_segment', null, 'candidate-1']);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['rejected', 'wrong_segment', null, null, 'candidate-1']);
     expect(result).toEqual(expect.objectContaining({
       status: 'rejected',
       reject_reason: 'wrong_segment',

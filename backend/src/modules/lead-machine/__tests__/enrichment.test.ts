@@ -5,7 +5,10 @@ const dbMock = createDbMock();
 const scrape = mock(() => Promise.resolve({ data: {} }));
 const searchGoogleMaps = mock(() => Promise.resolve({ places: [] }));
 const verifyScraperWebhook = mock(() => true);
+const fetchMock = mock(() => Promise.resolve(Response.json({})));
 const env = { APOLLO_API_KEY: '' };
+
+globalThis.fetch = fetchMock as unknown as typeof fetch;
 
 mock.module('@/db/client', () => ({
   db: dbMock.db,
@@ -25,7 +28,9 @@ const service = await import('../enrichment/enrichment.service');
 beforeEach(() => {
   dbMock.reset();
   scrape.mockReset();
+  fetchMock.mockReset();
   scrape.mockImplementation(() => Promise.resolve({ data: {} }));
+  fetchMock.mockImplementation(() => Promise.resolve(Response.json({})));
   env.APOLLO_API_KEY = '';
 });
 
@@ -87,6 +92,41 @@ describe('lead machine enrichment service', () => {
       candidateId: 'candidate-1',
       decisionMaker: { email: 'owner@dealer.example', phone: '+49 123' },
       sourceVendor: 'scraped',
+    }));
+  });
+
+  test('uses Apollo when API key is configured and normalizes decision maker', async () => {
+    env.APOLLO_API_KEY = 'apollo-key';
+    dbMock.queuePoolExecute([candidate()]);
+    fetchMock.mockImplementation(() => Promise.resolve(Response.json({
+      person: {
+        first_name: 'Anna',
+        last_name: 'Buyer',
+        title: 'Purchasing Manager',
+        email: 'anna@dealer.example',
+        linkedin_url: 'https://linkedin.com/in/anna',
+        phone_numbers: [{ sanitized_number: '+49 555' }],
+      },
+    })));
+
+    const result = await service.enrichCandidate('candidate-1');
+
+    expect(fetchMock).toHaveBeenCalledWith('https://api.apollo.io/v1/people/match', expect.objectContaining({
+      method: 'POST',
+      headers: { 'content-type': 'application/json', 'x-api-key': 'apollo-key' },
+    }));
+    expect(scrape).not.toHaveBeenCalled();
+    expect(dbMock.poolExecutions[1]?.values?.[3]).toBe('apollo');
+    expect(JSON.parse(String(dbMock.poolExecutions[1]?.values?.[2]))).toEqual(expect.objectContaining({
+      name: 'Anna Buyer',
+      title: 'Purchasing Manager',
+      email: 'anna@dealer.example',
+      linkedin_url: 'https://linkedin.com/in/anna',
+      phone: '+49 555',
+    }));
+    expect(result).toEqual(expect.objectContaining({
+      sourceVendor: 'apollo',
+      decisionMaker: expect.objectContaining({ email: 'anna@dealer.example' }),
     }));
   });
 

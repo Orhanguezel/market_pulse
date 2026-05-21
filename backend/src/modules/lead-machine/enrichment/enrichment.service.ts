@@ -13,6 +13,38 @@ function domainFromUrl(url: string | null) {
   }
 }
 
+function asRecord(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' ? value as Record<string, unknown> : {};
+}
+
+function firstString(value: unknown): string | null {
+  if (typeof value === 'string' && value.trim()) return value.trim();
+  if (Array.isArray(value)) {
+    const found = value.find((item) => typeof item === 'string' && item.trim());
+    return typeof found === 'string' ? found.trim() : null;
+  }
+  return null;
+}
+
+function normalizeApolloDecisionMaker(payload: unknown) {
+  const data = asRecord(payload);
+  const person = asRecord(data.person ?? data.contact ?? data);
+  const phoneNumbers = Array.isArray(person.phone_numbers) ? person.phone_numbers : [];
+  const phoneRow = asRecord(phoneNumbers[0]);
+  const firstName = firstString(person.first_name);
+  const lastName = firstString(person.last_name);
+  const joinedName = [firstName, lastName].filter(Boolean).join(' ');
+  const fullName = firstString(person.name) ?? (joinedName || null);
+  return {
+    name: fullName,
+    title: firstString(person.title ?? person.headline),
+    email: firstString(person.email ?? person.email_address),
+    linkedin_url: firstString(person.linkedin_url),
+    phone: firstString(person.phone ?? person.sanitized_phone ?? phoneRow.sanitized_number ?? phoneRow.raw_number),
+    raw: payload,
+  };
+}
+
 export async function enrichCandidate(candidateId: string) {
   const candidate = await getCandidate(candidateId);
   if (!candidate) throw new Error('CANDIDATE_NOT_FOUND');
@@ -27,7 +59,7 @@ export async function enrichCandidate(candidateId: string) {
       body: JSON.stringify({ domain, title: 'Owner CEO Purchasing Manager Category Manager Import Manager' }),
     });
     if (res.ok) {
-      decisionMaker = await res.json() as unknown;
+      decisionMaker = normalizeApolloDecisionMaker(await res.json() as unknown);
       sourceVendor = 'apollo';
     }
   }

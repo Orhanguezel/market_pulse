@@ -4,7 +4,7 @@
   "private": true,
   "description": "Next.js yonetim paneli; marka env ve site_settings uzerinden.",
   "scripts": {
-    "dev": "next dev -p 3096",
+    "dev": "next dev --webpack -p 3096",
     "build": "next build",
     "start": "next start -p 3096",
     "test": "bun test",

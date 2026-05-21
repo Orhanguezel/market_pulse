@@ -2,4 +2,23 @@ node_modules
 dist
 .next
 .env
+.env.local
 *.tsbuildinfo
+
+# Claude Code workspace
+.claude/
+
+# Geçici verileri ve cikti dosyalari
+output/
+/tmp/
+
+# Sync-conflict dosyalari
+*.sync-conflict-*
+
+# Build artifacts
+build/
+*.tsbuildinfo
+
+# Bun lock — opsiyonel; commit edilmez çünkü her ortamda yeniden olusur
+# (Eger reproducible build istiyorsan kaldir)
+# bun.lock

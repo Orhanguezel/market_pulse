@@ -1,6 +1,14 @@
 import type { FastifyInstance } from 'fastify';
 import {
+  createOutreachCampaign,
+  deleteOutreachCampaign,
+  getOutreachCampaign,
+  listOutreachCampaigns,
+  updateOutreachCampaign,
+} from './campaign/campaign.controller';
+import {
   approveToLead,
+  aggregateRejectionPatternsHandler,
   competitorScan,
   createIcp,
   createRule,
@@ -14,6 +22,9 @@ import {
   enrichBatch,
   enrichOne,
   fairSuggestions,
+  fairBriefingBulkPdf,
+  fairBriefingCandidatePdf,
+  fairBriefingDayPdf,
   generateOutreach,
   getAmazonJob,
   getAmazonRiskScores,
@@ -32,18 +43,25 @@ import {
   listLeadCandidates,
   listRules,
   listSavedSearchesHandler,
+  openTrackingPixel,
   rejectionPatterns,
   reviewCandidate,
   runSavedSearchHandler,
   scraperCallback,
+  sendDraft,
   startAmazonJob,
   startAmazonScan,
   startB2bJob,
   startFairJob,
+  startGenericFairRunner,
   updateDraft,
   updateIcp,
   updateSavedSearchHandler,
 } from './controller';
+
+export async function registerLeadMachinePublic(app: FastifyInstance) {
+  app.get('/lead-machine/outreach/open/:id/pixel.gif', openTrackingPixel);
+}
 
 export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.get('/lead-machine/candidates', listLeadCandidates);
@@ -52,6 +70,7 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.post('/lead-machine/candidates/:id/approve-to-lead', approveToLead);
   app.post('/lead-machine/scraper-callback', scraperCallback);
   app.get('/lead-machine/rejection-patterns', rejectionPatterns);
+  app.post('/lead-machine/rejection-patterns/aggregate', aggregateRejectionPatternsHandler);
 
   app.get('/lead-machine/icp', listIcp);
   app.get('/lead-machine/icp/:id', getIcp);
@@ -74,8 +93,12 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.get('/lead-machine/b2b/jobs', listB2bJobs);
 
   app.post('/lead-machine/fair/jobs', startFairJob);
+  app.post('/lead-machine/fair/run', startGenericFairRunner);
   app.get('/lead-machine/fair/jobs', listFairJobs);
   app.get('/lead-machine/fair/suggestions', fairSuggestions);
+  app.get('/lead-machine/fair/brifing/:candidateId.pdf', fairBriefingCandidatePdf);
+  app.get('/lead-machine/fair/brifing/day/:date.pdf', fairBriefingDayPdf);
+  app.post('/lead-machine/fair/brifing/bulk', fairBriefingBulkPdf);
 
   app.post('/lead-machine/enrich/:candidateId', enrichOne);
   app.get('/lead-machine/enrich/:candidateId', listEnrichment);
@@ -84,6 +107,13 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.post('/lead-machine/outreach/generate/:candidateId', generateOutreach);
   app.get('/lead-machine/outreach/drafts', listDrafts);
   app.patch('/lead-machine/outreach/drafts/:id', updateDraft);
+  app.post('/lead-machine/outreach/drafts/:id/send', sendDraft);
+
+  app.get('/lead-machine/outreach/campaigns', listOutreachCampaigns);
+  app.get('/lead-machine/outreach/campaigns/:id', getOutreachCampaign);
+  app.post('/lead-machine/outreach/campaigns', createOutreachCampaign);
+  app.patch('/lead-machine/outreach/campaigns/:id', updateOutreachCampaign);
+  app.delete('/lead-machine/outreach/campaigns/:id', deleteOutreachCampaign);
 
   app.post('/lead-machine/competitor/scan', competitorScan);
 

@@ -1,4 +1,4 @@
-import type { RouteHandler } from 'fastify';
+import type { FastifyReply, RouteHandler } from 'fastify';
 import { pool } from '@/db/client';
 import { approveCandidateToMarketLead } from './_shared/candidate.helpers';
 import {
@@ -18,6 +18,8 @@ import { getLatestAmazonRiskReport, getAmazonScanProducts } from './amazon/risk-
 import { rescoreForJob } from './amazon/rescore.service';
 import { runB2bJob } from './b2b/b2b.job';
 import { runFairJob } from './fair/fair.job';
+import { generateFairBriefingPdf, listFairBriefingCandidateIdsForDay } from './fair/briefing.service';
+import { buildGenericFairRunnerParams } from './fair/fair.runner';
 import {
   createIcpProfile,
   deleteIcpProfile,
@@ -26,9 +28,22 @@ import {
   updateIcpProfile,
 } from './icp/icp.repository';
 import { enrichCandidate, listCandidateEnrichment } from './enrichment/enrichment.service';
-import { generateOutreachEmail, listOutreachDrafts, updateOutreachDraft } from './outreach/outreach.service';
+import {
+  generateOutreachEmail,
+  listOutreachDrafts,
+  sendOutreachDraft,
+  trackOutreachOpen,
+  updateOutreachDraft,
+} from './outreach/outreach.service';
 import { scanCompetitorPage } from './competitor/competitor.scraper';
-import { listScanRules, createScanRule, deleteScanRule, getRejectionStats, getApprovedStats } from './scan-rules.service';
+import {
+  aggregateRejectionPatterns,
+  listScanRules,
+  createScanRule,
+  deleteScanRule,
+  getRejectionStats,
+  getApprovedStats,
+} from './scan-rules.service';
 import {
   listSavedSearches,
   createSavedSearch,
@@ -51,6 +66,10 @@ function parseJsonField(row: Record<string, unknown>, key: string): Record<strin
 
 function runInBackground(task: Promise<unknown>) {
   task.catch(() => undefined);
+}
+
+function queueCandidateEnrichment(candidateId: string) {
+  setTimeout(() => runInBackground(enrichCandidate(candidateId)), 0);
 }
 
 export const listLeadCandidates: RouteHandler<{ Querystring: unknown }> = async (req, reply) => {
@@ -85,6 +104,7 @@ export const reviewCandidate: RouteHandler<{ Params: { id: string }; Body: unkno
     rejectTags?.length ? rejectTags : null,
   );
   if (!candidate) return reply.code(404).send({ error: { message: 'not_found' } });
+  if (status === 'approved' || status === 'favorite') queueCandidateEnrichment(req.params.id);
   return candidate;
 };
 
@@ -93,6 +113,7 @@ export const approveToLead: RouteHandler<{ Params: { id: string } }> = async (re
   if (!candidate) return reply.code(404).send({ error: { message: 'not_found' } });
   const lead = await approveCandidateToMarketLead(candidate);
   await updateCandidateReview(req.params.id, 'approved');
+  queueCandidateEnrichment(req.params.id);
   return reply.code(201).send(lead);
 };
 
@@ -151,6 +172,8 @@ export const rejectionPatterns: RouteHandler = async () => {
   );
   return rows;
 };
+
+export const aggregateRejectionPatternsHandler: RouteHandler = async () => aggregateRejectionPatterns();
 
 export const listIcp: RouteHandler = async () => listIcpProfiles();
 
@@ -249,6 +272,41 @@ export const listB2bJobs: RouteHandler = async () => listSearchJobs('b2b_directo
 export const startFairJob: RouteHandler<{ Body: unknown }> = async (req, reply) => reply.code(201).send(await createAndRunJob('trade_fair', asRecord(req.body)));
 export const listFairJobs: RouteHandler = async () => listSearchJobs('trade_fair');
 export const fairSuggestions: RouteHandler = async () => [];
+export const startGenericFairRunner: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  try {
+    return reply.code(201).send(await createAndRunJob('trade_fair', { ...buildGenericFairRunnerParams(asRecord(req.body)) }));
+  } catch (e) {
+    if (e instanceof Error && (e.message === 'FAIR_URL_REQUIRED' || e.message === 'ICP_ID_REQUIRED')) {
+      return reply.code(400).send({ error: { message: e.message.toLowerCase() } });
+    }
+    throw e;
+  }
+};
+
+function pdfReply(reply: FastifyReply, pdf: Buffer, filename: string) {
+  return reply
+    .header('Content-Type', 'application/pdf')
+    .header('Content-Disposition', `inline; filename="${filename}"`)
+    .send(pdf);
+}
+
+export const fairBriefingCandidatePdf: RouteHandler<{ Params: { candidateId: string } }> = async (req, reply) => {
+  const pdf = await generateFairBriefingPdf([req.params.candidateId]);
+  return pdfReply(reply, pdf, `fair-briefing-${req.params.candidateId}.pdf`);
+};
+
+export const fairBriefingBulkPdf: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  const ids = Array.isArray(body.ids) ? body.ids.filter((id): id is string => typeof id === 'string') : [];
+  const pdf = await generateFairBriefingPdf(ids.slice(0, 100));
+  return pdfReply(reply, pdf, 'fair-briefing-bulk.pdf');
+};
+
+export const fairBriefingDayPdf: RouteHandler<{ Params: { date: string } }> = async (req, reply) => {
+  const ids = await listFairBriefingCandidateIdsForDay(req.params.date);
+  const pdf = await generateFairBriefingPdf(ids);
+  return pdfReply(reply, pdf, `fair-briefing-${req.params.date}.pdf`);
+};
 
 export const enrichOne: RouteHandler<{ Params: { candidateId: string } }> = async (req, reply) => reply.code(201).send(await enrichCandidate(req.params.candidateId));
 export const listEnrichment: RouteHandler<{ Params: { candidateId: string } }> = async (req) => listCandidateEnrichment(req.params.candidateId);
@@ -273,6 +331,31 @@ export const updateDraft: RouteHandler<{ Params: { id: string }; Body: unknown }
   });
   if (!draft) return reply.code(404).send({ error: { message: 'not_found' } });
   return draft;
+};
+
+export const sendDraft: RouteHandler<{ Params: { id: string }; Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  try {
+    return await sendOutreachDraft(req.params.id, typeof body.to === 'string' ? body.to : null);
+  } catch (e) {
+    if (e instanceof Error && e.message === 'DRAFT_NOT_FOUND') {
+      return reply.code(404).send({ error: { message: 'not_found' } });
+    }
+    if (e instanceof Error && e.message === 'OUTREACH_RECIPIENT_NOT_FOUND') {
+      return reply.code(422).send({ error: { message: 'recipient_not_found' } });
+    }
+    throw e;
+  }
+};
+
+const TRACKING_PIXEL = Buffer.from('R0lGODlhAQABAPAAAP///wAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw==', 'base64');
+
+export const openTrackingPixel: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  await trackOutreachOpen(req.params.id);
+  return reply
+    .header('content-type', 'image/gif')
+    .header('cache-control', 'no-store, no-cache, must-revalidate, max-age=0')
+    .send(TRACKING_PIXEL);
 };
 
 export const getLeadCandidate: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {

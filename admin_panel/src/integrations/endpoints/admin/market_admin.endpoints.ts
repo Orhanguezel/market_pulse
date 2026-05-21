@@ -101,7 +101,7 @@ export interface PaspasOrder {
 }
 
 export type LeadCandidateStatus = 'pending' | 'approved' | 'rejected' | 'favorite';
-export type LeadCandidateChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'icp_match';
+export type LeadCandidateChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match';
 
 export interface LeadCandidate {
   id: string;
@@ -158,6 +158,36 @@ export interface IcpDefinition {
   lead_channels?: string[];
   /** Serbest açıklama metni */
   description?: string;
+
+  // ─── v3 Gelişmiş ayarlar ───
+  /** Pozitif eşleşme (güçlü sektör) — match skoru x1.5 */
+  strong_match_sectors?: string[];
+  /** Pozitif eşleşme (zayıf sektör) — match skoru x1.0 */
+  weak_match_sectors?: string[];
+  /** Domain substring eleme. Örn: 'cooling' → reachcooling.com elenir */
+  exclude_domain_substrings?: string[];
+  /** OEM tier-1 brand eleme. Örn: 'bosch', 'zf', 'schaeffler' */
+  exclude_brands?: string[];
+  /** Business model anahtar kelime sözlüğü */
+  business_model_signals?: Record<string, string[]>;
+  /** Business model'e göre skor modifier'ı */
+  business_model_score_modifiers?: Record<string, number>;
+  /** Pozitif sinyaller (mail/web'de geçerse skor +) */
+  positive_signals?: string[];
+  /** Negatif sinyaller (skor -) */
+  negative_signals?: string[];
+  /** Skor ağırlıkları */
+  scoring_weights?: Record<string, number>;
+  /** Aday kabul edilmesi için minimum skor */
+  min_lead_score_for_candidate?: number;
+  /** Otomatik onay için skor eşiği */
+  auto_approve_threshold?: number;
+  /** Komşu stand bonusu (Manhattan mesafesi ≤ N adaylar için) */
+  neighbor_bonus?: number;
+  /** Öncelikli coğrafyalar (skor +) */
+  priority_geographies?: string[];
+  /** Öncelikli coğrafya için skor boost */
+  priority_boost?: number;
 }
 
 export interface IcpProfile {
@@ -228,6 +258,13 @@ export interface OutreachDraft {
   body: string;
   ai_model: string | null;
   status: 'draft' | 'sent' | 'archived';
+  sent_at: string | null;
+  opened_at: string | null;
+  open_count: number;
+  sequence_step: string;
+  last_reminder_at: string | null;
+  followup_step: string;
+  last_followup_at: string | null;
   reply_status: 'replied' | 'no_reply' | null;
   replied_at: string | null;
   created_at: string;
@@ -354,6 +391,49 @@ export interface AmazonSavedSearch {
 }
 
 // ─── Endpoints ───────────────────────────────────────────────────────────────
+
+export interface OutreachCampaign {
+  id:                   string;
+  slug:                 string;
+  name:                 string;
+  is_active:            number;
+
+  brand_name:           string;
+  brand_short:          string;
+  brand_legal:          string | null;
+  sender_label:         string;
+  sender_name:          string | null;
+  sender_title:         string | null;
+  sender_email:         string;
+  reply_to_email:       string | null;
+  sender_phone:         string | null;
+  sender_office:        string | null;
+  sender_website:       string | null;
+  sender_address:       string | null;
+
+  product_en:           string;
+  product_de:           string | null;
+  product_tr:           string | null;
+
+  fair_name:            string | null;
+  fair_edition:         string | null;
+  fair_dates_en:        string | null;
+  fair_dates_de:        string | null;
+  fair_dates_tr:        string | null;
+  fair_hall:            string | null;
+  fair_booth:           string | null;
+  fair_url:             string | null;
+
+  calendly_link:        string | null;
+  calendly_placeholder: string | null;
+
+  icp_id:               string | null;
+  default_lang:         string;
+  country_to_lang:      Record<string, string> | null;
+
+  created_at:           string;
+  updated_at:           string;
+}
 
 export const marketAdminApi = baseApi.injectEndpoints({
   endpoints: (b) => ({
@@ -641,6 +721,10 @@ export const marketAdminApi = baseApi.injectEndpoints({
       query: ({ id, body }) => ({ url: `/admin/lead-machine/outreach/drafts/${id}`, method: 'PATCH', body }),
       invalidatesTags: ['OutreachDrafts'],
     }),
+    sendOutreachDraft: b.mutation<OutreachDraft, { id: string; to?: string }>({
+      query: ({ id, to }) => ({ url: `/admin/lead-machine/outreach/drafts/${id}/send`, method: 'POST', body: to ? { to } : {} }),
+      invalidatesTags: ['OutreachDrafts'],
+    }),
     listAmazonJobs: b.query<LeadSearchJob[], void>({
       query: () => ({ url: '/admin/lead-machine/amazon/jobs' }),
       providesTags: ['LeadMachineJobs'],
@@ -709,6 +793,10 @@ export const marketAdminApi = baseApi.injectEndpoints({
     }),
     startFairJob: b.mutation<LeadSearchJob, Record<string, unknown>>({
       query: (body) => ({ url: '/admin/lead-machine/fair/jobs', method: 'POST', body }),
+      invalidatesTags: ['LeadMachineJobs'],
+    }),
+    startGenericFairRunner: b.mutation<LeadSearchJob, { fair_url: string; icp_id: string; fair_name?: string; fair_date?: string; hall_filters?: string[]; max_exhibitors?: number }>({
+      query: (body) => ({ url: '/admin/lead-machine/fair/run', method: 'POST', body }),
       invalidatesTags: ['LeadMachineJobs'],
     }),
     listIcpProfiles: b.query<IcpProfile[], void>({
@@ -796,6 +884,28 @@ export const marketAdminApi = baseApi.injectEndpoints({
       query: (id) => ({ url: `/admin/lead-machine/amazon/saved-searches/${id}/run`, method: 'POST' }),
       invalidatesTags: ['SavedSearches', 'LeadMachineJobs'],
     }),
+
+    // ─── Outreach Campaigns (SaaS — multi-tenant kampanya yapısı) ───────
+    listOutreachCampaigns: b.query<OutreachCampaign[], void>({
+      query: () => ({ url: '/admin/lead-machine/outreach/campaigns' }),
+      providesTags: ['OutreachCampaigns'],
+    }),
+    getOutreachCampaign: b.query<OutreachCampaign, string>({
+      query: (id) => ({ url: `/admin/lead-machine/outreach/campaigns/${id}` }),
+      providesTags: ['OutreachCampaigns'],
+    }),
+    createOutreachCampaign: b.mutation<OutreachCampaign, Partial<OutreachCampaign>>({
+      query: (body) => ({ url: '/admin/lead-machine/outreach/campaigns', method: 'POST', body }),
+      invalidatesTags: ['OutreachCampaigns'],
+    }),
+    updateOutreachCampaign: b.mutation<OutreachCampaign, { id: string; body: Partial<OutreachCampaign> }>({
+      query: ({ id, body }) => ({ url: `/admin/lead-machine/outreach/campaigns/${id}`, method: 'PATCH', body }),
+      invalidatesTags: ['OutreachCampaigns'],
+    }),
+    deleteOutreachCampaign: b.mutation<void, string>({
+      query: (id) => ({ url: `/admin/lead-machine/outreach/campaigns/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['OutreachCampaigns'],
+    }),
   }),
   overrideExisting: true,
 });
@@ -839,6 +949,7 @@ export const {
   useGenerateOutreachDraftMutation,
   useListOutreachDraftsQuery,
   useUpdateOutreachDraftMutation,
+  useSendOutreachDraftMutation,
   useListAmazonJobsQuery,
   useStartAmazonJobMutation,
   useStartAmazonScanMutation,
@@ -850,6 +961,7 @@ export const {
   useStartB2bJobMutation,
   useListFairJobsQuery,
   useStartFairJobMutation,
+  useStartGenericFairRunnerMutation,
   useListIcpProfilesQuery,
   useCreateIcpProfileMutation,
   useUpdateIcpProfileMutation,
@@ -871,6 +983,11 @@ export const {
   useUpdateSavedSearchMutation,
   useDeleteSavedSearchMutation,
   useRunSavedSearchMutation,
+  useListOutreachCampaignsQuery,
+  useGetOutreachCampaignQuery,
+  useCreateOutreachCampaignMutation,
+  useUpdateOutreachCampaignMutation,
+  useDeleteOutreachCampaignMutation,
 } = marketAdminApi;
 
 // Checklist uyumu için alias hook isimleri

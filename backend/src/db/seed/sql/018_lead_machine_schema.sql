@@ -81,8 +81,17 @@ CREATE TABLE IF NOT EXISTS `lead_candidates` (
   KEY `idx_candidates_icp`     (`icp_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-ALTER TABLE `lead_candidates`
-  ADD COLUMN IF NOT EXISTS `decision` varchar(30) DEFAULT NULL AFTER `lead_score`;
+SET @add_lead_candidates_decision := IF(
+  (SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'lead_candidates'
+     AND COLUMN_NAME = 'decision') = 0,
+  'ALTER TABLE `lead_candidates` ADD COLUMN `decision` varchar(30) DEFAULT NULL AFTER `lead_score`',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_lead_candidates_decision;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
 ALTER TABLE `lead_candidates`
   MODIFY COLUMN `lead_score` decimal(4,1) DEFAULT NULL;
@@ -118,6 +127,13 @@ CREATE TABLE IF NOT EXISTS `lead_outreach_drafts` (
   `body`           text         NOT NULL,
   `ai_model`       varchar(50)  DEFAULT NULL,  -- hangi model ürettiyse
   `status`         varchar(20)  NOT NULL DEFAULT 'draft',  -- draft | sent | archived
+  `sent_at`        datetime     DEFAULT NULL,
+  `opened_at`      datetime     DEFAULT NULL,
+  `open_count`     int          NOT NULL DEFAULT 0,
+  `sequence_step`  varchar(30)  NOT NULL DEFAULT 'initial',
+  `last_reminder_at` datetime   DEFAULT NULL,
+  `followup_step`  varchar(30)  NOT NULL DEFAULT 'initial',
+  `last_followup_at` datetime   DEFAULT NULL,
   `replied_at`     datetime     DEFAULT NULL,
   `reply_status`   varchar(20)  DEFAULT NULL,              -- replied | no_reply
   `created_at`     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -125,6 +141,90 @@ CREATE TABLE IF NOT EXISTS `lead_outreach_drafts` (
   KEY `idx_outreach_candidate`   (`candidate_id`),
   KEY `idx_outreach_market_lead` (`market_lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+SET @add_lead_outreach_sent_at := IF(
+  (SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'lead_outreach_drafts'
+     AND COLUMN_NAME = 'sent_at') = 0,
+  'ALTER TABLE `lead_outreach_drafts` ADD COLUMN `sent_at` datetime DEFAULT NULL AFTER `status`',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_lead_outreach_sent_at;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @add_lead_outreach_followup_step := IF(
+  (SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'lead_outreach_drafts'
+     AND COLUMN_NAME = 'followup_step') = 0,
+  'ALTER TABLE `lead_outreach_drafts` ADD COLUMN `followup_step` varchar(30) NOT NULL DEFAULT ''initial'' AFTER `last_reminder_at`',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_lead_outreach_followup_step;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @add_lead_outreach_last_followup_at := IF(
+  (SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'lead_outreach_drafts'
+     AND COLUMN_NAME = 'last_followup_at') = 0,
+  'ALTER TABLE `lead_outreach_drafts` ADD COLUMN `last_followup_at` datetime DEFAULT NULL AFTER `followup_step`',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_lead_outreach_last_followup_at;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @add_lead_outreach_sequence_step := IF(
+  (SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'lead_outreach_drafts'
+     AND COLUMN_NAME = 'sequence_step') = 0,
+  'ALTER TABLE `lead_outreach_drafts` ADD COLUMN `sequence_step` varchar(30) NOT NULL DEFAULT ''initial'' AFTER `open_count`',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_lead_outreach_sequence_step;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @add_lead_outreach_last_reminder_at := IF(
+  (SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'lead_outreach_drafts'
+     AND COLUMN_NAME = 'last_reminder_at') = 0,
+  'ALTER TABLE `lead_outreach_drafts` ADD COLUMN `last_reminder_at` datetime DEFAULT NULL AFTER `sequence_step`',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_lead_outreach_last_reminder_at;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @add_lead_outreach_opened_at := IF(
+  (SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'lead_outreach_drafts'
+     AND COLUMN_NAME = 'opened_at') = 0,
+  'ALTER TABLE `lead_outreach_drafts` ADD COLUMN `opened_at` datetime DEFAULT NULL AFTER `sent_at`',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_lead_outreach_opened_at;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+SET @add_lead_outreach_open_count := IF(
+  (SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'lead_outreach_drafts'
+     AND COLUMN_NAME = 'open_count') = 0,
+  'ALTER TABLE `lead_outreach_drafts` ADD COLUMN `open_count` int NOT NULL DEFAULT 0 AFTER `opened_at`',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_lead_outreach_open_count;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
 
 -- Öğrenme: red pattern'ları (H3 mekanizması için analiz kaynağı)
 -- Bu tablo lead_candidates.reject_reason'dan periyodik olarak derlenir
@@ -167,4 +267,79 @@ INSERT INTO `icp_profiles` (`id`, `name`, `is_active`, `definition`) VALUES (
     'price_segment',    'mid',
     'exclude_patterns', JSON_ARRAY()
   )
+);
+
+-- Automechanika 2026 — Avrasya Paspas için kalibre ICP (v1, 2026-05-21)
+-- Kaynak: docs/teknik/icp-automechanika-final.md
+INSERT INTO `icp_profiles` (`id`, `name`, `is_active`, `definition`)
+SELECT
+  '9f4c8f04-64b8-4da5-9c7d-4a4b5cf4b1b0',
+  'Automechanika 2026 — Paspas/Oto Aksesuar Alıcısı',
+  1,
+  JSON_OBJECT(
+    'version', 1,
+    'fair', JSON_OBJECT(
+      'name', 'Automechanika Frankfurt 2026',
+      'dates', '2026-09-08/2026-09-12',
+      'host_exhibitor', JSON_OBJECT(
+        'name', 'Avrasya Paspas Otomotiv San. ve Tic. Ltd. Şti.',
+        'brand', 'ProMats',
+        'hall', '3.1',
+        'booth', 'D11'
+      )
+    ),
+    'sectors', JSON_ARRAY(
+      'automotive accessories','car care','floor mats','car mats','car carpet',
+      'interior accessories','boot liners','trunk mats','auto trim','rubber mats'
+    ),
+    'firm_types', JSON_ARRAY(
+      'distributor','importer','wholesaler','e-commerce seller','buying group',
+      'aftermarket retailer','tuning shop chain','auto parts catalog company'
+    ),
+    'geographies', JSON_ARRAY(
+      'DE','AT','NL','PL','FR','BE','CZ','IT','ES','UK',
+      'RO','HU','SK','SE','DK','NO','FI','CH','GR','BG','PT','IE'
+    ),
+    'priority_geographies', JSON_ARRAY('DE','AT','NL','PL','FR'),
+    'sales_types', JSON_ARRAY('B2B','B2B2C','B2C'),
+    'sales_channels', JSON_ARRAY(
+      'own website','amazon','ebay','kaufland','otto','cdiscount','fruugo',
+      'wholesale catalog','retail chain','tuning chain'
+    ),
+    'price_segment', 'mid',
+    'company_size_min', 'small',
+    'company_size_max', 'enterprise',
+    'annual_revenue_min_eur', 500000,
+    'exclude_firm_types', JSON_ARRAY(
+      'manufacturer (own production)','OEM tier-1 supplier','single car brand official dealer',
+      'raw material supplier','tooling supplier'
+    ),
+    'exclude_sectors', JSON_ARRAY(
+      'engine oil only','lubricants only','battery only','tire only',
+      'electronic parts only','mechanical parts only'
+    ),
+    'exclude_patterns', JSON_ARRAY('chinese factory direct','made in china reseller only'),
+    'exclude_geographies', JSON_ARRAY('CN','HK','IN','PK','BD','VN','TH'),
+    'positive_signals', JSON_ARRAY(
+      'private label interest','ODM partnership signals','european-made preference',
+      'amazon FBA seller','multi-brand catalog','stocking distributor'
+    ),
+    'negative_signals', JSON_ARRAY(
+      'in-house production line','patent on floor mat manufacturing',
+      'established china supplier chain','single OEM contract revenue >70%'
+    ),
+    'scoring_weights', JSON_OBJECT(
+      'sector_match', 0.30,
+      'firm_type_match', 0.25,
+      'geography_match', 0.20,
+      'channel_match', 0.10,
+      'positive_signal', 0.10,
+      'negative_signal', -0.15
+    ),
+    'min_lead_score_for_candidate', 5.0
+  )
+WHERE NOT EXISTS (
+  SELECT 1 FROM `icp_profiles`
+  WHERE `id` = '9f4c8f04-64b8-4da5-9c7d-4a4b5cf4b1b0'
+     OR `name` = 'Automechanika 2026 — Paspas/Oto Aksesuar Alıcısı'
 );

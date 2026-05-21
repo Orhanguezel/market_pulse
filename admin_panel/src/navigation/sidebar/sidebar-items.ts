@@ -12,6 +12,7 @@ import {
   BookOpenText,
   Brain,
   Building2,
+  CalendarDays,
   ClipboardCheck,
   Clock,
   Code2,
@@ -79,8 +80,10 @@ export type AdminNavItemKey =
   | 'market_lead_amazon'
   | 'market_lead_b2b'
   | 'market_lead_fair'
+  | 'market_lead_fair_day'
   | 'market_lead_icp'
   | 'market_lead_outreach'
+  | 'market_outreach_campaigns'
   | 'market_lead_learning'
   | 'market_signals'
   | 'market_reports'
@@ -143,7 +146,9 @@ export const adminNavConfig: AdminNavConfigGroup[] = [
       { key: 'market_lead_amazon',      url: '/admin/market/lead-machine/amazon',         icon: Search, developerOnly: true },
       { key: 'market_lead_b2b',         url: '/admin/market/lead-machine/b2b',            icon: Building2, developerOnly: true },
       { key: 'market_lead_fair',        url: '/admin/market/lead-machine/fair',           icon: MapPin, developerOnly: true },
+      { key: 'market_lead_fair_day',    url: '/admin/market/lead-machine/fair-day',       icon: CalendarDays },
       { key: 'market_lead_outreach',    url: '/admin/market/lead-machine/outreach',       icon: Mail },
+      { key: 'market_outreach_campaigns', url: '/admin/market/lead-machine/outreach-campaigns', icon: Settings },
       { key: 'market_lead_learning',    url: '/admin/market/lead-machine/learning',       icon: Brain },
       { key: 'market_targets',          url: '/admin/market/targets',                     icon: Building2 },
       { key: 'market_signals',          url: '/admin/market/signals',                     icon: Activity },
@@ -179,8 +184,10 @@ const FALLBACK_TITLES: Record<AdminNavItemKey, string> = {
   market_lead_amazon:      'Amazon Arama',
   market_lead_b2b:         'B2B Arama',
   market_lead_fair:        'Fuar Tarama',
+  market_lead_fair_day:    'Fuar Günü',
   market_lead_icp:         'ICP Profilleri',
   market_lead_outreach:    'Outreach Taslakları',
+  market_outreach_campaigns: 'Outreach Kampanyaları',
   market_lead_learning:    'Öğrenme Raporu',
   market_signals:          'Sinyaller',
   market_reports:          'Raporlar',

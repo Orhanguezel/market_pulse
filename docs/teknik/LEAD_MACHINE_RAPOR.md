@@ -92,7 +92,7 @@ ICP tanımla (manuel veya mevcut müşteriden öğren)
 ```
 Fuar seç (Automechanika Frankfurt, Reifen, Equip Auto vb.)
   → Resmi fuar sitesinden exhibitor listesi scraping
-  → 10times API: kim "interested" olarak işaretledi
+  → 10times API: kim "interested" olarak işaretledi ⚠️ **DROP (2026-05-21)** — public/self-serve API yok, ihtiyacımız değil. Bk. [10times-drop-karari.md](10times-drop-karari.md)
   → (Ücretli) whr.ai: satın alma niyeti yüksek şirketler
   → ICP filtresi
   → lead_candidates → onay paneli
@@ -106,7 +106,7 @@ Fuar seç (Automechanika Frankfurt, Reifen, Equip Auto vb.)
 | Platform | Ne Verir | Maliyet |
 |----------|----------|---------|
 | Resmi fuar sitesi | Exhibitor listesi (ücretsiz scraping) | $0 |
-| 10times.com | "Kim bu fuara ilgilendi" intent sinyali | Ücretsiz API |
+| ~~10times.com~~ ❌ | ~~"Kim bu fuara ilgilendi" intent sinyali~~ | ~~Ücretsiz API~~ — **DROP**: public API yok, [10times-drop-karari.md](10times-drop-karari.md) |
 | whr.ai | Satın alma niyeti yüksek şirket shortlist | $200-500/ay |
 | ExpoCaptive | Verified exhibitor + attendee email | $300-800/ay |
 | Exhibitor Intelligence | 500K+ exhibitor contact DB | Ücretli |

@@ -14,6 +14,7 @@ import {
   useGetCandidateByIdQuery,
   useListCandidateEnrichmentQuery,
   useListOutreachDraftsQuery,
+  useSendOutreachDraftMutation,
   useUpdateOutreachDraftMutation,
   type OutreachDraft,
 } from '@/integrations/hooks';
@@ -145,6 +146,7 @@ function DraftEditor({ draft }: { draft: OutreachDraft }) {
   const [subject, setSubject] = React.useState(draft.subject);
   const [body, setBody] = React.useState(draft.body);
   const [updateDraft, updateState] = useUpdateOutreachDraftMutation();
+  const [sendDraft, sendState] = useSendOutreachDraftMutation();
 
   React.useEffect(() => {
     setSubject(draft.subject);
@@ -172,6 +174,16 @@ function DraftEditor({ draft }: { draft: OutreachDraft }) {
     }
   };
 
+  const handleSend = async () => {
+    try {
+      await updateDraft({ id: draft.id, body: { subject, body, status: draft.status } }).unwrap();
+      await sendDraft({ id: draft.id }).unwrap();
+      toast.success('Taslak gönderildi');
+    } catch {
+      toast.error('Taslak gönderilemedi');
+    }
+  };
+
   return (
     <Card className="rounded-[28px] border-gm-border-soft bg-gm-bg-deep/60 shadow-xl">
       <CardContent className="space-y-5 p-6">
@@ -187,6 +199,11 @@ function DraftEditor({ draft }: { draft: OutreachDraft }) {
                   {replyStatus.label}
                 </Badge>
               )}
+              {draft.open_count > 0 && (
+                <Badge variant="outline" className="rounded-full border-gm-primary/30 bg-gm-primary/10 text-[9px] font-bold uppercase tracking-widest text-gm-primary-light">
+                  {draft.open_count} açılma
+                </Badge>
+              )}
               <span className="text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">
                 {new Date(draft.created_at).toLocaleString('tr-TR')}
               </span>
@@ -198,10 +215,10 @@ function DraftEditor({ draft }: { draft: OutreachDraft }) {
               className="rounded-full border-gm-border-soft bg-gm-surface/20 text-gm-text hover:bg-gm-surface">
               <Clipboard className="mr-2 size-4" />Kopyala
             </Button>
-            <Button variant="outline" size="sm" disabled={updateState.isLoading}
-              onClick={() => handleSave({ status: 'sent' })}
+            <Button variant="outline" size="sm" disabled={updateState.isLoading || sendState.isLoading}
+              onClick={handleSend}
               className="rounded-full border-gm-success/30 bg-gm-success/5 text-gm-success hover:bg-gm-success/20">
-              <Mail className="mr-2 size-4" />Gönderildi
+              <Mail className="mr-2 size-4" />{sendState.isLoading ? 'Gönderiliyor' : 'Gönder'}
             </Button>
             <Button size="sm" disabled={updateState.isLoading}
               onClick={() => handleSave({ reply_status: 'replied' })}
@@ -338,7 +355,7 @@ export default function OutreachDraftsPanel() {
             <CardContent className="flex flex-col items-center justify-center gap-4 py-20 text-center">
               <Search className="size-12 text-gm-gold/40" />
               <div className="font-serif text-xl italic text-gm-muted">
-                {statusFilter === 'all' ? 'Henüz outreach taslağı yok.' : 'Bu filtrde taslak bulunamadı.'}
+                {statusFilter === 'all' ? 'Henüz outreach taslağı yok.' : 'Bu filtrede taslak bulunamadı.'}
               </div>
             </CardContent>
           </Card>

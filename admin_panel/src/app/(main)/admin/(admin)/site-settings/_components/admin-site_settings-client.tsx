@@ -150,37 +150,33 @@ export default function AdminSiteSettingsClient() {
   ];
 
   return (
-    <div className="space-y-10 pb-12 animate-in fade-in slide-in-from-bottom-4 duration-700">
-      {/* Header */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
-        <div className="space-y-2">
-          <div className="flex items-center gap-3">
-            <span className="w-8 h-px bg-gm-gold" />
-            <span className="text-gm-gold font-bold text-[10px] tracking-[0.2em] uppercase">
+    <div className="space-y-6 pb-10">
+      <div className="border-b border-gm-border-soft pb-5">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+          <div className="space-y-1">
+            <div className="text-xs font-semibold uppercase tracking-widest text-gm-muted">
               {t('admin.common.systemConfig', null, 'Sistem Yapılandırması')}
-            </span>
+            </div>
+            <h1 className="text-3xl font-semibold tracking-tight text-gm-text">{t('title')}</h1>
+            <p className="max-w-3xl text-sm leading-6 text-gm-muted">
+              {t('description')}
+            </p>
           </div>
-          <h1 className="font-serif text-4xl text-gm-text">{t('title')}</h1>
-          <p className="text-gm-muted text-sm font-serif italic opacity-70">
-            {t('description')}
-          </p>
-        </div>
 
-        <div className="flex items-center gap-4">
-          <div className="w-full md:w-64 space-y-2">
-            <label className="text-[10px] font-bold text-gm-muted tracking-[0.2em] uppercase ml-1">
+          <div className="w-full space-y-1.5 lg:w-72">
+            <label className="text-xs font-medium text-gm-muted">
               {t('admin.common.languageSelect', null, 'Dil Seçimi')}
             </label>
             <Select value={locale} onValueChange={setLocale} disabled={disabled || isGlobalTab}>
               <SelectTrigger className={cn(
-                "bg-gm-surface/40 border-gm-border-soft rounded-2xl h-12 text-sm focus:ring-gm-gold/50 transition-all",
-                isGlobalTab && "opacity-50 grayscale"
+                "h-10 rounded-md border-gm-border-soft bg-gm-surface/20 text-sm focus:ring-1 focus:ring-gm-primary/40",
+                isGlobalTab && "opacity-60"
               )}>
                 <SelectValue placeholder="Dil Seçin" />
               </SelectTrigger>
-              <SelectContent className="bg-gm-bg-deep border-gm-border-soft rounded-2xl shadow-2xl">
+              <SelectContent className="rounded-md border-gm-border-soft bg-gm-bg-deep shadow-lg">
                 {localeOptions.map((o) => (
-                  <SelectItem key={o.value} value={o.value} className="rounded-xl focus:bg-gm-gold/10 focus:text-gm-gold">
+                  <SelectItem key={o.value} value={o.value} className="rounded-sm">
                     {o.label}
                   </SelectItem>
                 ))}
@@ -190,11 +186,10 @@ export default function AdminSiteSettingsClient() {
         </div>
       </div>
 
-      <div className="grid lg:grid-cols-[280px_1fr] gap-8 items-start">
-        {/* Navigation Sidebar */}
-        <aside className="space-y-6">
-          <Card className="bg-gm-surface/20 border-gm-border-soft rounded-[32px] overflow-hidden p-6 backdrop-blur-sm shadow-xl">
-            <nav className="space-y-2">
+      <div className="grid gap-6 lg:grid-cols-[260px_1fr]">
+        <aside className="space-y-4">
+          <Card className="overflow-hidden rounded-md border-gm-border-soft bg-gm-surface/10 shadow-none">
+            <nav className="p-2">
               {menuItems.map((item) => {
                 const isActive = tab === item.value;
                 return (
@@ -202,60 +197,55 @@ export default function AdminSiteSettingsClient() {
                     key={item.value}
                     onClick={() => setTab(item.value as SettingsTab)}
                     className={cn(
-                      "w-full flex items-center justify-between px-5 py-4 rounded-2xl transition-all duration-300 group",
+                      "group flex w-full items-center justify-between rounded-md border px-3 py-2.5 text-left transition-colors",
                       isActive 
-                        ? "bg-gm-gold/10 text-gm-gold shadow-sm border border-gm-gold/20" 
-                        : "text-gm-muted hover:bg-gm-surface/40 hover:text-gm-text border border-transparent"
+                        ? "border-gm-border-soft bg-gm-surface/40 text-gm-text" 
+                        : "border-transparent text-gm-muted hover:bg-gm-surface/20 hover:text-gm-text"
                     )}
                   >
                     <div className="flex items-center gap-3">
-                      <item.icon className={cn("size-4 transition-colors", isActive ? "text-gm-gold" : "text-gm-muted/70 group-hover:text-gm-text/70")} />
-                      <span className="text-[10px] font-bold uppercase tracking-widest">{item.label}</span>
+                      <item.icon className={cn("size-4", isActive ? "text-gm-text" : "text-gm-muted")} />
+                      <span className="text-sm font-medium">{item.label}</span>
                     </div>
-                    {isActive && <ChevronRight className="size-3 text-gm-gold" />}
+                    {isActive && <ChevronRight className="size-4 text-gm-muted" />}
                   </button>
                 );
               })}
             </nav>
           </Card>
 
-          <Card className="bg-gm-gold/[0.02] border border-gm-gold/10 rounded-[32px] p-8 text-center space-y-4 backdrop-blur-sm shadow-inner">
-            <div className="size-12 rounded-full bg-gm-gold/10 flex items-center justify-center mx-auto text-gm-gold shadow-[0_0_15px_rgba(212,175,55,0.15)]">
-              <Globe className="size-5" />
-            </div>
-            <h4 className="font-serif text-lg text-gm-text">{t('admin.common.globalSettings', null, 'Global Ayarlar')}</h4>
-            <p className="text-[10px] text-gm-muted leading-relaxed uppercase tracking-[0.15em] opacity-80">
+          <Card className="rounded-md border-gm-border-soft bg-gm-surface/10 shadow-none">
+            <CardContent className="space-y-3 p-4">
+              <div className="flex items-center gap-2 text-sm font-semibold text-gm-text">
+                <Globe className="size-4 text-gm-muted" />
+                {t('admin.common.globalSettings', null, 'Global Ayarlar')}
+              </div>
+              <p className="text-xs leading-5 text-gm-muted">
               Bazı ayarlar tüm diller için ortaktır ve "Global" olarak işaretlenmiştir.
             </p>
+            </CardContent>
           </Card>
         </aside>
 
-        {/* Content Area */}
-        <Card className="bg-gm-surface/20 border-gm-border-soft rounded-[40px] overflow-hidden min-h-[700px] relative backdrop-blur-sm shadow-xl">
-          <div className="absolute top-0 right-0 p-16 opacity-[0.02] pointer-events-none">
-            {React.createElement(menuItems.find(m => m.value === tab)?.icon || Settings, {
-              className: "w-80 h-80"
-            })}
-          </div>
-          
-          <CardHeader className="p-10 border-b border-gm-border-soft bg-gm-surface/40">
-            <div className="flex items-center justify-between">
-              <div>
-                <CardTitle className="font-serif text-3xl text-gm-text">
+        <Card className="min-h-[700px] overflow-hidden rounded-md border-gm-border-soft bg-gm-surface/10 shadow-none">
+          <CardHeader className="border-b border-gm-border-soft bg-gm-surface/20 p-5">
+            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
+              <div className="space-y-1">
+                <CardTitle className="text-xl font-semibold text-gm-text">
                   {menuItems.find(m => m.value === tab)?.label}
                 </CardTitle>
-                <CardDescription className="font-serif italic text-lg text-gm-muted opacity-70 mt-2">
+                <CardDescription className="text-sm text-gm-muted">
                   Yapılandırma detaylarını güncelleyin.
                 </CardDescription>
               </div>
               <div className="flex items-center gap-2">
                 {isGlobalTab && (
-                  <Badge className="bg-gm-gold text-gm-bg hover:bg-gm-gold px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em] shadow-lg shadow-gm-gold/20">
+                  <Badge className="rounded-md bg-gm-surface text-gm-text hover:bg-gm-surface px-3 py-1 text-xs font-medium">
                     GLOBAL
                   </Badge>
                 )}
                 {!isGlobalTab && (
-                  <Badge variant="outline" className="border-gm-gold/30 bg-gm-gold/5 text-gm-gold px-4 py-1.5 text-[9px] font-bold uppercase tracking-[0.2em]">
+                  <Badge variant="outline" className="rounded-md border-gm-border-soft bg-gm-surface/10 px-3 py-1 text-xs font-medium text-gm-text">
                     {locale}
                   </Badge>
                 )}
@@ -263,8 +253,8 @@ export default function AdminSiteSettingsClient() {
             </div>
           </CardHeader>
 
-          <CardContent className="p-10">
-            <div className="relative z-10 animate-in fade-in zoom-in-95 duration-500">
+          <CardContent className="p-5">
+            <div className="animate-in fade-in duration-300">
               {tab === 'design_tokens' && <DesignTokensTab />}
               {tab === 'branding' && <BrandingSettingsTab />}
               {tab === 'brand_colors' && <BrandColorsTab />}
@@ -281,7 +271,7 @@ export default function AdminSiteSettingsClient() {
                       placeholder={t('admin.common.searchPlaceholder', null, 'Ayar anahtarı ara...')}
                       value={search} 
                       onChange={e => setSearch(e.target.value)} 
-                      className="pl-12 bg-gm-surface/40 border-gm-border-soft rounded-2xl h-12 focus:ring-gm-gold/50 text-sm transition-all"
+                      className="h-10 rounded-md border-gm-border-soft bg-gm-surface/20 pl-10 text-sm focus:ring-1 focus:ring-gm-primary/40"
                     />
                   </div>
                   <ListPanel locale={locale} search={search} onDeleteRow={handleDeleteRow} />

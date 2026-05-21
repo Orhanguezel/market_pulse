@@ -117,8 +117,29 @@ export interface FairExhibitorData {
     email:        string | null;
     phone:        string | null;
     source_url:   string;
+    detail_url?:  string | null;
     booth_number: string | null;
   }[];
+}
+
+export interface FairExhibitorDetailData {
+  profile:          'fair-exhibitor-detail';
+  url:              string;
+  final_url:        string;
+  name:             string | null;
+  hall:             string | null;
+  booth:            string | null;
+  country:          string | null;
+  city:             string | null;
+  address:          string | null;
+  website:          string | null;
+  phone:            string | null;
+  email:            string | null;
+  product_groups:   string[];
+  brands:           string[];
+  target_markets:   string[];
+  description:      string | null;
+  trade_audience:   string[];
 }
 
 // ─── Profile union ────────────────────────────────────────────────────────────
@@ -130,6 +151,7 @@ export type ScrapeProfile =
   | 'website-analysis'
   | 'directory-listing'
   | 'fair-exhibitor'
+  | 'fair-exhibitor-detail'
   | 'competitor-page';
 
 export type ScrapeMode = 'fast' | 'stealthy' | 'dynamic';
