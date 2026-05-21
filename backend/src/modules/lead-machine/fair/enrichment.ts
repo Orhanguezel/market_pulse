@@ -109,11 +109,28 @@ export interface KeywordOverlapResult {
   boost: number;
 }
 
-/** Compares the candidate's blob (own description + keyWords) against the
- *  host exhibitor's keywords. Match is case-insensitive substring against
- *  the candidate text — so 'Car floor mats' matches both literal phrase
- *  and any candidate keyWord/description containing it.
- *  Returns the shared host keywords + a score boost (0 - 2.0).            */
+// Words too generic to count as a meaningful overlap signal on their own.
+const STOP_TOKENS = new Set([
+  'and', 'the', 'for', 'with', 'from', 'auto', 'car', 'cars',
+  'und', 'der', 'die', 'das', 'fur', 'mit', 'auf',
+  've', 'ile', 'icin', 'oto',
+]);
+
+function tokenize(s: string): string[] {
+  // Strip HTML entities (Messe sometimes leaves &amp; / &szlig; etc.)
+  const cleaned = s
+    .toLowerCase()
+    .replace(/&[a-z]+;/g, ' ')
+    .replace(/[ßäöü]/g, (ch) => ({ 'ß': 'ss', 'ä': 'a', 'ö': 'o', 'ü': 'u' } as Record<string, string>)[ch] ?? ch);
+  return cleaned.split(/[^\p{L}\p{N}]+/u).filter((w) => w.length >= 3);
+}
+
+/** Token-level overlap between a host keyword phrase and the candidate text.
+ *  Splits the host phrase into 3+ char tokens, drops generic stop words like
+ *  'car' / 'and', and requires every remaining token to appear in the
+ *  candidate text. So 'Car interior accessories' still hits a candidate
+ *  whose keyword reads 'Car Interior & Exterior Accessories'.
+ *  Returns the shared host keywords + a score boost (0 – 2.0).           */
 export function computeKeywordOverlap(
   candidateText: string | null | undefined,
   hostKeywords: string[] | null | undefined,
@@ -121,15 +138,18 @@ export function computeKeywordOverlap(
   if (!candidateText || !hostKeywords?.length) {
     return { shared: [], count: 0, boost: 0 };
   }
-  const haystack = candidateText.toLowerCase();
+  const candidateTokens = new Set(tokenize(candidateText));
+  if (candidateTokens.size === 0) return { shared: [], count: 0, boost: 0 };
+
   const shared: string[] = [];
   for (const kw of hostKeywords) {
     const norm = (kw || '').trim();
     if (!norm) continue;
-    if (haystack.includes(norm.toLowerCase())) shared.push(norm);
+    const hostTokens = tokenize(norm).filter((t) => !STOP_TOKENS.has(t));
+    if (hostTokens.length === 0) continue;
+    const allHit = hostTokens.every((t) => candidateTokens.has(t));
+    if (allHit) shared.push(norm);
   }
-  // 0.7 per shared keyword, capped at 2.0 so a single very-loose match
-  // can't dominate the mail-type signal entirely.
   const boost = Math.min(2.0, shared.length * 0.7);
   return { shared, count: shared.length, boost };
 }
