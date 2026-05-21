@@ -1,0 +1,33 @@
+services:
+  api:
+    # Headless Chromium / Patchright: RAM + /dev/shm aynı ölçekte tutulur (OOM ve crash azaltır).
+    shm_size: 2gb
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+    expose:
+      - "8200"
+
+  worker:
+    shm_size: 2gb
+    restart: unless-stopped
+    deploy:
+      resources:
+        limits:
+          memory: 2G
+    volumes:
+      - crawl-checkpoints:/app/.scrapling
+
+  redis:
+    restart: unless-stopped
+    ports: []
+
+  # NOTE: Bu VPS'te scraper, host'un sistem nginx'i arkasindan servis ediliyor
+  # (vhost scraper.guezelwebdesign.com -> 127.0.0.1:8200). Containerli nginx
+  # host port 80/443 ile cakistigi icin kaldirildi; api `expose: 8200` ile
+  # localhost'a baglanir, sistem nginx reverse-proxy yapar.
+
+volumes:
+  crawl-checkpoints:

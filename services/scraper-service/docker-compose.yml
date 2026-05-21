@@ -1,0 +1,30 @@
+services:
+  api:
+    build: .
+    env_file: .env
+    # Sadece localhost (Nginx reverse proxy üzerinden erişim)
+    ports:
+      - "127.0.0.1:8200:8200"
+    shm_size: 1gb
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  worker:
+    build: .
+    env_file: .env
+    command: ["arq", "src.workers.tasks.WorkerSettings"]
+    shm_size: 1gb
+    depends_on:
+      - redis
+    restart: unless-stopped
+
+  redis:
+    image: redis:7-alpine
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+
+volumes:
+  redis-data:
