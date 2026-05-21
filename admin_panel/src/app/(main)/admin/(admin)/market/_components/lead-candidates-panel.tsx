@@ -597,6 +597,8 @@ export default function LeadCandidatesPanel({
   const [q, setQ] = React.useState('');
   const [channel, setChannel] = React.useState<LeadCandidateChannel | 'all'>(initialChannel);
   const [status, setStatus] = React.useState<LeadCandidateStatus | 'all'>(initialStatus);
+  const [recommendation, setRecommendation] = React.useState<string>('all');
+  const [sortBy, setSortBy] = React.useState<string>('priority');
   const [selectedIds, setSelectedIds] = React.useState<Set<string>>(() => new Set());
   const [bulkRejectOpen, setBulkRejectOpen] = React.useState(false);
   const [bulkTags, setBulkTags] = React.useState<string[]>([]);
@@ -618,8 +620,76 @@ export default function LeadCandidatesPanel({
 
   const filtered = React.useMemo(() => {
     const term = q.trim().toLowerCase();
-    if (!term) return data ?? [];
-    return (data ?? []).filter((candidate) => {
+    const RECOMMENDATION_PRIORITY: Record<string, number> = {
+      APPROVE_FAVORITE: 1,
+      APPROVE_DIRECT: 2,
+      APPROVE_WITH_REVIEW: 3,
+      RESEARCH: 4,
+      LOW_PRIORITY: 5,
+      REJECT: 6,
+    };
+
+    const getAction = (candidate: LeadCandidate): string | null => {
+      const data = candidate.raw_data;
+      if (!data || typeof data !== 'object') return null;
+      const r = (data as Record<string, unknown>).recommendation;
+      if (!r || typeof r !== 'object') return null;
+      const action = (r as Record<string, unknown>).action;
+      return typeof action === 'string' ? action : null;
+    };
+
+    let rows: LeadCandidate[] = data ?? [];
+
+    if (term) {
+      rows = rows.filter((candidate) =>
+        [
+          candidate.name,
+          candidate.website,
+          candidate.country,
+          candidate.city,
+          candidate.email,
+          candidate.phone,
+          candidate.ai_summary,
+        ].some((value) => String(value ?? '').toLowerCase().includes(term)),
+      );
+    }
+
+    if (recommendation !== 'all') {
+      rows = rows.filter((candidate) => {
+        const action = getAction(candidate);
+        if (recommendation === 'NONE') return action === null;
+        return action === recommendation;
+      });
+    }
+
+    if (sortBy === 'priority') {
+      rows = [...rows].sort((a, b) => {
+        const pa = RECOMMENDATION_PRIORITY[getAction(a) ?? ''] ?? 99;
+        const pb = RECOMMENDATION_PRIORITY[getAction(b) ?? ''] ?? 99;
+        if (pa !== pb) return pa - pb;
+        return (Number(b.lead_score) || 0) - (Number(a.lead_score) || 0);
+      });
+    } else if (sortBy === 'score_desc') {
+      rows = [...rows].sort((a, b) => (Number(b.lead_score) || 0) - (Number(a.lead_score) || 0));
+    } else if (sortBy === 'score_asc') {
+      rows = [...rows].sort((a, b) => (Number(a.lead_score) || 0) - (Number(b.lead_score) || 0));
+    } else if (sortBy === 'name_asc') {
+      rows = [...rows].sort((a, b) => (a.name || '').localeCompare(b.name || '', 'tr'));
+    } else if (sortBy === 'country') {
+      rows = [...rows].sort((a, b) => (a.country || '').localeCompare(b.country || '', 'en'));
+    } else if (sortBy === 'date_desc') {
+      rows = [...rows].sort((a, b) => String(b.created_at || '').localeCompare(String(a.created_at || '')));
+    }
+
+    return rows;
+  }, [data, q, recommendation, sortBy]);
+
+  // Per-recommendation counts (computed on the un-recommendation-filtered set so
+  // the dropdown shows total available, not what's currently visible).
+  const recommendationCounts = React.useMemo(() => {
+    const term = q.trim().toLowerCase();
+    const rows = (data ?? []).filter((candidate) => {
+      if (!term) return true;
       return [
         candidate.name,
         candidate.website,
@@ -630,6 +700,24 @@ export default function LeadCandidatesPanel({
         candidate.ai_summary,
       ].some((value) => String(value ?? '').toLowerCase().includes(term));
     });
+    const counts: Record<string, number> = {
+      all: rows.length,
+      APPROVE_FAVORITE: 0,
+      APPROVE_DIRECT: 0,
+      APPROVE_WITH_REVIEW: 0,
+      RESEARCH: 0,
+      LOW_PRIORITY: 0,
+      REJECT: 0,
+      NONE: 0,
+    };
+    for (const c of rows) {
+      const raw = c.raw_data;
+      const r = raw && typeof raw === 'object' ? (raw as Record<string, unknown>).recommendation : null;
+      const action = r && typeof r === 'object' ? (r as Record<string, unknown>).action : null;
+      const key = typeof action === 'string' ? action : 'NONE';
+      counts[key] = (counts[key] ?? 0) + 1;
+    }
+    return counts;
   }, [data, q]);
 
   const isBusy = reviewState.isLoading || approveState.isLoading || enrichBatchState.isLoading;
@@ -774,61 +862,101 @@ export default function LeadCandidatesPanel({
       </div>
 
       <Card className="rounded-[28px] border-gm-border-soft bg-gm-bg-deep/50 shadow-2xl">
-        <CardContent className="grid gap-5 p-6 md:grid-cols-[1fr_220px_220px]">
-          <div className="space-y-2">
-            <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Arama</label>
-            <div className="relative">
-              <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-gm-muted/60" />
-              <Input
-                value={q}
-                onChange={(e) => setQ(e.target.value)}
-                placeholder="Firma, ülke, e-posta veya özet ara"
-                className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 pl-12 text-gm-text placeholder:text-gm-text/25"
-              />
-            </div>
-          </div>
-
-          {lockChannel ? (
+        <CardContent className="space-y-4 p-6">
+          <div className="grid gap-5 md:grid-cols-[1fr_200px_200px]">
             <div className="space-y-2">
-              <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Kanal</label>
-              <div className="flex h-12 items-center rounded-2xl border border-gm-border-soft bg-gm-surface/30 px-4 text-sm font-medium text-gm-text">
-                <Badge variant="outline" className={cn('rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest', channelBadgeCls(channel))}>
-                  {CHANNEL_LABELS[channel] ?? channel}
-                </Badge>
+              <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Arama</label>
+              <div className="relative">
+                <Search className="absolute left-4 top-1/2 size-4 -translate-y-1/2 text-gm-muted/60" />
+                <Input
+                  value={q}
+                  onChange={(e) => setQ(e.target.value)}
+                  placeholder="Firma, ülke, e-posta veya özet ara"
+                  className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 pl-12 text-gm-text placeholder:text-gm-text/25"
+                />
               </div>
             </div>
-          ) : (
+
+            {lockChannel ? (
+              <div className="space-y-2">
+                <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Kanal</label>
+                <div className="flex h-12 items-center rounded-2xl border border-gm-border-soft bg-gm-surface/30 px-4 text-sm font-medium text-gm-text">
+                  <Badge variant="outline" className={cn('rounded-full px-3 py-1 text-[10px] font-bold uppercase tracking-widest', channelBadgeCls(channel))}>
+                    {CHANNEL_LABELS[channel] ?? channel}
+                  </Badge>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-2">
+                <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Kanal</label>
+                <Select value={channel} onValueChange={(v) => setChannel(v as LeadCandidateChannel | 'all')}>
+                  <SelectTrigger className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-2xl border-gm-border-soft bg-gm-surface text-gm-text">
+                    <SelectItem value="all">Tüm Kanallar</SelectItem>
+                    <SelectItem value="amazon">Amazon</SelectItem>
+                    <SelectItem value="b2b_directory">B2B Dizin</SelectItem>
+                    <SelectItem value="trade_fair">Fuar</SelectItem>
+                    <SelectItem value="icp_match">ICP</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+
             <div className="space-y-2">
-              <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Kanal</label>
-              <Select value={channel} onValueChange={(v) => setChannel(v as LeadCandidateChannel | 'all')}>
+              <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Durum</label>
+              <Select value={status} onValueChange={(v) => setStatus(v as LeadCandidateStatus | 'all')}>
                 <SelectTrigger className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text">
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent className="rounded-2xl border-gm-border-soft bg-gm-surface text-gm-text">
-                  <SelectItem value="all">Tüm Kanallar</SelectItem>
-                  <SelectItem value="amazon">Amazon</SelectItem>
-                  <SelectItem value="b2b_directory">B2B Dizin</SelectItem>
-                  <SelectItem value="trade_fair">Fuar</SelectItem>
-                  <SelectItem value="icp_match">ICP</SelectItem>
+                  <SelectItem value="all">Tüm Durumlar</SelectItem>
+                  <SelectItem value="pending">Bekliyor</SelectItem>
+                  <SelectItem value="favorite">Favori</SelectItem>
+                  <SelectItem value="approved">Onaylandı</SelectItem>
+                  <SelectItem value="rejected">Reddedildi</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-          )}
+          </div>
 
-          <div className="space-y-2">
-            <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Durum</label>
-            <Select value={status} onValueChange={(v) => setStatus(v as LeadCandidateStatus | 'all')}>
-              <SelectTrigger className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent className="rounded-2xl border-gm-border-soft bg-gm-surface text-gm-text">
-                <SelectItem value="all">Tüm Durumlar</SelectItem>
-                <SelectItem value="pending">Bekliyor</SelectItem>
-                <SelectItem value="favorite">Favori</SelectItem>
-                <SelectItem value="approved">Onaylandı</SelectItem>
-                <SelectItem value="rejected">Reddedildi</SelectItem>
-              </SelectContent>
-            </Select>
+          <div className="grid gap-5 md:grid-cols-2">
+            <div className="space-y-2">
+              <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Tavsiye</label>
+              <Select value={recommendation} onValueChange={setRecommendation}>
+                <SelectTrigger className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl border-gm-border-soft bg-gm-surface text-gm-text">
+                  <SelectItem value="all">Tüm Tavsiyeler ({recommendationCounts.all})</SelectItem>
+                  <SelectItem value="APPROVE_FAVORITE">⭐ Favori ({recommendationCounts.APPROVE_FAVORITE})</SelectItem>
+                  <SelectItem value="APPROVE_DIRECT">✅ Doğrudan Onayla ({recommendationCounts.APPROVE_DIRECT})</SelectItem>
+                  <SelectItem value="APPROVE_WITH_REVIEW">🟡 Kontrol Et, Onayla ({recommendationCounts.APPROVE_WITH_REVIEW})</SelectItem>
+                  <SelectItem value="RESEARCH">🔍 Önce Araştır ({recommendationCounts.RESEARCH})</SelectItem>
+                  <SelectItem value="LOW_PRIORITY">📭 Düşük Öncelik ({recommendationCounts.LOW_PRIORITY})</SelectItem>
+                  <SelectItem value="REJECT">❌ Reddedildi ({recommendationCounts.REJECT})</SelectItem>
+                  <SelectItem value="NONE">Tavsiye Yok ({recommendationCounts.NONE})</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+
+            <div className="space-y-2">
+              <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Sırala</label>
+              <Select value={sortBy} onValueChange={setSortBy}>
+                <SelectTrigger className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent className="rounded-2xl border-gm-border-soft bg-gm-surface text-gm-text">
+                  <SelectItem value="priority">Tavsiye önceliği (favori → reddet)</SelectItem>
+                  <SelectItem value="score_desc">Skor (yüksek → düşük)</SelectItem>
+                  <SelectItem value="score_asc">Skor (düşük → yüksek)</SelectItem>
+                  <SelectItem value="name_asc">Aday adı (A → Z)</SelectItem>
+                  <SelectItem value="country">Ülke (A → Z)</SelectItem>
+                  <SelectItem value="date_desc">Tarih (yeni → eski)</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
           </div>
         </CardContent>
       </Card>
