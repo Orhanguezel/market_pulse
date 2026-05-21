@@ -5,6 +5,7 @@ import { getCustomerOrders } from './external/paspas.repository';
 type TargetRow = RowDataPacket & {
   id: string;
   last_seen_at: string | Date | null;
+  paspas_customer_id: string | null;
 };
 
 type SignalCountRow = RowDataPacket & {
@@ -39,25 +40,33 @@ async function getSignalScore(targetId: string) {
   return score;
 }
 
-async function getPaspasOrderScore(targetId: string) {
+/** Returns null when we genuinely have no paspas order signal to use
+ *  (no paspas link, no orders ever, or paspas ERP unreachable). Callers
+ *  must NOT treat that as risk — a missing source of truth is not a
+ *  churn signal, just an information gap. Returns 0 when we have data
+ *  and the customer looks healthy, 10 when ordering is in steep decline. */
+async function getPaspasOrderScore(paspasCustomerId: string | null): Promise<number | null> {
+  if (!paspasCustomerId) return null;
+  let orders;
   try {
-    const orders = await getCustomerOrders(targetId);
-    if (!orders.length) return 15;
-
-    const now = Date.now();
-    const last90 = orders.filter((order) => now - new Date(order.siparisTarihi).getTime() <= 90 * 86_400_000);
-    if (!last90.length) return 15;
-
-    const previous90 = orders.filter((order) => {
-      const age = now - new Date(order.siparisTarihi).getTime();
-      return age > 90 * 86_400_000 && age <= 180 * 86_400_000;
-    });
-
-    if (previous90.length >= 2 && last90.length < previous90.length / 2) return 10;
-    return 0;
+    orders = await getCustomerOrders(paspasCustomerId);
   } catch {
-    return 0;
+    return null;
   }
+  if (!orders.length) return null;
+
+  const now = Date.now();
+  const last90 = orders.filter((order) => now - new Date(order.siparisTarihi).getTime() <= 90 * 86_400_000);
+  const previous90 = orders.filter((order) => {
+    const age = now - new Date(order.siparisTarihi).getTime();
+    return age > 90 * 86_400_000 && age <= 180 * 86_400_000;
+  });
+
+  // Only flag declining cadence as a churn signal. 'No recent orders'
+  // alone could mean a seasonal customer, so we don't treat it as risk
+  // unless we also see prior activity to compare against.
+  if (previous90.length >= 2 && last90.length < previous90.length / 2) return 10;
+  return 0;
 }
 
 export interface ChurnBreakdown {
@@ -65,12 +74,15 @@ export interface ChurnBreakdown {
   signal_score: number;
   age_score: number;
   age_days: number | null;
-  paspas_score: number;
+  /** `null` = no paspas data available (no link or empty history). UI
+   *  should render this differently from 0, which means 'we checked and
+   *  the customer looks healthy'. */
+  paspas_score: number | null;
 }
 
 export async function computeChurnBreakdown(targetId: string): Promise<ChurnBreakdown> {
   const [targets] = await pool.query<TargetRow[]>(
-    'SELECT id, last_seen_at FROM market_targets WHERE id = ? LIMIT 1',
+    'SELECT id, last_seen_at, paspas_customer_id FROM market_targets WHERE id = ? LIMIT 1',
     [targetId],
   );
   const target = targets[0];
@@ -86,8 +98,8 @@ export async function computeChurnBreakdown(targetId: string): Promise<ChurnBrea
   else if (age >= 90) ageScore = 30;
   else if (age >= 60) ageScore = 20;
   else if (age >= 30) ageScore = 10;
-  const paspasScore = await getPaspasOrderScore(target.id);
-  const total = Math.min(100, Math.max(0, signalScore + ageScore + paspasScore));
+  const paspasScore = await getPaspasOrderScore(target.paspas_customer_id);
+  const total = Math.min(100, Math.max(0, signalScore + ageScore + (paspasScore ?? 0)));
   return { total, signal_score: signalScore, age_score: ageScore, age_days: age, paspas_score: paspasScore };
 }
 

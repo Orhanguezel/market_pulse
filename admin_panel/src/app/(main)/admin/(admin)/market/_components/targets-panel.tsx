@@ -639,7 +639,11 @@ function TargetIntelPanel({ targetId, fallback }: { targetId: string; fallback: 
               </div>
               <div className="flex items-center justify-between">
                 <span className="text-gm-muted">Paspas sipariş trendi</span>
-                <span className="font-mono text-gm-text">+{data.churn.paspas_score.toFixed(0)}</span>
+                {data.churn.paspas_score === null ? (
+                  <span className="font-mono text-xs italic text-gm-muted/60">veri yok</span>
+                ) : (
+                  <span className="font-mono text-gm-text">+{data.churn.paspas_score.toFixed(0)}</span>
+                )}
               </div>
               <div className="border-t border-gm-border-soft pt-2 mt-2 flex items-center justify-between">
                 <span className="text-gm-text font-bold">Toplam</span>

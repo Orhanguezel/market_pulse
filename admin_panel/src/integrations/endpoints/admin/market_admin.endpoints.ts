@@ -481,7 +481,7 @@ export const marketAdminApi = baseApi.injectEndpoints({
         signal_score: number;
         age_score: number;
         age_days: number | null;
-        paspas_score: number;
+        paspas_score: number | null;
       } | null;
       signals: Array<{
         id: string;

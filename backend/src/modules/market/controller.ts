@@ -625,14 +625,16 @@ export const marketplaceHistory: RouteHandler<{
   if (!['hepsiburada', 'trendyol', 'amazon'].includes(platform)) {
     return reply.code(400).send({ error: { message: 'invalid_platform' } });
   }
+  // mysql2 prepared statements refuse a parameterized LIMIT, so we coerce
+  // to an int in JS and inline it. Range is clamped above.
   const limit = Math.min(Math.max(parseInt(req.query.limit ?? '60', 10) || 60, 1), 365);
   const [rows] = await pool.execute<RowDataPacket[]>(
     `SELECT id, created_at, description
        FROM market_signals
       WHERE target_id = ? AND signal_type = ?
       ORDER BY created_at ASC
-      LIMIT ?`,
-    [req.params.id, `marketplace_${platform}_snapshot`, limit],
+      LIMIT ${limit}`,
+    [req.params.id, `marketplace_${platform}_snapshot`],
   );
   const points = (rows as Array<{ id: string; created_at: string; description: string | null }>)
     .map((r) => {
