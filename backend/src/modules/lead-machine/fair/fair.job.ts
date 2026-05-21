@@ -3,7 +3,19 @@ import { insertCandidate, updateSearchJob, getSearchJob } from '../_shared/db';
 import { matchesIcp } from '../b2b/icp.matcher';
 import { scrapeExhibitorDetail, scrapeOfficialExhibitorList, type RawExhibitor } from './fair.scraper';
 import { isNeighborBooth, parseBooth } from './booth';
-import { buildSummary, classifyMail, computeScore, recommend } from './enrichment';
+import { buildSummary, classifyMail, computeKeywordOverlap, computeScore, recommend } from './enrichment';
+
+function extractHostKeywords(definition: unknown): string[] {
+  if (!definition || typeof definition !== 'object' || Array.isArray(definition)) return [];
+  const fair = (definition as Record<string, unknown>).fair;
+  if (!fair || typeof fair !== 'object' || Array.isArray(fair)) return [];
+  const host = (fair as Record<string, unknown>).host_exhibitor;
+  if (!host || typeof host !== 'object' || Array.isArray(host)) return [];
+  const snap = (host as Record<string, unknown>).messe_snapshot;
+  if (!snap || typeof snap !== 'object' || Array.isArray(snap)) return [];
+  const kws = (snap as Record<string, unknown>).keywords;
+  return Array.isArray(kws) ? kws.filter((k): k is string => typeof k === 'string' && k.trim().length > 0) : [];
+}
 
 interface FairJobParams {
   fair_name?: string;
@@ -41,6 +53,7 @@ export async function runFairJob(jobId: string) {
   await updateSearchJob(jobId, { status: 'running', started: true, errorMsg: null });
   try {
     const icp = params.icp_id ? await getIcpProfile(params.icp_id) : null;
+    const hostKeywords = extractHostKeywords(icp?.definition);
     const exhibitors = await scrapeOfficialExhibitorList(params.fair_url ?? '', {
       halls: params.hall_filters,
       maxPages: params.max_pages,
@@ -53,6 +66,13 @@ export async function runFairJob(jobId: string) {
     const matchAndInsert = async (exhibitor: RawExhibitor) => {
       const boothGrid = parseBooth(exhibitor.booth_number ?? exhibitor.hall ?? null);
       const isNeighbor = isNeighborBooth(boothGrid);
+      const candidateBlob = [
+        exhibitor.description,
+        ...(exhibitor.product_groups ?? []),
+        ...(exhibitor.brands ?? []),
+        ...(exhibitor.target_markets ?? []),
+        ...(exhibitor.trade_audience ?? []),
+      ].filter(Boolean).join(' ');
       const match = matchesIcp({
         name: exhibitor.name,
         website: exhibitor.website ?? null,
@@ -60,19 +80,14 @@ export async function runFairJob(jobId: string) {
         city: exhibitor.city,
         address: exhibitor.address,
         phone: exhibitor.phone,
-        description: [
-          exhibitor.description,
-          ...(exhibitor.product_groups ?? []),
-          ...(exhibitor.brands ?? []),
-          ...(exhibitor.target_markets ?? []),
-          ...(exhibitor.trade_audience ?? []),
-        ].filter(Boolean).join(' '),
+        description: candidateBlob,
         fairHall: boothGrid.hall ?? exhibitor.hall,
       }, (icp?.definition ?? {}) as Parameters<typeof matchesIcp>[1]);
       if (icp && !match.matches) return;
 
       const mailType = classifyMail(exhibitor.email);
-      const finalScore = computeScore(exhibitor.name, exhibitor.country, mailType);
+      const overlap = computeKeywordOverlap(`${exhibitor.name} ${candidateBlob}`, hostKeywords);
+      const finalScore = computeScore(exhibitor.name, exhibitor.country, mailType, overlap.boost);
       const recommendation = recommend({
         name: exhibitor.name,
         email: exhibitor.email,
@@ -114,6 +129,11 @@ export async function runFairJob(jobId: string) {
           },
           exhibitor,
           match,
+          host_keyword_match: {
+            shared: overlap.shared,
+            count: overlap.count,
+            score_boost: overlap.boost,
+          },
           mail_classification: {
             type: mailType,
             classified_at: new Date().toISOString(),

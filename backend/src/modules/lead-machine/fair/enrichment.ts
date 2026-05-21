@@ -94,11 +94,44 @@ export function computeScore(
   name: string | null | undefined,
   countryIso: string | null | undefined,
   mailType: MailType,
+  keywordOverlapBoost = 0,
 ): number {
   let score = MAIL_TYPE_BASE_SCORE[mailType];
   if (positiveHit(name)) score += 1.0;
   if (countryIso === 'DE' || countryIso === 'DEU' || countryIso === 'PL' || countryIso === 'POL') score += 0.3;
+  score += keywordOverlapBoost;
   return Math.min(10.0, Math.round(score * 10) / 10);
+}
+
+export interface KeywordOverlapResult {
+  shared: string[];
+  count: number;
+  boost: number;
+}
+
+/** Compares the candidate's blob (own description + keyWords) against the
+ *  host exhibitor's keywords. Match is case-insensitive substring against
+ *  the candidate text — so 'Car floor mats' matches both literal phrase
+ *  and any candidate keyWord/description containing it.
+ *  Returns the shared host keywords + a score boost (0 - 2.0).            */
+export function computeKeywordOverlap(
+  candidateText: string | null | undefined,
+  hostKeywords: string[] | null | undefined,
+): KeywordOverlapResult {
+  if (!candidateText || !hostKeywords?.length) {
+    return { shared: [], count: 0, boost: 0 };
+  }
+  const haystack = candidateText.toLowerCase();
+  const shared: string[] = [];
+  for (const kw of hostKeywords) {
+    const norm = (kw || '').trim();
+    if (!norm) continue;
+    if (haystack.includes(norm.toLowerCase())) shared.push(norm);
+  }
+  // 0.7 per shared keyword, capped at 2.0 so a single very-loose match
+  // can't dominate the mail-type signal entirely.
+  const boost = Math.min(2.0, shared.length * 0.7);
+  return { shared, count: shared.length, boost };
 }
 
 export function recommend(

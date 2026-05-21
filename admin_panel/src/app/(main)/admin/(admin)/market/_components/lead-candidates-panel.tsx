@@ -173,6 +173,21 @@ function recommendationStyle(action: string): string {
   return 'border-gm-border-soft bg-gm-surface/30 text-gm-muted';
 }
 
+type HostKeywordMatch = { shared: string[]; count: number; score_boost: number };
+
+function getHostKeywordMatch(candidate: LeadCandidate): HostKeywordMatch | null {
+  const data = candidate.raw_data;
+  if (!data || typeof data !== 'object') return null;
+  const m = (data as Record<string, unknown>).host_keyword_match;
+  if (!m || typeof m !== 'object') return null;
+  const rec = m as Record<string, unknown>;
+  const shared = Array.isArray(rec.shared) ? rec.shared.filter((s): s is string => typeof s === 'string') : [];
+  const count = typeof rec.count === 'number' ? rec.count : shared.length;
+  const boost = typeof rec.score_boost === 'number' ? rec.score_boost : 0;
+  if (count === 0) return null;
+  return { shared, count, score_boost: boost };
+}
+
 function formatMailType(candidate: LeadCandidate): string {
   const data = candidate.raw_data;
   if (!data || typeof data !== 'object') return '';
@@ -252,6 +267,7 @@ function CandidateCard({
         : null;
   const mailTypeBadge = candidate.channel === 'trade_fair' ? formatMailType(candidate) : '';
   const recommendation = candidate.channel === 'trade_fair' ? getRecommendation(candidate) : null;
+  const hostMatch = candidate.channel === 'trade_fair' ? getHostKeywordMatch(candidate) : null;
 
   const analysis = candidate.channel === 'b2b_directory' ? b2bAnalysis(candidate) : null;
   const match = candidate.channel === 'b2b_directory' ? b2bMatch(candidate) : null;
@@ -388,6 +404,22 @@ function CandidateCard({
             </div>
             <p className="mt-1.5 text-sm leading-5 opacity-90">
               {recommendation.reasoning}
+            </p>
+          </div>
+        )}
+
+        {hostMatch && (
+          <div className="rounded-2xl border-2 border-gm-gold/40 bg-gm-gold/15 p-4 text-gm-gold">
+            <div className="flex items-center justify-between gap-3">
+              <span className="font-bold text-base">
+                🎯 Host firma ile {hostMatch.count} keyword paylaşıyor
+              </span>
+              <span className="text-[10px] font-mono uppercase tracking-widest opacity-60">
+                +{hostMatch.score_boost.toFixed(1)} skor
+              </span>
+            </div>
+            <p className="mt-1.5 text-sm leading-5 opacity-90">
+              {hostMatch.shared.join(' · ')}
             </p>
           </div>
         )}

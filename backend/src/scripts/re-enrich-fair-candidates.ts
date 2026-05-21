@@ -1,14 +1,22 @@
 // =============================================================
 // FILE: backend/src/scripts/re-enrich-fair-candidates.ts
-// One-off: backfills mail_classification + recommendation + ai_summary
-// + lead_score onto existing lead_candidates rows scanned BEFORE the
-// enrichment port landed. Idempotent (skips rows that already have a
-// recommendation).
-// Run: bun src/scripts/re-enrich-fair-candidates.ts
+// Backfills enrichment fields onto existing lead_candidates rows.
+//
+// Two modes — controlled by --force:
+//   default      : skip rows that already have recommendation +
+//                  mail_classification (the original one-off)
+//   --force      : recompute everything, picking up host-keyword overlap
+//                  from icp_profiles.fair.host_exhibitor.messe_snapshot
+//
+// Run:
+//   bun src/scripts/re-enrich-fair-candidates.ts
+//   bun src/scripts/re-enrich-fair-candidates.ts --force
 // =============================================================
 
 import { pool } from '@/db/client';
-import { buildSummary, classifyMail, computeScore, recommend } from '@/modules/lead-machine/fair/enrichment';
+import {
+  buildSummary, classifyMail, computeKeywordOverlap, computeScore, recommend,
+} from '@/modules/lead-machine/fair/enrichment';
 
 interface CandidateRow {
   id: string;
@@ -17,29 +25,78 @@ interface CandidateRow {
   website: string | null;
   country: string | null;
   city: string | null;
+  icp_id: string | null;
   raw_data: any;
 }
 
+function asObject(value: unknown): Record<string, any> {
+  if (!value) return {};
+  if (typeof value === 'string') {
+    try {
+      return JSON.parse(value) ?? {};
+    } catch {
+      return {};
+    }
+  }
+  return value as Record<string, any>;
+}
+
+function extractHostKeywordsFromIcp(definition: unknown): string[] {
+  const def = asObject(definition);
+  const fair = asObject(def.fair);
+  const host = asObject(fair.host_exhibitor);
+  const snap = asObject(host.messe_snapshot);
+  const kws = snap.keywords;
+  return Array.isArray(kws) ? kws.filter((k): k is string => typeof k === 'string' && k.trim().length > 0) : [];
+}
+
+async function loadHostKeywordsByIcp(): Promise<Map<string, string[]>> {
+  const [icpRows] = await pool.query<any[]>('SELECT id, definition FROM icp_profiles');
+  const map = new Map<string, string[]>();
+  for (const r of icpRows as Array<{ id: string; definition: any }>) {
+    const kws = extractHostKeywordsFromIcp(r.definition);
+    if (kws.length) map.set(r.id, kws);
+  }
+  return map;
+}
+
 async function main() {
+  const force = process.argv.includes('--force');
+  const hostByIcp = await loadHostKeywordsByIcp();
+
   const [rows] = await pool.query<any[]>(
-    `SELECT id, name, email, website, country, city, raw_data
-     FROM lead_candidates
-     WHERE channel = 'trade_fair'`,
+    `SELECT id, name, email, website, country, city, icp_id, raw_data
+       FROM lead_candidates
+      WHERE channel = 'trade_fair'`,
   );
   const candidates = rows as CandidateRow[];
 
   let updated = 0;
   let skipped = 0;
+  let withOverlap = 0;
 
   for (const c of candidates) {
-    const raw = (typeof c.raw_data === 'string' ? JSON.parse(c.raw_data) : c.raw_data) ?? {};
-    if (raw.recommendation && raw.mail_classification) {
+    const raw = asObject(c.raw_data);
+    const hasAll = raw.recommendation && raw.mail_classification && raw.host_keyword_match;
+    if (hasAll && !force) {
       skipped += 1;
       continue;
     }
 
     const mailType = classifyMail(c.email);
-    const score = computeScore(c.name, c.country, mailType);
+    const hostKeywords = c.icp_id ? hostByIcp.get(c.icp_id) ?? [] : [];
+
+    const exhibitor = asObject(raw.exhibitor);
+    const candidateBlob = [
+      typeof exhibitor.description === 'string' ? exhibitor.description : '',
+      ...(Array.isArray(exhibitor.product_groups) ? exhibitor.product_groups : []),
+      ...(Array.isArray(exhibitor.brands) ? exhibitor.brands : []),
+      ...(Array.isArray(exhibitor.target_markets) ? exhibitor.target_markets : []),
+      ...(Array.isArray(exhibitor.trade_audience) ? exhibitor.trade_audience : []),
+    ].filter((s): s is string => typeof s === 'string' && s.length > 0).join(' ');
+
+    const overlap = computeKeywordOverlap(`${c.name} ${candidateBlob}`, hostKeywords);
+    const score = computeScore(c.name, c.country, mailType, overlap.boost);
     const recommendation = recommend(
       {
         name: c.name,
@@ -51,9 +108,9 @@ async function main() {
       score,
     );
 
-    const fairInfo = raw.fair_info ?? {};
-    const hall = fairInfo.hall ?? raw.exhibitor?.hall ?? null;
-    const booth = fairInfo.booth_number ?? raw.exhibitor?.booth_number ?? null;
+    const fairInfo = asObject(raw.fair_info);
+    const hall = fairInfo.hall ?? exhibitor.hall ?? null;
+    const booth = fairInfo.booth_number ?? exhibitor.booth_number ?? null;
     const fairName = fairInfo.fair_name ?? null;
 
     const summary = buildSummary({
@@ -72,20 +129,26 @@ async function main() {
       classified_at: new Date().toISOString(),
     };
     raw.recommendation = recommendation;
+    raw.host_keyword_match = {
+      shared: overlap.shared,
+      count: overlap.count,
+      score_boost: overlap.boost,
+    };
+    if (overlap.count > 0) withOverlap += 1;
 
     await pool.execute(
       `UPDATE lead_candidates
-         SET raw_data   = ?,
-             ai_summary = ?,
-             lead_score = ?
-       WHERE id = ?`,
+          SET raw_data   = ?,
+              ai_summary = ?,
+              lead_score = ?
+        WHERE id = ?`,
       [JSON.stringify(raw), summary, score, c.id],
     );
     updated += 1;
   }
 
   // eslint-disable-next-line no-console
-  console.log(`re-enrich done: updated=${updated} skipped=${skipped} total=${candidates.length}`);
+  console.log(`re-enrich done: updated=${updated} skipped=${skipped} with_overlap=${withOverlap} total=${candidates.length} force=${force}`);
   process.exit(0);
 }
 
