@@ -13,15 +13,18 @@ export type PaspasSyncResult = {
 };
 
 function turToCategory(tur: string): string {
-  const t = tur.toLowerCase().trim();
-  if (t === 'bayi')         return 'dealer';
+  const t = (tur || '').toLowerCase().trim();
   if (t === 'distribütör' || t === 'distributor') return 'distributor';
-  return 'musteri';
+  // Avrasya's universe has no 'musteri' bucket in Market Pulse — every paspas
+  // customer record is treated as a dealer ('bayi') unless explicitly tagged
+  // as a distributor. Paspas ERP keeps its own tur='musteri' label; we just
+  // normalize on this side.
+  return 'dealer';
 }
 
 function filterByMode(customers: PaspasCustomer[], mode: PaspasSyncMode): PaspasCustomer[] {
-  if (mode === 'customers') return customers.filter(c => turToCategory(c.tur) === 'musteri');
-  if (mode === 'dealers')   return customers.filter(c => turToCategory(c.tur) !== 'musteri');
+  if (mode === 'customers') return [];           // legacy mode — no longer meaningful
+  if (mode === 'dealers')   return customers;    // everything is a dealer now
   return customers;
 }
 
