@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { toast } from 'sonner';
-import { Loader2, Mail, Plus, Save, Trash2, X } from 'lucide-react';
+import { Loader2, Mail, Plus, RefreshCw, Save, Trash2, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -16,6 +16,7 @@ import {
   useUpdateOutreachCampaignMutation,
   useDeleteOutreachCampaignMutation,
   useGenerateOutreachDraftsMutation,
+  useSyncHostKeywordsMutation,
   type OutreachCampaign,
 } from '@/integrations/endpoints/admin/market_admin.endpoints';
 
@@ -73,6 +74,7 @@ export default function OutreachCampaignsPanel() {
   const [updateCampaign, updateState] = useUpdateOutreachCampaignMutation();
   const [deleteCampaign, deleteState] = useDeleteOutreachCampaignMutation();
   const [generateDrafts, generateState] = useGenerateOutreachDraftsMutation();
+  const [syncHost, syncHostState] = useSyncHostKeywordsMutation();
 
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
   const [form, setForm] = React.useState<FormState>(EMPTY);
@@ -143,11 +145,34 @@ export default function OutreachCampaignsPanel() {
     }
   }
 
+  async function handleSyncHostKeywords() {
+    if (!selectedId) return;
+    try {
+      const result = await syncHost(selectedId).unwrap();
+      if (!result.host_data) {
+        toast.error(`Messe'de "${result.host_query_used}" bulunamadı`);
+        return;
+      }
+      if (!result.icp_updated) {
+        toast.info(
+          `${result.host_data.name}: Messe sayfasından ${result.host_data.keywords.length} keyword okundu — ICP'de zaten mevcuttu, ekleme yapılmadı`,
+        );
+        return;
+      }
+      toast.success(
+        `${result.host_data.name}: ICP'ye ${result.added_sectors.length} yeni sektör + ${result.added_signals.length} yeni sinyal eklendi`,
+      );
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Sync başarısız');
+    }
+  }
+
   const busy =
     createState.isLoading
     || updateState.isLoading
     || deleteState.isLoading
-    || generateState.isLoading;
+    || generateState.isLoading
+    || syncHostState.isLoading;
 
   return (
     <div className="space-y-6 p-6">
@@ -419,6 +444,23 @@ export default function OutreachCampaignsPanel() {
                   )}
                 </div>
                 <div className="flex flex-wrap gap-2">
+                  {selected && !creating && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleSyncHostKeywords}
+                      disabled={busy}
+                      className="rounded-full border-gm-info/40 text-gm-info hover:bg-gm-info hover:text-black"
+                      title="Messe Frankfurt'taki kendi exhibitor sayfanızdan keyword'leri çek ve ICP'ye ekle"
+                    >
+                      {syncHostState.isLoading ? (
+                        <Loader2 className="mr-2 size-4 animate-spin" />
+                      ) : (
+                        <RefreshCw className="mr-2 size-4" />
+                      )}
+                      Messe'den Keyword Çek
+                    </Button>
+                  )}
                   {selected && !creating && (
                     <Button
                       type="button"

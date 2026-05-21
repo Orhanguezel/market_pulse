@@ -5,6 +5,7 @@ import {
   generateOutreachDrafts,
   getOutreachCampaign,
   listOutreachCampaigns,
+  syncHostKeywords,
   updateOutreachCampaign,
 } from './campaign/campaign.controller';
 import {
@@ -116,6 +117,7 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.patch('/lead-machine/outreach/campaigns/:id', updateOutreachCampaign);
   app.delete('/lead-machine/outreach/campaigns/:id', deleteOutreachCampaign);
   app.post('/lead-machine/outreach/campaigns/:id/generate-drafts', generateOutreachDrafts);
+  app.post('/lead-machine/outreach/campaigns/:id/sync-host-keywords', syncHostKeywords);
 
   app.post('/lead-machine/competitor/scan', competitorScan);
 

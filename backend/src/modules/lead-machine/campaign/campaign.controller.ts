@@ -8,6 +8,7 @@ import {
   type OutreachCampaignInput,
 } from './campaign.repository';
 import { generateDraftsForCampaign } from './draft.generator';
+import { syncHostKeywordsToIcp } from './host-keyword.sync';
 
 function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
@@ -102,5 +103,16 @@ export const generateOutreachDrafts: RouteHandler<{ Params: { id: string } }> = 
   }
   const result = await generateDraftsForCampaign(req.params.id);
   reply.code(201);
+  return result;
+};
+
+export const syncHostKeywords: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const existing = await getCampaign(req.params.id);
+  if (!existing) {
+    reply.code(404);
+    return { error: 'NOT_FOUND' };
+  }
+  const result = await syncHostKeywordsToIcp(req.params.id);
+  reply.code(200);
   return result;
 };

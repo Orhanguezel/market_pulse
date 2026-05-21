@@ -923,6 +923,35 @@ export const marketAdminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['OutreachDrafts', 'LeadCandidates'],
     }),
+    syncHostKeywords: b.mutation<
+      {
+        campaign_id: string;
+        campaign_slug: string;
+        host_query_used: string | null;
+        host_data: {
+          name: string;
+          description: string | null;
+          keywords: string[];
+          product_names: string[];
+          hall: string | null;
+          booth: string | null;
+          source_url: string;
+        } | null;
+        icp_updated: boolean;
+        icp_id: string | null;
+        added_sectors: string[];
+        added_signals: string[];
+        preview_existing_sectors: number;
+        preview_existing_signals: number;
+      },
+      string
+    >({
+      query: (id) => ({
+        url: `/admin/lead-machine/outreach/campaigns/${id}/sync-host-keywords`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['OutreachCampaigns', 'IcpProfiles'],
+    }),
   }),
   overrideExisting: true,
 });
@@ -1006,6 +1035,7 @@ export const {
   useUpdateOutreachCampaignMutation,
   useDeleteOutreachCampaignMutation,
   useGenerateOutreachDraftsMutation,
+  useSyncHostKeywordsMutation,
 } = marketAdminApi;
 
 // Checklist uyumu için alias hook isimleri
