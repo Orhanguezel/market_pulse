@@ -22,9 +22,12 @@ export async function searchDirectory(
     return data.places ?? [];
   }
 
+  // Europages migrated from .com/search/companies?query= to a .co.uk
+  // path-based URL with the keyword embedded directly. The old URL now
+  // redirects to /languages and returns no companies.
   const url = source === 'tobb'
     ? `https://www.tobb.org.tr/Sayfalar/Arama.php?q=${encodeURIComponent(query)}`
-    : `https://www.europages.com/search/companies?query=${encodeURIComponent(query)}`;
+    : `https://www.europages.co.uk/companies/${encodeURIComponent(query)}.html`;
 
   const result = await scrape(url, {
     profile:     'directory-listing',

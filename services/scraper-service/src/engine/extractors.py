@@ -282,6 +282,40 @@ def extract_directory_listing(html: str, url: str, response: Any) -> dict[str, A
     final_url = getattr(response, "url", url) or url
     companies: list[dict[str, Any]] = []
     seen: set[str] = set()
+
+    # 1) Europages: each company tile renders an <a data-test="company-name"
+    #    href="/en/company/<slug>-<id>"><h2>Name</h2></a>. Match this first
+    #    so we don't fall back to the generic block parser, which picks up
+    #    nav/footer junk on Europages's heavy SPA shell.
+    if "europages." in final_url:
+        for anchor in sel.css('a[data-test="company-name"]')[:120]:
+            name = _text(anchor.css('h2::text').get(default=None)) or _text(anchor.css('::text').get(default=None))
+            if not name:
+                continue
+            key = name.lower()
+            if key in seen:
+                continue
+            seen.add(key)
+            href = anchor.css('::attr(href)').get()
+            companies.append({
+                "name": name,
+                "website": urljoin(final_url, href) if href else None,
+                "description": None,
+                "email": None,
+                "phone": None,
+                "address": None,
+                "source_url": urljoin(final_url, href) if href else final_url,
+            })
+        if companies:
+            return {
+                "profile": "directory-listing",
+                "url": url,
+                "final_url": final_url,
+                "count": len(companies),
+                "companies": companies,
+            }
+
+    # 2) Schema.org JSON-LD (works on many B2B directories that publish it)
     for item in _json_ld(sel):
         if not isinstance(item, dict):
             continue
