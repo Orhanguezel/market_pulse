@@ -688,39 +688,56 @@ def extract_marketplace_store(html: str, url: str, response: Any) -> dict[str, A
     products: list[dict[str, Any]] = []
 
     # Hepsiburada: storefront uses React SSR. The real product tiles are
-    # rendered as anchors whose href matches /<slug>-p-<HBC...>. The
-    # `class*="productCard"` substring also catches generated CSS rule names,
-    # which gave us hundreds of false-positive matches in earlier runs — so
-    # we now anchor on the href pattern only. If the page hasn't hydrated
-    # the product grid yet, the count will be 0 — accurate signal that the
-    # scrape is incomplete rather than a phantom number.
+    # rendered as anchors whose href matches /<slug>-pm-<HBC...>. Names
+    # aren't reliably in title/alt attrs on initial HTML, so we derive
+    # them from the URL slug as a fallback. We also dedupe by ASIN-like
+    # product id rather than full URL, because the same product appears
+    # multiple times (different placement slots: 'Çok Satanlar',
+    # 'İndirimli Ürünler', 'Diğer Ürünler' — Hepsi repeats tiles across
+    # these rows).
     if platform == "hepsiburada":
-        seen_hrefs: set[str] = set()
-        for card in sel.css('a[href*="-p-HBC"], a[href*="-p-HBV"]')[:120]:
-            href = card.attrib.get('href') or card.css('::attr(href)').get()
-            if not href or href in seen_hrefs:
+        seen_ids: set[str] = set()
+        for card in sel.css('a[href*="-pm-HBC"], a[href*="-pm-HBV"], a[href*="-p-HBC"], a[href*="-p-HBV"]')[:300]:
+            href = card.css('::attr(href)').get() or card.attrib.get('href')
+            if not href:
                 continue
-            seen_hrefs.add(href)
+            product_id_match = re.search(r"-(?:p|pm)-(HB[A-Z]\w{8,18})", href)
+            if not product_id_match:
+                continue
+            product_id = product_id_match.group(1)
+            if product_id in seen_ids:
+                continue
+            seen_ids.add(product_id)
+
+            # Derive a human-readable name from the slug:
+            # /omsa-renault-clio-5-kol-dayama-kolcak-2020-ve-uzeri-pm-HBC...
+            #   -> "Omsa Renault Clio 5 Kol Dayama Kolcak 2020 Ve Uzeri"
+            slug = href.split('?', 1)[0].rstrip('/').split('/')[-1]
+            slug = re.sub(r"-pm-HB[A-Z]\w+$|-p-HB[A-Z]\w+$", "", slug)
+            slug_words = [w for w in slug.split('-') if w and not w.isdigit()]
+            url_name = ' '.join(w.capitalize() for w in slug_words) if slug_words else None
+
+            # Prefer DOM attributes if they happen to be filled
             name = (
-                _text(card.attrib.get('title'))
-                or _text(card.css('::attr(title)').get(default=None))
+                _text(card.css('::attr(title)').get(default=None))
                 or _text(card.css('h3::text, h2::text').get(default=None))
-                or _text(card.css('span[title]::attr(title)').get(default=None))
                 or _text(card.css('img::attr(alt)').get(default=None))
+                or url_name
             )
-            # Walk up the DOM tree a bit to find the price; product tile
-            # containers wrap the anchor and the price together
+
             parent = card.xpath('..')
             price_text = (
                 _text(card.css('[data-test-id="price-current-price"]::text').get(default=None))
                 or (_text(parent.css('[data-test-id="price-current-price"]::text').get(default=None)) if parent else None)
                 or _text(card.css('span:contains("TL")::text').get(default=None))
             )
+
             products.append({
                 "name": name,
                 "url": urljoin(final_url, href) if href else None,
                 "price_text": price_text,
                 "out_of_stock": bool(card.css('[class*="outOfStock"], [class*="tukendi"]')),
+                "product_id": product_id,
             })
 
     # Trendyol: product card layout
