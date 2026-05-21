@@ -8,6 +8,13 @@ export type PaspasCustomer = {
   phone: string | null;
   address: string | null;
   discount: number | null;
+  email: string | null;
+  website_url: string | null;
+  google_maps_url: string | null;
+  instagram_url: string | null;
+  facebook_url: string | null;
+  contact_name: string | null;
+  bayi_segment: string | null;
 };
 
 export type PaspasProduct = {
@@ -63,9 +70,17 @@ export async function getPaspasCustomers(q?: string, limit = 50): Promise<Paspas
     params.push(term, term);
   }
 
-  type Row = RowDataPacket & { id: string; tur: string; ad: string; telefon: string | null; adres: string | null; iskonto: string | null };
+  type Row = RowDataPacket & {
+    id: string; tur: string; ad: string;
+    telefon: string | null; adres: string | null; iskonto: string | null;
+    email: string | null; website_url: string | null;
+    google_maps_url: string | null; instagram_url: string | null; facebook_url: string | null;
+    ilgili_kisi: string | null; bayi_segment: string | null;
+  };
   const [rows] = await pool.query<Row[]>(
-    `SELECT id, tur, ad, telefon, adres, iskonto
+    `SELECT id, tur, ad, telefon, adres, iskonto,
+            email, website_url, google_maps_url, instagram_url, facebook_url,
+            ilgili_kisi, bayi_segment
      FROM musteriler
      ${where}
      ORDER BY ad ASC
@@ -74,12 +89,19 @@ export async function getPaspasCustomers(q?: string, limit = 50): Promise<Paspas
   );
 
   return rows.map((r) => ({
-    id:       r.id,
-    tur:      r.tur,
-    name:     r.ad,
-    phone:    r.telefon,
-    address:  r.adres,
-    discount: r.iskonto != null ? toNumber(r.iskonto) : null,
+    id:              r.id,
+    tur:             r.tur,
+    name:            r.ad,
+    phone:           r.telefon,
+    address:         r.adres,
+    discount:        r.iskonto != null ? toNumber(r.iskonto) : null,
+    email:           r.email,
+    website_url:     r.website_url,
+    google_maps_url: r.google_maps_url,
+    instagram_url:   r.instagram_url,
+    facebook_url:    r.facebook_url,
+    contact_name:    r.ilgili_kisi,
+    bayi_segment:    r.bayi_segment,
   }));
 }
 
@@ -88,21 +110,36 @@ export async function getPaspasCustomers(q?: string, limit = 50): Promise<Paspas
 
 export async function getAllPaspasActiveCustomers(): Promise<PaspasCustomer[]> {
   const pool = await requirePaspasPool();
-  type Row = RowDataPacket & { id: string; tur: string; ad: string; telefon: string | null; adres: string | null; iskonto: string | null };
+  type Row = RowDataPacket & {
+    id: string; tur: string; ad: string;
+    telefon: string | null; adres: string | null; iskonto: string | null;
+    email: string | null; website_url: string | null;
+    google_maps_url: string | null; instagram_url: string | null; facebook_url: string | null;
+    ilgili_kisi: string | null; bayi_segment: string | null;
+  };
   const [rows] = await pool.query<Row[]>(
-    `SELECT id, tur, ad, telefon, adres, iskonto
+    `SELECT id, tur, ad, telefon, adres, iskonto,
+            email, website_url, google_maps_url, instagram_url, facebook_url,
+            ilgili_kisi, bayi_segment
      FROM musteriler
      WHERE is_active = 1
      ORDER BY ad ASC
      LIMIT 2000`,
   );
   return rows.map((r) => ({
-    id:       r.id,
-    tur:      r.tur,
-    name:     r.ad,
-    phone:    r.telefon,
-    address:  r.adres,
-    discount: r.iskonto != null ? toNumber(r.iskonto) : null,
+    id:              r.id,
+    tur:             r.tur,
+    name:            r.ad,
+    phone:           r.telefon,
+    address:         r.adres,
+    discount:        r.iskonto != null ? toNumber(r.iskonto) : null,
+    email:           r.email,
+    website_url:     r.website_url,
+    google_maps_url: r.google_maps_url,
+    instagram_url:   r.instagram_url,
+    facebook_url:    r.facebook_url,
+    contact_name:    r.ilgili_kisi,
+    bayi_segment:    r.bayi_segment,
   }));
 }
 

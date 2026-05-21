@@ -49,14 +49,29 @@ export async function syncPaspasCustomersToTargets(mode: PaspasSyncMode = 'all')
         notes:              c.address ?? null,
         category,
         status:             'active',
+        email:              c.email ?? null,
+        website:            c.website_url ?? null,
+        google_maps_url:    c.google_maps_url ?? null,
+        instagram_url:      c.instagram_url ?? null,
+        contact_name:       c.contact_name ?? null,
       });
       inserted++;
     } else {
-      // Sadece ad, telefon ve kategoriyi güncelle — kullanıcının el ile girdiği
-      // website, e-posta, notlar, Instagram vb. alanları EZMEZ
+      // Paspas ERP single source of truth: sync writes every field every time.
+      // If you want to keep a manual override, edit the row directly in Paspas
+      // and the next sync will mirror it.
       await db
         .update(marketTargets)
-        .set({ name: c.name, phone: c.phone ?? null, category })
+        .set({
+          name:            c.name,
+          phone:           c.phone ?? null,
+          category,
+          email:           c.email ?? null,
+          website:         c.website_url ?? null,
+          google_maps_url: c.google_maps_url ?? null,
+          instagram_url:   c.instagram_url ?? null,
+          contact_name:    c.contact_name ?? null,
+        })
         .where(eq(marketTargets.paspas_customer_id, c.id));
       updated++;
     }
