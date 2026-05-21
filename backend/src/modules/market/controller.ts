@@ -35,6 +35,7 @@ import {
 import { computeChurnBreakdown, recalculateChurnScore } from './churn.service';
 import { scanAndCreateSignals } from './competitor.signal';
 import { scanMarketplaceForTarget, type Marketplace } from './marketplace.signal';
+import { scanAllMarketplaces } from '@/jobs/marketplace.job';
 import { generateWeeklyReport, sendWeeklyReportEmail } from './report.service';
 import { syncPaspasCustomersToTargets, type PaspasSyncMode } from './external/paspas.sync';
 
@@ -736,6 +737,18 @@ export const scanCompetitor: RouteHandler<{ Params: { id: string } }> = async (r
       return reply.code(Number((e as { statusCode: number }).statusCode)).send({ error: { message: e.message } });
     }
     throw e;
+  }
+};
+
+// Fire the nightly batch on demand (UI button / debugging). Returns the
+// summary the job logs at 08:00 every day.
+export const scanAllMarketplacesNow: RouteHandler = async (_req, reply) => {
+  try {
+    const r = await scanAllMarketplaces();
+    return r;
+  } catch (e) {
+    reply.code(500);
+    return { error: { message: e instanceof Error ? e.message : 'scan_all_failed' } };
   }
 };
 

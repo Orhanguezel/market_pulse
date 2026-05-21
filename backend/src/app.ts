@@ -20,6 +20,7 @@ import { parseCorsOrigins, pickUploadsRoot, pickUploadsPrefix } from './app.help
 import { registerChurnJob } from '@/jobs/churn.job';
 import { registerReportJob } from '@/jobs/report.job';
 import { registerLeadMachineJobs } from '@/jobs/lead-machine.job';
+import { registerMarketplaceJob } from '@/jobs/marketplace.job';
 
 export async function createApp() {
   const { default: buildFastify } =
@@ -89,6 +90,7 @@ export async function createApp() {
   registerChurnJob(app);
   registerReportJob(app);
   registerLeadMachineJobs(app);
+  registerMarketplaceJob(app);
 
   return app;
 }
