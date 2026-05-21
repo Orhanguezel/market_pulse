@@ -196,7 +196,11 @@ async def _search_places_uncached(
             await page.goto(
                 _build_search_url(req.query, req.language, req.region),
                 timeout=timeout_ms,
-                wait_until="domcontentloaded",
+                # `load` waits for the document + JS bundle, while
+                # `domcontentloaded` returns before Maps has rendered any
+                # listings — the LISTING_SELECTOR below then times out
+                # because the SPA hasn't injected /maps/place/ links yet.
+                wait_until="load",
             )
             await dismiss_consent(page)
             if await detect_captcha(page):
@@ -210,7 +214,26 @@ async def _search_places_uncached(
                     places=[],
                     error="captcha_detected",
                 )
-            await page.wait_for_selector(LISTING_SELECTOR, timeout=15_000)
+            # Bumped from 15s — the small VPS + stealth chromium combo needs
+            # noticeably longer than a local laptop run.
+            try:
+                await page.wait_for_selector(LISTING_SELECTOR, timeout=45_000)
+            except Exception:
+                # Maps sometimes lands directly on a single Place page
+                # (when the query is specific enough) instead of a listing.
+                # Try to extract that single result before giving up.
+                single = await _extract_place(page)
+                if single and single.name:
+                    return GoogleMapsSearchResponse(
+                        success=True,
+                        query=req.query,
+                        total_found=1,
+                        duration_ms=int((time.perf_counter() - t0) * 1000),
+                        cache_hit=False,
+                        fetched_at=fetched_at,
+                        places=[single],
+                    )
+                raise
             await _scroll_until_enough(page, req.total, FEED_SELECTOR)
             loc = page.locator(LISTING_SELECTOR)
             count = await loc.count()
