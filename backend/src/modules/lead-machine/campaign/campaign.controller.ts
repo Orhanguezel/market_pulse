@@ -7,6 +7,7 @@ import {
   updateCampaign,
   type OutreachCampaignInput,
 } from './campaign.repository';
+import { generateDraftsForCampaign } from './draft.generator';
 
 function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' ? (value as Record<string, unknown>) : {};
@@ -91,4 +92,15 @@ export const deleteOutreachCampaign: RouteHandler<{ Params: { id: string } }> = 
   await deleteCampaign(req.params.id);
   reply.code(204);
   return null;
+};
+
+export const generateOutreachDrafts: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const existing = await getCampaign(req.params.id);
+  if (!existing) {
+    reply.code(404);
+    return { error: 'NOT_FOUND' };
+  }
+  const result = await generateDraftsForCampaign(req.params.id);
+  reply.code(201);
+  return result;
 };

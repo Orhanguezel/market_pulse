@@ -906,6 +906,23 @@ export const marketAdminApi = baseApi.injectEndpoints({
       query: (id) => ({ url: `/admin/lead-machine/outreach/campaigns/${id}`, method: 'DELETE' }),
       invalidatesTags: ['OutreachCampaigns'],
     }),
+    generateOutreachDrafts: b.mutation<
+      {
+        campaign_id: string;
+        campaign_slug: string;
+        approved_count: number;
+        draft_count: number;
+        skipped_existing: number;
+        candidates_without_email: number;
+      },
+      string
+    >({
+      query: (id) => ({
+        url: `/admin/lead-machine/outreach/campaigns/${id}/generate-drafts`,
+        method: 'POST',
+      }),
+      invalidatesTags: ['OutreachDrafts', 'LeadCandidates'],
+    }),
   }),
   overrideExisting: true,
 });
@@ -988,6 +1005,7 @@ export const {
   useCreateOutreachCampaignMutation,
   useUpdateOutreachCampaignMutation,
   useDeleteOutreachCampaignMutation,
+  useGenerateOutreachDraftsMutation,
 } = marketAdminApi;
 
 // Checklist uyumu için alias hook isimleri

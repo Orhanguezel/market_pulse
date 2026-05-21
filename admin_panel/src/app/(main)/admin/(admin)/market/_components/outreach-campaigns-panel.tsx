@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { toast } from 'sonner';
-import { Loader2, Plus, Save, Trash2, X } from 'lucide-react';
+import { Loader2, Mail, Plus, Save, Trash2, X } from 'lucide-react';
 
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,6 +15,7 @@ import {
   useCreateOutreachCampaignMutation,
   useUpdateOutreachCampaignMutation,
   useDeleteOutreachCampaignMutation,
+  useGenerateOutreachDraftsMutation,
   type OutreachCampaign,
 } from '@/integrations/endpoints/admin/market_admin.endpoints';
 
@@ -71,6 +72,7 @@ export default function OutreachCampaignsPanel() {
   const [createCampaign, createState] = useCreateOutreachCampaignMutation();
   const [updateCampaign, updateState] = useUpdateOutreachCampaignMutation();
   const [deleteCampaign, deleteState] = useDeleteOutreachCampaignMutation();
+  const [generateDrafts, generateState] = useGenerateOutreachDraftsMutation();
 
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
   const [form, setForm] = React.useState<FormState>(EMPTY);
@@ -128,7 +130,24 @@ export default function OutreachCampaignsPanel() {
     }
   }
 
-  const busy = createState.isLoading || updateState.isLoading || deleteState.isLoading;
+  async function handleGenerateDrafts() {
+    if (!selectedId) return;
+    if (!confirm('APPROVE_FAVORITE + APPROVE_DIRECT adaylar için mail taslakları üretilsin mi?')) return;
+    try {
+      const result = await generateDrafts(selectedId).unwrap();
+      toast.success(
+        `${result.draft_count} taslak üretildi · ${result.skipped_existing} mevcut atlandı · ${result.approved_count} aday onaylandı`,
+      );
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : 'Taslak üretilemedi');
+    }
+  }
+
+  const busy =
+    createState.isLoading
+    || updateState.isLoading
+    || deleteState.isLoading
+    || generateState.isLoading;
 
   return (
     <div className="space-y-6 p-6">
@@ -399,7 +418,23 @@ export default function OutreachCampaignsPanel() {
                     <span>Son güncelleme: {new Date(selected.updated_at).toLocaleString('tr-TR')}</span>
                   )}
                 </div>
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
+                  {selected && !creating && (
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={handleGenerateDrafts}
+                      disabled={busy}
+                      className="rounded-full border-gm-primary/40 text-gm-primary hover:bg-gm-primary hover:text-black"
+                    >
+                      {generateState.isLoading ? (
+                        <Loader2 className="mr-2 size-4 animate-spin" />
+                      ) : (
+                        <Mail className="mr-2 size-4" />
+                      )}
+                      Mail Taslaklarını Üret
+                    </Button>
+                  )}
                   {selected && (
                     <Button
                       type="button"

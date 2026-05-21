@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import {
   createOutreachCampaign,
   deleteOutreachCampaign,
+  generateOutreachDrafts,
   getOutreachCampaign,
   listOutreachCampaigns,
   updateOutreachCampaign,
@@ -114,6 +115,7 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.post('/lead-machine/outreach/campaigns', createOutreachCampaign);
   app.patch('/lead-machine/outreach/campaigns/:id', updateOutreachCampaign);
   app.delete('/lead-machine/outreach/campaigns/:id', deleteOutreachCampaign);
+  app.post('/lead-machine/outreach/campaigns/:id/generate-drafts', generateOutreachDrafts);
 
   app.post('/lead-machine/competitor/scan', competitorScan);
 
