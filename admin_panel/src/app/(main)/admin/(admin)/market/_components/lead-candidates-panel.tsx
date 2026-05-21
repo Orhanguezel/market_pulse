@@ -268,9 +268,12 @@ function CandidateCard({
       : candidate.channel === 'trade_fair'
         ? formatFairInfo(candidate)
         : null;
-  const mailTypeBadge = candidate.channel === 'trade_fair' ? formatMailType(candidate) : '';
-  const recommendation = candidate.channel === 'trade_fair' ? getRecommendation(candidate) : null;
-  const hostMatch = candidate.channel === 'trade_fair' ? getHostKeywordMatch(candidate) : null;
+  // The enrichment pipeline (mail_classification, recommendation,
+  // host_keyword_match) is wired for trade_fair AND b2b_directory now, so
+  // we render whatever the row carries instead of gating by channel.
+  const mailTypeBadge = formatMailType(candidate);
+  const recommendation = getRecommendation(candidate);
+  const hostMatch = getHostKeywordMatch(candidate);
 
   const analysis = candidate.channel === 'b2b_directory' ? b2bAnalysis(candidate) : null;
   const match = candidate.channel === 'b2b_directory' ? b2bMatch(candidate) : null;
