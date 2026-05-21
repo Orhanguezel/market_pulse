@@ -661,6 +661,121 @@ def extract_competitor_page(html: str, url: str, response: Any) -> dict[str, Any
     }
 
 
+def extract_marketplace_store(html: str, url: str, response: Any) -> dict[str, Any]:
+    """Extract a seller storefront snapshot from Hepsiburada / Trendyol / Amazon TR.
+
+    Returns a normalized {products: [...], summary: {...}, platform: ...}
+    payload that's easy to diff between snapshots.
+
+    The shape is deliberately small and platform-agnostic: each product is
+    {name, price, currency, url, out_of_stock, rating, reviews_count}.  Three
+    things matter for our churn analysis:
+      1. listing count (drop = supply problem)
+      2. price drift (sustained drops = dealer trying to clear stock)
+      3. out_of_stock ratio (rising = inventory failure)
+    Anything richer (variants, descriptions) we can pull later with a
+    follow-up scrape per product URL.
+    """
+    sel = Selector(html or "", url=url)
+    final_url = getattr(response, "url", url) or url
+    host = (urlparse(final_url).netloc or "").lower()
+
+    platform = "unknown"
+    if "hepsiburada" in host: platform = "hepsiburada"
+    elif "trendyol" in host:  platform = "trendyol"
+    elif "amazon"   in host:  platform = "amazon"
+
+    products: list[dict[str, Any]] = []
+
+    # Hepsiburada: store page tiles
+    if platform == "hepsiburada":
+        for card in sel.css(
+            'li[data-test-id="product-card"], '
+            'div[class*="productCard"], '
+            'a[href*="/p/"][data-test-id*="product"]'
+        )[:120]:
+            name = _text(card.css('h3::text, [class*="productCard"] [class*="name"]::text, [data-test-id*="name"]::text').get(default=None))
+            href = card.css('a::attr(href)').get() or card.xpath('@href').get()
+            price_text = _text(card.css('[data-test-id="price-current-price"]::text, [class*="price"] [class*="current"]::text, span[class*="price"]::text').get(default=None))
+            if not name and not price_text:
+                continue
+            products.append({
+                "name": name,
+                "url": urljoin(final_url, href) if href else None,
+                "price_text": price_text,
+                "out_of_stock": bool(card.css('[class*="outOfStock"], [class*="tukendi"]')),
+            })
+
+    # Trendyol: product card layout
+    elif platform == "trendyol":
+        for card in sel.css(
+            'div.p-card-wrppr, div[data-test-id="product-card"], '
+            'div.product-card, a[href*="/sr/"][data-id]'
+        )[:120]:
+            name = _text(card.css('.prdct-desc-cntnr-name::text, span.prdct-desc-cntnr-ttl::text, [class*="product-name"]::text').get(default=None))
+            href = card.css('a::attr(href)').get()
+            price_text = _text(card.css('.prc-box-dscntd::text, .prc-box-sllng::text, [class*="price"]::text').get(default=None))
+            rating_text = _text(card.css('.ratings .ratings-count::text, [class*="rating"]::text').get(default=None))
+            if not name and not price_text:
+                continue
+            products.append({
+                "name": name,
+                "url": urljoin(final_url, href) if href else None,
+                "price_text": price_text,
+                "rating_text": rating_text,
+                "out_of_stock": bool(card.css('.out-of-stock, [class*="OutOfStock"]')),
+            })
+
+    # Amazon: seller storefront / search result tiles
+    elif platform == "amazon":
+        for card in sel.css(
+            'div[data-component-type="s-search-result"], '
+            'div[data-asin]:not([data-asin=""]), '
+            'div.s-result-item'
+        )[:120]:
+            asin = card.css('::attr(data-asin)').get()
+            name = _text(card.css('h2 span::text, h2 a span::text').get(default=None))
+            href = card.css('h2 a::attr(href)').get()
+            price_text = _text(card.css('.a-price .a-offscreen::text, .a-price-whole::text').get(default=None))
+            rating = _text(card.css('span.a-icon-alt::text').get(default=None))
+            reviews = _text(card.css('span[aria-label*="rating"] + span ::text, span.a-size-base::text').get(default=None))
+            if not name and not asin:
+                continue
+            products.append({
+                "name": name,
+                "asin": asin,
+                "url": urljoin(final_url, href) if href else None,
+                "price_text": price_text,
+                "rating_text": rating,
+                "reviews_text": reviews,
+                "out_of_stock": bool(card.css('span:contains("Currently unavailable"), span:contains("Şu anda mevcut değil")')),
+            })
+
+    # Hash for diffing future snapshots
+    hash_input = json.dumps(
+        [{"name": p.get("name"), "price": p.get("price_text"), "oos": p.get("out_of_stock")} for p in products[:60]],
+        sort_keys=True,
+    )
+    content_hash = hashlib.sha256(hash_input.encode()).hexdigest()
+
+    summary = {
+        "platform": platform,
+        "product_count": len(products),
+        "out_of_stock_count": sum(1 for p in products if p.get("out_of_stock")),
+        "page_title": _first(sel, "title::text"),
+    }
+
+    return {
+        "profile": "marketplace-store",
+        "url": url,
+        "final_url": final_url,
+        "platform": platform,
+        "products": products[:80],
+        "summary": summary,
+        "content_hash": content_hash,
+    }
+
+
 def extract_geo_page(html: str, url: str, response: Any) -> dict[str, Any]:
     sel = Selector(html, url=url)
     final_url = getattr(response, "url", url) or url

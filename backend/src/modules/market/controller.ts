@@ -34,6 +34,7 @@ import {
 } from './external/paspas.repository';
 import { computeChurnBreakdown, recalculateChurnScore } from './churn.service';
 import { scanAndCreateSignals } from './competitor.signal';
+import { scanMarketplaceForTarget, type Marketplace } from './marketplace.signal';
 import { generateWeeklyReport, sendWeeklyReportEmail } from './report.service';
 import { syncPaspasCustomersToTargets, type PaspasSyncMode } from './external/paspas.sync';
 
@@ -685,6 +686,25 @@ export const scanCompetitor: RouteHandler<{ Params: { id: string } }> = async (r
     const result = await scanAndCreateSignals(req.params.id);
     // Each scan creates new signals; churn score depends on signals, so refresh
     // it immediately so the UI doesn't display a stale value.
+    await recalculateChurnScore(req.params.id);
+    return result;
+  } catch (e) {
+    if (e instanceof Error && 'statusCode' in e) {
+      return reply.code(Number((e as { statusCode: number }).statusCode)).send({ error: { message: e.message } });
+    }
+    throw e;
+  }
+};
+
+export const scanMarketplace: RouteHandler<{
+  Params: { id: string; platform: string };
+}> = async (req, reply) => {
+  const platform = req.params.platform as Marketplace;
+  if (!['hepsiburada', 'trendyol', 'amazon'].includes(platform)) {
+    return reply.code(400).send({ error: { message: 'invalid_platform' } });
+  }
+  try {
+    const result = await scanMarketplaceForTarget(req.params.id, platform);
     await recalculateChurnScore(req.params.id);
     return result;
   } catch (e) {

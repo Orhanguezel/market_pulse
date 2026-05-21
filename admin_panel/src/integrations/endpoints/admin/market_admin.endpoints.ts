@@ -15,6 +15,9 @@ export interface MarketTarget {
   district:         string | null;
   instagramUrl:     string | null;
   googleMapsUrl:    string | null;
+  hepsiburadaUrl:   string | null;
+  trendyolUrl:      string | null;
+  amazonUrl:        string | null;
   notes:            string | null;
   churnRiskScore:   number;
   lastSeenAt:       string | null;
@@ -678,6 +681,31 @@ export const marketAdminApi = baseApi.injectEndpoints({
       query: (id) => ({ url: `/admin/market/targets/${id}/scan-competitor`, method: 'POST' }),
       invalidatesTags: ['MarketSignals', 'MarketTargets'],
     }),
+    scanMarketplace: b.mutation<{
+      target_id: string;
+      platform: 'hepsiburada' | 'trendyol' | 'amazon';
+      url: string;
+      snapshot: {
+        platform: string;
+        product_count: number;
+        out_of_stock_count: number;
+        content_hash: string;
+        page_title: string | null;
+        products: Array<{ name?: string | null; url?: string | null; price_text?: string | null; out_of_stock?: boolean }>;
+      };
+      changed_fields: string[];
+      signals_created: number;
+    }, { id: string; platform: 'hepsiburada' | 'trendyol' | 'amazon' }>({
+      query: ({ id, platform }) => ({
+        url: `/admin/market/targets/${id}/scan-marketplace/${platform}`,
+        method: 'POST',
+      }),
+      invalidatesTags: (_r, _e, { id }) => [
+        { type: 'MarketTargets' as const, id },
+        'MarketSignals',
+        'MarketStats',
+      ],
+    }),
     scanAllCompetitors: b.mutation<{
       total_active: number;
       scanned: number;
@@ -1018,6 +1046,7 @@ export const {
   useRecalculateChurnMutation,
   useGetTargetIntelQuery,
   useLazyGetTargetIntelQuery,
+  useScanMarketplaceMutation,
   useListMarketLeadsQuery,
   useCreateMarketLeadMutation,
   useUpdateMarketLeadMutation,

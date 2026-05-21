@@ -52,6 +52,7 @@ import {
   useScanCompetitorMutation,
   useScanAllCompetitorsMutation,
   useGetTargetIntelQuery,
+  useScanMarketplaceMutation,
   type MarketTarget,
 } from '@/integrations/hooks';
 import { cn } from '@/lib/utils';
@@ -548,7 +549,20 @@ function fmtDate(s: string | null | undefined): string {
 
 function TargetIntelPanel({ targetId, fallback }: { targetId: string; fallback: MarketTarget }) {
   const { data, isLoading, isError } = useGetTargetIntelQuery(targetId);
+  const [scanMarketplace, scanMpState] = useScanMarketplaceMutation();
   const t = data?.target ?? fallback;
+
+  const handleScanMarketplace = async (platform: 'hepsiburada' | 'trendyol' | 'amazon') => {
+    try {
+      const r = await scanMarketplace({ id: targetId, platform }).unwrap();
+      const parts: string[] = [`${r.snapshot.product_count} ürün`];
+      if (r.snapshot.out_of_stock_count > 0) parts.push(`${r.snapshot.out_of_stock_count} tükendi`);
+      if (r.signals_created > 0) parts.push('yeni sinyal');
+      toast.success(`${platform}: ${parts.join(' · ')}`);
+    } catch (e) {
+      toast.error(`${platform} taraması başarısız: ${(e as Error)?.message ?? 'bilinmeyen'}`);
+    }
+  };
 
   return (
     <div className="px-8 py-6 space-y-6 border-l-4 border-l-gm-gold/40">
@@ -680,6 +694,47 @@ function TargetIntelPanel({ targetId, fallback }: { targetId: string; fallback: 
             </div>
           ) : null}
         </div>
+      </div>
+
+      {/* Marketplace store scan triggers */}
+      <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/20 p-4">
+        <div className="mb-3 flex items-center justify-between gap-3">
+          <span className="text-[10px] font-bold uppercase tracking-widest text-gm-muted">Marketplace Mağazaları</span>
+          {scanMpState.isLoading && <span className="text-xs text-gm-muted">Taranıyor...</span>}
+        </div>
+        <div className="grid gap-2 md:grid-cols-3">
+          {([
+            ['hepsiburada', t.hepsiburadaUrl, 'border-orange-500/40 text-orange-300', 'Hepsiburada'],
+            ['trendyol',    t.trendyolUrl,    'border-orange-400/40 text-orange-200', 'Trendyol'],
+            ['amazon',      t.amazonUrl,      'border-yellow-500/40 text-yellow-300', 'Amazon TR'],
+          ] as const).map(([platform, url, cls, label]) => (
+            <div key={platform} className={`flex items-center justify-between gap-2 rounded-xl border bg-gm-surface/30 p-3 text-sm ${url ? cls : 'border-gm-border-soft text-gm-muted/60'}`}>
+              <div className="flex min-w-0 items-center gap-2">
+                {url ? (
+                  <a href={url} target="_blank" rel="noreferrer" className="truncate hover:underline">{label}</a>
+                ) : (
+                  <span className="truncate">{label} — URL yok</span>
+                )}
+              </div>
+              {url && (
+                <Button
+                  size="sm"
+                  variant="outline"
+                  disabled={scanMpState.isLoading}
+                  onClick={() => handleScanMarketplace(platform)}
+                  className="h-7 rounded-full border-gm-border-soft px-3 text-[10px] font-bold uppercase tracking-widest hover:bg-gm-gold hover:text-black"
+                >
+                  Tara
+                </Button>
+              )}
+            </div>
+          ))}
+        </div>
+        {!t.hepsiburadaUrl && !t.trendyolUrl && !t.amazonUrl && (
+          <p className="mt-3 text-[11px] italic text-gm-muted/70">
+            Düzenle butonuyla mağaza URL'lerini ekleyince burada Tara butonları aktif olur.
+          </p>
+        )}
       </div>
 
       {/* Signals */}

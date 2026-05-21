@@ -22,6 +22,9 @@ export const targetCreateSchema = z.object({
   district:        z.string().trim().max(100).optional(),
   instagram_url:   z.string().url().optional(),
   google_maps_url: z.string().url().optional(),
+  hepsiburada_url: z.string().url().optional(),
+  trendyol_url:    z.string().url().optional(),
+  amazon_url:      z.string().url().optional(),
   notes:           z.string().optional(),
 });
 

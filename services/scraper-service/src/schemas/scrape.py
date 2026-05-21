@@ -12,6 +12,7 @@ ScrapeProfile = Literal[
     "fair-exhibitor",
     "fair-exhibitor-detail",
     "competitor-page",
+    "marketplace-store",
 ]
 HttpMethod = Literal["GET", "POST"]
 

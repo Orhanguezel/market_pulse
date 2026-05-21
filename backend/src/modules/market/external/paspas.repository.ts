@@ -15,6 +15,9 @@ export type PaspasCustomer = {
   facebook_url: string | null;
   contact_name: string | null;
   bayi_segment: string | null;
+  hepsiburada_url: string | null;
+  trendyol_url: string | null;
+  amazon_url: string | null;
 };
 
 export type PaspasProduct = {
@@ -76,11 +79,13 @@ export async function getPaspasCustomers(q?: string, limit = 50): Promise<Paspas
     email: string | null; website_url: string | null;
     google_maps_url: string | null; instagram_url: string | null; facebook_url: string | null;
     ilgili_kisi: string | null; bayi_segment: string | null;
+    hepsiburada_url: string | null; trendyol_url: string | null; amazon_url: string | null;
   };
   const [rows] = await pool.query<Row[]>(
     `SELECT id, tur, ad, telefon, adres, iskonto,
             email, website_url, google_maps_url, instagram_url, facebook_url,
-            ilgili_kisi, bayi_segment
+            ilgili_kisi, bayi_segment,
+            hepsiburada_url, trendyol_url, amazon_url
      FROM musteriler
      ${where}
      ORDER BY ad ASC
@@ -102,6 +107,9 @@ export async function getPaspasCustomers(q?: string, limit = 50): Promise<Paspas
     facebook_url:    r.facebook_url,
     contact_name:    r.ilgili_kisi,
     bayi_segment:    r.bayi_segment,
+    hepsiburada_url: r.hepsiburada_url,
+    trendyol_url:    r.trendyol_url,
+    amazon_url:      r.amazon_url,
   }));
 }
 
@@ -116,11 +124,13 @@ export async function getAllPaspasActiveCustomers(): Promise<PaspasCustomer[]> {
     email: string | null; website_url: string | null;
     google_maps_url: string | null; instagram_url: string | null; facebook_url: string | null;
     ilgili_kisi: string | null; bayi_segment: string | null;
+    hepsiburada_url: string | null; trendyol_url: string | null; amazon_url: string | null;
   };
   const [rows] = await pool.query<Row[]>(
     `SELECT id, tur, ad, telefon, adres, iskonto,
             email, website_url, google_maps_url, instagram_url, facebook_url,
-            ilgili_kisi, bayi_segment
+            ilgili_kisi, bayi_segment,
+            hepsiburada_url, trendyol_url, amazon_url
      FROM musteriler
      WHERE is_active = 1
      ORDER BY ad ASC
@@ -140,6 +150,9 @@ export async function getAllPaspasActiveCustomers(): Promise<PaspasCustomer[]> {
     facebook_url:    r.facebook_url,
     contact_name:    r.ilgili_kisi,
     bayi_segment:    r.bayi_segment,
+    hepsiburada_url: r.hepsiburada_url,
+    trendyol_url:    r.trendyol_url,
+    amazon_url:      r.amazon_url,
   }));
 }
 

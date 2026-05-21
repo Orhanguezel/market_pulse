@@ -36,12 +36,16 @@ type Form = {
   notes: string;
   instagram_url: string;
   google_maps_url: string;
+  hepsiburada_url: string;
+  trendyol_url: string;
+  amazon_url: string;
 };
 
 const EMPTY: Form = {
   name: '', category: 'dealer', status: 'active',
   website: '', phone: '', email: '', contact_name: '',
   city: '', district: '', notes: '', instagram_url: '', google_maps_url: '',
+  hepsiburada_url: '', trendyol_url: '', amazon_url: '',
 };
 
 export default function AddTargetDialog({ open, onOpenChange, existing }: Props) {
@@ -70,6 +74,9 @@ export default function AddTargetDialog({ open, onOpenChange, existing }: Props)
         notes:           existing.notes ?? '',
         instagram_url:   existing.instagramUrl ?? '',
         google_maps_url: existing.googleMapsUrl ?? '',
+        hepsiburada_url: existing.hepsiburadaUrl ?? '',
+        trendyol_url:    existing.trendyolUrl ?? '',
+        amazon_url:      existing.amazonUrl ?? '',
       });
     } else {
       setForm(EMPTY);
@@ -108,6 +115,9 @@ export default function AddTargetDialog({ open, onOpenChange, existing }: Props)
       notes:           form.notes || undefined,
       instagram_url:   form.instagram_url || undefined,
       google_maps_url: form.google_maps_url || undefined,
+      hepsiburada_url: form.hepsiburada_url || undefined,
+      trendyol_url:    form.trendyol_url || undefined,
+      amazon_url:      form.amazon_url || undefined,
     };
     if (form.website) {
       try { new URL(form.website); body.website = form.website; } catch { /* skip invalid url */ }
@@ -243,6 +253,22 @@ export default function AddTargetDialog({ open, onOpenChange, existing }: Props)
           <div className="space-y-1.5">
             <Label>Google Maps</Label>
             <Input value={form.google_maps_url} onChange={set('google_maps_url')} placeholder="https://maps.google.com/..." disabled={busy} />
+          </div>
+
+          <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/20 p-4 space-y-3">
+            <div className="text-[10px] font-bold uppercase tracking-widest text-gm-gold">Marketplace Mağaza URL'leri</div>
+            <div className="space-y-1.5">
+              <Label>Hepsiburada</Label>
+              <Input value={form.hepsiburada_url} onChange={set('hepsiburada_url')} placeholder="https://www.hepsiburada.com/magaza/..." disabled={busy} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Trendyol</Label>
+              <Input value={form.trendyol_url} onChange={set('trendyol_url')} placeholder="https://www.trendyol.com/sr?mid=..." disabled={busy} />
+            </div>
+            <div className="space-y-1.5">
+              <Label>Amazon TR</Label>
+              <Input value={form.amazon_url} onChange={set('amazon_url')} placeholder="https://www.amazon.com.tr/stores/..." disabled={busy} />
+            </div>
           </div>
 
           <div className="space-y-1.5">

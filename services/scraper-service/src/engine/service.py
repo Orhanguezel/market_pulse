@@ -12,6 +12,7 @@ from src.engine.extractors import (
     extract_geo_page,
     extract_geo_robots,
     extract_lead_page,
+    extract_marketplace_store,
     extract_website_analysis,
 )
 from src.engine.fetcher import fetch_page
@@ -74,6 +75,8 @@ async def perform_scrape(
         data = extract_fair_exhibitor_detail(fetched.html, str(payload.url), fetched.response)
     elif payload.profile == "competitor-page":
         data = extract_competitor_page(fetched.html, str(payload.url), fetched.response)
+    elif payload.profile == "marketplace-store":
+        data = extract_marketplace_store(fetched.html, str(payload.url), fetched.response)
     else:
         data = extract_basic_page_data(fetched.response)
         data.update(extract_selectors(fetched.response, payload.selectors))

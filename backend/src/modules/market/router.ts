@@ -8,7 +8,7 @@ import {
   recalculateTargetChurn,
   syncPaspasTargets,
   bulkImportTargets, downloadImportTemplate,
-  scanCompetitor, scanAllCompetitors,
+  scanCompetitor, scanAllCompetitors, scanMarketplace,
   previewWeeklyReport, sendWeeklyReport,
   listMarketTestRuns, createMarketTestRun, executeMarketTestRun,
   listMarketDeveloperNotes, createMarketDeveloperNote, updateMarketDeveloperNote, deleteMarketDeveloperNote,
@@ -38,6 +38,7 @@ export async function registerMarketAdmin(app: FastifyInstance) {
   app.get('/market/targets/import-template',              downloadImportTemplate);
   app.post('/market/targets/:id/scan-competitor',         scanCompetitor);
   app.post('/market/targets/scan-all-competitors',        scanAllCompetitors);
+  app.post('/market/targets/:id/scan-marketplace/:platform', scanMarketplace);
   app.get('/market/external/paspas/customers',            listPaspasCustomers);
   app.get('/market/external/paspas/products',             listPaspasProducts);
   app.get('/market/external/paspas/customers/:id/orders', listPaspasCustomerOrders);

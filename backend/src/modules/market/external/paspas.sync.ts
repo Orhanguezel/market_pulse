@@ -57,6 +57,9 @@ export async function syncPaspasCustomersToTargets(mode: PaspasSyncMode = 'all')
         google_maps_url:    c.google_maps_url ?? null,
         instagram_url:      c.instagram_url ?? null,
         contact_name:       c.contact_name ?? null,
+        hepsiburada_url:    c.hepsiburada_url ?? null,
+        trendyol_url:       c.trendyol_url ?? null,
+        amazon_url:         c.amazon_url ?? null,
       });
       inserted++;
     } else {
@@ -74,6 +77,9 @@ export async function syncPaspasCustomersToTargets(mode: PaspasSyncMode = 'all')
           google_maps_url: c.google_maps_url ?? null,
           instagram_url:   c.instagram_url ?? null,
           contact_name:    c.contact_name ?? null,
+          hepsiburada_url: c.hepsiburada_url ?? null,
+          trendyol_url:    c.trendyol_url ?? null,
+          amazon_url:      c.amazon_url ?? null,
         })
         .where(eq(marketTargets.paspas_customer_id, c.id));
       updated++;

@@ -152,7 +152,8 @@ export type ScrapeProfile =
   | 'directory-listing'
   | 'fair-exhibitor'
   | 'fair-exhibitor-detail'
-  | 'competitor-page';
+  | 'competitor-page'
+  | 'marketplace-store';
 
 export type ScrapeMode = 'fast' | 'stealthy' | 'dynamic';
 
