@@ -1,5 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import type { RouteHandler } from 'fastify';
+import type { RowDataPacket } from 'mysql2/promise';
+import { pool } from '@/db/client';
 import { exec } from 'node:child_process';
 import { promisify } from 'node:util';
 import { basename, dirname } from 'node:path';
@@ -30,7 +32,7 @@ import {
   getPaspasCustomers,
   getPaspasProducts,
 } from './external/paspas.repository';
-import { recalculateChurnScore } from './churn.service';
+import { computeChurnBreakdown, recalculateChurnScore } from './churn.service';
 import { scanAndCreateSignals } from './competitor.signal';
 import { generateWeeklyReport, sendWeeklyReportEmail } from './report.service';
 import { syncPaspasCustomersToTargets, type PaspasSyncMode } from './external/paspas.sync';
@@ -608,6 +610,75 @@ export const bulkImportTargets: RouteHandler<{ Body: unknown }> = async (req, re
 };
 
 // ─── Competitor Scan ─────────────────────────────────────────────────────────
+
+// ─── Per-target Intel (aggregated detail) ───────────────────────────────────
+//
+// One request returns everything the target detail panel needs to render:
+//   - the target row (DTO form)
+//   - churn score with the three contributors broken out
+//   - recent signals (latest 20, newest first)
+//   - paspas order history (latest 30) + a coarse 90d/prev90d trend bucket
+//
+// Drives the expandable row on /admin/market/targets.
+
+export const targetIntel: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const rows = await db.select().from(marketTargets).where(eq(marketTargets.id, req.params.id)).limit(1);
+  const row = rows[0];
+  if (!row) return reply.code(404).send({ error: { message: 'not_found' } });
+
+  let churn: Awaited<ReturnType<typeof computeChurnBreakdown>> | null = null;
+  try { churn = await computeChurnBreakdown(req.params.id); } catch { /* keep null */ }
+
+  const [signalRows] = await pool.execute<RowDataPacket[]>(
+    `SELECT id, target_id, signal_type, severity, title, description, source_url,
+            is_reviewed, created_at, data
+       FROM market_signals
+      WHERE target_id = ?
+      ORDER BY created_at DESC
+      LIMIT 20`,
+    [req.params.id],
+  );
+
+  let orders: Awaited<ReturnType<typeof getCustomerOrders>> = [];
+  let ordersError: string | null = null;
+  if (row.paspas_customer_id) {
+    try {
+      orders = await getCustomerOrders(row.paspas_customer_id);
+    } catch (e) {
+      ordersError = e instanceof Error ? e.message : 'paspas_fetch_failed';
+    }
+  }
+
+  // Coarse 90d vs previous-90d trend (used by the panel and shows up next to
+  // 'Sipariş Geçmişi'). Done in JS instead of SQL so we don't hammer paspas
+  // with a second query.
+  const now = Date.now();
+  const window90 = 90 * 86_400_000;
+  const last90  = orders.filter((o) => now - new Date(o.siparisTarihi).getTime() <= window90);
+  const prev90  = orders.filter((o) => {
+    const age = now - new Date(o.siparisTarihi).getTime();
+    return age > window90 && age <= 2 * window90;
+  });
+  const sum = (arr: typeof orders) => arr.reduce((acc, o) => acc + (o.toplamTutar || 0), 0);
+  const orderTrend = {
+    last90_count:  last90.length,
+    last90_value:  sum(last90),
+    prev90_count:  prev90.length,
+    prev90_value:  sum(prev90),
+    delta_pct: prev90.length === 0 ? null : Math.round(((last90.length - prev90.length) / prev90.length) * 1000) / 10,
+  };
+
+  return {
+    target: targetToDto(row),
+    churn,
+    signals: signalRows,
+    orders: {
+      latest: orders.slice(0, 30),
+      trend: orderTrend,
+      error: ordersError,
+    },
+  };
+};
 
 export const scanCompetitor: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   try {

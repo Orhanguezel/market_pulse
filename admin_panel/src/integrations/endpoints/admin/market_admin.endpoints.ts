@@ -3,23 +3,24 @@ import { baseApi } from '@/integrations/baseApi';
 // ─── Types ───────────────────────────────────────────────────────────────────
 
 export interface MarketTarget {
-  id:             string;
-  name:           string;
-  category:       string;
-  status:         string;
-  website:        string | null;
-  phone:          string | null;
-  email:          string | null;
-  contactName:    string | null;
-  city:           string | null;
-  district:       string | null;
-  instagramUrl:   string | null;
-  googleMapsUrl:  string | null;
-  notes:          string | null;
-  churnRiskScore: number;
-  lastSeenAt:     string | null;
-  createdAt:      string;
-  updatedAt:      string;
+  id:               string;
+  name:             string;
+  category:         string;
+  status:           string;
+  website:          string | null;
+  phone:            string | null;
+  email:            string | null;
+  contactName:      string | null;
+  city:             string | null;
+  district:         string | null;
+  instagramUrl:     string | null;
+  googleMapsUrl:    string | null;
+  notes:            string | null;
+  churnRiskScore:   number;
+  lastSeenAt:       string | null;
+  paspasCustomerId: string | null;
+  createdAt:        string;
+  updatedAt:        string;
 }
 
 export interface MarketLead {
@@ -469,6 +470,48 @@ export const marketAdminApi = baseApi.injectEndpoints({
     recalculateChurn: b.mutation<{ score: number }, string>({
       query: (id) => ({ url: `/admin/market/targets/${id}/recalculate-churn`, method: 'POST' }),
       invalidatesTags: ['MarketTargets', 'MarketStats'],
+    }),
+    getTargetIntel: b.query<{
+      target: MarketTarget;
+      churn: {
+        total: number;
+        signal_score: number;
+        age_score: number;
+        age_days: number | null;
+        paspas_score: number;
+      } | null;
+      signals: Array<{
+        id: string;
+        signal_type: string;
+        severity: string;
+        title: string;
+        description: string | null;
+        source_url: string | null;
+        is_reviewed: number;
+        created_at: string;
+        data: unknown;
+      }>;
+      orders: {
+        latest: Array<{
+          id: string;
+          siparisNo: string;
+          siparisTarihi: string;
+          terminTarihi: string | null;
+          durum: string;
+          toplamTutar: number;
+        }>;
+        trend: {
+          last90_count: number;
+          last90_value: number;
+          prev90_count: number;
+          prev90_value: number;
+          delta_pct: number | null;
+        };
+        error: string | null;
+      };
+    }, string>({
+      query: (id) => ({ url: `/admin/market/targets/${id}/intel` }),
+      providesTags: (_r, _e, id) => [{ type: 'MarketTargets' as const, id }],
     }),
 
     listMarketLeads: b.query<MarketLead[], {
@@ -973,6 +1016,8 @@ export const {
   useUpdateMarketTargetMutation,
   useDeleteMarketTargetMutation,
   useRecalculateChurnMutation,
+  useGetTargetIntelQuery,
+  useLazyGetTargetIntelQuery,
   useListMarketLeadsQuery,
   useCreateMarketLeadMutation,
   useUpdateMarketLeadMutation,

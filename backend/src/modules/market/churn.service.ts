@@ -60,7 +60,15 @@ async function getPaspasOrderScore(targetId: string) {
   }
 }
 
-export async function recalculateChurnScore(targetId: string): Promise<number> {
+export interface ChurnBreakdown {
+  total: number;
+  signal_score: number;
+  age_score: number;
+  age_days: number | null;
+  paspas_score: number;
+}
+
+export async function computeChurnBreakdown(targetId: string): Promise<ChurnBreakdown> {
   const [targets] = await pool.query<TargetRow[]>(
     'SELECT id, last_seen_at FROM market_targets WHERE id = ? LIMIT 1',
     [targetId],
@@ -71,22 +79,25 @@ export async function recalculateChurnScore(targetId: string): Promise<number> {
     Object.assign(err, { statusCode: 404 });
     throw err;
   }
-
-  let score = await getSignalScore(target.id);
+  const signalScore = await getSignalScore(target.id);
   const age = daysSince(target.last_seen_at);
-  if (age === null) score += 15;
-  else if (age >= 90) score += 30;
-  else if (age >= 60) score += 20;
-  else if (age >= 30) score += 10;
+  let ageScore = 0;
+  if (age === null) ageScore = 15;
+  else if (age >= 90) ageScore = 30;
+  else if (age >= 60) ageScore = 20;
+  else if (age >= 30) ageScore = 10;
+  const paspasScore = await getPaspasOrderScore(target.id);
+  const total = Math.min(100, Math.max(0, signalScore + ageScore + paspasScore));
+  return { total, signal_score: signalScore, age_score: ageScore, age_days: age, paspas_score: paspasScore };
+}
 
-  score += await getPaspasOrderScore(target.id);
-  const normalized = Math.min(100, Math.max(0, score));
-
+export async function recalculateChurnScore(targetId: string): Promise<number> {
+  const breakdown = await computeChurnBreakdown(targetId);
   await pool.query(
     'UPDATE market_targets SET churn_risk_score = ?, updated_at = NOW() WHERE id = ?',
-    [normalized, target.id],
+    [breakdown.total, targetId],
   );
-  return normalized;
+  return breakdown.total;
 }
 
 export async function recalculateAllChurnScores(): Promise<void> {

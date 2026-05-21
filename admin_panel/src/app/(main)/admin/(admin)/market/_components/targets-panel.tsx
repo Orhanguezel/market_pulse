@@ -6,13 +6,19 @@ import {
   ArrowRight,
   Bell,
   Building2,
+  ChevronDown,
+  ChevronRight,
+  ExternalLink,
+  Instagram,
+  Mail,
+  MapPin,
   Pencil,
+  Phone,
   Plus,
   RefreshCw,
   Trash2,
   Search,
   Filter,
-  MapPin,
   TrendingUp,
   LayoutGrid,
   Upload,
@@ -45,6 +51,7 @@ import {
   useRecalculateChurnMutation,
   useScanCompetitorMutation,
   useScanAllCompetitorsMutation,
+  useGetTargetIntelQuery,
   type MarketTarget,
 } from '@/integrations/hooks';
 import { cn } from '@/lib/utils';
@@ -166,6 +173,7 @@ export default function TargetsPanel() {
   const [dialogOpen, setDialogOpen]     = React.useState(false);
   const [importOpen, setImportOpen]     = React.useState(false);
   const [editTarget, setEditTarget]     = React.useState<MarketTarget | null>(null);
+  const [expandedId, setExpandedId]     = React.useState<string | null>(null);
 
   const { data, isLoading, isFetching, refetch } = useListMarketTargetsQuery({
     q: q || undefined,
@@ -378,9 +386,19 @@ export default function TargetsPanel() {
                 </TableRow>
               ) : (
                 data?.map((target) => (
-                  <TableRow key={target.id} className="border-gm-border-soft hover:bg-gm-primary/3 transition-colors group">
+                  <React.Fragment key={target.id}>
+                  <TableRow className="border-gm-border-soft hover:bg-gm-primary/3 transition-colors group">
                     <TableCell className="py-6 px-8">
                       <div className="flex items-center gap-4">
+                        <Button
+                          variant="ghost"
+                          size="icon"
+                          className="size-8 rounded-full text-gm-muted hover:text-gm-gold hover:bg-gm-gold/10"
+                          onClick={() => setExpandedId((curr) => (curr === target.id ? null : target.id))}
+                          title="Detayları aç/kapat"
+                        >
+                          {expandedId === target.id ? <ChevronDown className="size-4" /> : <ChevronRight className="size-4" />}
+                        </Button>
                         <div className="w-12 h-12 rounded-full bg-gm-surface border border-gm-border-soft flex items-center justify-center text-gm-gold font-serif text-xl shadow-inner group-hover:border-gm-gold/50 transition-all">
                           {target.name[0]}
                         </div>
@@ -473,6 +491,14 @@ export default function TargetsPanel() {
                       </div>
                     </TableCell>
                   </TableRow>
+                  {expandedId === target.id && (
+                    <TableRow className="border-gm-border-soft bg-gm-surface/10">
+                      <TableCell colSpan={6} className="p-0">
+                        <TargetIntelPanel targetId={target.id} fallback={target} />
+                      </TableCell>
+                    </TableRow>
+                  )}
+                  </React.Fragment>
                 ))
               )}
             </TableBody>
@@ -497,6 +523,194 @@ export default function TargetsPanel() {
         onClose={() => setImportOpen(false)}
         onSuccess={() => refetch()}
       />
+    </div>
+  );
+}
+
+// ─── Per-target intel detail panel ──────────────────────────────────────────
+
+const SEVERITY_CLS: Record<string, string> = {
+  critical: 'border-gm-error/40 bg-gm-error/15 text-gm-error',
+  high:     'border-gm-warning/40 bg-gm-warning/15 text-gm-warning',
+  medium:   'border-gm-gold/40 bg-gm-gold/15 text-gm-gold',
+  low:      'border-gm-success/40 bg-gm-success/15 text-gm-success',
+};
+
+function fmtMoney(v: number): string {
+  if (!Number.isFinite(v)) return '0 ₺';
+  return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY', maximumFractionDigits: 0 }).format(v);
+}
+
+function fmtDate(s: string | null | undefined): string {
+  if (!s) return '—';
+  try { return new Date(s).toLocaleDateString('tr-TR'); } catch { return s; }
+}
+
+function TargetIntelPanel({ targetId, fallback }: { targetId: string; fallback: MarketTarget }) {
+  const { data, isLoading, isError } = useGetTargetIntelQuery(targetId);
+  const t = data?.target ?? fallback;
+
+  return (
+    <div className="px-8 py-6 space-y-6 border-l-4 border-l-gm-gold/40">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {t.website && (
+          <a href={t.website} target="_blank" rel="noreferrer"
+             className="flex items-center gap-2 rounded-2xl border border-gm-border-soft bg-gm-surface/30 p-3 text-sm text-gm-text hover:border-gm-primary/60 hover:bg-gm-primary/5">
+            <ExternalLink className="size-4 text-gm-primary" />
+            <span className="truncate">{t.website.replace(/^https?:\/\/(www\.)?/, '')}</span>
+          </a>
+        )}
+        {t.email && (
+          <a href={`mailto:${t.email}`} className="flex items-center gap-2 rounded-2xl border border-gm-border-soft bg-gm-surface/30 p-3 text-sm text-gm-text hover:border-gm-gold/60 hover:bg-gm-gold/5">
+            <Mail className="size-4 text-gm-gold" />
+            <span className="truncate">{t.email}</span>
+          </a>
+        )}
+        {t.phone && (
+          <a href={`tel:${t.phone}`} className="flex items-center gap-2 rounded-2xl border border-gm-border-soft bg-gm-surface/30 p-3 text-sm text-gm-text hover:border-gm-success/60 hover:bg-gm-success/5">
+            <Phone className="size-4 text-gm-success" />
+            <span className="truncate">{t.phone}</span>
+          </a>
+        )}
+        {t.instagramUrl && (
+          <a href={t.instagramUrl} target="_blank" rel="noreferrer"
+             className="flex items-center gap-2 rounded-2xl border border-gm-border-soft bg-gm-surface/30 p-3 text-sm text-gm-text hover:border-pink-400/60 hover:bg-pink-400/5">
+            <Instagram className="size-4 text-pink-400" />
+            <span className="truncate">{t.instagramUrl.replace(/^https?:\/\/(www\.)?instagram\.com\//, '@')}</span>
+          </a>
+        )}
+        {t.googleMapsUrl && (
+          <a href={t.googleMapsUrl} target="_blank" rel="noreferrer"
+             className="flex items-center gap-2 rounded-2xl border border-gm-border-soft bg-gm-surface/30 p-3 text-sm text-gm-text hover:border-blue-400/60 hover:bg-blue-400/5">
+            <MapPin className="size-4 text-blue-400" />
+            <span className="truncate">Google Maps</span>
+          </a>
+        )}
+      </div>
+
+      {t.notes && (
+        <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/20 p-4 text-sm text-gm-muted">
+          <div className="mb-1 text-[10px] font-bold uppercase tracking-widest text-gm-muted/70">Notlar / Adres</div>
+          {t.notes}
+        </div>
+      )}
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        {/* Churn breakdown */}
+        <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/20 p-4">
+          <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-gm-muted">Churn Skoru Detayı</div>
+          {isLoading ? (
+            <Skeleton className="h-24 w-full bg-gm-surface/20" />
+          ) : data?.churn ? (
+            <div className="space-y-2 text-sm">
+              <div className="flex items-center justify-between">
+                <span className="text-gm-muted">Sinyaller (son 90gün)</span>
+                <span className="font-mono text-gm-text">+{data.churn.signal_score.toFixed(0)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gm-muted">
+                  Son görülme {data.churn.age_days === null ? '(hiç)' : `(${data.churn.age_days} gün önce)`}
+                </span>
+                <span className="font-mono text-gm-text">+{data.churn.age_score.toFixed(0)}</span>
+              </div>
+              <div className="flex items-center justify-between">
+                <span className="text-gm-muted">Paspas sipariş trendi</span>
+                <span className="font-mono text-gm-text">+{data.churn.paspas_score.toFixed(0)}</span>
+              </div>
+              <div className="border-t border-gm-border-soft pt-2 mt-2 flex items-center justify-between">
+                <span className="text-gm-text font-bold">Toplam</span>
+                <span className="font-serif text-2xl text-gm-gold">{data.churn.total.toFixed(0)}%</span>
+              </div>
+            </div>
+          ) : (
+            <div className="text-sm text-gm-muted">Skor hesaplanamadı</div>
+          )}
+        </div>
+
+        {/* Paspas orders trend */}
+        <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/20 p-4">
+          <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-gm-muted">Sipariş Geçmişi (Paspas)</div>
+          {isLoading ? (
+            <Skeleton className="h-24 w-full bg-gm-surface/20" />
+          ) : data?.orders?.error ? (
+            <div className="text-sm text-gm-warning">Paspas ERP'den çekilemedi: {data.orders.error}</div>
+          ) : !t.paspasCustomerId ? (
+            <div className="text-sm text-gm-muted">Bu hedef paspas müşterisiyle eşleştirilmemiş</div>
+          ) : data?.orders ? (
+            <div className="space-y-3 text-sm">
+              <div className="grid grid-cols-2 gap-3">
+                <div className="rounded-xl bg-gm-surface/30 p-3">
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-gm-muted">Son 90 gün</div>
+                  <div className="mt-1 font-mono text-lg text-gm-text">{data.orders.trend.last90_count} sipariş</div>
+                  <div className="text-xs text-gm-muted">{fmtMoney(data.orders.trend.last90_value)}</div>
+                </div>
+                <div className="rounded-xl bg-gm-surface/30 p-3">
+                  <div className="text-[10px] font-bold uppercase tracking-widest text-gm-muted">Önceki 90 gün</div>
+                  <div className="mt-1 font-mono text-lg text-gm-text">{data.orders.trend.prev90_count} sipariş</div>
+                  <div className="text-xs text-gm-muted">{fmtMoney(data.orders.trend.prev90_value)}</div>
+                </div>
+              </div>
+              {data.orders.trend.delta_pct !== null && (
+                <div className={cn(
+                  'rounded-xl border-2 p-3 text-sm font-bold',
+                  data.orders.trend.delta_pct < -25 ? 'border-gm-error/40 bg-gm-error/10 text-gm-error'
+                  : data.orders.trend.delta_pct < 0 ? 'border-gm-warning/40 bg-gm-warning/10 text-gm-warning'
+                  : 'border-gm-success/40 bg-gm-success/10 text-gm-success',
+                )}>
+                  Trend: {data.orders.trend.delta_pct > 0 ? '+' : ''}{data.orders.trend.delta_pct.toFixed(1)}%
+                </div>
+              )}
+              {data.orders.latest.length > 0 && (
+                <details className="text-xs">
+                  <summary className="cursor-pointer text-gm-muted hover:text-gm-text">Son 10 sipariş</summary>
+                  <table className="mt-2 w-full font-mono">
+                    <tbody>
+                      {data.orders.latest.slice(0, 10).map((o) => (
+                        <tr key={o.id} className="border-b border-gm-border-soft/50">
+                          <td className="py-1 text-gm-muted">{fmtDate(o.siparisTarihi)}</td>
+                          <td className="py-1 text-gm-text">{o.siparisNo}</td>
+                          <td className="py-1 text-right text-gm-text">{fmtMoney(o.toplamTutar)}</td>
+                          <td className="py-1 text-right text-gm-muted">{o.durum}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </details>
+              )}
+            </div>
+          ) : null}
+        </div>
+      </div>
+
+      {/* Signals */}
+      <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/20 p-4">
+        <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-gm-muted">
+          Sinyaller {data?.signals ? `(${data.signals.length})` : ''}
+        </div>
+        {isLoading ? (
+          <Skeleton className="h-20 w-full bg-gm-surface/20" />
+        ) : isError ? (
+          <div className="text-sm text-gm-warning">İstihbarat çekilemedi</div>
+        ) : data?.signals && data.signals.length > 0 ? (
+          <div className="space-y-2">
+            {data.signals.map((s) => (
+              <div key={s.id} className={cn('rounded-xl border p-3 text-sm', SEVERITY_CLS[s.severity] ?? 'border-gm-border-soft bg-gm-surface/30 text-gm-muted')}>
+                <div className="flex items-center justify-between gap-3">
+                  <span className="font-bold">{s.title}</span>
+                  <span className="text-[10px] font-mono uppercase tracking-widest opacity-70">
+                    {fmtDate(s.created_at)} · {s.severity}
+                  </span>
+                </div>
+                {s.description && <p className="mt-1 text-xs opacity-90">{s.description}</p>}
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-sm text-gm-muted">
+            Henüz sinyal yok. <strong className="text-gm-text">"Rakip Tara"</strong> butonu ile web sitesi değişikliklerini izlemeye başlayabilirsin.
+          </div>
+        )}
+      </div>
     </div>
   );
 }

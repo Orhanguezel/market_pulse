@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import {
-  listTargets, getTarget, createTarget, updateTarget, deleteTarget,
+  listTargets, getTarget, targetIntel, createTarget, updateTarget, deleteTarget,
   listLeads, getLead, createLead, updateLead, deleteLead, getConversionStats,
   listSignals, createSignal, reviewSignal, deleteSignal,
   getMarketStats,
@@ -18,6 +18,7 @@ export async function registerMarketAdmin(app: FastifyInstance) {
   app.get('/market/stats',              getMarketStats);
   app.get('/market/targets',            listTargets);
   app.get('/market/targets/:id',        getTarget);
+  app.get('/market/targets/:id/intel',  targetIntel);
   app.post('/market/targets',           createTarget);
   app.patch('/market/targets/:id',      updateTarget);
   app.delete('/market/targets/:id',     deleteTarget);
