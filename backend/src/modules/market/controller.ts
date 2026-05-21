@@ -672,9 +672,10 @@ export const targetIntel: RouteHandler<{ Params: { id: string } }> = async (req,
 
   const [signalRows] = await pool.execute<RowDataPacket[]>(
     `SELECT id, target_id, signal_type, severity, title, description, source_url,
-            is_reviewed, created_at, data
+            is_reviewed, created_at
        FROM market_signals
       WHERE target_id = ?
+        AND signal_type NOT LIKE 'marketplace_%_snapshot'
       ORDER BY created_at DESC
       LIMIT 20`,
     [req.params.id],
