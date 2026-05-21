@@ -47,6 +47,12 @@ interface MesseHit {
         stand?: Array<{ name?: string | null }> | null;
       }> | null;
     } | null;
+    description?: { text?: string | null } | null;
+    keyWords?: string[] | null;
+    tag?: string[] | null;
+    products?: {
+      products?: Array<{ name?: string | null }> | null;
+    } | null;
   };
 }
 
@@ -63,7 +69,7 @@ interface MesseSearchResponse {
   };
 }
 
-function isMesseFrankfurtUrl(url: string): boolean {
+export function isMesseFrankfurtUrl(url: string): boolean {
   try {
     return new URL(url).hostname.endsWith('messefrankfurt.com');
   } catch {
@@ -111,6 +117,17 @@ function hitToRawExhibitor(hit: MesseHit): RawExhibitor | null {
     cleanHtmlText(address?.city),
     cleanHtmlText(address?.country?.label),
   ].filter(Boolean).join(', ') || undefined;
+  const longDescription = cleanHtmlText(exhibitor?.description?.text);
+  const shortDescription = cleanHtmlText(exhibitor?.shortDescription);
+  const keywords = (exhibitor?.keyWords ?? [])
+    .map((kw) => cleanHtmlText(kw))
+    .filter((kw): kw is string => Boolean(kw));
+  const productNames = (exhibitor?.products?.products ?? [])
+    .map((p) => cleanHtmlText(p?.name))
+    .filter((n): n is string => Boolean(n));
+  const tags = (exhibitor?.tag ?? [])
+    .map((t) => cleanHtmlText(t))
+    .filter((t): t is string => Boolean(t));
   return {
     name,
     website: normalizeWebsite(exhibitor?.homepage),
@@ -122,7 +139,9 @@ function hitToRawExhibitor(hit: MesseHit): RawExhibitor | null {
     hall: halls[0]?.name ?? halls[0]?.id ?? undefined,
     detail_url: detailUrl,
     booth_number: firstBooth(halls),
-    description: cleanHtmlText(exhibitor?.shortDescription),
+    description: longDescription || shortDescription,
+    product_groups: [...keywords, ...productNames],
+    brands: tags,
   };
 }
 

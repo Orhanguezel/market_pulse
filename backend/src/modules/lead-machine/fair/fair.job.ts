@@ -1,7 +1,7 @@
 import { getIcpProfile } from '../icp/icp.repository';
 import { insertCandidate, updateSearchJob, getSearchJob } from '../_shared/db';
 import { matchesIcp } from '../b2b/icp.matcher';
-import { scrapeExhibitorDetail, scrapeOfficialExhibitorList, type RawExhibitor } from './fair.scraper';
+import { isMesseFrankfurtUrl, scrapeExhibitorDetail, scrapeOfficialExhibitorList, type RawExhibitor } from './fair.scraper';
 import { isNeighborBooth, parseBooth } from './booth';
 
 interface FairJobParams {
@@ -40,36 +40,44 @@ export async function runFairJob(jobId: string) {
   await updateSearchJob(jobId, { status: 'running', started: true, errorMsg: null });
   try {
     const icp = params.icp_id ? await getIcpProfile(params.icp_id) : null;
-    const exhibitors = await scrapeOfficialExhibitorList(params.fair_url ?? '', {
+    const fairUrl = params.fair_url ?? '';
+    const exhibitors = await scrapeOfficialExhibitorList(fairUrl, {
       halls: params.hall_filters,
       maxPages: params.max_pages,
       maxExhibitors: params.max_exhibitors,
     });
-    const detailConcurrency = Math.min(5, Math.max(1, Math.floor(params.detail_concurrency ?? 5)));
+    // Messe Frankfurt list API already returns rich data (description, keywords, products,
+    // tags). Skip the per-exhibitor detail fetch to avoid scraper-service dependency.
     const detailErrors: Array<{ url: string; name: string; error: string }> = [];
-    const enrichedExhibitors = await mapWithConcurrency(exhibitors, detailConcurrency, async (listedExhibitor) => {
-      const detailUrl = listedExhibitor.detail_url;
-      if (!detailUrl) return listedExhibitor;
-      try {
-        const detail = await scrapeExhibitorDetail(detailUrl);
-        return {
-          ...listedExhibitor,
-          ...detail,
-          name: detail.name || listedExhibitor.name,
-          website: detail.website || listedExhibitor.website,
-          booth_number: detail.booth_number || listedExhibitor.booth_number,
-          description: detail.description || listedExhibitor.description,
-          detail_url: detail.detail_url || detailUrl,
-        };
-      } catch (e) {
-        detailErrors.push({
-          url: detailUrl,
-          name: listedExhibitor.name,
-          error: e instanceof Error ? e.message : 'UNKNOWN_ERROR',
-        });
-        return listedExhibitor;
-      }
-    });
+    let enrichedExhibitors: RawExhibitor[];
+    if (isMesseFrankfurtUrl(fairUrl)) {
+      enrichedExhibitors = exhibitors;
+    } else {
+      const detailConcurrency = Math.min(5, Math.max(1, Math.floor(params.detail_concurrency ?? 5)));
+      enrichedExhibitors = await mapWithConcurrency(exhibitors, detailConcurrency, async (listedExhibitor) => {
+        const detailUrl = listedExhibitor.detail_url;
+        if (!detailUrl) return listedExhibitor;
+        try {
+          const detail = await scrapeExhibitorDetail(detailUrl);
+          return {
+            ...listedExhibitor,
+            ...detail,
+            name: detail.name || listedExhibitor.name,
+            website: detail.website || listedExhibitor.website,
+            booth_number: detail.booth_number || listedExhibitor.booth_number,
+            description: detail.description || listedExhibitor.description,
+            detail_url: detail.detail_url || detailUrl,
+          };
+        } catch (e) {
+          detailErrors.push({
+            url: detailUrl,
+            name: listedExhibitor.name,
+            error: e instanceof Error ? e.message : 'UNKNOWN_ERROR',
+          });
+          return listedExhibitor;
+        }
+      });
+    }
     let count = 0;
     for (const exhibitor of enrichedExhibitors) {
       const boothGrid = parseBooth(exhibitor.booth_number ?? exhibitor.hall ?? null);

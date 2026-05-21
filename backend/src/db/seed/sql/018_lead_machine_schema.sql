@@ -33,7 +33,7 @@ CREATE TABLE IF NOT EXISTS `lead_search_jobs` (
   --   trade_fair:   { fair_name, fair_url, fair_date }
   `params`       json         NOT NULL,
   `result_count` int          NOT NULL DEFAULT 0,
-  `error_msg`    varchar(500) DEFAULT NULL,
+  `error_msg`    text         DEFAULT NULL,
   `created_by`   char(36)     DEFAULT NULL,
   `created_at`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `started_at`   datetime     DEFAULT NULL,
