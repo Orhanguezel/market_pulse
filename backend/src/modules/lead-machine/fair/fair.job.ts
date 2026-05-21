@@ -45,35 +45,11 @@ export async function runFairJob(jobId: string) {
       maxPages: params.max_pages,
       maxExhibitors: params.max_exhibitors,
     });
-    const detailConcurrency = Math.min(5, Math.max(1, Math.floor(params.detail_concurrency ?? 5)));
+    const detailConcurrency = Math.min(2, Math.max(1, Math.floor(params.detail_concurrency ?? 2)));
     const detailErrors: Array<{ url: string; name: string; error: string }> = [];
-    const enrichedExhibitors = await mapWithConcurrency(exhibitors, detailConcurrency, async (listedExhibitor) => {
-      const detailUrl = listedExhibitor.detail_url;
-      if (!detailUrl) return listedExhibitor;
-      try {
-        const detail = await scrapeExhibitorDetail(detailUrl);
-        return {
-          ...listedExhibitor,
-          ...detail,
-          name: detail.name || listedExhibitor.name,
-          website: detail.website || listedExhibitor.website,
-          booth_number: detail.booth_number || listedExhibitor.booth_number,
-          description: detail.description || listedExhibitor.description,
-          detail_url: detail.detail_url || detailUrl,
-          product_groups: detail.product_groups?.length ? detail.product_groups : listedExhibitor.product_groups,
-          brands: detail.brands?.length ? detail.brands : listedExhibitor.brands,
-        };
-      } catch (e) {
-        detailErrors.push({
-          url: detailUrl,
-          name: listedExhibitor.name,
-          error: e instanceof Error ? e.message : 'UNKNOWN_ERROR',
-        });
-        return listedExhibitor;
-      }
-    });
     let count = 0;
-    for (const exhibitor of enrichedExhibitors) {
+
+    const matchAndInsert = async (exhibitor: RawExhibitor) => {
       const boothGrid = parseBooth(exhibitor.booth_number ?? exhibitor.hall ?? null);
       const isNeighbor = isNeighborBooth(boothGrid);
       const match = matchesIcp({
@@ -92,7 +68,7 @@ export async function runFairJob(jobId: string) {
         ].filter(Boolean).join(' '),
         fairHall: boothGrid.hall ?? exhibitor.hall,
       }, (icp?.definition ?? {}) as Parameters<typeof matchesIcp>[1]);
-      if (icp && !match.matches) continue;
+      if (icp && !match.matches) return;
       await insertCandidate({
         jobId,
         channel: 'trade_fair',
@@ -120,10 +96,46 @@ export async function runFairJob(jobId: string) {
         leadScore: match.score,
       });
       count += 1;
-    }
+    };
+
+    await mapWithConcurrency(exhibitors, detailConcurrency, async (listedExhibitor) => {
+      const detailUrl = listedExhibitor.detail_url;
+      let enriched: RawExhibitor = listedExhibitor;
+      if (detailUrl) {
+        try {
+          const detail = await scrapeExhibitorDetail(detailUrl);
+          enriched = {
+            ...listedExhibitor,
+            ...detail,
+            name: detail.name || listedExhibitor.name,
+            website: detail.website || listedExhibitor.website,
+            booth_number: detail.booth_number || listedExhibitor.booth_number,
+            description: detail.description || listedExhibitor.description,
+            detail_url: detail.detail_url || detailUrl,
+            product_groups: detail.product_groups?.length ? detail.product_groups : listedExhibitor.product_groups,
+            brands: detail.brands?.length ? detail.brands : listedExhibitor.brands,
+          };
+        } catch (e) {
+          detailErrors.push({
+            url: detailUrl,
+            name: listedExhibitor.name,
+            error: e instanceof Error ? e.message : 'UNKNOWN_ERROR',
+          });
+        }
+      }
+      try {
+        await matchAndInsert(enriched);
+      } catch (e) {
+        detailErrors.push({
+          url: enriched.detail_url ?? '',
+          name: enriched.name,
+          error: `insert_failed: ${e instanceof Error ? e.message : String(e)}`,
+        });
+      }
+    });
+
     if (detailErrors.length) {
-      // Detail scrape hataları aday bazında izole edilir; job genel sonucu başarılı kalır.
-      await updateSearchJob(jobId, { errorMsg: JSON.stringify({ detail_errors: detailErrors.slice(0, 20) }) });
+      await updateSearchJob(jobId, { errorMsg: JSON.stringify({ detail_errors: detailErrors.slice(0, 20), detail_error_count: detailErrors.length }) });
     }
     await updateSearchJob(jobId, { status: 'done', resultCount: count, finished: true });
   } catch (e) {
