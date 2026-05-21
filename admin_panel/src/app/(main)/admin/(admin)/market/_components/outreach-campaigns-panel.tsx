@@ -160,7 +160,7 @@ export default function OutreachCampaignsPanel() {
         return;
       }
       toast.success(
-        `${result.host_data.name}: ICP'ye ${result.added_sectors.length} yeni sektör + ${result.added_signals.length} yeni sinyal eklendi`,
+        `${result.host_data.name}: ICP'ye ${result.added_keywords.length} keyword + ${result.added_signals.length} sinyal eklendi`,
       );
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Sync başarısız');

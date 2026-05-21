@@ -188,6 +188,8 @@ export interface IcpDefinition {
   priority_geographies?: string[];
   /** Öncelikli coğrafya için skor boost */
   priority_boost?: number;
+  /** Host firma'nın kendi Messe / fuar anahtar kelimeleri — overlap bonus +0.7/match */
+  keywords?: string[];
 }
 
 export interface IcpProfile {
@@ -939,10 +941,13 @@ export const marketAdminApi = baseApi.injectEndpoints({
         } | null;
         icp_updated: boolean;
         icp_id: string | null;
-        added_sectors: string[];
+        added_keywords: string[];
         added_signals: string[];
-        preview_existing_sectors: number;
+        preview_existing_keywords: number;
         preview_existing_signals: number;
+        // backward-compat
+        added_sectors: string[];
+        preview_existing_sectors: number;
       },
       string
     >({

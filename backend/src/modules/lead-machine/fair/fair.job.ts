@@ -7,14 +7,45 @@ import { buildSummary, classifyMail, computeKeywordOverlap, computeScore, recomm
 
 function extractHostKeywords(definition: unknown): string[] {
   if (!definition || typeof definition !== 'object' || Array.isArray(definition)) return [];
-  const fair = (definition as Record<string, unknown>).fair;
-  if (!fair || typeof fair !== 'object' || Array.isArray(fair)) return [];
-  const host = (fair as Record<string, unknown>).host_exhibitor;
-  if (!host || typeof host !== 'object' || Array.isArray(host)) return [];
-  const snap = (host as Record<string, unknown>).messe_snapshot;
-  if (!snap || typeof snap !== 'object' || Array.isArray(snap)) return [];
-  const kws = (snap as Record<string, unknown>).keywords;
-  return Array.isArray(kws) ? kws.filter((k): k is string => typeof k === 'string' && k.trim().length > 0) : [];
+  const def = definition as Record<string, unknown>;
+  const collected: string[] = [];
+
+  // Primary source: editable definition.keywords (managed by UI + sync)
+  const direct = def.keywords;
+  if (Array.isArray(direct)) {
+    for (const k of direct) {
+      if (typeof k === 'string' && k.trim()) collected.push(k);
+    }
+  }
+
+  // Fallback: snapshot stored by sync under fair.host_exhibitor.messe_snapshot.keywords
+  const fair = def.fair;
+  if (fair && typeof fair === 'object' && !Array.isArray(fair)) {
+    const host = (fair as Record<string, unknown>).host_exhibitor;
+    if (host && typeof host === 'object' && !Array.isArray(host)) {
+      const snap = (host as Record<string, unknown>).messe_snapshot;
+      if (snap && typeof snap === 'object' && !Array.isArray(snap)) {
+        const kws = (snap as Record<string, unknown>).keywords;
+        if (Array.isArray(kws)) {
+          for (const k of kws) {
+            if (typeof k === 'string' && k.trim()) collected.push(k);
+          }
+        }
+      }
+    }
+  }
+
+  // Dedup case-insensitive while preserving first occurrence order
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const k of collected) {
+    const norm = k.toLowerCase().trim();
+    if (norm && !seen.has(norm)) {
+      seen.add(norm);
+      out.push(k);
+    }
+  }
+  return out;
 }
 
 interface FairJobParams {

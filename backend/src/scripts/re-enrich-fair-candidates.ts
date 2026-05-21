@@ -43,11 +43,26 @@ function asObject(value: unknown): Record<string, any> {
 
 function extractHostKeywordsFromIcp(definition: unknown): string[] {
   const def = asObject(definition);
+  const all: string[] = [];
+  if (Array.isArray(def.keywords)) {
+    for (const k of def.keywords) if (typeof k === 'string' && k.trim()) all.push(k);
+  }
   const fair = asObject(def.fair);
   const host = asObject(fair.host_exhibitor);
   const snap = asObject(host.messe_snapshot);
-  const kws = snap.keywords;
-  return Array.isArray(kws) ? kws.filter((k): k is string => typeof k === 'string' && k.trim().length > 0) : [];
+  if (Array.isArray(snap.keywords)) {
+    for (const k of snap.keywords) if (typeof k === 'string' && k.trim()) all.push(k);
+  }
+  const seen = new Set<string>();
+  const out: string[] = [];
+  for (const k of all) {
+    const norm = k.toLowerCase().trim();
+    if (norm && !seen.has(norm)) {
+      seen.add(norm);
+      out.push(k);
+    }
+  }
+  return out;
 }
 
 async function loadHostKeywordsByIcp(): Promise<Map<string, string[]>> {

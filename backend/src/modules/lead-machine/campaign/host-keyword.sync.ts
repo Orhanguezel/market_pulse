@@ -16,10 +16,13 @@ export interface SyncResult {
   host_data: HostExhibitorData | null;
   icp_updated: boolean;
   icp_id: string | null;
-  added_sectors: string[];
+  added_keywords: string[];
   added_signals: string[];
-  preview_existing_sectors: number;
+  preview_existing_keywords: number;
   preview_existing_signals: number;
+  /** Deprecated — kept for backward-compat with older UI builds */
+  added_sectors: string[];
+  preview_existing_sectors: number;
 }
 
 function asStringArray(value: unknown): string[] {
@@ -102,10 +105,12 @@ export async function syncHostKeywordsToIcp(campaignId: string): Promise<SyncRes
       host_data: null,
       icp_updated: false,
       icp_id: campaign.icp_id,
-      added_sectors: [],
+      added_keywords: [],
       added_signals: [],
-      preview_existing_sectors: 0,
+      preview_existing_keywords: 0,
       preview_existing_signals: 0,
+      added_sectors: [],
+      preview_existing_sectors: 0,
     };
   }
 
@@ -132,10 +137,12 @@ export async function syncHostKeywordsToIcp(campaignId: string): Promise<SyncRes
       host_data: null,
       icp_updated: false,
       icp_id: campaign.icp_id,
-      added_sectors: [],
+      added_keywords: [],
       added_signals: [],
-      preview_existing_sectors: 0,
+      preview_existing_keywords: 0,
       preview_existing_signals: 0,
+      added_sectors: [],
+      preview_existing_sectors: 0,
     };
   }
 
@@ -147,10 +154,12 @@ export async function syncHostKeywordsToIcp(campaignId: string): Promise<SyncRes
       host_data: hostData,
       icp_updated: false,
       icp_id: null,
-      added_sectors: [],
+      added_keywords: [],
       added_signals: [],
-      preview_existing_sectors: 0,
+      preview_existing_keywords: 0,
       preview_existing_signals: 0,
+      added_sectors: [],
+      preview_existing_sectors: 0,
     };
   }
 
@@ -163,10 +172,12 @@ export async function syncHostKeywordsToIcp(campaignId: string): Promise<SyncRes
       host_data: hostData,
       icp_updated: false,
       icp_id: campaign.icp_id,
-      added_sectors: [],
+      added_keywords: [],
       added_signals: [],
-      preview_existing_sectors: 0,
+      preview_existing_keywords: 0,
       preview_existing_signals: 0,
+      added_sectors: [],
+      preview_existing_sectors: 0,
     };
   }
 
@@ -174,16 +185,19 @@ export async function syncHostKeywordsToIcp(campaignId: string): Promise<SyncRes
     ? { ...(icp.definition as Record<string, unknown>) }
     : {};
 
-  const sectors = asStringArray(definition.sectors);
+  const keywords = asStringArray(definition.keywords);
   const positives = asStringArray(definition.positive_signals);
 
   // Strategy:
-  //   - keywords  -> sectors (they are category labels, what we sell)
-  //   - product_names -> positive_signals (carry weaker weight)
-  const sectorsMerged = dedupCaseInsensitive(sectors, hostData.keywords);
+  //   - Messe keywords  -> definition.keywords  (host-specific, drives the
+  //     keyword-overlap badge + score boost; intentionally kept out of
+  //     definition.sectors so it does NOT widen the ICP inclusion filter)
+  //   - product_names   -> positive_signals  (still surfaces in matchesIcp
+  //     as a weaker text signal)
+  const keywordsMerged = dedupCaseInsensitive(keywords, hostData.keywords);
   const signalsMerged = dedupCaseInsensitive(positives, hostData.product_names);
 
-  definition.sectors = sectorsMerged.merged;
+  definition.keywords = keywordsMerged.merged;
   definition.positive_signals = signalsMerged.merged;
 
   // Store the host snapshot under fair.host_exhibitor.messe_snapshot so the UI
@@ -215,11 +229,14 @@ export async function syncHostKeywordsToIcp(campaignId: string): Promise<SyncRes
     campaign_slug: campaign.slug,
     host_query_used: query,
     host_data: hostData,
-    icp_updated: sectorsMerged.added.length > 0 || signalsMerged.added.length > 0,
+    icp_updated: keywordsMerged.added.length > 0 || signalsMerged.added.length > 0,
     icp_id: icp.id,
-    added_sectors: sectorsMerged.added,
+    added_keywords: keywordsMerged.added,
     added_signals: signalsMerged.added,
-    preview_existing_sectors: sectors.length,
+    preview_existing_keywords: keywords.length,
     preview_existing_signals: positives.length,
+    // backward-compat
+    added_sectors: keywordsMerged.added,
+    preview_existing_sectors: keywords.length,
   };
 }

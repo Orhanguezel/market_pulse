@@ -302,6 +302,7 @@ type IcpFormState = {
     min_employees: number | null;
     max_employees: number | null;
     description: string;
+    keywords: string[];
   };
 };
 
@@ -322,6 +323,7 @@ const EMPTY_FORM: IcpFormState = {
     exclude_patterns: [],
     lead_channels: [],
     description: '',
+    keywords: [],
   },
 };
 
@@ -345,6 +347,7 @@ function formFromProfile(profile?: IcpProfile | null): IcpFormState {
       exclude_patterns: d.exclude_patterns ?? [],
       lead_channels: d.lead_channels ?? [],
       description: d.description ?? '',
+      keywords: d.keywords ?? [],
     },
   };
 }
@@ -450,6 +453,25 @@ function IcpDialog({
               onChange={(v) => setDef('sectors', v)}
               placeholder="Özel sektör ekle…"
             />
+          </div>
+
+          {/* Host firma keyword'leri — Messe'den sync edilen anahtar kelimeler */}
+          <div className="space-y-3">
+            <Label className={LABEL_CAPS}>
+              Host Firma Anahtar Kelimeleri
+              <span className="ml-2 font-normal normal-case tracking-normal text-gm-muted">
+                — fuar exhibitor sayfasındaki kendi keyword'lerin; her overlap +0.7 skor
+              </span>
+            </Label>
+            <TagPicker
+              options={[]}
+              value={form.definition.keywords}
+              onChange={(v) => setDef('keywords', v)}
+              placeholder="Özel keyword ekle…"
+            />
+            <p className="text-[11px] text-gm-muted">
+              💡 Outreach Kampanyaları sayfasında "Messe'den Keyword Çek" butonu bu listeyi otomatik doldurur.
+            </p>
           </div>
 
           {/* Alt sektörler */}
