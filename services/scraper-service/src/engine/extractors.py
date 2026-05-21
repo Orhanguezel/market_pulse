@@ -687,32 +687,35 @@ def extract_marketplace_store(html: str, url: str, response: Any) -> dict[str, A
 
     products: list[dict[str, Any]] = []
 
-    # Hepsiburada: store page tiles
+    # Hepsiburada: storefront uses React SSR. The real product tiles are
+    # rendered as anchors whose href matches /<slug>-p-<HBC...>. The
+    # `class*="productCard"` substring also catches generated CSS rule names,
+    # which gave us hundreds of false-positive matches in earlier runs — so
+    # we now anchor on the href pattern only. If the page hasn't hydrated
+    # the product grid yet, the count will be 0 — accurate signal that the
+    # scrape is incomplete rather than a phantom number.
     if platform == "hepsiburada":
-        for card in sel.css(
-            'li[data-test-id="product-card"], '
-            'div[class*="productCard"], '
-            'a[href*="/p/"][data-test-id*="product"], '
-            'a[href*="-p-"]'
-        )[:120]:
-            # name: try multiple selector strategies (Hepsi changes DOM often)
+        seen_hrefs: set[str] = set()
+        for card in sel.css('a[href*="-p-HBC"], a[href*="-p-HBV"]')[:120]:
+            href = card.attrib.get('href') or card.css('::attr(href)').get()
+            if not href or href in seen_hrefs:
+                continue
+            seen_hrefs.add(href)
             name = (
-                _text(card.css('h3::text, h2::text').get(default=None))
-                or _text(card.css('[data-test-id="product-card-name"]::text').get(default=None))
-                or _text(card.css('[class*="ame"][class*="roduct"]::text').get(default=None))
-                or _text(card.css('span[title]::attr(title)').get(default=None))
+                _text(card.attrib.get('title'))
                 or _text(card.css('::attr(title)').get(default=None))
+                or _text(card.css('h3::text, h2::text').get(default=None))
+                or _text(card.css('span[title]::attr(title)').get(default=None))
                 or _text(card.css('img::attr(alt)').get(default=None))
             )
-            href = card.css('a::attr(href)').get() or card.xpath('@href').get()
+            # Walk up the DOM tree a bit to find the price; product tile
+            # containers wrap the anchor and the price together
+            parent = card.xpath('..')
             price_text = (
                 _text(card.css('[data-test-id="price-current-price"]::text').get(default=None))
-                or _text(card.css('div[class*="price"] span::text').get(default=None))
-                or _text(card.css('span[class*="price"]::text').get(default=None))
+                or (_text(parent.css('[data-test-id="price-current-price"]::text').get(default=None)) if parent else None)
                 or _text(card.css('span:contains("TL")::text').get(default=None))
             )
-            if not name and not price_text:
-                continue
             products.append({
                 "name": name,
                 "url": urljoin(final_url, href) if href else None,
