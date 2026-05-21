@@ -692,11 +692,25 @@ def extract_marketplace_store(html: str, url: str, response: Any) -> dict[str, A
         for card in sel.css(
             'li[data-test-id="product-card"], '
             'div[class*="productCard"], '
-            'a[href*="/p/"][data-test-id*="product"]'
+            'a[href*="/p/"][data-test-id*="product"], '
+            'a[href*="-p-"]'
         )[:120]:
-            name = _text(card.css('h3::text, [class*="productCard"] [class*="name"]::text, [data-test-id*="name"]::text').get(default=None))
+            # name: try multiple selector strategies (Hepsi changes DOM often)
+            name = (
+                _text(card.css('h3::text, h2::text').get(default=None))
+                or _text(card.css('[data-test-id="product-card-name"]::text').get(default=None))
+                or _text(card.css('[class*="ame"][class*="roduct"]::text').get(default=None))
+                or _text(card.css('span[title]::attr(title)').get(default=None))
+                or _text(card.css('::attr(title)').get(default=None))
+                or _text(card.css('img::attr(alt)').get(default=None))
+            )
             href = card.css('a::attr(href)').get() or card.xpath('@href').get()
-            price_text = _text(card.css('[data-test-id="price-current-price"]::text, [class*="price"] [class*="current"]::text, span[class*="price"]::text').get(default=None))
+            price_text = (
+                _text(card.css('[data-test-id="price-current-price"]::text').get(default=None))
+                or _text(card.css('div[class*="price"] span::text').get(default=None))
+                or _text(card.css('span[class*="price"]::text').get(default=None))
+                or _text(card.css('span:contains("TL")::text').get(default=None))
+            )
             if not name and not price_text:
                 continue
             products.append({
