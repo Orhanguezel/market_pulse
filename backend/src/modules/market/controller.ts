@@ -611,7 +611,11 @@ export const bulkImportTargets: RouteHandler<{ Body: unknown }> = async (req, re
 
 export const scanCompetitor: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   try {
-    return await scanAndCreateSignals(req.params.id);
+    const result = await scanAndCreateSignals(req.params.id);
+    // Each scan creates new signals; churn score depends on signals, so refresh
+    // it immediately so the UI doesn't display a stale value.
+    await recalculateChurnScore(req.params.id);
+    return result;
   } catch (e) {
     if (e instanceof Error && 'statusCode' in e) {
       return reply.code(Number((e as { statusCode: number }).statusCode)).send({ error: { message: e.message } });
@@ -621,18 +625,35 @@ export const scanCompetitor: RouteHandler<{ Params: { id: string } }> = async (r
 };
 
 export const scanAllCompetitors: RouteHandler = async (_req, _reply) => {
-  const targets = await db
-    .select({ id: marketTargets.id })
+  const allActive = await db
+    .select({ id: marketTargets.id, website: marketTargets.website })
     .from(marketTargets)
-    .where(and(eq(marketTargets.status, 'active'), sql`website IS NOT NULL`));
+    .where(eq(marketTargets.status, 'active'));
 
-  const results = await Promise.allSettled(targets.map(t => scanAndCreateSignals(t.id)));
+  const scannable = allActive.filter((t) => t.website && String(t.website).trim());
+  const without_website = allActive.length - scannable.length;
+
+  const results = await Promise.allSettled(scannable.map(t => scanAndCreateSignals(t.id)));
   const succeeded = results.filter(r => r.status === 'fulfilled').length;
   const failed    = results.filter(r => r.status === 'rejected').length;
   const signals   = results.reduce((acc, r) =>
     r.status === 'fulfilled' ? acc + r.value.signals_created : acc, 0);
 
-  return { scanned: targets.length, succeeded, failed, signals_created: signals };
+  // Refresh churn scores for everything we just touched.
+  for (const r of results) {
+    if (r.status === 'fulfilled') {
+      try { await recalculateChurnScore(r.value.target_id); } catch { /* keep going */ }
+    }
+  }
+
+  return {
+    total_active: allActive.length,
+    scanned: scannable.length,
+    succeeded,
+    failed,
+    signals_created: signals,
+    without_website,
+  };
 };
 
 // ─── Reports ────────────────────────────────────────────────────────────────

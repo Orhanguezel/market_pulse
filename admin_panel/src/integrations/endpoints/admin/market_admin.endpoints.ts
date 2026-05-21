@@ -636,7 +636,12 @@ export const marketAdminApi = baseApi.injectEndpoints({
       invalidatesTags: ['MarketSignals', 'MarketTargets'],
     }),
     scanAllCompetitors: b.mutation<{
-      scanned: number; succeeded: number; failed: number; signals_created: number;
+      total_active: number;
+      scanned: number;
+      succeeded: number;
+      failed: number;
+      signals_created: number;
+      without_website: number;
     }, void>({
       query: () => ({ url: '/admin/market/targets/scan-all-competitors', method: 'POST' }),
       invalidatesTags: ['MarketSignals', 'MarketTargets', 'MarketStats'],

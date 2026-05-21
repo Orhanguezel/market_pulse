@@ -40,11 +40,14 @@ import {
 import { cn } from '@/lib/utils';
 
 const REJECT_TAGS = [
+  'Rakip',
   'Kendi üretimi var',
   'Çok küçük',
   'Yanlış sektör',
   'Zaten müşterimiz',
   'Fiyat uyumsuz',
+  'OEM tier-1',
+  'Çin tedarikçisi',
 ] as const;
 
 const CHANNEL_LABELS: Record<string, string> = {
@@ -336,9 +339,9 @@ function CandidateCard({
               onClick={async () => {
                 try {
                   await enrichCandidate(candidate.id).unwrap();
-                  toast.success('Aday zenginleştirildi');
+                  toast.success('Zenginleştirme arka planda başlatıldı — sonuç 30-60sn içinde gelir');
                 } catch {
-                  toast.error('Zenginleştirme başarısız');
+                  toast.error('Zenginleştirme tetiklenemedi');
                 }
               }}
               disabled={isBusy || enrichState.isLoading}

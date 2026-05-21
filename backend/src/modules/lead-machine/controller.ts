@@ -308,12 +308,24 @@ export const fairBriefingDayPdf: RouteHandler<{ Params: { date: string } }> = as
   return pdfReply(reply, pdf, `fair-briefing-${req.params.date}.pdf`);
 };
 
-export const enrichOne: RouteHandler<{ Params: { candidateId: string } }> = async (req, reply) => reply.code(201).send(await enrichCandidate(req.params.candidateId));
+export const enrichOne: RouteHandler<{ Params: { candidateId: string } }> = async (req, reply) => {
+  // Enrichment can hit 5 sub-pages via Playwright (~10s each on the 2GB VPS).
+  // Returning synchronously would exceed Fastify's 30s default request timeout
+  // and make the button look broken. Queue it; the UI already polls
+  // /lead-machine/enrich/:candidateId (GET) on a 15s interval.
+  queueCandidateEnrichment(req.params.candidateId);
+  reply.code(202);
+  return { queued: true, candidate_id: req.params.candidateId };
+};
 export const listEnrichment: RouteHandler<{ Params: { candidateId: string } }> = async (req) => listCandidateEnrichment(req.params.candidateId);
-export const enrichBatch: RouteHandler<{ Body: unknown }> = async (req) => {
+export const enrichBatch: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  // Same reasoning as enrichOne: 50 candidates × ~30s each would obliterate the
+  // request timeout. Queue every one and let UI polling pick the results up.
   const ids = Array.isArray(asRecord(req.body).candidate_ids) ? asRecord(req.body).candidate_ids as string[] : [];
   const selected = ids.slice(0, 50);
-  return Promise.all(selected.map(id => enrichCandidate(id)));
+  for (const id of selected) queueCandidateEnrichment(id);
+  reply.code(202);
+  return { queued: selected.length };
 };
 
 export const generateOutreach: RouteHandler<{ Params: { candidateId: string } }> = async (req, reply) => reply.code(201).send(await generateOutreachEmail(req.params.candidateId));

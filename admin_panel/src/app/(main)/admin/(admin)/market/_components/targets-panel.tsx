@@ -213,8 +213,21 @@ export default function TargetsPanel() {
 
   const handleScanAll = async () => {
     try {
-      const r = await scanAll().unwrap();
-      toast.success(`${r.scanned} hedef tarandı — ${r.signals_created} yeni sinyal`);
+      const r = await scanAll().unwrap() as {
+        scanned: number;
+        signals_created: number;
+        without_website?: number;
+        total_active?: number;
+      };
+      if (r.scanned === 0 && (r.without_website ?? 0) > 0) {
+        toast.warning(
+          `Hiç hedef taranamadı — ${r.without_website} aktif hedefin web sitesi girilmemiş. Her bayinin web/sosyal medya hesabını ekleyince tarama anlamlı çalışır.`,
+        );
+        return;
+      }
+      const parts = [`${r.scanned} hedef tarandı`, `${r.signals_created} yeni sinyal`];
+      if (r.without_website && r.without_website > 0) parts.push(`${r.without_website} web sitesiz`);
+      toast.success(parts.join(' · '));
     } catch {
       toast.error('Toplu tarama başarısız');
     }

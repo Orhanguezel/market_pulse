@@ -171,10 +171,22 @@ export default function SignalsPanel() {
                 </div>
               ))
             ) : data?.length === 0 ? (
-              <div className="py-24 text-center">
-                <div className="flex flex-col items-center gap-4 opacity-30">
-                  <Activity className="w-16 h-16 text-gm-gold/50" />
-                  <span className="font-serif italic text-lg text-gm-muted">Henüz kayıtlı sinyal bulunmuyor.</span>
+              <div className="py-16 text-center">
+                <div className="mx-auto flex max-w-2xl flex-col items-center gap-5 px-8">
+                  <Activity className="w-16 h-16 text-gm-gold/50 opacity-50" />
+                  <h3 className="font-serif text-2xl text-gm-text">Henüz sinyal yok</h3>
+                  <p className="text-sm leading-relaxed text-gm-muted">
+                    Sinyaller, Market Pulse'nin <strong className="text-gm-text">Hedef Firmalar</strong> sayfasındaki
+                    bayilerin web sitelerini periyodik olarak taradığında otomatik üretilir.
+                  </p>
+                  <div className="space-y-3 rounded-2xl border border-gm-border-soft bg-gm-surface/30 p-5 text-left text-xs text-gm-muted">
+                    <div className="flex gap-2"><span>🔍</span><span><strong className="text-gm-text">Rakip taraması</strong> — Hedef Firmalar → "Rakipleri Tara" butonu, web sitesindeki fiyat / ürün / kampanya değişikliklerini sinyal olarak kaydeder.</span></div>
+                    <div className="flex gap-2"><span>⚡</span><span><strong className="text-gm-text">Manuel sinyal</strong> — Bir bayinin sosyal medyada veya görüşmede aktardığı bilgiyi ekleyebilirsiniz.</span></div>
+                    <div className="flex gap-2"><span>📉</span><span><strong className="text-gm-text">Churn skoru</strong> — Birikmiş sinyaller + son görülme tarihi + paspas sipariş geçmişine göre 0-100 hesaplanır.</span></div>
+                  </div>
+                  <p className="text-[11px] italic text-gm-muted/70">
+                    Sinyal üretmek için önce Hedef Firmalar sayfasından bayilerin web sitelerini eklemeniz gerekir.
+                  </p>
                 </div>
               </div>
             ) : (
