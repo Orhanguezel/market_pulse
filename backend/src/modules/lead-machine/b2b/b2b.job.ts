@@ -26,12 +26,23 @@ export async function runB2bJob(jobId: string) {
     const rules = await getRulesForJob(icp?.id ?? null, 'b2b_directory');
     const rulePenalty = rules.length;
     let count = 0;
+    // For directory searches, the query keyword is itself the category
+    // filter — Europages's /companies/car%20floor%20mats.html only lists
+    // floor-mat companies. The ICP-text matcher needs description/address
+    // tokens to fire, but directory tiles only carry a name. To avoid
+    // throwing away every result, we skip the matches=false gate when
+    // the source is a directory and use the search query as the implicit
+    // 'sector' reason.
+    const trustQuery = params.source === 'europages' || params.source === 'tobb';
     for (const lead of leads) {
       if (!lead.name) continue;
       const match = matchesIcp({ ...lead, country: params.country }, icpDefinition);
-      if (!match.matches) continue;
+      if (!match.matches && !trustQuery) continue;
       const analysis = lead.website ? await analyzeCompanyWebsite(lead.website) : null;
-      const baseScore = analysis?.is_b2b ? Math.min(10, match.score + 2) : match.score;
+      const directoryFloor = trustQuery ? 5 : 0; // give directory hits a baseline so they aren't filtered out by the threshold below
+      const baseScore = analysis?.is_b2b
+        ? Math.min(10, Math.max(match.score, directoryFloor) + 2)
+        : Math.max(match.score, directoryFloor);
       // Each active scan rule lowers the bar — candidates must score higher to pass
       const adjustedScore = Math.max(0, baseScore - rulePenalty);
       if (adjustedScore < 3) continue; // filtered out by learning feedback
