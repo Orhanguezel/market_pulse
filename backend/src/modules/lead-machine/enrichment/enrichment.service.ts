@@ -13,14 +13,16 @@ function domainFromUrl(url: string | null) {
   }
 }
 
-// Candidate sub-pages we try in addition to the homepage. Order matters: pages
-// listed earlier are preferred when picking a decision-maker name.
-const CONTACT_PATHS = [
-  '/impressum', '/imprint', '/legal-notice', '/mentions-legales',
-  '/contact', '/kontakt', '/contact-us', '/contacto',
-  '/about', '/about-us', '/uber-uns', '/ueber-uns', '/qui-sommes-nous',
-  '/team', '/management', '/leadership', '/company',
-];
+// Sub-pages we try in addition to the homepage. Kept short on purpose: each
+// scrape goes through Playwright stealth (≈10s on the 2GB VPS), so blowing
+// through 15+ paths makes the "Zenginleştir" button feel broken. These five
+// cover the vast majority of EU B2B sites:
+//   /impressum  — DE: legally required, contains Geschäftsführer name + email
+//   /kontakt    — DE catch-all
+//   /contact    — EN catch-all
+//   /about-us   — name + leadership bios when present
+//   /team       — name lists with titles
+const CONTACT_PATHS = ['/impressum', '/kontakt', '/contact', '/about-us', '/team'];
 
 // Labels that typically appear before a decision-maker name on contact /
 // impressum / about pages, in multiple languages.
@@ -107,6 +109,10 @@ interface DeepScrapeResult {
   pages_failed: string[];
 }
 
+function hasPersonalEmail(emails: string[]): boolean {
+  return emails.some((e) => rankEmail(e) >= 4);
+}
+
 async function deepScrapeContactInfo(websiteUrl: string): Promise<DeepScrapeResult> {
   const out: DeepScrapeResult = { emails: [], phones: [], decisionMakers: [], pages_visited: [], pages_failed: [] };
   const baseUrl = websiteUrl.replace(/\/+$/, '');
@@ -117,24 +123,28 @@ async function deepScrapeContactInfo(websiteUrl: string): Promise<DeepScrapeResu
   for (const url of urls) {
     if (seen.has(url)) continue;
     seen.add(url);
+    let success = false;
     try {
       const res = await scrape(url, { profile: 'lead-page', return_text: true });
-      if (!res.success || !res.data) {
-        out.pages_failed.push(url);
-        continue;
-      }
-      const data = res.data as unknown as LeadPageData;
-      out.pages_visited.push(res.final_url || url);
-      if (data.contact_emails?.length) out.emails.push(...data.contact_emails);
-      if (data.contact_phones?.length) out.phones.push(...data.contact_phones);
-      if (data.text_content) {
-        const found = extractDecisionMakersFromText(data.text_content, res.final_url || url);
-        out.decisionMakers.push(...found);
+      if (res.success && res.data) {
+        success = true;
+        const data = res.data as unknown as LeadPageData;
+        out.pages_visited.push(res.final_url || url);
+        if (Array.isArray(data.contact_emails)) out.emails.push(...data.contact_emails);
+        if (Array.isArray(data.contact_phones)) out.phones.push(...data.contact_phones);
+        if (typeof data.text_content === 'string' && data.text_content) {
+          const found = extractDecisionMakersFromText(data.text_content, res.final_url || url);
+          out.decisionMakers.push(...found);
+        }
       }
     } catch {
-      out.pages_failed.push(url);
+      // fall through to failed-list push below
     }
-    if (out.decisionMakers.length >= 3 && out.emails.length >= 2) break;
+    if (!success) out.pages_failed.push(url);
+
+    // Stop as soon as we have a usable name + personal-style email — saves
+    // ~20-50s per candidate on sites where the homepage already reveals both.
+    if (out.decisionMakers.length >= 1 && hasPersonalEmail(out.emails)) break;
   }
 
   out.emails = [...new Set(out.emails.map((e) => e.toLowerCase()))];
