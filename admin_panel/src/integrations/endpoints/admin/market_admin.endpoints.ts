@@ -681,6 +681,23 @@ export const marketAdminApi = baseApi.injectEndpoints({
       query: (id) => ({ url: `/admin/market/targets/${id}/scan-competitor`, method: 'POST' }),
       invalidatesTags: ['MarketSignals', 'MarketTargets'],
     }),
+    getMarketplaceHistory: b.query<{
+      platform: 'hepsiburada' | 'trendyol' | 'amazon';
+      target_id: string;
+      points: Array<{
+        at: string;
+        product_count: number;
+        out_of_stock_count: number;
+        content_hash: string;
+      }>;
+    }, { id: string; platform: 'hepsiburada' | 'trendyol' | 'amazon' }>({
+      query: ({ id, platform }) => ({
+        url: `/admin/market/targets/${id}/marketplace-history/${platform}`,
+      }),
+      providesTags: (_r, _e, { id, platform }) => [
+        { type: 'MarketTargets' as const, id: `${id}:${platform}:history` },
+      ],
+    }),
     scanMarketplace: b.mutation<{
       target_id: string;
       platform: 'hepsiburada' | 'trendyol' | 'amazon';
@@ -1047,6 +1064,8 @@ export const {
   useGetTargetIntelQuery,
   useLazyGetTargetIntelQuery,
   useScanMarketplaceMutation,
+  useGetMarketplaceHistoryQuery,
+  useLazyGetMarketplaceHistoryQuery,
   useListMarketLeadsQuery,
   useCreateMarketLeadMutation,
   useUpdateMarketLeadMutation,

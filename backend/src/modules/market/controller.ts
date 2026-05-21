@@ -612,6 +612,46 @@ export const bulkImportTargets: RouteHandler<{ Body: unknown }> = async (req, re
 
 // ─── Competitor Scan ─────────────────────────────────────────────────────────
 
+// ─── Marketplace snapshot history (for chart in target detail) ─────────────
+//
+// Returns the last N snapshots for a given target + platform in chronological
+// order so the UI can render a product_count / out_of_stock_count line chart.
+
+export const marketplaceHistory: RouteHandler<{
+  Params: { id: string; platform: string };
+  Querystring: { limit?: string };
+}> = async (req, reply) => {
+  const platform = req.params.platform;
+  if (!['hepsiburada', 'trendyol', 'amazon'].includes(platform)) {
+    return reply.code(400).send({ error: { message: 'invalid_platform' } });
+  }
+  const limit = Math.min(Math.max(parseInt(req.query.limit ?? '60', 10) || 60, 1), 365);
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT id, created_at, description
+       FROM market_signals
+      WHERE target_id = ? AND signal_type = ?
+      ORDER BY created_at ASC
+      LIMIT ?`,
+    [req.params.id, `marketplace_${platform}_snapshot`, limit],
+  );
+  const points = (rows as Array<{ id: string; created_at: string; description: string | null }>)
+    .map((r) => {
+      try {
+        const snap = JSON.parse(r.description ?? '{}');
+        return {
+          at: r.created_at,
+          product_count: Number(snap.product_count ?? 0),
+          out_of_stock_count: Number(snap.out_of_stock_count ?? 0),
+          content_hash: String(snap.content_hash ?? ''),
+        };
+      } catch {
+        return null;
+      }
+    })
+    .filter((p): p is NonNullable<typeof p> => p !== null);
+  return { platform, target_id: req.params.id, points };
+};
+
 // ─── Per-target Intel (aggregated detail) ───────────────────────────────────
 //
 // One request returns everything the target detail panel needs to render:

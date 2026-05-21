@@ -53,8 +53,18 @@ import {
   useScanAllCompetitorsMutation,
   useGetTargetIntelQuery,
   useScanMarketplaceMutation,
+  useGetMarketplaceHistoryQuery,
   type MarketTarget,
 } from '@/integrations/hooks';
+import {
+  CartesianGrid,
+  Line,
+  LineChart,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from 'recharts';
 import { cn } from '@/lib/utils';
 import AddTargetDialog from './add-target-dialog';
 import BulkImportDialog from './bulk-import-dialog';
@@ -696,38 +706,29 @@ function TargetIntelPanel({ targetId, fallback }: { targetId: string; fallback: 
         </div>
       </div>
 
-      {/* Marketplace store scan triggers */}
+      {/* Marketplace store scan + sales chart */}
       <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/20 p-4">
         <div className="mb-3 flex items-center justify-between gap-3">
           <span className="text-[10px] font-bold uppercase tracking-widest text-gm-muted">Marketplace Mağazaları</span>
           {scanMpState.isLoading && <span className="text-xs text-gm-muted">Taranıyor...</span>}
         </div>
-        <div className="grid gap-2 md:grid-cols-3">
+        <div className="grid gap-3 md:grid-cols-3">
           {([
-            ['hepsiburada', t.hepsiburadaUrl, 'border-orange-500/40 text-orange-300', 'Hepsiburada'],
-            ['trendyol',    t.trendyolUrl,    'border-orange-400/40 text-orange-200', 'Trendyol'],
-            ['amazon',      t.amazonUrl,      'border-yellow-500/40 text-yellow-300', 'Amazon TR'],
-          ] as const).map(([platform, url, cls, label]) => (
-            <div key={platform} className={`flex items-center justify-between gap-2 rounded-xl border bg-gm-surface/30 p-3 text-sm ${url ? cls : 'border-gm-border-soft text-gm-muted/60'}`}>
-              <div className="flex min-w-0 items-center gap-2">
-                {url ? (
-                  <a href={url} target="_blank" rel="noreferrer" className="truncate hover:underline">{label}</a>
-                ) : (
-                  <span className="truncate">{label} — URL yok</span>
-                )}
-              </div>
-              {url && (
-                <Button
-                  size="sm"
-                  variant="outline"
-                  disabled={scanMpState.isLoading}
-                  onClick={() => handleScanMarketplace(platform)}
-                  className="h-7 rounded-full border-gm-border-soft px-3 text-[10px] font-bold uppercase tracking-widest hover:bg-gm-gold hover:text-black"
-                >
-                  Tara
-                </Button>
-              )}
-            </div>
+            ['hepsiburada', t.hepsiburadaUrl, 'border-orange-500/40 text-orange-300', 'Hepsiburada', '#fb923c'],
+            ['trendyol',    t.trendyolUrl,    'border-orange-400/40 text-orange-200', 'Trendyol',    '#fdba74'],
+            ['amazon',      t.amazonUrl,      'border-yellow-500/40 text-yellow-300', 'Amazon TR',   '#facc15'],
+          ] as const).map(([platform, url, cls, label, color]) => (
+            <MarketplaceCard
+              key={platform}
+              targetId={targetId}
+              platform={platform}
+              label={label}
+              url={url}
+              cls={cls}
+              color={color}
+              onScan={() => handleScanMarketplace(platform)}
+              scanning={scanMpState.isLoading}
+            />
           ))}
         </div>
         {!t.hepsiburadaUrl && !t.trendyolUrl && !t.amazonUrl && (
@@ -766,6 +767,128 @@ function TargetIntelPanel({ targetId, fallback }: { targetId: string; fallback: 
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+// ─── Per-platform marketplace card with mini sales chart ────────────────────
+
+function MarketplaceCard({
+  targetId,
+  platform,
+  label,
+  url,
+  cls,
+  color,
+  onScan,
+  scanning,
+}: {
+  targetId: string;
+  platform: 'hepsiburada' | 'trendyol' | 'amazon';
+  label: string;
+  url: string | null;
+  cls: string;
+  color: string;
+  onScan: () => void;
+  scanning: boolean;
+}) {
+  const { data: history } = useGetMarketplaceHistoryQuery(
+    { id: targetId, platform },
+    { skip: !url },
+  );
+
+  const points = history?.points ?? [];
+  const latest = points[points.length - 1];
+  const prev   = points.length > 1 ? points[points.length - 2] : null;
+  const delta  = latest && prev ? latest.product_count - prev.product_count : 0;
+  const trendCls = delta > 0 ? 'text-gm-success'
+                 : delta < 0 ? 'text-gm-error'
+                 : 'text-gm-muted';
+
+  // Build chart data with short labels (DD/MM HH:mm)
+  const chartData = points.map((p) => {
+    const d = new Date(p.at);
+    const label = `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}`;
+    return {
+      at: label,
+      Ürün: p.product_count,
+      Tükendi: p.out_of_stock_count,
+    };
+  });
+
+  return (
+    <div className={`rounded-xl border bg-gm-surface/30 p-3 text-sm ${url ? cls : 'border-gm-border-soft text-gm-muted/60'}`}>
+      <div className="flex items-center justify-between gap-2">
+        <div className="flex min-w-0 items-center gap-2">
+          {url ? (
+            <a href={url} target="_blank" rel="noreferrer" className="truncate font-bold hover:underline">{label}</a>
+          ) : (
+            <span className="truncate">{label} — URL yok</span>
+          )}
+        </div>
+        {url && (
+          <Button
+            size="sm"
+            variant="outline"
+            disabled={scanning}
+            onClick={onScan}
+            className="h-7 rounded-full border-gm-border-soft px-3 text-[10px] font-bold uppercase tracking-widest hover:bg-gm-gold hover:text-black"
+          >
+            Tara
+          </Button>
+        )}
+      </div>
+
+      {url && latest && (
+        <div className="mt-3 space-y-2">
+          <div className="flex items-baseline justify-between">
+            <div>
+              <div className="font-mono text-2xl">{latest.product_count}</div>
+              <div className="text-[10px] text-gm-muted">ürün</div>
+            </div>
+            <div className="text-right">
+              <div className={`font-mono text-sm ${trendCls}`}>
+                {delta > 0 ? '+' : ''}{delta || 0}
+              </div>
+              <div className="text-[10px] text-gm-muted">
+                {latest.out_of_stock_count > 0 ? `${latest.out_of_stock_count} tükendi` : 'stoklu'}
+              </div>
+            </div>
+          </div>
+
+          {points.length >= 2 && (
+            <div className="h-24 -mx-1">
+              <ResponsiveContainer width="100%" height="100%">
+                <LineChart data={chartData} margin={{ top: 4, right: 8, bottom: 0, left: -25 }}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.08)" />
+                  <XAxis dataKey="at" tick={{ fontSize: 9, fill: 'rgba(255,255,255,0.5)' }} />
+                  <YAxis tick={{ fontSize: 9, fill: 'rgba(255,255,255,0.5)' }} width={28} />
+                  <Tooltip
+                    contentStyle={{
+                      background: 'rgba(0,0,0,0.85)',
+                      border: '1px solid rgba(255,255,255,0.12)',
+                      borderRadius: 8,
+                      fontSize: 11,
+                    }}
+                  />
+                  <Line type="monotone" dataKey="Ürün"    stroke={color} strokeWidth={2} dot={false} />
+                  <Line type="monotone" dataKey="Tükendi" stroke="#f87171" strokeWidth={1.5} strokeDasharray="3 3" dot={false} />
+                </LineChart>
+              </ResponsiveContainer>
+            </div>
+          )}
+
+          <div className="text-[10px] text-gm-muted/80 text-right">
+            {points.length} snapshot · son: {new Date(latest.at).toLocaleString('tr-TR', { day: '2-digit', month: '2-digit', hour: '2-digit', minute: '2-digit' })}
+          </div>
+        </div>
+      )}
+
+      {url && !latest && (
+        <div className="mt-3 text-[11px] text-gm-muted/80">
+          Henüz veri yok. <strong>"Tara"</strong> butonuna basarak ilk snapshot'ı oluştur.
+        </div>
+      )}
     </div>
   );
 }
