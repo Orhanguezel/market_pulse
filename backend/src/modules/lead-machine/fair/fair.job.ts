@@ -3,6 +3,7 @@ import { insertCandidate, updateSearchJob, getSearchJob } from '../_shared/db';
 import { matchesIcp } from '../b2b/icp.matcher';
 import { scrapeExhibitorDetail, scrapeOfficialExhibitorList, type RawExhibitor } from './fair.scraper';
 import { isNeighborBooth, parseBooth } from './booth';
+import { buildSummary, classifyMail, computeScore, recommend } from './enrichment';
 
 interface FairJobParams {
   fair_name?: string;
@@ -69,6 +70,26 @@ export async function runFairJob(jobId: string) {
         fairHall: boothGrid.hall ?? exhibitor.hall,
       }, (icp?.definition ?? {}) as Parameters<typeof matchesIcp>[1]);
       if (icp && !match.matches) return;
+
+      const mailType = classifyMail(exhibitor.email);
+      const finalScore = computeScore(exhibitor.name, exhibitor.country, mailType);
+      const recommendation = recommend({
+        name: exhibitor.name,
+        email: exhibitor.email,
+        website: exhibitor.website,
+        countryIso: exhibitor.country,
+      }, mailType, finalScore);
+      const aiSummary = buildSummary({
+        name: exhibitor.name,
+        city: exhibitor.city,
+        countryIso: exhibitor.country,
+        hall: boothGrid.hall ?? exhibitor.hall ?? null,
+        booth: exhibitor.booth_number,
+        fairName: params.fair_name,
+        mailType,
+        score: finalScore,
+      });
+
       await insertCandidate({
         jobId,
         channel: 'trade_fair',
@@ -80,9 +101,11 @@ export async function runFairJob(jobId: string) {
         phone: exhibitor.phone ?? null,
         email: exhibitor.email ?? null,
         rawData: {
+          source: 'messefrankfurt_api',
           fair_info: {
             fair_name: params.fair_name ?? null,
             fair_date: params.fair_date ?? null,
+            hall: boothGrid.hall ?? exhibitor.hall ?? null,
             booth_number: exhibitor.booth_number ?? null,
             booth_grid: boothGrid,
             is_neighbor: isNeighbor,
@@ -91,9 +114,14 @@ export async function runFairJob(jobId: string) {
           },
           exhibitor,
           match,
+          mail_classification: {
+            type: mailType,
+            classified_at: new Date().toISOString(),
+          },
+          recommendation,
         },
-        aiSummary: exhibitor.description ?? null,
-        leadScore: match.score,
+        aiSummary,
+        leadScore: finalScore,
       });
       count += 1;
     };
