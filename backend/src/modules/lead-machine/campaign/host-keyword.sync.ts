@@ -40,18 +40,61 @@ function dedupCaseInsensitive(existing: string[], additions: string[]): { merged
   return { merged, added };
 }
 
-function pickHostQuery(campaign: Awaited<ReturnType<typeof getCampaign>>): string | null {
-  if (!campaign) return null;
-  // Prefer the legal name (most specific), then short, then full brand name
-  return campaign.brand_legal || campaign.brand_short || campaign.brand_name || null;
+function toAsciiNoAbbrev(text: string): string {
+  // Strip "San.", "Tic.", "Ltd.", "Şti.", "Sp. z o.o.", "GmbH", "S.r.l." etc by
+  // removing punctuation-heavy tokens, then transliterate Turkish/German/Polish
+  // diacritics so Messe's name-matching can hit. Cheap best-effort, not perfect.
+  const noAbbrev = text
+    .replace(/\b(?:san|tic|ltd|şti|sti|s\.?p\.?\s*z\s*o\.?o\.?|gmbh|s\.?r\.?l|sas|sa|sl|ag|co|kg)\.?/gi, '')
+    .replace(/[.,/&]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  return noAbbrev
+    .replace(/[şŞ]/g, 's')
+    .replace(/[ıİ]/g, 'i')
+    .replace(/[ğĞ]/g, 'g')
+    .replace(/[üÜ]/g, 'u')
+    .replace(/[öÖ]/g, 'o')
+    .replace(/[çÇ]/g, 'c')
+    .replace(/[ą]/g, 'a').replace(/[ę]/g, 'e').replace(/[ł]/g, 'l').replace(/[ń]/g, 'n')
+    .replace(/[ć]/g, 'c').replace(/[ś]/g, 's').replace(/[ż]/g, 'z').replace(/[ź]/g, 'z')
+    .replace(/[äÄ]/g, 'a').replace(/[ßẞ]/g, 'ss');
+}
+
+function buildQueryCandidates(campaign: Awaited<ReturnType<typeof getCampaign>>): string[] {
+  if (!campaign) return [];
+  const queries: string[] = [];
+  const push = (s: string | null | undefined) => {
+    if (!s) return;
+    const trimmed = s.trim();
+    if (trimmed && !queries.includes(trimmed)) queries.push(trimmed);
+  };
+
+  push(campaign.brand_legal);
+  if (campaign.brand_legal) {
+    const ascii = toAsciiNoAbbrev(campaign.brand_legal);
+    push(ascii);
+    const firstTwo = ascii.split(/\s+/).slice(0, 2).join(' ');
+    push(firstTwo);
+    push(ascii.split(/\s+/)[0]);
+  }
+  push(campaign.brand_short);
+  if (campaign.brand_short) push(toAsciiNoAbbrev(campaign.brand_short));
+  // brand_name often contains a slash "Brand A / Brand B" — try each part.
+  if (campaign.brand_name) {
+    for (const part of campaign.brand_name.split(/[\\/|·]/)) {
+      push(part.trim());
+    }
+  }
+  return queries;
 }
 
 export async function syncHostKeywordsToIcp(campaignId: string): Promise<SyncResult> {
   const campaign = await getCampaign(campaignId);
   if (!campaign) throw new Error('CAMPAIGN_NOT_FOUND');
 
-  const query = pickHostQuery(campaign);
-  if (!query) {
+  const queryCandidates = buildQueryCandidates(campaign);
+  if (queryCandidates.length === 0) {
     return {
       campaign_id: campaign.id,
       campaign_slug: campaign.slug,
@@ -66,7 +109,21 @@ export async function syncHostKeywordsToIcp(campaignId: string): Promise<SyncRes
     };
   }
 
-  const hostData = await searchMesseExhibitor({ query });
+  let hostData: HostExhibitorData | null = null;
+  let queryUsed: string | null = null;
+  for (const q of queryCandidates) {
+    try {
+      const found = await searchMesseExhibitor({ query: q });
+      if (found) {
+        hostData = found;
+        queryUsed = q;
+        break;
+      }
+    } catch {
+      // try the next candidate
+    }
+  }
+  const query = queryUsed;
   if (!hostData) {
     return {
       campaign_id: campaign.id,
