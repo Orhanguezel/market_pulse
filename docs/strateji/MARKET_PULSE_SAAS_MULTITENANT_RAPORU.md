@@ -6,7 +6,7 @@
 **Kapsam notu:** Bu rapor BLUEPRINT'tir. Uygulama ayrı oturumda market_pulse repo'sunda yapılacak.
 **Repo:** https://github.com/Orhanguezel/market_pulse.git → vps-vistainsaat'a çekilecek.
 
-**Uygulama durumu (2026-06-02):** Bu rapordaki tam SaaS modeli, `MARKET_PULSE_TENANT_CEKLIST_PLANI.md` ile deploy-başına tek aktif tenant kararına indirgenerek uygulanıyor. Faz 1 tenant config çekirdeği (`026_tenancy_schema.sql`, `TENANT_KEY`, `core/tenant.ts`, tenant testleri) tamamlandı ve GitHub'a pushlandı. Faz 2'de iş tablo seed'lerine `tenant_key`, additive `db:migrate` runner ve market/lead/public/amazon repo scoping büyük ölçüde eklendi; cross-tenant izolasyon testi ve test expectation bakımı hâlâ açık.
+**Uygulama durumu (2026-06-02):** Bu rapordaki tam SaaS modeli, `MARKET_PULSE_TENANT_CEKLIST_PLANI.md` ile deploy-başına tek aktif tenant kararına indirgenerek uygulanıyor. Faz 1 tenant config çekirdeği (`026_tenancy_schema.sql`, `TENANT_KEY`, `core/tenant.ts`, tenant testleri) tamamlandı. Faz 2 kod/seed/migration tarafı da tamamlandı: iş tablo seed'lerine `tenant_key`, additive `db:migrate` runner, market/lead/public/amazon repo scoping, cross-tenant izolasyon testi ve `tenant:guard` eklendi; `build`, `db:seed`, `db:migrate`, `bun test` yeşil. Canlı deploy öncesi yedek ve snapshot karşılaştırması zorunlu kalıyor.
 
 ---
 
@@ -142,8 +142,8 @@ tenants (id, key, name, plan, status, settings_json)
 - [ ] `user_roles` → `tenant_members.role` geçişi bu mimaride kapsam dışı; ihtiyaç tekrar doğarsa ayrı SaaS fazı olarak ele alınacak.
 
 - [x] Tüm iş tablolarına `tenant_key` (seed güncelle, `db:seed`)
-- [ ] `tenant-scope` repo-helper + repo'ları tenant scope'a geçir _(ana akışlar tamamlandı, test/guard kapanışı sürüyor)_
-- [ ] Cross-tenant izolasyon testi (zorunlu, CI'da)
+- [x] `tenant-scope` repo-helper + repo'ları tenant scope'a geçir
+- [x] Cross-tenant izolasyon testi (zorunlu, CI'da)
 
 **Faz 3 — Config & kota tenant'a**
 - [ ] EXTERNAL_DB / ICP / kaynaklar → tenant_settings

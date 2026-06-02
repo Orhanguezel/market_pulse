@@ -73,15 +73,15 @@ describe('amazon job e2e integration flow', () => {
     expect(riskInsert?.sql).toContain('price_war_reason');
     expect(riskInsert?.sql).toContain('brand_reliability_reason');
     expect(riskInsert?.sql).toContain('operational_risk_reason');
-    expect(riskInsert?.values?.[5]).toEqual(expect.any(String));
-    expect(riskInsert?.values?.[8]).toEqual(expect.any(String));
-    expect(riskInsert?.values?.[11]).toEqual(expect.any(String));
-    expect(riskInsert?.values?.[14]).toEqual(expect.any(String));
-    expect(riskInsert?.values?.[17]).toEqual(expect.any(String));
+    expect(riskInsert?.values?.[6]).toEqual(expect.any(String));
+    expect(riskInsert?.values?.[9]).toEqual(expect.any(String));
+    expect(riskInsert?.values?.[12]).toEqual(expect.any(String));
+    expect(riskInsert?.values?.[15]).toEqual(expect.any(String));
+    expect(riskInsert?.values?.[18]).toEqual(expect.any(String));
 
     const candidateInsert = dbMock.poolExecutions.find((entry) => entry.sql.includes('INSERT INTO lead_candidates'));
     expect(candidateInsert?.values).toEqual(expect.arrayContaining(['job-e2e', 'amazon', 'thermal labels — Amazon Skor Raporu']));
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-e2e']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-e2e', 'avrasya']);
   });
 
   test('records error log and marks job failed when scraper fails', async () => {
@@ -99,7 +99,7 @@ describe('amazon job e2e integration flow', () => {
       && entry.values?.[0] === 'failed'
       && entry.values?.[2] === 'OXYLABS_AMAZON_SEARCH_FAILED_500'
     ))).toBe(true);
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'OXYLABS_AMAZON_SEARCH_FAILED_500', 'job-e2e']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'OXYLABS_AMAZON_SEARCH_FAILED_500', 'job-e2e', 'avrasya']);
   });
 });
 

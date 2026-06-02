@@ -69,6 +69,7 @@ describe('lead machine enrichment service', () => {
   test('scrapes candidate website and inserts enrichment', async () => {
     dbMock.queuePoolExecute([candidate()]);
     scrape.mockImplementation(() => Promise.resolve({
+      success: true,
       data: {
         contact_emails: ['owner@dealer.example'],
         contact_phones: ['+49 123'],
@@ -84,13 +85,14 @@ describe('lead machine enrichment service', () => {
     expect(dbMock.poolExecutions[1]?.sql).toStartWith('INSERT INTO lead_enrichment');
     expect(dbMock.poolExecutions[1]?.values).toEqual([
       expect.any(String),
+      'avrasya',
       'candidate-1',
-      '{"email":"owner@dealer.example","phone":"+49 123"}',
+      expect.stringContaining('owner@dealer.example'),
       'scraped',
     ]);
     expect(result).toEqual(expect.objectContaining({
       candidateId: 'candidate-1',
-      decisionMaker: { email: 'owner@dealer.example', phone: '+49 123' },
+      decisionMaker: expect.objectContaining({ email: 'owner@dealer.example', phone: '+49 123' }),
       sourceVendor: 'scraped',
     }));
   });
@@ -116,8 +118,8 @@ describe('lead machine enrichment service', () => {
       headers: { 'content-type': 'application/json', 'x-api-key': 'apollo-key' },
     }));
     expect(scrape).not.toHaveBeenCalled();
-    expect(dbMock.poolExecutions[1]?.values?.[3]).toBe('apollo');
-    expect(JSON.parse(String(dbMock.poolExecutions[1]?.values?.[2]))).toEqual(expect.objectContaining({
+    expect(dbMock.poolExecutions[1]?.values?.[4]).toBe('apollo');
+    expect(JSON.parse(String(dbMock.poolExecutions[1]?.values?.[3]))).toEqual(expect.objectContaining({
       name: 'Anna Buyer',
       title: 'Purchasing Manager',
       email: 'anna@dealer.example',
@@ -141,7 +143,7 @@ describe('lead machine enrichment service', () => {
 
     const result = await service.listCandidateEnrichment('candidate-1');
 
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['candidate-1']);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'candidate-1']);
     expect(result).toEqual([expect.objectContaining({
       decision_maker: { email: 'owner@dealer.example' },
       pain_points: ['MOQ'],

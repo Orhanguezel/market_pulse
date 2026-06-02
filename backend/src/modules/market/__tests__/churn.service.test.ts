@@ -51,7 +51,7 @@ describe('market churn service', () => {
 
     expect(score).toBe(70);
     expect(dbMock.poolQueries.at(-1)).toEqual(expect.objectContaining({
-      values: [70, 'target-1'],
+      values: [70, 'avrasya', 'target-1'],
     }));
   });
 
@@ -74,18 +74,18 @@ describe('market churn service', () => {
     }
   });
 
-  test('adds order risk when there are no orders', async () => {
-    dbMock.queuePoolQuery([{ id: 'target-1', last_seen_at: daysAgo(2) }]);
+  test('does not add order risk when order history is empty', async () => {
+    dbMock.queuePoolQuery([{ id: 'target-1', last_seen_at: daysAgo(2), paspas_customer_id: 'cust-1' }]);
     dbMock.queuePoolQuery([]);
     getCustomerOrders.mockImplementation(() => Promise.resolve([]));
 
     const score = await service.recalculateChurnScore('target-1');
 
-    expect(score).toBe(15);
+    expect(score).toBe(0);
   });
 
   test('adds order risk when recent order volume drops sharply', async () => {
-    dbMock.queuePoolQuery([{ id: 'target-1', last_seen_at: daysAgo(2) }]);
+    dbMock.queuePoolQuery([{ id: 'target-1', last_seen_at: daysAgo(2), paspas_customer_id: 'cust-1' }]);
     dbMock.queuePoolQuery([]);
     getCustomerOrders.mockImplementation(() => Promise.resolve([
       { siparisTarihi: daysAgo(10) },

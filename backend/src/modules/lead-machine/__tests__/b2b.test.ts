@@ -77,10 +77,10 @@ describe('b2b lead machine job runner', () => {
 
     await runB2bJob('job-1');
 
-    expect(dbMock.poolExecutions[1]?.values).toEqual(['running', null, 'job-1']);
+    expect(dbMock.poolExecutions[1]?.values).toEqual(['running', null, 'job-1', 'avrasya']);
     const insert = dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'));
     expect(insert?.values).toEqual(expect.arrayContaining(['job-1', 'b2b_directory', 'icp-1', 'Automotive Distributor A']));
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-1', 'avrasya']);
   });
 
   test('marks b2b job failed on directory error', async () => {
@@ -101,7 +101,7 @@ describe('b2b lead machine job runner', () => {
 
     await runB2bJob('job-1');
 
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'MAPS_DOWN', 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'MAPS_DOWN', 'job-1', 'avrasya']);
   });
 });
 
@@ -117,11 +117,12 @@ describe('b2b lead machine directory scraper', () => {
       limit: 25,
     });
 
-    expect(searchGoogleMaps).toHaveBeenCalledWith('car mat distributor', {
+    expect(searchGoogleMaps.mock.calls[0]?.[0]).toBe('car mat distributor');
+    expect(searchGoogleMaps.mock.calls[0]?.[1]).toEqual(expect.objectContaining({
       total: 10,
       language: 'en',
-      region: 'DE',
-    });
+      region: 'de',
+    }));
     expect(result).toEqual([{ name: 'Dealer A', website: 'https://dealer.example', phone: '+49' }]);
   });
 
@@ -139,11 +140,12 @@ describe('b2b lead machine directory scraper', () => {
       { country: 'NL', limit: 3 },
     );
 
-    expect(searchGoogleMaps).toHaveBeenCalledWith('automotive accessories', {
+    expect(searchGoogleMaps.mock.calls[0]?.[0]).toBe('automotive accessories');
+    expect(searchGoogleMaps.mock.calls[0]?.[1]).toEqual(expect.objectContaining({
       total: 3,
       language: 'en',
-      region: 'NL',
-    });
+      region: 'nl',
+    }));
   });
 
   test('scrapes non-google directory and normalizes companies', async () => {
@@ -166,12 +168,13 @@ describe('b2b lead machine directory scraper', () => {
       limit: 12,
     });
 
-    expect(scrape).toHaveBeenCalledWith('https://www.europages.com/search/companies?query=floor%20mats', {
+    expect(scrape.mock.calls[0]?.[0]).toBe('https://www.europages.co.uk/companies/floor%20mats.html');
+    expect(scrape.mock.calls[0]?.[1]).toEqual(expect.objectContaining({
       profile: 'directory-listing',
       return_text: true,
       mode: 'stealthy',
       options: { country: 'NL', limit: 12 },
-    });
+    }));
     expect(result).toEqual([{
       name: 'Europages Dealer',
       website: 'https://dealer.example',

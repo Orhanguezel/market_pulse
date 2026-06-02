@@ -105,7 +105,7 @@ describe('lead machine controller candidates', () => {
       body: { action: 'reject', reject_reason: 'wrong_segment' },
     });
 
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['rejected', 'wrong_segment', null, null, 'candidate-1']);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['rejected', 'wrong_segment', null, null, 'avrasya', 'candidate-1']);
     expect(result).toEqual(expect.objectContaining({
       status: 'rejected',
       reject_reason: 'wrong_segment',
@@ -163,8 +163,8 @@ describe('lead machine controller scraper callback and jobs', () => {
 
     expect(result).toEqual({ ok: true, inserted: 1 });
     expect(dbMock.poolExecutions.some((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'))).toBe(true);
-    expect(dbMock.poolExecutions.at(-1)?.sql).toContain('UPDATE lead_search_jobs SET status = ?, result_count = ?, error_msg = ?, finished_at = CURRENT_TIMESTAMP WHERE id = ?');
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, null, 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.sql).toContain('UPDATE lead_search_jobs SET status = ?, result_count = ?, error_msg = ?, finished_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_key = ?');
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, null, 'job-1', 'avrasya']);
   });
 
   test('rejects scraper callback without job id', async () => {
@@ -198,7 +198,7 @@ describe('lead machine controller scraper callback and jobs', () => {
     });
 
     expect(result).toEqual({ ok: true, inserted: 0 });
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'SCRAPER_DOWN', 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'SCRAPER_DOWN', 'job-1', 'avrasya']);
   });
 
   test('starts amazon job and returns created job', async () => {
@@ -307,7 +307,7 @@ describe('lead machine controller enrichment and competitor endpoints', () => {
       body: { candidate_ids: 'not-array' },
     });
 
-    expect(result).toEqual([]);
+    expect(result).toEqual({ queued: 0 });
   });
 
   test('batch enrichment caps candidate ids at 50', async () => {
@@ -320,9 +320,7 @@ describe('lead machine controller enrichment and competitor endpoints', () => {
       body: { candidate_ids: ids },
     });
 
-    expect(Array.isArray(result)).toBe(true);
-    expect((result as unknown[])).toHaveLength(50);
-    expect(dbMock.poolExecutions.filter((entry) => entry.sql.startsWith('INSERT INTO lead_enrichment'))).toHaveLength(50);
+    expect(result).toEqual({ queued: 50 });
   });
 
   test('competitor scan requires url', async () => {

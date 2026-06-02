@@ -107,18 +107,21 @@ Kanıtlanmış iş tabloları (rapor + keşif):
   - package.json: `"db:migrate": "bun src/db/migrate/index.ts"` ekle.
   - 2026-06-02: additive-only `db:migrate` eklendi ve idempotent çalıştı. DROP/TRUNCATE guard mevcut. Not: canlı unique index dönüşümleri additive runner'da DROP gerektirmediği için yapılmıyor; ihtiyaç olursa yedek sonrası ayrı onaylı migration işi.
 
-- [ ] **2.5 Repo katmanı — tenant scoping (iki pattern var, dikkat):** _(devam ediyor; ana market/lead/public/amazon raw ve Drizzle akışları tenant-aware yapıldı, full test expectation bakımı ve grep guard kaldı)_
+- [x] **2.5 Repo katmanı — tenant scoping (iki pattern var, dikkat):**
   - **Raw `pool.execute()` repo'ları** (örn. [icp.repository.ts](../../backend/src/modules/lead-machine/icp/icp.repository.ts), campaign.repository.ts): her SELECT/INSERT/UPDATE/DELETE'e `tenant_key = ?` ekle. INSERT'lere `tenant_key` kolonu+değeri ekle. Değer `getActiveTenant().key`'ten gelir.
   - **Drizzle repo'ları** (market modülü, [schema.ts](../../backend/src/modules/market/schema.ts)): `withTenant(qb)` sarmalayıcı + schema'lara `tenant_key` kolonu.
   - Ortak helper: `backend/src/modules/_shared/tenant-scope.ts` → `tenantWhere()` (raw için fragment), `withTenant()` (drizzle için). [repo-helpers.ts](../../backend/src/modules/_shared/repo-helpers.ts) yanına.
+  - 2026-06-02: market, lead-machine, public-api/BYOK, Amazon/Keepa/outreach/campaign/ICP ana akışları tenant-aware yapıldı. Full `bun test` yeşil.
 
-- [ ] **2.6 Cross-tenant izolasyon testi:** `__tests__/tenant-isolation.test.ts`
+- [x] **2.6 Cross-tenant izolasyon testi:** `__tests__/tenant-isolation.test.ts`
   - İki tenant seed'le, A'nın yarattığı icp/lead/target'ı B sorgusu **görmemeli**.
   - CI'da zorunlu (regresyon kapısı).
+  - 2026-06-02: `backend/src/modules/lead-machine/__tests__/tenant-isolation.test.ts` eklendi.
 
-- [ ] **2.7 Review kuralı / lint:** çıplak `pool.execute('SELECT ... FROM <iş_tablosu>')` (tenant_key'siz) ve `db.select().from(<businessTable>)` (withTenant'sız) yasak. En az grep-tabanlı bir CI guard veya PR-review checklist maddesi.
+- [x] **2.7 Review kuralı / lint:** çıplak `pool.execute('SELECT ... FROM <iş_tablosu>')` (tenant_key'siz) ve `db.select().from(<businessTable>)` (withTenant'sız) yasak. En az grep-tabanlı bir CI guard veya PR-review checklist maddesi.
+  - 2026-06-02: `bun run tenant:guard` eklendi (`backend/src/scripts/tenant-scope-guard.ts`) ve geçti.
 
-**Faz 2 kabul:** Avrasya migration sonrası tüm mevcut satırlar `tenant_key='avrasya'`, mevcut endpoint çıktıları snapshot 0.4 ile birebir. İzolasyon testi yeşil.
+**Faz 2 kabul:** Kod/seed/migration/test tarafı tamamlandı: `build`, `db:seed`, `db:migrate`, `tenant:guard`, `bun test` yeşil. Canlı Avrasya kabulü için 0.2 yedek + 0.4 snapshot/regresyon karşılaştırması hâlâ deploy öncesi zorunlu.
 
 ---
 

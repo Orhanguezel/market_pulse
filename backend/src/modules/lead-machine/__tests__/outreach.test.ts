@@ -75,6 +75,7 @@ describe('lead machine outreach service', () => {
     expect(dbMock.poolExecutions[2]?.sql).toStartWith('INSERT INTO lead_outreach_drafts');
     expect(dbMock.poolExecutions[2]?.values).toEqual([
       expect.any(String),
+      'avrasya',
       'candidate-1',
       'Automechanika Frankfurt - 10 Min Termin? - Avrasya / ProMats',
       expect.stringContaining(openingSentence),
@@ -106,8 +107,8 @@ describe('lead machine outreach service', () => {
 
     const result = await service.listOutreachDrafts('candidate-1', 'lead-1');
 
-    expect(dbMock.poolExecutions[0]?.sql).toContain('WHERE candidate_id = ? AND market_lead_id = ?');
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['candidate-1', 'lead-1']);
+    expect(dbMock.poolExecutions[0]?.sql).toContain('WHERE tenant_key = ? AND candidate_id = ? AND market_lead_id = ?');
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'candidate-1', 'lead-1']);
     expect(result).toEqual([{ id: 'draft-1', subject: 'S', body: 'B' }]);
   });
 
@@ -120,8 +121,8 @@ describe('lead machine outreach service', () => {
       status: 'sent',
     });
 
-    expect(dbMock.poolExecutions[0]?.sql).toContain('UPDATE lead_outreach_drafts SET subject = ?, body = ?, status = ? WHERE id = ?');
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['Updated', 'Body', 'sent', 'draft-1']);
+    expect(dbMock.poolExecutions[0]?.sql).toContain('UPDATE lead_outreach_drafts SET subject = ?, body = ?, status = ? WHERE id = ? AND tenant_key = ?');
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['Updated', 'Body', 'sent', 'draft-1', 'avrasya']);
     expect(result).toEqual({ id: 'draft-1', subject: 'Updated', body: 'Body', status: 'sent' });
   });
 
@@ -147,8 +148,8 @@ describe('lead machine outreach service', () => {
       text: 'Hello\n\nCan we meet?',
     });
     expect((sendMailRaw.mock.calls[0]?.[0] as { html: string }).html).toContain('/api/v1/lead-machine/outreach/open/draft-1/pixel.gif');
-    expect(dbMock.poolExecutions[2]?.sql).toBe("UPDATE lead_outreach_drafts SET status = 'sent', sent_at = CURRENT_TIMESTAMP WHERE id = ?");
-    expect(dbMock.poolExecutions[2]?.values).toEqual(['draft-1']);
+    expect(dbMock.poolExecutions[2]?.sql).toBe("UPDATE lead_outreach_drafts SET status = 'sent', sent_at = CURRENT_TIMESTAMP WHERE tenant_key = ? AND id = ?");
+    expect(dbMock.poolExecutions[2]?.values).toEqual(['avrasya', 'draft-1']);
     expect(result).toEqual(expect.objectContaining({ id: 'draft-1', status: 'sent' }));
   });
 
@@ -173,7 +174,7 @@ describe('lead machine outreach service', () => {
 
     expect(dbMock.poolExecutions[0]?.sql).toContain('UPDATE lead_outreach_drafts');
     expect(dbMock.poolExecutions[0]?.sql).toContain('open_count = COALESCE(open_count, 0) + 1');
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['draft-1']);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'draft-1']);
   });
 
   test('sends due outreach reminders once per sequence step', async () => {
@@ -196,8 +197,8 @@ describe('lead machine outreach service', () => {
       subject: 'Re: Automechanika Frankfurt - 10 min meeting?',
       text: expect.stringContaining('Quick reminder'),
     }));
-    expect(dbMock.poolExecutions[2]?.sql).toBe('UPDATE lead_outreach_drafts SET sequence_step = ?, last_reminder_at = CURRENT_TIMESTAMP WHERE id = ?');
-    expect(dbMock.poolExecutions[2]?.values).toEqual(['reminder_1', 'draft-1']);
+    expect(dbMock.poolExecutions[2]?.sql).toBe('UPDATE lead_outreach_drafts SET sequence_step = ?, last_reminder_at = CURRENT_TIMESTAMP WHERE tenant_key = ? AND id = ?');
+    expect(dbMock.poolExecutions[2]?.values).toEqual(['reminder_1', 'avrasya', 'draft-1']);
   });
 
   test('does not run reminders before the first due date', async () => {
@@ -225,14 +226,14 @@ describe('lead machine outreach service', () => {
 
     expect(result).toEqual({ stage: 'followup_1', sent: 1, skipped: 0 });
     expect(dbMock.poolExecutions[0]?.sql).toContain("COALESCE(followup_step, 'initial') = ?");
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['2026-09-13 09:00:00', 'initial']);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', '2026-09-13 09:00:00', 'initial']);
     expect(sendMailRaw).toHaveBeenCalledWith(expect.objectContaining({
       to: 'buyer@example.com',
       subject: 'Re: Automechanika Frankfurt - 10 min meeting?',
       text: expect.stringContaining('post-Automechanika conversation'),
     }));
-    expect(dbMock.poolExecutions[2]?.sql).toBe('UPDATE lead_outreach_drafts SET followup_step = ?, last_followup_at = CURRENT_TIMESTAMP WHERE id = ?');
-    expect(dbMock.poolExecutions[2]?.values).toEqual(['followup_1', 'draft-1']);
+    expect(dbMock.poolExecutions[2]?.sql).toBe('UPDATE lead_outreach_drafts SET followup_step = ?, last_followup_at = CURRENT_TIMESTAMP WHERE tenant_key = ? AND id = ?');
+    expect(dbMock.poolExecutions[2]?.values).toEqual(['followup_1', 'avrasya', 'draft-1']);
   });
 
   test('returns null for empty outreach update patch', async () => {

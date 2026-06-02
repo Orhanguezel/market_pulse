@@ -48,7 +48,7 @@ describe('lead machine icp repository', () => {
 
     const result = await icpRepo.getIcpProfile('icp-2');
 
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['icp-2']);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'icp-2']);
     expect(result).toEqual(expect.objectContaining({
       id: 'icp-2',
       definition: { sectors: ['retail'] },
@@ -66,6 +66,7 @@ describe('lead machine icp repository', () => {
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('INSERT INTO icp_profiles');
     expect(dbMock.poolExecutions[0]?.values).toEqual([
       expect.any(String),
+      'avrasya',
       'Created ICP',
       1,
       '{}',
@@ -86,12 +87,13 @@ describe('lead machine icp repository', () => {
       definition: { sectors: ['floor mats'] },
     });
 
-    expect(dbMock.poolExecutions[0]?.sql).toContain('UPDATE icp_profiles SET name = ?, is_active = ?, definition = ? WHERE id = ?');
+    expect(dbMock.poolExecutions[0]?.sql).toContain('UPDATE icp_profiles SET name = ?, is_active = ?, definition = ? WHERE id = ? AND tenant_key = ?');
     expect(dbMock.poolExecutions[0]?.values).toEqual([
       'Updated ICP',
       0,
       '{"sectors":["floor mats"]}',
       'icp-1',
+      'avrasya',
     ]);
     expect(result).toEqual(expect.objectContaining({
       name: 'Updated ICP',
@@ -115,8 +117,8 @@ describe('lead machine icp repository', () => {
     await icpRepo.deleteIcpProfile('icp-1');
 
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('SELECT id FROM lead_search_jobs');
-    expect(dbMock.poolExecutions[1]?.sql).toBe('DELETE FROM icp_profiles WHERE id = ?');
-    expect(dbMock.poolExecutions[1]?.values).toEqual(['icp-1']);
+    expect(dbMock.poolExecutions[1]?.sql).toBe('DELETE FROM icp_profiles WHERE tenant_key = ? AND id = ?');
+    expect(dbMock.poolExecutions[1]?.values).toEqual(['avrasya', 'icp-1']);
   });
 
   test('rejects deleting a profile that has jobs', async () => {

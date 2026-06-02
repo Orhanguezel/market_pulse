@@ -345,7 +345,7 @@ Her çeklist'in başı bu master plana referans verir: `> Bu çeklist [MARKET_PU
 ## 11. Açık Riskler ve Karar Bekleyenler
 
 ### Açık riskler
-1. **Multi-tenant DB**: Faz 1 tenant config çekirdeği tamamlandı; Faz 2'de iş tablo seed'lerine `tenant_key`, additive migration runner ve ana repo scoping akışları eklendi. Kalan kritik risk: cross-tenant izolasyon testi + grep/CI guard + full test expectation bakımı.
+1. **Multi-tenant DB**: Faz 1 tenant config çekirdeği tamamlandı; Faz 2 kod/seed/migration/test kapanışı tamamlandı (`tenant_key`, additive migration runner, repo scoping, cross-tenant test, `tenant:guard`). Kalan kritik risk canlı deploy öncesi yedek + snapshot regresyon karşılaştırması.
 2. **BAZ Export 1-2 yıl önde**: Discover + Outreach modüllerinde rekabet zorluğu. Pazara girerken **Monitor + CRM**'in ön plana çıkması, Outreach'in **Faz 2'ye atılması** bu nedenle.
 3. **Sanayi tier custom işi**: 199-499 EUR/ay danışmanlık-destekli — ölçeklenmez. 10+ müşteri olunca kişisel emek tükenir. Faz 5'te "kendi-kendine onboarding" sistemini sağlamlaştırmak şart.
 4. **amozon repo'su yarı yolda kalır**: Mevcut Amazon müşterisi (Bionluk teslimi) varsa onun sözleşmesi bitene kadar amozon yaşamaya devam eder. Aktarım, amozon'un kapanmasına bağlı değil; market_pulse paralel ilerler.
@@ -383,7 +383,7 @@ Sıra önemli; üstten alta:
    - [ ] Tema migrasyonu Adım 1: admin_panel token'ları (`docs/teknik/TEMA_MIGRASYON_CEKLISTI.md`)
    - [x] Tenant config çekirdeği (`026_tenancy_schema.sql`, `TENANT_KEY`, `getActiveTenant`) — detay: `docs/strateji/MARKET_PULSE_TENANT_CEKLIST_PLANI.md`
    - [x] Tenant isolation altyapısı: iş tablolarına `tenant_key` seed'i + `db:migrate` runner + ana repo scoping
-   - [ ] Tenant isolation kapanışı: cross-tenant test + grep/CI guard + full test expectation güncellemesi
+   - [x] Tenant isolation kapanışı: cross-tenant test + grep/CI guard + full test expectation güncellemesi
    - [ ] Sanayi görüşme sonuçlarına göre Monitor şablonları yazısı (`docs/teknik/MONITOR_MODULU_CEKLISTI.md`)
 
 3. **Haziran 2026**:

@@ -10,6 +10,7 @@
     "db:seed": "bun src/db/seed/index.ts",
     "db:seed:nodrop": "bun src/db/seed/index.ts --no-drop",
     "db:migrate": "bun src/db/migrate/index.ts",
+    "tenant:guard": "bun src/scripts/tenant-scope-guard.ts",
     "fair:import-cards": "bun src/scripts/import-fair-in-person-leads.ts"
   },
   "dependencies": {

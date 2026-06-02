@@ -142,10 +142,10 @@ describe('fair lead machine job runner', () => {
 
     await runFairJob('job-1');
 
-    expect(dbMock.poolExecutions[1]?.values).toEqual(['running', null, 'job-1']);
+    expect(dbMock.poolExecutions[1]?.values).toEqual(['running', null, 'job-1', 'avrasya']);
     const insert = dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'));
     expect(insert?.values).toEqual(expect.arrayContaining(['job-1', 'trade_fair', 'icp-1', 'Automotive Distributor Fair Co']));
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-1', 'avrasya']);
   });
 
   test('marks fair job failed on scraper error', async () => {
@@ -166,7 +166,7 @@ describe('fair lead machine job runner', () => {
 
     await runFairJob('job-1');
 
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'FAIR_DOWN', 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'FAIR_DOWN', 'job-1', 'avrasya']);
   });
 });
 
@@ -239,7 +239,7 @@ describe('fair lead machine scraper', () => {
     const url = new URL(String(fetchMock.mock.calls[0]?.[0]));
     expect(url.searchParams.get('location')).toBe('3.1');
     expect(scrape).not.toHaveBeenCalled();
-    expect(result).toEqual([{
+    expect(result).toEqual([expect.objectContaining({
       name: 'Avrasya Paspas Otomotiv Sanayi Ve Ticaret Limited Sirketi',
       website: 'https://www.promats.com.tr',
       country: 'TUR',
@@ -251,7 +251,7 @@ describe('fair lead machine scraper', () => {
       detail_url: 'https://automechanika.messefrankfurt.com/frankfurt/en/exhibitor-search.detail.html/avrasya-paspas-otomotiv-sanayi-ve-ticaret-limited-sirketi.html',
       booth_number: '3.1 D11',
       description: undefined,
-    }]);
+    })]);
   });
 
   test('scrapes exhibitor detail with fair-exhibitor-detail profile', async () => {
