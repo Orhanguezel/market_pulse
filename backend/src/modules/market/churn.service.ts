@@ -1,6 +1,7 @@
 import type { RowDataPacket } from 'mysql2/promise';
 import { pool } from '@/db/client';
 import { getCustomerOrders } from './external/paspas.repository';
+import { getActiveTenantKey } from '@/modules/_shared';
 
 type TargetRow = RowDataPacket & {
   id: string;
@@ -21,13 +22,13 @@ function daysSince(value: string | Date | null): number | null {
   return Math.floor((Date.now() - time) / 86_400_000);
 }
 
-async function getSignalScore(targetId: string) {
+async function getSignalScore(tenantKey: string, targetId: string) {
   const [rows] = await pool.query<SignalCountRow[]>(
     `SELECT severity, COUNT(*) AS count
      FROM market_signals
-     WHERE target_id = ? AND is_reviewed = 0 AND created_at >= DATE_SUB(NOW(), INTERVAL 90 DAY)
+     WHERE tenant_key = ? AND target_id = ? AND is_reviewed = 0 AND created_at >= DATE_SUB(NOW(), INTERVAL 90 DAY)
      GROUP BY severity`,
-    [targetId],
+    [tenantKey, targetId],
   );
 
   let score = 0;
@@ -81,9 +82,10 @@ export interface ChurnBreakdown {
 }
 
 export async function computeChurnBreakdown(targetId: string): Promise<ChurnBreakdown> {
+  const tenantKey = await getActiveTenantKey();
   const [targets] = await pool.query<TargetRow[]>(
-    'SELECT id, last_seen_at, paspas_customer_id FROM market_targets WHERE id = ? LIMIT 1',
-    [targetId],
+    'SELECT id, last_seen_at, paspas_customer_id FROM market_targets WHERE tenant_key = ? AND id = ? LIMIT 1',
+    [tenantKey, targetId],
   );
   const target = targets[0];
   if (!target) {
@@ -91,7 +93,7 @@ export async function computeChurnBreakdown(targetId: string): Promise<ChurnBrea
     Object.assign(err, { statusCode: 404 });
     throw err;
   }
-  const signalScore = await getSignalScore(target.id);
+  const signalScore = await getSignalScore(tenantKey, target.id);
   const age = daysSince(target.last_seen_at);
   let ageScore = 0;
   if (age === null) ageScore = 15;
@@ -104,17 +106,20 @@ export async function computeChurnBreakdown(targetId: string): Promise<ChurnBrea
 }
 
 export async function recalculateChurnScore(targetId: string): Promise<number> {
+  const tenantKey = await getActiveTenantKey();
   const breakdown = await computeChurnBreakdown(targetId);
   await pool.query(
-    'UPDATE market_targets SET churn_risk_score = ?, updated_at = NOW() WHERE id = ?',
-    [breakdown.total, targetId],
+    'UPDATE market_targets SET churn_risk_score = ?, updated_at = NOW() WHERE tenant_key = ? AND id = ?',
+    [breakdown.total, tenantKey, targetId],
   );
   return breakdown.total;
 }
 
 export async function recalculateAllChurnScores(): Promise<void> {
+  const tenantKey = await getActiveTenantKey();
   const [targets] = await pool.query<TargetRow[]>(
-    "SELECT id, last_seen_at FROM market_targets WHERE status IN ('active', 'paused')",
+    "SELECT id, last_seen_at FROM market_targets WHERE tenant_key = ? AND status IN ('active', 'paused')",
+    [tenantKey],
   );
   for (const target of targets) {
     await recalculateChurnScore(target.id);

@@ -8,6 +8,7 @@
 -- ICP (İdeal Müşteri Profili) tanımları
 CREATE TABLE IF NOT EXISTS `icp_profiles` (
   `id`         char(36)      NOT NULL,
+  `tenant_key` varchar(64)   NOT NULL DEFAULT 'avrasya',
   `name`       varchar(100)  NOT NULL,
   `is_active`  tinyint(1)    NOT NULL DEFAULT 1,
   -- JSON yapısı:
@@ -17,12 +18,14 @@ CREATE TABLE IF NOT EXISTS `icp_profiles` (
   `created_at` datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_icp_profiles_tenant` (`tenant_key`),
   KEY `idx_icp_is_active` (`is_active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Arama kampanya iş kayıtları
 CREATE TABLE IF NOT EXISTS `lead_search_jobs` (
   `id`           char(36)     NOT NULL,
+  `tenant_key`   varchar(64)  NOT NULL DEFAULT 'avrasya',
   `channel`      varchar(30)  NOT NULL,   -- 'amazon' | 'b2b_directory' | 'trade_fair'
   `status`       varchar(20)  NOT NULL DEFAULT 'pending',
   --   pending → running → done | failed
@@ -39,6 +42,7 @@ CREATE TABLE IF NOT EXISTS `lead_search_jobs` (
   `started_at`   datetime     DEFAULT NULL,
   `finished_at`  datetime     DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `idx_lead_search_jobs_tenant` (`tenant_key`),
   KEY `idx_jobs_channel`  (`channel`),
   KEY `idx_jobs_status`   (`status`),
   KEY `idx_jobs_icp`      (`icp_id`)
@@ -47,6 +51,7 @@ CREATE TABLE IF NOT EXISTS `lead_search_jobs` (
 -- Ham lead adayları — kullanıcı onayından önce
 CREATE TABLE IF NOT EXISTS `lead_candidates` (
   `id`             char(36)      NOT NULL,
+  `tenant_key`     varchar(64)   NOT NULL DEFAULT 'avrasya',
   `job_id`         char(36)      NOT NULL,
   `channel`        varchar(30)   NOT NULL,
   `icp_id`         char(36)      DEFAULT NULL,
@@ -75,6 +80,7 @@ CREATE TABLE IF NOT EXISTS `lead_candidates` (
   `reviewed_at`    datetime      DEFAULT NULL,
   `created_at`     datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_lead_candidates_tenant` (`tenant_key`),
   KEY `idx_candidates_job`     (`job_id`),
   KEY `idx_candidates_status`  (`status`),
   KEY `idx_candidates_channel` (`channel`),
@@ -100,6 +106,7 @@ ALTER TABLE `lead_candidates`
 -- candidate_id VEYA market_lead_id olur (onay öncesi/sonrası)
 CREATE TABLE IF NOT EXISTS `lead_enrichment` (
   `id`             char(36)    NOT NULL,
+  `tenant_key`     varchar(64) NOT NULL DEFAULT 'avrasya',
   `candidate_id`   char(36)    DEFAULT NULL,
   `market_lead_id` char(36)    DEFAULT NULL,
   -- { name, title, linkedin_url, email, phone }
@@ -114,6 +121,7 @@ CREATE TABLE IF NOT EXISTS `lead_enrichment` (
   `source_vendor`  varchar(50) DEFAULT NULL,
   `enriched_at`    datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_lead_enrichment_tenant` (`tenant_key`),
   KEY `idx_enrichment_candidate`   (`candidate_id`),
   KEY `idx_enrichment_market_lead` (`market_lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -121,8 +129,10 @@ CREATE TABLE IF NOT EXISTS `lead_enrichment` (
 -- Outreach taslakları (otomatik gönderilmez — kullanıcı onaylar)
 CREATE TABLE IF NOT EXISTS `lead_outreach_drafts` (
   `id`             char(36)     NOT NULL,
+  `tenant_key`     varchar(64)  NOT NULL DEFAULT 'avrasya',
   `candidate_id`   char(36)     DEFAULT NULL,
   `market_lead_id` char(36)     DEFAULT NULL,
+  `campaign_id`    char(36)     DEFAULT NULL,
   `subject`        varchar(300) NOT NULL,
   `body`           text         NOT NULL,
   `ai_model`       varchar(50)  DEFAULT NULL,  -- hangi model ürettiyse
@@ -138,8 +148,10 @@ CREATE TABLE IF NOT EXISTS `lead_outreach_drafts` (
   `reply_status`   varchar(20)  DEFAULT NULL,              -- replied | no_reply
   `created_at`     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_lead_outreach_drafts_tenant` (`tenant_key`),
   KEY `idx_outreach_candidate`   (`candidate_id`),
-  KEY `idx_outreach_market_lead` (`market_lead_id`)
+  KEY `idx_outreach_market_lead` (`market_lead_id`),
+  KEY `idx_outreach_draft_campaign` (`campaign_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET @add_lead_outreach_sent_at := IF(
@@ -230,17 +242,20 @@ DEALLOCATE PREPARE stmt;
 -- Bu tablo lead_candidates.reject_reason'dan periyodik olarak derlenir
 CREATE TABLE IF NOT EXISTS `lead_rejection_patterns` (
   `id`          char(36)     NOT NULL,
+  `tenant_key`  varchar(64)  NOT NULL DEFAULT 'avrasya',
   `channel`     varchar(30)  NOT NULL,
   `pattern`     varchar(200) NOT NULL,  -- tespit edilen pattern
   `count`       int          NOT NULL DEFAULT 1,
   `last_seen`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_rejection_channel_pattern` (`channel`, `pattern`(100))
+  KEY `idx_lead_rejection_patterns_tenant` (`tenant_key`),
+  UNIQUE KEY `uq_rejection_channel_pattern` (`tenant_key`, `channel`, `pattern`(100))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Kullanıcı tanımlı tarama dışlama kuralları ("Bu profil tipini bir daha getirme")
 CREATE TABLE IF NOT EXISTS `lead_scan_rules` (
   `id`         char(36)     NOT NULL,
+  `tenant_key` varchar(64)  NOT NULL DEFAULT 'avrasya',
   `icp_id`     char(36)     DEFAULT NULL,  -- NULL = tüm ICP'ler
   `channel`    varchar(30)  DEFAULT NULL,  -- NULL = tüm kanallar
   `rule_type`  varchar(30)  NOT NULL DEFAULT 'exclude_reject_tag',
@@ -248,9 +263,10 @@ CREATE TABLE IF NOT EXISTS `lead_scan_rules` (
   `label`      varchar(300) DEFAULT NULL,  -- opsiyonel açıklama / ICP adı
   `created_at` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_lead_scan_rules_tenant` (`tenant_key`),
   KEY `idx_scan_rule_icp` (`icp_id`),
   KEY `idx_scan_rule_channel` (`channel`),
-  UNIQUE KEY `uq_scan_rule` (`icp_id`, `channel`, `value`(100))
+  UNIQUE KEY `uq_scan_rule` (`tenant_key`, `icp_id`, `channel`, `value`(100))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Varsayılan ICP: Paspas için oto aksesuar distribütör profili

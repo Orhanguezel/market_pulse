@@ -1,5 +1,6 @@
 import type { FastifyReply, RouteHandler } from 'fastify';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { approveCandidateToMarketLead } from './_shared/candidate.helpers';
 import {
   createSearchJob,
@@ -162,13 +163,15 @@ export const scraperCallback: RouteHandler<{ Body: unknown }> = async (req, repl
 };
 
 export const rejectionPatterns: RouteHandler = async () => {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
     `SELECT channel, LOWER(TRIM(reject_reason)) AS pattern, COUNT(*) AS count, MAX(reviewed_at) AS last_seen
      FROM lead_candidates
-     WHERE status = 'rejected' AND reject_reason IS NOT NULL AND reject_reason <> ''
+     WHERE tenant_key = ? AND status = 'rejected' AND reject_reason IS NOT NULL AND reject_reason <> ''
      GROUP BY channel, LOWER(TRIM(reject_reason))
      ORDER BY count DESC
      LIMIT 50`,
+    [tenantKey],
   );
   return rows;
 };
@@ -233,13 +236,15 @@ export const startAmazonScan: RouteHandler<{ Body: unknown }> = async (req, repl
   }));
 };
 export const listAmazonJobs: RouteHandler = async () => {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
     `SELECT lsj.*, ars.decision, ars.composite_score, ars.data_points
      FROM lead_search_jobs lsj
-     LEFT JOIN amazon_risk_scores ars ON ars.job_id = lsj.id
-     WHERE lsj.channel = 'amazon'
+     LEFT JOIN amazon_risk_scores ars ON ars.tenant_key = lsj.tenant_key AND ars.job_id = lsj.id
+     WHERE lsj.tenant_key = ? AND lsj.channel = 'amazon'
      ORDER BY lsj.created_at DESC
-     LIMIT 100`
+     LIMIT 100`,
+    [tenantKey],
   );
   return (rows as any[]).map(row => {
     const job = parseJsonField(row, 'params');
@@ -260,7 +265,8 @@ export const getAmazonJob: RouteHandler<{ Params: { id: string } }> = async (req
 };
 
 export const getAmazonScan: RouteHandler<{ Params: { jobId: string } }> = async (req, reply) => {
-  const [rows] = await pool.execute('SELECT * FROM amazon_scan_jobs WHERE id = ? LIMIT 1', [req.params.jobId]);
+  const tenantKey = await getActiveTenantKey();
+  const [rows] = await pool.execute('SELECT * FROM amazon_scan_jobs WHERE tenant_key = ? AND id = ? LIMIT 1', [tenantKey, req.params.jobId]);
   const row = (rows as Record<string, unknown>[])[0];
   if (!row) return reply.code(404).send({ error: { message: 'not_found' } });
   return row;
@@ -417,8 +423,10 @@ export const getAmazonScanProductsList: RouteHandler<{ Params: { jobId: string }
 };
 
 export const getKeepaUsage: RouteHandler = async () => {
+  const tenantKey = await getActiveTenantKey();
   const [todayRows] = await pool.execute(
-    `SELECT budget_date, token_budget, tokens_used FROM amazon_keepa_daily_budget WHERE budget_date = CURDATE() LIMIT 1`,
+    `SELECT budget_date, token_budget, tokens_used FROM amazon_keepa_daily_budget WHERE tenant_key = ? AND budget_date = CURDATE() LIMIT 1`,
+    [tenantKey],
   );
   const todayRow = (todayRows as Array<{ budget_date: string; token_budget: string | number; tokens_used: string | number }>)[0] ?? null;
   const today = todayRow ? {
@@ -429,7 +437,8 @@ export const getKeepaUsage: RouteHandler = async () => {
   } : null;
 
   const [historyRows] = await pool.execute(
-    `SELECT budget_date, token_budget, tokens_used FROM amazon_keepa_daily_budget ORDER BY budget_date DESC LIMIT 7`,
+    `SELECT budget_date, token_budget, tokens_used FROM amazon_keepa_daily_budget WHERE tenant_key = ? ORDER BY budget_date DESC LIMIT 7`,
+    [tenantKey],
   );
   const history = (historyRows as Array<{ budget_date: string; token_budget: string | number; tokens_used: string | number }>).map(r => ({
     budget_date: String(r.budget_date).slice(0, 10),
@@ -442,7 +451,9 @@ export const getKeepaUsage: RouteHandler = async () => {
        SUM(status = 'pending')                                    AS pending,
        SUM(status = 'done' AND DATE(processed_at) = CURDATE())   AS done_today,
        SUM(status = 'failed')                                     AS failed_total
-     FROM amazon_keepa_queue`,
+     FROM amazon_keepa_queue
+     WHERE tenant_key = ?`,
+    [tenantKey],
   );
   const q = (queueRows as Array<{ pending: string | number | null; done_today: string | number | null; failed_total: string | number | null }>)[0] ?? {};
   const queue = {
@@ -533,9 +544,10 @@ export const deleteSavedSearchHandler: RouteHandler<{ Params: { id: string } }> 
 };
 
 export const runSavedSearchHandler: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
-    'SELECT * FROM amazon_saved_searches WHERE id = ?',
-    [req.params.id],
+    'SELECT * FROM amazon_saved_searches WHERE tenant_key = ? AND id = ?',
+    [tenantKey, req.params.id],
   ) as [Array<{ keyword: string; marketplace: string }>, unknown];
   const saved = rows[0];
   if (!saved) return reply.code(404).send({ error: { message: 'not_found' } });

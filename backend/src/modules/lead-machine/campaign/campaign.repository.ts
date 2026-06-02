@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 
 export interface OutreachCampaign {
   id: string;
@@ -58,25 +59,29 @@ function parseRow(row: OutreachCampaign): OutreachCampaign {
 }
 
 export async function listCampaigns() {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
-    'SELECT * FROM outreach_campaigns ORDER BY is_active DESC, updated_at DESC',
+    'SELECT * FROM outreach_campaigns WHERE tenant_key = ? ORDER BY is_active DESC, updated_at DESC',
+    [tenantKey],
   );
   return (rows as OutreachCampaign[]).map(parseRow);
 }
 
 export async function getCampaign(id: string) {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
-    'SELECT * FROM outreach_campaigns WHERE id = ? LIMIT 1',
-    [id],
+    'SELECT * FROM outreach_campaigns WHERE tenant_key = ? AND id = ? LIMIT 1',
+    [tenantKey, id],
   );
   const row = (rows as OutreachCampaign[])[0];
   return row ? parseRow(row) : null;
 }
 
 export async function getCampaignBySlug(slug: string) {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
-    'SELECT * FROM outreach_campaigns WHERE slug = ? LIMIT 1',
-    [slug],
+    'SELECT * FROM outreach_campaigns WHERE tenant_key = ? AND slug = ? LIMIT 1',
+    [tenantKey, slug],
   );
   const row = (rows as OutreachCampaign[])[0];
   return row ? parseRow(row) : null;
@@ -112,9 +117,10 @@ function serializeValue(key: ColumnKey, value: unknown): unknown {
 
 export async function createCampaign(input: OutreachCampaignInput) {
   const id = randomUUID();
-  const cols: string[] = ['id'];
-  const placeholders: string[] = ['?'];
-  const values: unknown[] = [id];
+  const tenantKey = await getActiveTenantKey();
+  const cols: string[] = ['id', 'tenant_key'];
+  const placeholders: string[] = ['?', '?'];
+  const values: unknown[] = [id, tenantKey];
 
   for (const col of COLUMNS) {
     if (input[col] !== undefined) {
@@ -143,14 +149,17 @@ export async function updateCampaign(id: string, input: OutreachCampaignInput) {
   }
 
   if (sets.length === 0) return getCampaign(id);
+  const tenantKey = await getActiveTenantKey();
   values.push(id);
+  values.push(tenantKey);
   await pool.execute(
-    `UPDATE outreach_campaigns SET ${sets.join(', ')} WHERE id = ?`,
+    `UPDATE outreach_campaigns SET ${sets.join(', ')} WHERE id = ? AND tenant_key = ?`,
     values as never[],
   );
   return getCampaign(id);
 }
 
 export async function deleteCampaign(id: string) {
-  await pool.execute('DELETE FROM outreach_campaigns WHERE id = ?', [id]);
+  const tenantKey = await getActiveTenantKey();
+  await pool.execute('DELETE FROM outreach_campaigns WHERE tenant_key = ? AND id = ?', [tenantKey, id]);
 }

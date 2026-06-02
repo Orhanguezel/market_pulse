@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 
 export type LeadChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match';
 export type JobStatus = 'pending' | 'running' | 'done' | 'failed';
@@ -74,23 +75,26 @@ function parseJsonField<T>(row: T, key: keyof T): T {
 
 export async function createSearchJob(channel: LeadChannel, params: unknown, icpId?: string | null, createdBy?: string | null) {
   const id = randomUUID();
+  const tenantKey = await getActiveTenantKey();
   await pool.execute(
-    'INSERT INTO lead_search_jobs (id, channel, status, icp_id, params, created_by) VALUES (?, ?, ?, ?, ?, ?)',
-    [id, channel, 'pending', icpId ?? null, JSON.stringify(params ?? {}), createdBy ?? null],
+    'INSERT INTO lead_search_jobs (id, tenant_key, channel, status, icp_id, params, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [id, tenantKey, channel, 'pending', icpId ?? null, JSON.stringify(params ?? {}), createdBy ?? null],
   );
   return getSearchJob(id);
 }
 
 export async function getSearchJob(id: string) {
-  const [rows] = await pool.execute('SELECT * FROM lead_search_jobs WHERE id = ? LIMIT 1', [id]);
+  const tenantKey = await getActiveTenantKey();
+  const [rows] = await pool.execute('SELECT * FROM lead_search_jobs WHERE tenant_key = ? AND id = ? LIMIT 1', [tenantKey, id]);
   const row = (rows as LeadSearchJob[])[0];
   return row ? parseJsonField(row, 'params') : null;
 }
 
 export async function listSearchJobs(channel?: LeadChannel) {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = channel
-    ? await pool.execute('SELECT * FROM lead_search_jobs WHERE channel = ? ORDER BY created_at DESC LIMIT 100', [channel])
-    : await pool.execute('SELECT * FROM lead_search_jobs ORDER BY created_at DESC LIMIT 100');
+    ? await pool.execute('SELECT * FROM lead_search_jobs WHERE tenant_key = ? AND channel = ? ORDER BY created_at DESC LIMIT 100', [tenantKey, channel])
+    : await pool.execute('SELECT * FROM lead_search_jobs WHERE tenant_key = ? ORDER BY created_at DESC LIMIT 100', [tenantKey]);
   return (rows as LeadSearchJob[]).map(row => parseJsonField(row, 'params'));
 }
 
@@ -112,18 +116,22 @@ export async function updateSearchJob(id: string, patch: { status?: JobStatus; r
   if (patch.started) sets.push('started_at = CURRENT_TIMESTAMP');
   if (patch.finished) sets.push('finished_at = CURRENT_TIMESTAMP');
   if (!sets.length) return;
+  const tenantKey = await getActiveTenantKey();
   values.push(id);
-  await pool.execute(`UPDATE lead_search_jobs SET ${sets.join(', ')} WHERE id = ?`, values as never[]);
+  values.push(tenantKey);
+  await pool.execute(`UPDATE lead_search_jobs SET ${sets.join(', ')} WHERE id = ? AND tenant_key = ?`, values as never[]);
 }
 
 export async function insertCandidate(input: CandidateInput) {
   const id = randomUUID();
+  const tenantKey = await getActiveTenantKey();
   await pool.execute(
     `INSERT INTO lead_candidates
-      (id, job_id, channel, icp_id, name, website, country, city, phone, email, contact_name, raw_data, ai_summary, lead_score, decision)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      (id, tenant_key, job_id, channel, icp_id, name, website, country, city, phone, email, contact_name, raw_data, ai_summary, lead_score, decision)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       id,
+      tenantKey,
       input.jobId,
       input.channel,
       input.icpId ?? null,
@@ -144,8 +152,9 @@ export async function insertCandidate(input: CandidateInput) {
 }
 
 export async function listCandidates(filters: { channel?: string; status?: string; jobId?: string; limit: number; offset: number }) {
-  const where: string[] = [];
-  const values: unknown[] = [];
+  const tenantKey = await getActiveTenantKey();
+  const where: string[] = ['tenant_key = ?'];
+  const values: unknown[] = [tenantKey];
   if (filters.channel) {
     where.push('channel = ?');
     values.push(filters.channel);
@@ -158,7 +167,7 @@ export async function listCandidates(filters: { channel?: string; status?: strin
     where.push('job_id = ?');
     values.push(filters.jobId);
   }
-  const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
+  const whereSql = `WHERE ${where.join(' AND ')}`;
   const limitInt = Math.floor(filters.limit);
   const offsetInt = Math.floor(filters.offset);
   const [rows] = await pool.execute(
@@ -173,7 +182,8 @@ export async function listCandidates(filters: { channel?: string; status?: strin
 }
 
 export async function getCandidate(id: string) {
-  const [rows] = await pool.execute('SELECT * FROM lead_candidates WHERE id = ? LIMIT 1', [id]);
+  const tenantKey = await getActiveTenantKey();
+  const [rows] = await pool.execute('SELECT * FROM lead_candidates WHERE tenant_key = ? AND id = ? LIMIT 1', [tenantKey, id]);
   let row = (rows as LeadCandidate[])[0];
   if (!row) return null;
   row = parseJsonField(row, 'raw_data');
@@ -190,9 +200,10 @@ export async function updateCandidateReview(
 ) {
   const tagsJson = rejectTags?.length ? JSON.stringify(rejectTags) : null;
   const reason = rejectReason ?? (rejectTags?.length ? rejectTags.join(', ') : null);
+  const tenantKey = await getActiveTenantKey();
   await pool.execute(
-    'UPDATE lead_candidates SET status = ?, reject_reason = ?, reject_tags = ?, reviewed_by = ?, reviewed_at = CURRENT_TIMESTAMP WHERE id = ?',
-    [status, reason, tagsJson, reviewedBy ?? null, id],
+    'UPDATE lead_candidates SET status = ?, reject_reason = ?, reject_tags = ?, reviewed_by = ?, reviewed_at = CURRENT_TIMESTAMP WHERE tenant_key = ? AND id = ?',
+    [status, reason, tagsJson, reviewedBy ?? null, tenantKey, id],
   );
   return getCandidate(id);
 }

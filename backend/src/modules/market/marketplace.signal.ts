@@ -12,6 +12,7 @@ import { pool } from '@/db/client';
 import type { RowDataPacket } from 'mysql2/promise';
 import { marketTargets, marketSignals } from './schema';
 import { scrape, type ScrapeResponse } from '../lead-machine/_shared/scraper.client';
+import { andTenant, getActiveTenantKey, tenantValues } from '@/modules/_shared';
 
 export type Marketplace = 'hepsiburada' | 'trendyol' | 'amazon';
 
@@ -36,12 +37,12 @@ function platformOf(target: { hepsiburada_url: string | null; trendyol_url: stri
   return null;
 }
 
-async function getLatestSnapshot(targetId: string, platform: Marketplace): Promise<MarketplaceSnapshot | null> {
+async function getLatestSnapshot(tenantKey: string, targetId: string, platform: Marketplace): Promise<MarketplaceSnapshot | null> {
   const [rows] = await pool.execute<RowDataPacket[]>(
     `SELECT description FROM market_signals
-      WHERE target_id = ? AND signal_type = ?
+      WHERE tenant_key = ? AND target_id = ? AND signal_type = ?
       ORDER BY created_at DESC LIMIT 1`,
-    [targetId, `marketplace_${platform}_snapshot`],
+    [tenantKey, targetId, `marketplace_${platform}_snapshot`],
   );
   const r = (rows as Array<{ description: string | null }>)[0];
   if (!r?.description) return null;
@@ -71,6 +72,7 @@ export async function scanMarketplaceForTarget(targetId: string, platform: Marke
   changed_fields: string[];
   signals_created: number;
 }> {
+  const tenantKey = await getActiveTenantKey();
   const [target] = await db
     .select({
       id: marketTargets.id,
@@ -80,7 +82,7 @@ export async function scanMarketplaceForTarget(targetId: string, platform: Marke
       amazon_url: marketTargets.amazon_url,
     })
     .from(marketTargets)
-    .where(eq(marketTargets.id, targetId))
+    .where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, targetId)]))
     .limit(1);
 
   if (!target) throw Object.assign(new Error('TARGET_NOT_FOUND'), { statusCode: 404 });
@@ -108,7 +110,7 @@ export async function scanMarketplaceForTarget(targetId: string, platform: Marke
     products: products.slice(0, 80) as MarketplaceSnapshot['products'],
   };
 
-  const prev = await getLatestSnapshot(targetId, platform);
+  const prev = await getLatestSnapshot(tenantKey, targetId, platform);
   const diff = diffSnapshots(prev, snapshot);
   let severity: 'critical' | 'high' | 'medium' | 'low' = 'low';
   if (diff.delta_product_count <= -10) severity = 'critical';
@@ -121,7 +123,7 @@ export async function scanMarketplaceForTarget(targetId: string, platform: Marke
   // Always store the snapshot itself as a 'snapshot' signal so future
   // diffs have a previous row to compare against. Marked 'low' / is_reviewed=1
   // so it doesn't clutter the operator's signal inbox.
-  await db.insert(marketSignals).values({
+  await db.insert(marketSignals).values(tenantValues(tenantKey, {
     id:          randomUUID(),
     target_id:   targetId,
     signal_type: `marketplace_${platform}_snapshot`,
@@ -130,7 +132,7 @@ export async function scanMarketplaceForTarget(targetId: string, platform: Marke
     description: JSON.stringify(snapshot),
     source_url:  url,
     is_reviewed: 1,
-  });
+  }));
 
   // Material diff against previous snapshot → user-facing signal
   if (diff.changed_fields.length > 0) {
@@ -139,7 +141,7 @@ export async function scanMarketplaceForTarget(targetId: string, platform: Marke
     if (diff.delta_oos_count > 0)       parts.push(`+${diff.delta_oos_count} tükendi`);
     const title = `${target.name} – ${platform}: ${parts.join(', ') || 'liste değişti'}`;
 
-    await db.insert(marketSignals).values({
+    await db.insert(marketSignals).values(tenantValues(tenantKey, {
       id:          randomUUID(),
       target_id:   targetId,
       signal_type: `marketplace_${platform}_diff`,
@@ -154,14 +156,14 @@ export async function scanMarketplaceForTarget(targetId: string, platform: Marke
         next: { count: snapshot.product_count, oos: snapshot.out_of_stock_count },
       }),
       source_url: url,
-    });
+    }));
     signalsCreated = 1;
   }
 
   await db
     .update(marketTargets)
     .set({ last_seen_at: new Date() })
-    .where(eq(marketTargets.id, targetId));
+    .where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, targetId)]));
 
   return {
     target_id: targetId,

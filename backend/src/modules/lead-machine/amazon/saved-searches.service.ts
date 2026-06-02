@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 
 export interface SavedSearch {
   id: string;
@@ -40,8 +41,10 @@ function rowToDto(r: Row): SavedSearch {
 }
 
 export async function listSavedSearches(): Promise<SavedSearch[]> {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
-    'SELECT * FROM amazon_saved_searches ORDER BY updated_at DESC',
+    'SELECT * FROM amazon_saved_searches WHERE tenant_key = ? ORDER BY updated_at DESC',
+    [tenantKey],
   );
   return (rows as Row[]).map(rowToDto);
 }
@@ -52,13 +55,14 @@ export async function createSavedSearch(input: {
   marketplace?: string;
   watchlistEnabled?: boolean;
 }): Promise<SavedSearch> {
+  const tenantKey = await getActiveTenantKey();
   const id = randomUUID();
   await pool.execute(
-    `INSERT INTO amazon_saved_searches (id, label, keyword, marketplace, watchlist_enabled)
-     VALUES (?, ?, ?, ?, ?)`,
-    [id, input.label, input.keyword, input.marketplace ?? 'com', input.watchlistEnabled ? 1 : 0],
+    `INSERT INTO amazon_saved_searches (id, tenant_key, label, keyword, marketplace, watchlist_enabled)
+     VALUES (?, ?, ?, ?, ?, ?)`,
+    [id, tenantKey, input.label, input.keyword, input.marketplace ?? 'com', input.watchlistEnabled ? 1 : 0],
   );
-  const [rows] = await pool.execute('SELECT * FROM amazon_saved_searches WHERE id = ?', [id]);
+  const [rows] = await pool.execute('SELECT * FROM amazon_saved_searches WHERE tenant_key = ? AND id = ?', [tenantKey, id]);
   return rowToDto((rows as Row[])[0]!);
 }
 
@@ -66,34 +70,36 @@ export async function updateSavedSearch(
   id: string,
   input: { watchlistEnabled?: boolean; lastJobId?: string; lastRunAt?: Date },
 ): Promise<void> {
+  const tenantKey = await getActiveTenantKey();
   if (input.watchlistEnabled !== undefined && input.lastJobId !== undefined && input.lastRunAt !== undefined) {
     await pool.execute(
-      'UPDATE amazon_saved_searches SET watchlist_enabled = ?, last_job_id = ?, last_run_at = ? WHERE id = ?',
-      [input.watchlistEnabled ? 1 : 0, input.lastJobId, input.lastRunAt, id],
+      'UPDATE amazon_saved_searches SET watchlist_enabled = ?, last_job_id = ?, last_run_at = ? WHERE tenant_key = ? AND id = ?',
+      [input.watchlistEnabled ? 1 : 0, input.lastJobId, input.lastRunAt, tenantKey, id],
     );
   } else if (input.lastJobId !== undefined && input.lastRunAt !== undefined) {
     await pool.execute(
-      'UPDATE amazon_saved_searches SET last_job_id = ?, last_run_at = ? WHERE id = ?',
-      [input.lastJobId, input.lastRunAt, id],
+      'UPDATE amazon_saved_searches SET last_job_id = ?, last_run_at = ? WHERE tenant_key = ? AND id = ?',
+      [input.lastJobId, input.lastRunAt, tenantKey, id],
     );
   } else if (input.watchlistEnabled !== undefined) {
     await pool.execute(
-      'UPDATE amazon_saved_searches SET watchlist_enabled = ? WHERE id = ?',
-      [input.watchlistEnabled ? 1 : 0, id],
+      'UPDATE amazon_saved_searches SET watchlist_enabled = ? WHERE tenant_key = ? AND id = ?',
+      [input.watchlistEnabled ? 1 : 0, tenantKey, id],
     );
   } else if (input.lastJobId !== undefined) {
     await pool.execute(
-      'UPDATE amazon_saved_searches SET last_job_id = ? WHERE id = ?',
-      [input.lastJobId, id],
+      'UPDATE amazon_saved_searches SET last_job_id = ? WHERE tenant_key = ? AND id = ?',
+      [input.lastJobId, tenantKey, id],
     );
   } else if (input.lastRunAt !== undefined) {
     await pool.execute(
-      'UPDATE amazon_saved_searches SET last_run_at = ? WHERE id = ?',
-      [input.lastRunAt, id],
+      'UPDATE amazon_saved_searches SET last_run_at = ? WHERE tenant_key = ? AND id = ?',
+      [input.lastRunAt, tenantKey, id],
     );
   }
 }
 
 export async function deleteSavedSearch(id: string): Promise<void> {
-  await pool.execute('DELETE FROM amazon_saved_searches WHERE id = ?', [id]);
+  const tenantKey = await getActiveTenantKey();
+  await pool.execute('DELETE FROM amazon_saved_searches WHERE tenant_key = ? AND id = ?', [tenantKey, id]);
 }

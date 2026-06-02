@@ -246,7 +246,7 @@ Modüler tier mantığı. Müşteri ihtiyacına göre modül ekler, faturası bu
 - 🔔 **Bu hafta (05-09):** Paspas sunum revize + müşteri görüşmesi + ilk teklif (199 EUR)
 - amozon → market_pulse aktarım (Senaryo A): repo birleştirme, klasör organizasyonu
 - Tema migrasyonu adım 1: admin_panel token'ları + sidebar yeniden düzeni
-- Multi-tenant DB şeması: `tenants`, `tenant_users`, `tenant_modules`, `tenant_subscriptions`
+- ✅ Tenant config çekirdeği: `tenants`, `tenant_settings`, `tenant_secrets`, `TENANT_KEY`, `getActiveTenant()` (deploy-başına tek aktif tenant modeli)
 
 ### Ay 2 — Haziran 2026
 - Monitor modülü MVP'si: 3 şablon (bayi sitesi izleme, Trendyol fiyat, RSS)
@@ -254,6 +254,7 @@ Modüler tier mantığı. Müşteri ihtiyacına göre modül ekler, faturası bu
 - Sinyal sistemi: e-mail + WhatsApp bildirimleri
 - CRM çekirdek backend: hesap, kişi, pipeline, görev tabloları + API
 - Tema migrasyonu adım 2: frontend (landing + auth + dashboard sade B2B'ye dön)
+- ✅ Tenant izolasyon altyapısı: iş tablo seed'lerine `tenant_key`, additive `db:migrate`, market/lead/public/amazon repo scoping ana akışları
 - **Hedef**: Paspas + 1 yeni sanayi müşterisi canlıda
 
 ### Ay 3 — Temmuz 2026
@@ -344,14 +345,14 @@ Her çeklist'in başı bu master plana referans verir: `> Bu çeklist [MARKET_PU
 ## 11. Açık Riskler ve Karar Bekleyenler
 
 ### Açık riskler
-1. **Multi-tenant DB**: Mevcut backend tek-tenant. Multi-tenant'a göç, en az 2 hafta iş + veri göçü. Yanlış yapılırsa müşteri verisi karışır.
+1. **Multi-tenant DB**: Faz 1 tenant config çekirdeği tamamlandı; Faz 2'de iş tablo seed'lerine `tenant_key`, additive migration runner ve ana repo scoping akışları eklendi. Kalan kritik risk: cross-tenant izolasyon testi + grep/CI guard + full test expectation bakımı.
 2. **BAZ Export 1-2 yıl önde**: Discover + Outreach modüllerinde rekabet zorluğu. Pazara girerken **Monitor + CRM**'in ön plana çıkması, Outreach'in **Faz 2'ye atılması** bu nedenle.
 3. **Sanayi tier custom işi**: 199-499 EUR/ay danışmanlık-destekli — ölçeklenmez. 10+ müşteri olunca kişisel emek tükenir. Faz 5'te "kendi-kendine onboarding" sistemini sağlamlaştırmak şart.
 4. **amozon repo'su yarı yolda kalır**: Mevcut Amazon müşterisi (Bionluk teslimi) varsa onun sözleşmesi bitene kadar amozon yaşamaya devam eder. Aktarım, amozon'un kapanmasına bağlı değil; market_pulse paralel ilerler.
 5. **Tema migrasyonu admin panel'i bozabilir**: Shadcn token override'ları tüm bileşenleri etkiler. Mevcut admin paneli kullanıcıya teslim edilmiş — kırılma olursa müşteri etkilenir. **Aksiyon**: tema migrasyonu yeni branch'te yapılır, görsel QA tamamlanmadan main'e merge edilmez.
 
 ### Karar bekleyen sorular (önümüzdeki 7 gün içinde)
-- **A**: Multi-tenant ayrı veritabanı mı yoksa `tenant_id` kolonu mu? (Önerim: tenant_id, row-level isolation. Maliyet düşük, müşteri sayısı az.)
+- **A**: Multi-tenant ayrı veritabanı mı yoksa `tenant_id` kolonu mu? **Karar verildi:** deploy-başına ayrı DB + tek aktif `TENANT_KEY`; büyüme kapısı için iş tablolarında `tenant_key` scoping Faz 2'de eklenecek.
 - **B**: Billing partner Iyzipay mı Paddle mı Stripe-only mi? (Önerim: Iyzipay TL + Stripe EUR/USD, çoklu.)
 - **C**: Auth/SSO ihtiyacı şimdi mi sonra mı? (Önerim: Faz 1'de e-mail+şifre, Faz 3'te Google OAuth, Faz 5'te SAML for enterprise.)
 - **D**: Domain → marketpulse.com.tr mu, marketpulse.app mı, başka mı? (Cevap yok.)
@@ -380,7 +381,9 @@ Sıra önemli; üstten alta:
 2. **Önümüzdeki 2 hafta (05-21 → 06-04)**:
    - [ ] amozon → market_pulse fiziksel aktarım (kod taşıma)
    - [ ] Tema migrasyonu Adım 1: admin_panel token'ları (`docs/teknik/TEMA_MIGRASYON_CEKLISTI.md`)
-   - [ ] Multi-tenant DB şeması taslağı (`docs/teknik/MULTI_TENANT_CEKLISTI.md`)
+   - [x] Tenant config çekirdeği (`026_tenancy_schema.sql`, `TENANT_KEY`, `getActiveTenant`) — detay: `docs/strateji/MARKET_PULSE_TENANT_CEKLIST_PLANI.md`
+   - [x] Tenant isolation altyapısı: iş tablolarına `tenant_key` seed'i + `db:migrate` runner + ana repo scoping
+   - [ ] Tenant isolation kapanışı: cross-tenant test + grep/CI guard + full test expectation güncellemesi
    - [ ] Sanayi görüşme sonuçlarına göre Monitor şablonları yazısı (`docs/teknik/MONITOR_MODULU_CEKLISTI.md`)
 
 3. **Haziran 2026**:

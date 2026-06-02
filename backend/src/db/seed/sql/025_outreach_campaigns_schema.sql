@@ -8,6 +8,7 @@
 
 CREATE TABLE IF NOT EXISTS `outreach_campaigns` (
   `id`             char(36)     NOT NULL,
+  `tenant_key`     varchar(64)  NOT NULL DEFAULT 'avrasya',
   `slug`           varchar(100) NOT NULL,        -- 'avrasya-automechanika-2026'
   `name`           varchar(200) NOT NULL,        -- 'Avrasya - Automechanika 2026'
   `is_active`      tinyint(1)   NOT NULL DEFAULT 1,
@@ -56,16 +57,11 @@ CREATE TABLE IF NOT EXISTS `outreach_campaigns` (
   `updated_at`     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
 
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_outreach_campaign_slug` (`slug`),
+  UNIQUE KEY `uq_outreach_campaign_slug` (`tenant_key`, `slug`),
+  KEY `idx_outreach_campaign_tenant` (`tenant_key`),
   KEY `idx_outreach_campaign_active` (`is_active`),
   KEY `idx_outreach_campaign_icp` (`icp_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
-
--- lead_outreach_drafts'a campaign referansi ekle (opsiyonel — eski draftlar NULL)
--- NOT: CLAUDE.md kurali geregi ALTER yerine seed dosyasi degisikligi onerilir,
--- ama bu yeni bir column eklemesi (mevcut veri kayipsiz) — pragmatik olarak ALTER.
--- Production'da bu adim db:seed:fresh ile birlesik calisir.
-ALTER TABLE `lead_outreach_drafts`
-  ADD COLUMN IF NOT EXISTS `campaign_id` char(36) DEFAULT NULL AFTER `market_lead_id`,
-  ADD KEY IF NOT EXISTS `idx_outreach_draft_campaign` (`campaign_id`);
+-- lead_outreach_drafts.campaign_id fresh seed yolunda 018_lead_machine_schema.sql
+-- CREATE TABLE tanimina eklenir. Canli veri korumali ileri migrasyon ayri runner ile yapilacak.

@@ -2,6 +2,7 @@ import type { RowDataPacket } from 'mysql2/promise';
 import { createRequire } from 'node:module';
 import { env } from '@/core/env';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { renderWeeklyReportText, type WeeklyReportData } from './report.template';
 
 const require = createRequire(import.meta.url);
@@ -46,28 +47,33 @@ function createSimplePdf(lines: string[]): Buffer {
 }
 
 async function collectWeeklyReportData(): Promise<WeeklyReportData> {
+  const tenantKey = await getActiveTenantKey();
   const [[targetStats], [leadStats], [signalStats], [riskRows], [signalRows], [leadRows]] = await Promise.all([
-    pool.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM market_targets'),
-    pool.query<RowDataPacket[]>("SELECT COUNT(*) AS count FROM market_leads WHERE status NOT IN ('converted', 'rejected')"),
-    pool.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM market_signals WHERE is_reviewed = 0'),
+    pool.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM market_targets WHERE tenant_key = ?', [tenantKey]),
+    pool.query<RowDataPacket[]>("SELECT COUNT(*) AS count FROM market_leads WHERE tenant_key = ? AND status NOT IN ('converted', 'rejected')", [tenantKey]),
+    pool.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM market_signals WHERE tenant_key = ? AND is_reviewed = 0', [tenantKey]),
     pool.query<RowDataPacket[]>(
       `SELECT name, churn_risk_score AS churnRiskScore, city
        FROM market_targets
-       WHERE churn_risk_score >= 60
+       WHERE tenant_key = ? AND churn_risk_score >= 60
        ORDER BY churn_risk_score DESC
        LIMIT 5`,
+      [tenantKey],
     ),
     pool.query<RowDataPacket[]>(
       `SELECT s.created_at AS createdAt, s.severity, s.title, t.name AS targetName
        FROM market_signals s
-       LEFT JOIN market_targets t ON t.id = s.target_id
-       WHERE s.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+       LEFT JOIN market_targets t ON t.tenant_key = s.tenant_key AND t.id = s.target_id
+       WHERE s.tenant_key = ?
+         AND s.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
          AND s.severity IN ('critical', 'high')
        ORDER BY s.created_at DESC
        LIMIT 20`,
+      [tenantKey],
     ),
     pool.query<RowDataPacket[]>(
-      'SELECT status, COUNT(*) AS count FROM market_leads GROUP BY status ORDER BY status ASC',
+      'SELECT status, COUNT(*) AS count FROM market_leads WHERE tenant_key = ? GROUP BY status ORDER BY status ASC',
+      [tenantKey],
     ),
   ]);
 

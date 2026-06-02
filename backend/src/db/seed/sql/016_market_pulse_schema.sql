@@ -2,6 +2,7 @@
 
 CREATE TABLE IF NOT EXISTS `market_targets` (
   `id`                  char(36)     NOT NULL,
+  `tenant_key`          varchar(64)  NOT NULL DEFAULT 'avrasya',
   `name`                varchar(255) NOT NULL,
   `category`            varchar(50)  NOT NULL DEFAULT 'dealer',
   `status`              varchar(30)  NOT NULL DEFAULT 'active',
@@ -24,7 +25,8 @@ CREATE TABLE IF NOT EXISTS `market_targets` (
   `created_at`          datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`          datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_market_targets_paspas_id` (`paspas_customer_id`)
+  KEY `idx_market_targets_tenant` (`tenant_key`),
+  UNIQUE KEY `uq_market_targets_paspas_id` (`tenant_key`, `paspas_customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 SET @add_market_targets_paspas_customer_id := IF(
@@ -53,6 +55,7 @@ DEALLOCATE PREPARE stmt;
 
 CREATE TABLE IF NOT EXISTS `market_leads` (
   `id`           char(36)     NOT NULL,
+  `tenant_key`   varchar(64)  NOT NULL DEFAULT 'avrasya',
   `name`         varchar(255) NOT NULL,
   `category`     varchar(100) DEFAULT NULL,
   `source`       varchar(100) NOT NULL DEFAULT 'manual',
@@ -70,11 +73,13 @@ CREATE TABLE IF NOT EXISTS `market_leads` (
   `converted_at` datetime     DEFAULT NULL,
   `created_at`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
+  PRIMARY KEY (`id`),
+  KEY `idx_market_leads_tenant` (`tenant_key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `market_signals` (
   `id`          char(36)      NOT NULL,
+  `tenant_key`  varchar(64)   NOT NULL DEFAULT 'avrasya',
   `target_id`   char(36)      DEFAULT NULL,
   `lead_id`     char(36)      DEFAULT NULL,
   `signal_type` varchar(100)  NOT NULL DEFAULT 'manual',
@@ -86,6 +91,7 @@ CREATE TABLE IF NOT EXISTS `market_signals` (
   `reviewed_at` datetime      DEFAULT NULL,
   `created_at`  datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_market_signals_tenant`      (`tenant_key`),
   KEY `idx_market_signals_target`      (`target_id`),
   KEY `idx_market_signals_lead`        (`lead_id`),
   KEY `idx_market_signals_is_reviewed` (`is_reviewed`)

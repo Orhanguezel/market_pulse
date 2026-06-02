@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 
 export interface IcpProfile {
   id: string;
@@ -22,21 +23,24 @@ function parseProfile(row: IcpProfile) {
 }
 
 export async function listIcpProfiles() {
-  const [rows] = await pool.execute('SELECT * FROM icp_profiles ORDER BY created_at DESC');
+  const tenantKey = await getActiveTenantKey();
+  const [rows] = await pool.execute('SELECT * FROM icp_profiles WHERE tenant_key = ? ORDER BY created_at DESC', [tenantKey]);
   return (rows as IcpProfile[]).map(parseProfile);
 }
 
 export async function getIcpProfile(id: string) {
-  const [rows] = await pool.execute('SELECT * FROM icp_profiles WHERE id = ? LIMIT 1', [id]);
+  const tenantKey = await getActiveTenantKey();
+  const [rows] = await pool.execute('SELECT * FROM icp_profiles WHERE tenant_key = ? AND id = ? LIMIT 1', [tenantKey, id]);
   const row = (rows as IcpProfile[])[0];
   return row ? parseProfile(row) : null;
 }
 
 export async function createIcpProfile(data: { name: string; definition: unknown; is_active?: boolean }) {
   const id = randomUUID();
+  const tenantKey = await getActiveTenantKey();
   await pool.execute(
-    'INSERT INTO icp_profiles (id, name, is_active, definition) VALUES (?, ?, ?, ?)',
-    [id, data.name, data.is_active === false ? 0 : 1, JSON.stringify(data.definition ?? {})],
+    'INSERT INTO icp_profiles (id, tenant_key, name, is_active, definition) VALUES (?, ?, ?, ?, ?)',
+    [id, tenantKey, data.name, data.is_active === false ? 0 : 1, JSON.stringify(data.definition ?? {})],
   );
   return getIcpProfile(id);
 }
@@ -57,17 +61,20 @@ export async function updateIcpProfile(id: string, data: { name?: string; defini
     values.push(JSON.stringify(data.definition));
   }
   if (!sets.length) return getIcpProfile(id);
+  const tenantKey = await getActiveTenantKey();
   values.push(id);
-  await pool.execute(`UPDATE icp_profiles SET ${sets.join(', ')} WHERE id = ?`, values as never[]);
+  values.push(tenantKey);
+  await pool.execute(`UPDATE icp_profiles SET ${sets.join(', ')} WHERE id = ? AND tenant_key = ?`, values as never[]);
   return getIcpProfile(id);
 }
 
 export async function deleteIcpProfile(id: string) {
-  const [jobs] = await pool.execute('SELECT id FROM lead_search_jobs WHERE icp_id = ? LIMIT 1', [id]);
+  const tenantKey = await getActiveTenantKey();
+  const [jobs] = await pool.execute('SELECT id FROM lead_search_jobs WHERE tenant_key = ? AND icp_id = ? LIMIT 1', [tenantKey, id]);
   if ((jobs as unknown[]).length) {
     const err = new Error('ICP_HAS_JOBS');
     (err as Error & { statusCode: number }).statusCode = 409;
     throw err;
   }
-  await pool.execute('DELETE FROM icp_profiles WHERE id = ?', [id]);
+  await pool.execute('DELETE FROM icp_profiles WHERE tenant_key = ? AND id = ?', [tenantKey, id]);
 }

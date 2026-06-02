@@ -1,5 +1,6 @@
 import crypto from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 
 function getEncryptionKey(): Buffer {
   const hex = process.env.KEEPA_ENCRYPTION_KEY;
@@ -37,9 +38,10 @@ export interface ByokStatus {
 }
 
 export async function getByokStatus(userId: string): Promise<ByokStatus> {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
-    'SELECT token_budget, tokens_used, last_checked_at FROM user_keepa_keys WHERE user_id = ? LIMIT 1',
-    [userId],
+    'SELECT token_budget, tokens_used, last_checked_at FROM user_keepa_keys WHERE tenant_key = ? AND user_id = ? LIMIT 1',
+    [tenantKey, userId],
   );
   const row = (rows as Record<string, unknown>[])[0];
   if (!row) return { hasKey: false, tokenBudget: null, tokensUsed: 0, lastCheckedAt: null };
@@ -52,24 +54,27 @@ export async function getByokStatus(userId: string): Promise<ByokStatus> {
 }
 
 export async function saveByokKey(userId: string, apiKey: string): Promise<void> {
+  const tenantKey = await getActiveTenantKey();
   const encryptedKey = encrypt(apiKey.trim());
   const id = crypto.randomUUID();
   await pool.execute(
-    `INSERT INTO user_keepa_keys (id, user_id, encrypted_key)
-     VALUES (?, ?, ?)
+    `INSERT INTO user_keepa_keys (id, tenant_key, user_id, encrypted_key)
+     VALUES (?, ?, ?, ?)
      ON DUPLICATE KEY UPDATE encrypted_key = VALUES(encrypted_key), updated_at = CURRENT_TIMESTAMP(3)`,
-    [id, userId, encryptedKey],
+    [id, tenantKey, userId, encryptedKey],
   );
 }
 
 export async function deleteByokKey(userId: string): Promise<void> {
-  await pool.execute('DELETE FROM user_keepa_keys WHERE user_id = ?', [userId]);
+  const tenantKey = await getActiveTenantKey();
+  await pool.execute('DELETE FROM user_keepa_keys WHERE tenant_key = ? AND user_id = ?', [tenantKey, userId]);
 }
 
 export async function getDecryptedByokKey(userId: string): Promise<string | null> {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
-    'SELECT encrypted_key FROM user_keepa_keys WHERE user_id = ? LIMIT 1',
-    [userId],
+    'SELECT encrypted_key FROM user_keepa_keys WHERE tenant_key = ? AND user_id = ? LIMIT 1',
+    [tenantKey, userId],
   );
   const row = (rows as Record<string, unknown>[])[0];
   if (!row?.encrypted_key) return null;

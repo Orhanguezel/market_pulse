@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
 import { env } from '@/core/env';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { getCandidate } from '../_shared/db';
 import { scrape, type LeadPageData } from '../_shared/scraper.client';
 
@@ -185,6 +186,7 @@ function normalizeApolloDecisionMaker(payload: unknown) {
 }
 
 export async function enrichCandidate(candidateId: string) {
+  const tenantKey = await getActiveTenantKey();
   const candidate = await getCandidate(candidateId);
   if (!candidate) throw new Error('CANDIDATE_NOT_FOUND');
   const domain = domainFromUrl(candidate.website);
@@ -229,17 +231,18 @@ export async function enrichCandidate(candidateId: string) {
 
   const id = randomUUID();
   await pool.execute(
-    `INSERT INTO lead_enrichment (id, candidate_id, decision_maker, source_vendor)
-     VALUES (?, ?, ?, ?)`,
-    [id, candidateId, JSON.stringify(decisionMaker), sourceVendor],
+    `INSERT INTO lead_enrichment (id, tenant_key, candidate_id, decision_maker, source_vendor)
+     VALUES (?, ?, ?, ?, ?)`,
+    [id, tenantKey, candidateId, JSON.stringify(decisionMaker), sourceVendor],
   );
   return { id, candidateId, decisionMaker, sourceVendor };
 }
 
 export async function listCandidateEnrichment(candidateId: string) {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
-    'SELECT * FROM lead_enrichment WHERE candidate_id = ? ORDER BY enriched_at DESC LIMIT 10',
-    [candidateId],
+    'SELECT * FROM lead_enrichment WHERE tenant_key = ? AND candidate_id = ? ORDER BY enriched_at DESC LIMIT 10',
+    [tenantKey, candidateId],
   );
   return (rows as Array<Record<string, unknown>>).map((row) => {
     const decisionMaker = row.decision_maker;

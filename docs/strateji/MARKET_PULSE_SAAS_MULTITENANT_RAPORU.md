@@ -6,6 +6,8 @@
 **Kapsam notu:** Bu rapor BLUEPRINT'tir. Uygulama ayrı oturumda market_pulse repo'sunda yapılacak.
 **Repo:** https://github.com/Orhanguezel/market_pulse.git → vps-vistainsaat'a çekilecek.
 
+**Uygulama durumu (2026-06-02):** Bu rapordaki tam SaaS modeli, `MARKET_PULSE_TENANT_CEKLIST_PLANI.md` ile deploy-başına tek aktif tenant kararına indirgenerek uygulanıyor. Faz 1 tenant config çekirdeği (`026_tenancy_schema.sql`, `TENANT_KEY`, `core/tenant.ts`, tenant testleri) tamamlandı ve GitHub'a pushlandı. Faz 2'de iş tablo seed'lerine `tenant_key`, additive `db:migrate` runner ve market/lead/public/amazon repo scoping büyük ölçüde eklendi; cross-tenant izolasyon testi ve test expectation bakımı hâlâ açık.
+
 ---
 
 ## 1. Yönetici Özeti
@@ -132,16 +134,15 @@ tenants (id, key, name, plan, status, settings_json)
 
 **Faz 0 — Hazırlık**
 - [ ] Repo'yu vps-vistainsaat'a klonla (deploy değil, kod hazırlığı)
-- [ ] Bu rapor + master plan gözden geçir, deploy topolojisi (A/B) kararını ver
+- [x] Bu rapor + master plan gözden geçirildi; güncel karar `MARKET_PULSE_TENANT_CEKLIST_PLANI.md` içindeki deploy-başına tek aktif tenant modeli.
 
 **Faz 1 — Tenant çekirdeği**
-- [ ] `0XX_tenancy_schema.sql` (tenants, tenant_members, tenant_settings, tenant_secrets, tenant_plans, tenant_usage)
-- [ ] Auth: JWT tenant bağlamı + `requireTenant` middleware
-- [ ] `user_roles` → `tenant_members.role` geçişi (global super-admin korunur)
+- [x] `026_tenancy_schema.sql` (`tenants`, `tenant_settings`, `tenant_secrets`) eklendi.
+- [x] Deploy-başına tek aktif tenant için `TENANT_KEY` + `getActiveTenant()` eklendi; request-scoped middleware bu mimaride bilinçli olarak yapılmadı.
+- [ ] `user_roles` → `tenant_members.role` geçişi bu mimaride kapsam dışı; ihtiyaç tekrar doğarsa ayrı SaaS fazı olarak ele alınacak.
 
-**Faz 2 — İzolasyon**
-- [ ] Tüm iş tablolarına `tenant_id` (seed güncelle, `db:seed:fresh`)
-- [ ] `withTenant` repo-helper + tüm repo'ları tenant imzasına geçir
+- [x] Tüm iş tablolarına `tenant_key` (seed güncelle, `db:seed`)
+- [ ] `tenant-scope` repo-helper + repo'ları tenant scope'a geçir _(ana akışlar tamamlandı, test/guard kapanışı sürüyor)_
 - [ ] Cross-tenant izolasyon testi (zorunlu, CI'da)
 
 **Faz 3 — Config & kota tenant'a**

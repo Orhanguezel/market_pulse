@@ -3,6 +3,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db/client';
 import { marketTargets, marketSignals } from './schema';
 import { scrape, type CompetitorPageData } from '../lead-machine/_shared/scraper.client';
+import { andTenant, getActiveTenantKey, tenantValues } from '@/modules/_shared';
 
 type SignalSeverity = 'critical' | 'high' | 'medium' | 'low';
 
@@ -30,10 +31,11 @@ export async function scanAndCreateSignals(targetId: string): Promise<{
   signals_created: number;
   scan_data: CompetitorPageData;
 }> {
+  const tenantKey = await getActiveTenantKey();
   const [target] = await db
     .select({ id: marketTargets.id, name: marketTargets.name, website: marketTargets.website })
     .from(marketTargets)
-    .where(eq(marketTargets.id, targetId))
+    .where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, targetId)]))
     .limit(1);
 
   if (!target) throw Object.assign(new Error('TARGET_NOT_FOUND'), { statusCode: 404 });
@@ -50,7 +52,7 @@ export async function scanAndCreateSignals(targetId: string): Promise<{
   let signalsCreated = 0;
 
   if (changedFields.length > 0) {
-    await db.insert(marketSignals).values({
+    await db.insert(marketSignals).values(tenantValues(tenantKey, {
       id:          randomUUID(),
       target_id:   targetId,
       signal_type: 'competitor_change',
@@ -63,7 +65,7 @@ export async function scanAndCreateSignals(targetId: string): Promise<{
         products:  data.products?.slice(0, 5),
       }),
       source_url: target.website,
-    });
+    }));
     signalsCreated = 1;
   }
 
@@ -71,7 +73,7 @@ export async function scanAndCreateSignals(targetId: string): Promise<{
   await db
     .update(marketTargets)
     .set({ last_seen_at: new Date() })
-    .where(eq(marketTargets.id, targetId));
+    .where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, targetId)]));
 
   return {
     target_id:       targetId,

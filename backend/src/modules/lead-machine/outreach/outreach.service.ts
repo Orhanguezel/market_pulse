@@ -1,6 +1,7 @@
 import { pool } from '@/db/client';
 import { env } from '@/core/env';
 import { sendMailRaw } from '@/modules/mail';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { getCandidate } from '../_shared/db';
 import { listCandidateEnrichment } from '../enrichment/enrichment.service';
 export { generateOutreachEmail } from './draft.service';
@@ -148,7 +149,8 @@ function followupContent(stage: typeof FOLLOWUP_STAGES[number]['step'], language
 }
 
 async function getOutreachDraft(id: string) {
-  const [rows] = await pool.execute('SELECT * FROM lead_outreach_drafts WHERE id = ? LIMIT 1', [id]);
+  const tenantKey = await getActiveTenantKey();
+  const [rows] = await pool.execute('SELECT * FROM lead_outreach_drafts WHERE tenant_key = ? AND id = ? LIMIT 1', [tenantKey, id]);
   return (rows as OutreachDraftRow[])[0] ?? null;
 }
 
@@ -164,7 +166,8 @@ async function resolveDraftRecipient(draft: OutreachDraftRow) {
   }
 
   if (draft.market_lead_id) {
-    const [rows] = await pool.execute('SELECT email FROM market_leads WHERE id = ? LIMIT 1', [draft.market_lead_id]);
+    const tenantKey = await getActiveTenantKey();
+    const [rows] = await pool.execute('SELECT email FROM market_leads WHERE tenant_key = ? AND id = ? LIMIT 1', [tenantKey, draft.market_lead_id]);
     const email = (rows as Array<{ email?: string | null }>)[0]?.email;
     if (email) return email;
   }
@@ -173,8 +176,9 @@ async function resolveDraftRecipient(draft: OutreachDraftRow) {
 }
 
 export async function listOutreachDrafts(candidateId?: string, marketLeadId?: string) {
-  const where: string[] = [];
-  const values: unknown[] = [];
+  const tenantKey = await getActiveTenantKey();
+  const where: string[] = ['tenant_key = ?'];
+  const values: unknown[] = [tenantKey];
   if (candidateId) {
     where.push('candidate_id = ?');
     values.push(candidateId);
@@ -207,8 +211,10 @@ export async function updateOutreachDraft(
   }
   if (!sets.length) return null;
   values.push(id);
-  await pool.execute(`UPDATE lead_outreach_drafts SET ${sets.join(', ')} WHERE id = ?`, values as never[]);
-  const [rows] = await pool.execute('SELECT * FROM lead_outreach_drafts WHERE id = ? LIMIT 1', [id]);
+  const tenantKey = await getActiveTenantKey();
+  values.push(tenantKey);
+  await pool.execute(`UPDATE lead_outreach_drafts SET ${sets.join(', ')} WHERE id = ? AND tenant_key = ?`, values as never[]);
+  const [rows] = await pool.execute('SELECT * FROM lead_outreach_drafts WHERE tenant_key = ? AND id = ? LIMIT 1', [tenantKey, id]);
   return (rows as unknown[])[0] ?? null;
 }
 
@@ -226,24 +232,26 @@ export async function sendOutreachDraft(id: string, toOverride?: string | null) 
   });
 
   await pool.execute(
-    "UPDATE lead_outreach_drafts SET status = 'sent', sent_at = CURRENT_TIMESTAMP WHERE id = ?",
-    [id],
+    "UPDATE lead_outreach_drafts SET status = 'sent', sent_at = CURRENT_TIMESTAMP WHERE tenant_key = ? AND id = ?",
+    [await getActiveTenantKey(), id],
   );
   const sentDraft = await getOutreachDraft(id);
   return sentDraft ?? { ...draft, status: 'sent' };
 }
 
 export async function trackOutreachOpen(id: string) {
+  const tenantKey = await getActiveTenantKey();
   await pool.execute(
     `UPDATE lead_outreach_drafts
      SET opened_at = COALESCE(opened_at, CURRENT_TIMESTAMP),
          open_count = COALESCE(open_count, 0) + 1
-     WHERE id = ?`,
-    [id],
+     WHERE tenant_key = ? AND id = ?`,
+    [tenantKey, id],
   );
 }
 
 export async function sendDueOutreachReminders(now = new Date()) {
+  const tenantKey = await getActiveTenantKey();
   const today = now.toISOString().slice(0, 10);
   const stage = [...REMINDER_STAGES].reverse().find((item) => today >= item.dueDate);
   if (!stage) return { stage: null, sent: 0, skipped: 0 };
@@ -251,12 +259,13 @@ export async function sendDueOutreachReminders(now = new Date()) {
   const [rows] = await pool.execute(
     `SELECT * FROM lead_outreach_drafts
      WHERE status = 'sent'
+       AND tenant_key = ?
        AND replied_at IS NULL
        AND reply_status IS NULL
        AND COALESCE(sequence_step, 'initial') = ?
      ORDER BY sent_at ASC
      LIMIT 100`,
-    [stage.previous],
+    [tenantKey, stage.previous],
   );
 
   let sent = 0;
@@ -275,8 +284,8 @@ export async function sendDueOutreachReminders(now = new Date()) {
       text: content.body,
     });
     await pool.execute(
-      'UPDATE lead_outreach_drafts SET sequence_step = ?, last_reminder_at = CURRENT_TIMESTAMP WHERE id = ?',
-      [stage.step, draft.id],
+      'UPDATE lead_outreach_drafts SET sequence_step = ?, last_reminder_at = CURRENT_TIMESTAMP WHERE tenant_key = ? AND id = ?',
+      [stage.step, tenantKey, draft.id],
     );
     sent += 1;
   }
@@ -285,6 +294,7 @@ export async function sendDueOutreachReminders(now = new Date()) {
 }
 
 export async function sendDuePostShowFollowups(now = new Date()) {
+  const tenantKey = await getActiveTenantKey();
   for (const stage of FOLLOWUP_STAGES) {
     const threshold = new Date(now);
     threshold.setUTCDate(threshold.getUTCDate() - stage.daysSinceSent);
@@ -293,6 +303,7 @@ export async function sendDuePostShowFollowups(now = new Date()) {
     const [rows] = await pool.execute(
       `SELECT * FROM lead_outreach_drafts
        WHERE status = 'sent'
+         AND tenant_key = ?
          AND sent_at IS NOT NULL
          AND sent_at <= ?
          AND replied_at IS NULL
@@ -300,7 +311,7 @@ export async function sendDuePostShowFollowups(now = new Date()) {
          AND COALESCE(followup_step, 'initial') = ?
        ORDER BY sent_at ASC
        LIMIT 100`,
-      [thresholdSql, stage.previous],
+      [tenantKey, thresholdSql, stage.previous],
     );
 
     if (!(rows as OutreachDraftRow[]).length) continue;
@@ -321,8 +332,8 @@ export async function sendDuePostShowFollowups(now = new Date()) {
         text: content.body,
       });
       await pool.execute(
-        'UPDATE lead_outreach_drafts SET followup_step = ?, last_followup_at = CURRENT_TIMESTAMP WHERE id = ?',
-        [stage.step, draft.id],
+        'UPDATE lead_outreach_drafts SET followup_step = ?, last_followup_at = CURRENT_TIMESTAMP WHERE tenant_key = ? AND id = ?',
+        [stage.step, tenantKey, draft.id],
       );
       sent += 1;
     }

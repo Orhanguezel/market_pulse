@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 
 export type PlanCode = 'free' | 'starter' | 'pro' | 'agency';
 
@@ -11,9 +12,10 @@ const PLAN_DAILY_LIMITS: Record<PlanCode, number> = {
 };
 
 export async function getUserPlan(userId: string): Promise<PlanCode> {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
-    `SELECT plan_code FROM user_plans WHERE user_id = ? AND is_active = 1 ORDER BY created_at DESC LIMIT 1`,
-    [userId],
+    `SELECT plan_code FROM user_plans WHERE tenant_key = ? AND user_id = ? AND is_active = 1 ORDER BY created_at DESC LIMIT 1`,
+    [tenantKey, userId],
   );
   const row = (rows as { plan_code: PlanCode }[])[0];
   return row?.plan_code ?? 'free';
@@ -22,9 +24,10 @@ export async function getUserPlan(userId: string): Promise<PlanCode> {
 export async function ensureUserPlan(userId: string): Promise<PlanCode> {
   const plan = await getUserPlan(userId);
   if (!plan) {
+    const tenantKey = await getActiveTenantKey();
     await pool.execute(
-      `INSERT INTO user_plans (id, user_id, plan_code) VALUES (?, ?, 'free')`,
-      [randomUUID(), userId],
+      `INSERT INTO user_plans (id, tenant_key, user_id, plan_code) VALUES (?, ?, ?, 'free')`,
+      [randomUUID(), tenantKey, userId],
     );
     return 'free';
   }
@@ -32,22 +35,24 @@ export async function ensureUserPlan(userId: string): Promise<PlanCode> {
 }
 
 export async function getTodayScanCount(userId: string): Promise<number> {
+  const tenantKey = await getActiveTenantKey();
   const today = new Date().toISOString().slice(0, 10);
   const [rows] = await pool.execute(
-    `SELECT scan_count FROM user_scan_usage WHERE user_id = ? AND scan_date = ? LIMIT 1`,
-    [userId, today],
+    `SELECT scan_count FROM user_scan_usage WHERE tenant_key = ? AND user_id = ? AND scan_date = ? LIMIT 1`,
+    [tenantKey, userId, today],
   );
   const row = (rows as { scan_count: number }[])[0];
   return row?.scan_count ?? 0;
 }
 
 export async function incrementScanCount(userId: string): Promise<void> {
+  const tenantKey = await getActiveTenantKey();
   const today = new Date().toISOString().slice(0, 10);
   await pool.execute(
-    `INSERT INTO user_scan_usage (id, user_id, scan_date, scan_count)
-     VALUES (?, ?, ?, 1)
+    `INSERT INTO user_scan_usage (id, tenant_key, user_id, scan_date, scan_count)
+     VALUES (?, ?, ?, ?, 1)
      ON DUPLICATE KEY UPDATE scan_count = scan_count + 1`,
-    [randomUUID(), userId, today],
+    [randomUUID(), tenantKey, userId, today],
   );
 }
 

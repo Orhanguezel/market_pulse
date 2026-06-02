@@ -41,9 +41,9 @@ CLAUDE.md "lokal'de ALTER yasak, `db:seed:fresh`" kuralı **lokal/yeni deploy** 
 
 ## FAZ 0 — Hazırlık & Güvenlik Ağı
 
-- [ ] **0.1** Bu checklist + kaynak rapor gözden geçirildi, kararlar (Bölüm 0) teyitli.
+- [x] **0.1** Bu checklist + kaynak rapor gözden geçirildi, kararlar (Bölüm 0) teyitli.
 - [ ] **0.2** Avrasya canlı DB'sinin **tam yedeği** alındı (mysqldump). Migration öncesi zorunlu. Yedek olmadan hiçbir migration çalıştırılmaz.
-- [ ] **0.3** `git` üzerinde `feat/tenant-layer` branch açıldı (main'e doğrudan commit yok).
+- [x] **0.3** `git` üzerinde `feat/tenant-config-core` branch açıldı (main'e doğrudan commit yok).
 - [ ] **0.4** Mevcut davranışın "altın çıktı" snapshot'ı alındı: birkaç kritik endpoint'in (lead listesi, icp, market targets) mevcut JSON yanıtı kaydedildi → regresyon karşılaştırması için.
 
 ---
@@ -52,25 +52,25 @@ CLAUDE.md "lokal'de ALTER yasak, `db:seed:fresh`" kuralı **lokal/yeni deploy** 
 
 Amaç: "aktif tenant" kavramını koda sok, ama henüz iş tablolarına dokunma. İzole, düşük riskli adım.
 
-- [ ] **1.1 Yeni seed: `026_tenancy_schema.sql`** (CREATE TABLE, ALTER yok)
+- [x] **1.1 Yeni seed: `026_tenancy_schema.sql`** (CREATE TABLE, ALTER yok)
   - `tenants(tenant_key PK, name, locale, status, plan, created_at, updated_at)`
   - `tenant_settings(tenant_key, key, value_json, PRIMARY KEY(tenant_key,key))` — ICP defaultları, fuar/dizin kaynakları, branding, external_erp config (host/db/tablo adları), feature flag'ler (erp_sync_enabled vb.)
   - `tenant_secrets(tenant_key, key, value_encrypted, PRIMARY KEY(tenant_key,key))` — Apollo/Keepa/scraper token/SMTP; `DB_ENCRYPTION_KEY` ile at-rest şifreli (alan zaten `env.DB_ENCRYPTION_KEY` mevcut, [env.ts:98](../../backend/src/core/env.ts#L98)).
   - Seed içeriği: `avrasya` ve `tarvista` satırları + default settings.
   - **Branch-marker yok** — seed nötr; marka verisi tenant_settings'te.
 
-- [ ] **1.2 `env.ts`: `TENANT_KEY` (aktif tenant) ekle.** [backend/src/core/env.ts](../../backend/src/core/env.ts)
+- [x] **1.2 `env.ts`: `TENANT_KEY` (aktif tenant) ekle.** [backend/src/core/env.ts](../../backend/src/core/env.ts)
   - `TENANT_KEY: process.env.TENANT_KEY ?? 'avrasya'` (default avrasya — mevcut deploy bozulmasın).
   - `EXTERNAL_DB.PASPAS` bloğunu (satır 56-64) bırak ama **deprecated** işaretle; gerçek kaynak artık `tenant_settings.external_erp` olacak (Faz 3'te taşınır).
 
-- [ ] **1.3 Tenant context helper:** `backend/src/core/tenant.ts` (yeni)
+- [x] **1.3 Tenant context helper:** `backend/src/core/tenant.ts` (yeni)
   - `getActiveTenant(): { key, settings, ... }` — `env.TENANT_KEY`'i okur, `tenants` + `tenant_settings`'i cache'ler.
   - `getTenantSetting(key, fallback)` ve `getTenantSecret(key)` (decrypt) helper'ları.
   - Tek aktif tenant olduğu için request-scoped middleware ŞART DEĞİL; modül başlangıcında resolve edilen singleton yeterli. (Çok-tenant'a geçilirse burası `req.tenantKey`'e döner — sınır net.)
 
-- [ ] **1.4 Birim testi:** `getActiveTenant` env'den doğru tenant'ı çözüyor, eksik tenant'ta net hata veriyor.
+- [x] **1.4 Birim testi:** `getActiveTenant` env'den doğru tenant'ı çözüyor, eksik tenant'ta net hata veriyor.
 
-**Faz 1 kabul:** Backend ayağa kalkar, `getActiveTenant()` `avrasya` döner, hiçbir mevcut endpoint davranışı değişmez (snapshot 0.4 ile birebir).
+**Faz 1 kabul:** Tamamlandı. Backend smoke geçti (`/api/health`, login, ICP listesi), `026` seed dahil tam `db:seed` akışı geçti, tenant testleri yeşil.
 
 ---
 
@@ -90,22 +90,24 @@ Kanıtlanmış iş tabloları (rapor + keşif):
 
 > `001_auth`, `004_site_settings`, `012-015` (tema/menü/bildirim) tenant_key ALMAZ (global/deploy-seviyesi) — aksi kanıtlanmadıkça. Codex her tabloyu eklemeden önce "bu veri tenant'a mı ait?" sorusunu cevaplar.
 
-- [ ] **2.2** Her CREATE TABLE seed'ine (yukarıdaki liste) ekle:
+- [x] **2.2** Her CREATE TABLE seed'ine (yukarıdaki liste) ekle:
   - `tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya'`
   - `INDEX idx_<tbl>_tenant (tenant_key)`
   - Mevcut `UNIQUE` kısıtları varsa → `UNIQUE(tenant_key, ...)` olacak şekilde genişlet (örn. icp name benzersizliği tenant başına).
   - DEFAULT `'avrasya'` geçici güvenlik ağıdır; Faz 3 sonunda kod her zaman açık `tenant_key` yazacak.
 
-- [ ] **2.3 Lokal/tarvista yolu:** `bun run build && bun run db:seed` → fresh şema doğrulanır.
+- [x] **2.3 Lokal/tarvista yolu:** `bun run build && bun run db:seed` → fresh şema doğrulanır.
+  - 2026-06-02: `cd backend && bun run build` ve `bun run db:seed` geçti.
 
-- [ ] **2.4 Canlı Avrasya yolu — idempotent forward-migration runner** (yeni: `backend/src/db/migrate/` + `db:migrate` script)
+- [x] **2.4 Canlı Avrasya yolu — idempotent forward-migration runner** (yeni: `backend/src/db/migrate/` + `db:migrate` script)
   - Her tablo için: `ALTER TABLE x ADD COLUMN IF NOT EXISTS tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya'` + index ekle (varsa atla).
   - Backfill: tüm mevcut satırlar zaten DEFAULT ile `avrasya` alır → ekstra UPDATE gerekmez.
   - **Idempotent:** ikinci çalıştırmada hata vermez (IF NOT EXISTS / information_schema kontrolü).
   - DROP/TRUNCATE içermez. `assertSafeToDrop` benzeri guard: migration runner DROP statement'ı reddeder.
   - package.json: `"db:migrate": "bun src/db/migrate/index.ts"` ekle.
+  - 2026-06-02: additive-only `db:migrate` eklendi ve idempotent çalıştı. DROP/TRUNCATE guard mevcut. Not: canlı unique index dönüşümleri additive runner'da DROP gerektirmediği için yapılmıyor; ihtiyaç olursa yedek sonrası ayrı onaylı migration işi.
 
-- [ ] **2.5 Repo katmanı — tenant scoping (iki pattern var, dikkat):**
+- [ ] **2.5 Repo katmanı — tenant scoping (iki pattern var, dikkat):** _(devam ediyor; ana market/lead/public/amazon raw ve Drizzle akışları tenant-aware yapıldı, full test expectation bakımı ve grep guard kaldı)_
   - **Raw `pool.execute()` repo'ları** (örn. [icp.repository.ts](../../backend/src/modules/lead-machine/icp/icp.repository.ts), campaign.repository.ts): her SELECT/INSERT/UPDATE/DELETE'e `tenant_key = ?` ekle. INSERT'lere `tenant_key` kolonu+değeri ekle. Değer `getActiveTenant().key`'ten gelir.
   - **Drizzle repo'ları** (market modülü, [schema.ts](../../backend/src/modules/market/schema.ts)): `withTenant(qb)` sarmalayıcı + schema'lara `tenant_key` kolonu.
   - Ortak helper: `backend/src/modules/_shared/tenant-scope.ts` → `tenantWhere()` (raw için fragment), `withTenant()` (drizzle için). [repo-helpers.ts](../../backend/src/modules/_shared/repo-helpers.ts) yanına.

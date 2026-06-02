@@ -3,6 +3,7 @@ import { eq } from 'drizzle-orm';
 import { db } from '@/db/client';
 import { marketTargets } from '../schema';
 import { getAllPaspasActiveCustomers, type PaspasCustomer } from './paspas.repository';
+import { andTenant, getActiveTenantKey, tenantValues } from '@/modules/_shared';
 
 export type PaspasSyncMode = 'all' | 'customers' | 'dealers';
 
@@ -31,6 +32,7 @@ function filterByMode(customers: PaspasCustomer[], mode: PaspasSyncMode): Paspas
 export async function syncPaspasCustomersToTargets(mode: PaspasSyncMode = 'all'): Promise<PaspasSyncResult> {
   const all      = await getAllPaspasActiveCustomers();
   const filtered = filterByMode(all, mode);
+  const tenantKey = await getActiveTenantKey();
   let inserted   = 0;
   let updated    = 0;
 
@@ -38,13 +40,13 @@ export async function syncPaspasCustomersToTargets(mode: PaspasSyncMode = 'all')
     const [existing] = await db
       .select({ id: marketTargets.id })
       .from(marketTargets)
-      .where(eq(marketTargets.paspas_customer_id, c.id))
+      .where(andTenant(marketTargets, tenantKey, [eq(marketTargets.paspas_customer_id, c.id)]))
       .limit(1);
 
     const category = turToCategory(c.tur);
 
     if (!existing) {
-      await db.insert(marketTargets).values({
+      await db.insert(marketTargets).values(tenantValues(tenantKey, {
         id:                 randomUUID(),
         paspas_customer_id: c.id,
         name:               c.name,
@@ -60,7 +62,7 @@ export async function syncPaspasCustomersToTargets(mode: PaspasSyncMode = 'all')
         hepsiburada_url:    c.hepsiburada_url ?? null,
         trendyol_url:       c.trendyol_url ?? null,
         amazon_url:         c.amazon_url ?? null,
-      });
+      }));
       inserted++;
     } else {
       // Paspas ERP single source of truth: sync writes every field every time.
@@ -81,7 +83,7 @@ export async function syncPaspasCustomersToTargets(mode: PaspasSyncMode = 'all')
           trendyol_url:    c.trendyol_url ?? null,
           amazon_url:      c.amazon_url ?? null,
         })
-        .where(eq(marketTargets.paspas_customer_id, c.id));
+        .where(andTenant(marketTargets, tenantKey, [eq(marketTargets.paspas_customer_id, c.id)]));
       updated++;
     }
   }

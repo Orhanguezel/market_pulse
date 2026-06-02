@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { askBestAvailable } from '../_shared/ai.client';
 import { getCandidate } from '../_shared/db';
 import { listCandidateEnrichment } from '../enrichment/enrichment.service';
@@ -166,10 +167,11 @@ AI summary:
     opts?.senderName || '{gonderici_ad_soyad}',
   );
 
+  const tenantKey = await getActiveTenantKey();
   const id = randomUUID();
   await pool.execute(
-    'INSERT INTO lead_outreach_drafts (id, candidate_id, subject, body, ai_model) VALUES (?, ?, ?, ?, ?)',
-    [id, candidateId, subject.slice(0, 300), body, 'gpt-4o-mini'],
+    'INSERT INTO lead_outreach_drafts (id, tenant_key, candidate_id, subject, body, ai_model) VALUES (?, ?, ?, ?, ?, ?)',
+    [id, tenantKey, candidateId, subject.slice(0, 300), body, 'gpt-4o-mini'],
   );
   return { id, candidateId, subject, body };
 }

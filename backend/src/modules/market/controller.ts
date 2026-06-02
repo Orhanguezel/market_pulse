@@ -38,6 +38,7 @@ import { scanMarketplaceForTarget, type Marketplace } from './marketplace.signal
 import { scanAllMarketplaces } from '@/jobs/marketplace.job';
 import { generateWeeklyReport, sendWeeklyReportEmail } from './report.service';
 import { syncPaspasCustomersToTargets, type PaspasSyncMode } from './external/paspas.sync';
+import { andTenant, getActiveTenantKey, tenantValues } from '@/modules/_shared';
 
 function getRequestUserId(req: { user?: unknown }) {
   const user = req.user;
@@ -54,12 +55,13 @@ export const listTargets: RouteHandler<{ Querystring: unknown }> = async (req, r
     return reply.code(400).send({ error: { message: 'invalid_query', issues: parsed.error.flatten() } });
 
   const q = parsed.data;
+  const tenantKey = await getActiveTenantKey();
   const conditions = [];
   if (q.q)        conditions.push(or(like(marketTargets.name, `%${q.q}%`), like(marketTargets.city, `%${q.q}%`)));
   if (q.category) conditions.push(eq(marketTargets.category, q.category));
   if (q.status)   conditions.push(eq(marketTargets.status, q.status));
 
-  const where = conditions.length ? and(...conditions) : undefined;
+  const where = andTenant(marketTargets, tenantKey, conditions);
   const orderCol = q.sort === 'name' ? marketTargets.name
     : q.sort === 'churn_risk_score' ? marketTargets.churn_risk_score
     : marketTargets.created_at;
@@ -74,7 +76,8 @@ export const listTargets: RouteHandler<{ Querystring: unknown }> = async (req, r
 };
 
 export const getTarget: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const rows = await db.select().from(marketTargets).where(eq(marketTargets.id, req.params.id)).limit(1);
+  const tenantKey = await getActiveTenantKey();
+  const rows = await db.select().from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, req.params.id)])).limit(1);
   if (!rows[0]) return reply.code(404).send({ error: { message: 'not_found' } });
   return targetToDto(rows[0]);
 };
@@ -85,8 +88,9 @@ export const createTarget: RouteHandler<{ Body: unknown }> = async (req, reply) 
     return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
 
   const id = randomUUID();
-  await db.insert(marketTargets).values({ id, ...parsed.data });
-  const rows = await db.select().from(marketTargets).where(eq(marketTargets.id, id)).limit(1);
+  const tenantKey = await getActiveTenantKey();
+  await db.insert(marketTargets).values(tenantValues(tenantKey, { id, ...parsed.data }));
+  const rows = await db.select().from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, id)])).limit(1);
   return reply.code(201).send(targetToDto(rows[0]!));
 };
 
@@ -95,14 +99,16 @@ export const updateTarget: RouteHandler<{ Params: { id: string }; Body: unknown 
   if (!parsed.success)
     return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
 
-  await db.update(marketTargets).set(parsed.data).where(eq(marketTargets.id, req.params.id));
-  const rows = await db.select().from(marketTargets).where(eq(marketTargets.id, req.params.id)).limit(1);
+  const tenantKey = await getActiveTenantKey();
+  await db.update(marketTargets).set(parsed.data).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, req.params.id)]));
+  const rows = await db.select().from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, req.params.id)])).limit(1);
   if (!rows[0]) return reply.code(404).send({ error: { message: 'not_found' } });
   return targetToDto(rows[0]);
 };
 
 export const deleteTarget: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  await db.delete(marketTargets).where(eq(marketTargets.id, req.params.id));
+  const tenantKey = await getActiveTenantKey();
+  await db.delete(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, req.params.id)]));
   return reply.code(204).send();
 };
 
@@ -114,13 +120,14 @@ export const listLeads: RouteHandler<{ Querystring: unknown }> = async (req, rep
     return reply.code(400).send({ error: { message: 'invalid_query', issues: parsed.error.flatten() } });
 
   const q = parsed.data;
+  const tenantKey = await getActiveTenantKey();
   const conditions = [];
   if (q.q)        conditions.push(or(like(marketLeads.name, `%${q.q}%`), like(marketLeads.city, `%${q.q}%`), like(marketLeads.contact_name, `%${q.q}%`)));
   if (q.status)   conditions.push(eq(marketLeads.status, q.status));
   if (q.priority) conditions.push(eq(marketLeads.priority, q.priority));
   if (q.source)   conditions.push(eq(marketLeads.source, q.source));
 
-  const where = conditions.length ? and(...conditions) : undefined;
+  const where = andTenant(marketLeads, tenantKey, conditions);
   const orderCol = q.sort === 'name' ? marketLeads.name
     : q.sort === 'score' ? marketLeads.score
     : q.sort === 'priority' ? marketLeads.priority
@@ -136,7 +143,8 @@ export const listLeads: RouteHandler<{ Querystring: unknown }> = async (req, rep
 };
 
 export const getLead: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const rows = await db.select().from(marketLeads).where(eq(marketLeads.id, req.params.id)).limit(1);
+  const tenantKey = await getActiveTenantKey();
+  const rows = await db.select().from(marketLeads).where(andTenant(marketLeads, tenantKey, [eq(marketLeads.id, req.params.id)])).limit(1);
   if (!rows[0]) return reply.code(404).send({ error: { message: 'not_found' } });
   return leadToDto(rows[0]);
 };
@@ -147,8 +155,9 @@ export const createLead: RouteHandler<{ Body: unknown }> = async (req, reply) =>
     return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
 
   const id = randomUUID();
-  await db.insert(marketLeads).values({ id, ...parsed.data });
-  const rows = await db.select().from(marketLeads).where(eq(marketLeads.id, id)).limit(1);
+  const tenantKey = await getActiveTenantKey();
+  await db.insert(marketLeads).values(tenantValues(tenantKey, { id, ...parsed.data }));
+  const rows = await db.select().from(marketLeads).where(andTenant(marketLeads, tenantKey, [eq(marketLeads.id, id)])).limit(1);
   return reply.code(201).send(leadToDto(rows[0]!));
 };
 
@@ -161,18 +170,20 @@ export const updateLead: RouteHandler<{ Params: { id: string }; Body: unknown }>
   if (parsed.data.status === 'converted') {
     payload.converted_at = new Date();
   }
-  await db.update(marketLeads).set(payload).where(eq(marketLeads.id, req.params.id));
-  const rows = await db.select().from(marketLeads).where(eq(marketLeads.id, req.params.id)).limit(1);
+  const tenantKey = await getActiveTenantKey();
+  await db.update(marketLeads).set(payload).where(andTenant(marketLeads, tenantKey, [eq(marketLeads.id, req.params.id)]));
+  const rows = await db.select().from(marketLeads).where(andTenant(marketLeads, tenantKey, [eq(marketLeads.id, req.params.id)])).limit(1);
   if (!rows[0]) return reply.code(404).send({ error: { message: 'not_found' } });
   return leadToDto(rows[0]);
 };
 
 export const getConversionStats: RouteHandler = async () => {
+  const tenantKey = await getActiveTenantKey();
   const [stageCounts, recentConversions, bySource] = await Promise.all([
     db.select({
       status: marketLeads.status,
       count:  sql<number>`count(*)`,
-    }).from(marketLeads).groupBy(marketLeads.status),
+    }).from(marketLeads).where(andTenant(marketLeads, tenantKey, [])).groupBy(marketLeads.status),
 
     db.select({
       id:           marketLeads.id,
@@ -181,7 +192,7 @@ export const getConversionStats: RouteHandler = async () => {
       score:        marketLeads.score,
       converted_at: marketLeads.converted_at,
     }).from(marketLeads)
-      .where(eq(marketLeads.status, 'converted'))
+      .where(andTenant(marketLeads, tenantKey, [eq(marketLeads.status, 'converted')]))
       .orderBy(desc(marketLeads.converted_at))
       .limit(5),
 
@@ -189,7 +200,7 @@ export const getConversionStats: RouteHandler = async () => {
       source: marketLeads.source,
       count:  sql<number>`count(*)`,
     }).from(marketLeads)
-      .where(eq(marketLeads.status, 'converted'))
+      .where(andTenant(marketLeads, tenantKey, [eq(marketLeads.status, 'converted')]))
       .groupBy(marketLeads.source)
       .orderBy(desc(sql<number>`count(*)`)),
   ]);
@@ -214,7 +225,8 @@ export const getConversionStats: RouteHandler = async () => {
 };
 
 export const deleteLead: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  await db.delete(marketLeads).where(eq(marketLeads.id, req.params.id));
+  const tenantKey = await getActiveTenantKey();
+  await db.delete(marketLeads).where(andTenant(marketLeads, tenantKey, [eq(marketLeads.id, req.params.id)]));
   return reply.code(204).send();
 };
 
@@ -226,13 +238,14 @@ export const listSignals: RouteHandler<{ Querystring: unknown }> = async (req, r
     return reply.code(400).send({ error: { message: 'invalid_query', issues: parsed.error.flatten() } });
 
   const q = parsed.data;
+  const tenantKey = await getActiveTenantKey();
   const conditions = [];
   if (q.target_id !== undefined)   conditions.push(eq(marketSignals.target_id, q.target_id));
   if (q.lead_id !== undefined)     conditions.push(eq(marketSignals.lead_id, q.lead_id));
   if (q.severity)                  conditions.push(eq(marketSignals.severity, q.severity));
   if (q.is_reviewed !== undefined) conditions.push(eq(marketSignals.is_reviewed, q.is_reviewed ? 1 : 0));
 
-  const where = conditions.length ? and(...conditions) : undefined;
+  const where = andTenant(marketSignals, tenantKey, conditions);
 
   const [rows, countResult] = await Promise.all([
     db.select().from(marketSignals).where(where).orderBy(desc(marketSignals.created_at)).limit(q.limit).offset(q.offset),
@@ -248,22 +261,25 @@ export const createSignal: RouteHandler<{ Body: unknown }> = async (req, reply) 
     return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
 
   const id = randomUUID();
-  await db.insert(marketSignals).values({ id, ...parsed.data });
-  const rows = await db.select().from(marketSignals).where(eq(marketSignals.id, id)).limit(1);
+  const tenantKey = await getActiveTenantKey();
+  await db.insert(marketSignals).values(tenantValues(tenantKey, { id, ...parsed.data }));
+  const rows = await db.select().from(marketSignals).where(andTenant(marketSignals, tenantKey, [eq(marketSignals.id, id)])).limit(1);
   return reply.code(201).send(signalToDto(rows[0]!));
 };
 
 export const reviewSignal: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const tenantKey = await getActiveTenantKey();
   await db.update(marketSignals)
     .set({ is_reviewed: 1, reviewed_at: new Date() })
-    .where(eq(marketSignals.id, req.params.id));
-  const rows = await db.select().from(marketSignals).where(eq(marketSignals.id, req.params.id)).limit(1);
+    .where(andTenant(marketSignals, tenantKey, [eq(marketSignals.id, req.params.id)]));
+  const rows = await db.select().from(marketSignals).where(andTenant(marketSignals, tenantKey, [eq(marketSignals.id, req.params.id)])).limit(1);
   if (!rows[0]) return reply.code(404).send({ error: { message: 'not_found' } });
   return signalToDto(rows[0]);
 };
 
 export const deleteSignal: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  await db.delete(marketSignals).where(eq(marketSignals.id, req.params.id));
+  const tenantKey = await getActiveTenantKey();
+  await db.delete(marketSignals).where(andTenant(marketSignals, tenantKey, [eq(marketSignals.id, req.params.id)]));
   return reply.code(204).send();
 };
 
@@ -275,10 +291,11 @@ export const listMarketTestRuns: RouteHandler<{ Querystring: unknown }> = async 
     return reply.code(400).send({ error: { message: 'invalid_query', issues: parsed.error.flatten() } });
 
   const q = parsed.data;
+  const tenantKey = await getActiveTenantKey();
   const conditions = [];
   if (q.suite) conditions.push(eq(marketTestRuns.suite, q.suite));
   if (q.status) conditions.push(eq(marketTestRuns.status, q.status));
-  const where = conditions.length ? and(...conditions) : undefined;
+  const where = andTenant(marketTestRuns, tenantKey, conditions);
 
   const [rows, countResult] = await Promise.all([
     db.select().from(marketTestRuns).where(where).orderBy(desc(marketTestRuns.created_at)).limit(q.limit).offset(q.offset),
@@ -294,12 +311,13 @@ export const createMarketTestRun: RouteHandler<{ Body: unknown }> = async (req, 
     return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
 
   const id = randomUUID();
-  await db.insert(marketTestRuns).values({
+  const tenantKey = await getActiveTenantKey();
+  await db.insert(marketTestRuns).values(tenantValues(tenantKey, {
     id,
     ...parsed.data,
     created_by: getRequestUserId(req),
-  });
-  const rows = await db.select().from(marketTestRuns).where(eq(marketTestRuns.id, id)).limit(1);
+  }));
+  const rows = await db.select().from(marketTestRuns).where(andTenant(marketTestRuns, tenantKey, [eq(marketTestRuns.id, id)])).limit(1);
   return reply.code(201).send(marketTestRunToDto(rows[0]!));
 };
 
@@ -367,7 +385,8 @@ export const executeMarketTestRun: RouteHandler<{ Body: unknown }> = async (req,
   }
 
   const id = randomUUID();
-  await db.insert(marketTestRuns).values({
+  const tenantKey = await getActiveTenantKey();
+  await db.insert(marketTestRuns).values(tenantValues(tenantKey, {
     id,
     suite: body.suite,
     title: body.title || body.suite,
@@ -378,9 +397,9 @@ export const executeMarketTestRun: RouteHandler<{ Body: unknown }> = async (req,
     skip_count: 0,
     output_excerpt: outputExcerpt,
     created_by: getRequestUserId(req),
-  });
+  }));
 
-  const rows = await db.select().from(marketTestRuns).where(eq(marketTestRuns.id, id)).limit(1);
+  const rows = await db.select().from(marketTestRuns).where(andTenant(marketTestRuns, tenantKey, [eq(marketTestRuns.id, id)])).limit(1);
   return reply.code(201).send(marketTestRunToDto(rows[0]!));
 };
 
@@ -392,11 +411,12 @@ export const listMarketDeveloperNotes: RouteHandler<{ Querystring: unknown }> = 
     return reply.code(400).send({ error: { message: 'invalid_query', issues: parsed.error.flatten() } });
 
   const q = parsed.data;
+  const tenantKey = await getActiveTenantKey();
   const conditions = [];
   if (q.status) conditions.push(eq(marketDeveloperNotes.status, q.status));
   if (q.priority) conditions.push(eq(marketDeveloperNotes.priority, q.priority));
   if (q.page_path) conditions.push(eq(marketDeveloperNotes.page_path, q.page_path));
-  const where = conditions.length ? and(...conditions) : undefined;
+  const where = andTenant(marketDeveloperNotes, tenantKey, conditions);
 
   const [rows, countResult] = await Promise.all([
     db.select().from(marketDeveloperNotes).where(where).orderBy(desc(marketDeveloperNotes.created_at)).limit(q.limit).offset(q.offset),
@@ -412,12 +432,13 @@ export const createMarketDeveloperNote: RouteHandler<{ Body: unknown }> = async 
     return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
 
   const id = randomUUID();
-  await db.insert(marketDeveloperNotes).values({
+  const tenantKey = await getActiveTenantKey();
+  await db.insert(marketDeveloperNotes).values(tenantValues(tenantKey, {
     id,
     ...parsed.data,
     created_by: getRequestUserId(req),
-  });
-  const rows = await db.select().from(marketDeveloperNotes).where(eq(marketDeveloperNotes.id, id)).limit(1);
+  }));
+  const rows = await db.select().from(marketDeveloperNotes).where(andTenant(marketDeveloperNotes, tenantKey, [eq(marketDeveloperNotes.id, id)])).limit(1);
   return reply.code(201).send(marketDeveloperNoteToDto(rows[0]!));
 };
 
@@ -426,24 +447,27 @@ export const updateMarketDeveloperNote: RouteHandler<{ Params: { id: string }; B
   if (!parsed.success)
     return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
 
-  await db.update(marketDeveloperNotes).set(parsed.data).where(eq(marketDeveloperNotes.id, req.params.id));
-  const rows = await db.select().from(marketDeveloperNotes).where(eq(marketDeveloperNotes.id, req.params.id)).limit(1);
+  const tenantKey = await getActiveTenantKey();
+  await db.update(marketDeveloperNotes).set(parsed.data).where(andTenant(marketDeveloperNotes, tenantKey, [eq(marketDeveloperNotes.id, req.params.id)]));
+  const rows = await db.select().from(marketDeveloperNotes).where(andTenant(marketDeveloperNotes, tenantKey, [eq(marketDeveloperNotes.id, req.params.id)])).limit(1);
   if (!rows[0]) return reply.code(404).send({ error: { message: 'not_found' } });
   return marketDeveloperNoteToDto(rows[0]);
 };
 
 export const deleteMarketDeveloperNote: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  await db.delete(marketDeveloperNotes).where(eq(marketDeveloperNotes.id, req.params.id));
+  const tenantKey = await getActiveTenantKey();
+  await db.delete(marketDeveloperNotes).where(andTenant(marketDeveloperNotes, tenantKey, [eq(marketDeveloperNotes.id, req.params.id)]));
   return reply.code(204).send();
 };
 
 // ─── Stats ───────────────────────────────────────────────────────────────────
 
 export const getMarketStats: RouteHandler = async (_req, _reply) => {
+  const tenantKey = await getActiveTenantKey();
   const [targets, leads, signals] = await Promise.all([
-    db.select({ count: sql<number>`count(*)` }).from(marketTargets),
-    db.select({ count: sql<number>`count(*)` }).from(marketLeads),
-    db.select({ count: sql<number>`count(*)` }).from(marketSignals).where(eq(marketSignals.is_reviewed, 0)),
+    db.select({ count: sql<number>`count(*)` }).from(marketTargets).where(andTenant(marketTargets, tenantKey, [])),
+    db.select({ count: sql<number>`count(*)` }).from(marketLeads).where(andTenant(marketLeads, tenantKey, [])),
+    db.select({ count: sql<number>`count(*)` }).from(marketSignals).where(andTenant(marketSignals, tenantKey, [eq(marketSignals.is_reviewed, 0)])),
   ]);
 
   return {
@@ -553,6 +577,7 @@ export const bulkImportTargets: RouteHandler<{ Body: unknown }> = async (req, re
     return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
 
   const { rows, dry_run, on_conflict } = parsed.data;
+  const tenantKey = await getActiveTenantKey();
   let inserted = 0;
   let updated  = 0;
   let skipped  = 0;
@@ -561,8 +586,8 @@ export const bulkImportTargets: RouteHandler<{ Body: unknown }> = async (req, re
   for (const row of rows) {
     // Duplicate detection: website öncelikli, yoksa name
     const existingRows = row.website
-      ? await db.select({ id: marketTargets.id }).from(marketTargets).where(eq(marketTargets.website, row.website)).limit(1)
-      : await db.select({ id: marketTargets.id }).from(marketTargets).where(eq(marketTargets.name, row.name)).limit(1);
+      ? await db.select({ id: marketTargets.id }).from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.website, row.website)])).limit(1)
+      : await db.select({ id: marketTargets.id }).from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.name, row.name)])).limit(1);
 
     const existing = existingRows[0];
 
@@ -579,7 +604,7 @@ export const bulkImportTargets: RouteHandler<{ Body: unknown }> = async (req, re
             city:         row.city ?? null,
             district:     row.district ?? null,
             notes:        row.notes ?? null,
-          }).where(eq(marketTargets.id, existing.id));
+          }).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, existing.id)]));
         }
         preview.push({ ...row, _action: 'update' });
         updated++;
@@ -589,7 +614,7 @@ export const bulkImportTargets: RouteHandler<{ Body: unknown }> = async (req, re
       }
     } else {
       if (!dry_run) {
-        await db.insert(marketTargets).values({
+        await db.insert(marketTargets).values(tenantValues(tenantKey, {
           id:           randomUUID(),
           name:         row.name,
           category:     row.category ?? 'prospect',
@@ -601,7 +626,7 @@ export const bulkImportTargets: RouteHandler<{ Body: unknown }> = async (req, re
           city:         row.city ?? null,
           district:     row.district ?? null,
           notes:        row.notes ?? null,
-        });
+        }));
       }
       preview.push({ ...row, _action: 'insert' });
       inserted++;
@@ -629,13 +654,14 @@ export const marketplaceHistory: RouteHandler<{
   // mysql2 prepared statements refuse a parameterized LIMIT, so we coerce
   // to an int in JS and inline it. Range is clamped above.
   const limit = Math.min(Math.max(parseInt(req.query.limit ?? '60', 10) || 60, 1), 365);
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute<RowDataPacket[]>(
     `SELECT id, created_at, description
        FROM market_signals
-      WHERE target_id = ? AND signal_type = ?
+      WHERE tenant_key = ? AND target_id = ? AND signal_type = ?
       ORDER BY created_at ASC
       LIMIT ${limit}`,
-    [req.params.id, `marketplace_${platform}_snapshot`],
+    [tenantKey, req.params.id, `marketplace_${platform}_snapshot`],
   );
   const points = (rows as Array<{ id: string; created_at: string; description: string | null }>)
     .map((r) => {
@@ -666,7 +692,8 @@ export const marketplaceHistory: RouteHandler<{
 // Drives the expandable row on /admin/market/targets.
 
 export const targetIntel: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const rows = await db.select().from(marketTargets).where(eq(marketTargets.id, req.params.id)).limit(1);
+  const tenantKey = await getActiveTenantKey();
+  const rows = await db.select().from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, req.params.id)])).limit(1);
   const row = rows[0];
   if (!row) return reply.code(404).send({ error: { message: 'not_found' } });
 
@@ -676,12 +703,13 @@ export const targetIntel: RouteHandler<{ Params: { id: string } }> = async (req,
   const [signalRows] = await pool.execute<RowDataPacket[]>(
     `SELECT id, target_id, signal_type, severity, title, description, source_url,
             is_reviewed, created_at
-       FROM market_signals
-      WHERE target_id = ?
+      FROM market_signals
+      WHERE tenant_key = ?
+        AND target_id = ?
         AND signal_type NOT LIKE 'marketplace_%_snapshot'
       ORDER BY created_at DESC
       LIMIT 20`,
-    [req.params.id],
+    [tenantKey, req.params.id],
   );
 
   let orders: Awaited<ReturnType<typeof getCustomerOrders>> = [];
@@ -772,10 +800,11 @@ export const scanMarketplace: RouteHandler<{
 };
 
 export const scanAllCompetitors: RouteHandler = async (_req, _reply) => {
+  const tenantKey = await getActiveTenantKey();
   const allActive = await db
     .select({ id: marketTargets.id, website: marketTargets.website })
     .from(marketTargets)
-    .where(eq(marketTargets.status, 'active'));
+    .where(andTenant(marketTargets, tenantKey, [eq(marketTargets.status, 'active')]));
 
   const scannable = allActive.filter((t) => t.website && String(t.website).trim());
   const without_website = allActive.length - scannable.length;
