@@ -42,6 +42,7 @@ export const env = {
   NODE_ENV: process.env.NODE_ENV ?? 'development',
   APP_NAME: process.env.APP_NAME ?? 'MarketPulse',
   APP_URL: process.env.APP_URL ?? process.env.PUBLIC_URL ?? 'http://localhost:8086',
+  TENANT_KEY: process.env.TENANT_KEY ?? 'avrasya',
   PORT: parseEnvInt(process.env.PORT, 8086),
   SENTRY_DSN: process.env.SENTRY_DSN || '',
 
@@ -54,6 +55,7 @@ export const env = {
   },
 
   EXTERNAL_DB: {
+    // @deprecated -> tenant_settings.external_erp (Faz 3)
     PASPAS: {
       host: process.env.EXTERNAL_DB_PASPAS_HOST,
       port: parseEnvInt(process.env.EXTERNAL_DB_PASPAS_PORT, 3306),
