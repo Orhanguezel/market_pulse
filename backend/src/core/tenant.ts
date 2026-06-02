@@ -85,9 +85,9 @@ export async function getActiveTenant(): Promise<ActiveTenant> {
 export async function getTenantSetting<T = unknown>(
   key: string,
   fallback?: T,
-): Promise<T | unknown> {
+): Promise<T | undefined> {
   const tenant = await getActiveTenant();
-  return Object.hasOwn(tenant.settings, key) ? tenant.settings[key] : fallback;
+  return Object.hasOwn(tenant.settings, key) ? tenant.settings[key] as T : fallback;
 }
 
 function getEncryptionKey(rawKey: string): Buffer {

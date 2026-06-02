@@ -8,6 +8,7 @@ const envMock = {
 };
 
 mock.module('@/db/client', () => ({
+  db: dbMock.db,
   pool: dbMock.pool,
 }));
 
