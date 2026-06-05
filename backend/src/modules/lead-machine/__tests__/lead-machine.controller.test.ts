@@ -169,6 +169,30 @@ describe('lead machine controller scraper callback and jobs', () => {
     expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, null, 'job-1', 'avrasya']);
   });
 
+  test('uses scraper callback tenant key for job lookup and writes', async () => {
+    dbMock.queuePoolExecute([job()]);
+
+    const { result } = await callHandler(controller.scraperCallback, {
+      headers: { 'x-scraper-signature': 'ok' },
+      body: {
+        job_id: 'job-1',
+        tenant_key: 'vistaseeds',
+        status: 'done',
+        result: {
+          candidates: [
+            { name: 'Vista Buyer', website: 'https://vista.example', lead_score: 6 },
+          ],
+        },
+      },
+    });
+
+    expect(result).toEqual({ ok: true, inserted: 1 });
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['vistaseeds', 'job-1']);
+    const insert = dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'));
+    expect(insert?.values).toEqual(expect.arrayContaining(['vistaseeds', 'job-1', 'amazon', 'Vista Buyer']));
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, null, 'job-1', 'vistaseeds']);
+  });
+
   test('rejects scraper callback without job id', async () => {
     const { state } = await callHandler(controller.scraperCallback, {
       headers: { 'x-scraper-signature': 'ok' },

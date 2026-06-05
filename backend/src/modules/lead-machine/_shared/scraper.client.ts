@@ -1,5 +1,7 @@
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { env } from '@/core/env';
+import { getActiveTenantKey } from '@/modules/_shared';
+import { getTenantSecret } from '@/core/tenant';
 
 // ─── Scraper-Service Response Types ──────────────────────────────────────────
 
@@ -43,19 +45,21 @@ export interface GoogleMapsResponse {
 }
 
 export interface JobCreateResponse {
-  job_id:   string;
-  status:   'queued' | 'running' | 'done' | 'failed';
-  poll_url: string;
+  job_id:     string;
+  status:     'queued' | 'running' | 'done' | 'failed';
+  poll_url:   string;
+  tenant_key?: string | null;
 }
 
 export interface JobStatusResponse {
-  job_id:     string;
-  status:     'queued' | 'running' | 'done' | 'failed';
-  type:       string;
-  created_at: string | null;
-  updated_at: string | null;
-  result:     unknown;
-  error:      string | null;
+  job_id:      string;
+  status:      'queued' | 'running' | 'done' | 'failed';
+  type:        string;
+  tenant_key?: string | null;
+  created_at:  string | null;
+  updated_at:  string | null;
+  result:      unknown;
+  error:       string | null;
 }
 
 // ─── Profile-specific data shapes ────────────────────────────────────────────
@@ -163,16 +167,20 @@ function baseUrl(): string {
   return env.SCRAPER_SERVICE_URL.replace(/\/$/, '');
 }
 
-function authHeaders(): Record<string, string> {
+async function authHeaders(): Promise<Record<string, string>> {
+  const tenantKey = await getActiveTenantKey();
+  const tenantApiKey = await getTenantSecret('scraper_api_key');
   const h: Record<string, string> = { 'content-type': 'application/json' };
-  if (env.SCRAPER_SERVICE_API_KEY) h['authorization'] = `Bearer ${env.SCRAPER_SERVICE_API_KEY}`;
+  h['x-tenant'] = tenantKey;
+  const apiKey = tenantApiKey || env.SCRAPER_SERVICE_API_KEY;
+  if (apiKey) h['authorization'] = `Bearer ${apiKey}`;
   return h;
 }
 
 async function post<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(`${baseUrl()}${path}`, {
     method: 'POST',
-    headers: authHeaders(),
+    headers: await authHeaders(),
     body: JSON.stringify(body),
   });
   if (!res.ok) {
@@ -183,7 +191,7 @@ async function post<T>(path: string, body: unknown): Promise<T> {
 }
 
 async function get<T>(path: string): Promise<T> {
-  const res = await fetch(`${baseUrl()}${path}`, { headers: authHeaders() });
+  const res = await fetch(`${baseUrl()}${path}`, { headers: await authHeaders() });
   if (!res.ok) throw new Error(`SCRAPER_SERVICE_ERROR_${res.status}`);
   return res.json() as Promise<T>;
 }

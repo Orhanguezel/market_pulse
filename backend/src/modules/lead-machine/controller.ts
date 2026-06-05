@@ -1,5 +1,6 @@
 import type { FastifyReply, RouteHandler } from 'fastify';
 import { pool } from '@/db/client';
+import { runWithTenant } from '@/core/tenant-context';
 import { getActiveTenantKey } from '@/modules/_shared';
 import { approveCandidateToMarketLead } from './_shared/candidate.helpers';
 import {
@@ -73,6 +74,10 @@ function queueCandidateEnrichment(candidateId: string) {
   setTimeout(() => runInBackground(enrichCandidate(candidateId)), 0);
 }
 
+function callbackTenantKey(body: Record<string, unknown>): string | null {
+  return typeof body.tenant_key === 'string' && /^[a-z0-9_-]{1,64}$/i.test(body.tenant_key) ? body.tenant_key : null;
+}
+
 export const listLeadCandidates: RouteHandler<{ Querystring: unknown }> = async (req, reply) => {
   const q = asRecord(req.query);
   const limit = Math.min(100, Math.max(1, Number(q.limit ?? 25)));
@@ -128,38 +133,42 @@ export const scraperCallback: RouteHandler<{ Body: unknown }> = async (req, repl
   const body = asRecord(req.body);
   const jobId = typeof body.job_id === 'string' ? body.job_id : '';
   if (!jobId) return reply.code(400).send({ error: { message: 'missing_job_id' } });
-  const job = await getSearchJob(jobId);
-  if (!job) return reply.code(404).send({ error: { message: 'job_not_found' } });
-  let inserted = 0;
-  const result = asRecord(body.result);
-  const candidates = Array.isArray(result.candidates) ? result.candidates : [];
-  for (const item of candidates) {
-    const candidate = asRecord(item);
-    if (typeof candidate.name !== 'string') continue;
-    await insertCandidate({
-      jobId,
-      channel: job.channel,
-      icpId: job.icp_id,
-      name: candidate.name,
-      website: typeof candidate.website === 'string' ? candidate.website : null,
-      country: typeof candidate.country === 'string' ? candidate.country : null,
-      city: typeof candidate.city === 'string' ? candidate.city : null,
-      phone: typeof candidate.phone === 'string' ? candidate.phone : null,
-      email: typeof candidate.email === 'string' ? candidate.email : null,
-      contactName: typeof candidate.contact_name === 'string' ? candidate.contact_name : null,
-      rawData: candidate.raw_data ?? candidate,
-      aiSummary: typeof candidate.ai_summary === 'string' ? candidate.ai_summary : null,
-      leadScore: typeof candidate.lead_score === 'number' ? candidate.lead_score : 0,
+  const handle = async () => {
+    const job = await getSearchJob(jobId);
+    if (!job) return reply.code(404).send({ error: { message: 'job_not_found' } });
+    let inserted = 0;
+    const result = asRecord(body.result);
+    const candidates = Array.isArray(result.candidates) ? result.candidates : [];
+    for (const item of candidates) {
+      const candidate = asRecord(item);
+      if (typeof candidate.name !== 'string') continue;
+      await insertCandidate({
+        jobId,
+        channel: job.channel,
+        icpId: job.icp_id,
+        name: candidate.name,
+        website: typeof candidate.website === 'string' ? candidate.website : null,
+        country: typeof candidate.country === 'string' ? candidate.country : null,
+        city: typeof candidate.city === 'string' ? candidate.city : null,
+        phone: typeof candidate.phone === 'string' ? candidate.phone : null,
+        email: typeof candidate.email === 'string' ? candidate.email : null,
+        contactName: typeof candidate.contact_name === 'string' ? candidate.contact_name : null,
+        rawData: candidate.raw_data ?? candidate,
+        aiSummary: typeof candidate.ai_summary === 'string' ? candidate.ai_summary : null,
+        leadScore: typeof candidate.lead_score === 'number' ? candidate.lead_score : 0,
+      });
+      inserted += 1;
+    }
+    await updateSearchJob(jobId, {
+      status: body.status === 'failed' ? 'failed' : body.status === 'completed' || body.status === 'done' ? 'done' : 'running',
+      resultCount: inserted || undefined,
+      errorMsg: typeof body.error === 'string' ? body.error : null,
+      finished: body.status === 'completed' || body.status === 'done' || body.status === 'failed',
     });
-    inserted += 1;
-  }
-  await updateSearchJob(jobId, {
-    status: body.status === 'failed' ? 'failed' : body.status === 'completed' ? 'done' : 'running',
-    resultCount: inserted || undefined,
-    errorMsg: typeof body.error === 'string' ? body.error : null,
-    finished: body.status === 'completed' || body.status === 'failed',
-  });
-  return { ok: true, inserted };
+    return { ok: true, inserted };
+  };
+  const tenantKey = callbackTenantKey(body);
+  return tenantKey ? runWithTenant(tenantKey, handle) : handle();
 };
 
 export const rejectionPatterns: RouteHandler = async () => {
