@@ -64,9 +64,13 @@ NODE_ENV=production
 NEXT_PUBLIC_SITE_URL=https://market.tarvista.com
 NEXT_PUBLIC_API_URL=/api/v1
 PANEL_API_URL=http://127.0.0.1:8087
+API_BASE_URL=http://127.0.0.1:8087/api/v1   # server-side build/SSR fetch'leri local backend'e (ZORUNLU)
 NEXT_PUBLIC_APP_NAME=TarVista
 NEXT_PUBLIC_BASE_PATH=
 ```
+> ÖNEMLİ: frontend build sırasında SSG/SSR sayfaları API'ye fetch atar. Domain (nginx+SSL) build'den ÖNCE
+> canlı olmalı, aksi halde `https://market.tarvista.com/api`'ye gidip 60sn timeout ile build çöker.
+> Sıra: nginx vhost + certbot → SONRA frontend/admin build.
 
 ### 5) admin_panel/.env.production
 ```
