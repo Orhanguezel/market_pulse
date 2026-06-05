@@ -125,3 +125,51 @@ curl -fsS -o /dev/null -w "%{http_code}\n" https://market.tarvista.com/panel/
 ```bash
 bash /var/www/market_pulse/deploy/tarvista/deploy.sh
 ```
+
+---
+
+## EK — Faz 7 Merkezi Çok-Tenant Deploy (2026-06-05, CANLI)
+
+Bu deploy artık MERKEZİ çok-tenant: vistaseeds + bereketfide + tarvista + default.
+Admin panel root'ta (frontend kapalı). Tenant runtime'da `X-Tenant` header / `?tenantKey=` ile seçilir.
+
+### Kaynak DB (her tenant kendi DB'sinden okur) — read-only kullanıcı
+```sql
+CREATE USER IF NOT EXISTS 'market_reader'@'localhost'  IDENTIFIED BY '<pw>';
+CREATE USER IF NOT EXISTS 'market_reader'@'127.0.0.1'  IDENTIFIED BY '<pw>';
+GRANT SELECT ON vistaseed.*   TO 'market_reader'@'localhost','market_reader'@'127.0.0.1';
+GRANT SELECT ON bereketfide.* TO 'market_reader'@'localhost','market_reader'@'127.0.0.1';
+FLUSH PRIVILEGES;
+```
+
+### backend/.env eklenenler
+```
+TENANT_KEY=vistaseeds            # default/fallback (switcher header'ı geçersiz kılar)
+EXTERNAL_DB_VISTASEEDS_HOST=127.0.0.1
+EXTERNAL_DB_VISTASEEDS_NAME=vistaseed
+EXTERNAL_DB_VISTASEEDS_USER=market_reader
+EXTERNAL_DB_VISTASEEDS_PASSWORD=<pw>
+EXTERNAL_DB_BEREKETFIDE_HOST=127.0.0.1
+EXTERNAL_DB_BEREKETFIDE_NAME=bereketfide
+EXTERNAL_DB_BEREKETFIDE_USER=market_reader
+EXTERNAL_DB_BEREKETFIDE_PASSWORD=<pw>
+```
+> connectionKey ('vistaseeds'/'bereketfide') → env prefix EXTERNAL_DB_<KEY>_USER/PASSWORD. host/db tenant_settings'ten.
+
+### Canlı şema güncelleme (additive, veri korunur)
+```bash
+cd backend
+bun run db:migrate                                  # Faz3 kolon rename + tenant_key
+bun run src/db/seed/index.ts --no-drop --only=026,027   # yeni tablolar + tenant config (idempotent)
+```
+
+### Sync (ecosystem → market_pulse lead)
+```
+POST /api/v1/admin/market/erp/sync  (Authorization: Bearer + X-Tenant: vistaseeds, body: {})
+→ dealer_profiles -> market_targets (tenant_key=vistaseeds)
+```
+
+### Deploy sırasında bulunan 2 kritik bug (DÜZELTİLDİ — tekrar etmesin)
+1. ALS: `tenantStorage.run(key, done)` Fastify lifecycle'i context dışında bırakıyordu → `enterWith` kullan.
+2. `tenantContextPlugin` `fastify-plugin` (fp) ile sarılmalı; aksi halde onRequest hook encapsulate olur,
+   route'lara uygulanmaz → her istek env.TENANT_KEY'e düşer (cross-tenant sızıntı).
