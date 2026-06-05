@@ -55,8 +55,16 @@ const definition = {
   ],
   priority_firm_types: ['seed distributor', 'seed importer', 'agro-dealer', 'seedling producer'],
 
-  // Hedef coğrafyalar — Türk hibrit biber tohumu ihracat pazarları
+  // Açılım stratejisi: ÖNCE YEREL (Türkiye), sonra yurtdışı
+  rollout: {
+    phase1_local: 'TR',
+    phase2_abroad: ['MENA', 'Orta Asya/Türki', 'Balkanlar', 'Akdeniz AB', 'Güney Asya/Afrika'],
+    note: 'Faz 1: Türkiye içi B2B tohum alıcıları + bayi ağı. Faz 2: yurtdışı pazarlar.',
+  },
+
+  // Hedef coğrafyalar — TR önce, sonra Türk hibrit biber tohumu ihracat pazarları
   geographies: [
+    'TR', // FAZ 1 — yerel öncelik
     // MENA
     'EG', 'MA', 'TN', 'DZ', 'JO', 'IQ', 'SA', 'AE', 'LB', 'LY', 'SD', 'OM',
     // Orta Asya / Türki cumhuriyetler + Kafkasya
@@ -68,7 +76,8 @@ const definition = {
     // Güney Asya + Afrika (biber yoğun)
     'IN', 'PK', 'NG', 'GH', 'KE', 'ET',
   ],
-  priority_geographies: ['EG', 'MA', 'UZ', 'AZ', 'RO', 'IQ', 'SA', 'DZ', 'TN', 'KZ'],
+  priority_geographies: ['TR'], // YEREL ÖNCELİK (faz 1)
+  expansion_geographies: ['EG', 'MA', 'UZ', 'AZ', 'RO', 'IQ', 'SA', 'DZ', 'TN', 'KZ'], // faz 2
   exclude_geographies: ['CN', 'HK'], // Çin/HK — büyük rakip biber tohumu kaynağı
 
   sales_types: ['B2B', 'B2B2C'],
@@ -115,25 +124,41 @@ const definition = {
   },
   min_lead_score_for_candidate: 5.0,
 
-  // Fuarlar — kullanıcı güncelleyecek; ev sahibi fuar + hedef tarama listesi
+  // Fuarlar — ÖNCE YEREL. Tek tek eklenir; ev sahibi fuar + tarama hedefleri.
   fair: {
     name: 'Growtech Antalya 2026',
     role: 'host_exhibitor',
     host_exhibitor: { name: 'VistaSeeds', hall: '', booth: '', brand: 'VistaSeeds' },
   },
-  target_fairs: [
-    { name: 'Growtech Antalya', country: 'TR', focus: 'sera, tohum, agri inputs' },
-    { name: 'Fruit Logistica Berlin', country: 'DE', focus: 'taze ürün / tohum alıcıları' },
-    { name: 'Fruit Attraction Madrid', country: 'ES', focus: 'taze ürün / tohum' },
-    { name: 'Sival Angers', country: 'FR', focus: 'bahçe bitkileri / tohum' },
-    { name: 'SIAM Meknès', country: 'MA', focus: 'Fas/Afrika tarım' },
-    { name: 'Sahara Expo Cairo', country: 'EG', focus: 'Mısır/MENA tarım' },
-    { name: 'AgroWorld Uzbekistan (Tashkent)', country: 'UZ', focus: 'Orta Asya tarım' },
-    { name: 'Caspian Agro Baku', country: 'AZ', focus: 'Kafkasya/Hazar tarım' },
-    { name: 'INDAGRA Bucharest', country: 'RO', focus: 'Balkanlar tarım' },
-    { name: 'Novi Sad Agricultural Fair', country: 'RS', focus: 'Sırbistan/Balkanlar tarım' },
-    { name: 'WOP Dubai', country: 'AE', focus: 'perishables / MENA taze ürün' },
-    { name: 'ISF World Seed Congress', country: '—', focus: 'global tohum endüstrisi' },
+  fairs: {
+    // Faz 1 — yerel (Türkiye). Kullanıcı tek tek ekleyecek/güncelleyecek.
+    local: [
+      { name: 'Growtech Antalya', country: 'TR', city: 'Antalya', focus: 'sera, tohum, fide, agri inputs', status: 'confirmed' },
+    ],
+    // Faz 2 — yurtdışı (sonra açılacak)
+    abroad: [
+      { name: 'Fruit Logistica Berlin', country: 'DE', focus: 'taze ürün / tohum alıcıları' },
+      { name: 'Fruit Attraction Madrid', country: 'ES', focus: 'taze ürün / tohum' },
+      { name: 'Sival Angers', country: 'FR', focus: 'bahçe bitkileri / tohum' },
+      { name: 'SIAM Meknès', country: 'MA', focus: 'Fas/Afrika tarım' },
+      { name: 'Sahara Expo Cairo', country: 'EG', focus: 'Mısır/MENA tarım' },
+      { name: 'AgroWorld Uzbekistan (Tashkent)', country: 'UZ', focus: 'Orta Asya tarım' },
+      { name: 'Caspian Agro Baku', country: 'AZ', focus: 'Kafkasya/Hazar tarım' },
+      { name: 'INDAGRA Bucharest', country: 'RO', focus: 'Balkanlar tarım' },
+      { name: 'WOP Dubai', country: 'AE', focus: 'perishables / MENA' },
+      { name: 'ISF World Seed Congress', country: '—', focus: 'global tohum endüstrisi' },
+    ],
+  },
+
+  // Yerli rakip tohum firmaları — lead'lerden hariç tut + keyword-overlap/rakip-izleme sinyali.
+  // Detaylı kayıt market_targets'ta (category='competitor'). Özel araştırma yapılacak.
+  competitors: [
+    { name: 'Yüksel Tohum', country: 'TR', type: 'domestic' },
+    { name: 'Maya Tohum', country: 'TR', type: 'domestic' },
+    { name: 'Multi Tohum', country: 'TR', type: 'domestic' },
+    { name: 'Anamas Tohum', country: 'TR', type: 'domestic' },
+    { name: 'Genetika Tohum', country: 'TR', type: 'domestic' },
+    { name: 'Petektar Tohum', country: 'TR', type: 'domestic' },
   ],
 
   // Diğer modüller için ipuçları
