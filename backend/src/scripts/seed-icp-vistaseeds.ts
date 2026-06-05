@@ -131,9 +131,13 @@ const definition = {
     host_exhibitor: { name: 'VistaSeeds', hall: '', booth: '', brand: 'VistaSeeds' },
   },
   fairs: {
-    // Faz 1 — yerel (Türkiye). Kullanıcı tek tek ekleyecek/güncelleyecek.
+    // Faz 1 — yerel (Türkiye). Tek tek eklenir/güncellenir.
     local: [
       { name: 'Growtech Antalya', country: 'TR', city: 'Antalya', focus: 'sera, tohum, fide, agri inputs', status: 'confirmed' },
+      { name: 'Konya Tarım Fuarı', country: 'TR', city: 'Konya', focus: 'tarım, tohum, bayi/dağıtıcı (İç Anadolu)', status: 'confirmed' },
+      { name: 'Agroexpo İzmir', country: 'TR', city: 'İzmir', focus: 'tarım & hayvancılık, sebze/tohum (Ege)', status: 'confirmed' },
+      { name: 'Anfaş Antalya Tarım', country: 'TR', city: 'Antalya', focus: 'sera/örtüaltı, biber & sebze (Akdeniz)', status: 'confirmed' },
+      { name: 'Adana Çukurova Tarım', country: 'TR', city: 'Adana', focus: 'biber & sebze üretim bölgesi (Güney)', status: 'confirmed' },
     ],
     // Faz 2 — yurtdışı (sonra açılacak)
     abroad: [
