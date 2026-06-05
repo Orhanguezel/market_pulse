@@ -22,7 +22,7 @@ function job(overrides: Record<string, unknown> = {}) {
     channel: 'amazon',
     status: 'pending',
     icp_id: null,
-    params: '{"keyword":"paspas"}',
+    params: '{"keyword":"oto aksesuar"}',
     result_count: 0,
     error_msg: null,
     created_by: null,
@@ -62,7 +62,7 @@ describe('lead machine db jobs', () => {
   test('creates and fetches a search job with parsed params', async () => {
     dbMock.queuePoolExecute([job()]);
 
-    const result = await leadDb.createSearchJob('amazon', { keyword: 'paspas' }, null, 'user-1');
+    const result = await leadDb.createSearchJob('amazon', { keyword: 'oto aksesuar' }, null, 'user-1');
 
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('INSERT INTO lead_search_jobs');
     expect(dbMock.poolExecutions[0]?.values).toEqual([
@@ -71,12 +71,12 @@ describe('lead machine db jobs', () => {
       'amazon',
       'pending',
       null,
-      '{"keyword":"paspas"}',
+      '{"keyword":"oto aksesuar"}',
       'user-1',
     ]);
     expect(result).toEqual(expect.objectContaining({
       id: 'job-1',
-      params: { keyword: 'paspas' },
+      params: { keyword: 'oto aksesuar' },
     }));
   });
 

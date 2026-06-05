@@ -82,7 +82,7 @@ async function readDbConfig(key: string): Promise<ExternalDbConfig | null> {
   };
 }
 
-export async function getExternalPool(key: 'PASPAS' | string): Promise<Pool | null> {
+export async function getExternalPool(key: string): Promise<Pool | null> {
   const normalizedKey = key.toUpperCase();
   const existing = pools.get(normalizedKey);
   if (existing) return existing;

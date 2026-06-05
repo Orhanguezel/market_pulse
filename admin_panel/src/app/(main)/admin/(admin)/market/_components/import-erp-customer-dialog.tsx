@@ -8,26 +8,27 @@ import { Dialog, DialogContent, DialogHeader, DialogTitle } from '@/components/u
 import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Skeleton } from '@/components/ui/skeleton';
-import { useListPaspasCustomersQuery, type PaspasCustomer } from '@/integrations/hooks';
+import { useListErpCustomersQuery, type ErpCustomer } from '@/integrations/hooks';
 
 interface Props {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onSelect: (customer: PaspasCustomer) => void;
+  onSelect: (customer: ErpCustomer) => void;
 }
 
-export default function ImportPaspasCustomerDialog({ open, onOpenChange, onSelect }: Props) {
+export default function ImportErpCustomerDialog({ open, onOpenChange, onSelect }: Props) {
   const [q, setQ] = React.useState('');
-  const { data, isLoading, isFetching } = useListPaspasCustomersQuery(
+  const { data, isLoading, isFetching } = useListErpCustomersQuery(
     { q: q.trim() || undefined, limit: 50 },
     { skip: !open },
   );
+  const items = data?.items ?? [];
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-2xl">
         <DialogHeader>
-          <DialogTitle>Paspas'tan İçe Aktar</DialogTitle>
+          <DialogTitle>ERP'den İçe Aktar</DialogTitle>
         </DialogHeader>
 
         <div className="space-y-3">
@@ -51,11 +52,11 @@ export default function ImportPaspasCustomerDialog({ open, onOpenChange, onSelec
                 </>
               )}
 
-              {!isLoading && !isFetching && (data?.length ?? 0) === 0 && (
+              {!isLoading && !isFetching && items.length === 0 && (
                 <p className="p-3 text-sm text-muted-foreground">Müşteri bulunamadı.</p>
               )}
 
-              {data?.map((customer) => (
+              {items.map((customer) => (
                 <button
                   key={customer.id}
                   type="button"

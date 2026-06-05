@@ -19,25 +19,21 @@ import {
   targetListQuerySchema, targetCreateSchema, targetPatchSchema,
   leadListQuerySchema, leadCreateSchema, leadPatchSchema,
   signalListQuerySchema, signalCreateSchema,
-  paspasExternalListQuerySchema,
-  bulkImportSchema, paspasSyncSchema,
+  erpExternalListQuerySchema,
+  bulkImportSchema, erpSyncSchema,
   marketDeveloperNoteCreateSchema,
   marketDeveloperNoteListQuerySchema,
   marketDeveloperNotePatchSchema,
   marketTestRunCreateSchema,
   marketTestRunListQuerySchema,
 } from './validation';
-import {
-  getCustomerOrders,
-  getPaspasCustomers,
-  getPaspasProducts,
-} from './external/paspas.repository';
+import { getErpProvider, type ErpOrder } from './external/erp';
 import { computeChurnBreakdown, recalculateChurnScore } from './churn.service';
 import { scanAndCreateSignals } from './competitor.signal';
 import { scanMarketplaceForTarget, type Marketplace } from './marketplace.signal';
 import { scanAllMarketplaces } from '@/jobs/marketplace.job';
 import { generateWeeklyReport, sendWeeklyReportEmail } from './report.service';
-import { syncPaspasCustomersToTargets, type PaspasSyncMode } from './external/paspas.sync';
+import { syncErpCustomersToTargets, type ErpSyncMode } from './external/erp/sync';
 import { andTenant, getActiveTenantKey, tenantValues } from '@/modules/_shared';
 
 function getRequestUserId(req: { user?: unknown }) {
@@ -477,15 +473,17 @@ export const getMarketStats: RouteHandler = async (_req, _reply) => {
   };
 };
 
-// ─── External: Paspas ERP ───────────────────────────────────────────────────
+// ─── External ERP ───────────────────────────────────────────────────────────
 
-export const listPaspasCustomers: RouteHandler<{ Querystring: unknown }> = async (req, reply) => {
-  const parsed = paspasExternalListQuerySchema.safeParse(req.query);
+export const listErpCustomers: RouteHandler<{ Querystring: unknown }> = async (req, reply) => {
+  const parsed = erpExternalListQuerySchema.safeParse(req.query);
   if (!parsed.success)
     return reply.code(400).send({ error: { message: 'invalid_query', issues: parsed.error.flatten() } });
 
   try {
-    return await getPaspasCustomers(parsed.data.q, parsed.data.limit);
+    const provider = await getErpProvider();
+    if (!provider) return { enabled: false, items: [] };
+    return { enabled: true, items: await provider.getCustomers(parsed.data.q, parsed.data.limit) };
   } catch (e) {
     if (e instanceof Error && 'statusCode' in e) {
       return reply.code(Number((e as { statusCode: number }).statusCode)).send({ error: { message: e.message } });
@@ -494,13 +492,15 @@ export const listPaspasCustomers: RouteHandler<{ Querystring: unknown }> = async
   }
 };
 
-export const listPaspasProducts: RouteHandler<{ Querystring: unknown }> = async (req, reply) => {
-  const parsed = paspasExternalListQuerySchema.safeParse(req.query);
+export const listErpProducts: RouteHandler<{ Querystring: unknown }> = async (req, reply) => {
+  const parsed = erpExternalListQuerySchema.safeParse(req.query);
   if (!parsed.success)
     return reply.code(400).send({ error: { message: 'invalid_query', issues: parsed.error.flatten() } });
 
   try {
-    return await getPaspasProducts(parsed.data.q, parsed.data.limit);
+    const provider = await getErpProvider();
+    if (!provider) return { enabled: false, items: [] };
+    return { enabled: true, items: await provider.getProducts(parsed.data.q, parsed.data.limit) };
   } catch (e) {
     if (e instanceof Error && 'statusCode' in e) {
       return reply.code(Number((e as { statusCode: number }).statusCode)).send({ error: { message: e.message } });
@@ -509,9 +509,11 @@ export const listPaspasProducts: RouteHandler<{ Querystring: unknown }> = async 
   }
 };
 
-export const listPaspasCustomerOrders: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+export const listErpCustomerOrders: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   try {
-    return await getCustomerOrders(req.params.id);
+    const provider = await getErpProvider();
+    if (!provider) return { enabled: false, items: [] };
+    return { enabled: true, items: await provider.getCustomerOrders(req.params.id) };
   } catch (e) {
     if (e instanceof Error && 'statusCode' in e) {
       return reply.code(Number((e as { statusCode: number }).statusCode)).send({ error: { message: e.message } });
@@ -534,17 +536,18 @@ export const recalculateTargetChurn: RouteHandler<{ Params: { id: string } }> = 
   }
 };
 
-// ─── Paspas Sync ────────────────────────────────────────────────────────────
+// ─── ERP Sync ───────────────────────────────────────────────────────────────
 
-export const syncPaspasTargets: RouteHandler<{ Body: unknown }> = async (req, reply) => {
-  const parsed = paspasSyncSchema.safeParse(req.body ?? {});
+export const syncErpTargets: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const parsed = erpSyncSchema.safeParse(req.body ?? {});
   if (!parsed.success)
     return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
 
   try {
-    const result = await syncPaspasCustomersToTargets(parsed.data.mode as PaspasSyncMode);
+    const result = await syncErpCustomersToTargets(parsed.data.mode as ErpSyncMode);
     return {
       ok:       true,
+      enabled:  result.enabled,
       inserted: result.inserted,
       updated:  result.updated,
       total:    result.total,
@@ -687,7 +690,7 @@ export const marketplaceHistory: RouteHandler<{
 //   - the target row (DTO form)
 //   - churn score with the three contributors broken out
 //   - recent signals (latest 20, newest first)
-//   - paspas order history (latest 30) + a coarse 90d/prev90d trend bucket
+//   - ERP order history (latest 30) + a coarse 90d/prev90d trend bucket
 //
 // Drives the expandable row on /admin/market/targets.
 
@@ -712,18 +715,19 @@ export const targetIntel: RouteHandler<{ Params: { id: string } }> = async (req,
     [tenantKey, req.params.id],
   );
 
-  let orders: Awaited<ReturnType<typeof getCustomerOrders>> = [];
+  let orders: ErpOrder[] = [];
   let ordersError: string | null = null;
-  if (row.paspas_customer_id) {
+  if (row.external_customer_id) {
     try {
-      orders = await getCustomerOrders(row.paspas_customer_id);
+      const provider = await getErpProvider();
+      orders = provider ? await provider.getCustomerOrders(row.external_customer_id) : [];
     } catch (e) {
-      ordersError = e instanceof Error ? e.message : 'paspas_fetch_failed';
+      ordersError = e instanceof Error ? e.message : 'erp_fetch_failed';
     }
   }
 
   // Coarse 90d vs previous-90d trend (used by the panel and shows up next to
-  // 'Sipariş Geçmişi'). Done in JS instead of SQL so we don't hammer paspas
+  // 'Sipariş Geçmişi'). Done in JS instead of SQL so we don't hammer ERP
   // with a second query.
   const now = Date.now();
   const window90 = 90 * 86_400_000;

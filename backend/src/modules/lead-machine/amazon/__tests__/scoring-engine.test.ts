@@ -5,14 +5,14 @@ import { products } from './fixtures/scoring-fixtures';
 describe('amazon scoring engine', () => {
   test('creates full 5-dimensional risk report', () => {
     const report = scoreAmazonCategory({
-      keyword: 'silikon paspas',
+      keyword: 'oto aksesuar',
       marketplace: 'de',
       products: products(50),
       reviewProblemScore: 6,
       reviewProblemFlags: ['quality', 'return'],
     });
 
-    expect(report.keyword).toBe('silikon paspas');
+    expect(report.keyword).toBe('oto aksesuar');
     expect(report.data_points).toBe(50);
     expect(report.scores.category_risk.confidence).toBe('HIGH');
     expect(report.composite_score).toBeNumber();

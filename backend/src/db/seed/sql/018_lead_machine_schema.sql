@@ -269,7 +269,7 @@ CREATE TABLE IF NOT EXISTS `lead_scan_rules` (
   UNIQUE KEY `uq_scan_rule` (`tenant_key`, `icp_id`, `channel`, `value`(100))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Varsayılan ICP: Paspas için oto aksesuar distribütör profili
+-- Varsayılan ICP: Oto Aksesuar için oto aksesuar distribütör profili
 INSERT INTO `icp_profiles` (`id`, `name`, `is_active`, `definition`) VALUES (
   UUID(),
   'Oto Aksesuar Distribütörü — Avrupa',
@@ -285,12 +285,12 @@ INSERT INTO `icp_profiles` (`id`, `name`, `is_active`, `definition`) VALUES (
   )
 );
 
--- Automechanika 2026 — Avrasya Paspas için kalibre ICP (v1, 2026-05-21)
+-- Automechanika 2026 — Avrasya Oto Aksesuar için kalibre ICP (v1, 2026-05-21)
 -- Kaynak: docs/teknik/icp-automechanika-final.md
 INSERT INTO `icp_profiles` (`id`, `name`, `is_active`, `definition`)
 SELECT
   '9f4c8f04-64b8-4da5-9c7d-4a4b5cf4b1b0',
-  'Automechanika 2026 — Paspas/Oto Aksesuar Alıcısı',
+  'Automechanika 2026 — Oto Aksesuar Alıcısı',
   1,
   JSON_OBJECT(
     'version', 1,
@@ -298,7 +298,7 @@ SELECT
       'name', 'Automechanika Frankfurt 2026',
       'dates', '2026-09-08/2026-09-12',
       'host_exhibitor', JSON_OBJECT(
-        'name', 'Avrasya Paspas Otomotiv San. ve Tic. Ltd. Şti.',
+        'name', 'Avrasya Otomotiv San. ve Tic. Ltd. Sti.',
         'brand', 'ProMats',
         'hall', '3.1',
         'booth', 'D11'
@@ -357,5 +357,5 @@ SELECT
 WHERE NOT EXISTS (
   SELECT 1 FROM `icp_profiles`
   WHERE `id` = '9f4c8f04-64b8-4da5-9c7d-4a4b5cf4b1b0'
-     OR `name` = 'Automechanika 2026 — Paspas/Oto Aksesuar Alıcısı'
+     OR `name` = 'Automechanika 2026 — Oto Aksesuar Alıcısı'
 );

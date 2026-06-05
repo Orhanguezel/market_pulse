@@ -16,7 +16,7 @@ import type { AmazonRiskReport } from '../amazon/amazon.types';
 
 function makeProduct(overrides: Partial<AmazonProduct> = {}): AmazonProduct {
   return {
-    product_title: 'Silikon Paspas',
+    product_title: 'Oto Aksesuar',
     price: 29.9,
     rating: 4.2,
     review_count: 120,
@@ -124,7 +124,7 @@ describe('category.normalizer', () => {
       makeProduct({ price: 20, seller_name: 'B' }),
       makeProduct({ price: 30, seller_name: 'C' }),
     ];
-    const stats = buildCategoryStats(products, 'paspas', 'com');
+    const stats = buildCategoryStats(products, 'oto aksesuar', 'com');
     expect(stats.priceMedian).toBe(20);
     expect(stats.sellerCount).toBe(3);
     expect(stats.productCount).toBe(3);
@@ -142,9 +142,9 @@ describe('category.normalizer', () => {
 
 // ─── scorers (unit) ──────────────────────────────────────────────────────────
 
-const BASE_STATS = buildCategoryStats(makeProducts(50), 'paspas', 'com');
+const BASE_STATS = buildCategoryStats(makeProducts(50), 'oto aksesuar', 'com');
 const BASE_PRODUCTS = normalizeProducts(makeProducts(50));
-const BASE_INPUT = { keyword: 'paspas', marketplace: 'com', products: BASE_PRODUCTS, stats: BASE_STATS };
+const BASE_INPUT = { keyword: 'oto aksesuar', marketplace: 'com', products: BASE_PRODUCTS, stats: BASE_STATS };
 
 describe('category-risk scorer', () => {
   test('returns INSUFFICIENT_DATA for < 10 products', () => {
@@ -162,8 +162,8 @@ describe('category-risk scorer', () => {
 
 describe('sku-chaos scorer', () => {
   test('high price spread produces higher score', () => {
-    const wideStats = buildCategoryStats(makeProducts(50, 5, 200), 'paspas', 'com');
-    const narrowStats = buildCategoryStats(makeProducts(50, 28, 32), 'paspas', 'com');
+    const wideStats = buildCategoryStats(makeProducts(50, 5, 200), 'oto aksesuar', 'com');
+    const narrowStats = buildCategoryStats(makeProducts(50, 28, 32), 'oto aksesuar', 'com');
     const wide  = scoreSkuChaos({ ...BASE_INPUT, stats: wideStats });
     const narrow = scoreSkuChaos({ ...BASE_INPUT, stats: narrowStats });
     expect(wide.score).toBeGreaterThan(narrow.score);
@@ -244,14 +244,14 @@ describe('scoreAmazonCategory (integration)', () => {
   test('produces a complete AmazonRiskReport for sufficient data', () => {
     const products = makeProducts(50);
     const report = scoreAmazonCategory({
-      keyword: 'silikon paspas',
+      keyword: 'oto aksesuar',
       marketplace: 'com',
       products,
       reviewProblemScore: 3,
       reviewProblemFlags: ['smell'],
     });
 
-    expect(report.keyword).toBe('silikon paspas');
+    expect(report.keyword).toBe('oto aksesuar');
     expect(report.data_points).toBe(50);
     expect(report.scores).toBeDefined();
     expect(typeof report.composite_score).toBe('number');

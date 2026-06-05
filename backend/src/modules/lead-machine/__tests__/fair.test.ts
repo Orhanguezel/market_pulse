@@ -212,8 +212,8 @@ describe('fair lead machine scraper', () => {
         hits: [{
           exhibitor: {
             id: 'mf-1',
-            rewriteId: 'avrasya-paspas-otomotiv-sanayi-ve-ticaret-limited-sirketi',
-            name: 'Avrasya Paspas Otomotiv Sanayi Ve Ticaret Limited Sirketi',
+            rewriteId: 'avrasya-otomotiv-sanayi-ve-ticaret-limited-sirketi',
+            name: 'Avrasya Otomotiv Sanayi Ve Ticaret Limited Sirketi',
             homepage: 'www.promats.com.tr',
             address: {
               city: 'Istanbul',
@@ -240,7 +240,7 @@ describe('fair lead machine scraper', () => {
     expect(url.searchParams.get('location')).toBe('3.1');
     expect(scrape).not.toHaveBeenCalled();
     expect(result).toEqual([expect.objectContaining({
-      name: 'Avrasya Paspas Otomotiv Sanayi Ve Ticaret Limited Sirketi',
+      name: 'Avrasya Otomotiv Sanayi Ve Ticaret Limited Sirketi',
       website: 'https://www.promats.com.tr',
       country: 'TUR',
       city: 'Istanbul',
@@ -248,7 +248,7 @@ describe('fair lead machine scraper', () => {
       phone: '+90 539 860 75 80',
       email: 'info@avrasyaotomotiv.net',
       hall: '3.1',
-      detail_url: 'https://automechanika.messefrankfurt.com/frankfurt/en/exhibitor-search.detail.html/avrasya-paspas-otomotiv-sanayi-ve-ticaret-limited-sirketi.html',
+      detail_url: 'https://automechanika.messefrankfurt.com/frankfurt/en/exhibitor-search.detail.html/avrasya-otomotiv-sanayi-ve-ticaret-limited-sirketi.html',
       booth_number: '3.1 D11',
       description: undefined,
     })]);

@@ -34,7 +34,7 @@ function job(overrides: Record<string, unknown> = {}) {
     channel: 'amazon',
     status: 'pending',
     icp_id: null,
-    params: '{"keyword":"paspas"}',
+    params: '{"keyword":"oto aksesuar"}',
     result_count: 0,
     error_msg: null,
     created_by: null,
@@ -205,7 +205,7 @@ describe('lead machine controller scraper callback and jobs', () => {
     dbMock.queuePoolExecute([job()]);
 
     const { state } = await callHandler(controller.startAmazonJob, {
-      body: { keyword: 'paspas', marketplace: 'de' },
+      body: { keyword: 'oto aksesuar', marketplace: 'de' },
     });
 
     expect(state.statusCode).toBe(201);
@@ -213,7 +213,7 @@ describe('lead machine controller scraper callback and jobs', () => {
     expect(state.payload).toEqual(expect.objectContaining({
       id: 'job-1',
       channel: 'amazon',
-      params: { keyword: 'paspas' },
+      params: { keyword: 'oto aksesuar' },
     }));
   });
 
@@ -252,7 +252,7 @@ describe('lead machine controller scraper callback and jobs', () => {
     dbMock.queuePoolExecute([{
       id: 'risk-1',
       job_id: 'job-1',
-      keyword: 'paspas',
+      keyword: 'oto aksesuar',
       marketplace: 'de',
       data_points: 47,
       category_risk_score: '7.2',
@@ -267,13 +267,13 @@ describe('lead machine controller scraper callback and jobs', () => {
     ]);
 
     const { result } = await callHandler(controller.getAmazonRiskScores, {
-      params: { keyword: encodeURIComponent('paspas') },
+      params: { keyword: encodeURIComponent('oto aksesuar') },
       query: { marketplace: 'de' },
     });
 
     expect(dbMock.poolExecutions.some((entry) => entry.sql.includes('FROM amazon_risk_scores'))).toBe(true);
     expect(result).toEqual(expect.objectContaining({
-      keyword: 'paspas',
+      keyword: 'oto aksesuar',
       data_points: 47,
       composite_score: 6.6,
       decision: 'DIKKATLI_OL',

@@ -141,7 +141,7 @@ export default function MarketTestCenterPage() {
         <div className="max-w-4xl space-y-4">
           <h1 className="font-serif text-4xl text-gm-text md:text-5xl">Test Merkezi</h1>
           <p className="font-serif text-base italic leading-7 text-gm-muted md:text-lg">
-            Paspas admin panelindeki Test Merkezi mimarisinin Market Pulse’a uyarlanmış kalite kapısıdır. Komutlar manuel çalıştırılır,
+            Market Pulse kalite kapısıdır. Komutlar manuel çalıştırılır,
             sonuçlar bu sayfadaki kapsam ve risk notlarına göre değerlendirilir.
           </p>
         </div>
@@ -196,7 +196,7 @@ export default function MarketTestCenterPage() {
                 <h2 className="font-serif text-2xl text-gm-text">Yedek Politikası</h2>
               </div>
               <p className="text-sm leading-6 text-gm-muted">
-                Mevcut Market Pulse testleri izole çalışır. Gerçek DB veya dış servis kullanan test eklendiğinde Paspas’taki snapshot/restore
+                Mevcut Market Pulse testleri izole çalışır. Gerçek DB veya dış servis kullanan test eklendiğinde snapshot/restore
                 yaklaşımı zorunlu hale getirilmeli ve test sonucu snapshot ID ile kaydedilmelidir.
               </p>
             </CardContent>
@@ -282,7 +282,7 @@ export default function MarketTestCenterPage() {
                 <h2 className="font-serif text-2xl text-gm-text">Sonraki Mimari Adım</h2>
               </div>
               <p className="text-sm leading-6 text-gm-muted">
-                Bu sayfanın sonraki sürümü Paspas Test Merkezi gibi test case, run history, manuel sonuç notu ve AI analiz kayıtlarını backend
+                Bu sayfanın sonraki sürümü test case, run history, manuel sonuç notu ve AI analiz kayıtlarını backend
                 tablolarına yazmalıdır.
               </p>
               <Link

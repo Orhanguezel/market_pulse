@@ -1,12 +1,12 @@
 import type { RowDataPacket } from 'mysql2/promise';
 import { pool } from '@/db/client';
-import { getCustomerOrders } from './external/paspas.repository';
+import { getErpProvider } from './external/erp';
 import { getActiveTenantKey } from '@/modules/_shared';
 
 type TargetRow = RowDataPacket & {
   id: string;
   last_seen_at: string | Date | null;
-  paspas_customer_id: string | null;
+  external_customer_id: string | null;
 };
 
 type SignalCountRow = RowDataPacket & {
@@ -41,16 +41,18 @@ async function getSignalScore(tenantKey: string, targetId: string) {
   return score;
 }
 
-/** Returns null when we genuinely have no paspas order signal to use
- *  (no paspas link, no orders ever, or paspas ERP unreachable). Callers
+/** Returns null when we genuinely have no ERP order signal to use
+ *  (no external link, no orders ever, or ERP unreachable). Callers
  *  must NOT treat that as risk — a missing source of truth is not a
  *  churn signal, just an information gap. Returns 0 when we have data
  *  and the customer looks healthy, 10 when ordering is in steep decline. */
-async function getPaspasOrderScore(paspasCustomerId: string | null): Promise<number | null> {
-  if (!paspasCustomerId) return null;
+async function getErpOrderScore(externalCustomerId: string | null): Promise<number | null> {
+  if (!externalCustomerId) return null;
   let orders;
   try {
-    orders = await getCustomerOrders(paspasCustomerId);
+    const provider = await getErpProvider();
+    if (!provider) return null;
+    orders = await provider.getCustomerOrders(externalCustomerId);
   } catch {
     return null;
   }
@@ -75,16 +77,16 @@ export interface ChurnBreakdown {
   signal_score: number;
   age_score: number;
   age_days: number | null;
-  /** `null` = no paspas data available (no link or empty history). UI
+  /** `null` = no ERP data available (no link or empty history). UI
    *  should render this differently from 0, which means 'we checked and
    *  the customer looks healthy'. */
-  paspas_score: number | null;
+  erp_score: number | null;
 }
 
 export async function computeChurnBreakdown(targetId: string): Promise<ChurnBreakdown> {
   const tenantKey = await getActiveTenantKey();
   const [targets] = await pool.query<TargetRow[]>(
-    'SELECT id, last_seen_at, paspas_customer_id FROM market_targets WHERE tenant_key = ? AND id = ? LIMIT 1',
+    'SELECT id, last_seen_at, external_customer_id FROM market_targets WHERE tenant_key = ? AND id = ? LIMIT 1',
     [tenantKey, targetId],
   );
   const target = targets[0];
@@ -100,9 +102,9 @@ export async function computeChurnBreakdown(targetId: string): Promise<ChurnBrea
   else if (age >= 90) ageScore = 30;
   else if (age >= 60) ageScore = 20;
   else if (age >= 30) ageScore = 10;
-  const paspasScore = await getPaspasOrderScore(target.paspas_customer_id);
-  const total = Math.min(100, Math.max(0, signalScore + ageScore + (paspasScore ?? 0)));
-  return { total, signal_score: signalScore, age_score: ageScore, age_days: age, paspas_score: paspasScore };
+  const erpScore = await getErpOrderScore(target.external_customer_id);
+  const total = Math.min(100, Math.max(0, signalScore + ageScore + (erpScore ?? 0)));
+  return { total, signal_score: signalScore, age_score: ageScore, age_days: age, erp_score: erpScore };
 }
 
 export async function recalculateChurnScore(targetId: string): Promise<number> {

@@ -4,7 +4,7 @@
 // hit the firm's homepage + /iletisim /kontakt /contact /about-us with
 // the scraper-service, collect contact_emails, pick the best one
 // (personal-style mail outranks info@/sales@), and UPDATE both the
-// market_targets row AND the paspas musteriler row (source of truth).
+// market_targets row AND the external customer row (source of truth).
 //
 // Run: bun src/scripts/enrich-target-emails.ts
 // =============================================================
@@ -66,12 +66,12 @@ interface TargetRow {
   id: string;
   name: string;
   website: string;
-  paspas_customer_id: string | null;
+  external_customer_id: string | null;
 }
 
 async function main() {
   const [rows] = await pool.query<any[]>(
-    `SELECT id, name, website, paspas_customer_id
+    `SELECT id, name, website, external_customer_id
        FROM market_targets
       WHERE status = 'active'
         AND website IS NOT NULL AND website <> ''
@@ -81,7 +81,7 @@ async function main() {
   // eslint-disable-next-line no-console
   console.log(`Found ${targets.length} target(s) with website but no email`);
 
-  const paspasPool = await getExternalPool('PASPAS');
+  const erpPool = await getExternalPool('PROMAT');
   let found = 0;
   let missed = 0;
 
@@ -105,11 +105,11 @@ async function main() {
       continue;
     }
     await pool.execute('UPDATE market_targets SET email = ? WHERE id = ?', [email, t.id]);
-    if (paspasPool && t.paspas_customer_id) {
+    if (erpPool && t.external_customer_id) {
       try {
-        await paspasPool.query(
+        await erpPool.query(
           'UPDATE musteriler SET email = COALESCE(email, ?) WHERE id = ?',
-          [email, t.paspas_customer_id],
+          [email, t.external_customer_id],
         );
       } catch {
         // keep going — local update already done

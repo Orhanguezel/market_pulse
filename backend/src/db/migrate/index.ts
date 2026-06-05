@@ -129,6 +129,32 @@ async function ensureIndex(
   );
 }
 
+async function ensureExternalCustomerColumn(conn: mysql.Connection): Promise<void> {
+  if (!(await tableExists(conn, 'market_targets'))) return;
+
+  const hasOld = await columnExists(conn, 'market_targets', 'paspas_customer_id');
+  const hasNew = await columnExists(conn, 'market_targets', 'external_customer_id');
+
+  if (hasOld && !hasNew) {
+    await query(
+      conn,
+      'ALTER TABLE `market_targets` CHANGE `paspas_customer_id` `external_customer_id` CHAR(36) DEFAULT NULL',
+    );
+  } else if (!hasNew) {
+    await query(
+      conn,
+      'ALTER TABLE `market_targets` ADD COLUMN `external_customer_id` CHAR(36) DEFAULT NULL',
+    );
+  }
+
+  if (!(await indexExists(conn, 'market_targets', 'uq_market_targets_external_customer_id'))) {
+    await query(
+      conn,
+      'ALTER TABLE `market_targets` ADD UNIQUE INDEX `uq_market_targets_external_customer_id` (`tenant_key`, `external_customer_id`)',
+    );
+  }
+}
+
 async function migrateTenantColumns(conn: mysql.Connection): Promise<void> {
   for (const table of TENANT_TABLES) {
     if (!(await tableExists(conn, table.name))) {
@@ -149,6 +175,7 @@ async function main(): Promise<void> {
   try {
     await query(conn, 'SET NAMES utf8mb4');
     await migrateTenantColumns(conn);
+    await ensureExternalCustomerColumn(conn);
     console.log('[migrate] completed');
   } finally {
     await conn.end();

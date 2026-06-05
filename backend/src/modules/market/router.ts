@@ -4,9 +4,9 @@ import {
   listLeads, getLead, createLead, updateLead, deleteLead, getConversionStats,
   listSignals, createSignal, reviewSignal, deleteSignal,
   getMarketStats,
-  listPaspasCustomers, listPaspasProducts, listPaspasCustomerOrders,
+  listErpCustomers, listErpProducts, listErpCustomerOrders,
   recalculateTargetChurn,
-  syncPaspasTargets,
+  syncErpTargets,
   bulkImportTargets, downloadImportTemplate,
   scanCompetitor, scanAllCompetitors, scanMarketplace, scanAllMarketplacesNow, marketplaceHistory,
   previewWeeklyReport, sendWeeklyReport,
@@ -33,7 +33,7 @@ export async function registerMarketAdmin(app: FastifyInstance) {
   app.post('/market/signals',           createSignal);
   app.post('/market/signals/:id/review', reviewSignal);
   app.delete('/market/signals/:id',     deleteSignal);
-  app.post('/market/sync-paspas',                         syncPaspasTargets);
+  app.post('/market/erp/sync',                            syncErpTargets);
   app.post('/market/targets/bulk-import',                 bulkImportTargets);
   app.get('/market/targets/import-template',              downloadImportTemplate);
   app.post('/market/targets/:id/scan-competitor',         scanCompetitor);
@@ -41,9 +41,9 @@ export async function registerMarketAdmin(app: FastifyInstance) {
   app.post('/market/targets/:id/scan-marketplace/:platform', scanMarketplace);
   app.get('/market/targets/:id/marketplace-history/:platform', marketplaceHistory);
   app.post('/market/targets/scan-all-marketplaces', scanAllMarketplacesNow);
-  app.get('/market/external/paspas/customers',            listPaspasCustomers);
-  app.get('/market/external/paspas/products',             listPaspasProducts);
-  app.get('/market/external/paspas/customers/:id/orders', listPaspasCustomerOrders);
+  app.get('/market/external/erp/customers',               listErpCustomers);
+  app.get('/market/external/erp/products',                listErpProducts);
+  app.get('/market/external/erp/customers/:id/orders',    listErpCustomerOrders);
   app.get('/market/reports/weekly/preview', previewWeeklyReport);
   app.post('/market/reports/weekly/send', sendWeeklyReport);
   app.get('/market/test-runs', listMarketTestRuns);

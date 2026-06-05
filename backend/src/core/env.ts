@@ -54,17 +54,6 @@ export const env = {
     name: process.env.DB_NAME ?? 'market_pulse_db',
   },
 
-  EXTERNAL_DB: {
-    // @deprecated -> tenant_settings.external_erp (Faz 3)
-    PASPAS: {
-      host: process.env.EXTERNAL_DB_PASPAS_HOST,
-      port: parseEnvInt(process.env.EXTERNAL_DB_PASPAS_PORT, 3306),
-      user: process.env.EXTERNAL_DB_PASPAS_USER,
-      password: process.env.EXTERNAL_DB_PASPAS_PASSWORD,
-      name: process.env.EXTERNAL_DB_PASPAS_NAME,
-    },
-  },
-
   JWT_SECRET: requireEnv('JWT_SECRET'),
   COOKIE_SECRET: requireEnv('COOKIE_SECRET'),
   CORS_ORIGIN,

@@ -16,7 +16,7 @@ CREATE TABLE IF NOT EXISTS `outreach_campaigns` (
   -- Marka & gonderici
   `brand_name`     varchar(150) NOT NULL,        -- 'Avrasya / ProMats'
   `brand_short`    varchar(80)  NOT NULL,        -- 'ProMats'
-  `brand_legal`    varchar(255) DEFAULT NULL,    -- 'Avrasya Paspas Otomotiv San. ve Tic. Ltd. Şti.'
+  `brand_legal`    varchar(255) DEFAULT NULL,    -- 'Avrasya Otomotiv San. ve Tic. Ltd. Sti.'
   `sender_label`   varchar(150) NOT NULL,        -- 'Avrasya / ProMats Export'
   `sender_name`    varchar(150) DEFAULT NULL,    -- 'Ahmet Yılmaz' (görüşme sonrası)
   `sender_title`   varchar(120) DEFAULT NULL,    -- 'Export Manager'

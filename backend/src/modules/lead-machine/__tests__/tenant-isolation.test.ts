@@ -29,7 +29,7 @@ function jobRow(id: string) {
     channel: 'amazon',
     status: 'pending',
     icp_id: null,
-    params: '{"keyword":"paspas"}',
+    params: '{"keyword":"oto aksesuar"}',
     result_count: 0,
     error_msg: null,
     created_by: null,
@@ -42,14 +42,14 @@ function jobRow(id: string) {
 describe('tenant isolation', () => {
   test('lead-machine reads and writes use the active tenant key', async () => {
     dbMock.queuePoolExecute([jobRow('avrasya-job')]);
-    await leadDb.createSearchJob('amazon', { keyword: 'paspas' });
+    await leadDb.createSearchJob('amazon', { keyword: 'oto aksesuar' });
     expect(dbMock.poolExecutions[0]?.values).toEqual([
       expect.any(String),
       'avrasya',
       'amazon',
       'pending',
       null,
-      '{"keyword":"paspas"}',
+      '{"keyword":"oto aksesuar"}',
       null,
     ]);
     expect(dbMock.poolExecutions[1]?.values).toEqual(['avrasya', expect.any(String)]);

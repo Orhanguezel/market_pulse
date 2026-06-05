@@ -21,7 +21,7 @@ export interface MarketTarget {
   notes:            string | null;
   churnRiskScore:   number;
   lastSeenAt:       string | null;
-  paspasCustomerId: string | null;
+  externalCustomerId: string | null;
   createdAt:        string;
   updatedAt:        string;
 }
@@ -73,7 +73,7 @@ export interface MarketStats {
   pendingSignals: number;
 }
 
-export interface PaspasCustomer {
+export interface ErpCustomer {
   id: string;
   tur: string;
   name: string;
@@ -82,7 +82,7 @@ export interface PaspasCustomer {
   discount: number | null;
 }
 
-export interface PaspasProduct {
+export interface ErpProduct {
   id: string;
   kategori: string;
   kod: string;
@@ -94,7 +94,7 @@ export interface PaspasProduct {
   unitPrice: number | null;
 }
 
-export interface PaspasOrder {
+export interface ErpOrder {
   id: string;
   siparisNo: string;
   customerId: string;
@@ -102,6 +102,11 @@ export interface PaspasOrder {
   terminTarihi: string | null;
   durum: string;
   toplamTutar: number;
+}
+
+export interface ErpListResponse<T> {
+  enabled: boolean;
+  items: T[];
 }
 
 export type LeadCandidateStatus = 'pending' | 'approved' | 'rejected' | 'favorite';
@@ -230,8 +235,9 @@ export interface BulkImportResult {
   preview:  BulkImportPreviewRow[];
 }
 
-export interface PaspasSyncResult {
+export interface ErpSyncResult {
   ok:       boolean;
+  enabled:  boolean;
   inserted: number;
   updated:  number;
   total:    number;
@@ -481,7 +487,7 @@ export const marketAdminApi = baseApi.injectEndpoints({
         signal_score: number;
         age_score: number;
         age_days: number | null;
-        paspas_score: number | null;
+        erp_score: number | null;
       } | null;
       signals: Array<{
         id: string;
@@ -588,14 +594,14 @@ export const marketAdminApi = baseApi.injectEndpoints({
       invalidatesTags: ['MarketSignals', 'MarketStats'],
     }),
 
-    listPaspasCustomers: b.query<PaspasCustomer[], { q?: string; limit?: number }>({
-      query: (params) => ({ url: '/admin/market/external/paspas/customers', params }),
+    listErpCustomers: b.query<ErpListResponse<ErpCustomer>, { q?: string; limit?: number }>({
+      query: (params) => ({ url: '/admin/market/external/erp/customers', params }),
     }),
-    listPaspasProducts: b.query<PaspasProduct[], { q?: string; limit?: number }>({
-      query: (params) => ({ url: '/admin/market/external/paspas/products', params }),
+    listErpProducts: b.query<ErpListResponse<ErpProduct>, { q?: string; limit?: number }>({
+      query: (params) => ({ url: '/admin/market/external/erp/products', params }),
     }),
-    listPaspasCustomerOrders: b.query<PaspasOrder[], string>({
-      query: (id) => ({ url: `/admin/market/external/paspas/customers/${id}/orders` }),
+    listErpCustomerOrders: b.query<ErpListResponse<ErpOrder>, string>({
+      query: (id) => ({ url: `/admin/market/external/erp/customers/${id}/orders` }),
     }),
 
     previewWeeklyReport: b.query<Blob, void>({
@@ -735,8 +741,8 @@ export const marketAdminApi = baseApi.injectEndpoints({
       invalidatesTags: ['MarketSignals', 'MarketTargets', 'MarketStats'],
     }),
 
-    syncPaspasTargets: b.mutation<PaspasSyncResult, { mode?: 'all' | 'customers' | 'dealers' }>({
-      query: (body) => ({ url: '/admin/market/sync-paspas', method: 'POST', body }),
+    syncErpTargets: b.mutation<ErpSyncResult, { mode?: 'all' | 'customers' | 'dealers' }>({
+      query: (body) => ({ url: '/admin/market/erp/sync', method: 'POST', body }),
       invalidatesTags: ['MarketTargets', 'MarketStats'],
     }),
     bulkImportTargets: b.mutation<BulkImportResult, {
@@ -1075,9 +1081,9 @@ export const {
   useCreateMarketSignalMutation,
   useReviewMarketSignalMutation,
   useDeleteMarketSignalMutation,
-  useListPaspasCustomersQuery,
-  useListPaspasProductsQuery,
-  useListPaspasCustomerOrdersQuery,
+  useListErpCustomersQuery,
+  useListErpProductsQuery,
+  useListErpCustomerOrdersQuery,
   usePreviewWeeklyReportQuery,
   useLazyPreviewWeeklyReportQuery,
   useSendWeeklyReportMutation,
@@ -1115,7 +1121,7 @@ export const {
   useCreateIcpProfileMutation,
   useUpdateIcpProfileMutation,
   useDeleteIcpProfileMutation,
-  useSyncPaspasTargetsMutation,
+  useSyncErpTargetsMutation,
   useBulkImportTargetsMutation,
   useLazyDownloadImportTemplateQuery,
   useScanCompetitorMutation,
@@ -1141,5 +1147,4 @@ export const {
   useSyncHostKeywordsMutation,
 } = marketAdminApi;
 
-// Checklist uyumu için alias hook isimleri
-export const useGetPaspasCustomerOrdersQuery = useListPaspasCustomerOrdersQuery;
+export const useGetErpCustomerOrdersQuery = useListErpCustomerOrdersQuery;

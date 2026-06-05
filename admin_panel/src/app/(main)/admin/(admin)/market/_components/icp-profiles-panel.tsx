@@ -64,7 +64,7 @@ const SECTOR_OPTIONS = [
 ];
 
 const SUB_SECTOR_MAP: Record<string, string[]> = {
-  'Otomotiv Aksesuar': ['Paspas', 'Kargo Havuzu', 'Koltuk Kılıfı', 'Direksiyon Kılıfı', 'Güneşlik'],
+  'Otomotiv Aksesuar': ['Oto Aksesuar', 'Kargo Havuzu', 'Koltuk Kılıfı', 'Direksiyon Kılıfı', 'Güneşlik'],
   'Oto Bakım & Detay': ['Detay Ürünleri', 'Cila & Pasta', 'Boya Koruma', 'İç Temizlik'],
   'Ev Tekstili': ['Halı & Kilim', 'Perde', 'Yorgan & Yastık', 'Havlu & Bornoz'],
   'Mobilya & Dekorasyon': ['Oturma Grubu', 'Yatak Odası', 'Aydınlatma', 'Duvar Dekorasyon'],

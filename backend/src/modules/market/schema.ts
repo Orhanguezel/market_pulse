@@ -30,7 +30,7 @@ export const marketTargets = mysqlTable('market_targets', {
   notes:            text('notes'),
   churn_risk_score:   decimal('churn_risk_score', { precision: 4, scale: 1 }).default('0.0'),
   last_seen_at:       datetime('last_seen_at'),
-  paspas_customer_id: char('paspas_customer_id', { length: 36 }),
+  external_customer_id: char('external_customer_id', { length: 36 }),
   created_at:         datetime('created_at').notNull().default(sql`CURRENT_TIMESTAMP`),
   updated_at:         datetime('updated_at').notNull().default(sql`CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP`),
 });
@@ -128,7 +128,7 @@ export function targetToDto(r: TargetRow) {
     notes:          r.notes ?? null,
     churnRiskScore:   Number(r.churn_risk_score ?? 0),
     lastSeenAt:       r.last_seen_at ?? null,
-    paspasCustomerId: r.paspas_customer_id ?? null,
+    externalCustomerId: r.external_customer_id ?? null,
     createdAt:        r.created_at,
     updatedAt:        r.updated_at,
   };

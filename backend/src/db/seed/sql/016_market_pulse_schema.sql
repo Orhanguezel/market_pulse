@@ -20,36 +20,35 @@ CREATE TABLE IF NOT EXISTS `market_targets` (
   `notes`               text         DEFAULT NULL,
   `churn_risk_score`    decimal(4,1) NOT NULL DEFAULT '0.0',
   `last_seen_at`        datetime     DEFAULT NULL,
-  -- Paspas ERP bağlantısı: NULL = manuel giriş, dolu = ERP'den senkronize
-  `paspas_customer_id`  char(36)     DEFAULT NULL,
+  `external_customer_id` char(36)    DEFAULT NULL,
   `created_at`          datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`          datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_market_targets_tenant` (`tenant_key`),
-  UNIQUE KEY `uq_market_targets_paspas_id` (`tenant_key`, `paspas_customer_id`)
+  UNIQUE KEY `uq_market_targets_external_customer_id` (`tenant_key`, `external_customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
-SET @add_market_targets_paspas_customer_id := IF(
+SET @add_market_targets_external_customer_id := IF(
   (SELECT COUNT(*) FROM information_schema.COLUMNS
    WHERE TABLE_SCHEMA = DATABASE()
      AND TABLE_NAME = 'market_targets'
-     AND COLUMN_NAME = 'paspas_customer_id') = 0,
-  'ALTER TABLE `market_targets` ADD COLUMN `paspas_customer_id` char(36) DEFAULT NULL',
+     AND COLUMN_NAME = 'external_customer_id') = 0,
+  'ALTER TABLE `market_targets` ADD COLUMN `external_customer_id` char(36) DEFAULT NULL',
   'SELECT 1'
 );
-PREPARE stmt FROM @add_market_targets_paspas_customer_id;
+PREPARE stmt FROM @add_market_targets_external_customer_id;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 
-SET @add_market_targets_paspas_index := IF(
+SET @add_market_targets_external_customer_index := IF(
   (SELECT COUNT(*) FROM information_schema.STATISTICS
    WHERE TABLE_SCHEMA = DATABASE()
      AND TABLE_NAME = 'market_targets'
-     AND INDEX_NAME = 'uq_market_targets_paspas_id') = 0,
-  'CREATE UNIQUE INDEX `uq_market_targets_paspas_id` ON `market_targets` (`paspas_customer_id`)',
+     AND INDEX_NAME = 'uq_market_targets_external_customer_id') = 0,
+  'CREATE UNIQUE INDEX `uq_market_targets_external_customer_id` ON `market_targets` (`tenant_key`, `external_customer_id`)',
   'SELECT 1'
 );
-PREPARE stmt FROM @add_market_targets_paspas_index;
+PREPARE stmt FROM @add_market_targets_external_customer_index;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 

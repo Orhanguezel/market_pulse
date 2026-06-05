@@ -9,14 +9,12 @@ mock.module('@/db/client', () => ({
   pool: dbMock.pool,
 }));
 
-mock.module('../external/paspas.repository', () => ({
-  getCustomerOrders: mock(() => Promise.resolve([])),
-  getPaspasCustomers: mock(() => Promise.resolve([])),
-  getPaspasProducts: mock(() => Promise.resolve([])),
+mock.module('../external/erp', () => ({
+  getErpProvider: mock(() => Promise.resolve(null)),
 }));
 
-mock.module('../external/paspas.sync', () => ({
-  syncPaspasCustomersToTargets: mock(() => Promise.resolve({ inserted: 1, updated: 2, total: 3 })),
+mock.module('../external/erp/sync', () => ({
+  syncErpCustomersToTargets: mock(() => Promise.resolve({ enabled: false, inserted: 0, updated: 0, total: 0 })),
 }));
 
 const controller = await import('../controller');

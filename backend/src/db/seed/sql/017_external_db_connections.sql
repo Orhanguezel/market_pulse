@@ -1,7 +1,7 @@
 -- =============================================================
 -- 017 — Harici veritabanı bağlantıları
 --
--- Amaç: MarketPulse'un Paspas ERP veya diğer projelerin
+-- Amaç: MarketPulse'un ERP veya diğer projelerin
 -- MySQL DB'lerinden okuma yapabilmesi için bağlantı kayıtları.
 --
 -- Güvenlik:
@@ -15,7 +15,7 @@
 
 CREATE TABLE IF NOT EXISTS `external_db_connections` (
   `id`             CHAR(36)     NOT NULL,
-  -- Benzersiz kısa tanımlayıcı: "PASPAS", "VISTASEEDS", "ENSOTEK" vb.
+  -- Benzersiz kısa tanımlayıcı: "PROMAT", "VISTASEEDS", "ENSOTEK" vb.
   -- Env var kalıbıyla eşleşir: EXTERNAL_DB_{key}_HOST
   `key`            VARCHAR(50)  NOT NULL,
   `name`           VARCHAR(100) NOT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `external_db_connections` (
   UNIQUE KEY `ext_db_key_uq` (`key`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Paspas ERP okuma bağlantısı (boş — .env'den alınır)
+-- Promat ERP okuma bağlantısı (boş — .env'den alınır)
 -- Prod'da host/user/pass değerleri ya .env'de ya da bu kayıtta olur.
 -- Bu satır var olması gerekiyor ki admin paneli kaydı listede göstersin.
 INSERT INTO `external_db_connections`
@@ -46,13 +46,13 @@ INSERT INTO `external_db_connections`
 VALUES
   (
     UUID(),
-    'PASPAS',
-    'Paspas ERP',
+    'PROMAT',
+    'Promat ERP',
     'Plastik enjeksiyon fabrikası ERP — müşteri, ürün ve sipariş okuma',
-    '',   -- .env EXTERNAL_DB_PASPAS_HOST ile doldurulur
+    '',   -- .env EXTERNAL_DB_PROMAT_HOST ile doldurulur
     3306,
-    '',   -- .env EXTERNAL_DB_PASPAS_NAME ile doldurulur
-    '',   -- .env EXTERNAL_DB_PASPAS_USER ile doldurulur
-    NULL, -- .env EXTERNAL_DB_PASPAS_PASSWORD ile doldurulur
+    '',   -- .env EXTERNAL_DB_PROMAT_NAME ile doldurulur
+    '',   -- .env EXTERNAL_DB_PROMAT_USER ile doldurulur
+    NULL, -- .env EXTERNAL_DB_PROMAT_PASSWORD ile doldurulur
     0     -- Prod'da aktif edilene kadar devre dışı
   );

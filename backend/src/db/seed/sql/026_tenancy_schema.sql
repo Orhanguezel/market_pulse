@@ -50,13 +50,13 @@ VALUES
     'external_erp',
     JSON_OBJECT(
       'enabled', TRUE,
-      'provider', '',
-      'host', '',
-      'database', '',
+      'provider', 'promat',
+      'connectionKey', 'promat',
       'tables', JSON_OBJECT(
-        'customers', '',
-        'products', '',
-        'orders', ''
+        'customers', 'musteriler',
+        'products', 'urunler',
+        'orders', 'satis_siparisleri',
+        'orderLines', 'siparis_kalemleri'
       )
     )
   ),
@@ -66,12 +66,12 @@ VALUES
     JSON_OBJECT(
       'enabled', FALSE,
       'provider', '',
-      'host', '',
-      'database', '',
+      'connectionKey', '',
       'tables', JSON_OBJECT(
         'customers', '',
         'products', '',
-        'orders', ''
+        'orders', '',
+        'orderLines', ''
       )
     )
   ),

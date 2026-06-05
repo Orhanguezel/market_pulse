@@ -156,16 +156,16 @@ describe('market admin RTK endpoints', () => {
     expect(call.url.pathname).toBe('/api/v1/admin/market/signals/signal-1');
   });
 
-  test('Paspas external and report endpoints map correctly', async () => {
-    let call = await dispatchEndpoint('listPaspasCustomers', { q: 'bayi', limit: 20 });
-    expect(call.url.pathname).toBe('/api/v1/admin/market/external/paspas/customers');
+  test('ERP external and report endpoints map correctly', async () => {
+    let call = await dispatchEndpoint('listErpCustomers', { q: 'bayi', limit: 20 });
+    expect(call.url.pathname).toBe('/api/v1/admin/market/external/erp/customers');
     expect(call.url.searchParams.get('q')).toBe('bayi');
 
-    call = await dispatchEndpoint('listPaspasProducts', { q: 'paspas', limit: 10 });
-    expect(call.url.pathname).toBe('/api/v1/admin/market/external/paspas/products');
+    call = await dispatchEndpoint('listErpProducts', { q: 'accessory', limit: 10 });
+    expect(call.url.pathname).toBe('/api/v1/admin/market/external/erp/products');
 
-    call = await dispatchEndpoint('listPaspasCustomerOrders', 'customer-1');
-    expect(call.url.pathname).toBe('/api/v1/admin/market/external/paspas/customers/customer-1/orders');
+    call = await dispatchEndpoint('listErpCustomerOrders', 'customer-1');
+    expect(call.url.pathname).toBe('/api/v1/admin/market/external/erp/customers/customer-1/orders');
 
     call = await dispatchEndpoint('previewWeeklyReport');
     expect(call.method).toBe('GET');
@@ -186,9 +186,9 @@ describe('market admin RTK endpoints', () => {
     expect(call.method).toBe('POST');
     expect(call.url.pathname).toBe('/api/v1/admin/market/targets/scan-all-competitors');
 
-    call = await dispatchEndpoint('syncPaspasTargets', { mode: 'customers' });
+    call = await dispatchEndpoint('syncErpTargets', { mode: 'customers' });
     expect(call.method).toBe('POST');
-    expect(call.url.pathname).toBe('/api/v1/admin/market/sync-paspas');
+    expect(call.url.pathname).toBe('/api/v1/admin/market/erp/sync');
     expect(jsonBody(call)).toEqual({ mode: 'customers' });
 
     call = await dispatchEndpoint('bulkImportTargets', { rows: [{ name: 'Target A' }], dry_run: true, on_conflict: 'skip' });
@@ -396,10 +396,10 @@ describe('lead machine admin RTK endpoints', () => {
       'useCreateMarketSignalMutation',
       'useReviewMarketSignalMutation',
       'useDeleteMarketSignalMutation',
-      'useListPaspasCustomersQuery',
-      'useListPaspasProductsQuery',
-      'useListPaspasCustomerOrdersQuery',
-      'useGetPaspasCustomerOrdersQuery',
+      'useListErpCustomersQuery',
+      'useListErpProductsQuery',
+      'useListErpCustomerOrdersQuery',
+      'useGetErpCustomerOrdersQuery',
       'usePreviewWeeklyReportQuery',
       'useLazyPreviewWeeklyReportQuery',
       'useSendWeeklyReportMutation',
@@ -432,7 +432,7 @@ describe('lead machine admin RTK endpoints', () => {
       'useCreateIcpProfileMutation',
       'useUpdateIcpProfileMutation',
       'useDeleteIcpProfileMutation',
-      'useSyncPaspasTargetsMutation',
+      'useSyncErpTargetsMutation',
       'useBulkImportTargetsMutation',
       'useLazyDownloadImportTemplateQuery',
       'useScanCompetitorMutation',
