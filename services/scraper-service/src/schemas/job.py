@@ -25,12 +25,14 @@ class JobCreateResponse(BaseModel):
     job_id: str
     status: JobStatus
     poll_url: str
+    tenant_key: str | None = None
 
 
 class JobStatusResponse(BaseModel):
     job_id: str
     status: JobStatus
     type: str
+    tenant_key: str | None = None
     created_at: datetime | None = None
     updated_at: datetime | None = None
     result: Any | None = None

@@ -40,9 +40,12 @@ def test_places_job_create_returns_202(monkeypatch, client):
         },
     )
     assert r.status_code == 202
+    assert r.json()["tenant_key"] == "job"
     assert fake_pool.enqueue_job.await_count == 1
     call = fake_pool.enqueue_job.await_args
     assert call.args[0] == "run_places_job"
+    assert call.args[5] == "job"
+    assert call.args[6]["tenant_key"] == "job"
 
 
 def test_scrape_job_still_supported(monkeypatch, client):
@@ -64,18 +67,31 @@ def test_scrape_job_still_supported(monkeypatch, client):
         },
     )
     assert r.status_code == 202
+    assert r.json()["tenant_key"] == "job"
     call = fake_pool.enqueue_job.await_args
     assert call.args[0] == "run_scrape_job"
+    assert call.args[5]["tenant_key"] == "job"
 
 
-def test_spider_job_returns_400(client):
+def test_spider_job_still_supported(monkeypatch, client):
+    fake_pool = MagicMock()
+    fake_pool.enqueue_job = AsyncMock()
+    fake_pool.close = AsyncMock()
+
+    async def fake_create_pool(_):
+        return fake_pool
+
+    monkeypatch.setattr("src.routes.jobs.create_pool", fake_create_pool)
+
     r = client.post(
         "/api/v1/jobs",
         headers={"Authorization": "Bearer scraper-job-key"},
         json={
             "type": "spider",
-            "payload": {},
+            "payload": {"start_url": "https://example.com", "max_pages": 2},
         },
     )
-    assert r.status_code == 400
-    assert r.json()["detail"] == "unsupported_job_type"
+    assert r.status_code == 202
+    call = fake_pool.enqueue_job.await_args
+    assert call.args[0] == "run_spider_job"
+    assert call.args[5]["tenant_key"] == "job"

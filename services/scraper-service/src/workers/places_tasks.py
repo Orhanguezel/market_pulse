@@ -33,10 +33,12 @@ async def run_places_job(
     callback_url: str | None = None,
     callback_secret: str | None = None,
     key_hash: str | None = None,
+    tenant_context: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     redis: Redis = ctx["redis"]
     await _store_job(redis, job_id, status=JobStatus.running.value, updated_at=utc_now())
     kh = key_hash or "unknown"
+    tenant_key = (tenant_context or {}).get("tenant_key")
 
     try:
         request = GoogleMapsSearchRequest.model_validate(payload)
@@ -57,6 +59,7 @@ async def run_places_job(
         callback_payload = {
             "job_id": job_id,
             "status": status,
+            "tenant_key": tenant_key,
             "result": result_payload,
             "error": err,
         }
@@ -65,6 +68,12 @@ async def run_places_job(
     except Exception as exc:
         error = str(exc)
         await _store_job(redis, job_id, status=JobStatus.failed.value, error=error, updated_at=utc_now())
-        callback_payload = {"job_id": job_id, "status": JobStatus.failed.value, "result": None, "error": error}
+        callback_payload = {
+            "job_id": job_id,
+            "status": JobStatus.failed.value,
+            "tenant_key": tenant_key,
+            "result": None,
+            "error": error,
+        }
         await post_callback(callback_url, callback_secret, callback_payload)
         return callback_payload

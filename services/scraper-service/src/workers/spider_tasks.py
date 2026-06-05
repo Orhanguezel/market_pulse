@@ -41,9 +41,11 @@ async def run_spider_job(
     payload: dict[str, Any],
     callback_url: str | None = None,
     callback_secret: str | None = None,
+    tenant_context: dict[str, str] | None = None,
 ) -> dict[str, Any]:
     redis: Redis = ctx["redis"]
     await store_job(redis, job_id, status=JobStatus.running.value, updated_at=utc_now())
+    tenant_key = (tenant_context or {}).get("tenant_key")
 
     start_url = str(payload.get("start_url", ""))
     max_pages = min(int(payload.get("max_pages", 20)), 50)
@@ -78,6 +80,7 @@ async def run_spider_job(
         result_payload: dict[str, Any] = {
             "job_id": job_id,
             "status": JobStatus.done.value,
+            "tenant_key": tenant_key,
             "results": results,
             "pages_crawled": len(visited),
             "error": None,
@@ -90,6 +93,7 @@ async def run_spider_job(
         callback_payload: dict[str, Any] = {
             "job_id": job_id,
             "status": JobStatus.failed.value,
+            "tenant_key": tenant_key,
             "result": None,
             "error": error,
         }

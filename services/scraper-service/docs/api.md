@@ -1,6 +1,7 @@
 # API
 
 Bearer auth is required. API keys can be configured via `API_KEYS` or Redis records under `apikey:<sha256>`.
+Use the `scraper-{tenant_key}-{secret}` key pattern for tenant-aware clients; the middle segment becomes the `tenant_key` for rate limits, quotas, async job metadata, and webhook callback payloads. Redis key records may override this with `tenant_key`.
 
 ## POST /api/v1/scrape
 

@@ -31,6 +31,16 @@ def _loads(value: str | None):
         return value
 
 
+def _tenant_context(principal: ApiPrincipal) -> dict[str, str]:
+    return {
+        "tenant_key": principal.tenant_key,
+        "project": principal.project,
+        "plan": principal.plan,
+        "key_hash": principal.key_hash,
+        "quota_key": principal.quota_key,
+    }
+
+
 @router.post("/jobs", response_model=JobCreateResponse, status_code=status.HTTP_202_ACCEPTED)
 async def create_job(
     payload: JobCreateRequest,
@@ -62,6 +72,8 @@ async def create_job(
             "created_at": created_at,
             "updated_at": created_at,
             "project": principal.project,
+            "tenant_key": principal.tenant_key,
+            "plan": principal.plan,
         },
     )
     await redis.expire(f"job:{job_id}", 86_400)
@@ -77,15 +89,21 @@ async def create_job(
                 job_payload,
                 cb,
                 secret,
-                principal.key_hash,
+                principal.quota_key,
+                _tenant_context(principal),
                 _job_id=job_id,
             )
         else:
-            await pool.enqueue_job(function_name, job_id, job_payload, cb, secret, _job_id=job_id)
+            await pool.enqueue_job(function_name, job_id, job_payload, cb, secret, _tenant_context(principal), _job_id=job_id)
     finally:
         await pool.close()
 
-    return JobCreateResponse(job_id=job_id, status=JobStatus.queued, poll_url=f"/api/v1/jobs/{job_id}")
+    return JobCreateResponse(
+        job_id=job_id,
+        status=JobStatus.queued,
+        poll_url=f"/api/v1/jobs/{job_id}",
+        tenant_key=principal.tenant_key,
+    )
 
 
 @router.get("/jobs/{job_id}", response_model=JobStatusResponse)
@@ -98,11 +116,14 @@ async def get_job(
     raw = await redis.hgetall(f"job:{job_id}")
     if not raw:
         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="job_not_found")
+    if raw.get("tenant_key") and raw.get("tenant_key") != principal.tenant_key:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="job_not_found")
 
     return JobStatusResponse(
         job_id=job_id,
         status=JobStatus(raw.get("status", JobStatus.failed.value)),
         type=raw.get("type", "scrape"),
+        tenant_key=raw.get("tenant_key"),
         created_at=_loads(raw.get("created_at")),
         updated_at=_loads(raw.get("updated_at")),
         result=_loads(raw.get("result")),

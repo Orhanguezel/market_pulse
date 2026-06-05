@@ -35,5 +35,5 @@ async def google_maps_search(
         redis,
         cache_bypass=cache_bypass,
         proxy_url=proxy,
-        key_hash=principal.key_hash,
+        key_hash=principal.quota_key,
     )
