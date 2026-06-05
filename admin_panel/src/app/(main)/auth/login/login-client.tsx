@@ -1,13 +1,15 @@
 'use client';
 
 import Link from 'next/link';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useMemo, useState } from 'react';
 import { ShieldCheck } from 'lucide-react';
 
 import { LoginForm } from '../_components/login-form';
 import { useLocaleContext } from '@/i18n';
 import type { AdminBrandingConfig } from '@/config/app-config';
 import { DEFAULT_BRANDING } from '@/config/app-config';
+import { getSelectedTenantKey } from '@/integrations/core/tenant';
+import { useListTenantsQuery } from '@/integrations/hooks';
 
 function LoginFormFallback() {
   return (
@@ -22,7 +24,45 @@ function LoginFormFallback() {
 
 export function LoginClient({ branding }: { branding: AdminBrandingConfig }) {
   const { t } = useLocaleContext();
-  const b = { ...DEFAULT_BRANDING, ...branding };
+  const { data: tenants = [] } = useListTenantsQuery();
+  const [tenantKey, setTenantKey] = useState('');
+
+  useEffect(() => {
+    setTenantKey(getSelectedTenantKey());
+  }, []);
+
+  const activeTenant = useMemo(() => (
+    tenants.find((tenant) => tenant.key === tenantKey) ?? tenants[0] ?? null
+  ), [tenants, tenantKey]);
+
+  const b = useMemo<AdminBrandingConfig>(() => {
+    const base = {
+      ...DEFAULT_BRANDING,
+      ...branding,
+      meta: { ...DEFAULT_BRANDING.meta, ...branding.meta },
+    };
+    if (!activeTenant) return base;
+    const tenantBranding = activeTenant.branding ?? {};
+    const tenantName = String(tenantBranding.appName || tenantBranding.displayName || activeTenant.name || base.app_name);
+    return {
+      ...base,
+      app_name: tenantName,
+      app_copyright: String(tenantBranding.displayName || activeTenant.name || base.app_copyright),
+      logo_url: String(tenantBranding.logoUrl || base.logo_url || ''),
+      admin_login_heading: tenantName,
+      meta: {
+        ...base.meta,
+        title: tenantName,
+        og_title: tenantName,
+      },
+    };
+  }, [activeTenant, branding]);
+
+  useEffect(() => {
+    const title = b.meta.title || b.app_name;
+    if (title) document.title = title;
+  }, [b.meta.title, b.app_name]);
+
   const leftHeading =
     (b.admin_login_heading || '').trim() || t('admin.auth.login.welcomeBack');
   const leftQuote = (b.admin_login_quote || '').trim() || t('admin.auth.login.heroTagline');

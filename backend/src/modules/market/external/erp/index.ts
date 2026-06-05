@@ -10,9 +10,10 @@ type ExternalErpConfig = {
   connectionKey?: string;
 };
 
-export async function getErpProvider(): Promise<ErpProvider | null> {
-  const erpConfig = await getTenantSetting<ExternalErpConfig>('external_erp');
-  const dbConfig = await getTenantSetting<ExternalErpConfig & ExternalPoolConfig>('external_db');
+export function createErpProviderFromSettings(
+  erpConfig?: ExternalErpConfig,
+  dbConfig?: ExternalErpConfig & ExternalPoolConfig,
+): ErpProvider | null {
   const config = erpConfig?.enabled === true ? erpConfig : dbConfig;
   if (config?.enabled !== true) return null;
 
@@ -26,6 +27,12 @@ export async function getErpProvider(): Promise<ErpProvider | null> {
   }
 
   return null;
+}
+
+export async function getErpProvider(): Promise<ErpProvider | null> {
+  const erpConfig = await getTenantSetting<ExternalErpConfig>('external_erp');
+  const dbConfig = await getTenantSetting<ExternalErpConfig & ExternalPoolConfig>('external_db');
+  return createErpProviderFromSettings(erpConfig, dbConfig);
 }
 
 export type { ErpCustomer, ErpOrder, ErpProduct, ErpProvider } from './erp.types';

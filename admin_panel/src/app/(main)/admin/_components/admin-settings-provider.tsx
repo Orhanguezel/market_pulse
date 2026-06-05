@@ -124,6 +124,11 @@ export function AdminSettingsProvider({ children }: { children: React.ReactNode 
     };
   }, [config, activeTenant]);
 
+  useEffect(() => {
+    const title = branding.meta.title || branding.app_name;
+    if (title) document.title = title;
+  }, [branding.meta.title, branding.app_name]);
+
   /* ================================================================ */
   /*  4. DB → Redux + Zustand sync + DOM apply (ilk yükleme)           */
   /* ================================================================ */

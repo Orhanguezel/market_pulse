@@ -50,9 +50,8 @@ export const DEFAULT_BRANDING: AdminBrandingConfig = {
   favicon_url: `${basePath}/favicon.ico`,
   logo_url: '',
   apple_touch_icon: `${basePath}/favicon/apple-touch-icon.svg`,
-  admin_login_heading: 'Pazar İstihbaratı ve Stratejik Analiz',
-  admin_login_quote:
-    'Veriye dayalı satış stratejileri ve churn analizi ile pazar hakimiyetinizi güçlendirin.',
+  admin_login_heading: appName,
+  admin_login_quote: appDescription,
   admin_login_background_url: `${process.env.NEXT_PUBLIC_BASE_PATH || ''}/img/admin_login_bg.png`,
   meta: {
     title: appName,

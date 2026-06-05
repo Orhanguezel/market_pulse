@@ -230,8 +230,8 @@
   "auth": {
     "login": {
       "title": "Giriş Yap",
-      "welcomeBack": "Pazar İstihbaratı ve Stratejik Analiz",
-      "heroTagline": "Veriye dayalı satış stratejileri ve churn analizi ile pazar hakimiyetinizi güçlendirin.",
+      "welcomeBack": "Tekrar hoş geldiniz",
+      "heroTagline": "Yönetim paneline güvenli erişim.",
       "copyrightLine": "© {year} {app}",
       "continueLogin": "Devam etmek için giriş yapın",
       "description": "Yönetim paneline erişmek için e-posta adresinizi ve şifrenizi girin.",
