@@ -19,6 +19,7 @@ import {
   Database,
   FileSearch,
   Flame,
+  Globe2,
   HardDrive,
   Mail,
   MapPin,
@@ -70,6 +71,8 @@ export type AdminNavItemKey =
   | 'storage'
   | 'db'
   | 'external_db'
+  | 'tenants'
+  | 'platform_settings'
   | 'audit'
   | 'profile'
   | 'market_pulse'
@@ -128,6 +131,8 @@ export const adminNavConfig: AdminNavConfigGroup[] = [
     items: [
       { key: 'notifications', url: '/admin/notifications', icon: Bell, badgeKey: 'notifications_unread' },
       { key: 'site_settings', url: '/admin/site-settings', icon: Settings },
+      { key: 'tenants', url: '/admin/tenants', icon: Building2 },
+      { key: 'platform_settings', url: '/admin/platform-settings', icon: Globe2 },
       { key: 'storage', url: '/admin/storage', icon: HardDrive, developerOnly: true },
       { key: 'db', url: '/admin/db', icon: Database, developerOnly: true },
       { key: 'external_db', url: '/admin/external-db', icon: Database, developerOnly: true },
@@ -174,6 +179,8 @@ const FALLBACK_TITLES: Record<AdminNavItemKey, string> = {
   storage: 'Dosya Yöneticisi',
   db: 'Veritabanı',
   external_db: 'Harici Veritabanları',
+  tenants: 'Tenant Yönetimi',
+  platform_settings: 'Platform Ayarları',
   audit: 'Denetim Kayıtları',
   profile: 'Profil',
   market_pulse:            'Ana Ekran',

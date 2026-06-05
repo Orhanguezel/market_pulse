@@ -2,7 +2,7 @@ import { beforeEach, describe, expect, mock, test } from 'bun:test';
 import { createDbMock } from '../../market/__tests__/helpers/mock-db';
 
 const dbMock = createDbMock();
-const env = { TENTIMES_API_KEY: '', PUBLIC_URL: 'http://localhost:8086' };
+const env = { TENANT_KEY: 'avrasya', TENTIMES_API_KEY: '', PUBLIC_URL: 'http://localhost:8086' };
 const scrape = mock(() => Promise.resolve({ data: {} }));
 const searchGoogleMaps = mock(() => Promise.resolve({ places: [] }));
 const verifyScraperWebhook = mock(() => true);

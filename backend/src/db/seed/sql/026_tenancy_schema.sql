@@ -36,7 +36,10 @@ CREATE TABLE IF NOT EXISTS tenant_secrets (
 INSERT INTO tenants (tenant_key, name, locale, status, plan)
 VALUES
   ('avrasya', 'Avrasya Otomotiv', 'tr', 'active', 'agency'),
-  ('tarvista', 'TarVista', 'tr', 'active', 'agency')
+  ('tarvista', 'TarVista', 'tr', 'active', 'agency'),
+  ('vistaseeds', 'VistaSeeds', 'tr', 'active', 'agency'),
+  ('bereketfide', 'Bereket Fide', 'tr', 'active', 'agency'),
+  ('default', 'MarketPulse', 'tr', 'active', 'agency')
 ON DUPLICATE KEY UPDATE
   name = VALUES(name),
   locale = VALUES(locale),
@@ -76,11 +79,74 @@ VALUES
     )
   ),
   (
+    'vistaseeds',
+    'external_erp',
+    JSON_OBJECT(
+      'enabled', TRUE,
+      'provider', 'ecosystem',
+      'connectionKey', 'vistaseeds'
+    )
+  ),
+  (
+    'bereketfide',
+    'external_erp',
+    JSON_OBJECT(
+      'enabled', TRUE,
+      'provider', 'ecosystem',
+      'connectionKey', 'bereketfide'
+    )
+  ),
+  (
+    'default',
+    'external_erp',
+    JSON_OBJECT(
+      'enabled', FALSE,
+      'provider', '',
+      'connectionKey', ''
+    )
+  ),
+  (
+    'vistaseeds',
+    'external_db',
+    JSON_OBJECT(
+      'enabled', TRUE,
+      'provider', 'ecosystem',
+      'host', '127.0.0.1',
+      'port', 3306,
+      'database', 'vistaseed',
+      'connectionKey', 'vistaseeds'
+    )
+  ),
+  (
+    'bereketfide',
+    'external_db',
+    JSON_OBJECT(
+      'enabled', TRUE,
+      'provider', 'ecosystem',
+      'host', '127.0.0.1',
+      'port', 3306,
+      'database', 'bereketfide',
+      'connectionKey', 'bereketfide'
+    )
+  ),
+  (
+    'tarvista',
+    'external_db',
+    JSON_OBJECT('enabled', FALSE)
+  ),
+  (
+    'default',
+    'external_db',
+    JSON_OBJECT('enabled', FALSE)
+  ),
+  (
     'avrasya',
     'branding',
     JSON_OBJECT(
       'appName', 'MarketPulse',
-      'displayName', 'Avrasya Otomotiv'
+      'displayName', 'Avrasya Otomotiv',
+      'logoUrl', '',
+      'sector', 'automotive'
     )
   ),
   (
@@ -88,10 +154,45 @@ VALUES
     'branding',
     JSON_OBJECT(
       'appName', 'MarketPulse',
-      'displayName', 'TarVista'
+      'displayName', 'TarVista',
+      'logoUrl', '',
+      'sector', 'platform'
+    )
+  ),
+  (
+    'vistaseeds',
+    'branding',
+    JSON_OBJECT(
+      'appName', 'MarketPulse',
+      'displayName', 'VistaSeeds',
+      'logoUrl', '',
+      'sector', 'seed'
+    )
+  ),
+  (
+    'bereketfide',
+    'branding',
+    JSON_OBJECT(
+      'appName', 'MarketPulse',
+      'displayName', 'Bereket Fide',
+      'logoUrl', '',
+      'sector', 'seedling'
+    )
+  ),
+  (
+    'default',
+    'branding',
+    JSON_OBJECT(
+      'appName', 'MarketPulse',
+      'displayName', 'MarketPulse',
+      'logoUrl', '',
+      'sector', 'platform'
     )
   ),
   ('avrasya', 'locale', JSON_OBJECT('default', 'tr')),
-  ('tarvista', 'locale', JSON_OBJECT('default', 'tr'))
+  ('tarvista', 'locale', JSON_OBJECT('default', 'tr')),
+  ('vistaseeds', 'locale', JSON_OBJECT('default', 'tr')),
+  ('bereketfide', 'locale', JSON_OBJECT('default', 'tr')),
+  ('default', 'locale', JSON_OBJECT('default', 'tr'))
 ON DUPLICATE KEY UPDATE
   value_json = VALUES(value_json);

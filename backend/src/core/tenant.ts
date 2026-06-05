@@ -2,6 +2,7 @@ import crypto from 'crypto';
 import type { RowDataPacket } from 'mysql2/promise';
 import { env } from '@/core/env';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared/tenant-scope';
 
 type TenantRow = RowDataPacket & {
   tenant_key: string;
@@ -33,7 +34,7 @@ export type ActiveTenant = {
   updatedAt: string;
 };
 
-let activeTenantPromise: Promise<ActiveTenant> | undefined;
+const activeTenantPromises = new Map<string, Promise<ActiveTenant>>();
 
 function parseJsonValue(value: unknown): unknown {
   if (typeof value !== 'string') return value;
@@ -44,8 +45,7 @@ function parseJsonValue(value: unknown): unknown {
   }
 }
 
-async function loadActiveTenant(): Promise<ActiveTenant> {
-  const tenantKey = env.TENANT_KEY;
+async function loadActiveTenant(tenantKey: string): Promise<ActiveTenant> {
   const [tenantRows] = await pool.execute<TenantRow[]>(
     'SELECT tenant_key, name, locale, status, plan, created_at, updated_at FROM tenants WHERE tenant_key = ? AND status = ? LIMIT 1',
     [tenantKey, 'active'],
@@ -78,8 +78,13 @@ async function loadActiveTenant(): Promise<ActiveTenant> {
 }
 
 export async function getActiveTenant(): Promise<ActiveTenant> {
-  activeTenantPromise ??= loadActiveTenant();
-  return activeTenantPromise;
+  const tenantKey = getActiveTenantKey();
+  let promise = activeTenantPromises.get(tenantKey);
+  if (!promise) {
+    promise = loadActiveTenant(tenantKey);
+    activeTenantPromises.set(tenantKey, promise);
+  }
+  return promise;
 }
 
 export async function getTenantSetting<T = unknown>(
@@ -154,6 +159,8 @@ export async function getTenantSecret(key: string): Promise<string | undefined> 
   return decryptAes256Gcm(value, env.DB_ENCRYPTION_KEY);
 }
 
-export function resetActiveTenantCacheForTests(): void {
-  activeTenantPromise = undefined;
+export function invalidateActiveTenantCache(): void {
+  activeTenantPromises.clear();
 }
+
+export const resetActiveTenantCacheForTests = invalidateActiveTenantCache;

@@ -11,6 +11,8 @@ mock.module('@/db/client', () => ({
   pool: dbMock.pool,
 }));
 
+mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'avrasya', PUBLIC_URL: 'http://localhost:8086' } }));
+
 mock.module('@/modules/lead-machine/_shared/ai.client', () => ({
   askBestAvailable,
 }));

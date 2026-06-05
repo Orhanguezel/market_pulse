@@ -17,6 +17,7 @@ mock.module('@/core/env', () => ({
 }));
 
 const tenant = await import('../tenant');
+const tenantContext = await import('../tenant-context');
 
 const tenantRow = {
   tenant_key: 'avrasya',
@@ -72,5 +73,33 @@ describe('tenant core', () => {
 
     await expect(tenant.getTenantSetting('branding', { appName: 'MarketPulse' }))
       .resolves.toEqual({ appName: 'MarketPulse' });
+  });
+
+  test('getActiveTenant resolves tenant from request context', async () => {
+    dbMock.queuePoolExecute([{ ...tenantRow, tenant_key: 'vistaseeds', name: 'VistaSeeds' }]);
+    dbMock.queuePoolExecute([{ key: 'branding', value_json: '{"displayName":"VistaSeeds"}' }]);
+
+    const result = await tenantContext.runWithTenant('vistaseeds', () => tenant.getActiveTenant());
+
+    expect(result.key).toBe('vistaseeds');
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['vistaseeds', 'active']);
+  });
+
+  test('caches active tenants per key', async () => {
+    dbMock.queuePoolExecute([{ ...tenantRow, tenant_key: 'vistaseeds', name: 'VistaSeeds' }]);
+    dbMock.queuePoolExecute([]);
+    dbMock.queuePoolExecute([{ ...tenantRow, tenant_key: 'bereketfide', name: 'Bereket Fide' }]);
+    dbMock.queuePoolExecute([]);
+
+    await tenantContext.runWithTenant('vistaseeds', () => tenant.getActiveTenant());
+    await tenantContext.runWithTenant('vistaseeds', () => tenant.getActiveTenant());
+    await tenantContext.runWithTenant('bereketfide', () => tenant.getActiveTenant());
+
+    expect(dbMock.poolExecutions.map((q) => q.values?.[0])).toEqual([
+      'vistaseeds',
+      'vistaseeds',
+      'bereketfide',
+      'bereketfide',
+    ]);
   });
 });

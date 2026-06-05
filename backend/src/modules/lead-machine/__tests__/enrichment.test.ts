@@ -6,7 +6,7 @@ const scrape = mock(() => Promise.resolve({ data: {} }));
 const searchGoogleMaps = mock(() => Promise.resolve({ places: [] }));
 const verifyScraperWebhook = mock(() => true);
 const fetchMock = mock(() => Promise.resolve(Response.json({})));
-const env = { APOLLO_API_KEY: '' };
+const env = { TENANT_KEY: 'avrasya', APOLLO_API_KEY: '' };
 
 globalThis.fetch = fetchMock as unknown as typeof fetch;
 

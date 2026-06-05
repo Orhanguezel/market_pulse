@@ -3,6 +3,7 @@ import { createDbMock } from '../../market/__tests__/helpers/mock-db';
 
 const dbMock = createDbMock();
 const env = {
+  TENANT_KEY: 'avrasya',
   OXYLABS_USERNAME: 'user',
   OXYLABS_PASSWORD: 'pass',
   GROQ_API_KEY: '',

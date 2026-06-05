@@ -13,6 +13,7 @@ mock.module('@/core/env', () => ({ env }));
 
 const leadDb = await import('../_shared/db');
 const icpRepo = await import('../icp/icp.repository');
+const { runWithTenant } = await import('@/core/tenant-context');
 
 beforeEach(() => {
   dbMock.reset();
@@ -67,5 +68,15 @@ describe('tenant isolation', () => {
     await icpRepo.listIcpProfiles();
     expect(dbMock.poolExecutions[0]?.sql).toContain('tenant_key = ?');
     expect(dbMock.poolExecutions[0]?.values).toEqual(['tarvista']);
+  });
+
+  test('runtime tenant context changes repository tenant key without env churn', async () => {
+    dbMock.queuePoolExecute([jobRow('vistaseeds-job')]);
+    await runWithTenant('vistaseeds', () => leadDb.getSearchJob('same-id'));
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['vistaseeds', 'same-id']);
+
+    dbMock.queuePoolExecute([jobRow('bereketfide-job')]);
+    await runWithTenant('bereketfide', () => leadDb.getSearchJob('same-id'));
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['bereketfide', 'same-id']);
   });
 });

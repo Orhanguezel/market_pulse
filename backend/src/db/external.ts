@@ -11,6 +11,16 @@ type ExternalDbConfig = {
   name?: string;
 };
 
+export type ExternalPoolConfig = {
+  host?: string;
+  port?: number;
+  user?: string;
+  username?: string;
+  password?: string;
+  name?: string;
+  database?: string;
+};
+
 type ExternalDbConfigRow = RowDataPacket & {
   host: string;
   port: number;
@@ -37,8 +47,33 @@ function readEnvConfig(key: string): ExternalDbConfig {
   };
 }
 
+function mergeEnvConfig(key: string, config: ExternalPoolConfig): ExternalDbConfig {
+  const envConfig = readEnvConfig(key);
+  return {
+    host: config.host ?? envConfig.host,
+    port: Number(config.port ?? envConfig.port ?? 3306),
+    user: config.user ?? config.username ?? envConfig.user,
+    password: config.password ?? envConfig.password,
+    name: config.name ?? config.database ?? envConfig.name,
+  };
+}
+
 function isConfigured(config: ExternalDbConfig): config is Required<ExternalDbConfig> {
   return Boolean(config.host && config.user && config.name);
+}
+
+function createPool(config: Required<ExternalDbConfig>): Pool {
+  return mysql.createPool({
+    host: config.host,
+    port: config.port,
+    user: config.user,
+    password: config.password,
+    database: config.name,
+    waitForConnections: true,
+    connectionLimit: 5,
+    supportBigNumbers: true,
+    dateStrings: true,
+  });
 }
 
 function getEncryptionKey() {
@@ -91,19 +126,26 @@ export async function getExternalPool(key: string): Promise<Pool | null> {
   const config = dbConfig ?? readEnvConfig(normalizedKey);
   if (!isConfigured(config)) return null;
 
-  const pool = mysql.createPool({
-    host: config.host,
-    port: config.port,
-    user: config.user,
-    password: config.password,
-    database: config.name,
-    waitForConnections: true,
-    connectionLimit: 5,
-    supportBigNumbers: true,
-    dateStrings: true,
-  });
+  const pool = createPool(config);
 
   pools.set(normalizedKey, pool);
+  return pool;
+}
+
+export async function getExternalPoolFromConfig(
+  key: string,
+  rawConfig: ExternalPoolConfig,
+): Promise<Pool | null> {
+  const normalizedKey = key.toUpperCase();
+  const cacheKey = `${normalizedKey}:${rawConfig.database ?? rawConfig.name ?? ''}:${rawConfig.host ?? ''}`;
+  const existing = pools.get(cacheKey);
+  if (existing) return existing;
+
+  const config = mergeEnvConfig(normalizedKey, rawConfig);
+  if (!isConfigured(config)) return null;
+
+  const pool = createPool(config);
+  pools.set(cacheKey, pool);
   return pool;
 }
 

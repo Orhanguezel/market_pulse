@@ -1,12 +1,13 @@
 import { and, eq, type SQL } from 'drizzle-orm';
 import { env } from '@/core/env';
+import { getRequestTenantKey } from '@/core/tenant-context';
 
 type TenantScopedTable = {
   tenant_key: unknown;
 };
 
 export function getActiveTenantKey(): string {
-  return env.TENANT_KEY ?? 'avrasya';
+  return getRequestTenantKey() ?? env.TENANT_KEY ?? 'default';
 }
 
 export function tenantPredicate(

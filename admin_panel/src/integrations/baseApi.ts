@@ -12,6 +12,7 @@ import type {
 
 import { tags } from './tags';
 import { tokenStore } from '@/integrations/core/token';
+import { getSelectedTenantKey } from '@/integrations/core/tenant';
 import { BASE_URL } from '@/integrations/apiBase';
 
 /* -------------------- helpers -------------------- */
@@ -125,6 +126,13 @@ function hasAccessToken(): boolean {
   return Boolean(tokenStore.get() || safeGetLocalStorageItem('mh_access_token'));
 }
 
+function applyTenantHeader(headers: Headers) {
+  const tenantKey = getSelectedTenantKey();
+  if (tenantKey && !headers.has('X-Tenant')) {
+    headers.set('X-Tenant', tenantKey);
+  }
+}
+
 /* -------------------- Base Query -------------------- */
 
 type RBQ = BaseQueryFn<
@@ -143,6 +151,7 @@ const rawBaseQuery: RBQ = fetchBaseQuery({
       headers.delete('x-skip-auth');
       if (!headers.has('Accept')) headers.set('Accept', 'application/json');
       if (!headers.has('Accept-Language')) headers.set('Accept-Language', getDefaultLocale());
+      applyTenantHeader(headers);
       return headers;
     }
 
@@ -154,6 +163,7 @@ const rawBaseQuery: RBQ = fetchBaseQuery({
 
     if (!headers.has('Accept')) headers.set('Accept', 'application/json');
     if (!headers.has('Accept-Language')) headers.set('Accept-Language', getDefaultLocale());
+    applyTenantHeader(headers);
 
     return headers;
   },

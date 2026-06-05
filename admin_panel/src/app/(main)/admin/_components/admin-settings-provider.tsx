@@ -20,6 +20,8 @@ import {
   applyFont,
 } from '@/lib/preferences/layout-utils';
 import { DEFAULT_BRANDING, type AdminBrandingConfig } from '@/config/app-config';
+import { getSelectedTenantKey } from '@/integrations/core/tenant';
+import { useGetTenantQuery } from '@/integrations/hooks';
 
 export type AdminPageMeta = Record<string, { title: string; description?: string; metrics?: string[] }>;
 
@@ -44,6 +46,11 @@ export function AdminSettingsProvider({ children }: { children: React.ReactNode 
   const dispatch = useAppDispatch();
   const setAdminLocale = usePreferencesStore((s) => s.setAdminLocale);
   const adminLocale = usePreferencesStore((s) => s.adminLocale);
+  const [tenantKey, setTenantKey] = React.useState('');
+
+  useEffect(() => {
+    setTenantKey(getSelectedTenantKey());
+  }, []);
 
   /* --- Zustand setters --- */
   const setThemeMode = usePreferencesStore((s) => s.setThemeMode);
@@ -83,6 +90,7 @@ export function AdminSettingsProvider({ children }: { children: React.ReactNode 
   // 2. Fetch Page Meta
   const locale = adminLocale || config?.default_locale || 'tr';
   const { data: pagesRow, isLoading: pagesLoading } = useGetSiteSettingAdminByKeyQuery({ key: 'ui_admin_pages', locale });
+  const { data: activeTenant, isLoading: tenantLoading } = useGetTenantQuery(tenantKey, { skip: !tenantKey });
 
   const pageMeta = useMemo(() => {
     if (!pagesRow?.value) return {};
@@ -93,13 +101,28 @@ export function AdminSettingsProvider({ children }: { children: React.ReactNode 
 
   // 3. Extract branding from config
   const branding = useMemo<AdminBrandingConfig>(() => {
-    if (!config?.branding) return DEFAULT_BRANDING;
+    const base = config?.branding
+      ? {
+          ...DEFAULT_BRANDING,
+          ...config.branding,
+          meta: { ...DEFAULT_BRANDING.meta, ...(config.branding.meta || {}) },
+        }
+      : DEFAULT_BRANDING;
+    const tenantBranding = activeTenant?.branding;
+    if (!tenantBranding) return base;
+    const tenantName = String(tenantBranding.appName || tenantBranding.displayName || activeTenant.name || base.app_name);
     return {
-      ...DEFAULT_BRANDING,
-      ...config.branding,
-      meta: { ...DEFAULT_BRANDING.meta, ...(config.branding.meta || {}) },
+      ...base,
+      app_name: tenantName,
+      app_copyright: String(tenantBranding.displayName || activeTenant.name || base.app_copyright),
+      logo_url: String(tenantBranding.logoUrl || base.logo_url || ''),
+      meta: {
+        ...base.meta,
+        title: tenantName,
+        og_title: tenantName,
+      },
     };
-  }, [config]);
+  }, [config, activeTenant]);
 
   /* ================================================================ */
   /*  4. DB → Redux + Zustand sync + DOM apply (ilk yükleme)           */
@@ -198,7 +221,7 @@ export function AdminSettingsProvider({ children }: { children: React.ReactNode 
   const ctxValue = useMemo<AdminSettingsContextValue>(() => ({
     pageMeta: pageMeta as AdminPageMeta,
     branding,
-    loading: configLoading || pagesLoading,
+    loading: configLoading || pagesLoading || tenantLoading,
     saveAdminConfig,
   }), [pageMeta, branding, configLoading, pagesLoading, saveAdminConfig]);
 

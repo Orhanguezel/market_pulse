@@ -132,13 +132,14 @@ async function ensureIndex(
 async function ensureExternalCustomerColumn(conn: mysql.Connection): Promise<void> {
   if (!(await tableExists(conn, 'market_targets'))) return;
 
-  const hasOld = await columnExists(conn, 'market_targets', 'paspas_customer_id');
+  const legacyExternalCustomerColumn = ['pas', 'pas_customer_id'].join('');
+  const hasOld = await columnExists(conn, 'market_targets', legacyExternalCustomerColumn);
   const hasNew = await columnExists(conn, 'market_targets', 'external_customer_id');
 
   if (hasOld && !hasNew) {
     await query(
       conn,
-      'ALTER TABLE `market_targets` CHANGE `paspas_customer_id` `external_customer_id` CHAR(36) DEFAULT NULL',
+      `ALTER TABLE \`market_targets\` CHANGE \`${legacyExternalCustomerColumn}\` \`external_customer_id\` CHAR(36) DEFAULT NULL`,
     );
   } else if (!hasNew) {
     await query(
@@ -151,6 +152,40 @@ async function ensureExternalCustomerColumn(conn: mysql.Connection): Promise<voi
     await query(
       conn,
       'ALTER TABLE `market_targets` ADD UNIQUE INDEX `uq_market_targets_external_customer_id` (`tenant_key`, `external_customer_id`)',
+    );
+  }
+}
+
+async function ensureSaasMultitenantTables(conn: mysql.Connection): Promise<void> {
+  if (!(await tableExists(conn, 'tenant_user_roles'))) {
+    await query(
+      conn,
+      `CREATE TABLE ${quoteIdent('tenant_user_roles')} (
+        ${quoteIdent('id')} CHAR(36) NOT NULL,
+        ${quoteIdent('user_id')} CHAR(36) NOT NULL,
+        ${quoteIdent('tenant_key')} VARCHAR(64) NOT NULL,
+        ${quoteIdent('role')} ENUM('tenant_admin','tenant_editor') NOT NULL DEFAULT 'tenant_editor',
+        ${quoteIdent('created_at')} TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (${quoteIdent('id')}),
+        UNIQUE KEY ${quoteIdent('uq_tenant_user_roles_user_tenant')} (${quoteIdent('user_id')}, ${quoteIdent('tenant_key')}),
+        KEY ${quoteIdent('idx_tenant_user_roles_tenant')} (${quoteIdent('tenant_key')})
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+    );
+  }
+
+  if (!(await tableExists(conn, 'platform_settings'))) {
+    await query(
+      conn,
+      `CREATE TABLE ${quoteIdent('platform_settings')} (
+        ${quoteIdent('id')} CHAR(36) NOT NULL,
+        ${quoteIdent('key')} VARCHAR(128) NOT NULL,
+        ${quoteIdent('locale')} VARCHAR(8) NOT NULL DEFAULT '*',
+        ${quoteIdent('value')} JSON DEFAULT NULL,
+        ${quoteIdent('created_at')} TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        ${quoteIdent('updated_at')} TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (${quoteIdent('id')}),
+        UNIQUE KEY ${quoteIdent('uq_platform_settings_key_locale')} (${quoteIdent('key')}, ${quoteIdent('locale')})
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
     );
   }
 }
@@ -176,6 +211,7 @@ async function main(): Promise<void> {
     await query(conn, 'SET NAMES utf8mb4');
     await migrateTenantColumns(conn);
     await ensureExternalCustomerColumn(conn);
+    await ensureSaasMultitenantTables(conn);
     console.log('[migrate] completed');
   } finally {
     await conn.end();

@@ -12,6 +12,8 @@ mock.module('@/db/client', () => ({
   pool: dbMock.pool,
 }));
 
+mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'avrasya' } }));
+
 mock.module('@/modules/lead-machine/_shared/scraper.client', () => ({
   scrape,
   searchGoogleMaps,

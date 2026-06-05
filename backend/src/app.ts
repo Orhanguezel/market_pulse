@@ -10,6 +10,7 @@ import authPlugin from './plugins/authPlugin';
 import mysqlPlugin from '@/plugins/mysql';
 import sentryPlugin from '@/plugins/sentry';
 import swaggerPlugin from '@/plugins/swagger';
+import tenantContextPlugin from '@/plugins/tenantContext';
 import { env } from '@/core/env';
 import { registerErrorHandlers } from '@/core/error';
 import { loggerConfig } from '@/core/logger';
@@ -32,7 +33,7 @@ export async function createApp() {
     origin: parseCorsOrigins(env.CORS_ORIGIN),
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Prefer', 'Accept', 'Accept-Language', 'x-skip-auth', 'Range'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Prefer', 'Accept', 'Accept-Language', 'x-skip-auth', 'X-Tenant', 'Range'],
     exposedHeaders: ['x-total-count', 'content-range', 'range'],
   });
 
@@ -57,6 +58,7 @@ export async function createApp() {
   });
 
   await app.register(authPlugin);
+  await app.register(tenantContextPlugin);
   await app.register(mysqlPlugin);
   await app.register(sentryPlugin);
   await app.register(swaggerPlugin);

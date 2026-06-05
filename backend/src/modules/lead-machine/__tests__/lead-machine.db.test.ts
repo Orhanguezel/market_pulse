@@ -8,6 +8,8 @@ mock.module('@/db/client', () => ({
   pool: dbMock.pool,
 }));
 
+mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'avrasya' } }));
+
 const leadDb = await import('../_shared/db');
 
 const now = '2026-05-08 10:00:00';

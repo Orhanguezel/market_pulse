@@ -8,6 +8,8 @@ mock.module('@/db/client', () => ({
   pool: dbMock.pool,
 }));
 
+mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'avrasya' } }));
+
 const icpRepo = await import('../icp/icp.repository');
 const { matchesIcp } = await import('../b2b/icp.matcher');
 

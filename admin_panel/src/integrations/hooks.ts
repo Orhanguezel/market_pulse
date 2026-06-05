@@ -38,3 +38,4 @@ export * from '@/integrations/endpoints/admin/menu_items_admin.endpoints';
 
 // MarketPulse
 export * from '@/integrations/endpoints/admin/market_admin.endpoints';
+export * from '@/integrations/endpoints/admin/tenant_admin.endpoints';

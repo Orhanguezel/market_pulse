@@ -37,6 +37,8 @@ export const tags = [
   'MarketDeveloperNotes',
   'ScanRules',
   'SavedSearches',
+  'Tenants',
+  'PlatformSettings',
 ] as const;
 
 export type tag = typeof tags[number];

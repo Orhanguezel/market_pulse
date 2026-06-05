@@ -8,6 +8,8 @@ import { registerUserRoles } from '@/modules/userRoles';
 import { registerTheme, registerThemeAdmin } from '@/modules/theme';
 import { registerNotifications } from '@/modules/notifications';
 import { registerAuditAdmin } from '@/modules/audit';
+import { registerTenants } from '@/modules/tenants';
+import { registerPlatformSettings, registerPlatformSettingsAdmin } from '@/modules/platform-settings';
 
 export async function registerSharedPublic(api: FastifyInstance) {
   await registerAuth(api);
@@ -18,6 +20,8 @@ export async function registerSharedPublic(api: FastifyInstance) {
   await registerTheme(api);
   await registerProfiles(api);
   await registerNotifications(api);
+  await registerTenants(api);
+  await registerPlatformSettings(api);
 }
 
 export async function registerSharedAdmin(adminApi: FastifyInstance) {
@@ -28,4 +32,5 @@ export async function registerSharedAdmin(adminApi: FastifyInstance) {
   await registerThemeAdmin(adminApi);
   await registerNotifications(adminApi);
   await registerAuditAdmin(adminApi);
+  await registerPlatformSettingsAdmin(adminApi);
 }

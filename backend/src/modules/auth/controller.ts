@@ -55,6 +55,12 @@ function getGoogleClient() {
   return googleClient;
 }
 
+function rejectNonAdmin(role: Role, reply: FastifyReply) {
+  if (role === 'admin') return false;
+  reply.status(403).send({ error: { message: 'admin_only' } });
+  return true;
+}
+
 async function verifyGoogleIdentityToken(idToken: string) {
   const { clientId } = await getGoogleSettings();
   if (!clientId) {
@@ -92,7 +98,7 @@ export async function signup(req: FastifyRequest, reply: FastifyReply) {
     const meta = (parsed.data.options?.data ?? {}) as Record<string, unknown>;
     const full_name = (parsed.data.full_name ?? (typeof meta['full_name'] === 'string' ? meta['full_name'] : undefined)) || undefined;
     const phone = (parsed.data.phone ?? (typeof meta['phone'] === 'string' ? meta['phone'] : undefined)) || undefined;
-    const requestedRole = meta['role'] === 'editor' ? 'editor' : 'admin';
+    const requestedRole = meta['role'] === 'editor' ? 'editor' : 'customer';
     const rulesAccepted = parsed.data.rules_accepted === true;
 
     const exists = await repoGetUserByEmail(email);
@@ -111,6 +117,7 @@ export async function signup(req: FastifyRequest, reply: FastifyReply) {
     void telegramNotify({ event: 'new_user', data: { user_name: full_name || email.split('@')[0], user_email: email, role: assignedRole, created_at: new Date().toISOString() } });
 
     const u = await repoGetUserById(id);
+    if (rejectNonAdmin(assignedRole, reply)) return;
     const { access, refresh } = await issueTokens(req.server, u!, assignedRole);
     setAccessCookie(reply, access);
     setRefreshCookie(reply, refresh);
@@ -148,6 +155,7 @@ export async function token(req: FastifyRequest, reply: FastifyReply) {
     await repoUpdateLastSignIn(u.id);
     await repoEnsureProfileRow(u.id);
     const role = await getPrimaryRole(u.id);
+    if (rejectNonAdmin(role, reply)) return;
     const { access, refresh } = await issueTokens(req.server, u, role);
     setAccessCookie(reply, access);
     setRefreshCookie(reply, refresh);
@@ -256,6 +264,7 @@ export async function googleToken(req: FastifyRequest, reply: FastifyReply) {
 
     await repoUpdateLastSignIn(user.id);
     const role = await getPrimaryRole(user.id);
+    if (rejectNonAdmin(role, reply)) return;
     const { access, refresh } = await issueTokens(req.server, user, role);
     setAccessCookie(reply, access);
     setRefreshCookie(reply, refresh);
@@ -300,6 +309,7 @@ export async function refresh(req: FastifyRequest, reply: FastifyReply) {
     if (!u) return reply.status(401).send({ error: { message: 'invalid_user' } });
 
     const role = await getPrimaryRole(u.id);
+    if (rejectNonAdmin(role, reply)) return;
     const access = jwt.sign({ sub: u.id, email: u.email ?? undefined, role }, { expiresIn: `${ACCESS_MAX_AGE}s` });
     const newRaw = await repoRotateRefreshToken(raw, u.id);
     setAccessCookie(reply, access);
@@ -375,6 +385,7 @@ export async function me(req: FastifyRequest, reply: FastifyReply) {
     const u = await repoGetUserById(p.sub);
     if (!u) return reply.status(401).send({ error: { message: 'invalid_token' } });
     const role = await getPrimaryRole(p.sub);
+    if (rejectNonAdmin(role, reply)) return;
     return reply.send({
       user: {
         id: u.id,

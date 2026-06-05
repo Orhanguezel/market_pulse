@@ -151,6 +151,14 @@ mock.module('@/app/(main)/admin/_components/admin-settings-provider', () => ({
 }));
 
 mock.module('@/integrations/hooks', () => ({
+  useListTenantsQuery: () => query([{ key: 'vistaseeds', name: 'VistaSeeds', branding: { displayName: 'VistaSeeds' } }]),
+  useGetTenantQuery: () => query({ key: 'vistaseeds', name: 'VistaSeeds', branding: { appName: 'VistaSeeds' } }),
+  useOnboardTenantMutation: () => mutationTuple(),
+  useUpdateTenantProfileMutation: () => mutationTuple(),
+  useListTenantRolesQuery: () => query([]),
+  useCreateTenantRoleMutation: () => mutationTuple(),
+  useListPlatformSettingsQuery: () => query([]),
+  useUpsertPlatformSettingMutation: () => mutationTuple(),
   useGetMarketStatsQuery: () => query({ totalTargets: 7, totalLeads: 4, pendingSignals: 2 }),
   useListMarketTargetsQuery: () => query([sampleTarget]),
   useDeleteMarketTargetMutation: () => mutationTuple(),
