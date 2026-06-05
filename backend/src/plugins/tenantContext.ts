@@ -1,6 +1,6 @@
 import type { FastifyPluginAsync } from 'fastify';
 import { env } from '@/core/env';
-import { runWithTenant } from '@/core/tenant-context';
+import { enterTenant } from '@/core/tenant-context';
 
 function firstString(value: unknown): string | undefined {
   if (Array.isArray(value)) return firstString(value[0]);
@@ -21,7 +21,8 @@ function resolveTenant(req: { query?: unknown; headers: Record<string, unknown> 
 
 export const tenantContextPlugin: FastifyPluginAsync = async (app) => {
   app.addHook('onRequest', (req, _reply, done) => {
-    runWithTenant(resolveTenant(req), done);
+    enterTenant(resolveTenant(req));
+    done();
   });
 };
 

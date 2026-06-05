@@ -25,3 +25,8 @@ export const tenantRoleCreateSchema = z.object({
   user_id: z.string().trim().min(1).max(36),
   role: z.enum(['tenant_admin', 'tenant_editor']).default('tenant_editor'),
 });
+
+export const tenantSecretUpsertSchema = z.object({
+  key: z.string().trim().min(1).max(128).regex(/^[a-z0-9_.-]+$/i),
+  value: z.string().min(1),
+});

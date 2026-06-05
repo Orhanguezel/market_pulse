@@ -2,8 +2,14 @@ import { randomUUID } from 'node:crypto';
 import type { RouteHandler } from 'fastify';
 import type { RowDataPacket } from 'mysql2/promise';
 import { pool } from '@/db/client';
-import { invalidateActiveTenantCache } from '@/core/tenant';
-import { tenantKeySchema, tenantOnboardSchema, tenantProfilePatchSchema, tenantRoleCreateSchema } from './validation';
+import { encryptTenantSecret, invalidateActiveTenantCache } from '@/core/tenant';
+import {
+  tenantKeySchema,
+  tenantOnboardSchema,
+  tenantProfilePatchSchema,
+  tenantRoleCreateSchema,
+  tenantSecretUpsertSchema,
+} from './validation';
 
 type TenantRow = RowDataPacket & {
   tenant_key: string;
@@ -148,4 +154,40 @@ export const createTenantRole: RouteHandler<{ Params: { key: string }; Body: unk
     [randomUUID(), parsed.data.user_id, key.data, parsed.data.role],
   );
   return reply.code(201).send({ ok: true });
+};
+
+export const listTenantSecrets: RouteHandler<{ Params: { key: string } }> = async (req, reply) => {
+  const key = tenantKeySchema.safeParse(req.params.key);
+  if (!key.success) return reply.code(400).send({ error: { message: 'invalid_tenant_key' } });
+
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT \`key\`, created_at, updated_at
+       FROM tenant_secrets
+      WHERE tenant_key = ?
+      ORDER BY \`key\` ASC`,
+    [key.data],
+  );
+
+  return rows.map((row) => ({
+    key: row.key,
+    configured: true,
+    created_at: row.created_at,
+    updated_at: row.updated_at,
+  }));
+};
+
+export const upsertTenantSecret: RouteHandler<{ Params: { key: string }; Body: unknown }> = async (req, reply) => {
+  const key = tenantKeySchema.safeParse(req.params.key);
+  if (!key.success) return reply.code(400).send({ error: { message: 'invalid_tenant_key' } });
+  const parsed = tenantSecretUpsertSchema.safeParse(req.body);
+  if (!parsed.success) return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
+
+  await pool.execute(
+    `INSERT INTO tenant_secrets (tenant_key, \`key\`, value_encrypted)
+     VALUES (?, ?, ?)
+     ON DUPLICATE KEY UPDATE value_encrypted = VALUES(value_encrypted), updated_at = CURRENT_TIMESTAMP`,
+    [key.data, parsed.data.key, encryptTenantSecret(parsed.data.value)],
+  );
+
+  return reply.code(201).send({ ok: true, key: parsed.data.key });
 };

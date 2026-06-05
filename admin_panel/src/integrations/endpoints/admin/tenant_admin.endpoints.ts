@@ -27,6 +27,13 @@ export interface TenantRole {
   created_at: string;
 }
 
+export interface TenantSecretSummary {
+  key: string;
+  configured: boolean;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface PlatformSetting {
   id: string;
   key: string;
@@ -80,6 +87,14 @@ export const tenantAdminApi = baseApi.injectEndpoints({
       query: ({ key, ...body }) => ({ url: `/tenants/admin/${key}/roles`, method: 'POST', body }),
       invalidatesTags: ['Tenants' as never],
     }),
+    listTenantSecrets: b.query<TenantSecretSummary[], string>({
+      query: (key) => ({ url: `/tenants/admin/${key}/secrets` }),
+      providesTags: ['Tenants' as never],
+    }),
+    upsertTenantSecret: b.mutation<{ ok: boolean; key: string }, { tenantKey: string; key: string; value: string }>({
+      query: ({ tenantKey, key, value }) => ({ url: `/tenants/admin/${tenantKey}/secrets`, method: 'POST', body: { key, value } }),
+      invalidatesTags: ['Tenants' as never],
+    }),
     listPlatformSettings: b.query<PlatformSetting[], { locale?: string } | void>({
       query: (params) => ({ url: '/platform-settings', params: params ?? undefined }),
       providesTags: ['PlatformSettings' as never],
@@ -99,6 +114,8 @@ export const {
   useUpdateTenantProfileMutation,
   useListTenantRolesQuery,
   useCreateTenantRoleMutation,
+  useListTenantSecretsQuery,
+  useUpsertTenantSecretMutation,
   useListPlatformSettingsQuery,
   useUpsertPlatformSettingMutation,
 } = tenantAdminApi;

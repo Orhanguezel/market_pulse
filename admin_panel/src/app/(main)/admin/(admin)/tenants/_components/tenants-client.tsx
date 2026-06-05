@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { toast } from 'sonner';
-import { Building2, Plus, Save, UserPlus } from 'lucide-react';
+import { Building2, KeyRound, Plus, Save, UserPlus } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -12,9 +12,11 @@ import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import {
   useCreateTenantRoleMutation,
+  useListTenantSecretsQuery,
   useListTenantRolesQuery,
   useListTenantsQuery,
   useOnboardTenantMutation,
+  useUpsertTenantSecretMutation,
   useUpdateTenantProfileMutation,
   type TenantSummary,
 } from '@/integrations/hooks';
@@ -27,9 +29,13 @@ function safeJson(text: string) {
 function TenantEditor({ tenant }: { tenant: TenantSummary }) {
   const [brandingText, setBrandingText] = React.useState(() => JSON.stringify(tenant.branding ?? {}, null, 2));
   const [userId, setUserId] = React.useState('');
+  const [secretKey, setSecretKey] = React.useState('scraper_api_key');
+  const [secretValue, setSecretValue] = React.useState('');
   const [updateTenant, updateState] = useUpdateTenantProfileMutation();
   const [createRole, roleState] = useCreateTenantRoleMutation();
+  const [upsertSecret, secretState] = useUpsertTenantSecretMutation();
   const { data: roles = [] } = useListTenantRolesQuery(tenant.key);
+  const { data: secrets = [] } = useListTenantSecretsQuery(tenant.key);
 
   React.useEffect(() => {
     setBrandingText(JSON.stringify(tenant.branding ?? {}, null, 2));
@@ -52,6 +58,17 @@ function TenantEditor({ tenant }: { tenant: TenantSummary }) {
       toast.success('Rol atandı');
     } catch {
       toast.error('Rol atanamadı');
+    }
+  };
+
+  const saveSecret = async () => {
+    if (!secretKey.trim() || !secretValue.trim()) return;
+    try {
+      await upsertSecret({ tenantKey: tenant.key, key: secretKey.trim(), value: secretValue }).unwrap();
+      setSecretValue('');
+      toast.success('Secret kaydedildi');
+    } catch {
+      toast.error('Secret kaydedilemedi');
     }
   };
 
@@ -87,6 +104,27 @@ function TenantEditor({ tenant }: { tenant: TenantSummary }) {
                 <span>{role.role}</span>
               </div>
             ))}
+          </div>
+        </div>
+        <div className="grid gap-2 border-t pt-4">
+          <Label>Tenant secret</Label>
+          <div className="grid gap-2 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
+            <Input value={secretKey} onChange={(e) => setSecretKey(e.target.value)} placeholder="scraper_api_key" />
+            <Input
+              value={secretValue}
+              onChange={(e) => setSecretValue(e.target.value)}
+              placeholder="Yeni değer"
+              type="password"
+              autoComplete="off"
+            />
+            <Button onClick={saveSecret} disabled={secretState.isLoading || !secretKey.trim() || !secretValue.trim()} size="icon" aria-label="Secret kaydet">
+              <KeyRound className="size-4" />
+            </Button>
+          </div>
+          <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+            {secrets.length ? secrets.map((secret) => (
+              <Badge key={secret.key} variant="secondary">{secret.key}</Badge>
+            )) : <span>Secret tanımlı değil</span>}
           </div>
         </div>
       </CardContent>
