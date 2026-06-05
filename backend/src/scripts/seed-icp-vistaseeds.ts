@@ -139,19 +139,29 @@ const definition = {
       { name: 'Anfaş Antalya Tarım', country: 'TR', city: 'Antalya', focus: 'sera/örtüaltı, biber & sebze (Akdeniz)', status: 'confirmed' },
       { name: 'Adana Çukurova Tarım', country: 'TR', city: 'Adana', focus: 'biber & sebze üretim bölgesi (Güney)', status: 'confirmed' },
     ],
-    // Faz 2 — yurtdışı (sonra açılacak)
+    // Faz 2 — yurtdışı (eklendi; tarama AŞAMALI, hepsi birden DEĞİL)
     abroad: [
-      { name: 'Fruit Logistica Berlin', country: 'DE', focus: 'taze ürün / tohum alıcıları' },
-      { name: 'Fruit Attraction Madrid', country: 'ES', focus: 'taze ürün / tohum' },
-      { name: 'Sival Angers', country: 'FR', focus: 'bahçe bitkileri / tohum' },
-      { name: 'SIAM Meknès', country: 'MA', focus: 'Fas/Afrika tarım' },
-      { name: 'Sahara Expo Cairo', country: 'EG', focus: 'Mısır/MENA tarım' },
-      { name: 'AgroWorld Uzbekistan (Tashkent)', country: 'UZ', focus: 'Orta Asya tarım' },
-      { name: 'Caspian Agro Baku', country: 'AZ', focus: 'Kafkasya/Hazar tarım' },
-      { name: 'INDAGRA Bucharest', country: 'RO', focus: 'Balkanlar tarım' },
-      { name: 'WOP Dubai', country: 'AE', focus: 'perishables / MENA' },
-      { name: 'ISF World Seed Congress', country: '—', focus: 'global tohum endüstrisi' },
+      { name: 'Fruit Logistica Berlin', country: 'DE', focus: 'taze ürün / tohum alıcıları', scan_status: 'pending' },
+      { name: 'Fruit Attraction Madrid', country: 'ES', focus: 'taze ürün / tohum', scan_status: 'pending' },
+      { name: 'SIAM Meknès', country: 'MA', focus: 'Fas/Afrika tarım (biber pazarı)', scan_status: 'pending' },
+      { name: 'Sahara Expo Cairo', country: 'EG', focus: 'Mısır/MENA tarım (biber yoğun)', scan_status: 'pending' },
+      { name: 'AgroWorld Uzbekistan (Tashkent)', country: 'UZ', focus: 'Orta Asya tarım', scan_status: 'pending' },
+      { name: 'Caspian Agro Baku', country: 'AZ', focus: 'Kafkasya/Hazar tarım', scan_status: 'pending' },
+      { name: 'INDAGRA Bucharest', country: 'RO', focus: 'Balkanlar tarım', scan_status: 'pending' },
+      { name: 'WOP Dubai', country: 'AE', focus: 'perishables / MENA', scan_status: 'pending' },
+      { name: 'Sival Angers', country: 'FR', focus: 'bahçe bitkileri / tohum', scan_status: 'pending' },
+      { name: 'ISF World Seed Congress', country: '—', focus: 'global tohum endüstrisi', scan_status: 'pending' },
     ],
+    // Tarama politikası: hepsini birden tarama; teker teker, öncelik sırasıyla.
+    scan_policy: {
+      mode: 'staged_one_at_a_time',
+      note: 'Fuarları TEK TEK tara — hepsini birden tetikleme. Önce yerel, sonra öncelik sırasına göre yurtdışı.',
+      priority_order: [
+        'Growtech Antalya', 'Anfaş Antalya Tarım', 'Adana Çukurova Tarım', 'Konya Tarım Fuarı', 'Agroexpo İzmir',
+        'Fruit Logistica Berlin', 'SIAM Meknès', 'Sahara Expo Cairo', 'AgroWorld Uzbekistan (Tashkent)',
+        'Caspian Agro Baku', 'Fruit Attraction Madrid', 'INDAGRA Bucharest', 'WOP Dubai', 'Sival Angers', 'ISF World Seed Congress',
+      ],
+    },
   },
 
   // Yerli rakip tohum firmaları — lead'lerden hariç tut + keyword-overlap/rakip-izleme sinyali.
