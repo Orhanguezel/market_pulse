@@ -1,3 +1,4 @@
+import fp from 'fastify-plugin';
 import type { FastifyPluginAsync } from 'fastify';
 import { env } from '@/core/env';
 import { enterTenant } from '@/core/tenant-context';
@@ -19,11 +20,15 @@ function resolveTenant(req: { query?: unknown; headers: Record<string, unknown> 
     ?? 'default';
 }
 
-export const tenantContextPlugin: FastifyPluginAsync = async (app) => {
+// fp ile sarılır ki onRequest hook'u izole edilmesin ve TÜM route'lara uygulansın.
+// (Sarılmazsa hook sadece bu plugin'in alt scope'una etki eder → route'lar tenant context görmez.)
+const tenantContextImpl: FastifyPluginAsync = async (app) => {
   app.addHook('onRequest', (req, _reply, done) => {
     enterTenant(resolveTenant(req));
     done();
   });
 };
+
+export const tenantContextPlugin = fp(tenantContextImpl, { name: 'tenant-context' });
 
 export default tenantContextPlugin;
