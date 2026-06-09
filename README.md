@@ -192,3 +192,10 @@ Yeni bir geliştirme başlatmadan önce sırasıyla:
 ## Lisans
 
 [LICENSE](LICENSE)
+
+## Ekran Görüntüleri
+<p align="center">
+  <img src="admin_panel/public/img/student_view.png" width="600" alt="Market Pulse user view" />
+  <img src="admin_panel/public/img/topic_tree.png" width="600" alt="Market Pulse topic tree" />
+  <img src="admin_panel/public/img/performance_target.png" width="600" alt="Market Pulse performance target" />
+</p>
