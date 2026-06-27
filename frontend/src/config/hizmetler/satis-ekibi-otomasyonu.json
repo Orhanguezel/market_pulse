@@ -1,0 +1,196 @@
+{
+  "slug": "satis-ekibi-otomasyonu",
+  "category": "crm-satis",
+  "module": "crm",
+  "order": 90,
+  "icon": "Workflow",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Satış Ekibi Otomasyonu | CRM ile Satış Takibi, Görev Yönetimi ve Performans Analizi",
+        "description": "Satış ekibinizin müşteri takibini, teklif süreçlerini, görevlerini, arama kayıtlarını, satış hedeflerini ve performans raporlarını CRM tabanlı satış ekibi otomasyonu ile yönetin.",
+        "ogTitle": "Satış Ekibi Otomasyonu | {{appName}}",
+        "ogDescription": "Satış ekibinizin müşteri adaylarını, görüşmelerini, tekliflerini, görevlerini, takip tarihlerini ve performansını CRM tabanlı satış ekibi otomasyonu ile yönetin."
+      },
+      "hero": {
+        "eyebrow": "CRM ve Satış",
+        "title": "Satış Ekibi Otomasyonu",
+        "lead": "Satış ekibiniz çok çalışıyor olabilir. Ancak satış süreciniz gerçekten kontrol altında mı? Hangi müşteri hangi aşamada, hangi teklif beklemede, hangi satış temsilcisi hangi fırsatı takip ediyor ve hangi müşteri tekrar aranmalı sorularına net cevap veremiyorsanız satış süreciniz kontrol altında değildir. {{appName}} Satış Ekibi Otomasyonu ile satış ekibinizin müşteri adaylarını, görüşmelerini, tekliflerini, görevlerini, takip tarihlerini, satış fırsatlarını ve performansını tek merkezden yönetebilirsiniz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Kurulum süreci nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Satış Ekibi Otomasyonu Nedir?",
+          "body": [
+            "Satış ekibi otomasyonu, satış temsilcilerinin müşteri takiplerini, görevlerini, tekliflerini, aramalarını, toplantılarını ve satış fırsatlarını dijital bir sistem üzerinden yönetmesini sağlayan CRM tabanlı süreç yönetimidir.",
+            "Bu sistem, satış ekibinin manuel takip yükünü azaltır. Müşteri bilgileri, görüşme notları, teklif durumları, takip tarihleri ve satış aşamaları tek merkezde toplanır.",
+            "{{appName}} Satış Ekibi Otomasyonu, satış sürecini kişisel takiplere bağlı olmaktan çıkarır ve şirketin yönetilebilir satış sistemine dönüştürür.",
+            "Müşteri adayları, telefon aramaları, teklif süreçleri, görevler, takip tarihleri, satış fırsatları ve temsilci performansı CRM tabanlı yapı ile düzenli şekilde takip edilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Satış Ekibi Otomasyonu Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Satış ekibi otomasyonu sayesinde yöneticiler satış sürecini kişilerin hafızasına bağlı kalmadan, gerçek veriler üzerinden takip edebilir.",
+            "Bu yapı satış sürecinde hangi müşterinin, hangi teklifin ve hangi temsilcinin hangi aşamada olduğunu görünür hale getirir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Satış Ekibi Otomasyonu Neden Gereklidir?",
+          "intro": "Birçok şirkette satış süreci satış temsilcilerinin kişisel çabasına bağlı ilerler. Müşteri notları telefonlarda, WhatsApp mesajlarında, Excel dosyalarında veya e-posta kutularında dağınık kalır. Doğru kurgulanan bir otomasyon sistemiyle satış ekibi daha planlı çalışır, müşteri takipleri zamanında yapılır ve yöneticiler satış sürecini gerçek verilerle izleyebilir.",
+          "items": [
+            { "title": "Dağınık satış takibinde oluşan riskler:", "body": "Takip edilmesi gereken müşteriler unutulur. Teklif gönderilen firmalar düzenli izlenmez. Aynı müşteriye birden fazla kişi ulaşabilir. Satış müdürü gerçek tabloyu göremez. Yeni gelen satış personeli geçmiş müşteri bilgilerine ulaşamaz. Yönetim hangi müşterinin hangi aşamada olduğunu bilemez. Satış fırsatları kişilerin hafızasına bağlı kalır. Performans ölçümü sağlıklı yapılamaz." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Bu hizmet, satış sürecini kişilere bağlı olmaktan çıkarıp şirketin kurumsal sistemi haline getirmek isteyen firmalar için uygundur.",
+          "items": [
+            { "title": "Satış Ekibi Bulunan KOBİ’ler", "body": "Satış ekibini daha düzenli yönetmek isteyen KOBİ’ler için uygundur." },
+            { "title": "B2B Satış Yapan Şirketler", "body": "Uzun takip süreci olan B2B satışlarda satış boru hattını görünür hale getirir." },
+            { "title": "Saha Satış Ekibi Olan Firmalar", "body": "Saha görüşmeleri, telefon aramaları ve müşteri notları kayıt altına alınabilir." },
+            { "title": "İhracat Müşteri Takibi Yapanlar", "body": "Yurt dışı müşteri listeleri, mail marketing ve telefon aramaları CRM üzerinden yönetilebilir." },
+            { "title": "Teklif ve Sipariş Sürecini Düzenlemek İsteyenler", "body": "Tekliflerin, geçerlilik sürelerinin ve siparişe dönüşen fırsatların takibini sağlar." },
+            { "title": "Mail Marketing Sonrası Takip Yapanlar", "body": "Cevap veren firmaların satış ekibine görev olarak atanmasını sağlar." },
+            { "title": "LinkedIn ve Sales Navigator Kullananlar", "body": "Bağlantı, mesaj ve cevap takibini daha ölçülebilir hale getirir." },
+            { "title": "Satış Performansını Ölçmek İsteyen Yöneticiler", "body": "Satış temsilcisi performansını ve açık fırsatları raporlayabilir." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Satış Ekibi Otomasyonu ile Hangi Süreçler Yönetilir?",
+          "intro": "Satış ekibi otomasyonu, satış departmanının günlük iş akışını daha düzenli hale getirir. Satış ekibi yalnızca müşteri arayan bir ekip olmaktan çıkar; ölçülebilir ve yönetilebilir bir satış organizasyonuna dönüşür.",
+          "items": [
+            { "title": "Müşteri Adayı Atama", "body": "Satış ekibi otomasyonunun en önemli adımlarından biri müşteri adaylarının doğru satış temsilcisine atanmasıdır. Web sitesi teklif formları, telefon aramaları ve mail marketing kampanyaları, LinkedIn, Sales Navigator ve B2B platform talepleri, fuar görüşmeleri ve konşimento verileriyle bulunan alıcı firmalar tek yapıda toplanır." },
+            { "title": "Satış Temsilcisi Görev Yönetimi", "body": "Satış temsilcilerinin gün içinde birçok müşteriyi araması, teklif göndermesi, toplantı yapması ve takip sürecini yönetmesi gerekir. Müşteriyi ara ve teklif gönder, takip maili gönder ve toplantı planla, numune talebini veya ödeme durumunu kontrol et, teklif sonucunu güncelle gibi görevler düzenli takip edilir." },
+            { "title": "Telefon Araması ve Görüşme Takibi", "body": "Telefon aramaları birçok B2B satış sürecinde kritik öneme sahiptir. Arama sonuçları kayıt altına alınmazsa satış süreci dağınık ilerler. Arama tarihi ve aranan firma, ilgili kişi ve görüşme sonucu, tekrar arama tarihi, teklif talebi ve sonraki aksiyon kayıt altına alınır." },
+            { "title": "Teklif Takibi", "body": "Satış sürecinde teklif gönderildikten sonra takip edilmezse birçok fırsat kaybolabilir. Satış ekibi otomasyonu ile teklifler düzenli şekilde takip edilir. Teklif tarihi, tutarı ve konusu, teklif geçerlilik süresi, müşteri geri dönüş durumu, siparişe dönüşen ve kaybedilen teklifler izlenir." },
+            { "title": "Satış Aşaması Yönetimi", "body": "Her müşteri aynı satış aşamasında değildir. Satış ekibi otomasyonu ile her müşteri belirli bir satış aşamasına yerleştirilebilir. Yeni müşteri adayı ve ilk iletişim, teklif istendi ve teklif gönderildi, takip ediliyor veya pazarlık aşamasında, siparişe dönüştü, kaybedildi veya daha sonra aranacak aşamaları izlenir." },
+            { "title": "Sıcak, Orta ve Soğuk Müşteri Sınıflandırması", "body": "Her müşteri adayının satış potansiyeli aynı değildir. Satış ekibinin zamanını doğru yönetebilmesi için müşteri adayları önceliklendirilmelidir. Sıcak müşteri adayı, orta veya düşük potansiyelli müşteri, teklif veya numune isteyen müşteri, ileri tarihli takip edilecek müşteri olarak sınıflandırılır." },
+            { "title": "Mail Marketing Sonrası Satış Takibi", "body": "Mail marketing çalışmaları satış ekibi otomasyonu ile birlikte kullanıldığında çok daha verimli hale gelir. Mail gönderilen ve cevap veren firmalar, teklif veya numune isteyen firmalar, telefonla aranacak firmalar, daha sonra tekrar iletişim kurulacak firmalar takip edilir." },
+            { "title": "LinkedIn ve Sales Navigator Takibi", "body": "LinkedIn ve Sales Navigator üzerinden yapılan müşteri bulma çalışmaları CRM sistemine bağlandığında daha profesyonel ve ölçülebilir hale gelir. Bağlantı kurulan kişiler, mesaj gönderilen potansiyel müşteriler, cevap veren kişiler, satış temsilcisine atanacak leadler takip edilir." },
+            { "title": "Fuar Sonrası Müşteri Takibi", "body": "Fuar sonrası görüşülen kişiler düzenli takip edilmezse fuar verimi düşer. Satış ekibi otomasyonu ile fuar sonrası müşteri kayıtları sisteme alınabilir. Fuar adı ve görüşülen firma, ilgili kişi, ülke ve ürün ilgisi, teklif veya numune talebi, takip tarihi ve sorumlu satış temsilcisi kaydedilir." },
+            { "title": "Satış Ekibi Performans Raporları", "body": "Satış ekibi otomasyonu yöneticiler için güçlü bir raporlama altyapısı sağlar. Satış müdürü veya işletme sahibi satış sürecini gerçek verilerle izleyebilir. Temsilci bazlı müşteri ve arama sayısı, gönderilen teklif sayısı, tekliften satışa dönüşüm oranı, geciken görevler ve açık fırsatlar raporlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Satış Ekibi Otomasyonu ile İhracat Satış Süreci Nasıl Yönetilir?",
+          "intro": "İhracat yapan veya ihracata başlamak isteyen şirketler için satış ekibi otomasyonu büyük avantaj sağlar. Yurt dışı müşteri listeleri, mail marketing, telefon aramaları, teklif talepleri ve numune süreçleri CRM üzerinden yönetilebilir.",
+          "items": [
+            "Yurt dışı müşteri listeleri",
+            "Konşimento verileriyle bulunan alıcı firmalar",
+            "GTİP / HS koduna göre oluşturulan müşteri grupları",
+            "Ülke bazlı müşteri adayları",
+            "İngilizce teklif talepleri ve numune görüşmeleri",
+            "Proforma süreçleri ve siparişe dönüşen firmalar"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Satış Ekibi Otomasyonu ile B2B Satış Daha Ölçülebilir Hale Gelir",
+          "intro": "B2B satış süreçleri genellikle uzun ve çok aşamalıdır. Bir müşteriyle ilk temastan siparişe kadar haftalar veya aylar geçebilir. Bu nedenle takip sistemi çok önemlidir.",
+          "items": [
+            "Uzun satış süreçlerini görünür hale getirir",
+            "Karar verici kişileri kayıt altına alır",
+            "Teklif ve takip tarihlerini düzenler",
+            "Açık fırsatları ve bekleyen teklifleri gösterir",
+            "Satış müdürüne gerçek zamanlı takip imkanı sunar",
+            "Kaybedilen fırsatlardan öğrenmeyi sağlar"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM ile Satış Ekibi Yönetimi İçin Dijital Altyapı",
+          "body": [
+            "Satış ekibi otomasyonu; müşteri takip otomasyonu, teklif takip sistemi, telefon araması takip sistemi, satış görev yönetimi, B2B satış CRM ve ihracat satış takip sistemi için kullanılabilir."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Satış Ekibi Otomasyonunun Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Müşteri takipleri unutulmaz",
+            "Satış temsilcilerinin görevleri netleşir",
+            "Teklifler daha düzenli takip edilir",
+            "Satış fırsatları görünür hale gelir",
+            "Satış müdürü ekibi daha iyi yönetir",
+            "Müşteri iletişim geçmişi kayıt altına alınır",
+            "Ekip performansı ölçülebilir",
+            "Mail marketing ve telefon aramaları satış sürecine bağlanır",
+            "Fuar sonrası müşteri takibi güçlenir",
+            "Şirketin satış hafızası oluşur"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Satış Ekibi Otomasyonunda Sık Yapılan Hatalar",
+          "items": [
+            "Satış sürecini analiz etmeden CRM kurmak",
+            "Satış aşamalarını net belirlememek",
+            "Müşteri adaylarını doğru sınıflandırmamak",
+            "Görev ve hatırlatma sistemini kullanmamak",
+            "Satış ekibini eğitmeden sisteme geçirmek",
+            "Yönetici raporlarını baştan planlamamak",
+            "Teklif süreçlerini CRM’e dahil etmemek",
+            "Telefon görüşmelerini kayıt altına almamak",
+            "Mail marketing sonuçlarını satış ekibine aktarmamak",
+            "Sistemi kurup düzenli takip etmemek"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Satış Ekibi Otomasyonu Kurulum Süreci Nasıl İlerler?",
+          "intro": "Satış ekibi otomasyonu şirketinizin gerçek satış sürecine göre planlanır. Müşteri adayından siparişe kadar satış sürecinizin hangi aşamalardan oluştuğu belirlenir ve CRM yapısı buna göre düzenlenir.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin satış ekibi yapısı, müşteri kaynakları, teklif süreci ve mevcut takip yöntemi analiz edilir." },
+            { "n": 2, "title": "Satış Süreci Haritası", "body": "Müşteri adayından siparişe kadar satış sürecinizin hangi aşamalardan oluştuğu belirlenir." },
+            { "n": 3, "title": "CRM Alanlarının Planlanması", "body": "Müşteri bilgileri, görevler, satış aşamaları, teklif alanları, raporlar ve kullanıcı yetkileri kurgulanır." },
+            { "n": 4, "title": "Satış Ekibi Görev Yapısı", "body": "Satış temsilcilerinin hangi görevleri nasıl takip edeceği belirlenir." },
+            { "n": 5, "title": "Otomasyon ve Hatırlatmalar", "body": "Tekrar arama, teklif takibi, takip maili ve görüşme hatırlatmaları sisteme dahil edilir." },
+            { "n": 6, "title": "Ekip Eğitimi", "body": "Satış ekibine müşteri kaydı, görev yönetimi, teklif takibi ve raporlama kullanımı anlatılır." },
+            { "n": 7, "title": "Yönetici Raporları", "body": "Satış müdürü veya işletme sahibi için performans ve satış süreci raporları oluşturulur." },
+            { "n": 8, "title": "Takip ve İyileştirme", "body": "Sistem kullanılmaya başladıktan sonra eksikler değerlendirilir ve satış süreci daha verimli hale getirilir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Satış ekibi otomasyonu nedir?",
+          "body": [
+            "Satış ekibi otomasyonu; satış temsilcilerinin müşteri adaylarını, telefon aramalarını, tekliflerini, görevlerini, takip tarihlerini, satış fırsatlarını ve performanslarını CRM sistemi üzerinden yönetmesini sağlayan dijital satış takip yapısıdır. {{appName}} Satış Ekibi Otomasyonu, şirketlerin satış sürecini daha düzenli, ölçülebilir ve yönetilebilir hale getirmesine yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Satış Ekibi Otomasyonu Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Satış ekibi otomasyonu kimler için uygundur?", "a": "Satış ekibi otomasyonu; müşteri adaylarını, teklifleri, telefon aramalarını, görevleri ve satış performansını daha düzenli takip etmek isteyen şirketler için uygundur." },
+            { "q": "Satış ekibi otomasyonu ne işe yarar?", "a": "Satış ekibi otomasyonu, satış temsilcilerinin müşteri takiplerini, görevlerini, tekliflerini ve görüşme notlarını tek sistemde yönetmesini sağlar. Yöneticiler de satış sürecini ve ekip performansını daha net izleyebilir." },
+            { "q": "CRM ile satış ekibi yönetilebilir mi?", "a": "Evet. CRM sistemi üzerinden müşteri adayları satış temsilcilerine atanabilir, görevler oluşturulabilir, teklifler takip edilebilir ve satış performansı raporlanabilir." },
+            { "q": "Telefon aramaları takip edilebilir mi?", "a": "Evet. Müşteriye yapılan telefon aramaları, görüşme notları, arama sonuçları ve tekrar arama tarihleri CRM üzerinde kayıt altına alınabilir." },
+            { "q": "Teklif takibi yapılabilir mi?", "a": "Evet. Gönderilen teklifler, teklif tutarları, geçerlilik süreleri, müşteri dönüşleri ve siparişe dönüşen fırsatlar takip edilebilir." },
+            { "q": "Satış ekibi performansı ölçülebilir mi?", "a": "Evet. Satış temsilcilerinin arama sayıları, teklifleri, açık fırsatları, kapanan satışları ve görev tamamlama durumları raporlanabilir." },
+            { "q": "Mail marketing sonrası gelen cevaplar satış ekibine aktarılabilir mi?", "a": "Evet. Mail marketing kampanyalarından gelen cevaplar CRM’e müşteri adayı olarak aktarılabilir ve ilgili satış temsilcisine görev olarak atanabilir." },
+            { "q": "İhracat satış ekipleri için uygun mu?", "a": "Evet. Yurt dışı müşteri listeleri, mail marketing, telefon aramaları, teklif talepleri, numune süreçleri ve ihracat satış fırsatları CRM üzerinden yönetilebilir." },
+            { "q": "LinkedIn ve Sales Navigator çalışmaları takip edilebilir mi?", "a": "Evet. LinkedIn üzerinden bağlantı kurulan, mesaj gönderilen veya cevap veren potansiyel müşteriler CRM sisteminde takip edilebilir." },
+            { "q": "Satış ekibi otomasyonu kurulurken eğitim veriyor musunuz?", "a": "Evet. Satış temsilcilerine ve yöneticilere CRM kullanımı, müşteri takibi, görev yönetimi, teklif takibi ve raporlama konusunda eğitim verilebilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Satış Ekibiniz İçin Doğru CRM Otomasyon Yapısını Birlikte Kuralım",
+        "body": "Satış ekibiniz müşteri takibini, teklifleri, telefon aramalarını ve görevleri dağınık şekilde yürütüyorsa satış fırsatlarınızın bir kısmını fark etmeden kaybediyor olabilirsiniz. {{appName}} Satış Ekibi Otomasyonu ile satış sürecinizi tek merkezden yönetin, ekibinizin performansını görün ve müşteri takiplerinizi daha sistemli hale getirin.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

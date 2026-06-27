@@ -1,0 +1,199 @@
+{
+  "slug": "etsy-egitimi-ve-hesap-yonetimi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 90,
+  "icon": "Palette",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Etsy Eğitimi ve Hesap Yönetimi | Ürün Listeleme, Mağaza Açma, SEO ve Satış Süreci",
+        "description": "Etsy’de satış yapmak isteyen işletmeler için mağaza açma, ürün listeleme, Etsy SEO, ürün başlığı, açıklama, etiket, fiyatlandırma, kargo, sipariş ve mağaza yönetimi konularında eğitim ve hesap yönetimi desteği sunuyoruz.",
+        "ogTitle": "Etsy Eğitimi ve Hesap Yönetimi | {{appName}}",
+        "ogDescription": "Etsy’de mağaza açma, ürün listeleme, Etsy SEO, başlık, açıklama, etiket, fotoğraf, fiyatlandırma, kargo ve mağaza yönetimi süreçleri için eğitim ve destek alın."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "Etsy Eğitimi ve Hesap Yönetimi",
+        "lead": "Etsy’de satış yapmak istiyor ama mağaza açma, ürün listeleme, Etsy SEO, ürün başlığı, etiket, açıklama, fiyatlandırma, kargo, sipariş ve müşteri yönetimi süreçlerinde nereden başlayacağınızı bilmiyor musunuz? Etsy, özellikle butik ürünler, tasarım ürünleri, el yapımı ürünler, kişiselleştirilmiş ürünler, dijital ürünler, dekorasyon, aksesuar, tekstil, hediyelik ürünler ve yaratıcı ürün grupları için önemli bir pazaryeri olabilir. Ancak Etsy’de satış yapmak yalnızca ürün yüklemekten ibaret değildir. {{appName}} olarak Etsy’de satış yapmak isteyen kişi, marka, üretici ve küçük işletmelere Etsy eğitimi ve hesap yönetimi desteği sunuyoruz. Amacımız, Etsy mağazanızı daha bilinçli açmanıza, ürünlerinizi daha düzenli listelemenize, Etsy SEO yapısını anlamanıza ve mağazanızı daha profesyonel yönetmenize yardımcı olmaktır.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Etsy Eğitimi ve Hesap Yönetimi Nedir?",
+          "body": [
+            "Etsy eğitimi ve hesap yönetimi, Etsy’de satış yapmak isteyen kişi ve işletmelerin mağaza açma, ürün listeleme, Etsy SEO, ürün açıklaması, etiket kullanımı, fiyatlandırma, kargo, sipariş, müşteri iletişimi ve mağaza performansı süreçlerini öğrenmesini ve daha düzenli yönetmesini sağlayan hizmettir.",
+            "Etsy’de başarılı olmak için yalnızca ürün sahibi olmak yeterli değildir. Ürünün doğru sunulması, doğru anahtar kelimelerle listelenmesi, görsellerin güven vermesi, fiyatın doğru belirlenmesi, kargo sürecinin planlanması ve müşteri sorularının profesyonel cevaplanması gerekir.",
+            "{{appName}}, Etsy sürecini yalnızca panel kullanımı olarak değil, yaratıcı ürünlerin yurt dışı pazara sunulması için düzenli bir e-ticaret operasyonu olarak ele alır.",
+            "Etsy mağazanızın ürün başlıkları, etiketleri, açıklamaları, fotoğrafları, fiyatlandırması ve kargo yapısı birlikte planlandığında satış süreciniz daha düzenli ilerler."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Etsy Eğitimi ve Hesap Yönetimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Etsy’de satış sürecinde mağaza açılışı, ürün sunumu, SEO, etiket, açıklama, fotoğraf, fiyatlandırma, kargo ve müşteri iletişimi birlikte değerlendirilmelidir.",
+            "Bu çalışma, Etsy mağazanızı kişisel deneme sürecinden çıkarıp daha düzenli bir pazaryeri operasyonuna dönüştürmeyi hedefler."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Etsy’de Satış Yapmak Neden Planlı Yönetilmelidir?",
+          "body": [
+            "Etsy’de satış yaparken ürünün kendisi kadar ürünün sunumu da önemlidir. Aynı kategoride birçok satıcı bulunabilir. Bu nedenle ürününüzün doğru başlık, açıklama, etiket, fotoğraf, fiyat ve mağaza güven unsurlarıyla sunulması gerekir.",
+            "Plansız Etsy yönetimi; yanlış etiket seçimi, zayıf açıklama, düşük kaliteli fotoğraf, hatalı fiyatlandırma, belirsiz kargo süreci ve düşük mağaza güveni gibi sorunlara neden olabilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Etsy’de ürünlerinizi satmak istiyor ama mağaza açma ve yönetim sürecini nasıl yürüteceğinizi bilmiyorsanız, bu hizmet sizin için uygundur.",
+          "items": [
+            { "title": "Etsy’de Satışa Başlamak İsteyen Girişimciler", "body": "Mağaza açma, ürün listeleme ve Etsy SEO sürecini öğrenmek isteyenler için uygundur." },
+            { "title": "El Yapımı Ürün Üreticileri", "body": "El yapımı ürünlerini yurt dışı müşterilere sunmak isteyen üreticiler için planlanabilir." },
+            { "title": "Tasarım Ürünleri Satan Markalar", "body": "Tasarım, dekorasyon, aksesuar ve butik ürünlerini Etsy’de daha profesyonel sunmak isteyen markalara uygundur." },
+            { "title": "Kişiselleştirilmiş Ürün İşletmeleri", "body": "Kişiye özel ürünlerde açıklama, seçenek, fotoğraf ve sipariş notu yapısı doğru planlanabilir." },
+            { "title": "Dijital Ürün Satıcıları", "body": "Dosya yapısı, ön izleme görselleri, açıklama ve kullanım talimatı olan dijital ürünler için uygundur." },
+            { "title": "Küçük İşletmeler ve KOBİ’ler", "body": "Yurt dışı müşterilere ulaşmak isteyen küçük işletmeler için Etsy süreci planlanabilir." },
+            { "title": "Mevcut Etsy Mağazası Olan Satıcılar", "body": "Mevcut mağazasını başlık, açıklama, etiket, fotoğraf ve fiyat açısından düzenlemek isteyenler için uygundur." },
+            { "title": "E-ticaret Ekibini Eğitmek İsteyen İşletmeler", "body": "Etsy mağaza yönetimini ekip içinde öğrenmek isteyen şirketler için eğitim planlanabilir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Etsy Eğitimi Kapsamında Hangi Konular Anlatılır?",
+          "body": [
+            "Etsy eğitimi işletmenin ürün yapısına ve ihtiyacına göre planlanabilir. Genel olarak pazaryeri mantığı, mağaza açma, satıcı paneli, ürün listeleme, Etsy SEO, etiket, açıklama, fotoğraf, fiyatlandırma, kargo, sipariş, müşteri mesajları ve mağaza performansı başlıkları birlikte ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Etsy Hesap Yönetimi Kapsamında Neler Yapıyoruz?",
+          "body": [
+            "Etsy hesap yönetimi hizmeti, mağazanızın durumuna ve ürün yapısına göre farklı başlıklarda planlanabilir. Amaç, Etsy mağazanızın dağınık ilerlemesini önlemek ve ürünlerinizi daha profesyonel şekilde yurt dışı müşterilere sunmaktır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Etsy Eğitimi ve Hesap Yönetiminde Hangi Alanlar İncelenir?",
+          "intro": "Etsy süreci; mağaza açma, ürün listeleme, SEO, etiket, açıklama, fotoğraf, fiyatlandırma, kargo, müşteri mesajları, dijital ürünler, mağaza görünümü ve satış raporlarıyla birlikte planlanır.",
+          "items": [
+            { "title": "Etsy Pazaryeri Mantığını Anlama", "body": "Etsy’de satışa başlamadan önce platformun nasıl çalıştığını anlamak gerekir. Etsy’de müşteri çoğu zaman özel, yaratıcı, kişiselleştirilmiş veya farklı ürünler arar." },
+            { "title": "Etsy Mağaza Açma Süreci", "body": "Etsy’de satışa başlamak için mağaza açılış süreci dikkatli yürütülmelidir. Mağaza adı, ürün planı, ödeme bilgileri, kargo ayarları ve temel mağaza yapısı baştan doğru hazırlanmalıdır." },
+            { "title": "Etsy Satıcı Paneli Kullanımı", "body": "Etsy satıcı paneli, mağazanızın yönetildiği ana alandır. Ürünler, siparişler, mesajlar, istatistikler ve mağaza ayarları bu panel üzerinden takip edilir." },
+            { "title": "Etsy Ürün Listeleme", "body": "Etsy’de ürün listeleme süreci satış başarısını doğrudan etkiler. Ürün doğru başlık, açıklama, etiket, kategori, fotoğraf, fiyat ve kargo bilgisiyle yayına alınmalıdır." },
+            { "title": "Etsy SEO Nedir?", "body": "Etsy SEO, ürünlerinizin Etsy aramalarında daha doğru müşterilere ulaşabilmesi için başlık, etiket, kategori, açıklama ve anahtar kelime yapısının düzenlenmesidir." },
+            { "title": "Ürün Başlığı Hazırlama", "body": "Etsy’de ürün başlığı, müşterinin ürünü anlaması ve arama sisteminin ürünü doğru yorumlaması açısından önemlidir." },
+            { "title": "Etsy Etiket Seçimi", "body": "Etsy’de etiketler ürünün arama sisteminde doğru kelimelerle ilişkilendirilmesine yardımcı olur. Yanlış etiket kullanımı ürünün doğru müşteriye ulaşmasını zorlaştırabilir." },
+            { "title": "Ürün Açıklaması Hazırlama", "body": "Etsy ürün açıklaması müşteriye ürün hakkında güven vermelidir. Ürün fiziksel olarak görülmediği için açıklama metni müşterinin sorularını önceden cevaplamalıdır." },
+            { "title": "Ürün Fotoğrafı ve Görsel Düzeni", "body": "Etsy’de fotoğraf kalitesi çok önemlidir. Müşteri ürünü fotoğraflar üzerinden değerlendirir." },
+            { "title": "Fiyatlandırma ve Kârlılık Hesabı", "body": "Etsy’de fiyat belirlerken ürün maliyeti dışında zaman, işçilik, paketleme, kargo, platform kesintileri, reklam, kur farkı ve iade riski gibi unsurlar da değerlendirilmelidir." },
+            { "title": "Kargo ve Teslimat Planı", "body": "Etsy’de yurt dışı satış yapan satıcılar için kargo süreci kritik öneme sahiptir. Teslimat süresi, kargo ücreti, takip bilgisi ve paketleme müşterinin satın alma kararını etkileyebilir." },
+            { "title": "Sipariş ve Müşteri Mesajları Takibi", "body": "Etsy mağazasında siparişler ve müşteri mesajları düzenli takip edilmelidir. Geç cevaplar, eksik bilgi veya kargo gecikmeleri müşteri memnuniyetini etkileyebilir." },
+            { "title": "Dijital Ürünler İçin Etsy Yönetimi", "body": "Etsy’de dijital ürün satışı yapmak isteyenler için ürün hazırlığı, dosya yapısı, açıklama ve müşteri bilgilendirmesi farklı planlanmalıdır." },
+            { "title": "Mağaza Görünümü ve Güven Unsurları", "body": "Etsy mağazasının görünümü müşteri güvenini etkiler. Mağaza yalnızca ürünlerden oluşmamalı; marka kimliği, açıklama, görseller ve iletişim yapısı düzenli görünmelidir." },
+            { "title": "Etsy Satış Raporları ve Performans Analizi", "body": "Etsy mağazasında ürün performansı düzenli takip edilmelidir. Hangi ürünlerin görüntülendiği, hangilerinin ilgi aldığı ve hangilerinin satışa dönüştüğü analiz edilmelidir." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Etsy Eğitimi ve Hesap Yönetimi Süreci Nasıl İlerler?",
+          "intro": "Süreç ürünleriniz, hedef pazarınız, mevcut Etsy durumunuz, mağaza açılış ihtiyacınız ve eğitim beklentiniz değerlendirilerek başlar. İhtiyacınıza göre Etsy eğitimi, hesap yönetimi veya ikisinin birlikte yürütüleceği bir plan oluşturulur.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Ürünleriniz, hedef pazarınız, mevcut Etsy durumunuz, mağaza açılış ihtiyacınız ve eğitim beklentiniz değerlendirilir." },
+            { "n": 2, "title": "Eğitim veya Yönetim Planı Hazırlığı", "body": "İhtiyacınıza göre Etsy eğitimi, hesap yönetimi veya ikisinin birlikte yürütüleceği bir plan oluşturulur." },
+            { "n": 3, "title": "Ürün ve Mağaza Analizi", "body": "Mevcut ürünler, görseller, açıklamalar, fiyatlandırma, kargo yapısı ve mağaza görünümü incelenir." },
+            { "n": 4, "title": "Ürün Listeleme Planı", "body": "Başlık, açıklama, etiket, kategori, görsel, fiyat, stok ve kargo bilgileri ürün bazlı planlanır." },
+            { "n": 5, "title": "Etsy SEO Çalışması", "body": "Ürünler için anahtar kelime, etiket ve başlık yapısı hedef müşteri aramalarına göre düzenlenir." },
+            { "n": 6, "title": "Mağaza Yönetimi", "body": "Sipariş, müşteri mesajları, ürün güncellemeleri, kargo bilgileri ve performans takibi yapılır." },
+            { "n": 7, "title": "Satış ve Performans Analizi", "body": "Ürün görüntülenmeleri, favoriler, satışlar, müşteri mesajları ve mağaza raporları düzenli değerlendirilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Etsy Eğitimi ve Hesap Yönetiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Etsy satış sürecini daha bilinçli öğrenirsiniz",
+            "Mağaza açılışını daha düzenli planlarsınız",
+            "Ürünlerinizi daha profesyonel listelersiniz",
+            "Etsy SEO mantığını öğrenirsiniz",
+            "Başlık, açıklama ve etiket yapısını geliştirirsiniz",
+            "Ürün fotoğraflarınızı daha dikkatli değerlendirirsiniz",
+            "Fiyatlandırma ve kargo maliyetlerini daha iyi hesaplarsınız",
+            "Sipariş ve müşteri mesajlarını daha düzenli takip edersiniz",
+            "Mağaza görünümünüzü daha güven verici hale getirirsiniz",
+            "Satış raporlarını daha doğru yorumlarsınız",
+            "Yurt dışı müşterilere daha profesyonel görünürsünüz",
+            "Etsy mağazanızı daha sistemli bir e-ticaret kanalına dönüştürürsünüz"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Etsy’de Sık Yapılan Hatalar",
+          "items": [
+            "Mağaza açmadan önce ürün planı yapmamak",
+            "Ürün başlıklarını arama odaklı hazırlamamak",
+            "Etiketleri yanlış veya ilgisiz seçmek",
+            "Ürün açıklamalarını yetersiz bırakmak",
+            "Fotoğrafları düşük kalitede kullanmak",
+            "Fiyatlandırmada kargo ve platform maliyetlerini hesaba katmamak",
+            "Kargo süresini net belirtmemek",
+            "Müşteri mesajlarına geç cevap vermek",
+            "Mağaza açıklamasını ve politikalarını eksik bırakmak",
+            "Ürün performansını analiz etmemek",
+            "Tüm ürünleri aynı başlık yapısıyla listelemek",
+            "Dijital ürünlerde kullanım açıklamasını eksik yazmak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Etsy Eğitimi ve Hesap Yönetimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Etsy eğitimi ve hesap yönetimi, e-ticaret ve pazaryeri yönetimi sürecinin parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Etsy Eğitimi, Hesap Yönetimi, Ürün Listeleme ve Etsy SEO",
+          "body": [
+            "Etsy eğitimi ve hesap yönetimi; Etsy mağaza yönetimi, Etsy mağaza açma eğitimi, Etsy ürün listeleme, ürün yükleme, Etsy SEO eğitimi, etiket seçimi, ürün başlığı, ürün açıklaması, kargo ayarları, fiyatlandırma, dijital ürün satışı, el yapımı ürün satışı ve Etsy yurt dışı satış süreçleri için planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Etsy eğitimi ve hesap yönetimi nedir?",
+          "body": [
+            "Etsy eğitimi ve hesap yönetimi; Etsy’de satış yapmak isteyen kişi ve işletmeler için mağaza açma, satıcı paneli kullanımı, ürün listeleme, Etsy SEO, ürün başlığı, açıklama, etiket, fotoğraf, fiyatlandırma, kargo, sipariş, müşteri mesajları ve mağaza performansı süreçlerinin öğrenilmesi ve düzenli yönetilmesi hizmetidir. {{appName}}, Etsy mağazası açmak veya mevcut mağazasını geliştirmek isteyen satıcılara eğitim ve hesap yönetimi desteği sunar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Etsy Eğitimi ve Hesap Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Etsy eğitimi kimler için uygundur?", "a": "Etsy eğitimi; Etsy’de satışa başlamak isteyen girişimciler, el yapımı ürün üreticileri, tasarım ürünleri satan markalar, dijital ürün satıcıları, KOBİ’ler ve e-ticaret ekipleri için uygundur." },
+            { "q": "Etsy hesap yönetimi hizmeti veriyor musunuz?", "a": "Evet. Etsy mağaza kurulumu, ürün listeleme, Etsy SEO, başlık, açıklama, etiket, fiyat, kargo, sipariş ve müşteri mesajları konularında hesap yönetimi desteği verilebilir." },
+            { "q": "Etsy’de ürün listeleme desteği sunuyor musunuz?", "a": "Evet. Ürün başlığı, açıklama, etiket, kategori, fotoğraf, fiyat, stok ve kargo bilgileriyle ürün listeleme sürecinde destek sağlanabilir." },
+            { "q": "Etsy SEO nedir?", "a": "Etsy SEO, ürünlerinizin Etsy aramalarında daha doğru müşterilere ulaşabilmesi için ürün başlığı, etiket, açıklama, kategori ve anahtar kelime yapısının düzenlenmesidir." },
+            { "q": "Etsy’de dijital ürün satışı için destek veriyor musunuz?", "a": "Evet. Dijital ürünlerde dosya yapısı, ürün açıklaması, ön izleme görselleri, etiketler, kullanım talimatları ve müşteri bilgilendirme alanlarında destek sağlanabilir." },
+            { "q": "Etsy ürün fotoğrafları konusunda destek veriyor musunuz?", "a": "Evet. Ürün fotoğraflarının yeterliliği, ürünle uyumu, görsel sıralaması ve müşteri güveni açısından değerlendirme yapılabilir." },
+            { "q": "Etsy’de satış garantisi veriyor musunuz?", "a": "Hayır. Etsy eğitimi ve hesap yönetimi satış garantisi vermez. Ancak mağaza, ürün listeleme, SEO, fiyatlandırma, kargo ve müşteri iletişimi süreçlerinin daha düzenli yönetilmesine yardımcı olur." },
+            { "q": "Mevcut Etsy mağazam analiz edilebilir mi?", "a": "Evet. Mevcut Etsy mağazanız ürün başlıkları, açıklamalar, etiketler, görseller, fiyatlandırma, kargo ve mağaza görünümü açısından analiz edilebilir." },
+            { "q": "Etsy eğitimi uygulamalı mı yapılır?", "a": "Evet. Eğitim işletmenizin ürünleri, mağaza durumu ve hedefleri üzerinden uygulamalı şekilde planlanabilir." },
+            { "q": "Etsy hesap yönetimi hangi hizmetlerle birlikte alınabilir?", "a": "Etsy hesap yönetimi; e-ticaret eğitimi, ürün içerik hazırlığı, ürün fotoğrafı değerlendirme, yurt dışı satış stratejisi, CRM müşteri takibi ve B2B müşteri bulma çalışmalarıyla birlikte planlanabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Etsy Mağazanızı Daha Planlı, Güven Veren ve Profesyonel Hale Getirelim",
+        "body": "Etsy’de satış yapmak istiyor ama mağaza açma, ürün listeleme, Etsy SEO, ürün fotoğrafı, fiyatlandırma, kargo ve müşteri yönetimi süreçlerini nasıl yürüteceğinizi bilmiyorsanız {{appName}} ile iletişime geçin. Etsy mağazanızı birlikte planlayalım, ürünlerinizi daha düzenli listeleyelim ve yurt dışı müşterilere daha profesyonel görünmenizi sağlayacak pazaryeri yapısını oluşturalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

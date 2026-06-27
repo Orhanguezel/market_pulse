@@ -2,7 +2,7 @@ import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
 import { getActiveTenantKey } from '@/modules/_shared';
 
-export type LeadChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match';
+export type LeadChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match' | 'customs';
 export type JobStatus = 'pending' | 'running' | 'done' | 'failed';
 export type CandidateStatus = 'pending' | 'approved' | 'rejected' | 'favorite';
 

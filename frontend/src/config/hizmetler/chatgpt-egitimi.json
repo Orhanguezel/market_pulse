@@ -1,0 +1,347 @@
+{
+  "slug": "chatgpt-egitimi",
+  "category": "egitim",
+  "module": "training",
+  "order": 20,
+  "icon": "Bot",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "ChatGPT Eğitimi | Prompt Yazma, İş Süreçlerinde ChatGPT Kullanımı ve Kurumsal AI Eğitimi",
+        "description": "ChatGPT eğitimi ile çalışanlara prompt yazma, e-posta, rapor, satış, pazarlama, ihracat, CRM, e-ticaret, içerik üretimi ve günlük ofis süreçlerinde ChatGPT kullanımını uygulamalı olarak öğretiyoruz.",
+        "ogTitle": "ChatGPT Eğitimi | {{appName}}",
+        "ogDescription": "ChatGPT’yi e-posta, rapor, satış, pazarlama, ihracat, CRM, e-ticaret, içerik üretimi ve günlük ofis süreçlerinde doğru kullanmayı öğrenin."
+      },
+      "hero": {
+        "eyebrow": "Yapay Zeka Eğitimi",
+        "title": "ChatGPT Eğitimi",
+        "lead": "ChatGPT kullanmak istiyor ama doğru komut yazmayı, çıkan cevabı kontrol etmeyi ve bu aracı gerçek iş süreçlerinize nasıl uyarlayacağınızı bilmiyor musunuz? ChatGPT yalnızca soru sorulan bir sohbet aracı değildir. Doğru kullanıldığında e-posta yazma, rapor hazırlama, müşteri takip mesajı oluşturma, satış metni geliştirme, ihracat yazışmaları, ürün açıklaması, CRM notları, toplantı özeti, içerik üretimi ve günlük ofis işlerinde güçlü bir yardımcı olabilir. {{appName}} olarak bireylere, ekiplere ve şirketlere uygulamalı ChatGPT eğitimi sunuyoruz. Eğitimi satış, pazarlama, ihracat, CRM, e-ticaret, yönetim, insan kaynakları ve ofis süreçlerine göre özelleştiriyoruz. Amacımız, ChatGPT’yi rastgele denenen bir araç olmaktan çıkarıp işlerinizi hızlandıran, metin kalitenizi artıran ve ekip verimliliğinizi destekleyen pratik bir iş yardımcısına dönüştürmektir.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "ChatGPT Eğitimi Nedir?",
+          "body": [
+            "ChatGPT eğitimi, ChatGPT’nin günlük iş süreçlerinde doğru, güvenli ve verimli şekilde kullanılmasını öğretmek için hazırlanan uygulamalı yapay zeka eğitimidir.",
+            "Bu eğitimde amaç yalnızca ChatGPT’ye soru sormayı göstermek değildir. Asıl amaç, kullanıcının kendi işine uygun komut yazmayı, doğru formatta çıktı almayı, cevabı geliştirmeyi, kontrol etmeyi ve ChatGPT’yi düzenli bir iş akışı içinde kullanmayı öğrenmesidir.",
+            "{{appName}}, ChatGPT eğitimini teorik anlatım yerine gerçek iş örnekleri, uygulamalı çalışmalar ve departman bazlı kullanım senaryolarıyla planlar.",
+            "ChatGPT’den daha kaliteli, kontrollü ve işe yarar sonuçlar alın",
+            "Doğru prompt yazma, rol verme, bağlam oluşturma, hedef belirtme, formatlı çıktı alma ve cevap kontrolüyle ChatGPT’yi günlük iş süreçlerinizde daha etkili kullanabilirsiniz."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "ChatGPT Eğitimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "ChatGPT’den verimli sonuç almak için yalnızca soru sormak yeterli değildir. Bağlamı, hedefi, tonu, formatı ve beklentiyi açıkça anlatan komutlar kullanılmalıdır.",
+            "Eğitimde ChatGPT’nin e-posta, satış, pazarlama, ihracat, CRM, e-ticaret, raporlama, içerik üretimi ve günlük ofis süreçlerinde nasıl kullanılabileceği uygulamalı şekilde ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "ChatGPT Neden İş Süreçlerinde Kullanılmalıdır?",
+          "body": [
+            "Birçok kişi ChatGPT’yi yalnızca basit sorular sormak veya kısa metinler yazdırmak için kullanır. Oysa doğru yönlendirildiğinde ChatGPT birçok iş sürecinde zaman kazandırabilir.",
+            "Ancak bu faydaları elde etmek için ChatGPT’nin doğru kullanılması gerekir. Genel ve belirsiz sorular yerine bağlamı, hedefi, tonu, formatı ve beklentiyi açıkça anlatan komutlar kullanılmalıdır.",
+            "ChatGPT şu alanlarda destek sağlayabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "ChatGPT Eğitimi Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, ChatGPT’yi sadece denemek değil, iş süreçlerinde gerçek verim almak isteyen herkes için uygundur.",
+          "items": [
+            {
+              "title": "ChatGPT Kullanmayı Öğrenmek İsteyen Bireyler",
+              "body": "ChatGPT’yi bilinçli ve verimli kullanmak isteyen kişiler için uygundur."
+            },
+            {
+              "title": "Şirket Çalışanları",
+              "body": "Günlük ofis işleri, yazışma, rapor ve içerik süreçlerini hızlandırmak isteyen çalışanlara uygundur."
+            },
+            {
+              "title": "Satış Ekipleri",
+              "body": "Müşteri mesajı, teklif takibi, telefon senaryosu ve CRM notları için ChatGPT kullanabilirler."
+            },
+            {
+              "title": "Pazarlama Ekipleri",
+              "body": "Sosyal medya, blog, reklam, mail marketing ve web sitesi içeriklerinde destek alabilirler."
+            },
+            {
+              "title": "İhracat ve Dış Ticaret Ekipleri",
+              "body": "İngilizce mail, ürün açıklaması, B2B platform metni ve müşteri takibi için uygundur."
+            },
+            {
+              "title": "CRM ve Müşteri Takip Ekipleri",
+              "body": "Müşteri notları, takip mesajları, satış aşamaları ve görev listelerinde destek alabilirler."
+            },
+            {
+              "title": "E-ticaret ve Pazaryeri Ekipleri",
+              "body": "Ürün açıklaması, müşteri soruları, kampanya metinleri ve pazaryeri içeriklerinde kullanabilirler."
+            },
+            {
+              "title": "KOBİ’ler, Üretici Firmalar ve Girişimciler",
+              "body": "ChatGPT’yi iş süreçlerine dahil etmek isteyen işletmeler ve girişimciler için uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "ChatGPT Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "ChatGPT eğitimi kişinin veya şirketin ihtiyacına göre planlanabilir. Genel olarak ChatGPT temel kullanımı, prompt yazma, rol ve bağlam verme, e-posta, satış, pazarlama, ihracat, CRM, toplantı notu, raporlama, e-ticaret, web sitesi içerikleri, metin düzenleme, çıktı kontrolü ve güvenli kullanım konuları ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "ChatGPT Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Eğitim modülleri ihtiyaca göre özelleştirilebilir. Aşağıdaki yapı, ChatGPT’yi iş süreçlerinde uygulamalı ve güvenli şekilde kullanmak için planlanmıştır.",
+          "items": [
+            {
+              "title": "ChatGPT Temel Kullanımı",
+              "body": "Eğitimin ilk bölümünde ChatGPT’nin temel kullanım mantığı anlatılır. Kullanıcıların aracı yalnızca sohbet için değil, iş süreçlerinde destek alabilecekleri bir yardımcı olarak görmesi hedeflenir. Kapsam: ChatGPT ne işe yarar ve hangi tür işlerde kullanılabilir?; Metin üretimi, metin düzenleme ve özetleme nasıl yapılır?; Liste, tablo ve formatlı çıktı nasıl alınır?; Yanlış veya eksik cevap nasıl düzelttirilir?."
+            },
+            {
+              "title": "Prompt Yazma Eğitimi",
+              "body": "ChatGPT’den kaliteli sonuç almak için doğru prompt yazmak gerekir. Prompt, ChatGPT’ye verilen komuttur. Komut ne kadar net olursa alınan cevap da o kadar kullanılabilir hale gelir. Kapsam: Prompt nedir, iyi prompt nasıl yazılır?; Rol verme, bağlam anlatma, hedef belirleme ve ton seçme; Çıktı formatı isteme ve örnek vererek sonucu iyileştirme; Aynı metnin farklı versiyonlarını alma ve revize komutu verme."
+            },
+            {
+              "title": "Rol, Bağlam ve Hedef Verme",
+              "body": "ChatGPT’ye yalnızca “bana bir metin yaz” demek çoğu zaman yeterli değildir. Daha iyi sonuç almak için rol, bağlam ve hedef birlikte verilmelidir. Kapsam: ChatGPT’ye uzman rolü verme; İşin bağlamını ve hedef müşteriyi açıklama; Sonucun kullanılacağı yeri ve formatı belirtme; Hangi bilgilerin yer alacağını ve hangi ifadelerden kaçınılacağını söyleme."
+            },
+            {
+              "title": "E-Posta Yazımında ChatGPT Kullanımı",
+              "body": "Günlük iş hayatında en sık kullanılan alanlardan biri e-posta yazımıdır. ChatGPT, farklı amaçlara uygun e-posta taslakları hazırlamak için kullanılabilir. Kapsam: Müşteri tanıtım e-postası, teklif gönderimi ve teklif takip e-postası; Toplantı talebi, hatırlatma, şikayet cevabı ve teşekkür e-postası; İngilizce iş e-postası ve kısa cevap metinleri; Resmi, samimi veya kurumsal tonlarda alternatif e-posta hazırlama."
+            },
+            {
+              "title": "Satış Süreçlerinde ChatGPT Kullanımı",
+              "body": "Satış ekipleri ChatGPT’yi müşteri iletişimi, teklif takibi, itiraz karşılama, telefon araması hazırlığı ve CRM notları gibi alanlarda kullanabilir. Kapsam: Satış mesajı ve potansiyel müşteri e-postası yazma; Teklif sonrası takip mesajı ve telefon konuşma senaryosu; LinkedIn bağlantı mesajı ve müşteri itirazlarına cevap taslağı; CRM görüşme notları, satış toplantısı gündemi ve satış sonrası teşekkür mesajı."
+            },
+            {
+              "title": "Pazarlama ve İçerik Üretiminde ChatGPT Kullanımı",
+              "body": "ChatGPT, pazarlama ekipleri için içerik fikri üretme, metin yazma, kampanya taslağı hazırlama ve var olan içerikleri geliştirme alanlarında kullanılabilir. Kapsam: Sosyal medya içerik fikri, blog başlığı ve web sitesi sayfa metni; Ürün açıklaması, mail marketing ve reklam metni hazırlama; Kampanya sloganı ve hedef kitleye göre metin uyarlama; SEO uyumlu içerik taslağı ve GEO kısa cevap alanı oluşturma."
+            },
+            {
+              "title": "İhracat ve Dış Ticarette ChatGPT Kullanımı",
+              "body": "İhracat yapan firmalar için ChatGPT, İngilizce yazışma, ürün açıklaması, müşteri takip mesajı, B2B platform metni ve fuar sonrası iletişim gibi alanlarda kullanılabilir. Kapsam: İngilizce tanıtım maili ve yurt dışı müşteri takip mesajı; Ürün açıklamalarını İngilizce hazırlama ve B2B platform ürün metni oluşturma; Fuar sonrası takip mesajı, teklif gönderim metni ve proforma açıklaması; Hedef ülke araştırması için soru listesi ve ihracat operasyon kontrol listesi."
+            },
+            {
+              "title": "CRM ve Müşteri Takibinde ChatGPT Kullanımı",
+              "body": "CRM süreçlerinde müşteri notları, takip mesajları, satış aşamaları ve görev listeleri düzenli tutulmalıdır. ChatGPT bu süreçlerde yardımcı olabilir. Kapsam: Müşteri görüşme notlarını özetleme; Takip mesajı ve teklif sonrası hatırlatma metni hazırlama; Müşteri ilgi seviyesini sınıflandırmak için kriter oluşturma; CRM kampanya metni, satış raporu taslağı ve müşteri cevaplarını düzenleme."
+            },
+            {
+              "title": "E-Ticaret ve Pazaryeri Süreçlerinde ChatGPT Kullanımı",
+              "body": "E-ticaret ve pazaryeri ekipleri ürün açıklamaları, ürün başlıkları, müşteri soruları, kampanya metinleri ve satış raporu yorumları için ChatGPT’den destek alabilir. Kapsam: Trendyol ürün açıklaması, Amazon ürün başlığı, Etsy ve eBay ürün metinleri; B2B platform ürün metni ve yurt dışı pazaryeri içerikleri; Ürün faydalarını açıklama, müşteri sorularına cevap ve kampanya metni; SEO uyumlu ürün açıklaması ve ürün karşılaştırma metni."
+            },
+            {
+              "title": "Web Sitesi, Blog ve SEO İçeriklerinde ChatGPT Kullanımı",
+              "body": "ChatGPT, web sitesi içerikleri, blog yazıları, hizmet sayfaları, sık sorulan sorular ve SEO içerik taslakları için kullanılabilir. Kapsam: Hizmet sayfası taslağı, blog konu başlığı ve SEO başlığı hazırlama; Meta açıklama, H1, H2 ve H3 başlık yapısı planlama; Sık sorulan sorular ve GEO odaklı kısa cevap alanı oluşturma; Var olan metni sadeleştirme, satış odaklı hale getirme ve hedef kitleye göre yeniden yazma."
+            },
+            {
+              "title": "Toplantı Notu ve Rapor Hazırlamada ChatGPT Kullanımı",
+              "body": "ChatGPT, toplantı notlarını düzenlemek, görev listesi çıkarmak ve rapor taslağı oluşturmak için kullanılabilir. Kapsam: Toplantı notlarını düzenleme ve karar maddelerini çıkarma; Görev listesi, haftalık rapor ve satış raporu özeti oluşturma; Müşteri görüşme raporu, proje durum raporu ve yönetici özeti yazma; Uzun metni kısa özet haline getirme ve aksiyon planı oluşturma."
+            },
+            {
+              "title": "Excel, Tablo ve Veri Yorumlama Süreçlerinde ChatGPT Kullanımı",
+              "body": "ChatGPT, tablo verilerini yorumlama, sınıflandırma, rapor formatı oluşturma ve analiz fikri geliştirme süreçlerinde destekleyici olarak kullanılabilir. Kapsam: Tablo verisi yorumlatma, satış verisi özetletme ve müşteri listesi sınıflandırma; Ürün listesi düzenleme ve Excel formül mantığı sorma; Rapor tablosu hazırlama ve eksik veri fark etme; Kritik verilerde ChatGPT sonucunu insan kontrolünden geçirme."
+            },
+            {
+              "title": "İnsan Kaynakları ve Kurumsal İletişimde ChatGPT Kullanımı",
+              "body": "İnsan kaynakları ve kurumsal iletişim ekipleri ChatGPT’yi iş ilanı, görev tanımı, iç duyuru, eğitim dokümanı ve oryantasyon metni hazırlamak için kullanabilir. Kapsam: İş ilanı, görev tanımı ve mülakat soru listesi; Oryantasyon dokümanı ve çalışan duyuru metni; Eğitim içerik taslağı ve performans görüşmesi soru listesi; İç iletişim mesajı, şirket içi prosedür ve departman bazlı görev listesi."
+            },
+            {
+              "title": "ChatGPT ile Metin Düzenleme ve Kalite Artırma",
+              "body": "ChatGPT yalnızca sıfırdan metin yazmak için değil, mevcut metinleri iyileştirmek için de kullanılabilir. Kapsam: Metni sadeleştirme, profesyonelleştirme ve yazım hatalarını düzeltme; Uzun metni kısaltma veya kısa metni detaylandırma; Teknik metni müşteri diline çevirme; Türkçe metni İngilizceye uyarlama ve farklı tonlarda alternatif metin üretme."
+            },
+            {
+              "title": "ChatGPT Cevaplarını Kontrol Etme",
+              "body": "ChatGPT faydalı bir araç olsa da her cevabı doğru kabul edilmemelidir. Kullanıcılar çıkan cevabı kontrol etmeyi öğrenmelidir. Kapsam: Bilgi doğru mu, tarih veya güncellik gerekiyor mu?; Hukuki, finansal, resmi veya teknik bir konu var mı?; Müşteriye gönderilebilir mi ve marka diliyle uyumlu mu?; Yanıltıcı, abartılı, eksik veya fazla genel ifade var mı?."
+            },
+            {
+              "title": "ChatGPT Kullanımında Gizlilik ve Güvenlik",
+              "body": "ChatGPT kullanırken şirket verileri, müşteri bilgileri ve kişisel bilgiler konusunda dikkatli olunmalıdır. Her bilgi yapay zeka aracına girilmemelidir. Kapsam: Şirket gizli bilgileri, müşteri bilgileri ve kişisel veriler nasıl korunmalı?; Finansal bilgiler, ticari sırlar ve çalışan bilgileri nasıl ele alınmalı?; Müşteri yazışmaları anonimleştirilebilir mi?; Hangi durumlarda yönetici veya uzman onayı gerekir?."
+            },
+            {
+              "title": "Departmanlara Özel ChatGPT Kullanım Senaryoları",
+              "body": "ChatGPT her departmanda farklı şekilde kullanılabilir. Bu nedenle eğitimde departmanlara özel örnekler hazırlanabilir."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "ChatGPT Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç eğitim alacak kişinin veya şirketin ihtiyacı, departman yapısı, mevcut ChatGPT kullanım seviyesi ve hedefleri değerlendirilerek başlar. Ardından eğitim içeriği planlanır, temel kullanım ve prompt eğitimi verilir, uygulamalı örnekler yapılır, güvenli kullanım kuralları anlatılır ve pratik kullanım yol haritası oluşturulur.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Eğitim alacak kişinin veya şirketin ihtiyacı, departman yapısı, mevcut ChatGPT kullanım seviyesi ve hedefleri değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Eğitim İçeriği Planlama",
+              "body": "Satış, pazarlama, ihracat, CRM, e-ticaret, yönetim veya ofis süreçlerinden hangilerine odaklanılacağı belirlenir."
+            },
+            {
+              "n": 3,
+              "title": "Temel Kullanım ve Prompt Eğitimi",
+              "body": "ChatGPT temel kullanımı, prompt yazma, rol verme, bağlam oluşturma ve doğru çıktı alma mantığı anlatılır."
+            },
+            {
+              "n": 4,
+              "title": "Uygulamalı Örnekler",
+              "body": "Katılımcıların kendi iş süreçlerine uygun e-posta, rapor, müşteri mesajı, ürün açıklaması ve içerik örnekleri hazırlanır."
+            },
+            {
+              "n": 5,
+              "title": "Departman Bazlı Çalışmalar",
+              "body": "Eğitim şirket için yapılıyorsa departmanlara özel kullanım senaryoları oluşturulur."
+            },
+            {
+              "n": 6,
+              "title": "Güvenli Kullanım Kuralları",
+              "body": "Gizlilik, kişisel veri, müşteri bilgileri, şirket verileri ve çıktı kontrolü konuları anlatılır."
+            },
+            {
+              "n": 7,
+              "title": "Soru-Cevap ve Uygulama",
+              "body": "Katılımcıların kendi işlerinden örnekler alınarak ChatGPT ile nasıl çalışılacağı gösterilir."
+            },
+            {
+              "n": 8,
+              "title": "Kullanım Yol Haritası",
+              "body": "Eğitim sonunda ChatGPT’nin günlük işlerde nasıl kullanılacağına dair pratik bir yol haritası oluşturulur."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "ChatGPT Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Çalışanlar ChatGPT’yi daha bilinçli kullanır",
+            "Prompt yazma becerisi gelişir",
+            "E-posta ve yazışma süreçleri hızlanabilir",
+            "Satış ve müşteri takip mesajları daha düzenli hazırlanabilir",
+            "Pazarlama ve içerik üretimi desteklenir",
+            "İhracat yazışmaları daha profesyonel hale gelebilir",
+            "CRM notları ve takip süreçleri daha düzenli hazırlanabilir",
+            "E-ticaret ürün açıklamaları daha hızlı oluşturulabilir",
+            "Toplantı notları ve raporlar daha sistemli hale gelebilir",
+            "Departmanlara özel kullanım senaryoları oluşur",
+            "Gizlilik ve veri güvenliği farkındalığı artar",
+            "Şirket içinde yapay zeka kullanım kültürü gelişir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "ChatGPT Kullanımında Sık Yapılan Hatalar",
+          "items": [
+            "Çok genel soru sormak",
+            "Bağlam vermeden sonuç beklemek",
+            "Hedef kitle belirtmemek",
+            "Çıktı formatını söylememek",
+            "İlk cevabı yeterli kabul etmek",
+            "Cevabı kontrol etmeden kullanmak",
+            "Şirket gizli bilgilerini paylaşmak",
+            "Kişisel verileri bilinçsiz kullanmak",
+            "Yanlış bilgileri müşteri iletişimine aktarmak",
+            "ChatGPT’yi uzman görüşünün yerine koymak",
+            "Her işi tek komutla yaptırmaya çalışmak",
+            "Prompt yazma mantığını öğrenmeden kullanmak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "ChatGPT Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "ChatGPT eğitimi, yapay zeka ve dijital dönüşüm sürecinin parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "ChatGPT Eğitimi, Prompt Yazma Eğitimi ve İş Süreçlerinde ChatGPT Kullanımı",
+          "body": [
+            "ChatGPT eğitimi; kurumsal ChatGPT eğitimi, şirketlere ChatGPT eğitimi, ChatGPT prompt eğitimi, prompt yazma eğitimi, ChatGPT kullanım eğitimi, iş süreçlerinde ChatGPT kullanımı, satışta ChatGPT kullanımı, pazarlamada ChatGPT eğitimi, ihracatta ChatGPT kullanımı, CRM ChatGPT eğitimi, e-ticarette ChatGPT kullanımı, ChatGPT ile e-posta yazma, ChatGPT ile rapor hazırlama, ChatGPT ile ürün açıklaması yazma ve ChatGPT ile müşteri takibi konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "ChatGPT eğitimi nedir?",
+          "body": [
+            "ChatGPT eğitimi; ChatGPT’nin e-posta yazma, rapor hazırlama, satış mesajı oluşturma, pazarlama içeriği üretme, ihracat yazışmaları hazırlama, CRM müşteri takibi, e-ticaret ürün açıklaması, toplantı notu düzenleme ve günlük ofis süreçlerinde doğru, güvenli ve verimli kullanılmasını öğreten uygulamalı yapay zeka eğitimidir. {{appName}}, bireylere, ekiplere ve şirketlere ihtiyaçlarına göre ChatGPT eğitimi sunar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "ChatGPT Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "ChatGPT eğitimi kimler için uygundur? +",
+              "a": "ChatGPT eğitimi; çalışanlar, satış ekipleri, pazarlama ekipleri, ihracat ekipleri, CRM kullanıcıları, e-ticaret ekipleri, yöneticiler, girişimciler, KOBİ’ler ve ChatGPT’yi iş süreçlerinde kullanmak isteyen herkes için uygundur."
+            },
+            {
+              "q": "ChatGPT eğitimi uygulamalı mı yapılır? +",
+              "a": "Evet. Eğitim, gerçek iş örnekleri üzerinden uygulamalı şekilde yapılabilir. E-posta, rapor, satış mesajı, müşteri takibi, ürün açıklaması ve içerik üretimi gibi örnekler üzerinde çalışılabilir."
+            },
+            {
+              "q": "Prompt yazma eğitimi veriliyor mu? +",
+              "a": "Evet. Eğitimde doğru prompt yazma, rol verme, bağlam oluşturma, hedef belirtme, ton seçme ve formatlı çıktı alma konuları detaylı şekilde anlatılır."
+            },
+            {
+              "q": "Satış ekibi için ChatGPT eğitimi alabilir miyiz? +",
+              "a": "Evet. Satış ekipleri için müşteri e-postası, teklif takip mesajı, telefon araması senaryosu, LinkedIn mesajı, CRM notları ve müşteri takip süreçlerinde ChatGPT kullanımı anlatılabilir."
+            },
+            {
+              "q": "İhracat ekibi için ChatGPT eğitimi veriliyor mu? +",
+              "a": "Evet. İhracat ekipleri için İngilizce tanıtım maili, ürün açıklaması, B2B platform içerikleri, fuar sonrası takip mesajı, müşteri cevapları ve ihracat operasyon kontrol listeleri hazırlanabilir."
+            },
+            {
+              "q": "E-ticaret ürün açıklamaları için ChatGPT kullanılabilir mi? +",
+              "a": "Evet. Trendyol, Amazon, Etsy, eBay ve B2B platformlar için ürün açıklaması, ürün başlığı, kampanya metni ve müşteri soru cevapları hazırlamak için ChatGPT’den destek alınabilir."
+            },
+            {
+              "q": "ChatGPT eğitimi şirketimize özel hazırlanabilir mi? +",
+              "a": "Evet. Eğitim şirketinizin sektörü, departmanları, çalışan profili ve iş süreçlerine göre özelleştirilebilir."
+            },
+            {
+              "q": "ChatGPT kullanırken gizlilik konusu anlatılıyor mu? +",
+              "a": "Evet. Şirket verileri, müşteri bilgileri, kişisel veriler, ticari sırlar ve ChatGPT çıktılarının kontrol edilmesi konuları eğitimde özellikle ele alınır."
+            },
+            {
+              "q": "ChatGPT cevapları doğrudan kullanılabilir mi? +",
+              "a": "Hayır. ChatGPT çıktıları mutlaka kontrol edilmelidir. Özellikle güncel bilgi, hukuki, finansal, teknik veya müşteriyle paylaşılacak konularda insan kontrolü önemlidir."
+            },
+            {
+              "q": "Eğitim online mı yoksa yüz yüze mi yapılır? +",
+              "a": "Eğitim ihtiyaca göre online veya yüz yüze planlanabilir. Katılımcı sayısı, şirket lokasyonu ve eğitim kapsamına göre uygun model belirlenebilir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "ChatGPT’yi Rastgele Kullanılan Bir Sohbet Aracı Olmaktan Çıkaralım",
+        "body": "ChatGPT kullanmak istiyor ama doğru komut yazmayı, iş süreçlerinize uyarlamayı ve güvenli kullanmayı bilmiyorsanız bu araçtan yeterince verim alamıyor olabilirsiniz. {{appName}} ChatGPT Eğitimi ile ChatGPT’yi e-posta, satış, pazarlama, ihracat, CRM, e-ticaret, raporlama ve günlük ofis süreçlerinde nasıl kullanacağınızı uygulamalı olarak öğrenin.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

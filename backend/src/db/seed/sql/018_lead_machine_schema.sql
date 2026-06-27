@@ -133,6 +133,9 @@ CREATE TABLE IF NOT EXISTS `lead_outreach_drafts` (
   `candidate_id`   char(36)     DEFAULT NULL,
   `market_lead_id` char(36)     DEFAULT NULL,
   `campaign_id`    char(36)     DEFAULT NULL,
+  `recipient_list_id` char(36)  DEFAULT NULL,   -- bulk liste kaynağı (outreach_recipient_lists)
+  `recipient_email`   varchar(255) DEFAULT NULL, -- pipeline'sız bulk için alıcı
+  `recipient_name`    varchar(255) DEFAULT NULL,
   `subject`        varchar(300) NOT NULL,
   `body`           text         NOT NULL,
   `ai_model`       varchar(50)  DEFAULT NULL,  -- hangi model ürettiyse
@@ -151,7 +154,8 @@ CREATE TABLE IF NOT EXISTS `lead_outreach_drafts` (
   KEY `idx_lead_outreach_drafts_tenant` (`tenant_key`),
   KEY `idx_outreach_candidate`   (`candidate_id`),
   KEY `idx_outreach_market_lead` (`market_lead_id`),
-  KEY `idx_outreach_draft_campaign` (`campaign_id`)
+  KEY `idx_outreach_draft_campaign` (`campaign_id`),
+  KEY `idx_outreach_draft_reclist` (`recipient_list_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET @add_lead_outreach_sent_at := IF(

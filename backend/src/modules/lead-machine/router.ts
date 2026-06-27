@@ -38,6 +38,7 @@ import {
   getIcp,
   listAmazonJobs,
   listB2bJobs,
+  listCustomsJobs,
   listDrafts,
   listEnrichment,
   listFairJobs,
@@ -54,12 +55,22 @@ import {
   startAmazonJob,
   startAmazonScan,
   startB2bJob,
+  startCustomsJob,
   startFairJob,
   startGenericFairRunner,
   updateDraft,
   updateIcp,
   updateSavedSearchHandler,
 } from './controller';
+import {
+  deleteBulkList,
+  generateBulkDrafts,
+  getBulkList,
+  listBulkLists,
+  listBulkRecipients,
+  sendBulkList,
+  uploadBulkList,
+} from './outreach/bulk-list.controller';
 
 export async function registerLeadMachinePublic(app: FastifyInstance) {
   app.get('/lead-machine/outreach/open/:id/pixel.gif', openTrackingPixel);
@@ -94,6 +105,9 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.post('/lead-machine/b2b/jobs', startB2bJob);
   app.get('/lead-machine/b2b/jobs', listB2bJobs);
 
+  app.post('/lead-machine/customs/jobs', startCustomsJob);
+  app.get('/lead-machine/customs/jobs', listCustomsJobs);
+
   app.post('/lead-machine/fair/jobs', startFairJob);
   app.post('/lead-machine/fair/run', startGenericFairRunner);
   app.get('/lead-machine/fair/jobs', listFairJobs);
@@ -118,6 +132,15 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.delete('/lead-machine/outreach/campaigns/:id', deleteOutreachCampaign);
   app.post('/lead-machine/outreach/campaigns/:id/generate-drafts', generateOutreachDrafts);
   app.post('/lead-machine/outreach/campaigns/:id/sync-host-keywords', syncHostKeywords);
+
+  // Outreach bulk-list send (Excel/CSV alıcı listesi → toplu mail)
+  app.get   ('/lead-machine/outreach/lists',                 listBulkLists);
+  app.post  ('/lead-machine/outreach/lists',                 uploadBulkList);        // multipart
+  app.get   ('/lead-machine/outreach/lists/:id',             getBulkList);
+  app.get   ('/lead-machine/outreach/lists/:id/recipients',  listBulkRecipients);
+  app.post  ('/lead-machine/outreach/lists/:id/generate',    generateBulkDrafts);    // {subjectTemplate, bodyTemplate}
+  app.post  ('/lead-machine/outreach/lists/:id/send',        sendBulkList);          // {ratePerMinute?}
+  app.delete('/lead-machine/outreach/lists/:id',             deleteBulkList);
 
   app.post('/lead-machine/competitor/scan', competitorScan);
 

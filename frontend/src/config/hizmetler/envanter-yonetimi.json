@@ -1,0 +1,199 @@
+{
+  "slug": "envanter-yonetimi",
+  "category": "urun-modulleri",
+  "module": "crm",
+  "order": 20,
+  "icon": "Boxes",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Envanter ve Stok Yönetimi | İşletmeni Yönet",
+        "description": "Karmaşık stok süreçlerinizi basitleştirin. Ürün girişi, stok takibi ve depo yönetimini dijital dünyada güvenle yapın.",
+        "ogTitle": "Envanter ve Stok Yönetimi | {{appName}}",
+        "ogDescription": "Stok takibi, ürün yönetimi ve analitik araçlarla işletmenizi bir üst seviyeye taşıyın. Ürünleri çalışanlara kolayca atayın, sorumlulukları takip edin ve varlık yönetimini basitleştirin. İşletme yönetim uygulamamız şimdi ve her zaman ücretsiz. Tüm özellikleri sınırsız kullanın, ek ücret yok!"
+      },
+      "hero": {
+        "eyebrow": "Ürün Modülü",
+        "title": "Envanter Yönetimi",
+        "lead": "Stok takibi, ürün yönetimi ve analitik araçlarla işletmenizi bir üst seviyeye taşıyın. Ürünleri çalışanlara kolayca atayın, sorumlulukları takip edin ve varlık yönetimini basitleştirin. İşletme yönetim uygulamamız şimdi ve her zaman ücretsiz. Tüm özellikleri sınırsız kullanın, ek ücret yok!",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Nasıl çalışır?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Öne Çıkan Özellikler",
+          "items": [
+            {
+              "title": "Dinamik Envanter Yönetimi",
+              "body": "Ürünleri hızlıca ekleyin, kategorize edin ve gerçek zamanlı stok seviyeleriyle envanter kontrolünü optimize edin."
+            },
+            {
+              "title": "Akıllı Zimmetleme Sistemi",
+              "body": "Envanter ürünlerini çalışanlara kolayca atayın, sorumlulukları takip edin ve varlık yönetimini basitleştirin."
+            },
+            {
+              "title": "Tam Mobil Entegrasyon",
+              "body": "Ofiste veya sahada, tüm envanter işlemlerini mobil cihazlardan gerçekleştirin. Gerçek zamanlı senkronizasyon ile her an güncel kalın."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Nasıl Çalışır?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ürünleri Ekleyin",
+              "body": "Ürünlerinizi sisteme ekleyin ve kategorilere ayırın."
+            },
+            {
+              "n": 2,
+              "title": "Zimmetleme",
+              "body": "Envanter ürünlerini çalışanlara atayın ve sorumlulukları takip edin."
+            },
+            {
+              "n": 3,
+              "title": "Finansal Analiz",
+              "body": "Envanter maliyetinizi inceleyin ve bütçe planlamanızı optimize edin."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Sıkça Sorulan Sorular",
+          "items": [
+            {
+              "q": "Hangi işletme türleri için uygundur?",
+              "a": "Küçük işletmelerden büyük ölçekli şirketlere kadar her boyutta işletme için uygundur. Perakende, üretim, lojistik ve daha birçok sektörde kullanılabilir."
+            },
+            {
+              "q": "Mevcut sistemlerle entegrasyon mümkün mü?",
+              "a": "Evet, birçok popüler e-ticaret platformu ve muhasebe yazılımı ile entegre çalışabilir. API'lerimiz sayesinde özel entegrasyonlar da mümkündür."
+            },
+            {
+              "q": "Zimmetleme sistemi nasıl çalışır?",
+              "a": "Zimmetleme sistemi, envanter ürünlerini belirli çalışanlara veya departmanlara atamayı sağlar. Bu sayede kimin hangi ürünü kullandığını takip edebilir, sorumlulukları belirleyebilir ve varlık yönetimini kolaylaştırabilirsiniz."
+            },
+            {
+              "q": "Mobil uygulama mevcut mu?",
+              "a": "Evet, iOS ve Android için mobil uygulamamız mevcuttur. Bu sayede envanter yönetimini her yerden yapabilir, barkod tarama gibi özellikleri kullanabilirsiniz."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Envanter Yönetiminizi Optimize Edin",
+        "body": "Stok takibinizi kolaylaştırın, maliyetlerinizi düşürün ve verimliliğinizi artırın.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "seo": {
+        "title": "Inventory Management - Efficient Stock Tracking and Assignment | isletmeyonetim.com",
+        "description": "Simplify your stock tracking, reduce costs, and increase efficiency with inventory management software. Try it for free!",
+        "ogTitle": "Inventory Management - Efficient Stock Tracking and Assignment | {{appName}}",
+        "ogDescription": "Take your business to the next level with stock tracking, product management, and analytical tools. Easily assign products to employees, track responsibilities, and simplify asset management. Our business management application is free now and always. Use all features unlimitedly, no additional fees!"
+      },
+      "hero": {
+        "eyebrow": "Product Module",
+        "title": "Inventory Management",
+        "lead": "Take your business to the next level with stock tracking, product management, and analytical tools. Easily assign products to employees, track responsibilities, and simplify asset management. Our business management application is free now and always. Use all features unlimitedly, no additional fees!",
+        "primaryCTA": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "How it works?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Featured Characteristics",
+          "items": [
+            {
+              "title": "Dynamic Inventory Management",
+              "body": "Quickly add and categorize products, and optimize inventory control with real-time stock levels."
+            },
+            {
+              "title": "Smart Assignment System",
+              "body": "Easily assign inventory items to employees, track responsibilities, and simplify asset management."
+            },
+            {
+              "title": "Full Mobile Integration",
+              "body": "Perform all inventory operations from mobile devices, whether in the office or in the field. Stay up-to-date with real-time synchronization."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "How Does It Work?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Add Products",
+              "body": "Add your products to the system and categorize them."
+            },
+            {
+              "n": 2,
+              "title": "Assignment",
+              "body": "Assign inventory items to employees and track responsibilities."
+            },
+            {
+              "n": 3,
+              "title": "Financial Analysis",
+              "body": "Review your inventory costs and optimize your budget planning."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Frequently Asked Questions",
+          "items": [
+            {
+              "q": "What types of businesses is it suitable for?",
+              "a": "It is suitable for businesses of all sizes, from small enterprises to large-scale companies. It can be used in retail, manufacturing, logistics, and many other sectors."
+            },
+            {
+              "q": "Is integration with existing systems possible?",
+              "a": "Yes, it can integrate with many popular e-commerce platforms and accounting software. Custom integrations are also possible thanks to our APIs."
+            },
+            {
+              "q": "How does the assignment system work?",
+              "a": "The assignment system allows you to assign inventory items to specific employees or departments. This way, you can track who is using which product, define responsibilities, and simplify asset management."
+            },
+            {
+              "q": "Is there a mobile app available?",
+              "a": "Yes, we have mobile apps for iOS and Android. This allows you to manage inventory from anywhere and use features like barcode scanning."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Optimize Your Inventory Management",
+        "body": "Simplify your stock tracking, reduce costs, and increase your efficiency.",
+        "button": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

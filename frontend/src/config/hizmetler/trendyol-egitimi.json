@@ -1,0 +1,184 @@
+{
+  "slug": "trendyol-egitimi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 140,
+  "icon": "GraduationCap",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Trendyol Eğitimi | Mağaza Açma, Ürün Yükleme, Satış, Reklam ve Pazaryeri Yönetimi",
+        "description": "Trendyol’da satış yapmak isteyen işletmeler için mağaza açma, ürün yükleme, fiyatlandırma, sipariş yönetimi, kampanya, reklam, stok ve satış analizi konularında uygulamalı Trendyol eğitimi sunuyoruz.",
+        "ogTitle": "Trendyol Eğitimi | {{appName}}",
+        "ogDescription": "Trendyol’da mağaza açma, ürün yükleme, satıcı paneli, fiyatlandırma, stok, sipariş, kampanya, reklam ve satış raporu analizi için uygulamalı eğitim alın."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "Trendyol Eğitimi",
+        "lead": "Trendyol’da satış yapmak istiyor ama mağaza açma, ürün yükleme, fiyatlandırma, reklam, kampanya, stok, sipariş ve müşteri yönetimi süreçlerinde nereden başlayacağınızı bilmiyor musunuz? Trendyol’da başarılı satış yapmak yalnızca mağaza açmakla sınırlı değildir. Ürün başlıkları, görseller, açıklamalar, kategori seçimi, fiyatlandırma, stok takibi, kargo süreci, kampanya katılımı, reklam yönetimi, müşteri soruları ve satış performansı birlikte yönetilmelidir. {{appName}} olarak Trendyol’da satış yapmak isteyen işletmelere, üreticilere, KOBİ’lere, marka sahiplerine ve e-ticaret ekiplerine uygulamalı Trendyol eğitimi sunuyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Trendyol Eğitimi Nedir?",
+          "body": [
+            "Trendyol eğitimi, Trendyol’da mağaza açmak, ürün yayınlamak, siparişleri yönetmek, kampanyalara katılmak, reklam süreçlerini anlamak, stok ve fiyat takibi yapmak isteyen kişi ve işletmelere yönelik uygulamalı e-ticaret eğitimidir.",
+            "Bu eğitimde amaç yalnızca Trendyol panelini göstermek değildir. Asıl amaç, Trendyol’da satış sürecinin nasıl çalıştığını, ürünlerin nasıl daha düzenli yayınlanacağını, mağaza operasyonunun nasıl takip edileceğini ve satış performansının nasıl analiz edileceğini öğretmektir.",
+            "{{appName}}, Trendyol eğitimini teorik anlatım yerine işletmenizin gerçek ürünleri ve satış hedefleri üzerinden uygulamalı şekilde planlar.",
+            "Amacımız, Trendyol mağazanızı daha bilinçli yönetebilmeniz, ürünlerinizi doğru şekilde yayına alabilmeniz, satış süreçlerinizi takip edebilmeniz ve pazaryeri operasyonlarınızı daha düzenli hale getirmenizdir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol’da Satış Yapmak Neden Planlı Yönetilmelidir?",
+          "body": [
+            "Trendyol büyük bir pazaryeridir. Bu nedenle mağaza açmak tek başına satış getirmez. Aynı kategoride birçok satıcı, benzer ürünler ve farklı fiyat seçenekleri bulunabilir.",
+            "Başarılı olmak için ürün yönetimi, fiyatlandırma, stok, sipariş, kampanya, reklam ve raporlama süreçlerinin birlikte yönetilmesi gerekir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Eğitim Kimler İçin Uygundur?",
+          "intro": "Trendyol’da bilinçli satış yapmak ve pazaryeri sürecini daha düzenli öğrenmek isteyen herkes için uygundur.",
+          "items": [
+            { "title": "Trendyol’da Satışa Başlamak İsteyen Girişimciler", "body": "Mağaza açılışı ve temel pazaryeri mantığını öğrenmek isteyen girişimciler için uygundur." },
+            { "title": "Trendyol Mağazası Açmak İsteyen Üreticiler", "body": "Kendi ürünlerini Trendyol’da satmak isteyen üretici firmalar için uygulanabilir eğitim sunulur." },
+            { "title": "E-ticarete Yeni Başlayan KOBİ’ler", "body": "Pazaryeri satış sürecini temelinden öğrenmek isteyen KOBİ’ler için uygundur." },
+            { "title": "Mevcut Mağazasını Geliştirmek İsteyenler", "body": "Ürün, stok, fiyat, sipariş ve raporlama sürecini daha düzenli hale getirmek isteyen işletmelere uygundur." },
+            { "title": "Ürün Yükleme Öğrenmek İsteyen Ekipler", "body": "Kategori, başlık, açıklama, görsel, barkod, varyant ve stok alanları uygulamalı anlatılır." },
+            { "title": "Trendyol Reklamlarını Anlamak İsteyen Satıcılar", "body": "Reklam mantığı, bütçe planlama ve performans takibine giriş yapılabilir." },
+            { "title": "E-ticaret Ekibini Eğitmek İsteyen Şirketler", "body": "Operasyon, satış, stok ve müşteri hizmetleri ekipleri için eğitim planlanabilir." },
+            { "title": "Pazaryeri Operasyonu Kurmak İsteyenler", "body": "Mağaza yönetimini kişiye bağlı dağınık işlerden çıkarıp süreç haline getirmek isteyenler için uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "Trendyol eğitimi işletmenin ihtiyacına göre planlanabilir. Genel olarak mağaza açılışı, panel kullanımı, ürün yönetimi, fiyatlandırma, stok, sipariş, kampanya, reklam ve raporlama başlıkları birlikte ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Trendyol Eğitiminde Hangi Alanlar Uygulamalı Anlatılır?",
+          "intro": "Eğitim, Trendyol mağaza yönetimini teorik bilgi olmaktan çıkarıp gerçek ürün, panel ve operasyon süreçleri üzerinden anlatır.",
+          "items": [
+            { "title": "Trendyol Pazaryeri Mantığını Anlama", "body": "Trendyol’da satış yapmadan önce pazaryerinin nasıl çalıştığını anlamak gerekir. Bu temel yapı anlaşılmadan mağaza yönetimine geçmek ileride birçok hataya neden olabilir. Trendyol pazaryeri yapısı ve satıcı-müşteri ilişkisi; ürün listeleme mantığı ve kategori yapısı; rekabet ortamı ve fiyat karşılaştırması; mağaza performansı, müşteri yorumları ve güven unsurları." },
+            { "title": "Trendyol Mağaza Açma Süreci", "body": "Trendyol’da satışa başlamak isteyen işletmeler için mağaza açılış süreci önemlidir. Gerekli belgeler, şirket bilgileri ve mağaza paneli dikkatli hazırlanmalıdır. Mağaza açılış mantığı ve satıcı başvuru süreci; şirket bilgileri ve belge hazırlığı; mağaza adı seçimi ve satıcı paneline giriş; temel mağaza ayarları ve ürün planı." },
+            { "title": "Satıcı Paneli Kullanımı", "body": "Trendyol satıcı paneli, mağazanın yönetildiği ana alandır. Ürünler, siparişler, kampanyalar, reklamlar, müşteri soruları ve raporlar bu panel üzerinden takip edilir. Ana ekran, ürün yönetimi ve sipariş yönetimi; kargo ve teslimat alanları; müşteri soruları, kampanya ve reklam bölümü; finansal özet ve mağaza performans göstergeleri." },
+            { "title": "Ürün Yükleme Eğitimi", "body": "Trendyol’da ürün yükleme, satış başarısını doğrudan etkileyen en önemli konulardan biridir. Yanlış kategori, eksik başlık veya hatalı görsel ürün performansını düşürebilir. Ürün adı, kategori, marka ve barkod kullanımı; ürün açıklaması, özellikler ve görseller; varyant, renk, beden ve ölçü bilgileri; stok, fiyat, kargo bilgisi ve yayına alma adımları." },
+            { "title": "Ürün Başlığı ve Açıklama Hazırlama", "body": "Trendyol’da ürün başlığı ve açıklaması müşterinin ürünü anlaması için çok önemlidir. Eksik veya yanlış yazılmış bilgiler satın alma kararını olumsuz etkileyebilir. Ürün başlığı nasıl yazılır? Başlıkta hangi bilgiler yer almalıdır? Ürün açıklaması, teknik özellikler ve kullanım alanları; sade, anlaşılır ve güven veren ürün metni hazırlama." },
+            { "title": "Ürün Görseli ve Mağaza Sunumu", "body": "Trendyol’da görseller satış üzerinde büyük etkiye sahiptir. Müşteri ürünü fiziksel olarak göremediği için görsel kalite ve sunum düzeni önemlidir. Ana ürün görseli ve ek ürün görselleri; beyaz fon, detay görselleri ve kullanım görselleri; ambalaj ve varyant görselleri; görsel kalite kontrolü ve açıklama uyumu." },
+            { "title": "Fiyatlandırma ve Kâr Hesabı", "body": "Trendyol’da fiyat belirlemek yalnızca ürün maliyetine kâr eklemek değildir. Komisyon, kargo, kampanya, reklam, iade, paketleme ve operasyon maliyetleri birlikte düşünülmelidir. Ürün, kargo ve paketleme maliyeti; komisyon, kampanya ve reklam etkisi; iade ve operasyon riski; rakip fiyat analizi ve minimum kârlı satış fiyatı." },
+            { "title": "Stok ve Sipariş Yönetimi", "body": "Stok hataları, geciken gönderimler ve yanlış ürün teslimleri mağaza performansını olumsuz etkileyebilir. Bu nedenle stok ve sipariş yönetimi düzenli yapılmalıdır. Stok girişi, stok güncelleme ve stok bitişi takibi; sipariş bildirimleri ve sipariş hazırlık süreci; paketleme, kargo teslim süreci ve gecikme riskleri; operasyon takip tablosu oluşturma." },
+            { "title": "Kargo, İade ve İptal Süreçleri", "body": "Pazaryeri satışlarında kargo, iade ve iptal süreçleri müşteri memnuniyeti açısından önemlidir. Satıcıların bu süreçleri doğru yönetmesi gerekir. Sipariş ne zaman hazırlanmalıdır? Paketleme ve kargo süreci nasıl takip edilir? İade ve iptal süreçlerinde nelere dikkat edilmelidir? Müşteri bilgilendirme ve mağaza performansı ilişkisi." },
+            { "title": "Müşteri Soruları ve Mağaza İletişimi", "body": "Müşteri sorularına hızlı, açıklayıcı ve profesyonel cevap vermek satış ihtimalini artırabilir. Sık sorulan sorular ürün açıklamasını geliştirmek için de kullanılabilir. Kısa ve net cevap verme; ürün bilgisini doğru aktarma; ölçü, beden, içerik ve kullanım sorularını açıklama; müşteri memnuniyeti ve mağaza güveni." },
+            { "title": "Kampanya ve İndirim Yönetimi", "body": "Trendyol’da kampanyalar satışları artırmak için kullanılabilir. Ancak kampanyaya katılmadan önce fiyat, stok, kâr ve operasyon kapasitesi değerlendirilmelidir. Kampanya mantığı ve indirim planı; stok hazırlığı ve kârlılık kontrolü; hangi ürünler kampanyaya alınmalı? Kampanya sonrası satış analizi." },
+            { "title": "Trendyol Reklam Yönetimine Giriş", "body": "Trendyol’da reklam, ürün görünürlüğünü artırmak için kullanılabilir. Ancak reklam bütçesi planlanmadan harcama yapmak doğru değildir. Reklam mantığı ve ürün görünürlüğü; bütçe planlama ve ürün seçimi; reklam ve kârlılık ilişkisi; reklam sonrası satış analizi ve performans takibi." },
+            { "title": "Satış Raporları ve Performans Analizi", "body": "Trendyol’da satış yapan işletmelerin yalnızca siparişlere bakması yeterli değildir. Satış raporları, ürün performansı, fiyat, kampanya, stok ve reklam sonuçları birlikte değerlendirilmelidir. En çok satan ve az satan ürünler; kampanya ve reklam performansı; stok, iade, sipariş ve gelir değerlendirmesi; kategori performansı ve mağaza göstergeleri." },
+            { "title": "Trendyol Mağaza Yönetimi İçin Ekip Görevleri", "body": "Bir işletmede Trendyol mağazası birden fazla kişi tarafından yönetiliyorsa görev dağılımı yapılmalıdır. Bu yapı mağaza yönetimini kişiye bağlı dağınık işlerden çıkarır. Ürün yükleme, stok ve fiyat güncelleme sorumlusu; sipariş, kargo ve müşteri soruları sorumlusu; kampanya, reklam ve raporlama sorumlusu; genel mağaza yöneticisi ve operasyon planı." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Trendyol Eğitimi Nasıl İlerler?",
+          "intro": "Eğitim süreci işletmenizin ürünleri, mevcut Trendyol durumu, e-ticaret hedefi ve eğitim ihtiyacı değerlendirilerek planlanır. Ardından uygulamalı eğitim, ürün analizi, operasyon planı ve yol haritası oluşturulur.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "İşletmenizin ürünleri, mevcut Trendyol durumu, e-ticaret hedefi ve eğitim ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Eğitim Planı Hazırlığı", "body": "Mağaza açılışı, ürün yükleme, sipariş yönetimi, reklam, kampanya veya raporlama gibi hangi konulara ağırlık verileceği belirlenir." },
+            { "n": 3, "title": "Uygulamalı Eğitim", "body": "Trendyol satıcı paneli, ürün yükleme, fiyatlandırma, stok, sipariş, kampanya ve raporlama alanları uygulamalı şekilde anlatılır." },
+            { "n": 4, "title": "Ürün ve Mağaza Analizi", "body": "Mevcut ürünler veya yüklenecek ürünler üzerinden başlık, açıklama, görsel, fiyat ve kategori yapısı değerlendirilir." },
+            { "n": 5, "title": "Operasyon Planı", "body": "Sipariş, kargo, stok, müşteri soruları ve ekip görevleri için takip yapısı oluşturulur." },
+            { "n": 6, "title": "Satış ve Reklam Değerlendirmesi", "body": "Reklam, kampanya ve satış raporları üzerinden mağazanın nasıl daha bilinçli yönetileceği anlatılır." },
+            { "n": 7, "title": "Soru-Cevap ve Yol Haritası", "body": "Eğitim sonunda işletmenin Trendyol mağazası için uygulanabilir bir yol haritası oluşturulur." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Trendyol Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Trendyol satıcı panelini daha bilinçli kullanırsınız",
+            "Ürün yükleme sürecini doğru öğrenirsiniz",
+            "Ürün başlığı ve açıklama hazırlamayı geliştirirsiniz",
+            "Görsel ve kategori hatalarını azaltabilirsiniz",
+            "Fiyatlandırma ve kâr hesabını daha dikkatli yaparsınız",
+            "Stok ve sipariş sürecini daha düzenli yönetirsiniz",
+            "Kampanya kararlarını daha bilinçli verirsiniz",
+            "Reklam bütçenizi daha kontrollü kullanırsınız",
+            "Müşteri sorularını daha profesyonel cevaplayabilirsiniz",
+            "Satış raporlarını daha doğru okuyabilirsiniz",
+            "Mağaza operasyonunu ekip içinde daha düzenli dağıtabilirsiniz",
+            "Pazaryeri satış sürecinizi daha sistemli hale getirebilirsiniz"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Trendyol’da Sık Yapılan Hatalar",
+          "items": [
+            "Mağaza açılışından sonra ürün planı yapmamak",
+            "Yanlış kategori seçmek",
+            "Ürün başlıklarını eksik yazmak",
+            "Ürün açıklamalarını yetersiz bırakmak",
+            "Kalitesiz veya eksik ürün görseli kullanmak",
+            "Kâr hesabı yapmadan fiyat belirlemek",
+            "Stokları düzenli güncellememek",
+            "Kampanyalara bilinçsiz katılmak",
+            "Reklam bütçesini plansız kullanmak",
+            "Müşteri sorularına geç cevap vermek",
+            "İade ve iptal süreçlerini takip etmemek",
+            "Satış raporlarını analiz etmemek",
+            "Mağaza yönetimini tek kişiye bağlı bırakmak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Trendyol eğitimi, e-ticaret ve pazaryeri yönetimi sürecinin bir parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol Satış Eğitimi, Ürün Yükleme, Reklam ve Mağaza Yönetimi",
+          "body": [
+            "Trendyol eğitimi; Trendyol satış eğitimi, Trendyol mağaza açma eğitimi, Trendyol ürün yükleme eğitimi, Trendyol satıcı paneli eğitimi, Trendyol reklam eğitimi, Trendyol kampanya yönetimi ve e-ticaret pazaryeri eğitimi süreçleri için planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol eğitimi nedir?",
+          "body": [
+            "Trendyol eğitimi; Trendyol’da satış yapmak isteyen işletmelere mağaza açma, satıcı paneli kullanımı, ürün yükleme, kategori seçimi, ürün başlığı ve açıklama hazırlama, görsel düzeni, fiyatlandırma, stok yönetimi, sipariş ve kargo takibi, kampanya, reklam ve satış raporu analizi konularında verilen uygulamalı e-ticaret eğitimidir. {{appName}}, Trendyol eğitimiyle şirketlerin pazaryeri satış sürecini daha bilinçli, düzenli ve ölçülebilir hale getirmesine yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Trendyol Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Trendyol eğitimi kimler için uygundur?", "a": "Trendyol eğitimi; Trendyol’da satışa başlamak isteyen girişimciler, üretici firmalar, KOBİ’ler, marka sahipleri, e-ticaret ekipleri ve mevcut mağazasını daha düzenli yönetmek isteyen işletmeler için uygundur." },
+            { "q": "Trendyol mağaza açma eğitimi veriyor musunuz?", "a": "Evet. Trendyol mağaza açılış süreci, gerekli hazırlıklar, satıcı paneli kullanımı ve mağaza yönetimi temel adımları eğitim kapsamında anlatılabilir." },
+            { "q": "Ürün yükleme eğitimi veriliyor mu?", "a": "Evet. Ürün adı, kategori, açıklama, görsel, barkod, varyant, fiyat, stok ve yayına alma adımları uygulamalı şekilde anlatılabilir." },
+            { "q": "Trendyol reklam eğitimi var mı?", "a": "Evet. Trendyol reklam mantığı, bütçe planlama, ürün seçimi ve reklam performansını takip etme konularında giriş seviyesinde eğitim verilebilir." },
+            { "q": "Trendyol kampanya yönetimi anlatılıyor mu?", "a": "Evet. Kampanya seçimi, indirim planı, stok hazırlığı, kârlılık kontrolü ve kampanya sonrası satış analizi eğitim kapsamında değerlendirilebilir." },
+            { "q": "Eğitim uygulamalı mı yapılır?", "a": "Evet. Eğitim, işletmenizin ürünleri ve mağaza ihtiyaçları üzerinden uygulamalı şekilde planlanabilir." },
+            { "q": "Trendyol’da satış garantisi veriyor musunuz?", "a": "Hayır. Eğitim satış garantisi vermez. Ancak mağaza yönetimi, ürün yükleme, fiyatlandırma, kampanya, reklam ve raporlama süreçlerini daha bilinçli yönetmenize yardımcı olur." },
+            { "q": "Mevcut Trendyol mağazamız için eğitim alabilir miyiz?", "a": "Evet. Mevcut mağazanız incelenerek ürünler, fiyatlandırma, stok, kampanya, reklam ve satış raporları üzerinden eğitim planlanabilir." },
+            { "q": "Ekipler için Trendyol eğitimi veriyor musunuz?", "a": "Evet. Şirket içindeki e-ticaret, operasyon, satış, stok ve müşteri hizmetleri ekiplerine yönelik Trendyol eğitimi planlanabilir." },
+            { "q": "Trendyol eğitimi sonrası mağaza yönetimi desteği alabilir miyiz?", "a": "Evet. Eğitim sonrasında Trendyol hesap yönetimi, ürün yükleme, mağaza düzenleme, kampanya takibi ve operasyon danışmanlığı gibi destekler ayrıca planlanabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Trendyol Mağazanızı Daha Bilinçli ve Sistemli Yönetmek İçin Eğitiminizi Birlikte Planlayalım",
+        "body": "Trendyol’da satış yapmak istiyor ama mağaza açma, ürün yükleme, fiyatlandırma, kampanya, reklam, stok ve sipariş yönetimi süreçlerinde nereden başlayacağınızı bilmiyorsanız {{appName}} ile iletişime geçin. Trendyol mağazanızı daha bilinçli yönetmek, ürünlerinizi daha düzenli yayınlamak ve pazaryeri satış sürecinizi sistemli hale getirmek için Trendyol eğitiminizi birlikte planlayalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

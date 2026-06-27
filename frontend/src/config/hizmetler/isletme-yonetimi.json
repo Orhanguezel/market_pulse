@@ -1,0 +1,107 @@
+{
+  "slug": "isletme-yonetimi",
+  "category": "urun-modulleri",
+  "module": "crm",
+  "order": 60,
+  "icon": "Building2",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "İşletme Kayıt ve Yönetim Paneli | İşletmeni Yönet",
+        "description": "Sisteme kayıtlı işletmeleri görüntüleyin, yeni işletme profilleri oluşturun ve kurumsal yapınızı tek bir panelden düzenleyin.",
+        "ogTitle": "İşletme Kayıt ve Yönetim Paneli | {{appName}}",
+        "ogDescription": "İşletmenizi kaydedin, uzmanlık alanınıza özel reklamınızı yapalım. Binlerce potansiyel müşteriye ulaşın ve işinizi büyütün!"
+      },
+      "hero": {
+        "eyebrow": "Ürün Modülü",
+        "title": "İşletmenizi Ücretsiz Tanıtın!",
+        "lead": "İşletmenizi kaydedin, uzmanlık alanınıza özel reklamınızı yapalım. Binlerce potansiyel müşteriye ulaşın ve işinizi büyütün!",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Nasıl çalışır?",
+          "href": "/teklif-al"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "İşletmenizi Ücretsiz Tanıtın!",
+          "body": [
+            "Sisteme kayıtlı işletmeleri görüntüleyin, yeni işletme profilleri oluşturun ve kurumsal yapınızı tek bir panelden düzenleyin.",
+            "İşletmenizi kaydedin, uzmanlık alanınıza özel reklamınızı yapalım. Binlerce potansiyel müşteriye ulaşın ve işinizi büyütün!"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Öne Çıkanlar",
+          "items": [
+            "Premium Kullanan İşletmeler",
+            "Tüm İşletmeler"
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "İşletmenizi Ücretsiz Tanıtın!",
+        "body": "İşletmenizi kaydedin, uzmanlık alanınıza özel reklamınızı yapalım. Binlerce potansiyel müşteriye ulaşın ve işinizi büyütün!",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "seo": {
+        "title": "Businesses | isletmeyonetim.com",
+        "description": "View registered businesses, discover premium features, and seize new business opportunities.",
+        "ogTitle": "Businesses | {{appName}}",
+        "ogDescription": "Register your business, and we'll advertise your area of expertise. Reach thousands of potential customers and grow your business!"
+      },
+      "hero": {
+        "eyebrow": "Product Module",
+        "title": "Promote Your Business for Free!",
+        "lead": "Register your business, and we'll advertise your area of expertise. Reach thousands of potential customers and grow your business!",
+        "primaryCTA": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "How it works?",
+          "href": "/teklif-al"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Promote Your Business for Free!",
+          "body": [
+            "View registered businesses, discover premium features, and seize new business opportunities.",
+            "Register your business, and we'll advertise your area of expertise. Reach thousands of potential customers and grow your business!"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Highlights",
+          "items": [
+            "Businesses Using Premium",
+            "All Businesses"
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Promote Your Business for Free!",
+        "body": "Register your business, and we'll advertise your area of expertise. Reach thousands of potential customers and grow your business!",
+        "button": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

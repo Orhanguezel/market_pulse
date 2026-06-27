@@ -1,0 +1,353 @@
+{
+  "slug": "linkedin-egitimi",
+  "category": "egitim",
+  "module": "training",
+  "order": 60,
+  "icon": "Linkedin",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "LinkedIn Eğitimi | Profesyonel Profil, B2B İletişim, İçerik ve Müşteri Bulma Eğitimi",
+        "description": "LinkedIn eğitimi ile profesyonel profil oluşturma, şirket sayfası kullanımı, B2B bağlantı kurma, içerik paylaşımı, karar verici kişilere ulaşma, mesajlaşma ve müşteri takip süreçlerini uygulamalı olarak öğretiyoruz.",
+        "ogTitle": "LinkedIn Eğitimi | {{appName}}",
+        "ogDescription": "LinkedIn profilinizi, şirket sayfanızı, bağlantı stratejinizi, mesajlaşma sürecinizi ve B2B müşteri takibinizi profesyonel hale getirin."
+      },
+      "hero": {
+        "eyebrow": "LinkedIn Eğitimi",
+        "title": "LinkedIn Eğitimi",
+        "lead": "LinkedIn hesabınız var ama profilinizi profesyonel kullanamıyor, doğru kişilerle bağlantı kuramıyor, içerik paylaşımı yapamıyor veya LinkedIn’i B2B müşteri bulma sürecine dönüştüremiyor musunuz? LinkedIn, yalnızca CV paylaşma veya iş arama platformu değildir. Doğru kullanıldığında şirketlerin marka görünürlüğünü artırmasına, karar verici kişilerle bağlantı kurmasına, sektörel güven oluşturmasına, satış ve ihracat süreçlerini desteklemesine yardımcı olan güçlü bir B2B iletişim kanalıdır. {{appName}} olarak bireylere, satış ekiplerine, ihracat ekiplerine, yöneticilere, girişimcilere ve şirketlere uygulamalı LinkedIn eğitimi sunuyoruz. Amacımız, LinkedIn’i rastgele bağlantı kurulan bir sosyal medya hesabı olmaktan çıkarıp; profesyonel görünürlük, B2B iletişim, güven oluşturma, müşteri adayı geliştirme ve satış takip sürecini destekleyen stratejik bir iş kanalına dönüştürmektir.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "LinkedIn Eğitimi Nedir?",
+          "body": [
+            "LinkedIn eğitimi, LinkedIn’in profesyonel profil oluşturma, şirket sayfası yönetimi, içerik paylaşımı, bağlantı kurma, mesajlaşma, karar verici kişilere ulaşma ve B2B müşteri takip süreçlerinde doğru kullanılmasını öğreten uygulamalı eğitimdir.",
+            "Bu eğitimde amaç yalnızca LinkedIn hesabı açmayı göstermek değildir. Asıl amaç, LinkedIn’i iş geliştirme, satış, ihracat, marka görünürlüğü ve profesyonel iletişim süreçlerinde daha bilinçli kullanmayı öğretmektir.",
+            "{{appName}}, LinkedIn eğitimini teorik anlatım yerine gerçek profil, sektör, hedef müşteri ve iş geliştirme örnekleriyle uygulamalı şekilde planlar.",
+            "LinkedIn’i profesyonel bir B2B iş geliştirme kanalına dönüştürün",
+            "Profil düzenleme, şirket sayfası, hedef kitle, bağlantı stratejisi, mesajlaşma, içerik paylaşımı ve CRM takibiyle LinkedIn çalışmalarınızı daha ölçülebilir hale getirin."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn Eğitimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "LinkedIn’den verim almak için yalnızca hesap açmak yeterli değildir. Profilin profesyonel görünmesi, şirket sayfasının doğru hazırlanması, hedef kitleye uygun içerik paylaşılması, bağlantı taleplerinin doğru yönetilmesi ve mesajların profesyonel yazılması gerekir.",
+            "Eğitimde LinkedIn’in profil düzenleme, şirket sayfası, hedef kitle, karar verici kişi bulma, bağlantı kurma, ilk mesaj, takip mesajı, içerik paylaşımı ve CRM müşteri takibi süreçlerinde nasıl kullanılacağı ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn Neden İş Geliştirme İçin Önemlidir?",
+          "body": [
+            "B2B satışta, ihracatta ve profesyonel hizmetlerde güven çok önemlidir. Potansiyel müşteriler yalnızca web sitenize değil, LinkedIn profilinize, şirket sayfanıza, paylaşımlarınıza ve profesyonel görünümünüze de bakabilir.",
+            "LinkedIn yanlış kullanıldığında ters etki oluşturabilir. Hazır mesajlar, spam gibi görünen bağlantı talepleri, eksik profil bilgileri, profesyonel olmayan görseller ve yanlış hedef kitle iletişimi güven kaybına neden olabilir.",
+            "LinkedIn doğru kullanıldığında şu alanlarda destek sağlayabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "LinkedIn Eğitimi Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, LinkedIn’i yalnızca sosyal ağ olarak değil, profesyonel iş geliştirme kanalı olarak kullanmak isteyen herkes için uygundur.",
+          "items": [
+            {
+              "title": "Bireyler ve Profesyoneller",
+              "body": "LinkedIn profilini daha profesyonel hale getirmek isteyen çalışanlar ve uzmanlar için uygundur."
+            },
+            {
+              "title": "Satış Ekipleri",
+              "body": "B2B müşteri bulma, bağlantı kurma ve takip mesajları hazırlama süreçlerinde LinkedIn kullanabilirler."
+            },
+            {
+              "title": "İhracat ve Dış Ticaret Ekipleri",
+              "body": "Yurt dışı karar verici kişilere ulaşmak isteyen ihracat ekipleri için planlanabilir."
+            },
+            {
+              "title": "Yöneticiler ve Şirket Sahipleri",
+              "body": "Kişisel marka, profesyonel görünürlük ve şirket güveni oluşturmak isteyen yöneticiler için uygundur."
+            },
+            {
+              "title": "KOBİ’ler ve Üretici Firmalar",
+              "body": "B2B satış, ihracat ve marka görünürlüğü için LinkedIn’i daha bilinçli kullanmak isteyen firmalara uygundur."
+            },
+            {
+              "title": "Pazarlama Ekipleri",
+              "body": "LinkedIn içerik paylaşımı, şirket sayfası ve görünürlük çalışmalarını planlamak isteyen ekipler için uygundur."
+            },
+            {
+              "title": "İnsan Kaynakları Ekipleri",
+              "body": "Kurumsal görünürlük, işveren markası ve profesyonel iletişim süreçlerinde LinkedIn kullanabilirler."
+            },
+            {
+              "title": "Fuar Sonrası Takip Yapan Firmalar",
+              "body": "Fuar öncesi ve sonrası müşteri takibini LinkedIn ile desteklemek isteyen firmalar için uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "LinkedIn eğitimi kişinin veya şirketin ihtiyacına göre planlanabilir. Genel olarak LinkedIn’in profesyonel kullanım mantığı, kişisel profil düzenleme, şirket sayfası kullanımı, hedef kitle belirleme, karar verici kişi araştırması, bağlantı kurma, ilk mesaj, takip mesajı, içerik paylaşım planı, B2B güven oluşturma, satış ve ihracat için LinkedIn kullanımı, CRM müşteri takibi ve performans takibi konuları ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "LinkedIn Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Eğitim modülleri satış, ihracat, pazarlama, insan kaynakları veya yönetici profiline göre özelleştirilebilir.",
+          "items": [
+            {
+              "title": "LinkedIn Profesyonel Kullanım Mantığı",
+              "body": "Eğitimin ilk bölümünde LinkedIn’in profesyonel kullanım mantığı anlatılır. LinkedIn’in klasik sosyal medya platformlarından farklı olduğu ve B2B güven, uzmanlık, bağlantı ve iş ilişkisi geliştirme amacıyla kullanılması gerektiği vurgulanır. Kapsam: LinkedIn ne için kullanılmalıdır?; B2B satışta LinkedIn nasıl değerlendirilir?; Şirket sayfası ve kişisel profil birlikte nasıl çalışır?; LinkedIn çalışmaları nasıl ölçülebilir?."
+            },
+            {
+              "title": "LinkedIn Profil Düzenleme",
+              "body": "LinkedIn profiliniz, potansiyel müşterilerin, iş ortaklarının ve karar verici kişilerin sizi değerlendirdiği dijital kartvizitinizdir. Eksik veya zayıf bir profil, bağlantı ve iletişim sürecini olumsuz etkileyebilir. Kapsam: Profil fotoğrafı, kapak görseli ve unvan alanı; Başlık, hakkında bölümü ve deneyim alanı; Uzmanlık alanları, iletişim bilgileri ve öne çıkan içerikler; Profil dili ve hedef kitleye uygunluk."
+            },
+            {
+              "title": "Başlık Alanı Hazırlama",
+              "body": "LinkedIn başlık alanı yalnızca mevcut iş unvanı değil, ne yaptığınızı ve kime değer sunduğunuzu anlatan kısa bir profesyonel ifade olarak düşünülmelidir. Kapsam: Uzmanlık alanı ve hedef kitle; Sunulan hizmet, sektör bilgisi ve B2B odağı; Şirket adı, değer önerisi ve anahtar kelime kullanımı; Profesyonel, sade ve abartısız konumlandırma."
+            },
+            {
+              "title": "Hakkında Bölümü Yazımı",
+              "body": "LinkedIn hakkında bölümü, kişinin veya yöneticinin profesyonel hikayesini, uzmanlık alanlarını ve değer önerisini anlattığı önemli bir alandır. Kapsam: Kim olduğunuz ve hangi alanlarda çalıştığınız; Hangi sektörlere hizmet verdiğiniz; Hangi problemleri çözdüğünüz; Neden sizinle iletişime geçilmesi gerektiği."
+            },
+            {
+              "title": "Deneyim ve Hizmet Alanlarının Düzenlenmesi",
+              "body": "LinkedIn profilinde deneyim alanı yalnızca geçmiş işlerin listesi olarak kullanılmamalıdır. Bu alan, kişinin uzmanlığını ve şirketin sunduğu hizmetleri anlatan destekleyici bir bölüm olarak düzenlenmelidir. Kapsam: Şirket adı, görev ve hizmet açıklaması; Sorumluluk alanları ve uzmanlık konuları; B2B veya ihracat odağı; Web sitesi veya iletişim yönlendirmesi."
+            },
+            {
+              "title": "Şirket Sayfası Kullanımı",
+              "body": "LinkedIn’de kişisel profil kadar şirket sayfası da önemlidir. Şirket sayfası, firmanın kurumsal görünümünü destekler ve içerik paylaşımı için temel alanlardan biridir. Kapsam: Şirket açıklaması, logo ve kapak görseli; Web sitesi, sektör bilgisi ve konum bilgisi; Hizmet veya ürün açıklamaları; Kurumsal anahtar kelimeler ve B2B güven unsurları."
+            },
+            {
+              "title": "Hedef Kitle Belirleme",
+              "body": "LinkedIn’de başarılı iletişim için önce hedef kitle belirlenmelidir. Herkese bağlantı göndermek doğru bir strateji değildir. Kapsam: Hangi sektör ve ülkeler hedefleniyor?; Hangi şirket türleri uygun?; Hangi unvanlardaki kişiler karar verici?; Yurt içi mi, yurt dışı mı çalışılacak?."
+            },
+            {
+              "title": "Karar Verici Kişi Bulma",
+              "body": "LinkedIn, B2B karar verici kişilere ulaşmak için kullanılabilir. Ancak doğru kişiyi bulmak için unvan, sektör, ülke, şirket türü ve iş alanı doğru analiz edilmelidir. Kapsam: Satın alma müdürü, genel müdür ve şirket sahibi; İthalat, ihracat, operasyon ve kategori yöneticileri; E-ticaret, pazarlama, satış ve iş geliştirme yöneticileri; Distribütörlük ve tedarik zinciri sorumluları."
+            },
+            {
+              "title": "Bağlantı Kurma Stratejisi",
+              "body": "LinkedIn’de bağlantı kurma süreci dikkatli yönetilmelidir. Rastgele bağlantı göndermek, yanlış kişilere ulaşmak veya satış odaklı agresif mesajlar kullanmak olumsuz algı oluşturabilir. Kapsam: Kimlere bağlantı gönderilmeli?; Bağlantı kabul edildikten sonra ne yapılır?; Hemen satış mesajı göndermek doğru mu?; Bağlantılar CRM’e nasıl aktarılır?."
+            },
+            {
+              "title": "İlk Mesaj Yazma",
+              "body": "LinkedIn’de ilk mesaj çok önemlidir. İlk mesaj fazla uzun, doğrudan satış odaklı veya kopyala-yapıştır gibi görünürse karşı tarafta olumsuz izlenim bırakabilir. Kapsam: Kısa, açık ve profesyonel olmalı; Kişiye özel görünmeli; Hemen satış baskısı yapmamalı; Spam gibi görünmemeli."
+            },
+            {
+              "title": "Takip Mesajları ve Görüşme Talebi",
+              "body": "Bağlantı kurulduktan sonra sürecin devamı doğru yönetilmelidir. İlk mesajdan sonra hemen uzun satış sunumu göndermek yerine, karşı tarafın ilgisine göre ilerlemek daha profesyonel bir yaklaşımdır. Kapsam: Kısa tanıtım ve ilgili ürün ya da hizmet bilgisi; Web sitesi veya katalog yönlendirmesi; Görüşme talebi ve nazik hatırlatma; Sonraki aksiyon belirleme."
+            },
+            {
+              "title": "LinkedIn İçerik Paylaşımı",
+              "body": "LinkedIn’de düzenli ve doğru içerik paylaşımı, profesyonel görünürlüğü artırmaya yardımcı olabilir. Ancak içeriklerin hedef kitleye uygun, faydalı ve güven verici olması gerekir. Kapsam: Sektörel bilgi paylaşımları ve şirket hizmetleri; Ürün tanıtımları ve ihracat ipuçları; Fuar katılım duyuruları ve blog yönlendirmeleri; Sık sorulan sorulara cevaplar."
+            },
+            {
+              "title": "Kişisel Marka Oluşturma",
+              "body": "LinkedIn, kişisel marka oluşturmak için önemli bir platformdur. Şirket sahibi, yönetici, satış temsilcisi veya uzman kişiler kendi alanlarında düzenli ve profesyonel görünürlük sağlayabilir. Kapsam: Profilin profesyonel olması; Uzmanlık alanının net görünmesi; Düzenli içerik paylaşımı; Güven veren iletişim tarzı."
+            },
+            {
+              "title": "LinkedIn ve İhracat Müşteri Bulma",
+              "body": "LinkedIn, ihracat müşteri bulma sürecinde destekleyici bir kanal olarak kullanılabilir. Özellikle ithalatçı firmalar, distribütörler, satın alma yetkilileri ve sektör profesyonelleriyle bağlantı kurmak için değerlendirilebilir. Kapsam: Yurt dışı firma araştırması; Karar verici kişi ve satın alma müdürü bulma; Fuar öncesi ve sonrası bağlantı kurma; CRM’e müşteri adayı aktarma."
+            },
+            {
+              "title": "LinkedIn ve Mail Marketing İlişkisi",
+              "body": "LinkedIn, mail marketing çalışmalarını destekleyebilir. E-posta gönderilen potansiyel müşteriler LinkedIn üzerinden araştırılabilir, karar verici kişilerle bağlantı kurulabilir ve takip süreci güçlendirilebilir. Kapsam: E-posta gönderilen firmaların LinkedIn’de araştırılması; Karar verici kişilerin bulunması; Mail sonrası bağlantı talebi gönderilmesi; CRM’de LinkedIn etkileşimlerinin işlenmesi."
+            },
+            {
+              "title": "LinkedIn ve CRM Müşteri Takibi",
+              "body": "LinkedIn üzerinden bulunan potansiyel müşteriler CRM’e aktarılmadığında takip süreci dağınık kalabilir. Hangi kişiyle bağlantı kuruldu, kim cevap verdi, kim teklif istedi ve kim tekrar aranacak gibi bilgiler kayıt altına alınmalıdır. Kapsam: Kişi adı, unvan, şirket adı, ülke ve sektör; LinkedIn profil bağlantısı ve bağlantı tarihi; İlk mesaj tarihi, cevap durumu ve ürün ilgisi; Takip tarihi, satış temsilcisi ve satış aşaması."
+            },
+            {
+              "title": "LinkedIn’de Profesyonel İletişim Kuralları",
+              "body": "LinkedIn’de iletişim kurarken profesyonel sınırlar korunmalıdır. Agresif satış, kopyala-yapıştır mesajlar ve çok sık takip mesajı göndermek olumsuz algı oluşturabilir. Kapsam: Kısa ve net mesaj yazmak; Kişiye özel yaklaşım kullanmak; Hemen satış baskısı yapmamak; Spam algısı oluşturmamak."
+            },
+            {
+              "title": "LinkedIn Performans Takibi",
+              "body": "LinkedIn çalışmaları düzenli takip edilmelidir. Bağlantı sayısı tek başına başarı ölçüsü değildir. Önemli olan doğru kişilerle bağlantı kurulması ve bu bağlantıların iş sürecine katkı sağlamasıdır. Kapsam: Profil görüntülenmeleri ve bağlantı kabul oranı; Mesaj cevap oranı ve içerik etkileşimi; Toplantı talebi ve teklif isteyen kişi sayısı; CRM’e aktarılan müşteri adayları."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "LinkedIn Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç kişinin veya şirketin LinkedIn kullanım seviyesi, hedef kitlesi, sektör yapısı ve eğitim ihtiyacı değerlendirilerek başlar. Ardından profil ve şirket sayfası analizi, hedef kitle planı, uygulamalı profil düzenleme, bağlantı ve mesajlaşma eğitimi, içerik planı, CRM takip süreci ve uygulanabilir yol haritası hazırlanır.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Kişinin veya şirketin LinkedIn kullanım seviyesi, hedef kitlesi, sektör yapısı ve eğitim ihtiyacı değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Profil ve Şirket Sayfası Analizi",
+              "body": "Mevcut LinkedIn profili, şirket sayfası, açıklamalar, görseller, başlık alanı ve içerik yapısı incelenir."
+            },
+            {
+              "n": 3,
+              "title": "Hedef Kitle Planı",
+              "body": "Satış, ihracat, işe alım, marka görünürlüğü veya B2B müşteri bulma hedeflerine göre hedef kişi ve şirket profilleri belirlenir."
+            },
+            {
+              "n": 4,
+              "title": "Uygulamalı Profil Düzenleme",
+              "body": "Başlık, hakkında bölümü, deneyim alanı, görsel yapı ve anahtar kelime kullanımı uygulamalı şekilde gösterilir."
+            },
+            {
+              "n": 5,
+              "title": "Bağlantı ve Mesajlaşma Eğitimi",
+              "body": "Bağlantı talebi, ilk mesaj, takip mesajı, görüşme talebi ve profesyonel iletişim örnekleri hazırlanır."
+            },
+            {
+              "n": 6,
+              "title": "İçerik Planı Hazırlığı",
+              "body": "Hedef kitleye uygun LinkedIn içerik başlıkları, paylaşım fikirleri ve içerik takvimi oluşturulur."
+            },
+            {
+              "n": 7,
+              "title": "CRM ve Takip Süreci",
+              "body": "LinkedIn üzerinden bulunan kişilerin CRM’e nasıl aktarılacağı ve satış sürecinde nasıl takip edileceği anlatılır."
+            },
+            {
+              "n": 8,
+              "title": "Yol Haritası",
+              "body": "Eğitim sonunda LinkedIn’in günlük, haftalık ve aylık olarak nasıl kullanılacağına dair uygulanabilir bir yol haritası hazırlanır."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "LinkedIn Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Profesyonel profil görünümü güçlenir",
+            "Şirket sayfası daha düzenli hale gelir",
+            "Hedef kitle daha doğru belirlenir",
+            "Karar verici kişilere ulaşma becerisi gelişir",
+            "Bağlantı ve mesajlaşma süreci daha profesyonel yürütülür",
+            "B2B müşteri bulma çalışmaları desteklenir",
+            "İhracat müşteri araştırması daha düzenli hale gelir",
+            "Mail marketing ve telefon araması süreçleri LinkedIn ile desteklenir",
+            "İçerik paylaşımı daha planlı yapılır",
+            "Kişisel marka ve şirket görünürlüğü artabilir",
+            "LinkedIn kaynaklı müşteri adayları CRM ile takip edilebilir",
+            "Satış ekibi LinkedIn’i daha bilinçli kullanır"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "LinkedIn Kullanımında Sık Yapılan Hatalar",
+          "items": [
+            "Eksik profil bilgileriyle bağlantı kurmak",
+            "Profesyonel olmayan profil fotoğrafı kullanmak",
+            "Başlık alanını yalnızca unvan olarak bırakmak",
+            "Hakkında bölümünü boş veya zayıf yazmak",
+            "Şirket sayfasını güncel tutmamak",
+            "Rastgele kişilere bağlantı göndermek",
+            "Kopyala-yapıştır mesajlar kullanmak",
+            "İlk mesajda doğrudan satış yapmaya çalışmak",
+            "Çok uzun ve karışık mesajlar yazmak",
+            "Cevap gelmeyince aşırı ısrarcı olmak",
+            "İçerik paylaşımı yapmamak",
+            "LinkedIn çalışmalarını CRM’e aktarmamak",
+            "Bağlantı sayısını başarı ölçüsü sanmak",
+            "Profesyonel iletişim kurallarını ihmal etmek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "LinkedIn eğitimi, satış, ihracat ve dijital pazarlama süreçleriyle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn Eğitimi, B2B Müşteri Bulma ve Profesyonel Profil Oluşturma",
+          "body": [
+            "LinkedIn eğitimi; kurumsal LinkedIn eğitimi, LinkedIn kullanım eğitimi, LinkedIn profil eğitimi, LinkedIn şirket sayfası eğitimi, LinkedIn B2B müşteri bulma, LinkedIn satış eğitimi, LinkedIn ihracat müşteri bulma, LinkedIn bağlantı kurma eğitimi, LinkedIn mesajlaşma eğitimi, LinkedIn içerik eğitimi, LinkedIn kişisel marka eğitimi, LinkedIn karar verici kişi bulma, LinkedIn satın alma müdürü bulma, LinkedIn CRM müşteri takibi ve LinkedIn iş geliştirme eğitimi konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn eğitimi nedir?",
+          "body": [
+            "LinkedIn eğitimi; LinkedIn profilinin profesyonel düzenlenmesi, şirket sayfasının güçlendirilmesi, hedef kitle belirleme, karar verici kişilere ulaşma, bağlantı kurma, ilk mesaj ve takip mesajı yazma, içerik paylaşımı, B2B müşteri bulma, ihracat müşteri araştırması ve LinkedIn kaynaklı müşteri adaylarının CRM üzerinden takip edilmesini öğreten uygulamalı eğitimdir. {{appName}}, bireylere, satış ekiplerine, ihracat ekiplerine ve şirketlere ihtiyaçlarına göre LinkedIn eğitimi sunar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "LinkedIn Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "LinkedIn eğitimi kimler için uygundur? +",
+              "a": "LinkedIn eğitimi; bireyler, satış ekipleri, ihracat ekipleri, yöneticiler, şirket sahipleri, girişimciler, KOBİ’ler, pazarlama ekipleri ve LinkedIn’i profesyonel iş geliştirme amacıyla kullanmak isteyen herkes için uygundur."
+            },
+            {
+              "q": "LinkedIn profil düzenleme eğitimi veriliyor mu? +",
+              "a": "Evet. Profil fotoğrafı, kapak görseli, başlık alanı, hakkında bölümü, deneyim alanı, anahtar kelimeler ve profesyonel görünüm konuları uygulamalı olarak anlatılabilir."
+            },
+            {
+              "q": "Şirket sayfası eğitimi de var mı? +",
+              "a": "Evet. LinkedIn şirket sayfasının açıklama, görsel, web sitesi, sektör bilgisi, içerik paylaşımı ve kurumsal görünüm açısından nasıl düzenleneceği anlatılabilir."
+            },
+            {
+              "q": "LinkedIn ile B2B müşteri bulunabilir mi? +",
+              "a": "LinkedIn, B2B karar vericilere ve potansiyel iş bağlantılarına ulaşmak için destekleyici bir kanal olarak kullanılabilir. Ancak doğru hedef kitle, profesyonel profil, kişiye özel mesaj ve düzenli takip gerekir."
+            },
+            {
+              "q": "İhracat müşterisi bulmak için LinkedIn kullanılabilir mi? +",
+              "a": "Evet. İthalatçılar, distribütörler, satın alma müdürleri ve sektör profesyonelleri LinkedIn üzerinden araştırılabilir. Bu süreç mail marketing, telefon aramaları ve CRM takibiyle birlikte planlanabilir."
+            },
+            {
+              "q": "LinkedIn mesajları nasıl yazılmalıdır? +",
+              "a": "LinkedIn mesajları kısa, profesyonel, kişiye özel ve spam algısı oluşturmayacak şekilde yazılmalıdır. İlk mesajda doğrudan satış baskısı yapmak yerine güven veren iletişim kurulmalıdır."
+            },
+            {
+              "q": "LinkedIn içerik paylaşımı eğitimde anlatılıyor mu? +",
+              "a": "Evet. Hedef kitleye uygun içerik başlıkları, paylaşım fikirleri, içerik takvimi, uzmanlık gösteren paylaşımlar ve şirket sayfası içerikleri eğitimde ele alınabilir."
+            },
+            {
+              "q": "LinkedIn çalışmalarını CRM ile takip etmek mümkün mü? +",
+              "a": "Evet. LinkedIn üzerinden bulunan kişiler, bağlantı durumu, mesaj tarihi, cevap durumu, ürün ilgisi, takip tarihi ve satış aşaması CRM üzerinde takip edilebilir."
+            },
+            {
+              "q": "Eğitim şirketimize özel hazırlanabilir mi? +",
+              "a": "Evet. Eğitim şirketinizin sektörü, hedef müşterileri, satış süreci, ihracat hedefleri ve ekip yapısına göre özelleştirilebilir."
+            },
+            {
+              "q": "LinkedIn eğitimi online mı yapılır? +",
+              "a": "Eğitim ihtiyaca göre online veya yüz yüze planlanebilir. Katılımcı sayısı, şirket lokasyonu ve eğitim kapsamına göre uygun model belirlenebilir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "LinkedIn’i Rastgele Bağlantı Kurulan Bir Hesap Olarak Bırakmayalım",
+        "body": "LinkedIn hesabınız var ama profiliniz, şirket sayfanız, bağlantılarınız, mesajlarınız ve içerik paylaşımlarınız iş hedeflerinizi desteklemiyorsa LinkedIn’den yeterince verim alamıyor olabilirsiniz. {{appName}} LinkedIn Eğitimi ile LinkedIn profilinizi profesyonel hale getirmeyi, doğru hedef kitleye ulaşmayı, karar verici kişilerle bağlantı kurmayı, etkili mesajlar yazmayı, içerik paylaşımını planlamayı ve müşteri adaylarını CRM üzerinden takip etmeyi öğrenin.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

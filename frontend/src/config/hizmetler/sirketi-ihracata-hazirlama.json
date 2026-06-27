@@ -1,0 +1,114 @@
+{
+  "slug": "sirketi-ihracata-hazirlama",
+  "category": "ihracat-musteri-bulma",
+  "module": "service",
+  "order": 150,
+  "icon": "ClipboardCheck",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Şirketi İhracata Hazırlama | İhracata Başlamak İsteyen Firmalar İçin Hazırlık Hizmeti",
+        "description": "Şirketinizi ihracata hazır hale getiriyoruz. İngilizce tanıtım metni, ürün açıklamaları, web sitesi kontrolü, hedef pazar analizi, teklif formatı ve müşteri bulma hazırlıklarıyla ihracat sürecinizi başlatıyoruz.",
+        "ogTitle": "Şirketi İhracata Hazırlama | {{appName}}",
+        "ogDescription": "Şirketinizi ihracata hazır hale getiriyor; ürünlerinizi, web sitenizi, İngilizce içeriklerinizi, teklif formatınızı ve hedef pazar stratejinizi profesyonel şekilde planlıyoruz."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "Şirketinizi İhracata Hazırlıyoruz",
+        "lead": "İhracat yapmak istiyor ancak şirketinizin nereden başlaması gerektiğini bilmiyor musunuz? {{appName}} olarak şirketinizi ihracata hazır hale getiriyoruz. Ürünlerinizi, web sitenizi, İngilizce tanıtım metinlerinizi, teklif yapınızı, hedef pazar stratejinizi ve müşteri bulma sürecinizi ihracata uygun şekilde planlıyoruz. İhracata başlamak isteyen üretici firmalar, KOBİ’ler ve yurt dışı pazarlara açılmak isteyen şirketler için profesyonel ihracata hazırlık hizmeti sunuyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Şirketi İhracata Hazırlama Hizmeti Nedir?",
+          "body": [
+            "Şirketi ihracata hazırlama hizmeti, ihracata başlamak isteyen bir firmanın yurt dışı pazarlara uygun hale getirilmesi sürecidir.",
+            "Bir şirketin kaliteli ürün üretmesi ihracat için tek başına yeterli değildir. Yabancı alıcılar firmanın web sitesini, ürün açıklamalarını, kurumsal tanıtımını, iletişim dilini, teklif yapısını ve profesyonel görünümünü değerlendirir.",
+            "{{appName}} olarak şirketinizin ihracata hazır olup olmadığını analiz ediyor, eksik alanları belirliyor ve yurt dışı müşteri bulma sürecinden önce gerekli hazırlıkları yapıyoruz.",
+            "İhracata başlamadan önce güçlü bir altyapı oluşturun: İngilizce tanıtım metinleri, ürün açıklamaları, web sitesi kontrolü, teklif formatı, hedef pazar stratejisi, mail marketing hazırlığı ve müşteri bulma kanalları ihracat sürecine başlamadan önce planlanır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden İhracata Hazırlık Süreci Gereklidir?",
+          "body": [
+            "Birçok şirket ihracat yapmak ister ancak hazırlık süreci eksik olduğu için potansiyel müşterilerden yeterli geri dönüş alamaz.",
+            "Şirketi ihracata hazırlama hizmeti, firmanızın yabancı alıcı karşısında ilk izlenimini güçlendirir ve müşteri bulma çalışmalarının daha verimli ilerlemesine yardımcı olur."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Bu hizmet, ihracata başlamadan önce temel altyapısını güçlendirmek isteyen tüm şirketler için uygundur.",
+          "items": [
+            { "title": "Üretici Firmalar", "body": "İhracata yeni başlamak isteyen üretici firmalar için uygundur." },
+            { "title": "KOBİ’ler", "body": "Dış ticaret departmanı olmayan KOBİ’lerin hazırlık sürecini güçlendirir." },
+            { "title": "Yurt Dışına Açılmak İsteyenler", "body": "Ürünlerini yurt dışına satmak isteyen şirketlere yol haritası sunar." },
+            { "title": "İngilizce İçeriği Eksik Olanlar", "body": "Web sitesi ve tanıtım metni eksik olan işletmeler için uygundur." },
+            { "title": "Müşteri Bulmaya Hazırlananlar", "body": "Yurt dışı müşteri bulma sürecinden önce altyapısını hazırlamak isteyen firmalara uygundur." },
+            { "title": "B2B ve LinkedIn Kullananlar", "body": "B2B platform, fuar, mail marketing veya LinkedIn üzerinden alıcı bulmak isteyen şirketler için uygundur." },
+            { "title": "Mevcut İhracatını Geliştirmek İsteyenler", "body": "Mevcut ihracatını daha profesyonel hale getirmek isteyen işletmelere destek olur." },
+            { "title": "Kurumsal Görünümünü Güçlendirmek İsteyenler", "body": "Yurt dışı pazarlarda güven veren bir kurumsal görünüm oluşturmayı sağlar." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Şirketinizi İhracata Nasıl Hazırlıyoruz?",
+          "intro": "İhracata hazırlık sürecini şirketinizin ürünlerine, sektörüne ve hedeflerine göre planlıyoruz. Her firma için aynı standart yöntem uygulanmaz; firmanın mevcut durumu analiz edilir ve ihtiyaçlara göre çalışma yapılır.",
+          "items": [
+            { "title": "Şirket ve Ürün Analizi", "body": "İlk aşamada şirketinizin mevcut yapısı, ürünleri, üretim kapasitesi, satış kanalları ve ihracat hedefleri analiz edilir: şirket hangi ürünleri ihraç edebilir; ürünlerin yurt dışı pazarlara uygunluğu nedir; hangi ürün grupları öncelikli olarak pazarlanmalı; mevcut tanıtım materyalleri yeterli mi." },
+            { "title": "İhracat Uygunluk Değerlendirmesi", "body": "Firmanın ihracata başlamak için hangi eksiklerini tamamlaması gerektiği belirlenir: ürün yapısı ve web sitesi; İngilizce içerikler ve kataloglar; teklif formatı ve e-posta iletişimi; hedef pazar ve satış takip süreci." },
+            { "title": "İngilizce Kurumsal Tanıtım Metni", "body": "Web sitesi, e-posta tanıtımları, kataloglar, B2B platformlar, LinkedIn mesajları ve teklif dosyalarında kullanılabilecek İngilizce kurumsal tanıtım metni hazırlanabilir: şirketin faaliyet alanı; ürün grupları ve üretim kabiliyeti; hizmet verilen sektörler; yabancı alıcıya güven veren kurumsal açıklama." },
+            { "title": "İngilizce Ürün Açıklamaları", "body": "Ürün açıklamaları doğrudan çeviri mantığıyla değil, ihracat odaklı hazırlanır ve web sitesi, katalog, B2B platform ve mail marketing çalışmalarında kullanılabilir: ürün adı ve kullanım alanı; teknik özellikler; ambalaj ve kalite bilgileri; alıcı için net ve anlaşılır ürün sunumu." },
+            { "title": "İhracata Uygun Web Sitesi Kontrolü", "body": "Web sitenizin ihracata uygunluğu değerlendirilir: web sitesi İngilizce mi; ürünler net şekilde listelenmiş mi; teklif alma formu var mı; mobil uyum ve iletişim alanları yeterli mi." },
+            { "title": "Teklif ve Proforma Formatı", "body": "Yabancı müşteriye gönderilecek tekliflerin anlaşılır, düzenli ve ticari olarak net olması için teklif ve proforma yapısı hazırlanabilir: ürün adı, miktar ve birim fiyat; teslim şekli ve ödeme şekli; geçerlilik süresi; sevkiyat ve ambalaj bilgileri." },
+            { "title": "Hedef Pazar ve Müşteri Profili", "body": "Ürününüze, sektörünüze, fiyat yapınıza ve üretim kapasitenize göre hedef pazarlar belirlenir: ürün hangi ülkelerde talep görebilir; hedef müşteri tipi kimdir; ithalatçı, distribütör veya toptancı mı hedeflenmeli; hangi müşteri bulma kanalı daha uygundur." },
+            { "title": "Mail Marketing Hazırlığı", "body": "Şirket ihracata hazır hale geldikten sonra potansiyel müşterilere ulaşmak için mail marketing süreci hazırlanabilir: İngilizce tanıtım maili; ürün veya sektör bazlı e-posta şablonu; takip maili metinleri; mail başlıkları ve cevap takip planı." },
+            { "title": "B2B Platform ve LinkedIn Hazırlığı", "body": "LinkedIn, Alibaba, TradeWheel, Go4WorldBusiness, Europages ve benzeri platformlarda profesyonel görünmek için hazırlık yapılır: LinkedIn şirket sayfası kontrolü; Sales Navigator hedef müşteri kriterleri; Alibaba ve B2B platform ürün başlıkları; platform mesajlaşma şablonları." },
+            { "title": "İhracat Satış Süreci Yol Haritası", "body": "Hazırlık çalışmasının sonunda şirketiniz için uygulanabilir bir ihracat yol haritası oluşturulur: öncelikli ürün grupları ve hedef ülkeler; kullanılacak müşteri bulma kanalları; mail marketing ve telefon araması stratejisi; teklif, takip ve operasyon hazırlıkları." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Şirketinizi İhracata Hazırlama Süreci Nasıl İlerler?",
+          "intro": "İhracata hazırlık süreci şirket ve ürün analizinden başlayarak ihracat satış süreci yol haritasının oluşturulmasına kadar adım adım planlanır.",
+          "steps": [
+            { "n": 1, "title": "Şirket ve Ürün Analizi", "body": "Şirketinizin mevcut yapısı, ürünleri, üretim kapasitesi, satış kanalları ve ihracat hedefleri analiz edilir." },
+            { "n": 2, "title": "İhracat Uygunluk Değerlendirmesi", "body": "Firmanın ihracata başlamak için hangi eksiklerini tamamlaması gerektiği belirlenir." },
+            { "n": 3, "title": "İngilizce İçerik Hazırlığı", "body": "İngilizce kurumsal tanıtım metni ve ihracat odaklı ürün açıklamaları hazırlanır." },
+            { "n": 4, "title": "Web Sitesi ve Teklif Formatı Kontrolü", "body": "Web sitesinin ihracata uygunluğu değerlendirilir, teklif ve proforma formatı hazırlanır." },
+            { "n": 5, "title": "Hedef Pazar ve Müşteri Profili", "body": "Ürün, sektör ve kapasiteye göre hedef pazarlar ve müşteri profili belirlenir." },
+            { "n": 6, "title": "Mail Marketing ve B2B Platform Hazırlığı", "body": "Mail marketing içerikleri ile B2B platform ve LinkedIn hazırlıkları yapılır." },
+            { "n": 7, "title": "İhracat Satış Süreci Yol Haritası", "body": "Şirketiniz için uygulanabilir bir ihracat yol haritası oluşturulur." }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Şirketi İhracata Hazırlama Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Şirketi ihracata hazırlama hizmeti kimler için uygundur?", "a": "Bu hizmet; ihracata yeni başlamak isteyen üretici firmalar, KOBİ’ler, dış ticaret departmanı olmayan şirketler ve yurt dışı müşteri bulma sürecine başlamadan önce hazırlık yapmak isteyen işletmeler için uygundur." },
+            { "q": "İhracata başlamak için önce ne yapmak gerekir?", "a": "İhracata başlamak için öncelikle ürünlerin ihracata uygunluğu, web sitesi, İngilizce tanıtım metinleri, ürün açıklamaları, hedef pazar stratejisi, teklif formatı ve müşteri bulma kanalları hazırlanmalıdır." },
+            { "q": "İngilizce ürün açıklamaları hazırlıyor musunuz?", "a": "Evet. Ürünlerinizi yurt dışı müşterilere uygun şekilde anlatan İngilizce ürün açıklamaları hazırlanabilir. Bu metinler web sitesi, katalog, B2B platformlar ve mail marketing çalışmalarında kullanılabilir." },
+            { "q": "Web sitemi ihracata uygun hale getiriyor musunuz?", "a": "Evet. Mevcut web sitenizin ihracata uygunluğu analiz edilir. Gerekirse İngilizce içerik, ürün sayfaları, teklif formları, iletişim alanları ve B2B odaklı yapılar için öneriler hazırlanır." },
+            { "q": "Hedef ülke belirleme konusunda destek veriyor musunuz?", "a": "Evet. Ürününüz, sektörünüz ve şirket hedeflerinize göre hedef pazar ve müşteri profili belirleme konusunda destek sağlanabilir." },
+            { "q": "Mail marketing hazırlığı yapıyor musunuz?", "a": "Evet. Yurt dışı potansiyel müşterilere gönderilecek İngilizce tanıtım mailleri, takip mailleri ve mesaj kurguları hazırlanabilir." },
+            { "q": "Teklif ve proforma formatı hazırlıyor musunuz?", "a": "Evet. Yabancı müşterilere gönderilecek teklif ve proforma yapısı düzenlenebilir. Böylece satış süreci daha profesyonel hale gelir." },
+            { "q": "LinkedIn ve B2B platform hazırlığı yapıyor musunuz?", "a": "Evet. LinkedIn, Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi kanallarda firma profili, ürün açıklamaları ve müşteri bulma hazırlıkları yapılabilir." },
+            { "q": "Bu hizmet ihracat danışmanlığı mı?", "a": "Bu hizmet ihracat danışmanlığının hazırlık aşamasıdır. Amaç, şirketinizi yurt dışı müşteri bulma, mail marketing, teklif verme ve ihracat operasyon sürecine hazır hale getirmektir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "İhracata Daha Güçlü Başlamak İçin Hazırlık Sürecinizi Planlayalım",
+        "body": "Şirketiniz ihracat yapmak istiyor ancak nereden başlayacağını bilmiyorsa, önce doğru hazırlık sürecini oluşturmak gerekir. {{appName}} olarak şirketinizi ihracata hazır hale getiriyor; ürünlerinizi, web sitenizi, İngilizce içeriklerinizi, hedef pazarınızı ve müşteri bulma sürecinizi profesyonel şekilde planlıyoruz.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

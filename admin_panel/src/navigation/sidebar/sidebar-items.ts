@@ -26,6 +26,7 @@ import {
   Radar,
   ScanLine,
   Search,
+  Send,
   Settings,
   SlidersHorizontal,
   UserCheck,
@@ -87,6 +88,7 @@ export type AdminNavItemKey =
   | 'market_lead_icp'
   | 'market_lead_outreach'
   | 'market_outreach_campaigns'
+  | 'market_lead_bulk_lists'
   | 'market_lead_learning'
   | 'market_signals'
   | 'market_reports'
@@ -154,6 +156,7 @@ export const adminNavConfig: AdminNavConfigGroup[] = [
       { key: 'market_lead_fair_day',    url: '/admin/market/lead-machine/fair-day',       icon: CalendarDays },
       { key: 'market_lead_outreach',    url: '/admin/market/lead-machine/outreach',       icon: Mail },
       { key: 'market_outreach_campaigns', url: '/admin/market/lead-machine/outreach-campaigns', icon: Settings },
+      { key: 'market_lead_bulk_lists',  url: '/admin/market/lead-machine/outreach/lists',  icon: Send },
       { key: 'market_lead_learning',    url: '/admin/market/lead-machine/learning',       icon: Brain },
       { key: 'market_targets',          url: '/admin/market/targets',                     icon: Building2 },
       { key: 'market_signals',          url: '/admin/market/signals',                     icon: Activity },
@@ -195,6 +198,7 @@ const FALLBACK_TITLES: Record<AdminNavItemKey, string> = {
   market_lead_icp:         'ICP Profilleri',
   market_lead_outreach:    'Outreach Taslakları',
   market_outreach_campaigns: 'Outreach Kampanyaları',
+  market_lead_bulk_lists:  'Toplu Liste',
   market_lead_learning:    'Öğrenme Raporu',
   market_signals:          'Sinyaller',
   market_reports:          'Raporlar',

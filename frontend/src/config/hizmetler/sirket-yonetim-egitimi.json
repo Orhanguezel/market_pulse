@@ -1,0 +1,356 @@
+{
+  "slug": "sirket-yonetim-egitimi",
+  "category": "egitim",
+  "module": "training",
+  "order": 110,
+  "icon": "BookOpen",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Şirket Yönetim Eğitimi | KOBİ, Yönetici, Ekip, Süreç ve Satış Yönetimi Eğitimi",
+        "description": "Şirket yönetim eğitimi ile işletme sahiplerine, yöneticilere ve ekip liderlerine organizasyon, görev dağılımı, süreç yönetimi, ekip takibi, satış, CRM, raporlama ve dijital dönüşüm konularında uygulamalı eğitim sunuyoruz.",
+        "ogTitle": "Şirket Yönetim Eğitimi | {{appName}}",
+        "ogDescription": "Şirketinizde organizasyon, görev dağılımı, ekip yönetimi, süreç takibi, satış, CRM, raporlama ve dijital dönüşüm süreçlerini daha sistemli hale getirin."
+      },
+      "hero": {
+        "eyebrow": "Yönetim Eğitimi",
+        "title": "Şirket Yönetim Eğitimi",
+        "lead": "Şirketiniz büyüyor ama işler hâlâ kişilere bağlı ilerliyor, ekipler net görevlerle çalışmıyor, satış süreci takip edilemiyor, müşteri bilgileri dağınık kalıyor ve yöneticiler günlük operasyon içinde boğuluyor mu? Bir şirketin sürdürülebilir şekilde büyümesi için yalnızca iyi ürün veya iyi hizmet yeterli değildir. Organizasyon yapısı, görev tanımları, süreç yönetimi, ekip takibi, satış sistemi, müşteri yönetimi, raporlama, finansal farkındalık, toplantı düzeni, dijital araç kullanımı ve yönetici disiplini birlikte ele alınmalıdır. {{appName}} olarak işletme sahipleri, yöneticiler, ekip liderleri, KOBİ’ler, aile şirketleri, üretici firmalar, hizmet şirketleri, ihracatçılar ve büyüme sürecindeki işletmeler için uygulamalı şirket yönetim eğitimi sunuyoruz. Amacımız, şirketinizde işlerin kişisel hafızaya, dağınık WhatsApp yazışmalarına, kontrolsüz Excel dosyalarına veya tek kişinin takibine bağlı kalmasını önlemek; daha düzenli, ölçülebilir ve yönetilebilir bir işletme yapısı oluşturmanıza yardımcı olmaktır.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Şirket Yönetim Eğitimi Nedir?",
+          "body": [
+            "Şirket yönetim eğitimi, işletme sahiplerinin, yöneticilerin ve ekip liderlerinin şirketi daha düzenli, verimli, ölçülebilir ve sürdürülebilir şekilde yönetmesini sağlamak amacıyla hazırlanan uygulamalı eğitim programıdır.",
+            "Bu eğitimde amaç yalnızca teorik yönetim bilgisi vermek değildir. Asıl amaç, şirket içinde yaşanan gerçek yönetim sorunlarını ele almak ve bu sorunlara uygulanabilir çözümler geliştirmektir.",
+            "{{appName}}, şirket yönetim eğitimini teorik anlatım yerine işletmenin günlük problemlerine, ekip yapısına, satış sürecine ve operasyon ihtiyaçlarına göre uygulamalı şekilde planlar.",
+            "İşleri kişisel takipten sistemli yönetime taşıyın",
+            "Organizasyon, görev dağılımı, süreç akışı, satış yönetimi, CRM, toplantı düzeni, raporlama ve dijital araç kullanımıyla şirketinizin yönetim yapısını daha ölçülebilir hale getirin."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirket Yönetim Eğitimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Şirket büyüdükçe yalnızca çalışan sayısını artırmak yeterli olmaz. İşlerin kime ait olduğu, hangi sürecin nasıl ilerlediği, müşteri bilgilerinin nerede tutulduğu, satış fırsatlarının nasıl takip edildiği ve yöneticilerin hangi raporları izleyeceği netleşmelidir.",
+            "Eğitimde organizasyon yapısı, görev tanımları, ekip yönetimi, süreç yönetimi, satış yönetimi, CRM, toplantı yönetimi, raporlama, hedef ve performans takibi, delegasyon, dijital dönüşüm ve kurumsallaşma konuları uygulamalı olarak ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirket Yönetimi Neden Önemlidir?",
+          "body": [
+            "Birçok işletmede sorun ürün kalitesinden veya hizmet becerisinden değil, yönetim yapısının dağınık olmasından kaynaklanır. İşler büyüdükçe iletişim karmaşası, görev belirsizliği, müşteri takibinde kopukluk, satış sürecinde düzensizlik ve ekipler arasında sorumluluk kaybı yaşanabilir.",
+            "Şirket yönetim eğitimi, bu sorunları azaltmak ve işletmeyi daha sistemli, ölçülebilir ve sürdürülebilir hale getirmek için önemli bir adımdır.",
+            "Zayıf şirket yönetimi şu sorunlara neden olabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Eğitim Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, şirketini daha profesyonel, ölçülebilir ve takip edilebilir hale getirmek isteyen işletmeler için uygundur.",
+          "items": [
+            {
+              "title": "Şirket Sahipleri",
+              "body": "İşlerin tek kişinin hafızasına bağlı kalmasını istemeyen ve şirketini daha sistemli yönetmek isteyen işletme sahipleri için uygundur."
+            },
+            {
+              "title": "Genel Müdürler ve Yöneticiler",
+              "body": "Departmanları, ekipleri, raporları ve satış süreçlerini daha düzenli takip etmek isteyen yöneticiler için uygundur."
+            },
+            {
+              "title": "Ekip Liderleri",
+              "body": "Görev takibi, ekip iletişimi, performans ve sorumluluk yönetimi konusunda gelişmek isteyen ekip liderleri için planlanabilir."
+            },
+            {
+              "title": "KOBİ’ler ve Aile Şirketleri",
+              "body": "Kurumsallaşma sürecine başlamak ve görev dağılımını netleştirmek isteyen KOBİ’ler ve aile şirketleri için uygundur."
+            },
+            {
+              "title": "Üretici Firmalar",
+              "body": "Satış, üretim, operasyon, sevkiyat, teklif ve müşteri takibi süreçlerini düzenlemek isteyen üreticiler için uygundur."
+            },
+            {
+              "title": "Hizmet Şirketleri",
+              "body": "Müşteri yönetimi, ekip takibi, proje süreci ve hizmet kalitesini daha ölçülebilir hale getirmek isteyen firmalar için uygundur."
+            },
+            {
+              "title": "İhracat Yapan İşletmeler",
+              "body": "Müşteri takibi, teklif, operasyon, CRM ve raporlama süreçlerini ihracat hedefleriyle birlikte yönetmek isteyen firmalar için planlanabilir."
+            },
+            {
+              "title": "Dijital Dönüşüme Başlamak İsteyen Şirketler",
+              "body": "CRM, görev takip araçları, raporlama ve yapay zeka destekli iş akışlarını daha bilinçli kullanmak isteyen şirketler için uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirket Yönetim Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "Şirket yönetim eğitimi, firmanın mevcut yapısına, çalışan sayısına, sektörüne ve yönetim ihtiyacına göre özelleştirilebilir. Genel olarak şirket yönetiminin temel mantığı, organizasyon yapısı, görev ve sorumluluk dağılımı, departman yönetimi, ekip yönetimi, süreç yönetimi, satış yönetimi, müşteri takibi, CRM, toplantı yönetimi, raporlama, hedef ve performans takibi, delegasyon, dijital dönüşüm, yapay zeka ve otomasyon, kurumsallaşma ve yönetici disiplini ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Şirket Yönetim Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Eğitim başlıkları şirketin ihtiyacına göre daraltılabilir veya detaylandırılabilir.",
+          "items": [
+            {
+              "title": "Şirket Yönetiminin Temel Mantığı",
+              "body": "Yönetim yalnızca emir vermek veya işleri takip etmek değildir. Yönetim; hedef belirleme, görev dağıtma, süreci izleme, sorunları çözme, ekipleri yönlendirme ve sonuçları ölçme disiplinidir. Kapsam: Şirket yönetimi nedir?; Yönetici ne yapmalıdır?; İşler neden kişilere bağlı kalmamalıdır?; Şirket büyüdükçe yönetim neden değişmelidir?."
+            },
+            {
+              "title": "Organizasyon Yapısı Oluşturma",
+              "body": "Şirketlerde organizasyon yapısı net değilse görevler karışır. Kim hangi işten sorumlu, kim kime rapor verir, hangi kararları kim alır gibi konular açık olmalıdır. Kapsam: Departmanlar, yönetici rolleri ve ekip liderleri; Çalışan görevleri ve raporlama ilişkileri; Karar yetkileri ve onay süreçleri; Operasyon, satış ve müşteri takip sorumlulukları."
+            },
+            {
+              "title": "Görev Tanımları ve Sorumluluk Dağılımı",
+              "body": "Birçok işletmede çalışanlar hangi işten sorumlu olduğunu tam olarak bilmez. Bu durum işlerin gecikmesine, sorumlulukların birbirine atılmasına ve yönetici üzerindeki yükün artmasına neden olur. Kapsam: Her pozisyonun temel görevi nedir?; Hangi işleri kim takip edecek?; Teklif, operasyon, CRM ve rapor sorumlulukları; Geciken işlerde kim aksiyon alacak?."
+            },
+            {
+              "title": "Ekip Yönetimi",
+              "body": "Ekip yönetimi, yalnızca çalışanlara iş vermek değildir. Ekiplerin hedefe uygun çalışması, performansının takip edilmesi, sorunlarının çözülmesi ve gelişiminin desteklenmesi gerekir. Kapsam: Ekip hedefi ve görev takibi; Çalışan performansı ve geri bildirim; Sorumluluk almayan çalışanla çalışma; Kontrol ve güven dengesini kurma."
+            },
+            {
+              "title": "Süreç Yönetimi",
+              "body": "Şirket içinde işler belirli süreçlerle ilerlemelidir. Satış, teklif, sipariş, üretim, sevkiyat, müşteri takibi, ödeme ve raporlama süreçleri net değilse hata riski artar. Kapsam: İş akışı ve süreç adımları çıkarma; Her adımın sorumlusunu belirleme; Kontrol noktaları ve gecikme takibi; Süreçleri dijital sistemlere aktarma."
+            },
+            {
+              "title": "Satış Yönetimi",
+              "body": "Satış yönetimi, yalnızca satış temsilcisinin müşteriyle görüşmesi değildir. Hedef müşteri, müşteri adayı, teklif, takip, kapanış ve satış sonrası süreç birlikte yönetilmelidir. Kapsam: Satış hedefi ve müşteri adayı takibi; Teklif süreci ve teklif sonrası takip; Satış fırsatlarını sınıflandırma; CRM ile satış yönetimi."
+            },
+            {
+              "title": "Müşteri Yönetimi ve CRM Kullanımı",
+              "body": "Müşteri bilgileri dağınık Excel dosyalarında, telefon rehberlerinde, WhatsApp konuşmalarında veya kişisel notlarda kaldığında şirket müşteri ilişkilerini sağlıklı yönetemez. Kapsam: Müşteri bilgileri ve müşteri adayı kaydı; Teklif, son görüşme ve takip tarihi izleme; Satış aşamaları ve müşteri segmentleri; Yönetici CRM üzerinden neyi kontrol etmelidir?."
+            },
+            {
+              "title": "Toplantı Yönetimi",
+              "body": "Birçok şirkette toplantılar yapılır ama sonuç üretilmez. Toplantının amacı, gündemi, kararları, sorumluları ve takip tarihi belli değilse toplantı zaman kaybına dönüşür. Kapsam: Toplantı amacı ve gündem hazırlığı; Karar, görev ve sorumlu kişi kaydı; Takip tarihi ve toplantı sonrası rapor; Bir sonraki toplantıda ne kontrol edilir?."
+            },
+            {
+              "title": "Raporlama Sistemi",
+              "body": "Yönetici doğru raporları görmeden şirketi sağlıklı yönetemez. Raporlama sistemi olmayan şirketlerde kararlar çoğu zaman tahmine göre alınır. Kapsam: Satış, teklif, sipariş ve tahsilat raporları; Operasyon ve personel görev raporları; CRM raporları ve geciken işler raporu; Haftalık yönetici özeti ve aylık değerlendirme."
+            },
+            {
+              "title": "Hedef ve Performans Yönetimi",
+              "body": "Şirketlerde hedefler net değilse çalışanlar yalnızca günlük işleri yapar. Hedef yönetimi, ekiplerin neye ulaşması gerektiğini ve başarının nasıl ölçüleceğini belirler. Kapsam: Şirket, departman ve satış hedefleri; KPI mantığı ve performans göstergeleri; Haftalık hedef takibi ve aylık değerlendirme; Hedef sapmalarını analiz etme."
+            },
+            {
+              "title": "Delegasyon ve Yetki Devri",
+              "body": "Birçok işletme sahibi veya yönetici her işi kendi kontrolünde tutmaya çalışır. Bu durum zamanla yöneticiyi yorar ve şirketin büyümesini sınırlar. Kapsam: Hangi işler devredilebilir?; Yetki ve sorumluluk dengesi; Devredilen iş nasıl takip edilir?; Mikro yönetimden kaçınma."
+            },
+            {
+              "title": "Zaman Yönetimi ve Önceliklendirme",
+              "body": "Şirketlerde zaman yönetimi yalnızca kişisel verimlilik konusu değildir. Ekiplerin öncelikleri, acil işler, önemli işler ve takip süreçleri doğru yönetilmelidir. Kapsam: Acil ve önemli iş ayrımı; Günlük görev ve haftalık yönetim planı; Geciken işlerin takibi; Tekrar eden işleri standartlaştırma."
+            },
+            {
+              "title": "Problem Çözme ve Karar Alma",
+              "body": "Şirket yönetiminde problemler kaçınılmazdır. Önemli olan sorunları kişisel tartışmaya dönüştürmeden, veri ve süreç odaklı çözebilmektir. Kapsam: Sorun nasıl tanımlanır?; Kök neden nasıl bulunur?; Alternatif çözüm yolları nasıl üretilir?; Aksiyon planı ve sonuç takibi."
+            },
+            {
+              "title": "Departmanlar Arası İletişim",
+              "body": "Satış, operasyon, muhasebe, üretim, lojistik, müşteri hizmetleri ve yönetim ekipleri birbirinden kopuk çalışırsa işlerin aksaması kaçınılmaz olur. Kapsam: Bilgi akışı ve ortak sistem kullanımı; Satıştan operasyona bilgi aktarımı; Departmanlar arası toplantı düzeni; WhatsApp, e-posta ve CRM dengesi."
+            },
+            {
+              "title": "Finansal Farkındalık ve Yönetici Bakışı",
+              "body": "Şirket yönetiminde yöneticilerin temel finansal farkındalığa sahip olması önemlidir. Her yöneticinin muhasebeci olması gerekmez; ancak maliyet, gelir, kârlılık, tahsilat ve nakit akışı mantığını bilmesi gerekir. Kapsam: Gelir, gider, maliyet ve kârlılık farkındalığı; Tahsilat ve nakit akışı takibi; İndirim kararlarında dikkat; Operasyon maliyetleri ve temel finansal göstergeler."
+            },
+            {
+              "title": "Dijital Dönüşüm ve Yönetim Araçları",
+              "body": "Modern şirket yönetiminde dijital araçlar önemli rol oynar. Ancak dijital dönüşüm yalnızca yazılım almak değildir. Süreçlerin dijital sisteme uygun hale getirilmesi gerekir. Kapsam: CRM, görev takip araçları ve raporlama panelleri; Bulut doküman yönetimi ve iletişim araçları; Teklif, sipariş ve satış otomasyonu; Veri güvenliği ve yazılım seçimi."
+            },
+            {
+              "title": "Yapay Zeka ve Otomasyonun Şirket Yönetiminde Kullanımı",
+              "body": "Yapay zeka ve otomasyon araçları şirket yönetimini destekleyebilir. Ancak bu araçlar doğru süreçlerle birlikte kullanılmalı ve insan kararının yerine geçmemelidir. Kapsam: Toplantı notu ve rapor özeti hazırlama; Müşteri takip mesajı ve satış e-postası oluşturma; CRM notlarını ve görev listelerini düzenleme; Süreç kontrol listeleri ve rapor yorumlama."
+            },
+            {
+              "title": "Kurumsallaşma ve Sistem Kurma",
+              "body": "Kurumsallaşma, şirketin büyümesiyle birlikte daha düzenli, ölçülebilir ve kişilere bağımlı olmayan bir yapıya geçmesidir. Kurumsallaşma yalnızca büyük şirketler için değil, büyümek isteyen KOBİ’ler için de önemlidir. Kapsam: Organizasyon yapısı ve görev tanımları; Süreç dokümanları ve raporlama sistemi; CRM, müşteri kayıt sistemi ve finansal takip; Yönetici alışkanlıkları ve performans takibi."
+            },
+            {
+              "title": "Yönetici Disiplini ve Liderlik",
+              "body": "Şirket yönetiminde sistem kadar yönetici davranışı da önemlidir. Yönetici net, adil, takip eden, geri bildirim veren ve karar alabilen kişi olmalıdır."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Şirket Yönetim Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketin sektörü, çalışan sayısı, departman yapısı, mevcut yönetim sorunları ve eğitim ihtiyacı değerlendirilerek başlar. Ardından ihtiyaç analizi, eğitim içeriği planlama, uygulamalı eğitim, yönetim araçları ve şablonlar, soru-cevap, örnek olaylar ve uygulanabilir yol haritası adımlarıyla ilerler.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Şirketin sektörü, çalışan sayısı, departman yapısı, mevcut yönetim sorunları ve eğitim ihtiyacı değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "İhtiyaç Analizi",
+              "body": "Organizasyon, görev dağılımı, satış, CRM, operasyon, raporlama, toplantı düzeni ve dijital araç kullanımı açısından mevcut durum analiz edilir."
+            },
+            {
+              "n": 3,
+              "title": "Eğitim İçeriği Planlama",
+              "body": "Şirketin ihtiyacına göre eğitim başlıkları belirlenir. Eğitim genel yönetim, satış yönetimi, ekip yönetimi veya dijital dönüşüm odaklı planlanabilir."
+            },
+            {
+              "n": 4,
+              "title": "Uygulamalı Eğitim",
+              "body": "Katılımcıların kendi şirket yapısına uygun örnekler üzerinden görev tanımı, süreç akışı, toplantı düzeni, raporlama ve CRM takip çalışmaları yapılır."
+            },
+            {
+              "n": 5,
+              "title": "Yönetim Araçları ve Şablonlar",
+              "body": "Görev takip listeleri, toplantı notu formatları, rapor şablonları, CRM takip yapısı ve süreç kontrol listeleri hazırlanabilir."
+            },
+            {
+              "n": 6,
+              "title": "Soru-Cevap ve Örnek Olaylar",
+              "body": "Şirketin yaşadığı gerçek yönetim sorunları üzerinden çözüm yaklaşımı geliştirilir."
+            },
+            {
+              "n": 7,
+              "title": "Yol Haritası",
+              "body": "Eğitim sonunda şirketin daha düzenli yönetim yapısına geçmesi için uygulanabilir adımlar belirlenir."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Şirket Yönetim Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Organizasyon yapısı daha net hale gelir",
+            "Görev ve sorumluluklar belirginleşir",
+            "Ekip yönetimi daha düzenli yapılır",
+            "Satış süreci daha ölçülebilir hale gelir",
+            "Müşteri takibi CRM ile güçlenir",
+            "Toplantılar daha verimli hale gelir",
+            "Raporlama sistemi gelişir",
+            "Yöneticiler daha bilinçli karar alır",
+            "İşler kişilere bağlı olmaktan çıkar",
+            "Departmanlar arası iletişim güçlenir",
+            "Dijital araçlar daha verimli kullanılır",
+            "Yapay zeka ve otomasyon süreçleri daha bilinçli değerlendirilir",
+            "Şirket içinde sorumluluk kültürü gelişir",
+            "Kurumsallaşma süreci desteklenir",
+            "Büyüme daha kontrollü yönetilebilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Şirket Yönetiminde Sık Yapılan Hatalar",
+          "items": [
+            "Görev tanımlarını netleştirmemek",
+            "Her işi şirket sahibinin takip etmesi",
+            "Ekip liderlerine yetki vermemek",
+            "Satış sürecini CRM ile takip etmemek",
+            "Müşteri bilgilerini kişisel notlarda tutmak",
+            "Toplantı yapıp kararları takip etmemek",
+            "Raporlama sistemi oluşturmamak",
+            "Çalışan performansını ölçmemek",
+            "Departmanlar arası iletişimi plansız bırakmak",
+            "Dijital araçları sadece dosya saklama amacıyla kullanmak",
+            "Yapay zeka ve otomasyonu plansız kullanmak",
+            "Hedef belirlemeden ekipten sonuç beklemek",
+            "Sorunları süreç yerine kişi üzerinden değerlendirmek",
+            "Kurumsallaşmayı sürekli ertelemek",
+            "Büyüme sürecini sistem kurmadan yönetmeye çalışmak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirket Yönetim Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Şirket yönetim eğitimi, kurumsal gelişim, CRM, satış, ihracat ve dijital dönüşüm süreçleriyle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirket Yönetim Eğitimi, KOBİ Yönetimi, Ekip Yönetimi ve Kurumsallaşma",
+          "body": [
+            "Şirket yönetim eğitimi; KOBİ yönetim eğitimi, kurumsal yönetim eğitimi, yönetici eğitimi, ekip yönetimi eğitimi, süreç yönetimi eğitimi, satış yönetimi eğitimi, CRM yönetim eğitimi, işletme yönetimi eğitimi, şirket sahipleri için yönetim eğitimi, aile şirketi yönetim eğitimi, KOBİ kurumsallaşma eğitimi, görev dağılımı eğitimi, organizasyon yönetimi eğitimi, toplantı yönetimi eğitimi, raporlama eğitimi, performans yönetimi eğitimi, dijital dönüşüm yönetim eğitimi ve iş süreçleri yönetimi eğitimi konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirket yönetim eğitimi nedir?",
+          "body": [
+            "Şirket yönetim eğitimi; işletme sahipleri, yöneticiler ve ekip liderleri için organizasyon yapısı, görev tanımları, süreç yönetimi, ekip yönetimi, satış yönetimi, CRM müşteri takibi, toplantı düzeni, raporlama, hedef ve performans takibi, delegasyon, dijital dönüşüm ve kurumsallaşma konularını uygulamalı olarak öğreten eğitimdir. {{appName}}, şirketlerin daha düzenli, ölçülebilir ve yönetilebilir bir yapıya geçmesi için şirket yönetim eğitimi sunar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Şirket Yönetim Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "Şirket yönetim eğitimi kimler için uygundur? +",
+              "a": "Şirket yönetim eğitimi; şirket sahipleri, yöneticiler, ekip liderleri, KOBİ’ler, aile şirketleri, üretici firmalar, hizmet şirketleri ve büyüme sürecindeki işletmeler için uygundur."
+            },
+            {
+              "q": "Eğitim şirketimize özel hazırlanabilir mi? +",
+              "a": "Evet. Eğitim şirketinizin sektörü, çalışan sayısı, departman yapısı, mevcut sorunları ve yönetim ihtiyaçlarına göre özelleştirilebilir."
+            },
+            {
+              "q": "Bu eğitim sadece yöneticiler için mi? +",
+              "a": "Hayır. Eğitim şirket sahipleri, yöneticiler, ekip liderleri ve yönetici adayı çalışanlar için planlanabilir."
+            },
+            {
+              "q": "Görev tanımı ve organizasyon yapısı eğitimde anlatılıyor mu? +",
+              "a": "Evet. Organizasyon yapısı, görev tanımları, sorumluluk dağılımı, yetki devri ve ekip takibi eğitimde detaylı şekilde ele alınabilir."
+            },
+            {
+              "q": "Satış yönetimi konusu da var mı? +",
+              "a": "Evet. Satış hedefleri, müşteri adayı takibi, teklif süreci, satış temsilcisi performansı, CRM kullanımı ve satış raporları eğitim kapsamında değerlendirilebilir."
+            },
+            {
+              "q": "CRM kullanımı şirket yönetimi eğitimine dahil mi? +",
+              "a": "Evet. CRM ile müşteri takibi, satış aşamaları, teklif takibi, takip tarihi, müşteri segmentleri ve yönetici raporları eğitimde anlatılabilir."
+            },
+            {
+              "q": "Toplantı ve raporlama düzeni öğretiliyor mu? +",
+              "a": "Evet. Toplantı gündemi, karar takibi, görev dağılımı, haftalık raporlar, satış raporları ve yönetici özetleri için pratik yöntemler anlatılabilir."
+            },
+            {
+              "q": "Eğitim online mı yapılır? +",
+              "a": "Eğitim ihtiyaca göre online veya yüz yüze planlanabilir. Şirketin lokasyonu, katılımcı sayısı ve eğitim kapsamına göre uygun model belirlenebilir."
+            },
+            {
+              "q": "Şirket yönetim eğitimi kurumsallaşmaya katkı sağlar mı? +",
+              "a": "Evet. Eğitim; görev tanımı, süreç yönetimi, raporlama, CRM, dijital araçlar ve yönetici disiplini konularında farkındalık oluşturarak kurumsallaşma sürecini destekler."
+            },
+            {
+              "q": "Eğitim sonunda ne elde ederiz? +",
+              "a": "Eğitim sonunda şirketinizin yönetim sorunlarına göre uygulanabilir bir yol haritası, görev ve süreç yaklaşımı, toplantı düzeni, raporlama mantığı ve CRM takip yapısı oluşturulabilir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Şirketinizi Kişisel Takipten Sistemli Yönetime Taşıyalım",
+        "body": "Şirketinizde işler kişilere bağlı ilerliyor, ekipler net görevlerle çalışmıyor, satış süreci takip edilemiyor, müşteri bilgileri dağınık kalıyor ve yöneticiler sürekli günlük operasyon içinde boğuluyorsa yönetim sisteminizi güçlendirme zamanı gelmiş olabilir. {{appName}} Şirket Yönetim Eğitimi ile organizasyon yapınızı, görev dağılımınızı, ekip yönetiminizi, satış sürecinizi, CRM kullanımınızı, toplantı düzeninizi, raporlama sisteminizi ve dijital dönüşüm yaklaşımınızı birlikte güçlendirelim.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

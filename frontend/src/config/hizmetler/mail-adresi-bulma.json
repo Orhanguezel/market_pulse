@@ -1,0 +1,180 @@
+{
+  "slug": "mail-adresi-bulma",
+  "category": "ihracat-musteri-bulma",
+  "module": "outreach",
+  "order": 70,
+  "icon": "Mail",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Mail Adresi Bulma | Kurumsal E-posta Araştırması ve B2B İletişim Listesi Hazırlama",
+        "description": "Yurt dışı alıcı firmalar için kurumsal mail adresi, satın alma departmanı e-postası, ithalat sorumlusu iletişim kanalı ve B2B e-posta listesi araştırması yapıyoruz.",
+        "ogTitle": "Mail Adresi Bulma | {{appName}}",
+        "ogDescription": "Yurt dışı alıcı firmalar için kurumsal mail adresi, departman e-postası, satın alma ve ithalat birimi iletişim kanalı araştırması yapıyoruz."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "Mail Adresi Bulma",
+        "lead": "Yurt dışı alıcı firmaları buldunuz ama bu firmalara hangi e-posta adresinden ulaşacağınızı bilmiyor musunuz? İhracat ve B2B satışta firma adı bulmak tek başına yeterli değildir. Satış sürecinin başlayabilmesi için doğru kurumsal mail adresine, ilgili departmana veya satın alma sürecinden sorumlu kişiyle bağlantılı profesyonel iletişim kanalına ulaşmak gerekir. {{appName}} olarak yurt dışı alıcı firmalar için kurumsal mail adresi araştırması, departman e-postası tespiti, satın alma ve ithalat birimi iletişim kanalı araştırması, karar verici kişiyle ilişkili B2B iletişim listesi hazırlama ve CRM’e aktarılabilir e-posta verisi düzenleme desteği sunuyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Mail Adresi Bulma Nedir?",
+          "body": [
+            "Mail adresi bulma, hedef firma veya potansiyel müşteri listesinde yer alan şirketlerin kurumsal e-posta adreslerinin, departman iletişim kanallarının, satın alma veya ithalat birimi e-postalarının ve B2B satışa uygun iletişim bilgilerinin araştırılması sürecidir.",
+            "B2B satış ve ihracat müşteri bulma çalışmalarında doğru firmaya ulaşmak kadar, o firmaya doğru iletişim kanalından ulaşmak da önemlidir.",
+            "{{appName}}, mail adresi bulma sürecini yalnızca e-posta arama işi olarak değil, B2B satış ve ihracat müşteri takibine bağlanan profesyonel bir iletişim altyapısı olarak ele alır.",
+            "Doğru mail adresi olmadan satış süreci başlamaz: Doğru firma, doğru departman, doğru kurumsal e-posta ve düzenli CRM takibi bir araya geldiğinde mail marketing ve ihracat müşteri bulma süreci daha profesyonel hale gelir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Doğru Mail Adresi Olmadan Satış Süreci Başlamaz",
+          "body": [
+            "Birçok şirket yurt dışı alıcı firma listesi hazırlar ancak bu firmalara ulaşırken genel, yanlış veya güncel olmayan e-posta adresleri kullanır. Bu durumda gönderilen tanıtım mailleri ilgili kişiye ulaşmaz, cevap oranı düşer ve satış ekibi zaman kaybeder.",
+            "Doğru mail adresi, ihracat müşteri bulma sürecinde ilk temas kalitesini doğrudan etkiler. Bu nedenle mail adresi araştırması yalnızca liste tamamlama değil, satış sürecinin başlangıç altyapısıdır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Hedef firmalarınız var ama doğru e-posta adreslerini bulmakta zorlanıyorsanız, bu hizmet satış sürecinizin eksik kalan bölümünü tamamlar.",
+          "items": [
+            { "title": "Yurt Dışı Alıcı Firma Listesi Olan İhracatçılar", "body": "Mevcut alıcı firma listesini kurumsal e-posta bilgileriyle güçlendirmek isteyen firmalar için uygundur." },
+            { "title": "Konşimento Verileriyle Firma Bulanlar", "body": "Gerçek ithalatçı firma listelerini iletişim kanallarıyla satışa hazır hale getirebilir." },
+            { "title": "Mail Marketing Yapacak B2B Satış Ekipleri", "body": "Kampanya öncesi firma, ülke, departman ve e-posta listesi hazırlanabilir." },
+            { "title": "Satın Alma Departmanlarına Ulaşmak İsteyenler", "body": "Satın alma, procurement, purchasing ve import departmanı iletişimleri araştırılabilir." },
+            { "title": "Telefon Araması Öncesi Liste Hazırlayanlar", "body": "Arama öncesi firma web sitesi, departman ve iletişim bilgileri düzenlenebilir." },
+            { "title": "LinkedIn ve Sales Navigator Kullananlar", "body": "LinkedIn kişi araştırması e-posta ve kurumsal iletişim araştırmasıyla desteklenebilir." },
+            { "title": "Fuar Öncesi Hedef Liste Hazırlayanlar", "body": "Fuar öncesinde firma, departman ve e-posta bazlı görüşme listesi oluşturulabilir." },
+            { "title": "CRM’e Aktarılabilir Liste İsteyen KOBİ’ler", "body": "Bulunan e-posta bilgileri CRM müşteri takibine uygun formatta düzenlenebilir." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Mail Adresi Bulma Çalışmasında Hangi Alanlar İncelenir?",
+          "intro": "Amaç yalnızca e-posta bulmak değildir. Firma, departman, kişi profili, kurumsal iletişim kanalı, liste temizliği ve CRM takibi birlikte planlanmalıdır.",
+          "items": [
+            { "title": "Hedef Firma Listesinin Hazırlanması", "body": "Firma listesi doğru değilse mail adresi araştırması da verimsiz hale gelir: konşimento verileri ve GTİP / HS koduna göre alıcı firmalar; ürün adına göre ithalatçı firmalar; fuar katılımcı listeleri ve LinkedIn hedef firma listeleri; B2B platform firma profilleri ve mevcut müşteri listeleri." },
+            { "title": "Firma Web Sitesi Üzerinden Mail Araştırması", "body": "Firma web sitesi en güvenilir kurumsal iletişim kaynaklarından biridir: Contact, About us, Team ve Management sayfaları; Procurement, supplier application ve import department sayfaları; genel iletişim e-postası ve departman e-postaları; iletişim formu, şube ve ofis iletişimleri." },
+            { "title": "Departman Bazlı E-posta Araştırması", "body": "Ürün veya hizmete göre doğru departman belirlenmelidir: satın alma, ithalat ve tedarik zinciri departmanları; kategori yönetimi ve iş geliştirme departmanı; tedarikçi başvuru birimi ve genel merkez iletişimi; bölgesel ofis iletişim adresleri." },
+            { "title": "Kurumsal E-posta Formatı Kontrolü", "body": "İlgili kişi e-postası açıkça paylaşılmasa da firma genelinde kullanılan e-posta formatı değerlendirilebilir: firma domain adresi ve genel e-posta formatı; açıkça paylaşılan çalışan veya departman e-postaları; kurumsal iletişim sayfaları ve B2B platform adresleri; fuar katalogları, duyuru ve basın sayfaları." },
+            { "title": "LinkedIn ve Sales Navigator ile Kişi Eşleştirme", "body": "Firma içindeki görev dağılımı ve ilgili kişi profili daha iyi anlaşılır: procurement manager, purchasing manager ve import manager; supply chain manager, sourcing manager ve category manager; buyer, senior buyer ve business development manager; general manager ve operations manager profilleri." },
+            { "title": "B2B Platformlardan İletişim Bilgisi Araştırması", "body": "Bazı firmalar B2B platformlarda iletişim veya mesajlaşma kanallarını paylaşır: Alibaba, TradeWheel, Go4WorldBusiness ve Europages profilleri; sektörel B2B dizinler ve ihracatçı-ithalatçı rehberleri; fuar ve katılımcı platformları; B2B platform mesajlaşma kanalları." },
+            { "title": "E-posta Doğrulama ve Liste Temizliği", "body": "Yanlış, eksik veya güncel olmayan adresler kampanya performansını düşürür: e-posta formatı ve domain uyumu kontrol edilir; genel e-posta mı departman e-postası mı ayrıştırılır; tekrar eden kayıtlar ve eski bilgiler ayıklanır; CRM’e aktarım için düzenli format hazırlanır." },
+            { "title": "Mail Marketing İçin Segmentasyon", "body": "Ülke, sektör, ürün grubu, firma türü ve departman bilgisine göre segmentasyon yapılır: ithalatçı, distribütör, toptancı ve perakendeci ayrımı; satın alma departmanı ve ithalat departmanı ayrımı; yüksek öncelikli ve daha sonra takip edilecek firma ayrımı; karar verici kişi ve genel kurumsal e-posta ayrımı." },
+            { "title": "CRM’e Aktarılabilir Mail Listesi Hazırlama", "body": "Liste yalnızca dosya olarak kalmamalı, satış takip sistemine dahil edilmelidir: firma adı, ülke, web sitesi ve kurumsal e-posta; departman e-postası, ilgili kişi, unvan ve LinkedIn profili; firma kaynağı, ürün ilgisi ve öncelik durumu; mail gönderim tarihi, cevap durumu ve takip tarihi." },
+            { "title": "Mail Gönderimi Sonrası Takip Planı", "body": "Asıl sonuç, gönderim sonrası takip yapılmasıyla oluşur: tanıtım maili ve takip maili planı; cevap veren firmaların sınıflandırılması; teklif isteyen firmaların satış ekibine atanması; telefon araması, LinkedIn bağlantısı ve CRM kampanya raporu." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Yurt Dışı Firmalar İçin Mail Adresi Bulma",
+          "intro": "İhracat müşteri bulma sürecinde yurt dışı firmaların kurumsal mail adreslerini bulmak önemli bir adımdır. Ancak her ülkede firma iletişim yapısı farklı olabilir.",
+          "items": [
+            "Firma web sitesi dili ve ülkeye göre iletişim alışkanlıkları",
+            "Departman e-postası ve genel info adresi kullanımı",
+            "Tedarikçi başvuru formları ve kurumsal e-posta formatları",
+            "LinkedIn kullanım yoğunluğu ve B2B platform profilleri",
+            "Fuar katalogları ve yerel firma dizinleri"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Mail Adresi Bulma ve İhracat Müşteri Bulma İlişkisi",
+          "intro": "İhracat müşteri bulma sürecinde alıcı firma listesi, karar verici kişi araştırması, mail adresi bulma, mail marketing, telefon araması ve CRM takibi birlikte düşünülmelidir.",
+          "items": [
+            "Ürün ve hedef pazar belirlenir",
+            "Konşimento veya dış ticaret verileri analiz edilir",
+            "Alıcı firmalar listelenir",
+            "Kurumsal iletişim bilgileri araştırılır",
+            "İngilizce tanıtım maili hazırlanır",
+            "Cevap veren firmalar CRM’e alınır"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Mail Adresi Araştırması Yapılırken Nelere Dikkat Edilmelidir?",
+          "body": [
+            "{{appName}} yaklaşımında amaç kişisel, gizli veya izinsiz verileri toplamak değildir. Amaç, firmaların açık ve kurumsal iletişim kanallarını araştırarak B2B satış ve ihracat sürecinde doğru departmana ulaşılmasını sağlamaktır."
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Mail Adresi Bulma Süreci Nasıl İlerler?",
+          "intro": "Süreç hedef firma listesinin değerlendirilmesiyle başlar. Ardından firma web siteleri, departman iletişimleri, LinkedIn ve B2B kaynaklar incelenir; liste temizliği yapılarak CRM’e aktarılabilir B2B e-posta listesi hazırlanır.",
+          "steps": [
+            { "n": 1, "title": "Hedef Firma Listesi Alınır", "body": "Araştırma yapılacak firma listesi konşimento verileri, GTİP / HS kodu, ürün adı, fuar listesi, LinkedIn veya mevcut müşteri verilerinden gelebilir." },
+            { "n": 2, "title": "Firma Web Siteleri İncelenir", "body": "Her firmanın resmi web sitesi, iletişim sayfası, departman bilgileri ve kurumsal e-posta alanları kontrol edilir." },
+            { "n": 3, "title": "Departman İletişimleri Araştırılır", "body": "Satın alma, ithalat, tedarik zinciri, iş geliştirme veya ilgili departman e-postaları incelenir." },
+            { "n": 4, "title": "LinkedIn ve B2B Kaynaklar Kontrol Edilir", "body": "İlgili kişi, unvan, şirket profili, B2B platform iletişim kanalları ve açık kaynak bilgiler değerlendirilir." },
+            { "n": 5, "title": "Mail Listesi Düzenlenir", "body": "Bulunan e-posta adresleri firma adı, ülke, departman, kişi, kaynak ve öncelik bilgisiyle birlikte düzenlenir." },
+            { "n": 6, "title": "Liste Temizliği Yapılır", "body": "Tekrar eden, hatalı görünen, alakasız veya güncel olmayan kayıtlar ayıklanır." },
+            { "n": 7, "title": "CRM Formatı Hazırlanır", "body": "Liste CRM’e aktarılabilir şekilde firma, kişi, e-posta, telefon, kaynak, takip tarihi ve satış aşaması alanlarıyla düzenlenir." },
+            { "n": 8, "title": "Mail Marketing ve Takip Planı Oluşturulur", "body": "Tanıtım maili, takip maili, telefon araması ve satış temsilcisi atama süreci planlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Mail Adresi Bulma Hizmetinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Hedef firmalara daha doğru kanaldan ulaşabilirsiniz",
+            "Kurumsal iletişim bilgilerini düzenli listeye dönüştürebilirsiniz",
+            "Satın alma ve ithalat departmanlarını hedefleyebilirsiniz",
+            "Mail marketing çalışmalarınızı daha profesyonel yapabilirsiniz",
+            "Telefon aramaları için iletişim altyapısı oluşturabilirsiniz",
+            "LinkedIn araştırmasıyla kişi ve firma ilişkisini güçlendirebilirsiniz",
+            "CRM’e aktarılabilir B2B e-posta listesi hazırlayabilirsiniz",
+            "Cevap veren firmaları satış sürecine alabilirsiniz",
+            "Yanlış ve ilgisiz adreslerle zaman kaybını azaltabilirsiniz",
+            "İhracat müşteri bulma sürecinizi daha sistemli hale getirebilirsiniz"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Mail Adresi Bulma Sürecinde Sık Yapılan Hatalar",
+          "items": [
+            "Sadece genel info adreslerine güvenmek",
+            "Firma web sitesini detaylı incelememek",
+            "Satın alma veya ithalat departmanını araştırmamak",
+            "Eski ve güncel olmayan e-posta adreslerini kullanmak",
+            "Kurumsal domain kontrolü yapmamak",
+            "Kişi ve firma bilgilerini eşleştirmemek",
+            "Bulunan adresleri CRM’e aktarmamak",
+            "Liste temizliği yapmadan kampanya göndermek",
+            "Her firmaya aynı e-posta metnini göndermek",
+            "Cevap veren firmaları takip etmemek"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Mail Adresi Bulma Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Mail adresi bulma hizmeti kimler için uygundur?", "a": "Bu hizmet; ihracat yapmak isteyen, yurt dışı alıcı firma listesi bulunan, mail marketing yapmak isteyen ve hedef firmalara kurumsal e-posta üzerinden ulaşmak isteyen şirketler için uygundur." },
+            { "q": "Yurt dışı firmaların mail adresleri bulunabilir mi?", "a": "Evet. Firma web siteleri, kurumsal iletişim sayfaları, B2B platformlar, LinkedIn ve açık kaynaklar üzerinden yurt dışı firmaların kurumsal e-posta adresleri araştırılabilir." },
+            { "q": "Satın alma departmanı mail adresi bulunabilir mi?", "a": "Bazı firmalarda satın alma, procurement, purchasing veya import departmanı e-posta adresleri açık kaynaklarda yer alabilir. Bu bilgiler firma bazında araştırılır." },
+            { "q": "Kişisel e-posta adresleri mi bulunuyor?", "a": "Amaç kişisel veya özel verileri toplamak değildir. Çalışma kurumsal e-posta adresleri, departman iletişimleri ve B2B satışa uygun profesyonel iletişim kanalları üzerinden yürütülmelidir." },
+            { "q": "LinkedIn üzerinden mail adresi bulunabilir mi?", "a": "LinkedIn, doğru kişi ve unvanı tespit etmek için kullanılabilir. İletişim süreci ise kurumsal e-posta, LinkedIn mesajı, telefon veya firma iletişim formu gibi profesyonel kanallarla planlanabilir." },
+            { "q": "Bulunan mail adresleri doğrulanıyor mu?", "a": "Bulunan adresler format, domain, firma eşleşmesi ve tekrar eden kayıtlar açısından kontrol edilebilir. Ancak hiçbir doğrulama yöntemi teslimat veya cevap garantisi vermez." },
+            { "q": "Mail listesi CRM’e aktarılabilir mi?", "a": "Evet. Firma adı, ülke, e-posta adresi, kişi, unvan, telefon, kaynak, mail gönderim tarihi, cevap durumu ve takip tarihi gibi bilgiler CRM’e aktarılabilir." },
+            { "q": "Mail adresi bulma kesin müşteri getirir mi?", "a": "Hayır. Mail adresi bulma kesin müşteri garantisi vermez. Ancak doğru firmaya doğru kurumsal iletişim kanalıyla ulaşma ihtimalini artırır." },
+            { "q": "Mail marketing için liste hazırlanabilir mi?", "a": "Evet. Bulunan mail adresleri ülke, sektör, ürün grubu, firma türü ve departman bilgisine göre segmentlere ayrılarak mail marketing çalışması için hazırlanabilir." },
+            { "q": "Mail adresi bulma çalışması hangi hizmetlerle birlikte yapılmalıdır?", "a": "Bu çalışma; konşimento verileriyle alıcı firma bulma, GTİP / HS koduna göre müşteri bulma, ürün adına göre ithalatçı firma bulma, karar verici kişi araştırması, mail marketing, telefon araması ve CRM takibiyle birlikte daha verimli olur." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Doğru Firmaya Doğru E-posta Kanalıyla Ulaşın",
+        "body": "Hedef alıcı firmaları bulduğunuz halde doğru mail adresine ulaşamıyorsanız, satış süreciniz başlamadan zayıflıyor olabilir. {{appName}} Mail Adresi Bulma hizmeti ile yurt dışı alıcı firmaların kurumsal iletişim kanallarını, satın alma ve ithalat departmanı e-postalarını, B2B iletişim bilgilerini ve CRM’e aktarılabilir mail listelerini birlikte hazırlayalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

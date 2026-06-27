@@ -1,0 +1,128 @@
+{
+  "slug": "mail-marketing-ve-telefon-aramalari",
+  "category": "mail-outreach",
+  "module": "outreach",
+  "order": 30,
+  "icon": "PhoneCall",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Mail Marketing ve Telefon Aramaları | İhracat İçin B2B Müşteri Takibi",
+        "description": "İhracat yapmak isteyen şirketler için yurt dışı potansiyel müşterilere mail marketing çalışmaları yapıyor, takip mailleri hazırlıyor ve telefon aramalarıyla B2B satış sürecini destekliyoruz.",
+        "ogTitle": "Mail Marketing ve Telefon Aramaları | {{appName}}",
+        "ogDescription": "Yurt dışı potansiyel müşterilere profesyonel mail marketing çalışmaları yapıyor, takip mailleri hazırlıyor ve telefon aramalarıyla B2B satış sürecinizi destekliyoruz."
+      },
+      "hero": {
+        "eyebrow": "Mail & Telefon İletişimi",
+        "title": "İhracat İçin Mail Marketing ve Telefon Aramaları",
+        "lead": "Yurt dışı müşterilere ulaşmak için yalnızca firma listesi hazırlamak yeterli değildir. Doğru tanıtım maili, düzenli takip, ilgili kişiye ulaşma ve profesyonel iletişim süreci gerekir. {{appName}} olarak ihracat yapmak isteyen şirketler için potansiyel alıcı firmalara yönelik mail marketing çalışmaları hazırlıyor, takip mesajları oluşturuyor ve gerekli durumlarda telefon aramalarıyla satış sürecini destekliyoruz. Amacımız, ürünlerinizi doğru firmalara tanıtmak, ilgilenen müşterileri belirlemek ve ihracat satış sürecinizi daha sistemli hale getirmektir.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Mail Marketing ve Telefon Aramaları Hizmeti Nedir?",
+          "body": [
+            "Mail marketing ve telefon aramaları hizmeti, potansiyel yurt dışı alıcı firmalara profesyonel şekilde ulaşmak için kullanılan B2B satış geliştirme sürecidir.",
+            "Bu hizmet kapsamında hedef müşteri listesi hazırlanır, ürün veya şirket tanıtımına uygun e-posta metinleri oluşturulur, takip mailleri planlanır ve gerekli durumlarda telefon aramalarıyla iletişim süreci desteklenir.",
+            "{{appName}} olarak bu süreci ihracat odaklı kurguluyoruz. Amaç yalnızca e-posta göndermek değil; potansiyel müşteriyi doğru bilgilendirmek, ilgili kişiye ulaşmak, cevap veren firmaları sınıflandırmak ve satış fırsatlarını takip edilebilir hale getirmektir.",
+            "Hedef müşteri listesi, İngilizce tanıtım maili, takip maili, telefon araması, cevap sınıflandırması, CRM takibi ve satış fırsatı yönetimi tek bir plan içinde ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden Mail Marketing Tek Başına Yeterli Değildir?",
+          "body": [
+            "Birçok şirket yurt dışı müşterilere ulaşmak için e-posta gönderir ancak beklediği sonucu alamaz. Bunun temel nedeni genellikle sürecin plansız yürütülmesidir.",
+            "Sadece tek seferlik mail göndermek yerine, satış sürecinin tamamını planlamak daha etkili sonuç verir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Bu hizmet, özellikle hedef müşteri listesi olan ancak bu firmalarla nasıl iletişim kurulacağını bilmeyen şirketler için uygundur.",
+          "items": [
+            { "title": "Üretici Firmalar", "body": "İhracat yapmak isteyen üretici firmalara profesyonel iletişim süreci sunar." },
+            { "title": "Yurt Dışı Müşteri Arayan KOBİ’ler", "body": "Potansiyel müşterilere düzenli ve takip edilebilir şekilde ulaşılmasını sağlar." },
+            { "title": "Yeni Pazarlara Açılmak İsteyenler", "body": "Yeni ülke ve sektörlerde B2B müşteri iletişimini destekler." },
+            { "title": "Distribütör veya İthalatçı Arayanlar", "body": "Distribütör, toptancı veya ithalatçı firma arayan şirketler için uygundur." },
+            { "title": "B2B Platform Kullanan Firmalar", "body": "B2B platformlarda ürün yayınlayan firmaların satış takibini güçlendirir." },
+            { "title": "Dış Ticaret Ekibi Olmayan İşletmeler", "body": "Dış ticaret departmanı olmayan işletmeler için takip desteği sağlar." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Mail Marketing Sürecinde Neler Yapıyoruz?",
+          "intro": "Mail marketing süreci, şirketinizin ürünlerine, hedef pazarına ve müşteri profiline göre planlanır. Böylece çalışma rastgele gönderim olmaktan çıkar ve ölçülebilir bir satış geliştirme sürecine dönüşür.",
+          "items": [
+            { "title": "Hedef Müşteri Listesi Hazırlığı", "body": "Başarılı bir mail marketing çalışmasının ilk adımı doğru hedef müşteri listesidir. Konşimento verileri, GTİP / HS kodu bazlı ithalatçı firma araştırması, LinkedIn ve Sales Navigator araştırmaları ile B2B platform ve sektör firma listeleri değerlendirilir." },
+            { "title": "İngilizce Tanıtım Maili Hazırlama", "body": "Yurt dışı müşterilere gönderilecek tanıtım maili kısa, net ve profesyonel olmalıdır. Kısa şirket tanıtımı, ürün veya ürün grubu açıklaması, alıcı firma için değer önerisi ve iletişim / teklif talep yönlendirmesi içerir." },
+            { "title": "Takip Maili Kurgusu", "body": "Yurt dışı müşteriler genellikle ilk mailden sonra hemen dönüş yapmayabilir. İlk tanıtım maili, ilk hatırlatma maili, ürün / avantaj odaklı ikinci takip maili ve teklif veya görüşme talebi maili kurgulanır." },
+            { "title": "Mail Gönderim Planı", "body": "Hangi firmaya ne zaman mail gönderildiği, kimin cevap verdiği ve hangi firmaların tekrar takip edileceği kayıt altına alınır. Firma adı, ülke, web sitesi, ilgili kişi, e-posta adresi, gönderim tarihi ve cevap / takip / telefon araması durumu izlenir." },
+            { "title": "Cevap Veren Firmaların Sınıflandırılması", "body": "Gelen cevapların doğru sınıflandırılması, satış ekibinin zamanını en yüksek potansiyele sahip firmalara ayırmasını sağlar. Teklif isteyen, ürün detayı isteyen, numune talep eden ve daha sonra takip edilecek firmalar ayrıştırılır." },
+            { "title": "Telefon Aramaları ile Müşteri Takibi", "body": "Bazı durumlarda mail gönderimi yeterli olmayabilir. Satın alma departmanına ulaşma, gönderilen tanıtım mailinin teyidi, doğru e-posta adresinin teyidi ve teklif talebi varsa satış sürecine aktarılması için telefon aramaları yapılır." },
+            { "title": "B2B Satış Takip Süreci", "body": "Mail marketing ve telefon aramaları satış sürecinin başlangıç noktasıdır. Firmanın hangi ürünle ilgilendiği, teklif / numune talebi olup olmadığı, sıcak-orta-düşük potansiyel durumu ve tekrar ne zaman iletişim kurulacağı takip edilir." },
+            { "title": "CRM ile Mail Marketing Takibi", "body": "Mail marketing ve telefon aramaları CRM sistemiyle birlikte yürütüldüğünde daha verimli hale gelir. Müşteri adayları, gönderilen mailler ve cevap durumları, telefon aramaları ve teklif talepleri, görevler, hatırlatmalar ve satış aşamaları yönetilir." },
+            { "title": "İhracat Odaklı Mail Marketing", "body": "İhracat odaklı mail marketing klasik tanıtım e-postasından farklıdır. Burada hedef, yabancı alıcının firmanızı güvenilir bir tedarikçi olarak değerlendirmesidir. Kısa ve net anlatım, profesyonel İngilizce dil, ürün grubunun açık belirtilmesi ve teklif almaya yönlendiren çağrı esastır." },
+            { "title": "Telefon Aramalarında Amaç", "body": "Telefon aramalarında amaç doğrudan satış baskısı oluşturmak değildir. Doğru departmanı öğrenmek, satın alma yetkilisine ulaşmak, e-posta adresini teyit etmek ve sonraki takip tarihini belirlemek hedeflenir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Mail Marketing ve Telefon Aramaları Hizmetinin Avantajları",
+          "body": [
+            "Bu hizmet, müşteri bulma sürecini daha aktif, sistemli ve takip edilebilir hale getirir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Uyum ve Profesyonel İletişim Yaklaşımı",
+          "body": [
+            "Mail marketing ve telefon aramaları yapılırken profesyonel iletişim dili, doğru hedefleme ve mevzuata uygunluk önemlidir. Bu süreçte gereksiz, ilgisiz veya rahatsız edici iletişimden kaçınılmalıdır.",
+            "Hedef müşteri listeleri dikkatli hazırlanmalı, kurumsal iletişim dili kullanılmalı ve her ülkenin ticari iletişim kuralları ayrıca değerlendirilmelidir. {{appName}} olarak mail marketing çalışmalarını rastgele toplu gönderim anlayışıyla değil, hedefli B2B satış iletişimi yaklaşımıyla ele alıyoruz."
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Süreç Nasıl İlerler?",
+          "intro": "Ön görüşmeden raporlamaya kadar mail marketing ve telefon aramaları süreci planlı şekilde yürütülür. Amaç yalnızca iletişim kurmak değil, oluşan satış fırsatlarını takip edilebilir hale getirmektir.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin ürünleri, hedef ülkeleri, mevcut müşteri listesi ve ihracat hedefleri değerlendirilir." },
+            { "n": 2, "title": "Hedef Kitle Belirleme", "body": "Hangi ülkelerde, hangi sektörlerde ve hangi tür firmalara ulaşılması gerektiği belirlenir." },
+            { "n": 3, "title": "Mail Metinlerinin Hazırlanması", "body": "İngilizce tanıtım maili, takip mailleri ve gerekli mesaj şablonları hazırlanır." },
+            { "n": 4, "title": "Gönderim ve Takip Planı", "body": "Mail gönderim planı, takip tarihleri ve cevap sınıflandırma yapısı oluşturulur." },
+            { "n": 5, "title": "Telefon Aramaları", "body": "Gerekli görülen firmalara telefon aramaları yapılır ve ilgili kişiye ulaşılmaya çalışılır." },
+            { "n": 6, "title": "Raporlama", "body": "Cevap veren, ilgilenen, takip edilecek ve olumsuz dönüş yapan firmalar raporlanır." },
+            { "n": 7, "title": "Satış Sürecine Aktarım", "body": "Teklif isteyen veya ilgilenen firmalar satış sürecine alınır ve sonraki adımlar planlanır." }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Mail Marketing ve Telefon Aramaları Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Mail marketing hizmeti kimler için uygundur?", "a": "Bu hizmet; ihracat yapmak isteyen üretici firmalar, yurt dışı müşteri bulmak isteyen KOBİ’ler, distribütör veya ithalatçı arayan şirketler ve B2B satış sürecini güçlendirmek isteyen işletmeler için uygundur." },
+            { "q": "Yurt dışı müşterilere e-posta metni hazırlıyor musunuz?", "a": "Evet. Şirketinizin ürünlerine, sektörüne ve hedef pazarına uygun İngilizce tanıtım maili ve takip maili metinleri hazırlanabilir." },
+            { "q": "Mail gönderilecek müşteri listesini siz hazırlıyor musunuz?", "a": "Evet. Konşimento verileri, GTİP / HS kodu araştırmaları, ürün adına göre ithalatçı firma araştırması, LinkedIn, B2B platformlar ve diğer kaynaklardan hedef müşteri listesi hazırlanabilir." },
+            { "q": "Telefon aramalarını siz yapıyor musunuz?", "a": "Evet. Gerekli durumlarda potansiyel alıcı firmalara telefon aramaları yapılarak ilgili kişi veya departmana ulaşılmaya çalışılır, gönderilen mailin teyidi alınır ve firmanın ilgisi ölçülür." },
+            { "q": "Telefon aramalarında ne amaçlanır?", "a": "Telefon aramalarında amaç doğru kişiye ulaşmak, e-posta adresini teyit etmek, gönderilen tanıtım mailinin ulaşıp ulaşmadığını öğrenmek ve firmanın ürünle ilgilenme durumunu anlamaktır." },
+            { "q": "Mail marketing ile kesin müşteri bulunur mu?", "a": "Mail marketing bir satış geliştirme yöntemidir; kesin müşteri garantisi vermez. Ancak doğru hedef liste, profesyonel e-posta metni, düzenli takip ve telefon aramalarıyla potansiyel müşteri oluşturma ihtimali artırılabilir." },
+            { "q": "Takip mailleri hazırlıyor musunuz?", "a": "Evet. İlk tanıtım mailinden sonra gönderilecek hatırlatma, ürün odaklı takip ve görüşme talebi mailleri hazırlanabilir." },
+            { "q": "Cevap veren firmaları raporluyor musunuz?", "a": "Evet. Cevap veren, ilgilenen, teklif isteyen, daha sonra takip edilecek veya olumsuz dönüş yapan firmalar sınıflandırılarak raporlanabilir." },
+            { "q": "Mail marketing CRM ile birlikte kullanılabilir mi?", "a": "Evet. Mail marketing ve telefon aramaları CRM sistemiyle birlikte yürütüldüğünde müşteri adayı takibi, görevler, cevap durumları ve satış aşamaları daha düzenli yönetilebilir." },
+            { "q": "Bu hizmet ihracat müşteri bulma hizmetinin parçası mı?", "a": "Evet. Mail marketing ve telefon aramaları, ihracat müşteri bulma sürecinin önemli parçalarından biridir. Hedef müşteri listesi hazırlandıktan sonra bu firmalarla iletişim kurmak ve satış fırsatlarını takip etmek için kullanılır." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "B2B Müşteri İletişim Sürecinizi Planlayalım",
+        "body": "Yurt dışı müşterilere ulaşmak, ürünlerinizi profesyonel şekilde tanıtmak ve mail marketing sürecinizi telefon aramalarıyla desteklemek istiyorsanız {{appName}} ile iletişime geçin. Şirketiniz için hedefli B2B müşteri iletişim süreci oluşturalım ve ihracat satış çalışmalarınızı daha düzenli hale getirelim.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

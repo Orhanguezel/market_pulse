@@ -1,0 +1,395 @@
+{
+  "slug": "e-ticaret-ve-pazaryeri-paketi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 80,
+  "icon": "Package",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "E-Ticaret ve Pazaryeri Paketi | Trendyol, Amazon, Etsy, eBay ve B2B Platform Yönetimi",
+        "description": "E-Ticaret ve Pazaryeri Paketi ile Trendyol, Amazon, Etsy, eBay, Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi platformlarda mağaza, ürün yükleme, SEO, fiyatlandırma, sipariş, müşteri ve raporlama süreçlerini planlıyoruz.",
+        "ogTitle": "E-Ticaret ve Pazaryeri Paketi | {{appName}}",
+        "ogDescription": "Trendyol, Amazon, Etsy, eBay, Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi platformlarda mağaza, ürün, SEO, fiyatlandırma, sipariş, müşteri ve raporlama süreçleri."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "E-Ticaret ve Pazaryeri Paketi",
+        "lead": "Ürünlerinizi e-ticaret ve pazaryerlerinde satmak istiyor ama hangi platformda başlamanız gerektiğini, mağaza kurulumunu, ürün yüklemeyi, açıklama yazmayı, fiyatlandırmayı, sipariş takibini ve müşteri iletişimini nasıl yöneteceğinizi bilmiyor musunuz? E-ticaret yalnızca ürün yükleyip satış beklemek değildir. Doğru platform seçimi, mağaza kurulumu, ürün başlığı, açıklama, görsel, kategori, fiyatlandırma, stok takibi, sipariş yönetimi, kargo süreci, müşteri mesajları, iade takibi, kampanya planı, raporlama ve platform kurallarına uygun çalışma birlikte düşünülmelidir. Trendyol, Amazon, Etsy, eBay gibi pazaryerleri ile Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi B2B platformlar farklı satış mantıklarına sahiptir. Her platformun hedef kitlesi, ürün sunum dili, müşteri beklentisi ve operasyon süreci farklıdır.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "E-Ticaret ve Pazaryeri Paketi Nedir?",
+          "body": [
+            "{{appName}} olarak E-Ticaret ve Pazaryeri Paketi ile şirketinizin ürünlerini doğru platformlarda daha düzenli sunmasına, mağaza ve ürün yapısını güçlendirmesine, satış sürecini takip edilebilir hale getirmesine ve pazaryeri operasyonlarını daha profesyonel yönetmesine yardımcı oluyoruz. Amacımız, e-ticaret sürecinizi rastgele ürün yükleme yapısından çıkarıp; ürün, içerik, fiyat, stok, sipariş, müşteri iletişimi, raporlama ve CRM takibiyle yönetilen daha sistemli bir satış kanalına dönüştürmektir.",
+            "E-Ticaret ve Pazaryeri Paketi, ürünlerini online kanallarda satmak isteyen işletmeler için pazaryeri seçimi, mağaza kurulumu, ürün yükleme, ürün açıklaması, kategori planı, pazaryeri SEO, fiyatlandırma, stok, sipariş, müşteri iletişimi, iade, kampanya ve raporlama süreçlerini kapsayan pakettir.",
+            "Bu paket, yalnızca mağaza açmak veya ürün yüklemek için hazırlanmaz. Asıl amaç, şirketin e-ticaret sürecini baştan sona daha düzenli, ölçülebilir ve sürdürülebilir hale getirmektir.",
+            "Paket kapsamında Trendyol, Amazon, Etsy, eBay gibi pazaryerleri ile Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi B2B platformlar şirketin ürün grubuna ve hedef pazarına göre değerlendirilebilir.",
+            "E-ticareti rastgele ürün yükleme süreci olmaktan çıkarın",
+            "Platform seçimi, mağaza kurulumu, ürün başlığı, açıklama, görsel, fiyatlandırma, stok, sipariş, müşteri mesajları, iade, kampanya ve raporlama süreçlerini daha sistemli yönetin."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Bu Paket Hangi Sorulara Cevap Verir?",
+          "body": [
+            "E-ticaret sürecinde platform seçimi, mağaza profili, ürün içerikleri, fiyatlandırma, stok, sipariş, kargo, müşteri mesajları ve raporlama birlikte düşünülmediğinde mağaza performansı zayıf kalabilir.",
+            "{{appName}}, bu paketi şirketin ürün grubuna, satış hedeflerine, mevcut pazaryeri durumuna ve operasyon ihtiyacına göre planlar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden E-Ticaret ve Pazaryeri Paketi Gerekir?",
+          "body": [
+            "Birçok işletme e-ticarete ürün yükleyerek başlar. Ancak ürün doğru kategoriye eklenmezse, başlık zayıfsa, açıklama yetersizse, görseller güven vermiyorsa, fiyatlandırma yanlışsa ve sipariş süreci takip edilmiyorsa pazaryeri hesabı verimsiz kalabilir.",
+            "E-Ticaret ve Pazaryeri Paketi, bu sorunları azaltmak ve online satış sürecini daha sistemli hale getirmek için hazırlanmıştır.",
+            "E-ticaret ve pazaryeri süreçlerinde sık yaşanan sorunlar:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Paket Kimler İçin Uygundur?",
+          "intro": "Bu paket, e-ticareti deneme amaçlı değil, planlı ve takip edilebilir bir satış kanalı olarak kullanmak isteyen şirketler için uygundur.",
+          "items": [
+            {
+              "title": "E-Ticarete Başlamak İsteyen İşletmeler",
+              "body": "Online satışa başlamak isteyen ancak platform, mağaza, ürün ve operasyon yapısını nasıl kuracağını bilmeyen firmalar için uygundur."
+            },
+            {
+              "title": "Pazaryerlerinde Satış Yapmak İsteyen KOBİ’ler",
+              "body": "Trendyol, Amazon, Etsy veya eBay gibi platformlarda ürünlerini daha düzenli sunmak isteyen KOBİ’ler için planlanabilir."
+            },
+            {
+              "title": "B2B Platformlarda Ürün Yayınlamak İsteyen Üreticiler",
+              "body": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi platformlarda ürün yayınlamak isteyen üreticiler için uygundur."
+            },
+            {
+              "title": "Mevcut Mağazasını Düzenlemek İsteyenler",
+              "body": "Mağaza bilgisi, ürün başlığı, açıklama, görsel, fiyatlandırma ve raporlama alanlarını güçlendirmek isteyen firmalar için uygundur."
+            },
+            {
+              "title": "Fiyatlandırma ve Kârlılığı Kontrol Etmek İsteyenler",
+              "body": "Komisyon, kargo, paketleme, iade riski, kampanya ve reklam maliyetlerini dikkate almak isteyen işletmeler için uygundur."
+            },
+            {
+              "title": "Stok ve Sipariş Sürecini Düzenlemek İsteyenler",
+              "body": "Sipariş, stok, kargo, müşteri mesajı ve iade takibini daha düzenli yönetmek isteyen ekipler için uygundur."
+            },
+            {
+              "title": "İhracat ve E-Ticareti Birlikte Planlamak İsteyenler",
+              "body": "Amazon, Etsy, eBay ve B2B platformlar üzerinden yurt dışı müşteri ve satış kanalı oluşturmak isteyen şirketler için uygundur."
+            },
+            {
+              "title": "B2B Talepleri CRM ile Takip Etmek İsteyenler",
+              "body": "Kurumsal müşteri, toptan sipariş, distribütörlük ve ihracat taleplerini CRM’de takip etmek isteyen firmalar için uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "E-Ticaret ve Pazaryeri Paketinde Neler Var?",
+          "body": [
+            "E-Ticaret ve Pazaryeri Paketi, şirketin ihtiyacına göre farklı kapsamlarla planlanabilir. Bu kapsam Trendyol, Amazon, Etsy, eBay veya B2B platformlara göre ayrı ayrı özelleştirilebilir.",
+            "Genel olarak mevcut e-ticaret durum analizi, pazaryeri seçimi, mağaza kurulum planı, ürün kategori yapısı, ürün yükleme, başlık, açıklama, görsel, SEO, fiyatlandırma, stok, sipariş, kargo, müşteri mesajları, iade, kampanya, raporlama, B2B platformlar ve CRM takibi planlanabilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "E-Ticaret ve Pazaryeri Paketinde Hangi Alanlar Çalışılır?",
+          "intro": "Aşağıdaki başlıklar şirketin ürün grubuna, platform seçimine, satış hedeflerine ve operasyon ihtiyacına göre planlanır.",
+          "items": [
+            {
+              "title": "Mevcut E-Ticaret Durum Analizi",
+              "body": "Paketin ilk aşamasında şirketin mevcut e-ticaret ve pazaryeri durumu değerlendirilir. Eğer mağaza aktifse ürünler, içerikler, fiyatlar, stoklar ve sipariş süreci incelenir. Eğer mağaza yoksa başlangıç için gerekli hazırlıklar belirlenir. Bu kapsamda: Mevcut pazaryeri hesapları ve ürün grupları; Ürün başlıkları, açıklamaları ve görselleri; Kategori, fiyatlandırma, stok ve sipariş yönetimi; Platform performansı, B2B talepler ve CRM yapısı."
+            },
+            {
+              "title": "Doğru Pazaryeri Seçimi",
+              "body": "Her ürün her pazaryeri için uygun değildir. Ürünün hedef kitlesi, fiyat seviyesi, lojistik yapısı, rekabet durumu ve satış modeli platform seçiminde önemlidir. Bu kapsamda: Ürün yurt içi satışa mı, yurt dışı satışa mı uygun?; Ürün B2C müşteriye mi, B2B alıcıya mı hitap ediyor?; Ürün toptan satışa veya perakendeye uygun mu?; B2B platform mu, perakende pazaryeri mi daha uygun?."
+            },
+            {
+              "title": "Trendyol Mağaza ve Ürün Yönetimi",
+              "body": "Trendyol, Türkiye’de e-ticaret yapmak isteyen işletmeler için önemli bir satış kanalı olabilir. Ancak mağaza kurulumu, ürün yükleme, kampanya, kargo ve müşteri mesajları düzenli yönetilmelidir. Bu kapsamda: Mağaza bilgileri kontrolü ve ürün kategori planı; Ürün başlığı, açıklaması ve görsel kontrolü; Fiyat, komisyon, stok, sipariş ve kargo süreci; Müşteri soruları, iade, kampanya ve raporlama."
+            },
+            {
+              "title": "Amazon Ürün Listeleme ve Hesap Yönetimi",
+              "body": "Amazon’da satış yapmak isteyen firmalar için ürün listeleme, açıklama, varyasyon, görsel, fiyat, stok ve müşteri iletişimi dikkatli yönetilmelidir. Bu kapsamda: Hesap yapısı, kategori seçimi ve ürün listeleme; Ürün başlığı, bullet point ve açıklama; Varyasyon, görsel standartları, fiyat ve stok; Yurt dışı satış farkındalığı ve ürün sayfası optimizasyonu."
+            },
+            {
+              "title": "Etsy Mağaza ve Ürün Yönetimi",
+              "body": "Etsy; el işi, tasarım, kişiselleştirilmiş ürün, dijital ürün ve özgün ürün grupları için değerlendirilebilecek bir platformdur. Etsy’de ürünün hikayesi, görsel kalitesi, başlık ve etiket yapısı önemlidir. Bu kapsamda: Mağaza profili, ürün seçimi ve niş ürün değerlendirmesi; Ürün başlığı, etiket, anahtar kelime ve açıklama; Görsel kalitesi, kişiselleştirme ve fiyatlandırma; Yurt dışı müşteri iletişimi ve performans takibi."
+            },
+            {
+              "title": "eBay Ürün Listeleme ve Satış Süreci",
+              "body": "eBay, farklı ürün gruplarında yurt dışı satış yapmak isteyen işletmeler için değerlendirilebilir. Ürün listeleme, açıklama, fiyatlandırma ve kargo bilgileri açık şekilde hazırlanmalıdır. Bu kapsamda: Hesap yapısı değerlendirme, ürün listeleme ve kategori seçimi; Ürün başlığı, açıklaması, durumu ve görsel kullanımı; Fiyatlandırma, kargo seçenekleri ve müşteri iletişimi; Sipariş, iade, performans ve rakip ürün inceleme."
+            },
+            {
+              "title": "B2B Platformlarda Ürün Yayınlama",
+              "body": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi B2B platformlar, üretici ve ihracatçı firmalar için toptan satış, distribütör, ithalatçı ve kurumsal alıcı ilişkileri açısından değerlendirilebilir. Bu kapsamda: Şirket profili ve İngilizce firma açıklaması; Ürün kategori yapısı, İngilizce ürün başlığı ve açıklaması; MOQ, ambalaj, teslim süresi ve ürün görselleri; B2B alıcı mesajları ve CRM müşteri takibi."
+            },
+            {
+              "title": "Mağaza Kurulumu ve Profil Düzenleme",
+              "body": "Pazaryerlerinde mağaza profili müşterinin satıcıyı değerlendirdiği ilk alanlardan biridir. Eksik veya zayıf mağaza bilgileri güveni azaltabilir. Bu kapsamda: Mağaza adı, şirket bilgileri, logo ve kapak görseli; Marka açıklaması, hakkımızda metni ve iletişim bilgileri; Kargo, iade, mağaza politikaları ve ürün kategorileri; Web sitesi, sosyal medya ve B2B iletişim yönlendirmesi."
+            },
+            {
+              "title": "Ürün Kategori Planı",
+              "body": "Ürünlerin doğru kategoriyle sunulması hem müşteri deneyimi hem de platform içi görünürlük açısından önemlidir. Bu kapsamda: Ana kategori, alt kategori ve ürün grupları; Ürün varyasyonları, model farkları, renk ve ölçü seçenekleri; Toptan ve perakende ayrımı, B2B ve B2C ürün ayrımı; Öne çıkarılacak ürünler, sezonluk ürünler ve düşük performanslı ürünler."
+            },
+            {
+              "title": "Ürün Başlığı Hazırlama",
+              "body": "Ürün başlığı, müşterinin ürünü ilk gördüğü alanlardan biridir. Başlık hem ürünün ne olduğunu anlatmalı hem de platform arama mantığına uygun hazırlanmalıdır. Bu kapsamda: Marka adı, ürün adı ve model bilgisi; Renk, ölçü, malzeme ve kullanım alanı; Paket içeriği, ürün özelliği ve müşteri arama kelimesi; Yanıltıcı olmayan, gereksiz tekrar içermeyen başlık yapısı."
+            },
+            {
+              "title": "Ürün Açıklaması Hazırlama",
+              "body": "Ürün açıklaması, müşterinin satın alma kararını etkileyen önemli alanlardan biridir. Açıklama net, sade ve güven verici olmalıdır. Bu kapsamda: Ürün nedir, ne işe yarar ve kimler için uygundur?; Hangi alanlarda kullanılır ve temel özellikleri nelerdir?; Ölçü, renk, malzeme ve paket içeriği nedir?; Müşterinin sık soracağı sorulara cevap verir mi?."
+            },
+            {
+              "title": "Ürün Görseli ve Sunum Kontrolü",
+              "body": "E-ticarette müşteri ürünü fiziksel olarak inceleyemez. Bu nedenle görseller ürün sayfasının en önemli unsurlarından biridir. Bu kapsamda: Ana ürün görseli, ek görseller ve detay görselleri; Kullanım, ambalaj, ölçü veya teknik bilgi görselleri; Arka plan düzeni, çözünürlük ve platform görsel kuralları; Ürünü doğru gösteren, yanıltıcı olmayan görsel yapısı."
+            },
+            {
+              "title": "Pazaryeri SEO Düzenlemesi",
+              "body": "Pazaryerlerinde ürün görünürlüğü için başlık, açıklama, kategori, etiket, özellik alanları ve müşteri arama davranışı birlikte değerlendirilmelidir. Bu kapsamda: Anahtar kelime belirleme ve doğru başlık kullanımı; Açıklamada doğal anahtar kelime kullanımı; Kategori, etiket ve özellik alanları; Rakip ürün incelemesi ve uzun kuyruklu arama ifadeleri."
+            },
+            {
+              "title": "Fiyatlandırma ve Kârlılık Kontrolü",
+              "body": "E-ticarette satış yapmak kadar kârlı satış yapmak da önemlidir. Fiyatlandırma sadece rakibe bakılarak yapılmamalıdır. Bu kapsamda: Ürün maliyeti, pazaryeri komisyonu ve kargo maliyeti; Paketleme, iade riski, reklam ve kampanya maliyeti; Vergi, kur farkı, indirim oranı ve minimum kâr hedefi; Rakip fiyatları ve platform kampanya şartları."
+            },
+            {
+              "title": "Stok Takip Yapısı",
+              "body": "Stok takibi yapılmadığında sipariş iptalleri, müşteri şikayetleri ve mağaza performans sorunları yaşanabilir. Bu kapsamda: Stok kodu, ürün varyasyonları, renk ve beden stokları; Minimum stok seviyesi ve stok güncelleme takvimi; Çoklu pazaryeri stok kontrolü ve depo koordinasyonu; Hızlı tükenen ürünler ve düşük hareketli ürünler."
+            },
+            {
+              "title": "Sipariş Yönetimi",
+              "body": "Sipariş yönetimi, e-ticaret operasyonunun temel alanıdır. Siparişin alınması, hazırlanması, paketlenmesi, kargoya verilmesi ve müşteriye doğru bilgi aktarılması gerekir. Bu kapsamda: Sipariş ekranı takibi ve hazırlık süreci; Paketleme kontrolü, fatura veya belge hazırlığı; Kargo süreci, teslimat takibi ve geciken siparişler; Sipariş iptali, operasyon notları ve müşteri memnuniyeti."
+            },
+            {
+              "title": "Kargo ve Teslimat Süreci",
+              "body": "E-ticarette ürünün zamanında ve doğru şekilde teslim edilmesi müşteri deneyimini doğrudan etkiler. Kargo süreci plansızsa şikayetler ve iade talepleri artabilir. Bu kapsamda: Kargo firması seçimi ve kargo anlaşmaları; Paketleme standartları ve kırılabilir ürünlerde dikkat; Teslimat süresi, takip bilgisi ve gecikme yönetimi; Hasarlı ürün süreci ve kargo maliyetinin fiyatlandırmaya etkisi."
+            },
+            {
+              "title": "Müşteri Mesajları ve Cevap Şablonları",
+              "body": "Pazaryerlerinde müşteri sorularına hızlı, net ve profesyonel cevap verilmelidir. Zayıf iletişim, müşteri kaybına ve olumsuz değerlendirmelere neden olabilir. Bu kapsamda: Ürün, kargo, iade, ölçü, renk ve varyasyon soruları; Profesyonel cevap şablonları ve kısa iletişim dili; Olumsuz müşteriye yaklaşım ve şikayet yönetimi; B2B teklif talepleri ve yurt dışı müşteri iletişim metinleri."
+            },
+            {
+              "title": "İade ve Değişim Süreçleri",
+              "body": "İade ve değişim süreci doğru yönetilmelidir. Bu süreç hem müşteri memnuniyetini hem de mağaza performansını etkileyebilir. Bu kapsamda: İade talebi değerlendirme ve ürün geri geldiğinde kontrol; Hasarlı, yanlış veya eksik ürün süreci; Müşteriyle iletişim ve platform kurallarına dikkat; İade nedenleri analizi ve tekrarlayan sorunların azaltılması."
+            },
+            {
+              "title": "Kampanya ve İndirim Planı",
+              "body": "Pazaryerlerinde kampanyalar satışları destekleyebilir. Ancak plansız kampanya yapmak kârlılığı düşürebilir. Bu kapsamda: İndirim oranı, kampanya maliyeti ve kâr marjı; Stok durumu, sezonluk dönemler ve platform kampanyaları; Ürün bazlı kampanya seçimi ve sepet artırma önerileri; Kampanya sonrası performans, satış adedi ve kârlılık dengesi."
+            },
+            {
+              "title": "Reklam ve Görünürlük Değerlendirmesi",
+              "body": "Pazaryerlerinde bazı ürünler reklam ve görünürlük çalışmalarıyla desteklenebilir. Ancak reklamdan önce ürün sayfası, fiyat, görsel, stok ve açıklama yapısı güçlü olmalıdır. Bu kapsamda: Ürün sayfası, başlık, açıklama ve görsel yeterliliği; Fiyat rekabeti ve stok durumu; Reklam bütçesi düşüncesi ve performans ölçümü; Satış ve kârlılığın birlikte takip edilmesi."
+            },
+            {
+              "title": "Satış Raporları ve Performans Takibi",
+              "body": "E-ticarette satışlar düzenli raporlanmalıdır. Hangi ürün satıyor, hangi ürün iade ediliyor, hangi kampanya işe yarıyor ve hangi ürün kârlı gibi sorular raporlarla değerlendirilmelidir. Bu kapsamda: Günlük, haftalık ve aylık satış raporu; Ürün, kategori, stok, iade ve kârlılık raporu; Kampanya performansı ve platform bazlı satış karşılaştırması; En çok satılan ürünler, düşük performanslı ürünler ve B2B talep raporu."
+            },
+            {
+              "title": "CRM ile B2B Müşteri Takibi",
+              "body": "Pazaryerlerinden veya B2B platformlardan gelen kurumsal müşteri talepleri CRM üzerinde takip edilebilir. Özellikle toptan satış, distribütörlük veya ihracat talepleri için CRM önemlidir. Bu kapsamda: Firma adı, ülke, sektör, ilgili kişi ve iletişim bilgileri; Platform kaynağı, ilgilendiği ürün ve toptan talep durumu; Teklif durumu, sipariş potansiyeli ve satış aşaması; Son görüşme tarihi, takip tarihi ve sonraki aksiyon."
+            },
+            {
+              "title": "E-Ticaret ve İhracat Bağlantısı",
+              "body": "E-ticaret, ihracat süreciyle birlikte planlanabilir. Amazon, Etsy, eBay ve B2B platformlar yurt dışı müşteri ve satış kanalı olarak değerlendirilebilir. Bu kapsamda: İngilizce ürün açıklamaları ve döviz bazlı fiyatlandırma; Yurt dışı kargo süreci, gümrük ve belge farkındalığı; B2B alıcı talepleri, distribütör ve toptancı iletişimi; Mail marketing, LinkedIn ve CRM ile yurt dışı müşteri yönetimi."
+            },
+            {
+              "title": "Yapay Zeka ile E-Ticaret Süreçlerini Destekleme",
+              "body": "Yapay zeka araçları e-ticaret süreçlerinde içerik, açıklama, müşteri cevapları, raporlama ve kampanya fikirleri konusunda destek sağlayabilir. Ancak tüm çıktılar mutlaka insan kontrolünden geçirilmelidir."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Bu Paket Neleri Kapsamaz?",
+          "body": [
+            "E-Ticaret ve Pazaryeri Paketi, pazaryeri ve e-ticaret süreçlerini planlamak, düzenlemek ve yönetim desteği sağlamak için hazırlanır. Aşağıdaki çalışmalar ihtiyaç halinde ayrıca değerlendirilir veya ilgili uzmanlarla birlikte planlanır."
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "E-Ticaret ve Pazaryeri Paketi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketin ürünleri, mevcut pazaryeri durumu, hedef satış kanalları, ekip yapısı ve operasyon ihtiyacı değerlendirilerek başlar. Ardından platform değerlendirmesi, mağaza ve ürün analizi, içerik hazırlığı, operasyon planı, raporlama, B2B/CRM takibi ve yol haritası adımlarıyla ilerler.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Şirketin ürünleri, mevcut pazaryeri durumu, hedef satış kanalları, ekip yapısı ve operasyon ihtiyacı değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Platform Değerlendirmesi",
+              "body": "Trendyol, Amazon, Etsy, eBay veya B2B platformlardan hangilerinin şirket için daha uygun olabileceği değerlendirilir."
+            },
+            {
+              "n": 3,
+              "title": "Mağaza ve Ürün Analizi",
+              "body": "Mevcut mağaza, ürün başlıkları, açıklamalar, görseller, fiyatlar, stok yapısı ve operasyon süreci incelenir."
+            },
+            {
+              "n": 4,
+              "title": "Ürün İçerik Hazırlığı",
+              "body": "Ürün başlığı, açıklama, kategori, anahtar kelime, görsel ihtiyaçları ve pazaryeri SEO yapısı düzenlenir."
+            },
+            {
+              "n": 5,
+              "title": "Operasyon Planı",
+              "body": "Sipariş, stok, kargo, müşteri mesajları, iade ve kampanya süreçleri için takip yapısı oluşturulur."
+            },
+            {
+              "n": 6,
+              "title": "Raporlama ve Performans Takibi",
+              "body": "Satış, stok, iade, ürün performansı ve kampanya sonuçlarının nasıl takip edileceği belirlenir."
+            },
+            {
+              "n": 7,
+              "title": "B2B ve CRM Takibi",
+              "body": "Kurumsal müşteri talepleri, toptan sipariş potansiyeli ve B2B platform kaynaklı müşteri adayları için CRM takip yapısı oluşturulabilir."
+            },
+            {
+              "n": 8,
+              "title": "Yol Haritası",
+              "body": "Eğitim ve uygulama sonunda şirketin pazaryeri süreçlerini daha düzenli yönetebilmesi için uygulanabilir yol haritası hazırlanır."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "E-Ticaret ve Pazaryeri Paketinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Doğru pazaryeri seçimi daha bilinçli yapılır",
+            "Mağaza yapısı daha profesyonel hale gelir",
+            "Ürün yükleme süreci düzenlenir",
+            "Ürün başlıkları ve açıklamaları güçlenir",
+            "Pazaryeri SEO yapısı iyileştirilir",
+            "Görsel ihtiyaçları netleşir",
+            "Fiyatlandırma ve kârlılık daha dikkatli değerlendirilir",
+            "Stok ve sipariş yönetimi düzenlenir",
+            "Müşteri mesajları daha profesyonel cevaplanır",
+            "İade nedenleri daha iyi analiz edilir",
+            "Kampanyalar daha planlı yapılır",
+            "Satış raporları düzenli takip edilir",
+            "B2B platform talepleri CRM’e aktarılabilir",
+            "E-ticaret ve ihracat bağlantısı güçlenir",
+            "Yapay zeka araçları içerik ve süreçlerde daha bilinçli kullanılabilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "E-Ticaret ve Pazaryeri Sürecinde Sık Yapılan Hatalar",
+          "items": [
+            "Yanlış pazaryeri seçmek",
+            "Eksik mağaza bilgileriyle satışa başlamak",
+            "Ürünleri yanlış kategoriye yüklemek",
+            "Zayıf ürün başlığı kullanmak",
+            "Kopyala-yapıştır ürün açıklaması yazmak",
+            "Düşük kaliteli görseller kullanmak",
+            "Fiyatlandırmayı sadece rakibe göre yapmak",
+            "Komisyon ve kargo maliyetini hesaba katmamak",
+            "Stok takibini ihmal etmek",
+            "Siparişleri geç hazırlamak",
+            "Müşteri sorularına geç cevap vermek",
+            "İade nedenlerini analiz etmemek",
+            "Kampanyaları plansız yapmak",
+            "Satış raporlarını takip etmemek",
+            "B2B talepleri CRM’e aktarmamak",
+            "Yapay zeka çıktısını kontrol etmeden kullanmak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Hangi Paketlerle Birlikte Alınabilir?",
+          "body": [
+            "E-Ticaret ve Pazaryeri Paketi, diğer paketlerle birlikte planlanabilir. Özellikle ihracat hedefi olan firmalarda E-Ticaret ve Pazaryeri Paketi, İhracata Hazırlık Paketi ve B2B Müşteri Bulma Paketi ile birlikte planlanabilir. Kurumsal müşteri ve toptan satış talepleri için CRM Kurulum Paketi de sürece dahil edilebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "E-Ticaret ve Pazaryeri Paketi, Trendyol, Amazon, Etsy, eBay ve B2B Platform Yönetimi",
+          "body": [
+            "E-ticaret paketi; pazaryeri paketi, e-ticaret ve pazaryeri paketi, Trendyol hesap yönetimi paketi, Trendyol ürün yükleme paketi, Amazon hesap yönetimi paketi, Etsy hesap yönetimi paketi, eBay hesap yönetimi paketi, Alibaba hesap yönetimi, TradeWheel platform yönetimi, Go4WorldBusiness platform yönetimi, Europages firma profili yönetimi, B2B platformlarda ürün yükleme, pazaryeri ürün yükleme hizmeti, pazaryeri SEO çalışması, e-ticaret mağaza yönetimi, e-ticaret ürün açıklaması, e-ticaret fiyatlandırma, e-ticaret sipariş yönetimi ve KOBİ e-ticaret danışmanlığı konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "E-Ticaret ve Pazaryeri Paketi nedir?",
+          "body": [
+            "E-Ticaret ve Pazaryeri Paketi; Trendyol, Amazon, Etsy, eBay, Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi platformlarda satış yapmak isteyen işletmeler için pazaryeri seçimi, mağaza kurulumu, ürün yükleme, ürün başlığı, ürün açıklaması, görsel kontrolü, kategori planı, pazaryeri SEO, fiyatlandırma, stok takibi, sipariş yönetimi, müşteri mesajları, iade süreci, kampanya planı, raporlama, B2B platform ürün yayınlama ve CRM müşteri takibi süreçlerini kapsayan pakettir. {{appName}}, şirketlerin e-ticaret ve pazaryeri satış süreçlerini daha düzenli ve yönetilebilir hale getirmeye yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "E-Ticaret ve Pazaryeri Paketi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "E-Ticaret ve Pazaryeri Paketi kimler için uygundur?",
+              "a": "Bu paket; e-ticarete başlamak isteyen işletmeler, pazaryeri mağazası olan KOBİ’ler, üretici firmalar, ihracatçılar, Trendyol, Amazon, Etsy, eBay veya B2B platformlarda ürün satmak isteyen şirketler için uygundur."
+            },
+            {
+              "q": "Hangi platformlar için destek veriliyor?",
+              "a": "Trendyol, Amazon, Etsy, eBay, Alibaba, TradeWheel, Go4WorldBusiness, Europages ve benzeri pazaryeri veya B2B platformlar için şirketin ihtiyacına göre destek planlanabilir."
+            },
+            {
+              "q": "Ürün yükleme bu pakete dahil mi?",
+              "a": "Evet. Paket kapsamında ürün başlığı, açıklama, kategori, görsel, fiyat, stok, varyasyon ve teslimat bilgileriyle ürün yükleme süreci planlanabilir."
+            },
+            {
+              "q": "Pazaryeri SEO çalışması yapılır mı?",
+              "a": "Evet. Ürün başlığı, açıklama, kategori, etiket, anahtar kelime ve ürün özellik alanları üzerinden pazaryeri SEO düzenlemesi yapılabilir."
+            },
+            {
+              "q": "Trendyol mağaza yönetimi yapılabilir mi?",
+              "a": "Evet. Trendyol mağaza bilgileri, ürün yükleme, fiyatlandırma, stok, sipariş, müşteri mesajları, iade ve kampanya süreçleri değerlendirilebilir."
+            },
+            {
+              "q": "Amazon, Etsy ve eBay için çalışma yapılabilir mi?",
+              "a": "Evet. Amazon, Etsy ve eBay için ürün listeleme, açıklama, fiyatlandırma, görsel, kargo, müşteri mesajları ve performans takibi konularında destek planlanabilir."
+            },
+            {
+              "q": "B2B platformlar bu pakete dahil mi?",
+              "a": "Evet. Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi B2B platformlarda şirket profili, ürün başlığı, ürün açıklaması, MOQ, ambalaj bilgisi ve alıcı mesajları için hazırlık yapılabilir."
+            },
+            {
+              "q": "Bu paket satış garantisi verir mi?",
+              "a": "Hayır. E-Ticaret ve Pazaryeri Paketi satış garantisi vermez. Ancak mağaza, ürün, içerik, fiyat, stok, sipariş, müşteri iletişimi ve raporlama süreçlerinin daha düzenli yönetilmesine yardımcı olur."
+            },
+            {
+              "q": "Reklam yönetimi pakete dahil mi?",
+              "a": "Reklam ve görünürlük değerlendirmesi yapılabilir. Reklam bütçesi, platform reklam harcamaları ve detaylı reklam kampanya yönetimi ihtiyaç halinde ayrıca planlanabilir."
+            },
+            {
+              "q": "Paket fiyatı var mı?",
+              "a": "Bu sayfada fiyat verilmez. Şirketin ürün sayısı, platform sayısı, mevcut mağaza durumu, ürün içerik ihtiyacı, operasyon kapsamı ve yönetim süresine göre teklif hazırlanır."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "E-Ticareti Rastgele Ürün Yükleme Süreci Olmaktan Çıkaralım",
+        "body": "Ürünlerinizi e-ticaret ve pazaryerlerinde satmak istiyor ama mağaza kurulumu, ürün yükleme, açıklama, fiyatlandırma, stok, sipariş, müşteri mesajları ve raporlama süreçlerinde düzenli bir yapıya ihtiyaç duyuyorsanız {{appName}} ile iletişime geçin. E-Ticaret ve Pazaryeri Paketi ile Trendyol, Amazon, Etsy, eBay ve B2B platformlardaki satış sürecinizi birlikte planlayalım; ürünlerinizi daha profesyonel sunalım, operasyonunuzu daha düzenli hale getirelim ve e-ticaret kanalınızı ölçülebilir bir satış sistemine dönüştürelim.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

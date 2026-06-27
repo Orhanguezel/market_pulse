@@ -1,0 +1,174 @@
+{
+  "slug": "b2b-platformlarda-urun-yayinlama",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 40,
+  "icon": "Upload",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "B2B Platformlarda Ürün Yayınlama | Alibaba, TradeWheel, Go4WorldBusiness ve Europages Yönetimi",
+        "description": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi B2B platformlarda firma profili oluşturma, ürün yükleme, İngilizce ürün açıklaması hazırlama ve müşteri taleplerini takip etme hizmeti sunuyoruz.",
+        "ogTitle": "B2B Platformlarda Ürün Yayınlama | {{appName}}",
+        "ogDescription": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi B2B platformlarda firma profili oluşturma, ürün yayınlama ve müşteri talebi takibi hizmeti sunuyoruz."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "B2B Platformlarda Ürün Yayınlama",
+        "lead": "İhracat yapmak isteyen şirketler için yalnızca web sitesi yeterli değildir. Ürünlerinizi global B2B platformlarda da profesyonel şekilde yayınlamanız gerekir. {{appName}} olarak Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi B2B platformlarda firma profilinizi oluşturuyor, ürünlerinizi ihracata uygun şekilde yüklüyor, İngilizce ürün başlıkları ve açıklamaları hazırlıyoruz. Amacımız, şirketinizin global alıcılar karşısında daha profesyonel görünmesini ve dijital ihracat kanallarında daha düzenli yer almasını sağlamaktır.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "B2B Platformlarda Ürün Yayınlama Nedir?",
+          "body": [
+            "B2B platformlarda ürün yayınlama, ihracat yapmak isteyen şirketlerin ürünlerini global alıcıların araştırma yaptığı dijital ticaret platformlarında profesyonel şekilde sunmasıdır.",
+            "Bu süreç yalnızca ürün görseli ve ürün adı eklemekten ibaret değildir. Doğru kategori seçimi, İngilizce ürün başlığı, ihracata uygun ürün açıklaması, firma profili, iletişim bilgileri, anahtar kelime kullanımı, ürün görselleri ve gelen müşteri taleplerinin takibi birlikte düşünülmelidir.",
+            "B2B platformlarda profesyonel ürün yayını, şirketinizin yurt dışı alıcılar tarafından daha kolay anlaşılmasına ve daha güvenilir görünmesine katkı sağlar.",
+            "Global alıcılar için profesyonel ürün sunumu: Firma profili, ürün kategorileri, İngilizce başlıklar, ürün açıklamaları, görseller, anahtar kelimeler ve müşteri talebi takibi birlikte planlandığında B2B platformlar daha verimli kullanılabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B Platformlar İhracat İçin Neden Önemlidir?",
+          "body": [
+            "Yurt dışı alıcılar ürün tedarik etmek için web siteleri, fuarlar, LinkedIn, konşimento verileri ve B2B platformlar gibi farklı kaynakları kullanır.",
+            "Doğru hazırlanmış B2B platform profili, şirketinizin global pazarda daha profesyonel görünmesini sağlar ve diğer müşteri bulma çalışmalarınızı destekler."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Hangi B2B Platformlarda Hizmet Veriyoruz?",
+          "intro": "Her platformun ürün yükleme yapısı, firma profili alanı, kategori sistemi ve müşteri talebi yönetimi farklı olabilir. Bu nedenle her platform için ayrı bir içerik ve yayınlama stratejisi oluşturulmalıdır.",
+          "items": [
+            { "title": "Alibaba", "body": "Firma profili, ürün yükleme, İngilizce açıklama, kategori seçimi ve alıcı taleplerinin takibi için destek sağlanabilir." },
+            { "title": "TradeWheel", "body": "Ürün listeleme, firma profili hazırlama, ürün açıklaması düzenleme ve potansiyel alıcı takibi yapılabilir." },
+            { "title": "Go4WorldBusiness", "body": "Firma açıklaması, ürün grupları, İngilizce içerikler, alıcı talepleri ve B2B mesajlaşma süreci takip edilebilir." },
+            { "title": "Europages", "body": "Firma profili, şirket açıklaması, ürün ve hizmet grupları, web sitesi bağlantıları ve kurumsal bilgiler düzenlenebilir." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Bu hizmet, dijital ihracat kanallarında daha düzenli ve profesyonel görünmek isteyen şirketler için uygundur.",
+          "items": [
+            { "title": "Üretici Firmalar", "body": "İhracat yapmak isteyen üretici firmaların ürünlerini global alıcılara sunmasına destek olur." },
+            { "title": "KOBİ’ler", "body": "Yurt dışı müşterilere dijital kanallardan ulaşmak isteyen KOBİ’ler için uygundur." },
+            { "title": "Alibaba Hesabı Olan Şirketler", "body": "Alibaba hesabı olan ancak ürünlerini profesyonel yönetemeyen şirketlere destek verir." },
+            { "title": "Global Platformlarda Görünmek İsteyenler", "body": "TradeWheel, Go4WorldBusiness veya Europages profili oluşturmak isteyen firmalara uygundur." },
+            { "title": "İngilizce Ürün Sunumu İsteyenler", "body": "Ürünlerini İngilizce olarak global alıcılara sunmak isteyen işletmeler için uygundur." },
+            { "title": "Talepleri Takip Etmek İsteyenler", "body": "B2B platformlardan gelen müşteri taleplerini düzenli takip etmek isteyen şirketlere destek olur." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "B2B Platformlarda Neler Yapıyoruz?",
+          "intro": "Amaç, firmanızın platformda sadece yer alması değil; profesyonel, anlaşılır ve alıcı odaklı görünmesidir.",
+          "items": [
+            { "title": "Firma Profili Oluşturma", "body": "B2B platformlarda firma profili, yabancı alıcının şirketiniz hakkında ilk izlenim edindiği alanlardan biridir. Şirket adı ve faaliyet alanı; ürün grupları ve üretim kapasitesi; kalite ve sertifika bilgileri; web sitesi bağlantısı ve firma tanıtım metni hazırlanır." },
+            { "title": "Mevcut Profilin Düzenlenmesi", "body": "Bazı şirketlerin B2B platformlarda hesabı vardır ancak profil bilgileri eksik, eski veya yetersiz olabilir. Firma açıklaması yeterli mi; iletişim bilgileri güncel mi; ürün görselleri kaliteli mi; profil yabancı alıcıya güven veriyor mu kontrol edilir." },
+            { "title": "Ürün Kategori Yapısının Belirlenmesi", "body": "Yanlış kategori seçimi, ürünlerin doğru alıcılara ulaşmasını zorlaştırabilir. Ürün grupları ve alt kategoriler; hedef alıcı tipi; platformun kategori sistemi; benzer ürünlerin platformdaki konumu değerlendirilir." },
+            { "title": "İngilizce Ürün Başlığı Hazırlama", "body": "Ürün başlığı hem alıcı deneyimi hem de platform içi görünürlük açısından önemlidir. Kısa ve net ürün adı; anahtar kelime kullanımı; alıcının arama niyetine uygun başlık; ürün tipi ve kullanım alanını yansıtan ifade hazırlanır." },
+            { "title": "İngilizce Ürün Açıklaması Hazırlama", "body": "Ürün açıklamaları doğrudan çeviri gibi değil, ihracat alıcısına hitap edecek şekilde hazırlanmalıdır. Ürün tanımı ve kullanım alanları; teknik özellikler; ambalaj ve minimum sipariş bilgisi; sertifika, kalite ve özel üretim bilgileri içerir." },
+            { "title": "Ürün Görsellerinin Düzenlenmesi", "body": "Düşük kaliteli veya eksik görseller ürünün profesyonel algısını zayıflatabilir. Net ve kaliteli görsel kullanımı; ambalaj ve paketleme görselleri; platform ölçülerine uygun boyut; sade ve profesyonel görsel sunumu sağlanır." },
+            { "title": "Anahtar Kelime ve Arama Terimleri", "body": "B2B platformlarda ürünlerin bulunabilir olması için doğru anahtar kelimeler kullanılmalıdır. Ürün adı ve İngilizce karşılığı; sektörel terimler; alternatif ürün adları; platform içi arama mantığı değerlendirilir." },
+            { "title": "Ürün Yükleme ve Yayınlama", "body": "Ürün başlıkları, açıklamaları, görselleri ve kategori bilgileri hazırlandıktan sonra ürünler platforma yüklenir. Ürün adı, kategori ve açıklama; teknik özellikler ve görseller; minimum sipariş miktarı; ambalaj, teslimat ve anahtar kelime bilgileri yayınlanır." },
+            { "title": "Gelen Müşteri Taleplerinin Takibi", "body": "B2B platformlarda ürün yayınlamak kadar gelen müşteri taleplerini takip etmek de önemlidir. Teklif isteyen firmalar; ürün detayı veya numune talep eden firmalar; distribütörlük veya iş birliği talepleri; ciddi potansiyeli olan alıcıların ayrıştırılması takip edilir." },
+            { "title": "CRM ve Takip Sistemi ile Entegrasyon", "body": "B2B platformlardan gelen müşteri talepleri CRM veya takip tablosu üzerinden yönetildiğinde süreç daha verimli hale gelir. Firma adı, ülke ve ilgilendiği ürün; talep tarihi ve iletişim bilgileri; teklif gönderim ve takip durumu; potansiyel seviyesi ve sonraki aksiyon kaydedilir." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages Yönetimi",
+          "intro": "Her platform için firma profili, ürün içerikleri, kategori yapısı, görseller ve müşteri talebi takibi ayrı şekilde ele alınır.",
+          "items": [
+            { "title": "Alibaba Hesap Yönetimi", "body": "Alibaba hesabının verimli kullanılabilmesi için firma profili, ürün başlıkları, açıklamalar, görseller ve gelen talepler düzenli şekilde yönetilmelidir. Amaç, Alibaba hesabının daha profesyonel ve ihracata uygun şekilde yönetilmesini sağlamaktır." },
+            { "title": "TradeWheel Platform Yönetimi", "body": "TradeWheel gibi B2B platformlarda firma profili hazırlama, ürün listeleme, kategori seçimi, İngilizce ürün başlıkları ve gelen taleplerin takibi için destek sağlanabilir." },
+            { "title": "Go4WorldBusiness Platform Yönetimi", "body": "Go4WorldBusiness üzerinde firma açıklaması, ürün grupları, İngilizce ürün içerikleri, alıcı taleplerinin takibi, ürün ve kategori düzenleme, mesajlaşma süreci ve raporlama yapılabilir." },
+            { "title": "Europages Firma Profili Yönetimi", "body": "Europages profili; şirket açıklaması, ürün ve hizmet grupları, uygun dilde içerik, web sitesi ve iletişim bağlantıları, görseller ve kurumsal bilgilerle B2B alıcıya uygun hale getirilebilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "B2B Platform Yönetiminin Avantajları",
+          "items": [
+            "Ürünler global alıcılara daha düzenli sunulur",
+            "Firma profili yabancı müşterilere güven verir",
+            "İngilizce ürün açıklamaları satış sürecini destekler",
+            "Platformlardan gelen talepler daha düzenli takip edilir",
+            "Mail marketing ve LinkedIn çalışmaları desteklenir",
+            "Web sitesi görünürlüğü güçlenir",
+            "Dijital ihracat kanalları çeşitlenir",
+            "Potansiyel alıcılarla iletişim süreci başlatılabilir",
+            "CRM ile müşteri takibi yapılabilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "B2B Platformlarda Sık Yapılan Hatalar",
+          "items": [
+            "Eksik firma profili oluşturmak",
+            "Ürünleri yanlış kategoriye yüklemek",
+            "Zayıf İngilizce metinler kullanmak",
+            "Ürün başlıklarını alıcı arama mantığına göre yazmamak",
+            "Görselleri düşük kaliteyle yüklemek",
+            "Minimum sipariş ve ambalaj bilgisi vermemek",
+            "Gelen müşteri taleplerine geç dönüş yapmak",
+            "Talepleri CRM veya takip tablosuna aktarmamak",
+            "Platform profilini güncel tutmamak",
+            "Her platformda aynı metni kullanmak"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "B2B Platformlarda Ürün Yayınlama Sürecimiz",
+          "intro": "Şirketinizin ürünleri, hedef pazarları, mevcut platform hesapları ve ihracat hedeflerine göre platform seçimi, firma profili, ürün içerikleri ve takip süreci planlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin ürünleri, hedef pazarları, mevcut platform hesapları ve ihracat hedefleri değerlendirilir." },
+            { "n": 2, "title": "Platform Seçimi", "body": "Ürün grubunuza ve hedef pazarınıza göre uygun B2B platformlar değerlendirilir." },
+            { "n": 3, "title": "Firma Profili Hazırlığı", "body": "Şirket açıklaması, logo, iletişim bilgileri, web sitesi bağlantısı ve kurumsal profil metni hazırlanır." },
+            { "n": 4, "title": "Ürün İçeriklerinin Hazırlanması", "body": "İngilizce ürün başlıkları, açıklamalar, kategori bilgileri ve anahtar kelimeler hazırlanır." },
+            { "n": 5, "title": "Ürün Görsellerinin Düzenlenmesi", "body": "Ürün görselleri platformlara uygun şekilde kontrol edilir ve gerekiyorsa düzenleme önerileri yapılır." },
+            { "n": 6, "title": "Ürünlerin Yayınlanması", "body": "Hazırlanan ürünler ilgili platformlarda uygun kategori ve açıklamalarla yayınlanır." },
+            { "n": 7, "title": "Müşteri Talebi Takibi", "body": "Gelen talepler, mesajlar ve potansiyel alıcılar düzenli şekilde takip edilir." },
+            { "n": 8, "title": "Raporlama", "body": "Yayınlanan ürünler, gelen talepler ve takip edilmesi gereken firmalar raporlanır." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B platformlarda ürün yayınlama nedir?",
+          "body": [
+            "B2B platformlarda ürün yayınlama; ihracat yapmak isteyen şirketlerin Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi platformlarda firma profili oluşturması, ürünlerini İngilizce başlık ve açıklamalarla listelemesi, ürün görsellerini düzenlemesi ve gelen müşteri taleplerini takip etmesi hizmetidir. {{appName}}, şirketlerin global B2B platformlarda daha profesyonel görünmesi için bu süreci yönetir."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "B2B Platformlarda Ürün Yayınlama Hakkında Merak Edilenler",
+          "items": [
+            { "q": "B2B platformlarda ürün yayınlama hizmeti kimler için uygundur?", "a": "Bu hizmet; ihracat yapmak isteyen üretici firmalar, yurt dışı müşteri bulmak isteyen KOBİ’ler, Alibaba hesabını yönetmek isteyen şirketler ve global B2B platformlarda görünür olmak isteyen işletmeler için uygundur." },
+            { "q": "Hangi B2B platformlarda hizmet veriyorsunuz?", "a": "Alibaba, TradeWheel, Go4WorldBusiness, Europages ve şirketinizin ürün grubuna uygun diğer B2B platformlarda firma profili oluşturma, ürün yükleme ve hesap yönetimi konusunda destek sağlanabilir." },
+            { "q": "Alibaba hesap yönetimi yapıyor musunuz?", "a": "Evet. Alibaba hesabınızda firma profili düzenleme, ürün yükleme, İngilizce ürün açıklaması hazırlama, kategori seçimi ve müşteri taleplerinin takibi konusunda destek verilebilir." },
+            { "q": "Ürün açıklamalarını İngilizce hazırlıyor musunuz?", "a": "Evet. Ürünleriniz için yabancı alıcıların anlayabileceği, ihracat ve B2B satış odaklı İngilizce ürün açıklamaları hazırlanabilir." },
+            { "q": "Ürün başlıklarını da hazırlıyor musunuz?", "a": "Evet. Platform içi arama mantığına uygun, kısa, net ve ürün odaklı İngilizce ürün başlıkları hazırlanabilir." },
+            { "q": "Ürün görsellerini düzenliyor musunuz?", "a": "Ürün görselleri kalite, ölçü ve platforma uygunluk açısından kontrol edilebilir. Gerekli durumlarda görsellerin daha profesyonel sunulması için düzenleme önerileri yapılabilir." },
+            { "q": "Gelen müşteri taleplerini takip ediyor musunuz?", "a": "Evet. Platformlardan gelen müşteri talepleri sınıflandırılabilir, cevaplanabilir, takip listesine alınabilir ve CRM veya takip tablosuna aktarılabilir." },
+            { "q": "B2B platformlar kesin müşteri getirir mi?", "a": "B2B platformlar müşteri bulma kanallarından biridir; kesin müşteri garantisi vermez. Ancak doğru profil, profesyonel ürün içerikleri, düzenli takip ve hızlı dönüşlerle potansiyel müşteri oluşturma ihtimali artırılabilir." },
+            { "q": "B2B platformlar ihracat müşteri bulma sürecine nasıl katkı sağlar?", "a": "B2B platformlar, ürünlerinizi global alıcılara sunar, firma profilinizi görünür hale getirir ve potansiyel müşteri talepleri oluşturabilir. Bu çalışmalar mail marketing, LinkedIn ve konşimento verileriyle alıcı bulma süreciyle birlikte kullanıldığında daha güçlü sonuç verir." },
+            { "q": "Platform hesapları CRM ile takip edilebilir mi?", "a": "Evet. B2B platformlardan gelen müşteri talepleri CRM sistemine veya takip tablosuna aktarılabilir. Böylece teklif, takip ve satış süreci daha düzenli yönetilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "B2B Platform Görünürlüğünüzü Birlikte Oluşturalım",
+        "body": "Ürünlerinizi Alibaba, TradeWheel, Go4WorldBusiness, Europages ve diğer uygun B2B platformlarda profesyonel şekilde yayınlamak, firma profilinizi ihracata uygun hale getirmek ve gelen müşteri taleplerini düzenli takip etmek istiyorsanız {{appName}} ile iletişime geçin.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

@@ -33,6 +33,7 @@ export const tags = [
   'LeadEnrichment',
   'OutreachDrafts',
   'OutreachCampaigns',
+  'OutreachLists',
   'MarketTestRuns',
   'MarketDeveloperNotes',
   'ScanRules',

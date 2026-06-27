@@ -1,0 +1,347 @@
+{
+  "slug": "sirketlere-ozel-yapay-zeka-egitimi",
+  "category": "egitim",
+  "module": "training",
+  "order": 100,
+  "icon": "Bot",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Şirketlere Özel Yapay Zeka Eğitimi | ChatGPT, Claude, Gemini ve İş Süreçlerinde AI Kullanımı",
+        "description": "Şirketlere özel yapay zeka eğitimi ile ChatGPT, Claude, Gemini ve yapay zeka araçlarının satış, pazarlama, ihracat, CRM, raporlama, içerik üretimi ve ofis süreçlerinde nasıl kullanılacağını uygulamalı olarak öğretiyoruz.",
+        "ogTitle": "Şirketlere Özel Yapay Zeka Eğitimi | {{appName}}",
+        "ogDescription": "Şirketiniz için ChatGPT, Claude, Gemini, prompt yazma, satış, pazarlama, ihracat, CRM, raporlama, e-ticaret ve güvenli yapay zeka kullanımı eğitimi alın."
+      },
+      "hero": {
+        "eyebrow": "Yapay Zeka Eğitimi",
+        "title": "Şirketlere Özel Yapay Zeka Eğitimi",
+        "lead": "Şirketinizde yapay zeka kullanmak istiyor ama çalışanlarınız ChatGPT, Claude, Gemini ve benzeri araçları iş süreçlerine nasıl uyarlayacağını bilmiyor mu? Yapay zeka artık yalnızca teknoloji ekiplerinin kullandığı bir araç değildir. Satış, pazarlama, ihracat, müşteri ilişkileri, e-ticaret, insan kaynakları, yönetim, raporlama, içerik üretimi ve günlük ofis süreçlerinde doğru kullanıldığında şirketlere ciddi zaman kazandırabilir. {{appName}} olarak şirketlere özel yapay zeka eğitimi sunuyoruz. Eğitimi şirketinizin sektörü, ekip yapısı, departmanları, hedefleri ve günlük iş akışlarına göre planlıyoruz. Amacımız, çalışanlarınızın yapay zekayı işlerini hızlandıran, içerik üretimini kolaylaştıran, müşteri takibini güçlendiren ve kurumsal verimliliği artıran bir yardımcı olarak kullanmasını sağlamaktır.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Şirketlere Özel Yapay Zeka Eğitimi Nedir?",
+          "body": [
+            "Şirketlere özel yapay zeka eğitimi, işletmelerin çalışanlarına yapay zeka araçlarını iş süreçlerinde doğru, güvenli ve verimli kullanmayı öğretmek için hazırlanan uygulamalı kurumsal eğitim programıdır.",
+            "Bu eğitimde amaç yalnızca ChatGPT veya benzeri araçların nasıl açılacağını göstermek değildir. Asıl amaç, çalışanların kendi görevlerinde yapay zekayı nasıl kullanabileceğini anlamasıdır.",
+            "{{appName}}, yapay zeka eğitimini teorik anlatım yerine şirketinizin gerçek ihtiyaçları, departmanları, günlük iş akışları ve örnek kullanım senaryoları üzerinden uygulamalı şekilde planlar.",
+            "Yapay zekayı şirket içinde kontrollü ve iş odaklı kullanın",
+            "Doğru prompt yazma, departman bazlı kullanım senaryoları, güvenli veri kullanımı, çıktı kontrolü ve gerçek iş örnekleriyle ekibinizin yapay zekadan daha verimli yararlanmasına yardımcı oluyoruz."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirketlere Özel Yapay Zeka Eğitimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Yapay zekadan verim almak için sadece araca soru sormak yeterli değildir. Doğru komut yazmak, verilen cevabı kontrol etmek, şirket verilerini güvenli kullanmak ve departmanlara göre kullanım senaryoları oluşturmak gerekir.",
+            "Eğitimde çalışanların kendi işlerinde yapay zekayı nasıl kullanabileceği, hangi alanlarda dikkatli olması gerektiği ve hangi çıktıların mutlaka kontrol edilmesi gerektiği uygulamalı olarak ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirketler Neden Yapay Zeka Eğitimi Almalıdır?",
+          "body": [
+            "Birçok çalışan yapay zekayı duymuş olsa da günlük işinde nasıl kullanacağını bilmez. Bazı çalışanlar yalnızca basit sorular sorar, bazıları yanlış komut verir, bazıları ise çıkan cevabı doğrudan kullanarak hata riski oluşturabilir.",
+            "Bu nedenle şirket içinde yapay zeka kullanımı eğitim, örnek uygulama, departman bazlı senaryo ve güvenli kullanım prensipleriyle birlikte ele alınmalıdır.",
+            "Yapay zeka doğru kullanılmadığında:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Eğitim Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, yapay zekayı sadece merak eden değil; iş süreçlerinde gerçekten kullanmak isteyen şirketler için uygundur.",
+          "items": [
+            {
+              "title": "Yapay Zekayı İş Süreçlerine Dahil Etmek İsteyen Şirketler",
+              "body": "Şirket içinde yapay zeka kullanımını başlatmak veya geliştirmek isteyen işletmeler için uygundur."
+            },
+            {
+              "title": "Satış ve Pazarlama Ekipleri",
+              "body": "Müşteri iletişimi, içerik üretimi, kampanya metni ve takip süreçlerini hızlandırmak isteyen ekipler için uygundur."
+            },
+            {
+              "title": "İhracat ve Dış Ticaret Ekipleri",
+              "body": "İngilizce mail, ürün açıklaması, B2B platform içerikleri ve müşteri takip metinleri hazırlamak isteyen firmalara uygundur."
+            },
+            {
+              "title": "CRM ve Müşteri Takip Ekipleri",
+              "body": "Müşteri notlarını, takip mesajlarını ve satış aşamalarını daha düzenli yönetmek isteyen ekipler için planlanabilir."
+            },
+            {
+              "title": "E-ticaret ve Pazaryeri Ekipleri",
+              "body": "Ürün açıklaması, müşteri cevapları, kampanya metni ve pazaryeri içeriklerini hızlandırmak isteyen ekipler için uygundur."
+            },
+            {
+              "title": "Yönetici ve Ekip Liderleri",
+              "body": "Raporlama, toplantı özeti, görev listesi ve süreç takibi alanlarında yapay zeka farkındalığı kazanabilirler."
+            },
+            {
+              "title": "İnsan Kaynakları ve Kurumsal İletişim",
+              "body": "İş ilanı, duyuru, oryantasyon metni ve iç iletişim içeriklerini daha hızlı hazırlamak isteyen ekipler için uygundur."
+            },
+            {
+              "title": "KOBİ’ler, Üreticiler ve Hizmet Şirketleri",
+              "body": "Dijital dönüşüm sürecine yapay zekayı kontrollü şekilde dahil etmek isteyen işletmeler için uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirketlere Özel Yapay Zeka Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "Eğitim, şirketin sektörüne, ekip yapısına ve ihtiyaçlarına göre özelleştirilebilir. Genel olarak yapay zeka temel mantığı, ChatGPT, Claude, Gemini, prompt yazma, satış, pazarlama, ihracat, CRM, e-posta, raporlama, e-ticaret, insan kaynakları, veri güvenliği ve departman bazlı uygulama örnekleri birlikte ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Şirketlere Özel Yapay Zeka Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Eğitim modülleri şirketinize göre daraltılabilir veya genişletilebilir. Aşağıdaki yapı, kurumsal yapay zeka kullanımını departman bazlı ve uygulamalı şekilde ele almak için planlanmıştır.",
+          "items": [
+            {
+              "title": "Yapay Zeka Temel Mantığı",
+              "body": "Eğitimin ilk bölümünde yapay zekanın temel mantığı sade ve anlaşılır şekilde anlatılır. Amaç, çalışanların yapay zekayı sihirli bir cevap makinesi olarak değil, doğru yönlendirildiğinde güçlü bir yardımcı araç olarak görmesini sağlamaktır. Kapsam: Yapay zeka nedir ve ChatGPT gibi araçlar nasıl çalışır?; Yapay zeka neyi iyi yapar, hangi konularda hata yapabilir?; Neden insan kontrolü gerekir?; Şirket içinde hangi işlerde kullanılabilir, hangi işlerde dikkatli olunmalıdır?."
+            },
+            {
+              "title": "ChatGPT Kullanımı",
+              "body": "ChatGPT, şirket çalışanlarının metin hazırlama, fikir geliştirme, e-posta yazma, rapor düzenleme, müşteri iletişimi ve iş süreçlerini hızlandırma amacıyla kullanabileceği araçlardan biridir. Kapsam: ChatGPT arayüzü, doğru komut yazma, rol ve bağlam verme; E-posta, teklif metni, toplantı notu ve satış mesajı hazırlama; İhracat müşteri iletişimi ve web sitesi içerik taslağı oluşturma; Metin özetleme, iyileştirme, tablo ve liste oluşturma."
+            },
+            {
+              "title": "Claude Kullanımı",
+              "body": "Claude, uzun metinleri analiz etme, dokümanları düzenleme, raporları özetleme ve daha geniş bağlamlı yazılarla çalışma konusunda kullanılabilecek yapay zeka araçlarından biridir. Kapsam: Uzun metinleri analiz etme ve doküman özetleme; Rapor taslağı, süreç dokümanı, talimat ve prosedür yazımı; Kurumsal yazı düzenleme ve içerik kalite kontrolü; Müşteri yazışmalarını sadeleştirme ve hedef kitleye göre uyarlama."
+            },
+            {
+              "title": "Gemini Kullanımı",
+              "body": "Gemini, araştırma, içerik üretimi, fikir geliştirme, metin düzenleme ve Google ekosistemiyle çalışan ekipler için faydalı olabilecek yapay zeka araçlarından biridir. Kapsam: Araştırma taslağı, içerik fikri ve sunum taslağı oluşturma; E-posta, metin hazırlama ve metinleri sadeleştirme; Pazarlama metni, ürün açıklaması ve soru-cevap içerikleri oluşturma; Rapor ve toplantı notu düzenleme."
+            },
+            {
+              "title": "Prompt Yazma Eğitimi",
+              "body": "Yapay zekadan kaliteli sonuç almak için doğru prompt yani komut yazmak gerekir. Belirsiz komutlar genellikle yüzeysel ve kullanılamaz cevaplar üretir. Kapsam: Bağlam, rol tanımı, hedef kitle, ton ve çıktı formatı belirleme; Örnek vererek sonucu iyileştirme ve revize ettirme; Tablo, liste, e-posta veya rapor formatı isteme; Kötü prompt ile iyi prompt arasındaki farkı uygulamalı görme."
+            },
+            {
+              "title": "Satış Süreçlerinde Yapay Zeka Kullanımı",
+              "body": "Satış ekipleri yapay zekayı müşteri iletişimi, teklif takibi, arama senaryosu, satış mesajı, itiraz karşılama ve CRM notları gibi alanlarda kullanabilir. Kapsam: Müşteri e-postası, teklif takip mesajı ve telefon araması senaryosu; Müşteri itirazlarına cevap ve LinkedIn bağlantı mesajı hazırlama; Satış temsilcisi görev listesi ve CRM görüşme notları düzenleme; Satış toplantısı gündemi ve satış sonrası takip mesajı oluşturma."
+            },
+            {
+              "title": "Pazarlama ve İçerik Üretiminde Yapay Zeka",
+              "body": "Pazarlama ekipleri yapay zekayı sosyal medya, blog, web sitesi, ürün açıklaması, kampanya fikri, e-posta pazarlama ve reklam metni hazırlığında kullanabilir. Kapsam: Sosyal medya içerik fikri, blog başlığı ve web sayfası taslağı; Ürün açıklaması, mail marketing ve reklam metni hazırlama; Kampanya sloganı, hedef kitleye göre metin uyarlama; SEO odaklı içerik ve GEO kısa cevap alanları hazırlama."
+            },
+            {
+              "title": "İhracat ve Dış Ticarette Yapay Zeka",
+              "body": "İhracat yapan veya ihracata başlamak isteyen şirketler yapay zekayı müşteri bulma, mail hazırlama, ürün açıklaması, teklif metni ve operasyon takibi gibi alanlarda kullanabilir. Kapsam: İngilizce tanıtım maili ve yurt dışı müşteri takip mesajı; B2B platform ürün metni ve fuar sonrası takip mesajı; Hedef ülke araştırması için soru listesi ve müşteri araştırma planı; Proforma açıklaması, müşteri cevapları ve ihracat operasyon kontrol listesi."
+            },
+            {
+              "title": "CRM ve Müşteri Takibinde Yapay Zeka",
+              "body": "CRM sistemlerinde yapay zeka, müşteri notlarını düzenleme, takip mesajları yazma, satış aşamalarını özetleme ve görev listeleri oluşturma konusunda destek sağlayabilir. Kapsam: Müşteri görüşme notlarını özetleme ve takip tarihi önerileri; Satış aşaması açıklaması ve teklif sonrası takip mesajı; Müşteri segmentlerine göre iletişim metni hazırlama; Satış raporu, CRM kampanya metni ve müşteri itirazlarını sınıflandırma."
+            },
+            {
+              "title": "E-Posta, Teklif ve Kurumsal Yazışmalar",
+              "body": "Şirket çalışanları günlük olarak birçok e-posta, teklif metni, müşteri cevabı, iç yazışma ve bilgilendirme metni hazırlar. Yapay zeka bu süreçleri hızlandırabilir. Kapsam: Resmi e-posta, müşteri cevabı ve teklif gönderim metni; Teklif takip e-postası, şikayet cevabı ve toplantı daveti; İngilizce e-posta ve daha profesyonel metin düzenleme; Uzun metni kısa yazışmaya dönüştürme ve müşteri tonuna uygun cevap hazırlama."
+            },
+            {
+              "title": "Raporlama ve Toplantı Notlarında Yapay Zeka",
+              "body": "Yapay zeka, toplantı notlarını düzenlemek, kararları çıkarmak, görevleri listelemek ve rapor taslakları hazırlamak için kullanılabilir. Kapsam: Toplantı notu düzenleme, karar maddeleri ve görev listesi oluşturma; Haftalık faaliyet raporu, satış raporu ve müşteri görüşme raporu; Proje durum raporu ve yönetici özeti oluşturma; Uzun raporları kısa özet haline getirme."
+            },
+            {
+              "title": "Excel, Tablo ve Veri Yorumlama",
+              "body": "Yapay zeka, tablo verilerini anlamlandırmak, raporlamak, sınıflandırmak ve yorumlamak için destekleyici şekilde kullanılabilir. Ancak finansal veya kritik verilerde sonuçlar mutlaka insan kontrolünden geçirilmelidir. Kapsam: Satış verisi özetleme, müşteri listesi sınıflandırma ve ürün listesi düzenleme; Excel formül mantığı sorma ve rapor tablosu hazırlama; Eksik veri tespiti ve veri yorumunda dikkat edilecek alanlar; Yapay zeka sonucunu kontrol etme."
+            },
+            {
+              "title": "E-Ticaret ve Pazaryeri Süreçlerinde Yapay Zeka",
+              "body": "E-ticaret ve pazaryeri ekipleri yapay zekayı ürün açıklaması, başlık, kategori metni, müşteri soruları, kampanya fikri ve satış raporu yorumlama alanlarında kullanabilir. Kapsam: Trendyol, Amazon, Etsy ve eBay ürün açıklamaları; B2B platform ürün metni ve yurt dışı pazaryeri içerikleri; Müşteri sorularına cevap taslağı ve kampanya metni oluşturma; SEO uyumlu ürün açıklaması ve ürün karşılaştırma metni hazırlama."
+            },
+            {
+              "title": "İnsan Kaynakları ve Kurumsal İletişimde Yapay Zeka",
+              "body": "İnsan kaynakları ve kurumsal iletişim ekipleri iş ilanları, eğitim dokümanları, çalışan duyuruları, oryantasyon metinleri ve iç yazışmalarda yapay zekadan faydalanabilir. Kapsam: İş ilanı, mülakat soru listesi ve oryantasyon dokümanı; Çalışan duyurusu, eğitim içeriği ve iç iletişim mesajları; Performans görüşmesi soru listesi ve görev tanımı; Şirket içi prosedür metni ve süreç dokümanı oluşturma."
+            },
+            {
+              "title": "Yapay Zeka Kullanımında Gizlilik ve Güvenlik",
+              "body": "Şirketlerde yapay zeka kullanırken gizlilik ve veri güvenliği çok önemlidir. Her bilgi yapay zeka araçlarına girilmemelidir. Kapsam: Şirket gizli bilgileri, müşteri bilgileri ve kişisel veriler nasıl korunmalı?; Finansal bilgiler, ticari sırlar ve çalışan verilerinde nelere dikkat edilmeli?; Yapay zeka çıktısı doğrudan kullanılmalı mı?; Hangi durumlarda insan onayı gerekir ve şirket içi kullanım kuralları nasıl oluşturulur?."
+            },
+            {
+              "title": "Departmanlara Özel Yapay Zeka Kullanım Senaryoları",
+              "body": "Her departmanın yapay zekayı kullanma şekli farklı olabilir. Bu nedenle eğitim, departmanlara özel örneklerle desteklenmelidir. Kapsam: Satış için müşteri takip mesajları ve pazarlama için kampanya fikirleri; İhracat için İngilizce mail ve ürün açıklamaları; Yönetim için rapor özetleri ve operasyon için kontrol listeleri; İnsan kaynakları, finans ve müşteri hizmetleri için örnek kullanım alanları."
+            },
+            {
+              "title": "Şirket İçi Yapay Zeka Kullanım Rehberi Oluşturma",
+              "body": "Eğitim sonrasında şirket içinde yapay zeka kullanımının sürdürülebilir olması için temel bir kullanım rehberi hazırlanabilir. Bu rehber, yapay zeka kullanımının kişisel deneme seviyesinden kurumsal standarda geçmesine yardımcı olur."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Şirketlere Özel Yapay Zeka Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketinizin sektörü, departmanları, çalışan profili, mevcut yapay zeka kullanım seviyesi ve eğitim hedefleri değerlendirilerek başlar. Ardından ihtiyaç analizi, eğitim içerik planı, uygulamalı eğitim, departman bazlı örnekler, güvenli kullanım kuralları ve yol haritası oluşturulur.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Şirketinizin sektörü, departmanları, çalışan profili, mevcut yapay zeka kullanım seviyesi ve eğitim hedefleri değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "İhtiyaç Analizi",
+              "body": "Satış, pazarlama, ihracat, CRM, e-ticaret, yönetim, insan kaynakları veya operasyon gibi hangi departmanlara odaklanılacağı belirlenir."
+            },
+            {
+              "n": 3,
+              "title": "Eğitim İçeriği Planlama",
+              "body": "Şirketinize uygun eğitim başlıkları, araçlar, örnek senaryolar ve uygulama konuları hazırlanır."
+            },
+            {
+              "n": 4,
+              "title": "Uygulamalı Eğitim",
+              "body": "ChatGPT, Claude, Gemini ve benzeri araçlar üzerinden gerçek iş süreçlerine yönelik uygulamalı çalışmalar yapılır."
+            },
+            {
+              "n": 5,
+              "title": "Departman Bazlı Örnekler",
+              "body": "Her departman için örnek promptlar, metinler, raporlar, e-postalar ve iş akışı uygulamaları gösterilir."
+            },
+            {
+              "n": 6,
+              "title": "Güvenli Kullanım Kuralları",
+              "body": "Şirket verilerinin korunması, kişisel veriler, müşteri bilgileri ve yapay zeka cevaplarının kontrolü konusunda temel prensipler anlatılır."
+            },
+            {
+              "n": 7,
+              "title": "Soru-Cevap ve Uygulama",
+              "body": "Çalışanların kendi görevleriyle ilgili soruları alınır ve örnek çözümler hazırlanır."
+            },
+            {
+              "n": 8,
+              "title": "Yol Haritası",
+              "body": "Eğitim sonunda şirketin yapay zekayı hangi süreçlerde, nasıl ve hangi kurallarla kullanabileceğine dair temel yol haritası oluşturulur."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Şirketlere Özel Yapay Zeka Eğitiminin Avantajları",
+          "items": [
+            "Çalışanlar yapay zekayı daha bilinçli kullanır",
+            "ChatGPT, Claude ve Gemini gibi araçların iş süreçlerindeki kullanımını öğrenir",
+            "E-posta, rapor ve içerik hazırlama süreçleri hızlanabilir",
+            "Satış ve müşteri takip süreçleri desteklenir",
+            "İhracat ve B2B müşteri bulma süreçlerinde içerik üretimi kolaylaşır",
+            "CRM notları ve takip mesajları daha düzenli hazırlanabilir",
+            "E-ticaret ürün açıklamaları daha hızlı üretilebilir",
+            "Toplantı notları ve görev listeleri daha sistemli hale gelebilir",
+            "Departmanlara özel kullanım senaryoları oluşur",
+            "Şirket içinde ortak yapay zeka kullanım kültürü gelişir",
+            "Gizlilik ve veri güvenliği farkındalığı artar",
+            "Kurumsal dijital dönüşüm süreci desteklenir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Yapay Zeka Kullanımında Sık Yapılan Hatalar",
+          "items": [
+            "Yapay zekaya çok genel sorular sormak",
+            "Bağlam vermeden kaliteli sonuç beklemek",
+            "Çıkan cevabı kontrol etmeden kullanmak",
+            "Şirket gizli bilgilerini bilinçsiz paylaşmak",
+            "Kişisel verileri korumadan kullanmak",
+            "Her işi yapay zekaya yaptırmaya çalışmak",
+            "Departman ihtiyaçlarına göre kullanım senaryosu oluşturmamak",
+            "Prompt yazma mantığını öğrenmeden kullanmak",
+            "Yapay zeka cevabını uzman görüşü yerine koymak",
+            "Yanlış bilgileri müşteri iletişiminde kullanmak",
+            "Eğitim almadan şirket genelinde kullanıma geçmek",
+            "Yapay zeka araçlarını sadece içerik yazdırma aracı olarak görmek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirketlere Özel Yapay Zeka Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Şirketlere özel yapay zeka eğitimi, dijital dönüşüm ve iş süreçleri yönetimi kapsamında farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirketlere Özel Yapay Zeka Eğitimi, ChatGPT Eğitimi ve Prompt Yazma Eğitimi",
+          "body": [
+            "Şirketlere özel yapay zeka eğitimi; kurumsal yapay zeka eğitimi, ChatGPT eğitimi, Claude eğitimi, Gemini eğitimi, yapay zeka araçları eğitimi, prompt yazma eğitimi, iş süreçlerinde yapay zeka kullanımı, satışta yapay zeka kullanımı, pazarlamada yapay zeka eğitimi, ihracatta yapay zeka kullanımı, CRM yapay zeka eğitimi, e-ticarette yapay zeka kullanımı ve departmanlara özel yapay zeka eğitimi süreçleri için planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirketlere özel yapay zeka eğitimi nedir?",
+          "body": [
+            "Şirketlere özel yapay zeka eğitimi; çalışanların ChatGPT, Claude, Gemini ve benzeri yapay zeka araçlarını satış, pazarlama, ihracat, CRM, e-ticaret, raporlama, toplantı notları, e-posta yazımı, içerik üretimi ve günlük iş süreçlerinde doğru, güvenli ve verimli kullanmasını öğretmek için hazırlanan uygulamalı kurumsal eğitimdir. {{appName}}, şirketin sektörüne, departmanlarına ve ihtiyaçlarına göre yapay zeka eğitim programı hazırlar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Şirketlere Özel Yapay Zeka Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "Şirketlere özel yapay zeka eğitimi kimler için uygundur? +",
+              "a": "Bu eğitim; çalışanlarına yapay zeka kullanımını öğretmek isteyen şirketler, KOBİ’ler, üretici firmalar, ihracatçılar, satış ve pazarlama ekipleri, e-ticaret ekipleri ve dijital dönüşüm sürecindeki işletmeler için uygundur."
+            },
+            {
+              "q": "Eğitimde ChatGPT anlatılıyor mu? +",
+              "a": "Evet. ChatGPT’nin iş süreçlerinde nasıl kullanılacağı, doğru prompt yazma, e-posta, rapor, içerik, satış mesajı ve müşteri takip metni hazırlama gibi konular uygulamalı şekilde anlatılabilir."
+            },
+            {
+              "q": "Claude ve Gemini eğitimi de veriliyor mu? +",
+              "a": "Evet. Şirketin ihtiyacına göre Claude, Gemini ve farklı yapay zeka araçlarının kullanım senaryoları eğitim kapsamına dahil edilebilir."
+            },
+            {
+              "q": "Eğitim şirketimize özel hazırlanıyor mu? +",
+              "a": "Evet. Eğitim şirketinizin sektörü, departmanları, çalışan profili ve iş süreçlerine göre özelleştirilebilir."
+            },
+            {
+              "q": "Yapay zeka eğitimi uygulamalı mı yapılır? +",
+              "a": "Evet. Eğitim teorik anlatım yerine gerçek iş örnekleri, prompt çalışmaları, e-posta, rapor, içerik, müşteri takibi ve departman bazlı uygulamalarla yapılabilir."
+            },
+            {
+              "q": "Satış ekibimiz için yapay zeka eğitimi alabilir miyiz? +",
+              "a": "Evet. Satış ekipleri için müşteri e-postası, teklif takibi, telefon araması senaryosu, LinkedIn mesajı, CRM notları ve müşteri takip süreçlerinde yapay zeka kullanımı anlatılabilir."
+            },
+            {
+              "q": "İhracat ekibi için yapay zeka kullanımı anlatılıyor mu? +",
+              "a": "Evet. İhracat ekipleri için İngilizce tanıtım maili, ürün açıklaması, B2B platform içerikleri, fuar sonrası takip mesajı, müşteri cevapları ve ihracat operasyon kontrol listeleri hazırlanabilir."
+            },
+            {
+              "q": "Yapay zeka kullanımında gizlilik ve güvenlik anlatılıyor mu? +",
+              "a": "Evet. Şirket verilerinin korunması, kişisel veriler, müşteri bilgileri, ticari sırlar ve yapay zeka çıktılarının kontrol edilmesi konuları eğitimde özellikle ele alınır."
+            },
+            {
+              "q": "Eğitim sonunda çalışanlar hemen kullanabilir mi? +",
+              "a": "Eğitim sonunda çalışanlar temel kullanım mantığını, prompt yazmayı ve kendi işlerine uygun örnek senaryoları öğrenir. Ancak şirket içinde sürdürülebilir kullanım için tekrar, uygulama ve süreç standardı oluşturulması önerilir."
+            },
+            {
+              "q": "Eğitim online mı yoksa yüz yüze mi yapılır? +",
+              "a": "Eğitim ihtiyaca göre online veya yüz yüze planlanabilir. Şirketin lokasyonu, ekip sayısı ve eğitim kapsamına göre uygun model belirlenebilir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Yapay Zekayı Şirketinizde Rastgele Değil, Kontrollü ve Verimli Kullanalım",
+        "body": "Şirketinizde yapay zeka kullanmak istiyor ama çalışanlarınız bu araçları iş süreçlerine nasıl uyarlayacağını bilmiyorsa, yapay zeka potansiyeliniz kullanılmadan kalıyor olabilir. {{appName}} Şirketlere Özel Yapay Zeka Eğitimi ile ekibinize ChatGPT, Claude, Gemini ve yapay zeka araçlarını satış, pazarlama, ihracat, CRM, e-ticaret, raporlama ve günlük ofis süreçlerinde nasıl kullanacağını uygulamalı olarak öğretelim.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

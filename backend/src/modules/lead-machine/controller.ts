@@ -19,6 +19,7 @@ import { runAmazonJob } from './amazon/amazon.job';
 import { getLatestAmazonRiskReport, getAmazonScanProducts } from './amazon/risk-report.service';
 import { rescoreForJob } from './amazon/rescore.service';
 import { runB2bJob } from './b2b/b2b.job';
+import { runCustomsJob } from './customs/customs.job';
 import { runFairJob } from './fair/fair.job';
 import { generateFairBriefingPdf, listFairBriefingCandidateIdsForDay } from './fair/briefing.service';
 import { buildGenericFairRunnerParams } from './fair/fair.runner';
@@ -229,6 +230,7 @@ async function createAndRunJob(channel: LeadChannel, body: Record<string, unknow
   if (channel === 'amazon') runInBackground(runAmazonJob(job.id));
   if (channel === 'b2b_directory') runInBackground(runB2bJob(job.id));
   if (channel === 'trade_fair') runInBackground(runFairJob(job.id));
+  if (channel === 'customs') runInBackground(runCustomsJob(job.id));
   return job;
 }
 
@@ -283,6 +285,9 @@ export const getAmazonScan: RouteHandler<{ Params: { jobId: string } }> = async 
 
 export const startB2bJob: RouteHandler<{ Body: unknown }> = async (req, reply) => reply.code(201).send(await createAndRunJob('b2b_directory', asRecord(req.body)));
 export const listB2bJobs: RouteHandler = async () => listSearchJobs('b2b_directory');
+
+export const startCustomsJob: RouteHandler<{ Body: unknown }> = async (req, reply) => reply.code(201).send(await createAndRunJob('customs', asRecord(req.body)));
+export const listCustomsJobs: RouteHandler = async () => listSearchJobs('customs');
 
 export const startFairJob: RouteHandler<{ Body: unknown }> = async (req, reply) => reply.code(201).send(await createAndRunJob('trade_fair', asRecord(req.body)));
 export const listFairJobs: RouteHandler = async () => listSearchJobs('trade_fair');

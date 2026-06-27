@@ -1,0 +1,394 @@
+{
+  "slug": "e-ticaret-ve-pazaryeri-egitimi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 70,
+  "icon": "GraduationCap",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "E-Ticaret ve Pazaryeri Eğitimi | Trendyol, Amazon, Etsy, eBay ve B2B Platform Eğitimi",
+        "description": "E-ticaret ve pazaryeri eğitimi ile Trendyol, Amazon, Etsy, eBay, Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi platformlarda mağaza yönetimi, ürün yükleme, fiyatlandırma, SEO, sipariş ve müşteri takibi süreçlerini uygulamalı olarak öğretiyoruz.",
+        "ogTitle": "E-Ticaret ve Pazaryeri Eğitimi | {{appName}}",
+        "ogDescription": "Trendyol, Amazon, Etsy, eBay ve B2B platformlarda mağaza yönetimi, ürün yükleme, pazaryeri SEO, fiyatlandırma, stok, sipariş, müşteri iletişimi ve CRM takibini öğrenin."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "E-Ticaret ve Pazaryeri Eğitimi",
+        "lead": "E-ticaret yapmak istiyor ama hangi pazaryerinde satış yapacağınızı, mağazanızı nasıl kuracağınızı, ürünlerinizi nasıl yükleyeceğinizi, fiyatlandırmayı nasıl yapacağınızı ve sipariş sürecini nasıl yöneteceğinizi bilmiyor musunuz? E-ticaret yalnızca ürün fotoğrafı yükleyip satış beklemek değildir. Doğru ürün seçimi, mağaza kurulumu, kategori seçimi, ürün başlığı, açıklama, görsel, fiyatlandırma, stok takibi, sipariş yönetimi, müşteri iletişimi, iade süreçleri, kampanya yönetimi, raporlama ve platform kurallarına uygun çalışma birlikte düşünülmelidir. {{appName}} olarak e-ticarete başlamak isteyen işletmelere, KOBİ’lere, üretici firmalara, girişimcilere, ihracatçılara ve pazaryeri satışlarını geliştirmek isteyen şirketlere uygulamalı e-ticaret ve pazaryeri eğitimi sunuyoruz. Amacımız, e-ticareti rastgele ürün yükleme süreci olmaktan çıkarıp; doğru ürün, doğru platform, doğru içerik, doğru fiyat, düzenli operasyon ve takip edilebilir satış yönetimiyle daha sistemli hale getirmektir.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "E-Ticaret ve Pazaryeri Eğitimi Nedir?",
+          "body": [
+            "E-ticaret ve pazaryeri eğitimi, işletmelerin ürünlerini dijital kanallarda satabilmesi için mağaza kurulumu, ürün yükleme, ürün açıklaması, kategori seçimi, fiyatlandırma, stok yönetimi, sipariş takibi, müşteri iletişimi, kampanya planlama, raporlama ve platform yönetimi konularını uygulamalı olarak öğreten eğitimdir.",
+            "Bu eğitimde amaç yalnızca pazaryeri panelini göstermek değildir. Asıl amaç, katılımcıların e-ticareti bir satış sistemi olarak anlamasını, ürünlerini dijital ortamda doğru sunmasını, platform kurallarına dikkat etmesini ve satış sürecini düzenli takip etmesini sağlamaktır.",
+            "{{appName}}, e-ticaret ve pazaryeri eğitimini teorik anlatım yerine gerçek ürün, gerçek mağaza ve uygulamalı satış senaryolarıyla planlar.",
+            "E-ticareti takip edilebilir bir satış sistemine dönüştürün",
+            "Ürün başlığı, açıklama, görsel, kategori, fiyatlandırma, stok, sipariş, müşteri mesajları, iade, kampanya, raporlama ve CRM takibiyle pazaryeri yönetiminizi daha profesyonel hale getirin."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "E-Ticaret ve Pazaryeri Eğitimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "E-ticarette başarılı olmak için yalnızca ürün yüklemek yeterli değildir. Hangi platformun seçileceği, mağaza kurulumunun nasıl yapılacağı, ürünlerin nasıl sunulacağı, fiyatın nasıl belirleneceği, siparişlerin nasıl yönetileceği ve raporların nasıl takip edileceği birlikte planlanmalıdır.",
+            "Eğitimde Trendyol, Amazon, Etsy, eBay, Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi platformlar için mağaza yönetimi, ürün yükleme, pazaryeri SEO, fiyatlandırma, stok, sipariş, kargo, müşteri iletişimi, kampanya, raporlama ve CRM müşteri takibi uygulamalı olarak ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "E-Ticaret Eğitimi Neden Önemlidir?",
+          "body": [
+            "Birçok işletme e-ticarete ürünlerini pazaryerine yükleyerek başlar. Ancak ürün başlığı zayıfsa, açıklama eksikse, görseller güven vermiyorsa, fiyatlandırma yanlışsa, stok takibi yapılmıyorsa ve sipariş süreci düzenli yönetilmiyorsa beklenen satış performansı oluşmayabilir.",
+            "E-ticaret eğitimi, bu hataları azaltmak ve pazaryeri satış sürecini daha bilinçli yönetmek için önemlidir.",
+            "E-ticarette bilgi eksikliği şu sorunlara neden olabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Eğitim Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, e-ticareti deneme amaçlı değil, düzenli ve takip edilebilir bir satış kanalı olarak kullanmak isteyen herkes için uygundur.",
+          "items": [
+            {
+              "title": "E-Ticarete Başlamak İsteyen Girişimciler",
+              "body": "Hangi pazaryerinden başlayacağını, mağaza kurulumunu ve ürün yükleme sürecini öğrenmek isteyen girişimciler için uygundur."
+            },
+            {
+              "title": "KOBİ’ler ve Üretici Firmalar",
+              "body": "Ürünlerini Trendyol, Amazon, Etsy, eBay veya B2B platformlarda satmak isteyen firmalar için planlanabilir."
+            },
+            {
+              "title": "Mevcut Pazaryeri Mağazası Olan Şirketler",
+              "body": "Ürün yükleme, stok, sipariş, müşteri mesajları, kampanya ve raporlama süreçlerini düzenlemek isteyen şirketler için uygundur."
+            },
+            {
+              "title": "İhracatçılar",
+              "body": "Amazon, Etsy, eBay ve B2B platformları yurt dışı satış ve müşteri bulma kanalı olarak değerlendirmek isteyen işletmeler için uygundur."
+            },
+            {
+              "title": "Trendyol Mağazası Açmak İsteyen İşletmeler",
+              "body": "Trendyol mağaza açılışı, ürün yükleme, fiyatlandırma, kargo ve müşteri iletişimini öğrenmek isteyen firmalara uygundur."
+            },
+            {
+              "title": "Amazon, Etsy ve eBay’de Satış Yapmak İsteyenler",
+              "body": "Yurt dışı pazaryerlerinde ürün listeleme, mağaza yönetimi ve müşteri iletişimi öğrenmek isteyenler için planlanabilir."
+            },
+            {
+              "title": "B2B Platform Kullanmak İsteyen Üreticiler",
+              "body": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi platformlarda ürün yayınlamak isteyen üreticiler için uygundur."
+            },
+            {
+              "title": "E-Ticaret Ekibini Eğitmek İsteyen Firmalar",
+              "body": "Stok, sipariş, müşteri takibi, raporlama ve operasyon süreçlerini ekibine öğretmek isteyen işletmeler için uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "E-Ticaret ve Pazaryeri Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "Eğitim, işletmenin ürün grubuna, satış hedeflerine, pazaryeri tercihine ve mevcut bilgi seviyesine göre özelleştirilebilir. Genel olarak e-ticaretin temel mantığı, pazaryeri seçimi, Trendyol, Amazon, Etsy, eBay, B2B platformlarda ürün yayınlama, mağaza kurulumu, ürün kategori planı, ürün yükleme, ürün başlığı, açıklama, görsel, pazaryeri SEO, fiyatlandırma, stok, sipariş, kargo, müşteri mesajları, iade, kampanya, reklam, satış raporları, CRM ve yapay zeka destekli süreçler ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "E-Ticaret ve Pazaryeri Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Bu başlıklar Trendyol, Amazon, Etsy, eBay veya B2B platformlara göre ayrıca detaylandırılabilir.",
+          "items": [
+            {
+              "title": "E-Ticaretin Temel Mantığı",
+              "body": "E-ticaret yalnızca ürünün internette görünmesi değil, ürünün doğru müşteriye doğru içerik, doğru fiyat ve doğru operasyonla sunulmasıdır. Bu kapsamda: E-ticaret, pazaryeri, B2C ve B2B farkı; Kendi web sitesi ile pazaryeri arasındaki fark; Ürün sayfası, fiyat ve görselin satışa etkisi; Sürdürülebilir satış mantığı."
+            },
+            {
+              "title": "Doğru Pazaryeri Seçimi",
+              "body": "Her ürün her pazaryeri için uygun olmayabilir. Ürünün hedef kitlesi, fiyat seviyesi, lojistik yapısı, rekabet durumu ve marka konumlandırması pazaryeri seçimini etkiler. Bu kapsamda: Ürün yurt içinde mi, yurt dışında mı satılacak?; Ürün B2C müşteriye mi, B2B alıcıya mı hitap ediyor?; Komisyon ve operasyon maliyetleri uygun mu?; Hangi platform hedef müşteriyle daha uyumlu?."
+            },
+            {
+              "title": "Trendyol Satış Mantığı",
+              "body": "Trendyol’da başarılı olmak için mağaza kurulumu, ürün yükleme, fiyatlandırma, kampanya, kargo ve müşteri iletişimi düzenli yönetilmelidir. Bu kapsamda: Mağaza açılışı, kategori ve ürün yükleme; Başlık, açıklama, görsel ve stok takibi; Fiyat, komisyon, kargo ve sipariş yönetimi; Müşteri soruları, iade ve performans takibi."
+            },
+            {
+              "title": "Amazon Satış Mantığı",
+              "body": "Amazon’da satış yaparken ürün listeleme, varyasyon, açıklama, görsel, fiyatlandırma, stok ve operasyon süreçleri dikkatli yönetilmelidir. Bu kapsamda: Amazon hesap yapısı ve ürün listeleme mantığı; Ürün başlığı, bullet point ve açıklama; Kategori, varyasyon ve görsel standartları; Stok, sipariş, performans ve yurt dışı lojistik farkındalığı."
+            },
+            {
+              "title": "Etsy Satış Mantığı",
+              "body": "Etsy, el işi, tasarım, kişiselleştirilmiş ürün, dijital ürün ve özgün ürün grupları için değerlendirilebilecek bir pazaryeridir. Bu kapsamda: Etsy mağaza yapısı ve niş ürün mantığı; Başlık, etiket, anahtar kelime ve açıklama; Görsel kalitesi ve kişiselleştirme seçenekleri; Kargo, müşteri mesajları ve mağaza güveni."
+            },
+            {
+              "title": "eBay Satış Mantığı",
+              "body": "eBay’de ürün listeleme, açıklama, fiyatlandırma, kargo ve müşteri iletişimi dikkatli yönetilmelidir. Bu kapsamda: eBay hesap yapısı ve ürün listeleme; Kategori, ürün başlığı, açıklama ve ürün durumu; Görsel, fiyatlandırma ve kargo seçenekleri; Yurt dışı müşteri iletişimi, sipariş ve iade takibi."
+            },
+            {
+              "title": "B2B Platformlarda Ürün Yayınlama Mantığı",
+              "body": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi B2B platformlar, üretici ve ihracatçı firmalar için farklı bir satış mantığına sahiptir. Bu kapsamda: B2B platform ve B2C pazaryeri farkı; İngilizce ürün başlığı ve açıklaması; MOQ, ambalaj, teslim bilgisi ve ürün görselleri; Alıcı mesajları ve CRM ile B2B müşteri takibi."
+            },
+            {
+              "title": "Mağaza Kurulumu",
+              "body": "Pazaryerlerinde mağaza kurulumu eksiksiz ve güven verici yapılmalıdır. Mağaza bilgileri, şirket açıklaması, logo, iletişim ve politika alanları düzenli olmalıdır. Bu kapsamda: Mağaza adı, şirket bilgileri, logo ve kapak görseli; Marka açıklaması, iletişim ve resmi bilgiler; Kargo, iade ve mağaza politikaları; Müşteri güveni oluşturan alanlar."
+            },
+            {
+              "title": "Ürün Kategori Planı",
+              "body": "Ürünlerin doğru kategoriye yüklenmesi, müşterinin ürünü bulmasını ve platformun ürünü doğru sınıflandırmasını destekler. Bu kapsamda: Ana kategori, alt kategori ve ürün grubu mantığı; Varyasyon, model, ölçü ve renk seçenekleri; Paket seçenekleri ve toptan/perakende ayrımı; Platforma özel kategori kuralları."
+            },
+            {
+              "title": "Ürün Yükleme Eğitimi",
+              "body": "Ürün yükleme süreci, e-ticaretin en kritik alanlarından biridir. Ürün eksik veya yanlış bilgilerle yüklendiğinde müşteri ürünü anlamakta zorlanabilir. Bu kapsamda: Ürün adı, kategori, başlık ve açıklama; Teknik özellikler, varyasyon, stok kodu ve barkod; Fiyat, indirimli fiyat, görseller ve kargo bilgisi; Teslimat, iade, etiket ve ürün onay süreci."
+            },
+            {
+              "title": "Ürün Başlığı Hazırlama",
+              "body": "Ürün başlığı, müşterinin ürünü ilk gördüğü alanlardan biridir. Başlık hem ürünün ne olduğunu anlatmalı hem de platform arama mantığına uygun hazırlanmalıdır. Bu kapsamda: Marka, ürün adı, model, renk ve ölçü; Malzeme, kullanım alanı ve paket içeriği; Müşteri arama kelimesi ve anahtar kelime dengesi; Gereksiz tekrar ve yanıltıcı ifadeden kaçınma."
+            },
+            {
+              "title": "Ürün Açıklaması Yazma",
+              "body": "Ürün açıklaması, müşterinin satın alma kararını etkileyen önemli alanlardan biridir. Açıklama yalnızca teknik bilgi değil, ürünün faydasını ve kullanım alanını da anlatmalıdır. Bu kapsamda: Ürün nedir, ne işe yarar ve kimler için uygundur?; Ölçü, renk, malzeme ve paket içeriği; Kullanım talimatı, bakım ve saklama bilgisi; Müşterinin sık soracağı sorulara cevap verme."
+            },
+            {
+              "title": "Ürün Görseli ve Görsel Kalitesi",
+              "body": "E-ticarette müşteri ürünü fiziksel olarak inceleyemez. Bu nedenle görseller ürün sayfasının en önemli unsurlarından biridir. Bu kapsamda: Ana ürün görseli, detay ve kullanım görselleri; Ambalaj, ölçü ve teknik bilgi görselleri; Arka plan, çözünürlük ve ürünün doğru gösterimi; Platform görsel kurallarına dikkat etme."
+            },
+            {
+              "title": "Pazaryeri SEO Mantığı",
+              "body": "Pazaryerlerinde ürünlerin görünürlüğü için başlık, açıklama, kategori, etiket, ürün özellikleri ve müşteri arama davranışı önemlidir. Bu kapsamda: Ürün anahtar kelimeleri ve başlıkta kullanım; Açıklamada doğru kelime yapısı ve kategori uyumu; Etiket, ürün özellikleri ve müşteri arama kelimeleri; Rakip ürün incelemesi ve uzun kuyruklu aramalar."
+            },
+            {
+              "title": "Fiyatlandırma ve Kârlılık",
+              "body": "E-ticarette satış yapmak kadar kârlı satış yapmak da önemlidir. Fiyat belirlerken yalnızca rakibe bakmak yeterli değildir. Bu kapsamda: Ürün maliyeti, komisyon, kargo ve paketleme maliyeti; İade, reklam, kampanya ve vergi etkisi; Kur farkı, indirim oranı ve minimum kâr hedefi; Rakip fiyatları ve platform kampanya şartları."
+            },
+            {
+              "title": "Stok Yönetimi",
+              "body": "Stok yönetimi e-ticarette müşteri memnuniyeti için kritik öneme sahiptir. Stokta olmayan ürünün satılması ciddi sorunlara yol açabilir. Bu kapsamda: Stok kodu, varyasyon, renk ve beden takibi; Minimum stok seviyesi ve stok güncelleme; Çoklu pazaryerinde stok takibi; Sipariş öncesi stok kontrolü."
+            },
+            {
+              "title": "Sipariş Yönetimi",
+              "body": "Siparişin alınması, hazırlanması, paketlenmesi, kargoya verilmesi ve müşteriye doğru bilgi aktarılması gerekir. Bu kapsamda: Sipariş ekranı, hazırlık ve paketleme kontrolü; Fatura, belge ve kargo süreci; Teslimat takibi ve geciken sipariş yönetimi; Operasyon notları ve müşteri memnuniyeti."
+            },
+            {
+              "title": "Kargo ve Teslimat Süreci",
+              "body": "E-ticarette ürünün zamanında ve doğru şekilde teslim edilmesi müşteri memnuniyeti açısından çok önemlidir. Bu kapsamda: Kargo firması, anlaşmalar ve paketleme standartları; Kırılabilir ürünler ve teslimat süresi; Kargo takip bilgisi ve gecikme yönetimi; Kargo maliyetinin fiyatlandırmaya etkisi."
+            },
+            {
+              "title": "Müşteri Soruları ve Mesaj Yönetimi",
+              "body": "Pazaryerlerinde müşteri sorularına hızlı, net ve profesyonel cevap verilmelidir. Zayıf iletişim müşteri kaybına ve olumsuz değerlendirmelere neden olabilir. Bu kapsamda: Ürün, kargo, iade, ölçü ve varyasyon soruları; Profesyonel cevap şablonları; Olumsuz müşteriye doğru yaklaşım; Yorum, değerlendirme ve memnuniyet takibi."
+            },
+            {
+              "title": "İade ve Değişim Süreçleri",
+              "body": "E-ticarette iade ve değişim süreci doğru yönetilmelidir. Bu süreç hem müşteri memnuniyetini hem de mağaza performansını etkileyebilir. Bu kapsamda: İade talebi, ürün kontrolü ve hasarlı ürün süreci; Yanlış ürün gönderimi ve müşteri iletişimi; İade oranı ve iade nedenlerini analiz etme; Tekrarlayan iade sorunlarını azaltma."
+            },
+            {
+              "title": "Kampanya ve İndirim Yönetimi",
+              "body": "Pazaryerlerinde kampanyalar satışları destekleyebilir. Ancak plansız kampanya yapmak kârlılığı düşürebilir. Bu kapsamda: İndirim planlama ve kampanya maliyeti; Kâr marjı ve stok durumuna göre kampanya; Platform kampanyaları ve sezonluk kampanyalar; Kampanya sonrası performans analizi."
+            },
+            {
+              "title": "Reklam ve Görünürlük Mantığı",
+              "body": "Pazaryerlerinde bazı ürünler reklam ve görünürlük çalışmalarıyla desteklenebilir. Ancak reklam vermeden önce ürün sayfası, fiyat, görsel, açıklama ve stok yapısı düzgün olmalıdır. Bu kapsamda: Reklamın amacı ve reklamla desteklenecek ürünler; Ürün sayfası, fiyat ve stok kontrolü; Reklam bütçesi ve satış-kârlılık takibi; Zayıf ürün sayfasına reklam vermenin riski."
+            },
+            {
+              "title": "Satış Raporları ve Performans Takibi",
+              "body": "E-ticarette satışları düzenli takip etmek gerekir. Hangi ürün satıyor, hangi ürün iade ediliyor, hangi ürün kârlı gibi sorular raporlarla değerlendirilmelidir. Bu kapsamda: Ürün, kategori, günlük, haftalık ve aylık satış raporları; Kârlılık, stok, iade ve kampanya raporları; En çok görüntülenen ve en çok satılan ürünler; Düşük performanslı ürünleri analiz etme."
+            },
+            {
+              "title": "CRM ve Müşteri Takibi",
+              "body": "Özellikle B2B platformlar ve ihracat odaklı e-ticaret çalışmalarında CRM müşteri takibi büyük önem taşır. Bu kapsamda: Kurumsal müşteri ve toptan sipariş talepleri; B2B alıcı mesajları ve ürün ilgisi; Teklif isteyen müşteriler ve platform kaynak bilgisi; Takip tarihi, satış aşaması ve tekrar sipariş potansiyeli."
+            },
+            {
+              "title": "E-Ticaret ve İhracat İlişkisi",
+              "body": "E-ticaret, ihracat süreciyle birlikte de planlanabilir. Özellikle Amazon, Etsy, eBay ve B2B platformlar yurt dışı müşteri ve satış kanalı olarak değerlendirilebilir. Bu kapsamda: Yurt dışı pazaryerleri ve İngilizce ürün açıklaması; Döviz bazlı fiyatlandırma ve yurt dışı kargo; Gümrük ve belge farkındalığı; B2B alıcı talepleri, distribütör ve toptancı iletişimi."
+            },
+            {
+              "title": "Yapay Zeka ile E-Ticaret Süreçlerini Destekleme",
+              "body": "Yapay zeka araçları e-ticaret süreçlerinde içerik, açıklama, müşteri cevapları, raporlama ve kampanya fikirleri konusunda destek sağlayabilir. Bu kapsamda: Ürün açıklaması, başlık alternatifi ve SEO kelime fikri; Müşteri cevap şablonları ve kampanya metinleri; İngilizce ürün açıklaması ve B2B platform metni; Satış raporu yorumlama ve iade nedenlerini sınıflandırma."
+            },
+            {
+              "title": "E-Ticarette Sık Yapılan Hatalar",
+              "body": "E-ticarette sık yapılan bazı hatalar satış performansını ve mağaza güvenini olumsuz etkileyebilir. {{appName}}, bu hataları azaltmak için eğitimi ürün, mağaza, operasyon, müşteri, raporlama ve dijital araç kullanımıyla birlikte planlar."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "E-Ticaret ve Pazaryeri Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç işletmenin ürünleri, mevcut e-ticaret durumu, pazaryeri hesapları, hedef müşterileri ve eğitim ihtiyacı değerlendirilerek başlar. Ardından platform seçimi, mağaza ve ürün analizi, uygulamalı ürün yükleme, operasyon eğitimi, raporlama, CRM takibi ve uygulanabilir yol haritası ile ilerler.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "İşletmenin ürünleri, mevcut e-ticaret durumu, pazaryeri hesapları, hedef müşterileri ve eğitim ihtiyacı değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Platform Seçimi ve Strateji",
+              "body": "Trendyol, Amazon, Etsy, eBay veya B2B platformlardan hangilerinin işletme için daha uygun olabileceği değerlendirilir."
+            },
+            {
+              "n": 3,
+              "title": "Mağaza ve Ürün Analizi",
+              "body": "Mevcut mağaza, ürün başlıkları, açıklamalar, görseller, fiyatlar, stok yapısı ve operasyon süreci incelenir."
+            },
+            {
+              "n": 4,
+              "title": "Uygulamalı Ürün Yükleme",
+              "body": "Ürün başlığı, açıklama, kategori, görsel, fiyat, stok ve teslimat bilgileri üzerinden uygulamalı ürün yükleme çalışması yapılır."
+            },
+            {
+              "n": 5,
+              "title": "Operasyon Eğitimi",
+              "body": "Sipariş, kargo, müşteri mesajları, iade, stok ve kampanya süreçleri anlatılır."
+            },
+            {
+              "n": 6,
+              "title": "Raporlama ve Performans Takibi",
+              "body": "Satış, stok, iade, ürün performansı ve kampanya sonuçlarının nasıl takip edileceği gösterilir."
+            },
+            {
+              "n": 7,
+              "title": "CRM ve B2B Takip Yapısı",
+              "body": "Kurumsal müşteri talepleri, B2B alıcılar, tekrar sipariş ihtimali ve platform kaynaklı müşteri adayları için takip sistemi oluşturulabilir."
+            },
+            {
+              "n": 8,
+              "title": "Yol Haritası",
+              "body": "Eğitim sonunda işletmenin e-ticaret ve pazaryeri satışlarını daha düzenli yönetebilmesi için uygulanabilir yol haritası hazırlanır."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "E-Ticaret ve Pazaryeri Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "E-ticaret süreci daha anlaşılır hale gelir",
+            "Doğru pazaryeri seçimi daha bilinçli yapılır",
+            "Mağaza kurulumu daha profesyonel planlanır",
+            "Ürün yükleme süreci daha düzenli yürütülür",
+            "Ürün başlığı ve açıklamaları güçlenir",
+            "Görseller daha doğru değerlendirilir",
+            "Pazaryeri SEO mantığı öğrenilir",
+            "Fiyatlandırma ve kârlılık daha bilinçli takip edilir",
+            "Stok ve sipariş yönetimi güçlenir",
+            "Müşteri mesajları daha profesyonel cevaplanır",
+            "İade ve değişim süreçleri daha kontrollü yönetilir",
+            "Kampanyalar daha planlı yapılır",
+            "Satış raporları düzenli incelenir",
+            "B2B ve ihracat fırsatları daha doğru değerlendirilir",
+            "Yapay zeka araçları daha bilinçli kullanılabilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "E-Ticarette Sık Yapılan Hatalar",
+          "items": [
+            "Yanlış pazaryeri seçmek",
+            "Eksik mağaza bilgileriyle satışa başlamak",
+            "Ürünleri yanlış kategoriye yüklemek",
+            "Zayıf ürün başlığı kullanmak",
+            "Kopyala-yapıştır ürün açıklaması yazmak",
+            "Düşük kaliteli görseller kullanmak",
+            "Fiyatlandırmayı sadece rakibe göre yapmak",
+            "Komisyon ve kargo maliyetini hesaba katmamak",
+            "Stok takibini ihmal etmek",
+            "Siparişleri geç hazırlamak",
+            "Müşteri sorularına geç cevap vermek",
+            "İade nedenlerini analiz etmemek",
+            "Kampanyaları plansız yapmak",
+            "Satış raporlarını takip etmemek",
+            "B2B talepleri CRM’e aktarmamak",
+            "Yapay zeka çıktısını kontrol etmeden kullanmak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "E-Ticaret ve Pazaryeri Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "E-ticaret ve pazaryeri eğitimi, dijital satış, ihracat, CRM ve yapay zeka süreçleriyle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "E-Ticaret Eğitimi, Pazaryeri Eğitimi ve Ürün Yükleme Eğitimi",
+          "body": [
+            "E-ticaret ve pazaryeri eğitimi; e-ticaret eğitimi, pazaryeri eğitimi, Trendyol eğitimi, Amazon eğitimi, Etsy eğitimi, eBay eğitimi, B2B platform eğitimi, pazaryeri ürün yükleme eğitimi, e-ticaret mağaza yönetimi eğitimi, Trendyol ürün yükleme eğitimi, Amazon ürün listeleme eğitimi, Etsy mağaza eğitimi, eBay satış eğitimi, Alibaba ürün yayınlama eğitimi, e-ticaret SEO eğitimi, pazaryeri SEO eğitimi, e-ticaret fiyatlandırma eğitimi, e-ticaret sipariş yönetimi ve KOBİ e-ticaret eğitimi konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "E-ticaret ve pazaryeri eğitimi nedir?",
+          "body": [
+            "E-ticaret ve pazaryeri eğitimi; Trendyol, Amazon, Etsy, eBay, Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi platformlarda mağaza kurulumu, ürün yükleme, ürün başlığı, ürün açıklaması, görsel kullanımı, kategori seçimi, pazaryeri SEO, fiyatlandırma, stok yönetimi, sipariş takibi, müşteri mesajları, iade süreçleri, kampanya yönetimi, raporlama ve CRM müşteri takibi konularını uygulamalı olarak öğreten eğitimdir. {{appName}}, e-ticaret yapmak veya pazaryeri satışlarını geliştirmek isteyen işletmelere uygulamalı eğitim sunar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "E-Ticaret ve Pazaryeri Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "E-ticaret ve pazaryeri eğitimi kimler için uygundur?",
+              "a": "Bu eğitim; e-ticarete başlamak isteyen girişimciler, KOBİ’ler, üretici firmalar, pazaryeri mağazası olan işletmeler, ihracatçılar ve dijital satış kanallarını geliştirmek isteyen şirketler için uygundur."
+            },
+            {
+              "q": "Eğitimde hangi platformlar anlatılıyor?",
+              "a": "Eğitim ihtiyaca göre Trendyol, Amazon, Etsy, eBay, Alibaba, TradeWheel, Go4WorldBusiness, Europages ve benzeri pazaryeri veya B2B platformlar için planlanabilir."
+            },
+            {
+              "q": "Ürün yükleme eğitimi veriliyor mu?",
+              "a": "Evet. Ürün başlığı, açıklama, kategori, görsel, fiyat, stok, varyasyon, kargo ve ürün onay süreci uygulamalı olarak anlatılabilir."
+            },
+            {
+              "q": "Pazaryeri SEO eğitimi var mı?",
+              "a": "Evet. Ürün başlığı, açıklama, kategori, etiket, anahtar kelime ve müşteri arama davranışı üzerinden pazaryeri SEO mantığı anlatılabilir."
+            },
+            {
+              "q": "Trendyol eğitimi bu eğitime dahil mi?",
+              "a": "Eğitim kapsamına göre Trendyol mağaza kurulumu, ürün yükleme, fiyatlandırma, sipariş, kargo, müşteri mesajları ve kampanya yönetimi anlatılabilir."
+            },
+            {
+              "q": "Amazon, Etsy ve eBay için eğitim alabilir miyiz?",
+              "a": "Evet. Amazon, Etsy ve eBay için ürün listeleme, mağaza yönetimi, ürün açıklaması, fiyatlandırma, kargo ve müşteri iletişimi konularında eğitim planlanabilir."
+            },
+            {
+              "q": "B2B platform eğitimi de veriliyor mu?",
+              "a": "Evet. Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi B2B platformlarda ürün yayınlama, İngilizce açıklama, MOQ, ambalaj bilgisi ve alıcı mesajlarının takibi anlatılabilir."
+            },
+            {
+              "q": "Eğitim şirketimize özel hazırlanabilir mi?",
+              "a": "Evet. Eğitim işletmenizin ürün grubuna, mevcut pazaryeri hesaplarına, satış hedeflerine ve ekip seviyesine göre özelleştirilebilir."
+            },
+            {
+              "q": "E-ticaret eğitimi satış garantisi verir mi?",
+              "a": "Hayır. Eğitim satış garantisi vermez. Ancak mağaza, ürün, fiyat, operasyon, müşteri iletişimi ve raporlama süreçlerini daha bilinçli yönetmenize yardımcı olur."
+            },
+            {
+              "q": "Eğitim online mı yapılır?",
+              "a": "Eğitim ihtiyaca göre online veya yüz yüze planlanabilir. Katılımcı sayısı, platform tercihi ve eğitim kapsamına göre uygun model belirlenebilir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "E-Ticareti Rastgele Ürün Yükleme Süreci Olmaktan Çıkaralım",
+        "body": "E-ticarete başlamak istiyor ama hangi pazaryerini seçeceğinizi, ürünlerinizi nasıl yükleyeceğinizi, fiyatlandırmayı nasıl yapacağınızı ve mağazanızı nasıl yöneteceğinizi bilmiyorsanız {{appName}} ile iletişime geçin. E-Ticaret ve Pazaryeri Eğitimi ile Trendyol, Amazon, Etsy, eBay ve B2B platformlarda mağaza yönetimi, ürün yükleme, pazaryeri SEO, fiyatlandırma, sipariş, müşteri iletişimi, raporlama ve takip süreçlerini uygulamalı olarak öğrenin.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

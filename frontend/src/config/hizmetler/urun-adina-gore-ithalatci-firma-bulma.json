@@ -1,0 +1,184 @@
+{
+  "slug": "urun-adina-gore-ithalatci-firma-bulma",
+  "category": "ihracat-musteri-bulma",
+  "module": "discover-customs",
+  "order": 40,
+  "icon": "Package",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Ürün Adına Göre İthalatçı Firma Bulma | Yurt Dışı Alıcı Firma ve İhracat Müşteri Araştırması",
+        "description": "Ürün adına göre yurt dışı ithalatçı firmaları, alıcı şirketleri, hedef ülkeleri, ürün açıklamalarını ve dış ticaret verilerini analiz ederek ihracat müşteri bulma sürecinizi güçlendiriyoruz.",
+        "ogTitle": "Ürün Adına Göre İthalatçı Firma Bulma | {{appName}}",
+        "ogDescription": "Ürün adı, İngilizce ürün karşılığı, alternatif ürün açıklamaları, GTİP / HS kodu ve dış ticaret verileriyle gerçek ithalatçı firmaları analiz ediyoruz."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "Ürün Adına Göre İthalatçı Firma Bulma",
+        "lead": "Ürününüzü yurt dışına satmak istiyor ama bu ürünü hangi firmaların ithal ettiğini ve hangi ülkelerde gerçek alıcı olduğunu bilmiyor musunuz? Birçok şirket ihracat müşteri ararken yalnızca genel sektör listelerine veya rastgele firma araştırmalarına yönelir. Ancak doğru ürün adıyla yapılan ithalatçı firma araştırması, ürününüzü veya benzer ürünleri daha önce ithal etmiş alıcı firmalara ulaşmanız için daha hedefli bir yol sunar. {{appName}} olarak ürün adına göre yurt dışı ithalatçı firma araştırması yapıyor; ürününüzün İngilizce karşılığını, dış ticaret kayıtlarında geçen alternatif ürün açıklamalarını, GTİP / HS kodu bağlantılarını, hedef ülkeleri ve gerçek alıcı firmaları analiz ediyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Ürün Adına Göre İthalatçı Firma Bulma Nedir?",
+          "body": [
+            "Ürün adına göre ithalatçı firma bulma, belirli bir ürünün Türkçe, İngilizce ve dış ticaret kayıtlarında kullanılan ticari adları üzerinden araştırılarak bu ürünü ithal eden yurt dışı firmaların tespit edilmesi sürecidir.",
+            "Her ürün dış ticaret verilerinde birebir aynı adla geçmeyebilir. Bir ürün farklı ülkelerde, farklı firmalar tarafından veya farklı belgelerde değişik açıklamalarla kaydedilmiş olabilir. Bu nedenle yalnızca tek bir ürün adıyla arama yapmak çoğu zaman yeterli değildir.",
+            "{{appName}}, ürün adını yalnızca kelime olarak değil, ihracat müşteri bulma sürecinde kullanılabilecek ticari veri anahtarı olarak değerlendirir.",
+            "Doğru ürün adı, doğru alıcı firma listesinin başlangıcıdır: Ürününüz dış ticaret kayıtlarında teknik adla, ticari adla, ürün grubu adıyla veya farklı İngilizce karşılıklarla geçebilir. Doğru ürün adı analizi yapılmadan gerçek ithalatçı firmalara ulaşmak zorlaşır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Ürün Adına Göre Araştırmada Hangi Sorulara Cevap Aranır?",
+          "body": [
+            "Ürün adına göre ithalatçı firma araştırmasında amaç yalnızca firma adı bulmak değildir. Ürünün dış ticarette hangi adlarla geçtiğini, hangi ülkelerde alıcı bulunduğunu ve hangi firmaların satış ekibi için öncelikli olabileceğini anlamaktır.",
+            "Bu nedenle ürün adı, alternatif açıklamalar, GTİP / HS kodu bağlantısı, hedef ülke ve alıcı firma geçmişi birlikte değerlendirilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Ürün Adı Doğru Belirlenmeden Doğru Müşteri Bulunamaz",
+          "body": [
+            "İhracat müşteri bulma sürecinde en sık yapılan hatalardan biri ürün adını yanlış veya eksik kullanmaktır. Ürünün Türkçe adıyla doğrudan çeviri yapmak her zaman doğru sonuç vermez.",
+            "Bazı ürünler dış ticarette teknik adla, bazıları ticari adla, bazıları ise daha genel ürün grubu adıyla geçer. Yanlış ürün adıyla yapılan araştırma, yanlış firmalara ulaşmanıza veya gerçek alıcıları kaçırmanıza neden olabilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Ürününüz için doğru alıcı firmaları bulmak istiyorsanız, araştırmaya doğru ürün adı analiziyle başlamak gerekir.",
+          "items": [
+            { "title": "İhracata Başlamak İsteyen Üreticiler", "body": "Ürününü yurt dışına satmak isteyen ve gerçek alıcıları görmek isteyen üreticiler için uygundur." },
+            { "title": "Yurt Dışı Müşteri Arayan KOBİ’ler", "body": "Genel sektör listeleri yerine ürün bazlı ithalatçı firma araştırması yapmak isteyen firmalara uygundur." },
+            { "title": "İngilizce Ürün Karşılığını Netleştirmek İsteyenler", "body": "Ürünün dış ticarette hangi İngilizce adlarla geçtiğini analiz etmek isteyen şirketlere uygundur." },
+            { "title": "GTİP / HS Kodu Bilinmeyen Ürünler", "body": "Kod bilinmese bile ürün adı ve alternatif açıklamalar üzerinden araştırmaya başlanabilir." },
+            { "title": "Mail Marketing Listesi Hazırlamak İsteyenler", "body": "Ürün bazlı hedef ithalatçı firma listesi mail marketing için hazırlanabilir." },
+            { "title": "Telefon Araması Yapacak Satış Ekipleri", "body": "Düzenli alım yapan ve öncelikli görünen firmalar telefon araması listesine alınabilir." },
+            { "title": "LinkedIn Karar Verici Araştırması Yapacaklar", "body": "Bulunan firmalarda satın alma müdürü ve karar verici kişiler araştırılabilir." },
+            { "title": "CRM’e Aktarılabilir Liste İsteyenler", "body": "Firma, ürün, iletişim ve takip bilgileri CRM sistemine uygun formatta düzenlenebilir." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Ürün Adına Göre İthalatçı Firma Araştırmasında Hangi Alanlar İncelenir?",
+          "intro": "Araştırma; ürün adı, alternatif açıklamalar, dış ticaret kayıtları, GTİP / HS bağlantısı, hedef ülke, alıcı firma ve satış takip yapısı açısından birlikte planlanır.",
+          "items": [
+            { "title": "Ürünün Türkçe ve İngilizce Adının Analizi", "body": "İlk aşama ürünün doğru Türkçe ve İngilizce karşılığının belirlenmesidir: ürünün Türkçe adı, İngilizce adı ve sektörde kullanılan adı; teknik, ticari ve ürün grubu adı; kullanım alanı, ambalaj veya form bilgisi; farklı ülkelerde kullanılan ürün karşılıkları." },
+            { "title": "Alternatif Ürün Adlarının Belirlenmesi", "body": "Aynı ürün farklı firmalar tarafından farklı açıklamalarla kaydedilmiş olabilir: benzer İngilizce ürün adları ve teknik açıklamalar; ticari ürün ifadeleri ve sektörel kullanım kelimeleri; hammadde, ambalaj veya ölçü bazlı tanımlar; yanlış veya eksik yazılmış ürün açıklamaları." },
+            { "title": "Ürün Açıklamalarının Dış Ticaret Verilerinde İncelenmesi", "body": "Ürün adının dış ticaret kayıtlarında nasıl geçtiği incelenir: ürün hangi açıklamayla geçiyor, teknik mi genel mi yazılmış, alakasız ürün açıklamaları ayıklanmalı mı, ürün farklı GTİP / HS kodları altında geçiyor olabilir mi." },
+            { "title": "Ürün Adı ve GTİP / HS Kodunu Birlikte Kullanma", "body": "Bazı durumlarda GTİP / HS koduyla birlikte kullanmak daha doğru sonuç verir: liste daha temiz hale gelir, alakasız firmalar azaltılır, ürün grubu daha doğru analiz edilir, hedef ülkeler ve ithalatçı firmalar daha iyi sınıflandırılır." },
+            { "title": "Hedef Ülke Analizi", "body": "Sadece firma bulmak yeterli değildir; ürün hangi ülkelerde ithal ediliyor, hangi ülkelerde daha fazla alıcı firma var, hangi ülkelerde düzenli alım yapan firmalar bulunuyor ve hangi pazarlara mail marketing yapılmalı incelenir." },
+            { "title": "İthalatçı Firmaların Tespit Edilmesi", "body": "Ürün adı ve açıklamaları analiz edildikten sonra bu ürünü ithal eden firmalar tespit edilir: ithalatçı firma adı, ülke ve ürün açıklaması; ithalat tarihi, ürün miktarı ve toplam ticaret değeri; tedarikçi ülke ve ürün açıklamasının uygunluğu; firma potansiyeli ve öncelik durumu." },
+            { "title": "Düzenli Alım Yapan Firmaların Önceliklendirilmesi", "body": "Öncelik düzenli alım yapan firmalara verilmelidir: son ithalat tarihi ve ithalat sıklığı; toplam ithalat miktarı ve ticaret değeri; ürün açıklaması uyumu ve hedef ülke önceliği; iletişim bilgisine ulaşılabilirlik ve satış potansiyeli." },
+            { "title": "Firma Web Sitesi ve Kurumsal İletişim Araştırması", "body": "Firmaya ulaşmak için web sitesi, kurumsal e-posta ve telefon numarası; iletişim formu, genel merkez ve departman bilgileri; satın alma ve ithalat departmanı araştırması; LinkedIn şirket sayfası ve ilgili kişi bilgisi incelenir." },
+            { "title": "Karar Verici Kişi Araştırması", "body": "Ürün adına göre bulunan firmalar üzerinde karar verici kişi araştırması yapılabilir: satın alma müdürü, ithalat sorumlusu ve dış ticaret sorumlusu; tedarik zinciri yöneticisi ve kategori yöneticisi; procurement manager, purchasing manager ve import manager; sourcing manager ve business development manager." },
+            { "title": "Mail Marketing ve Telefon Araması İçin Liste Hazırlama", "body": "Hazırlanan liste mail marketing, telefon araması ve CRM takibi için düzenlenir: firma adı, ülke, ürün açıklaması ve ürün adı eşleşmesi; GTİP / HS kodu, ithalat tarihi, miktarı ve değeri; web sitesi, e-posta, telefon ve ilgili kişi; öncelik seviyesi, takip tarihi ve CRM aşaması." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Ürün Adına Göre İthalatçı Firma Bulma Süreci Nasıl İlerler?",
+          "intro": "Süreç ürün bilgisinin alınmasıyla başlar. Ardından ürün adı analizi, alternatif açıklamalar, dış ticaret verileri, hedef ülkeler, ithalatçı firmalar, iletişim bilgileri ve satış takip planı birlikte hazırlanır.",
+          "steps": [
+            { "n": 1, "title": "Ürün Bilgisi Alınır", "body": "Ürünün Türkçe adı, İngilizce adı, kullanım alanı, teknik özellikleri, hedef ülkeleri ve varsa GTİP / HS kodu değerlendirilir." },
+            { "n": 2, "title": "Ürün Adı Analizi Yapılır", "body": "Ürünün dış ticarette hangi isimlerle geçtiği, alternatif İngilizce karşılıkları ve sektörel ürün açıklamaları incelenir." },
+            { "n": 3, "title": "Veri Araştırması Yapılır", "body": "Ürün adı, alternatif ürün açıklamaları ve gerekirse GTİP / HS kodu üzerinden dış ticaret verileri analiz edilir." },
+            { "n": 4, "title": "Hedef Ülkeler Belirlenir", "body": "Ürünü ithal eden ülkeler ve bu ülkelerdeki alıcı firma yoğunluğu değerlendirilir." },
+            { "n": 5, "title": "İthalatçı Firmalar Listelenir", "body": "Ürünü veya benzer ürünleri ithal eden firmalar, ithalat geçmişleriyle birlikte düzenlenir." },
+            { "n": 6, "title": "Liste Temizliği ve Önceliklendirme Yapılır", "body": "Alakasız firmalar ayıklanır, düzenli alım yapan ve ürün açıklaması uyumlu firmalar önceliklendirilir." },
+            { "n": 7, "title": "İletişim Bilgileri Araştırılır", "body": "Firma web sitesi, kurumsal e-posta, telefon ve karar verici kişi bilgileri araştırılır." },
+            { "n": 8, "title": "Satış Takip Planı Oluşturulur", "body": "Mail marketing, telefon araması, LinkedIn araştırması, teklif takibi ve CRM süreci planlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Ürün Adı Yanlış Seçilirse Ne Olur?",
+          "intro": "Ürün adı yanlış seçilirse araştırma sonucu yanıltıcı olabilir. Bu durumda satış ekibi yanlış firmalara ulaşabilir veya gerçek alıcıları kaçırabilir.",
+          "items": [
+            "Alakasız ithalatçı firmalar listelenir",
+            "Gerçek alıcı firmalar bulunamaz",
+            "Hedef ülkeler yanlış belirlenir",
+            "Mail marketing dönüş oranı düşer",
+            "Satış ekibi zaman kaybeder",
+            "Telefon aramaları verimsiz olur",
+            "CRM listesi kalitesiz hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Ürün Adı ile Bulunan Firmalar Kesin Müşteri midir?",
+          "intro": "Hayır. Ürün adına göre bulunan firmalar, ilgili ürünü veya benzer ürünleri geçmişte ithal etmiş olabilecek potansiyel alıcı firmalardır. Bu firmalar kesin müşteri garantisi vermez.",
+          "items": [
+            "Doğru ürün adı analizi yapılmalıdır",
+            "Hedef ülke seçimi dikkatli yapılmalıdır",
+            "Alıcı firma listesi temizlenmelidir",
+            "Kurumsal iletişim bilgileri araştırılmalıdır",
+            "İngilizce tanıtım maili hazırlanmalıdır",
+            "Telefon araması ve LinkedIn takibi yapılmalıdır",
+            "CRM ile düzenli satış süreci kurulmalıdır"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Ürün Adına Göre İthalatçı Firma Bulmanın Avantajları",
+          "items": [
+            "Ürününüzü ithal eden firmaları analiz edebilirsiniz",
+            "Ürünün dış ticarette hangi adlarla geçtiğini öğrenebilirsiniz",
+            "Hedef ülkeleri daha bilinçli belirleyebilirsiniz",
+            "GTİP / HS kodu bilinmese bile araştırmaya başlayabilirsiniz",
+            "Alternatif ürün adlarıyla daha geniş alıcı listesi oluşturabilirsiniz",
+            "Düzenli alım yapan ithalatçıları önceliklendirebilirsiniz",
+            "Mail marketing için hedefli firma listesi hazırlayabilirsiniz",
+            "Telefon araması yapılacak firmaları belirleyebilirsiniz",
+            "LinkedIn üzerinden karar verici kişi araştırması yapabilirsiniz",
+            "CRM’e aktarılabilir müşteri verisi elde edebilirsiniz"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Ürün Adına Göre İthalatçı Firma Bulmada Sık Yapılan Hatalar",
+          "items": [
+            "Ürünün İngilizce adını doğrudan çeviriyle belirlemek",
+            "Alternatif ürün adlarını araştırmamak",
+            "Dış ticaret kayıtlarındaki ürün açıklamalarını incelememek",
+            "GTİP / HS kodu bağlantısını kontrol etmemek",
+            "Benzer ama farklı ürünleri aynı listeye almak",
+            "Alakasız firmaları liste dışı bırakmamak",
+            "Tek seferlik ithalat yapan firmalara öncelik vermek",
+            "İletişim bilgilerini doğrulamadan mail göndermek",
+            "Karar verici kişi araştırması yapmamak",
+            "Listeyi CRM’e aktarmamak"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Ürün Adına Göre İthalatçı Firma Bulma Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Ürün adına göre ithalatçı firma bulma kimler için uygundur?", "a": "Bu hizmet; ihracata başlamak isteyen üretici firmalar, yurt dışı müşteri arayan KOBİ’ler, ürününü hangi firmaların ithal ettiğini öğrenmek isteyen şirketler ve mail marketing için hedef alıcı listesi hazırlamak isteyen ihracatçılar için uygundur." },
+            { "q": "Ürün adıyla gerçek ithalatçı firma bulunabilir mi?", "a": "Evet. Ürünün doğru İngilizce adı, alternatif ürün açıklamaları ve dış ticaret verileri analiz edilerek ilgili ürünü ithal eden firmalar tespit edilebilir. Ancak her firma güncel müşteri olmayabilir; satış takibi ayrıca yapılmalıdır." },
+            { "q": "Ürünün İngilizce adını bilmiyorsak çalışma yapılabilir mi?", "a": "Evet. Ürünün Türkçe adı, kullanım alanı, teknik özellikleri ve sektör bilgisi üzerinden İngilizce karşılıklar ve alternatif dış ticaret açıklamaları araştırılabilir." },
+            { "q": "Sadece ürün adıyla araştırma yapmak yeterli mi?", "a": "Her zaman yeterli olmayabilir. Bazı ürünlerde ürün adı ile GTİP / HS kodu birlikte değerlendirilmelidir. Bu sayede liste daha doğru ve temiz hale gelir." },
+            { "q": "GTİP / HS kodu olmadan ithalatçı firma bulunabilir mi?", "a": "Bazı durumlarda evet. Ürün adı ve alternatif açıklamalarla araştırma yapılabilir. Ancak daha doğru sonuç için GTİP / HS kodu da değerlendirilmelidir." },
+            { "q": "Alıcı firma listesinde hangi bilgiler bulunur?", "a": "Liste içinde firma adı, ülke, ürün açıklaması, ithalat tarihi, miktar, ticaret değeri, web sitesi, kurumsal e-posta, telefon, ilgili kişi ve takip notları bulunabilir." },
+            { "q": "Karar verici kişi bilgileri de araştırılır mı?", "a": "Evet. İthalatçı firma listesi hazırlandıktan sonra satın alma müdürü, ithalat sorumlusu, procurement manager, purchasing manager veya ilgili departman kişileri için kurumsal iletişim araştırması yapılabilir." },
+            { "q": "Bulunan firmalara mail marketing yapılabilir mi?", "a": "Evet. Firma listesi ülke, ürün, alım potansiyeli ve iletişim bilgilerine göre düzenlenerek mail marketing çalışması için kullanılabilir." },
+            { "q": "Ürün adına göre bulunan firmalar kesin müşteri olur mu?", "a": "Hayır. Bu çalışma kesin müşteri garantisi vermez. Ancak rastgele firma aramak yerine ürününüzle ilgili ithalat geçmişi olan firmalara ulaşmayı sağlar." },
+            { "q": "Bulunan firmalar CRM’e aktarılabilir mi?", "a": "Evet. Firma adı, ülke, ürün açıklaması, e-posta, telefon, ilgili kişi, mail gönderim tarihi, arama sonucu, teklif talebi ve takip tarihi gibi bilgiler CRM’e aktarılabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Ürününüz İçin Doğru Alıcı Firmaları Birlikte Bulalım",
+        "body": "Ürününüz için doğru ürün adıyla ithalatçı firma araştırması yapmadan ihracat müşteri bulma sürecine başlıyorsanız, gerçek alıcı firmaları kaçırıyor olabilirsiniz. {{appName}} Ürün Adına Göre İthalatçı Firma Bulma hizmeti ile ürününüzün dış ticarette hangi adlarla geçtiğini analiz edelim, hedef ülkeleri belirleyelim ve satış ekibinizin kullanabileceği profesyonel ithalatçı firma listesi oluşturalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

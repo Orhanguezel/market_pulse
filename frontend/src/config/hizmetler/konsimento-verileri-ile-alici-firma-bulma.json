@@ -1,0 +1,170 @@
+{
+  "slug": "konsimento-verileri-ile-alici-firma-bulma",
+  "category": "ihracat-musteri-bulma",
+  "module": "discover-customs",
+  "order": 30,
+  "icon": "Ship",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Konşimento Verileri ile Alıcı Firma Bulma | Gerçek İthalatçı Firmalara Ulaşın",
+        "description": "Konşimento verileri, gümrük kayıtları, GTİP / HS kodu ve ürün adına göre gerçek ithalat yapan yurt dışı alıcı firmaları bulun. İhracat müşteri bulma sürecinizi veriye dayalı şekilde yönetin.",
+        "ogTitle": "Konşimento Verileri ile Alıcı Firma Bulma | {{appName}}",
+        "ogDescription": "Ürününüzü veya benzer ürünleri geçmişte ithal etmiş gerçek yurt dışı alıcı firmaları konşimento, gümrük verisi, ürün adı ve GTİP / HS kodu ile analiz edin."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "Konşimento Verileri ile Alıcı Firma Bulma",
+        "lead": "Yurt dışına ihracat yapmak istiyor ama ürününüzü gerçekten satın alan ithalatçı firmalara nasıl ulaşacağınızı bilmiyor musunuz? Rastgele firma listeleriyle zaman kaybetmek yerine, geçmişte ürününüzü veya benzer ürünleri ithal etmiş gerçek alıcı firmaları analiz ederek daha doğru hedef müşterilere ulaşabilirsiniz. {{appName}} olarak konşimento verileri, gümrük kayıtları, ithalat verileri, GTİP / HS kodu ve ürün adına göre yurt dışındaki alıcı firmaları araştırıyor; ithalat yapan firmaları, sevkiyat ülkelerini, ürün açıklamalarını, ithalat miktarlarını ve ticaret hacimlerini analiz ederek ihracat müşteri bulma sürecinizi daha hedefli hale getiriyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Konşimento Verileri ile Alıcı Firma Bulma Nedir?",
+          "body": [
+            "Konşimento verileri ile alıcı firma bulma, geçmiş ithalat ve ihracat kayıtlarını analiz ederek belirli bir ürünü, ürün grubunu veya GTİP / HS kodunu ithal eden yurt dışı firmaları tespit etme yöntemidir.",
+            "Dış ticaret verileri içinde alıcı firma, tedarikçi firma, ürün açıklaması, ürün miktarı, sevkiyat ülkesi, tarih, GTİP / HS kodu ve ticaret hacmi gibi bilgiler yer alabilir.",
+            "{{appName}}, bu verileri ihracat müşteri bulma sürecine uygun şekilde analiz ederek şirketinize hedeflenmiş alıcı firma listeleri oluşturur.",
+            "Rastgele firma aramak yerine ithalat geçmişi olan firmalara odaklanın: Ürün adı, GTİP / HS kodu, ülke, sevkiyat tarihi, ithalat sıklığı ve ürün açıklaması gibi veriler analiz edilerek satış ekibiniz için daha anlamlı hedef alıcı listeleri oluşturulabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Konşimento Verileri Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Konşimento, gümrük ve ithalat verileri doğru analiz edildiğinde ihracat müşteri bulma süreciniz tahmine değil, gerçek dış ticaret hareketlerine dayanır.",
+            "Bu yapı, hangi ürün adıyla arama yapılması gerektiğini, hangi ülkelerde alıcı potansiyeli olduğunu ve hangi firmaların düzenli ithalat yaptığını daha net görmenize yardımcı olur."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Rastgele Firma Listesi Değil, Gerçek İthalat Geçmişi Olan Alıcılar",
+          "intro": "İhracat yapmak isteyen birçok firma internetten rastgele şirket arar, genel firma dizinlerinden liste toplar veya ürünle ilgisi net olmayan firmalara e-posta gönderir. Konşimento verileriyle çalışmanın en büyük avantajı, hedef firmaların geçmişte gerçekten ithalat yapmış olmasıdır. Bu yaklaşım, ihracat müşteri bulma sürecini daha profesyonel ve ölçülebilir hale getirir.",
+          "items": [
+            "Rastgele firma yerine gerçek ithalatçı analiz edilir",
+            "Genel sektör listesi yerine ürün bazlı alıcı bulunur",
+            "Tahmine dayalı pazar araştırması yerine veri odaklı analiz yapılır",
+            "Sadece firma adı değil, ithalat geçmişi de değerlendirilir",
+            "Hangi ülkeye odaklanılması gerektiği daha net görülür",
+            "Satış ekibi daha doğru hedef müşterilere ulaşır"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Ürününüz için doğru alıcı firmaları bulmak istiyorsanız, konşimento verileri ihracat müşteri bulma sürecinde güçlü bir başlangıç noktası olabilir.",
+          "items": [
+            { "title": "İhracata Başlamak İsteyen Üreticiler", "body": "Ürününü hangi ülkelerin ithal ettiğini ve hangi firmaların aldığını görmek isteyen üreticiler için uygundur." },
+            { "title": "Yurt Dışı Müşteri Arayan KOBİ’ler", "body": "Rastgele firma listeleri yerine veriyle desteklenmiş alıcı listesi oluşturmak isteyen KOBİ’lere uygundur." },
+            { "title": "GTİP / HS Koduyla Araştırma Yapmak İsteyenler", "body": "Doğru kodla ürün grubunu ithal eden firmaları bulmak isteyen ihracatçılar için uygundur." },
+            { "title": "Gerçek İthalatçı Firmalara Ulaşmak İsteyenler", "body": "Geçmişte ithalat yaptığı görülen firmalarla çalışmak isteyen şirketler için uygundur." },
+            { "title": "Mail Marketing Listesi Hazırlayanlar", "body": "E-posta kampanyaları için daha hedefli müşteri listesi oluşturmak isteyen ihracat ekiplerine uygundur." },
+            { "title": "Telefon Araması Yapacak Satış Ekipleri", "body": "Aranacak firmaları ithalat geçmişine göre önceliklendirmek isteyen satış ekipleri için uygundur." },
+            { "title": "Fuar Öncesi Hedef Liste İsteyenler", "body": "Fuar öncesinde gerçek alıcı potansiyeli olan firmaları belirlemek isteyen şirketler için uygundur." },
+            { "title": "Mevcut İhracat Pazarını Büyütmek İsteyenler", "body": "Yeni ülke, yeni alıcı ve yeni ithalatçı firma fırsatlarını görmek isteyen şirketler için uygundur." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Konşimento Verileri ile Alıcı Firma Araştırmasında Neler Yapıyoruz?",
+          "intro": "{{appName}}, ürününüzün dış ticaret verilerinde nasıl geçtiğini, hangi ülkelerde alıcı potansiyeli olduğunu ve hangi firmaların satış sürecine alınabileceğini analiz eder.",
+          "items": [
+            { "title": "Ürün Adına Göre Alıcı Firma Bulma", "body": "Ürünün İngilizce adı, ticari kullanım şekli, sektörel karşılığı ve dış ticaret kayıtlarında geçen alternatif isimleri analiz edilir; ürünün dış ticaret kayıtlarında hangi adla geçtiği, alıcı firmaların ürünü hangi açıklamalarla ithal ettiği, farklı İngilizce karşılıkları ve hangi ülkelerde ithalat hareketi olduğu incelenir." },
+            { "title": "GTİP / HS Koduna Göre Alıcı Firma Bulma", "body": "Doğru kod ile ürün grubunu ithal eden firmalara hedefli şekilde ulaşılır; hangi ülkeler ve firmalar bu kodla alım yapıyor, ithalat tarihleri güncel mi ve benzer HS kodları da incelenmeli mi değerlendirilir." },
+            { "title": "Ülke Bazlı İthalatçı Firma Analizi", "body": "Her ürün her ülkede aynı potansiyele sahip değildir; hangi ülkeler bu ürünü ithal ediyor, hangi ülkelerde ithalat hacmi daha yüksek, hangi ülkelerde düzenli alıcı firmalar var ve ilk ihracat denemesi için hangi ülkeler daha uygun olabilir incelenir." },
+            { "title": "Düzenli İthalat Yapan Firmaların Tespiti", "body": "Düzenli ithalat yapan firmalar potansiyel müşteri olarak daha dikkatli incelenir; firma kaç kez ve hangi tarihlerde ithalat yapmış, toplam ithalat miktarı ve değeri ne, son ithalat tarihi güncel mi değerlendirilir." },
+            { "title": "Ürün Açıklaması Analizi", "body": "Aynı ürün farklı firmalar tarafından farklı kelimelerle kaydedilmiş olabilir; ürünün İngilizce adı ve alternatif ticari adları, teknik açıklamalar ve sektörel kullanım ifadeleri, kısaltmalar, yanlış veya eksik yazılmış ürün adları ile benzer ürün açıklamaları incelenir." },
+            { "title": "Rakip ve Tedarikçi Analizi", "body": "Konşimento ve dış ticaret verileri pazar yapısını anlamak için de kullanılır; benzer ürünleri hangi firmalar ihraç ediyor, alıcı firmalar hangi ülkelerden tedarik yapıyor, hangi alıcılar birden fazla tedarikçiyle çalışıyor ve hangi ülkelerde rakip hareketi daha yoğun değerlendirilir." },
+            { "title": "Alıcı Firma Önceliklendirme", "body": "Yüzlerce hatta binlerce firma içinde son ithalat tarihi, ithalat sıklığı ve toplam ithalat değeri; ürün açıklamasının uygunluğu ve hedef ülke önceliği; firma türü ve düzenli alım potansiyeli; ulaşılabilir iletişim bilgisi ve teklif sürecine uygunluğa göre sınıflandırma yapılır." },
+            { "title": "Alıcı Firma Listesi Hazırlama", "body": "Satış ve ihracat ekibinin kullanabileceği düzenli hedef liste hazırlanır: alıcı firma adı, ülke, ürün açıklaması ve GTİP / HS kodu; ithalat tarihi, miktarı, değeri ve tedarikçi ülke; firma web sitesi, kurumsal e-posta ve telefon bilgisi; notlar, öncelik durumu ve takip önerisi." },
+            { "title": "Karar Verici Kişi ve İletişim Araştırması", "body": "Doğru kişiye ulaşmak için satın alma müdürü, ithalat sorumlusu ve dış ticaret sorumlusu; procurement manager, import manager ve purchasing manager; supply chain manager, kategori yöneticisi ve genel müdür; web sitesi, LinkedIn ve açık kaynak iş profilleri üzerinden iletişim araştırması yapılabilir." },
+            { "title": "CRM ve Mail Marketing Sürecine Aktarma", "body": "Liste Excel dosyasında kalırsa takip zayıflar; firma, ülke, ürün grubu, GTİP / HS kodu ve ilgili kişi bilgisi; mail gönderim tarihi ve telefon araması durumu; teklif talebi, numune talebi ve takip tarihi; satış temsilcisi, satış aşaması ve siparişe dönüşme durumu CRM sürecine aktarılır." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Konşimento Verileri ile İhracat Müşteri Bulma Süreci Nasıl İlerler?",
+          "intro": "Süreç ürün analizinden başlar; ürün adı, İngilizce karşılıklar, GTİP / HS kodu, ülke bazlı ithalatçı analizi, firma listesi, iletişim araştırması ve CRM takip planıyla devam eder.",
+          "steps": [
+            { "n": 1, "title": "Ürün Analizi", "body": "Şirketinizin ürünü, ürün adı, İngilizce karşılığı, kullanım alanı ve varsa GTİP / HS kodu değerlendirilir." },
+            { "n": 2, "title": "Veri Kapsamı Kontrolü", "body": "Ürün, ülke ve dönem bazında dış ticaret verilerinde anlamlı sonuç olup olmadığı kontrol edilir." },
+            { "n": 3, "title": "Ürün Adı ve HS Kod Araştırması", "body": "Doğru ürün adı, alternatif ürün açıklamaları ve ilgili GTİP / HS kodları analiz edilir." },
+            { "n": 4, "title": "Ülke Bazlı Alıcı Firma Analizi", "body": "Ürünü ithal eden ülkeler ve bu ülkelerdeki potansiyel alıcı firmalar incelenir." },
+            { "n": 5, "title": "Alıcı Firma Listesi Hazırlığı", "body": "Gerçek ithalat geçmişi olan firmalar düzenlenir, tekrar eden ve yüksek potansiyelli firmalar önceliklendirilir." },
+            { "n": 6, "title": "İletişim Bilgisi Araştırması", "body": "Firma web siteleri, kurumsal iletişim kanalları ve açık kaynaklar üzerinden iletişim bilgileri araştırılır." },
+            { "n": 7, "title": "CRM ve Satış Takip Planı", "body": "Alıcı firmalar CRM’e veya takip dosyasına aktarılır. Mail marketing, telefon araması ve teklif süreci planlanır." },
+            { "n": 8, "title": "Raporlama ve Strateji", "body": "Hangi ülkelere, hangi firmalara ve hangi ürün adıyla odaklanılması gerektiği değerlendirilir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Veriler Kesin Müşteri Garantisi Verir mi?",
+          "body": [
+            "Konşimento verileri birçok farklı ürün grubu için kullanılabilir. Ancak veri kapsamı ürün türüne ve ülkeye göre değişebilir; bu nedenle her ürün için ön analiz yapılması gerekir.",
+            "Konşimento verileri tek başına müşteri kazandıran sihirli bir yöntem değildir. Asıl sonuç, doğru analiz edilen alıcı listesinin profesyonel satış çalışmalarıyla takip edilmesiyle alınır.",
+            "Hayır. Konşimento verileri veya dış ticaret kayıtları kesin müşteri garantisi vermez. Ancak rastgele müşteri aramak yerine geçmişte ithalat yaptığı görülen firmalara ulaşmayı sağlar. Sonuç almak için veri analizi, doğru iletişim, profesyonel takip ve düzenli satış süreci birlikte yürütülmelidir."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Konşimento Verileri ile Alıcı Firma Bulmanın Avantajları",
+          "items": [
+            "Gerçek ithalat geçmişi olan firmalara ulaşabilirsiniz",
+            "Ürününüzü hangi ülkelerin ithal ettiğini görebilirsiniz",
+            "GTİP / HS koduna göre hedef müşteri listesi oluşturabilirsiniz",
+            "Rastgele firma aramak yerine veriye dayalı çalışabilirsiniz",
+            "Düzenli ithalat yapan firmaları önceliklendirebilirsiniz",
+            "Mail marketing için daha doğru hedef liste hazırlayabilirsiniz",
+            "Telefon araması yapılacak firmaları belirleyebilirsiniz",
+            "Fuar öncesi hedef alıcı listesi oluşturabilirsiniz",
+            "CRM sistemiyle takip edilebilir müşteri listesi oluşturabilirsiniz",
+            "Yurt dışı pazarlara daha bilinçli açılabilirsiniz"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Konşimento Verileri Kullanırken Sık Yapılan Hatalar",
+          "items": [
+            "Yanlış GTİP / HS kodu ile arama yapmak",
+            "Ürün adının İngilizce karşılığını yanlış kullanmak",
+            "Benzer ama farklı ürünleri aynı listeye almak",
+            "Tek seferlik ithalat yapan firmaları yüksek potansiyelli sanmak",
+            "Güncel olmayan verileri dikkate almak",
+            "Firma iletişim bilgilerini doğrulamadan mail göndermek",
+            "Alıcı firma listelerini CRM’e aktarmamak",
+            "Mail marketing sonrası takip yapmamak",
+            "Telefon aramalarını kayıt altına almamak",
+            "Veriyi satış süreciyle birleştirmemek"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Konşimento Verileri ile Alıcı Firma Bulma Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Konşimento verileri ile alıcı firma bulma kimler için uygundur?", "a": "Bu hizmet; ihracat yapmak isteyen üretici firmalar, yurt dışı müşteri arayan KOBİ’ler, GTİP / HS koduna göre ithalatçı firma bulmak isteyen ihracatçılar ve gerçek alıcı firma listesi oluşturmak isteyen şirketler için uygundur." },
+            { "q": "Konşimento verileri nedir?", "a": "Konşimento verileri, uluslararası ticarette ürün sevkiyatlarına ait dış ticaret kayıtlarıdır. Bu verilerde alıcı firma, tedarikçi firma, ürün açıklaması, sevkiyat tarihi, ülke, miktar, değer ve GTİP / HS kodu gibi bilgiler yer alabilir." },
+            { "q": "Bu verilerle gerçek ithalatçı firmalar bulunabilir mi?", "a": "Evet. Konşimento ve dış ticaret verileri analiz edilerek geçmişte belirli ürünleri ithal etmiş firmalar tespit edilebilir. Ancak her firma güncel alıcı olmayabilir; bu nedenle firma listesi ayrıca değerlendirilmelidir." },
+            { "q": "GTİP / HS kodu ile müşteri bulunabilir mi?", "a": "Evet. Doğru GTİP / HS kodu ile belirli ürün grubunu ithal eden firmalar araştırılabilir. Kodun doğru seçilmesi alıcı firma listesinin kalitesi açısından önemlidir." },
+            { "q": "Ürün adıyla ithalatçı firma bulunabilir mi?", "a": "Evet. Ürünün İngilizce adı, alternatif ürün açıklamaları ve sektörel karşılıkları üzerinden ithalat yapan firmalar araştırılabilir." },
+            { "q": "Hangi ülkelerde alıcı firma bulunabilir?", "a": "Veri kapsamı ürüne ve ülkeye göre değişebilir. Analiz öncesinde ürününüz için hangi ülkelerde anlamlı veri olduğu kontrol edilmelidir." },
+            { "q": "Alıcı firma listesinde hangi bilgiler olur?", "a": "Liste içinde alıcı firma adı, ülke, ürün açıklaması, GTİP / HS kodu, ithalat tarihi, miktar, değer, firma web sitesi, kurumsal iletişim bilgileri ve takip notları yer alabilir." },
+            { "q": "Karar verici kişileri de buluyor musunuz?", "a": "Alıcı firma listesi hazırlandıktan sonra satın alma müdürü, ithalat sorumlusu, procurement manager, import manager veya ilgili departman kişileri için kurumsal iletişim araştırması yapılabilir." },
+            { "q": "Bu yöntem kesin müşteri getirir mi?", "a": "Hayır. Konşimento verileri kesin müşteri garantisi vermez. Ancak rastgele firma aramak yerine geçmişte ithalat yapmış firmalara ulaşmayı sağlar. Sonuç almak için doğru iletişim, mail marketing, telefon araması ve düzenli takip gerekir." },
+            { "q": "Bulunan firmalar CRM’e aktarılabilir mi?", "a": "Evet. Alıcı firma listesi CRM’e aktarılabilir; mail gönderimi, telefon araması, teklif takibi, numune talebi ve satış aşamaları CRM üzerinden yönetilebilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Rastgele Müşteri Aramak Yerine Veriye Dayalı İhracat Müşteri Bulma Sürecine Başlayın",
+        "body": "Ürününüzü gerçekten ithal eden firmalara ulaşmadan ihracat müşteri bulma sürecine başlıyorsanız, zamanınızı yanlış firmalara harcıyor olabilirsiniz. {{appName}} Konşimento Verileri ile Alıcı Firma Bulma hizmeti ile ürününüzü ithal eden gerçek alıcı firmaları analiz edelim, hedef ülkeleri belirleyelim ve satış ekibinizin kullanabileceği profesyonel müşteri listesi oluşturalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

@@ -1,0 +1,199 @@
+{
+  "slug": "ekipler-icin-crm",
+  "category": "crm-satis",
+  "module": "crm",
+  "order": 50,
+  "icon": "Users",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Ekipler İçin CRM | Satış, Pazarlama, İhracat, Operasyon ve Yönetim Ekipleri İçin CRM Sistemi",
+        "description": "Satış, pazarlama, ihracat, müşteri hizmetleri, operasyon ve yönetim ekiplerinizin müşteri takibi, görevleri, teklifleri ve raporları tek CRM sistemi üzerinden yönetmesini sağlayın.",
+        "ogTitle": "Ekipler İçin CRM | {{appName}}",
+        "ogDescription": "Satış, pazarlama, ihracat, operasyon, e-ticaret, müşteri hizmetleri ve yönetim ekiplerinizi tek CRM sistemi üzerinde buluşturun."
+      },
+      "hero": {
+        "eyebrow": "CRM ve Satış",
+        "title": "Ekipler İçin CRM",
+        "lead": "Şirketinizde satış ekibi ayrı, pazarlama ekibi ayrı, operasyon ekibi ayrı, yönetim ise tüm süreci farklı dosyalardan mı takip ediyor? Müşteri bilgileri farklı kişilerde kalıyor, teklifler satış ekibinde duruyor, kampanya sonuçları pazarlamada kalıyor, sipariş sonrası süreç operasyon ekibine geç aktarılıyor ve yönetici gerçek tabloyu görmekte zorlanıyorsa şirketinizin ekipler arası CRM yapısına ihtiyacı vardır. {{appName}} Ekipler İçin CRM hizmeti ile satış, pazarlama, ihracat, e-ticaret, operasyon, müşteri hizmetleri ve yönetim ekiplerinizin aynı müşteri verisi üzerinde daha düzenli çalışmasını sağlıyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Kurulum süreci nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Ekipler İçin CRM Nedir?",
+          "body": [
+            "Ekipler için CRM, şirket içindeki farklı departmanların müşteri, satış, teklif, görev, kampanya, operasyon ve raporlama süreçlerini aynı sistem üzerinde yönetmesini sağlayan müşteri ilişkileri yönetimi yapısıdır.",
+            "CRM yalnızca satış ekibinin kullandığı bir müşteri takip sistemi olarak düşünülmemelidir. Doğru kurgulandığında CRM; satış, pazarlama, ihracat, müşteri hizmetleri, operasyon, e-ticaret ve yönetim ekiplerinin birlikte çalıştığı ortak iş platformuna dönüşür.",
+            "{{appName}} olarak ekiplerinizin çalışma düzenine uygun CRM yapısı planlıyor, müşteri yönetimi ve satış süreçlerinizi ekip bazlı daha sistemli hale getirmenize destek oluyoruz.",
+            "Satış, pazarlama, ihracat, operasyon, e-ticaret, müşteri hizmetleri ve yönetim ekipleri aynı CRM sistemi üzerinden görevlerini, müşteri geçmişini, teklifleri, kampanyaları ve raporları takip edebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Şirketlerde Ekipler Arası CRM Neden Gereklidir?",
+          "body": [
+            "Birçok şirkette müşteri süreci tek bir ekipte başlamaz ve tek bir ekipte bitmez. Pazarlama ekibi müşteri adayı oluşturur, satış ekibi müşteriyle görüşür, operasyon ekibi sipariş sürecini yürütür, müşteri hizmetleri satış sonrası destek verir.",
+            "Bu ekipler aynı sistemde çalışmıyorsa bilgi kopukluğu oluşur. Ekipler için CRM yapısı, bu kopuklukları azaltmak ve şirketin müşteri yönetimini daha kurumsal hale getirmek için kullanılır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Şirketinizde bir müşteriyle birden fazla ekip ilgileniyorsa, CRM yapınız ekipler arası çalışmaya uygun olmalıdır.",
+          "items": [
+            { "title": "Satış Ekibi Bulunan Şirketler", "body": "Satış temsilcilerinin müşteri adaylarını, teklifleri ve görevleri tek sistemde takip etmesini sağlar." },
+            { "title": "Pazarlama ve Satışı Birlikte Yönetmek İsteyenler", "body": "Kampanya sonuçlarının satış sürecine düzenli aktarılmasına yardımcı olur." },
+            { "title": "İhracat, Operasyon ve Satışı Birleştirmek İsteyenler", "body": "Yurt dışı müşteri, teklif, proforma, nakliye ve sevkiyat süreçlerini bir araya getirir." },
+            { "title": "Müşteri Hizmetlerini Kayıt Altına Almak İsteyenler", "body": "Satış sonrası destek, şikayet, memnuniyet ve geri bildirim süreçlerini yönetir." },
+            { "title": "E-ticaret ve B2B Platform Taleplerini Yönetenler", "body": "Farklı platformlardan gelen müşteri taleplerini CRM sistemine bağlar." },
+            { "title": "Tekliften Siparişe Geçişte Kopukluk Yaşayanlar", "body": "Onaylanan tekliflerin operasyon ekibine doğru bilgiyle aktarılmasını kolaylaştırır." },
+            { "title": "Yönetici Raporlarını Net Görmek İsteyenler", "body": "Satış, kampanya, görev, teklif ve operasyon raporlarını daha görünür hale getirir." },
+            { "title": "Müşteri Bilgisinin Şirkette Kalmasını İsteyenler", "body": "Müşteri bilgisini kişilere bağlı olmaktan çıkarıp kurumsal hafızaya taşır." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Ekipler İçin CRM ile Hangi Departmanlar Yönetilebilir?",
+          "body": [
+            "Ekipler için CRM yapısı şirketinizin organizasyonuna göre farklı departmanları kapsayabilir. Her ekibin CRM içindeki rolü, görevleri, yetkileri ve göreceği alanlar şirket yapısına göre planlanmalıdır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Ekipler CRM İçinde Hangi Süreçleri Yönetebilir?",
+          "intro": "{{appName}}, CRM yapısını şirketinizin ekip düzenine göre planlar. Her ekip kendi sorumluluklarını görürken, müşteri süreci şirket genelinde tek merkezden takip edilir.",
+          "items": [
+            { "title": "Satış Ekibi İçin CRM", "body": "Satış ekibi CRM sisteminin en aktif kullanıcılarından biridir. Satış temsilcileri müşteri adaylarını, görüşmeleri, teklifleri, takip tarihlerini ve satış fırsatlarını CRM üzerinden yönetebilir. Müşteri adayı kaydı ve satış temsilcisine müşteri atama, telefon görüşme notları ve teklif gönderim durumu, teklif sonrası takip görevleri ve satış aşamaları, açık fırsatlar, kazanılan ve kaybedilen satışlar bu kapsamda yer alır." },
+            { "title": "Pazarlama Ekibi İçin CRM", "body": "Pazarlama ekibi müşteri adayı oluşturan kanalları yönetir. Pazarlama çalışmalarının gerçek değeri, satışa ne kadar katkı sağladığı ölçüldüğünde ortaya çıkar. Kampanya kaynakları ve mail marketing dönüşleri, web sitesi form talepleri ve LinkedIn kampanya sonuçları, fuar öncesi ve sonrası müşteri listeleri, satış ekibine aktarılan leadler ve kampanya performans raporları bu kapsamda yer alır." },
+            { "title": "İhracat Ekibi İçin CRM", "body": "İhracat süreçlerinde çok sayıda ülke, alıcı firma, ilgili kişi, ürün, GTİP / HS kodu, teklif, proforma ve takip süreci aynı anda yürütülür. Yurt dışı alıcı firma kayıtları ve ülke bazlı müşteri listeleri, konşimento verileri ve GTİP / HS koduna göre müşteri grupları, mail marketing, telefon aramaları ve İngilizce teklif talepleri, proforma, numune, teslim, ödeme, nakliye ve sevkiyat bilgileri bu kapsamda yer alır." },
+            { "title": "Operasyon Ekibi İçin CRM", "body": "Satış tamamlandığında süreç operasyon ekibine geçer. Satıştan operasyona bilgi eksik aktarılırsa müşteri memnuniyeti ve teslimat süreci zarar görebilir. Siparişe dönüşen teklifler ve müşteri talepleri, ürün veya hizmet kapsamı, teslim tarihi ve ödeme durumu, ürün hazırlık süreci, nakliye ve teslimat bilgileri, gümrük evrak takipleri ve müşteri bilgilendirme notları bu kapsamda yer alır." },
+            { "title": "Müşteri Hizmetleri Ekibi İçin CRM", "body": "Müşteri hizmetleri ekibi, satış sonrası müşteri memnuniyetini ve destek taleplerini yönetir. CRM sistemi sayesinde müşteriyle ilgili geçmiş satış ve iletişim bilgilerine ulaşılabilir. Müşteri iletişim geçmişi ve satış sonrası destek talepleri, şikayet kayıtları ve ürün veya hizmet geri bildirimleri, teslimat sonrası memnuniyet takibi, destek taleplerinin sorumlu kişiye atanması bu kapsamda yer alır." },
+            { "title": "E-ticaret Ekibi İçin CRM", "body": "E-ticaret ve pazaryeri süreçlerinde müşteri talepleri farklı kanallardan gelebilir. Bu talepler sistemli takip edilmezse müşteri kaybı yaşanabilir. Trendyol, Amazon, Etsy ve eBay müşteri iletişimleri, Alibaba, TradeWheel, Go4WorldBusiness ve Europages talepleri, web sitesi teklif formları ve WhatsApp talepleri, ürün soruları ve sipariş sonrası destek talepleri bu kapsamda yer alır." },
+            { "title": "Yönetim Ekibi İçin CRM", "body": "Şirket sahipleri ve yöneticiler için CRM’in en önemli tarafı raporlamadır. Yönetici, günlük detayların içinde boğulmadan şirketin satış ve müşteri durumunu görebilmelidir. Yeni müşteri adayı sayısı ve açık satış fırsatları, gönderilen teklifler ve tekliften siparişe dönüşüm oranı, kampanya performansı ve satış temsilcisi performansı, müşteri takip gecikmeleri, satış tahmini ve operasyon durumu bu kapsamda yer alır." },
+            { "title": "Saha Satış Ekibi İçin CRM", "body": "Saha satış ekipleri müşteri ziyaretleri, görüşme notları ve takip görevleri için CRM sisteminden faydalanabilir. Ziyaret edilen müşteriler ve ziyaret tarihleri, görüşme notları, ilgilenilen ürünler ve teklif talepleri, bölge bazlı müşteri listeleri ve saha satış görevleri, ziyaret sonrası aksiyonlar ve potansiyel müşteri kayıtları bu kapsamda yer alır." },
+            { "title": "Mail Marketing Ekibi İçin CRM", "body": "Mail marketing çalışmaları, satış ekibiyle bağlantılı ilerlemediğinde sonuçlar dağınık kalabilir. CRM bu süreci ekipler arası daha düzenli hale getirir. Gönderilen kampanyalar ve hedef müşteri listeleri, cevap veren, teklif isteyen ve telefonla aranacak firmalar, satış ekibine aktarılacak leadler, kampanya performansı ve satışa dönüşen fırsatlar bu kapsamda yer alır." },
+            { "title": "B2B Platform Ekibi İçin CRM", "body": "Alibaba, TradeWheel, Go4WorldBusiness, Europages ve benzeri B2B platformlardan gelen talepler satış sürecine aktarılmalıdır. Talebin geldiği platform, firma adı ve ülke, ilgilendiği ürün, mesaj içeriği ve teklif talebi, numune talebi, satış temsilcisi ve takip tarihi, satış aşaması ve siparişe dönüşme durumu bu kapsamda yer alır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Ekipler Arası Görev Yönetimi",
+          "intro": "CRM sisteminde ekiplerin en önemli ihtiyacı görev yönetimidir. Hangi işin kime ait olduğu net değilse müşteri süreci aksar.",
+          "items": [
+            "Satış temsilcisi müşteriyi arasın",
+            "Pazarlama ekibi kampanya cevabını sınıflandırsın",
+            "İhracat ekibi proforma hazırlasın",
+            "Operasyon ekibi teslim sürecini başlatsın",
+            "Müşteri hizmetleri destek talebine dönüş yapsın",
+            "Yönetici özel fiyat teklifini onaylasın",
+            "Mail marketing ekibi takip maili hazırlasın",
+            "B2B platform ekibi gelen talebi kontrol etsin"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Kullanıcı Yetkileri ve Görünürlük",
+          "intro": "Her ekip CRM içinde aynı bilgilere erişmek zorunda değildir. Şirket yapısına göre kullanıcı yetkileri ve görünürlük ayarları planlanmalıdır.",
+          "items": [
+            "Satış temsilcisi sadece kendi müşterilerini görebilir",
+            "Satış müdürü tüm satış ekibini görebilir",
+            "Pazarlama ekibi kampanya verilerini yönetebilir",
+            "Operasyon ekibi siparişe dönüşen kayıtları görebilir",
+            "Müşteri hizmetleri destek kayıtlarına erişebilir",
+            "Yönetici tüm raporları inceleyebilir",
+            "Bazı kullanıcılar sadece görevlerini görebilir",
+            "Bazı kullanıcılar teklif veya fiyat bilgisine erişmeyebilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Ekipler İçin CRM ile Şirketiniz Ne Kazanır?",
+          "items": [
+            "Müşteri bilgileri tek merkezde toplanır",
+            "Satış, pazarlama ve operasyon ekipleri aynı sistemde çalışır",
+            "Müşteri adayları doğru ekibe aktarılır",
+            "Teklif ve sipariş süreçleri daha düzenli ilerler",
+            "Departmanlar arası bilgi kopukluğu azalır",
+            "Yönetici tüm süreci daha net görür",
+            "Görev ve sorumluluklar belirgin hale gelir",
+            "Müşteri geçmişi şirkette kalır",
+            "Ekip performansı ölçülebilir hale gelir",
+            "İhracat ve e-ticaret süreçleri daha kontrollü takip edilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Ekipler İçin CRM Kullanımında Sık Yapılan Hatalar",
+          "items": [
+            "CRM’i yalnızca satış ekibine ait bir sistem gibi görmek",
+            "Pazarlama, operasyon ve müşteri hizmetlerini sürece dahil etmemek",
+            "Kullanıcı yetkilerini doğru planlamamak",
+            "Görev ve sorumlulukları net tanımlamamak",
+            "Ekipleri CRM kullanımı konusunda eğitmemek",
+            "Müşteri kaynaklarını düzenli işlememek",
+            "Satıştan operasyona geçiş sürecini CRM’e bağlamamak",
+            "Raporları yöneticinin ihtiyaçlarına göre oluşturmamak",
+            "CRM’i gerçek iş akışına göre uyarlamamak",
+            "Sistemi kurup ekip kullanımını takip etmemek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Satış, Pazarlama, Operasyon ve Yönetim İçin Ortak CRM Altyapısı",
+          "body": [
+            "Ekipler için CRM; satış ekibi CRM, pazarlama ekibi CRM, ihracat ekibi CRM, operasyon ekibi CRM, müşteri hizmetleri CRM, e-ticaret ekibi CRM, CRM ekip yönetimi, CRM görev yönetimi ve CRM yönetici raporları için kullanılabilir."
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Ekipler İçin CRM Kurulum Süreci Nasıl İlerler?",
+          "intro": "Ekipler için CRM kurulumu, şirketinizin ekip yapısı, satış süreci, pazarlama kanalları, operasyon akışı ve müşteri yönetimi ihtiyaçları değerlendirilerek planlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin ekip yapısı, satış süreci, pazarlama kanalları, operasyon akışı ve müşteri yönetimi ihtiyaçları değerlendirilir." },
+            { "n": 2, "title": "Ekip Rollerinin Belirlenmesi", "body": "Satış, pazarlama, ihracat, operasyon, müşteri hizmetleri, e-ticaret ve yönetim ekiplerinin CRM içindeki rolleri belirlenir." },
+            { "n": 3, "title": "Süreç Haritası Oluşturma", "body": "Müşteri adayından satışa, tekliften siparişe, siparişten satış sonrası takibe kadar süreç adım adım çıkarılır." },
+            { "n": 4, "title": "Kullanıcı Yetkilerinin Planlanması", "body": "Hangi kullanıcının hangi müşteri, görev, teklif, rapor veya operasyon bilgisini göreceği belirlenir." },
+            { "n": 5, "title": "Görev ve İş Akışı Yapısı", "body": "Ekipler arası görev atama, takip tarihleri, hatırlatmalar ve onay süreçleri kurgulanır." },
+            { "n": 6, "title": "Raporlama Ekranları", "body": "Yönetici, satış ekibi, pazarlama ekibi ve operasyon ekibi için gerekli raporlar planlanır." },
+            { "n": 7, "title": "Ekip Eğitimi", "body": "Tüm ilgili ekiplere CRM’in nasıl kullanılacağı, görevlerin nasıl takip edileceği ve raporların nasıl okunacağı anlatılır." },
+            { "n": 8, "title": "Test ve İyileştirme", "body": "Sistem gerçek kullanımda test edilir, eksikler belirlenir ve ekiplerden gelen geri bildirimlere göre geliştirilir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Ekipler için CRM nedir?",
+          "body": [
+            "Ekipler için CRM; satış, pazarlama, ihracat, operasyon, e-ticaret, müşteri hizmetleri ve yönetim ekiplerinin müşteri bilgilerini, görevleri, teklifleri, kampanyaları, siparişleri ve raporları aynı sistem üzerinden yönetmesini sağlayan CRM yapısıdır. {{appName}}, şirketlerin ekipler arası müşteri yönetimini daha düzenli, ölçülebilir ve kurumsal hale getirmesine yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Ekipler İçin CRM Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Ekipler için CRM kimler için uygundur?", "a": "Ekipler için CRM; satış, pazarlama, operasyon, müşteri hizmetleri, ihracat veya e-ticaret ekibi bulunan ve müşteri süreçlerini tek sistemde yönetmek isteyen şirketler için uygundur." },
+            { "q": "CRM sadece satış ekibi için mi kullanılır?", "a": "Hayır. CRM satış ekibinin yanında pazarlama, ihracat, operasyon, müşteri hizmetleri, e-ticaret ve yönetim ekipleri tarafından da kullanılabilir." },
+            { "q": "Satış ve pazarlama ekipleri aynı CRM’i kullanabilir mi?", "a": "Evet. Pazarlama ekibi kampanya ve müşteri adayı kaynaklarını takip ederken, satış ekibi bu müşteri adaylarını teklif ve satış sürecine alabilir." },
+            { "q": "Operasyon ekibi CRM kullanabilir mi?", "a": "Evet. Siparişe dönüşen teklifler, teslim süreci, ödeme durumu, müşteri bilgilendirme ve operasyon görevleri CRM üzerinden takip edilebilir." },
+            { "q": "İhracat ekibi için CRM uygun mu?", "a": "Evet. Yurt dışı müşteri listeleri, konşimento verileri, GTİP / HS kodu, mail marketing, telefon aramaları, teklif, proforma ve sevkiyat süreçleri CRM ile takip edilebilir." },
+            { "q": "Kullanıcı yetkileri ayarlanabilir mi?", "a": "Evet. Her kullanıcının hangi müşteri kayıtlarını, teklifleri, görevleri veya raporları göreceği şirket yapısına göre planlanabilir." },
+            { "q": "Ekipler arası görev ataması yapılabilir mi?", "a": "Evet. Satış, pazarlama, operasyon, müşteri hizmetleri ve yönetim ekipleri arasında görev atama, takip tarihi ve sorumluluk tanımları oluşturulabilir." },
+            { "q": "Yönetici tüm ekip performansını görebilir mi?", "a": "Evet. Yönetici müşteri adayları, teklifler, kampanyalar, görevler, açık fırsatlar ve ekip performansı hakkında raporlar alabilir." },
+            { "q": "CRM ekipler tarafından kullanılmazsa ne olur?", "a": "CRM ekipler tarafından düzenli kullanılmazsa müşteri bilgileri eksik kalır, görevler aksar ve raporlar doğru sonuç vermez. Bu nedenle kurulum kadar ekip eğitimi de önemlidir." },
+            { "q": "Ekipler için CRM kurulurken eğitim veriyor musunuz?", "a": "Evet. Satış, pazarlama, ihracat, operasyon, e-ticaret ve yönetim ekiplerine CRM kullanımı, görev takibi, müşteri kaydı ve raporlama konularında eğitim verilebilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Ekipleriniz İçin Doğru CRM Yapısını Birlikte Kuralım",
+        "body": "Şirketinizde müşteri bilgileri farklı kişilerde kalıyor, ekipler aynı müşteriye farklı bilgilerle yaklaşıyor ve yönetici sürecin tamamını net göremiyorsa CRM yapınızı ekipler arası çalışmaya uygun hale getirmeniz gerekir. {{appName}} Ekipler İçin CRM hizmeti ile satış, pazarlama, ihracat, operasyon, e-ticaret ve yönetim ekiplerinizi aynı müşteri yönetimi sistemi üzerinde buluşturun.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

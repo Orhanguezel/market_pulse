@@ -136,8 +136,8 @@ export function getDefaultTokenBranding(): DesignTokens['branding'] {
       String(siteDefaults.brand.taglineEn || '').trim(),
     logo_url: '',
     favicon_url: '',
-    theme_color: '#15803d',
-    theme_color_dark: '#052e16',
+    theme_color: '#0f766e',
+    theme_color_dark: '#0f172a',
     og_image_url: '',
   };
 }

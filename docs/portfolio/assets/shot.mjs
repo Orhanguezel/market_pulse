@@ -1,0 +1,11 @@
+import pkg from '/home/orhan/Documents/Projeler/market_pulse/frontend/node_modules/playwright-core/index.js';
+const { chromium } = pkg;
+const file = process.argv[2];
+const out = process.argv[3];
+const browser = await chromium.launch({ channel: 'chrome' });
+const page = await browser.newPage({ viewport: { width: 1600, height: 1000 }, deviceScaleFactor: 2 });
+await page.goto('file://' + file);
+await page.waitForTimeout(400);
+await page.screenshot({ path: out, clip: { x: 0, y: 0, width: 1600, height: 1000 } });
+await browser.close();
+console.log('saved', out);

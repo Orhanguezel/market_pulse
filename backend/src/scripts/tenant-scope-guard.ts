@@ -30,6 +30,8 @@ const businessTables = [
   'user_scan_usage',
   'user_keepa_keys',
   'outreach_campaigns',
+  'outreach_recipient_lists',
+  'outreach_recipients',
 ];
 
 function walk(dir: string): string[] {

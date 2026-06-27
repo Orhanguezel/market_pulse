@@ -1,4 +1,5 @@
 import { baseApi } from '@/integrations/baseApi';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -445,6 +446,56 @@ export interface OutreachCampaign {
 
   created_at:           string;
   updated_at:           string;
+}
+
+// ─── Outreach Bulk Lists (Excel/CSV alıcı listesi → toplu mail) ──────────────
+
+export interface OutreachRecipientList {
+  id:          string;
+  tenant_key:  string;
+  campaign_id: string | null;
+  name:        string;
+  source:      string;
+  status:      string;
+  total_count: number;
+  sent_count:  number;
+  created_at:  string;
+  updated_at:  string;
+}
+
+export interface OutreachRecipient {
+  id:            string;
+  tenant_key:    string;
+  list_id:       string;
+  email:         string;
+  name:          string | null;
+  company:       string | null;
+  country:       string | null;
+  custom_fields: Record<string, unknown> | null;
+  status:        string;
+  draft_id:      string | null;
+  created_at:    string;
+}
+
+export interface OutreachUploadResult {
+  list:       OutreachRecipientList;
+  inserted:   number;
+  invalid:    number;
+  duplicates: number;
+}
+
+export interface OutreachGenerateResult {
+  listId:    string;
+  generated: number;
+  skipped:   number;
+  draftIds:  string[];
+}
+
+export interface OutreachSendResult {
+  listId:  string;
+  sent:    number;
+  bounced: number;
+  total:   number;
 }
 
 export const marketAdminApi = baseApi.injectEndpoints({
@@ -1056,6 +1107,83 @@ export const marketAdminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['OutreachCampaigns', 'IcpProfiles'],
     }),
+
+    // ─── Outreach Bulk Lists (toplu alıcı listesi → mail) ──────────────
+    listBulkLists: b.query<OutreachRecipientList[], void>({
+      query: () => ({ url: '/admin/lead-machine/outreach/lists' }),
+      providesTags: ['OutreachLists'],
+    }),
+    getBulkList: b.query<OutreachRecipientList, string>({
+      query: (id) => ({ url: `/admin/lead-machine/outreach/lists/${id}` }),
+      providesTags: (_r, _e, id) => [{ type: 'OutreachLists' as const, id }],
+    }),
+    uploadBulkList: b.mutation<OutreachUploadResult, { file: File; name: string; campaignId?: string | null }>({
+      async queryFn(args, _api, _extra, baseQuery) {
+        try {
+          const fd = new FormData();
+          fd.append('file', args.file, args.file.name);
+          fd.append('name', args.name);
+          if (args.campaignId) fd.append('campaignId', args.campaignId);
+
+          const res = await baseQuery({
+            url: '/admin/lead-machine/outreach/lists',
+            method: 'POST',
+            body: fd,
+          });
+
+          if (res.error) return { error: res.error as FetchBaseQueryError };
+          return { data: res.data as OutreachUploadResult };
+        } catch (e) {
+          return {
+            error: {
+              status: 'CUSTOM_ERROR',
+              error: e instanceof Error ? e.message : 'upload_failed',
+            } as FetchBaseQueryError,
+          };
+        }
+      },
+      invalidatesTags: ['OutreachLists'],
+    }),
+    listBulkRecipients: b.query<OutreachRecipient[], { id: string; status?: string }>({
+      query: ({ id, status }) => ({
+        url: `/admin/lead-machine/outreach/lists/${id}/recipients`,
+        params: status ? { status } : undefined,
+      }),
+      providesTags: (_r, _e, { id }) => [{ type: 'OutreachLists' as const, id: `${id}:recipients` }],
+    }),
+    generateBulkDrafts: b.mutation<
+      OutreachGenerateResult,
+      { id: string; subjectTemplate: string; bodyTemplate: string }
+    >({
+      query: ({ id, subjectTemplate, bodyTemplate }) => ({
+        url: `/admin/lead-machine/outreach/lists/${id}/generate`,
+        method: 'POST',
+        body: { subjectTemplate, bodyTemplate },
+      }),
+      invalidatesTags: (_r, _e, { id }) => [
+        { type: 'OutreachLists' as const, id },
+        { type: 'OutreachLists' as const, id: `${id}:recipients` },
+        'OutreachLists',
+        'OutreachDrafts',
+      ],
+    }),
+    sendBulkList: b.mutation<OutreachSendResult, { id: string; ratePerMinute?: number }>({
+      query: ({ id, ratePerMinute }) => ({
+        url: `/admin/lead-machine/outreach/lists/${id}/send`,
+        method: 'POST',
+        body: ratePerMinute ? { ratePerMinute } : {},
+      }),
+      invalidatesTags: (_r, _e, { id }) => [
+        { type: 'OutreachLists' as const, id },
+        { type: 'OutreachLists' as const, id: `${id}:recipients` },
+        'OutreachLists',
+        'OutreachDrafts',
+      ],
+    }),
+    deleteBulkList: b.mutation<void, string>({
+      query: (id) => ({ url: `/admin/lead-machine/outreach/lists/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['OutreachLists'],
+    }),
   }),
   overrideExisting: true,
 });
@@ -1145,6 +1273,13 @@ export const {
   useDeleteOutreachCampaignMutation,
   useGenerateOutreachDraftsMutation,
   useSyncHostKeywordsMutation,
+  useListBulkListsQuery,
+  useGetBulkListQuery,
+  useUploadBulkListMutation,
+  useListBulkRecipientsQuery,
+  useGenerateBulkDraftsMutation,
+  useSendBulkListMutation,
+  useDeleteBulkListMutation,
 } = marketAdminApi;
 
 export const useGetErpCustomerOrdersQuery = useListErpCustomerOrdersQuery;

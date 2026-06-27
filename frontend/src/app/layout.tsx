@@ -14,7 +14,7 @@ import {
 } from '@/lib/site-config';
 
 export async function generateViewport(): Promise<Viewport> {
-  let themeColor = '#15803d';
+  let themeColor = '#0f766e';
   try {
     const row = await fetchSetting('design_tokens', '*', { revalidate: 300 });
     const raw = row?.value;

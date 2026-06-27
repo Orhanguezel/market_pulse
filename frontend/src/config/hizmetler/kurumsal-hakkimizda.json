@@ -1,0 +1,94 @@
+{
+  "slug": "kurumsal-hakkimizda",
+  "category": "kurumsal",
+  "module": null,
+  "order": 10,
+  "icon": "Info",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Hakkımızda | İşletmeni Yönet Platformu Vizyonu",
+        "description": "İşletmelerin dijital dönüşüm yolculuğuna eşlik eden, yerli üretim yönetim platformumuz ve ekibimiz hakkında bilgi edinin.",
+        "ogTitle": "Hakkımızda | {{appName}}",
+        "ogDescription": "{{appName}} ile müşteri ilişkilerinizi güçlendirin, operasyonlarınızı optimize edin ve işletmenizi büyütün."
+      },
+      "hero": {
+        "eyebrow": "Kurumsal",
+        "title": "İşletmenizi Dijital Dünyada Yönetin",
+        "lead": "{{appName}} ile müşteri ilişkilerinizi güçlendirin, operasyonlarınızı optimize edin ve işletmenizi büyütün.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Daha fazla bilgi",
+          "href": "/teklif-al"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Hakkımızda",
+          "items": [
+            {
+              "title": "Misyonumuz",
+              "body": "Müşteri ilişkilerini ve operasyonları daha kolay ve etkili bir şekilde yönetebilmek, şirketlerin büyümelerine katkı sağlamak."
+            }
+          ],
+          "intro": "{{appName}} olarak, işletmelerin daha verimli çalışmasına yardımcı olmak için güçlü ve kullanıcı dostu bir müşteri yönetim sistemi sunuyoruz."
+        },
+        {
+          "type": "cards",
+          "heading": "Ne Sunuyoruz?",
+          "items": [
+            {
+              "title": "Müşteri Yönetimi",
+              "body": "Potansiyel ve mevcut müşterilerinizi merkezi bir sistemde tutarak, ilişkilerinizi daha sağlıklı bir şekilde yönetin."
+            },
+            {
+              "title": "Tedarikçi Yönetimi",
+              "body": "Tedarikçilerinizle olan iş süreçlerinizi kolayca takip edin ve organize edin."
+            },
+            {
+              "title": "Teklif Yönetimi",
+              "body": "Hızla teklif hazırlayın, müşterilerinize zamanında iletin ve süreçlerinizi hızlandırın."
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Neden Bizi Tercih Etmelisiniz?",
+          "items": [
+            {
+              "title": "Kapsamlı ve Kolay Kullanım",
+              "body": "Gelişmiş özelliklerimiz, kullanıcı dostu arayüzümüz ile birleşerek size hem güçlü hem de kolay bir deneyim sunar."
+            },
+            {
+              "title": "Zaman ve İş Gücü Tasarrufu",
+              "body": "Tek bir platformda tüm süreçlerinizi yöneterek zaman kaybını azaltın, verimliliği artırın."
+            },
+            {
+              "title": "Hızlı Destek",
+              "body": "İhtiyaç duyduğunuzda her zaman yanınızdayız. Sorularınızı hızlıca yanıtlıyoruz."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "İşletmenizi Dijital Dünyada Yönetin",
+        "body": "{{appName}} ile müşteri ilişkilerinizi güçlendirin, operasyonlarınızı optimize edin ve işletmenizi büyütün.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

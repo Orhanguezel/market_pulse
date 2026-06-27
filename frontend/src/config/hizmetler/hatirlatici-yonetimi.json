@@ -1,0 +1,207 @@
+{
+  "slug": "hatirlatici-yonetimi",
+  "category": "urun-modulleri",
+  "module": "crm",
+  "order": 50,
+  "icon": "BellRing",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Hatırlatıcı Yönetimi - Verimli Görev ve Randevu Yönetimi | isletmeniyonet.com",
+        "description": "Ücretsiz hatırlatıcı uygulaması ile görevlerinizi ve randevularınızı etkili bir şekilde yönetin. Müşteri ilişkilerinizi güçlendirin ve işletmenizin verimliliğini artırın.",
+        "ogTitle": "Hatırlatıcı Yönetimi - Verimli Görev ve Randevu Yönetimi | {{appName}}",
+        "ogDescription": "Önemli görevlerinizi ve randevularınızı asla unutmayın. Ücretsiz hatırlatma sistemi ile her şey kontrolünüz altında! Müşterilerinize özel hatırlatmalar gönderin ve iş ilişkilerinizi güçlendirin. İşletme yönetim uygulamamız şimdi ve her zaman ücretsiz. Tüm özellikleri sınırsız kullanın, ek ücret yok!"
+      },
+      "hero": {
+        "eyebrow": "Ürün Modülü",
+        "title": "Hatırlatıcı Uygulaması",
+        "lead": "Önemli görevlerinizi ve randevularınızı asla unutmayın. Ücretsiz hatırlatma sistemi ile her şey kontrolünüz altında! Müşterilerinize özel hatırlatmalar gönderin ve iş ilişkilerinizi güçlendirin. İşletme yönetim uygulamamız şimdi ve her zaman ücretsiz. Tüm özellikleri sınırsız kullanın, ek ücret yok!",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Nasıl çalışır?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Öne Çıkan Özellikler",
+          "items": [
+            {
+              "title": "Kolay Hatırlatma Ekleme",
+              "body": "Takvim üzerinden hızlıca gün ve saat seçerek hatırlatmalarınızı oluşturun."
+            },
+            {
+              "title": "Müşteri Hatırlatmaları",
+              "body": "Müşterilerinize özel hatırlatmalar göndererek iş ilişkilerinizi güçlendirin."
+            },
+            {
+              "title": "Geçmiş Hatırlatma Yönetimi",
+              "body": "Geçmiş hatırlatmaları görüntüleyin, düzenleyin veya yeniden kullanın."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Nasıl Çalışır?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Hatırlatma Ekleyin",
+              "body": "Takvim üzerinden gün ve saat seçerek yeni bir hatırlatma oluşturun."
+            },
+            {
+              "n": 2,
+              "title": "Detayları Girin",
+              "body": "Hatırlatma içeriğini yazın ve gerekirse müşteri bilgilerini ekleyin."
+            },
+            {
+              "n": 3,
+              "title": "Bildirimleri Alın",
+              "body": "Belirlediğiniz zamanda e-posta ile hatırlatma alın ve işlerinizi aksatmayın."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Sıkça Sorulan Sorular",
+          "items": [
+            {
+              "q": "Uygulama tamamen ücretsiz mi?",
+              "a": "Evet, hatırlatıcı uygulamamız tamamen ücretsizdir. Tüm özellikleri herhangi bir ücret ödemeden kullanabilirsiniz."
+            },
+            {
+              "q": "Kaç hatırlatma ekleyebilirim?",
+              "a": "Hatırlatma sayısında herhangi bir sınırlama yoktur. İhtiyacınız olan kadar hatırlatma ekleyebilirsiniz."
+            },
+            {
+              "q": "Müşteri hatırlatmaları nasıl çalışır?",
+              "a": "Müşteri hatırlatmaları, belirli müşterileriniz için özel hatırlatmalar oluşturmanıza olanak tanır. Bu hatırlatmalar, müşteri iletişiminizi güçlendirmek ve önemli tarihleri (örneğin, sözleşme yenileme tarihleri) takip etmek için kullanılabilir."
+            },
+            {
+              "q": "Hatırlatmalar için bildirim seçenekleri nelerdir?",
+              "a": "Uygulamamız e-posta bildirimleri sunar. Ayrıca, yakında SMS ve mobil uygulama push bildirimleri de eklenecektir. Hatırlatmalarınız için birden fazla bildirim zamanı ayarlayabilirsiniz."
+            },
+            {
+              "q": "Tekrarlanan hatırlatmalar oluşturabilir miyim?",
+              "a": "Evet, tekrarlanan hatırlatmalar oluşturabilirsiniz. Günlük, haftalık, aylık veya yıllık olarak tekrarlanan hatırlatmalar ayarlayabilir, böylece düzenli görevlerinizi kolayca yönetebilirsiniz."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Hatırlatıcı Uygulamasını Ücretsiz Deneyin",
+        "body": "İşlerinizi organize edin, müşterilerinizle iletişiminizi güçlendirin ve asla önemli bir görevi kaçırmayın!",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "seo": {
+        "title": "Reminder Management - Efficient Task and Appointment Management | isletmeyonetim.com",
+        "description": "Effectively manage your tasks and appointments with a free reminder application. Strengthen your customer relationships and increase your business efficiency.",
+        "ogTitle": "Reminder Management - Efficient Task and Appointment Management | {{appName}}",
+        "ogDescription": "Never forget your important tasks and appointments. Everything is under your control with our free reminder system! Send personalized reminders to your customers and strengthen your business relationships. Our business management application is free now and always. Use all features unlimitedly, no additional fees!"
+      },
+      "hero": {
+        "eyebrow": "Product Module",
+        "title": "Reminder Application",
+        "lead": "Never forget your important tasks and appointments. Everything is under your control with our free reminder system! Send personalized reminders to your customers and strengthen your business relationships. Our business management application is free now and always. Use all features unlimitedly, no additional fees!",
+        "primaryCTA": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "How it works?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Featured Characteristics",
+          "items": [
+            {
+              "title": "Easy Reminder Creation",
+              "body": "Create your reminders quickly by selecting date and time on the calendar."
+            },
+            {
+              "title": "Customer Reminders",
+              "body": "Strengthen your business relationships by sending personalized reminders to your customers."
+            },
+            {
+              "title": "Past Reminder Management",
+              "body": "View, edit, or reuse past reminders."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "How Does It Work?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Add a Reminder",
+              "body": "Create a new reminder by selecting the date and time on the calendar."
+            },
+            {
+              "n": 2,
+              "title": "Enter Details",
+              "body": "Write the reminder content and add customer information if necessary."
+            },
+            {
+              "n": 3,
+              "title": "Receive Notifications",
+              "body": "Get email reminders at the specified time and stay on top of your tasks."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Frequently Asked Questions",
+          "items": [
+            {
+              "q": "Is the application completely free?",
+              "a": "Yes, our reminder application is completely free. You can use all features without paying any fees."
+            },
+            {
+              "q": "How many reminders can I add?",
+              "a": "There is no limit to the number of reminders. You can add as many reminders as you need."
+            },
+            {
+              "q": "How do customer reminders work?",
+              "a": "Customer reminders allow you to create specific reminders for your customers. These reminders can be used to strengthen customer communication and track important dates (for example, contract renewal dates)."
+            },
+            {
+              "q": "What are the notification options for reminders?",
+              "a": "Our application offers email notifications. Additionally, SMS and mobile app push notifications will be added soon. You can set multiple notification times for your reminders."
+            },
+            {
+              "q": "Can I create recurring reminders?",
+              "a": "Yes, you can create recurring reminders. You can set reminders to repeat daily, weekly, monthly, or yearly, allowing you to easily manage your regular tasks."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Try the Reminder Application for Free",
+        "body": "Organize your tasks, strengthen communication with your customers, and never miss an important task!",
+        "button": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

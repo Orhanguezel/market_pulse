@@ -1,0 +1,173 @@
+{
+  "slug": "190-ulke-alici-firma-verileri",
+  "category": "ihracat-musteri-bulma",
+  "module": "discover-customs",
+  "order": 20,
+  "icon": "Globe",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "190+ Ülke Alıcı Firma Verileri | Yurt Dışı İthalatçı Firma ve B2B Müşteri Listeleri",
+        "description": "190+ ülke dış ticaret verileriyle ürününüze uygun yurt dışı alıcı firmaları, ithalatçıları, GTİP / HS koduna göre müşteri listelerini ve hedef pazarları analiz ediyoruz.",
+        "ogTitle": "190+ Ülke Alıcı Firma Verileri | {{appName}}",
+        "ogDescription": "190+ ülke dış ticaret ve ithalat verileriyle ürününüze uygun gerçek alıcı firmaları, hedef ülkeleri ve ithalatçı müşteri listelerini analiz ediyoruz."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "190+ Ülke Alıcı Firma Verileri",
+        "lead": "İhracat yapmak istiyorsunuz ama hangi ülkelerde gerçek alıcı olduğunu, hangi firmaların ürününüzü ithal ettiğini ve hangi pazara öncelik vermeniz gerektiğini bilmiyor musunuz? {{appName}} olarak 190+ ülke dış ticaret ve alıcı firma verileri üzerinden ürününüze uygun ithalatçı firmaları, hedef ülkeleri, ürün açıklamalarını, GTİP / HS kodlarını, ithalat miktarlarını ve ticaret hacimlerini analiz ediyoruz. Amacımız, şirketinizin rastgele yurt dışı müşteri aramak yerine veriye dayalı şekilde doğru ülkelere, doğru firmalara ve doğru alıcı profillerine ulaşmasını sağlamaktır.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "190+ Ülke Alıcı Firma Verileri Nedir?",
+          "body": [
+            "190+ ülke alıcı firma verileri, farklı ülkelerde ithalat yapan firmaların dış ticaret kayıtları, ürün açıklamaları, GTİP / HS kodları, ithalat miktarları, sevkiyat tarihleri ve ticaret hacimleri üzerinden analiz edilmesiyle oluşturulan ihracat müşteri bulma kaynağıdır.",
+            "Bu veriler sayesinde şirketler yalnızca “hangi ülkeye ihracat yapabilirim?” sorusuna değil, daha önemli olan “hangi ülkede benim ürünümü gerçekten satın alan firmalar var?” sorusuna cevap arayabilir.",
+            "{{appName}}, 190+ ülke alıcı firma verilerini ürününüze ve hedeflerinize göre analiz ederek satış ekibinizin kullanabileceği düzenli ihracat müşteri listeleri oluşturmanıza yardımcı olur.",
+            "Ürününüzü hangi ülkeler ithal ediyor, hangi firmalar düzenli alım yapıyor, hangi ürün açıklamaları dış ticaret kayıtlarında kullanılıyor ve hangi alıcılar CRM sistemine aktarılmalı sorularına veriyle cevap aranır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Ürününüz için gerçek alıcı firmaları bulmak, hedef ülke seçimini veriye dayandırmak ve satış ekibinize kullanılabilir müşteri listesi hazırlamak istiyorsanız bu hizmet sizin için uygundur.",
+          "items": [
+            { "title": "İhracata Başlamak İsteyen Üreticiler", "body": "Ürününü hangi ülkelerdeki firmalara sunabileceğini görmek isteyen üreticiler için uygundur." },
+            { "title": "Yurt Dışı Müşteri Arayan KOBİ’ler", "body": "Rastgele arama yerine gerçek ithalat verileriyle müşteri listesi oluşturmak isteyen firmalara uygundur." },
+            { "title": "GTİP / HS Koduna Göre Alıcı Arayanlar", "body": "Ürün grubunu ithal eden firmaları kod bazlı analiz etmek isteyen ihracatçılara uygundur." },
+            { "title": "Yeni Hedef Pazar Belirlemek İsteyenler", "body": "Hangi ülkeye öncelik verilmesi gerektiğini veriyle görmek isteyen işletmeler için uygundur." },
+            { "title": "Mail Marketing Listesi Hazırlamak İsteyenler", "body": "Ülke, ürün ve ithalat geçmişine göre hedefli e-posta listesi hazırlanabilir." },
+            { "title": "Telefon Araması Yapacak Satış Ekipleri", "body": "Yüksek potansiyelli alıcı firmalar arama önceliğine göre düzenlenebilir." },
+            { "title": "Fuar Öncesi Hedef Liste İsteyenler", "body": "Fuar öncesi ülke, sektör ve alıcı firma bazlı hazırlık yapılabilir." },
+            { "title": "CRM ile İhracat Takibi Yapmak İsteyenler", "body": "Alıcı firma verileri CRM müşteri adayı sistemine aktarılabilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "190+ Ülke Alıcı Firma Verileriyle Hangi Analizler Yapılır?",
+          "intro": "Alıcı firma verileri; ülke, ürün adı, GTİP / HS kodu, ithalat sıklığı, hedef pazar, iletişim ve CRM takip yapısı açısından satışa uygun şekilde düzenlenir.",
+          "items": [
+            "Ülke bazlı alıcı firma analizi: ürününüzü hangi ülkeler ithal ediyor, hangi ülkelerde daha fazla alıcı firma ve ithalat hacmi var, hangi ülkeler önceliklendirilmeli",
+            "Ürün adına göre alıcı firma verileri: ürünün İngilizce karşılığı, alternatif ürün adları ve dış ticaret kayıtlarındaki açıklamalarla araştırma",
+            "GTİP / HS koduna göre alıcı firma verileri: hangi ülkeler ve firmalar bu kod altında alım yapıyor, son ithalat tarihleri güncel mi",
+            "Düzenli ithalat yapan firmaların belirlenmesi: firma kaç kez ve hangi tarihlerde alım yapmış, toplam ithalat miktarı ve değeri",
+            "Hedef pazar önceliklendirme: ithalat hacmi, alıcı firma sayısı, lojistik kolaylığı ve ticari potansiyele göre sıralama",
+            "Alıcı firma listesi hazırlama: firma adı, ülke, ürün açıklaması, GTİP / HS kodu, ithalat tarihi/miktarı/değeri ve iletişim bilgileri",
+            "Karar verici kişi ve kurumsal iletişim araştırması: satın alma müdürü, ithalat sorumlusu, procurement / purchasing / import manager",
+            "Mail marketing için hedef liste hazırlama: ülke, ürün grubu, HS kodu, ithalat sıklığı ve kampanya segmentasyonu",
+            "Telefon aramaları için alıcı firma verisi: firma adı, ülke, telefon, ilgili departman, arama önceliği ve takip tarihi",
+            "CRM’e aktarılabilir müşteri verisi: firma, ilgili kişi, e-posta, telefon, ürün grubu, takip tarihi ve satış aşaması"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "190+ Ülke Alıcı Firma Verileri ile İhracat Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketinizin ürünü, ürün grubu, İngilizce ürün adı, kullanım alanı ve varsa GTİP / HS kodu değerlendirilerek başlar. Ardından ülke, ürün, alıcı firma, iletişim ve CRM takip yapısı birlikte planlanır.",
+          "steps": [
+            { "n": 1, "title": "Ürün ve Hedef Analizi", "body": "Şirketinizin ürünü, ürün grubu, İngilizce ürün adı, kullanım alanı ve varsa GTİP / HS kodu değerlendirilir." },
+            { "n": 2, "title": "Veri Kapsamı Kontrolü", "body": "Ürününüze göre hangi ülkelerde anlamlı alıcı firma verisi oluşabileceği kontrol edilir." },
+            { "n": 3, "title": "Ülke ve Ürün Bazlı Veri Araştırması", "body": "190+ ülke veri kapsamı içinde ürün adına, HS koduna ve ürün açıklamalarına göre araştırma yapılır." },
+            { "n": 4, "title": "Alıcı Firma Analizi", "body": "İthalat yapan firmalar, alım sıklıkları, ürün açıklamaları, miktarları ve ticaret hacimleri incelenir." },
+            { "n": 5, "title": "Hedef Ülke Önceliklendirme", "body": "En uygun ülkeler, alıcı firma sayısı ve ithalat geçmişi dikkate alınarak önceliklendirilir." },
+            { "n": 6, "title": "Alıcı Firma Listesi Hazırlığı", "body": "Satış ekibinizin kullanabileceği düzenli hedef alıcı firma listesi oluşturulur." },
+            { "n": 7, "title": "İletişim Bilgisi ve Karar Verici Araştırması", "body": "Firma web sitesi, kurumsal iletişim kanalları ve açık kaynaklar üzerinden iletişim bilgileri araştırılır." },
+            { "n": 8, "title": "Satış Takip Planı", "body": "Mail marketing, telefon araması, LinkedIn araştırması, teklif takibi ve CRM süreci planlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "190+ Ülke Verisi Hangi Çalışmalarla Birleştirilebilir?",
+          "intro": "Alıcı firma verileri tek başına yeterli değildir. Doğru satış çalışmalarıyla desteklenmelidir.",
+          "items": [
+            "Mail marketing kampanyaları",
+            "Telefon aramaları",
+            "LinkedIn ve Sales Navigator araştırması",
+            "Karar verici kişi bulma",
+            "İngilizce tanıtım maili hazırlama",
+            "Teklif ve proforma süreci",
+            "CRM müşteri adayı takibi",
+            "Fuar öncesi hedef müşteri listesi",
+            "B2B platformlarda ürün yayınlama",
+            "E-posta pazarlama ve e-posta izleme"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Veri Kapsamı ve Gerçekçi Beklenti",
+          "intro": "190+ ülke alıcı firma verileri ihracat müşteri bulma sürecinde güçlü bir kaynaktır. Ancak her ürün, her ülke ve her dönem için aynı seviyede veri bulunmayabilir.",
+          "items": [
+            "Veri kapsamı ülkeye göre değişebilir",
+            "Bazı ürünlerde HS kodu çok genel olabilir",
+            "Bazı ürünler farklı isimlerle kaydedilmiş olabilir",
+            "Her alıcı firma güncel müşteri olmayabilir",
+            "İletişim bilgileri ayrıca doğrulanmalıdır",
+            "Veri kesin satış garantisi vermez",
+            "Sonuç almak için düzenli takip gerekir",
+            "CRM ile takip yapılmazsa fırsatlar kaybolabilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "190+ Ülke Alıcı Firma Verilerinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Ürününüzü ithal eden ülkeleri görebilirsiniz",
+            "Gerçek ithalatçı firmaları tespit edebilirsiniz",
+            "GTİP / HS koduna göre hedef müşteri listesi oluşturabilirsiniz",
+            "Ürün adına göre alıcı firma araştırması yapabilirsiniz",
+            "Rastgele firma aramak yerine veriye dayalı çalışabilirsiniz",
+            "Düzenli ithalat yapan firmaları önceliklendirebilirsiniz",
+            "Mail marketing için hedefli liste hazırlayabilirsiniz",
+            "Telefon araması yapılacak firmaları belirleyebilirsiniz",
+            "LinkedIn üzerinden karar verici kişi araştırması yapabilirsiniz",
+            "CRM’e aktarılabilir müşteri verisi elde edebilirsiniz",
+            "İhracat satış ekibinizi gerçek verilerle destekleyebilirsiniz"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "190+ Ülke Alıcı Firma Verilerinde Sık Yapılan Hatalar",
+          "items": [
+            "Yanlış GTİP / HS kodu ile araştırma yapmak",
+            "Ürün adının dış ticaret kayıtlarındaki karşılığını yanlış seçmek",
+            "Her ülkeye aynı anda odaklanmak",
+            "Tek seferlik ithalat yapan firmaları yüksek potansiyelli görmek",
+            "Güncel olmayan firmalara öncelik vermek",
+            "İletişim bilgisi doğrulamadan kampanya yapmak",
+            "Alıcı listesini CRM’e aktarmamak",
+            "Mail marketing sonrası takip yapmamak",
+            "Telefon arama sonuçlarını kayıt altına almamak",
+            "Veri analizini satış stratejisiyle birleştirmemek"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "190+ Ülke Alıcı Firma Verileri Hakkında Merak Edilenler",
+          "items": [
+            { "q": "190+ ülke alıcı firma verileri kimler için uygundur?", "a": "Bu hizmet; ihracat yapmak isteyen üretici firmalar, yurt dışı müşteri arayan KOBİ’ler, GTİP / HS koduna göre ithalatçı firma bulmak isteyen ihracatçılar ve hedef ülke analizi yapmak isteyen şirketler için uygundur." },
+            { "q": "Bu verilerle gerçek ithalatçı firmalar bulunabilir mi?", "a": "Evet. Dış ticaret ve ithalat verileri analiz edilerek belirli ürünleri geçmişte ithal etmiş firmalar tespit edilebilir. Ancak her firma güncel müşteri olmayabilir; bu nedenle verilerin satış süreciyle birlikte değerlendirilmesi gerekir." },
+            { "q": "Hangi ülkelerde alıcı firma bulunabilir?", "a": "Veri kapsamı ürün, ülke ve dönem bazında değişebilir. Genel olarak 190+ ülke üzerinden alıcı firma araştırması yapılabilir; ancak her ürün için ön analiz yapılması gerekir." },
+            { "q": "GTİP / HS koduna göre alıcı firma listesi hazırlanabilir mi?", "a": "Evet. Doğru GTİP / HS kodu ile belirli ürün grubunu ithal eden firmalar araştırılabilir ve ülke bazlı alıcı firma listesi hazırlanabilir." },
+            { "q": "Ürün adına göre ithalatçı firma bulunabilir mi?", "a": "Evet. Ürünün İngilizce adı, alternatif ticari ürün açıklamaları ve dış ticaret kayıtlarında geçen tanımları üzerinden alıcı firma araştırması yapılabilir." },
+            { "q": "Alıcı firma listesinde hangi bilgiler olur?", "a": "Liste içinde firma adı, ülke, ürün açıklaması, GTİP / HS kodu, ithalat tarihi, ithalat miktarı, ithalat değeri, firma web sitesi, iletişim bilgileri ve takip notları yer alabilir." },
+            { "q": "Karar verici kişilerin bilgileri bulunabilir mi?", "a": "Alıcı firma listesi hazırlandıktan sonra satın alma müdürü, ithalat sorumlusu, procurement manager, import manager veya ilgili departman kişileri için kurumsal iletişim araştırması yapılabilir." },
+            { "q": "Bu veriler mail marketing için kullanılabilir mi?", "a": "Evet. Alıcı firma verileri ülke, ürün, HS kodu ve ithalat potansiyeline göre segmentlere ayrılarak mail marketing çalışmaları için hedef listeye dönüştürülebilir." },
+            { "q": "Veriler kesin müşteri getirir mi?", "a": "Hayır. Alıcı firma verileri kesin müşteri garantisi vermez. Ancak rastgele firma aramak yerine geçmişte ithalat yaptığı görülen firmalara ulaşmayı sağlar. Sonuç almak için profesyonel iletişim ve düzenli takip gerekir." },
+            { "q": "Bulunan firmalar CRM’e aktarılabilir mi?", "a": "Evet. Firma adı, ülke, ürün grubu, ilgili kişi, e-posta, telefon, mail gönderim tarihi, arama sonucu, teklif talebi ve takip tarihi gibi bilgiler CRM sistemine aktarılabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Rastgele Müşteri Aramayı Bırakın, İhracat Müşteri Bulma Sürecinizi Veriye Dayalı Hale Getirin",
+        "body": "İhracat yapmak istiyorsanız ilk soru “kime satabilirim?” değil, “ürünümü hangi ülkelerde hangi firmalar zaten ithal ediyor?” olmalıdır. {{appName}} 190+ Ülke Alıcı Firma Verileri hizmeti ile ürününüz için gerçek ithalatçı firmaları analiz edelim, hedef ülkeleri belirleyelim ve satış ekibinizin kullanabileceği profesyonel alıcı firma listesi oluşturalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

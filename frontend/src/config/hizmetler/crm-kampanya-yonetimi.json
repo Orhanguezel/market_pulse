@@ -1,0 +1,191 @@
+{
+  "slug": "crm-kampanya-yonetimi",
+  "category": "crm-satis",
+  "module": "crm",
+  "order": 30,
+  "icon": "Megaphone",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "CRM Kampanya Yönetimi | Mail Marketing, Lead Takibi, Satış Kampanyası ve Müşteri Dönüşüm Analizi",
+        "description": "Mail marketing, LinkedIn, fuar, web sitesi, B2B platform ve ihracat müşteri bulma kampanyalarınızı CRM ile yönetin. Hangi kampanyanın müşteri, teklif ve satış getirdiğini ölçün.",
+        "ogTitle": "CRM Kampanya Yönetimi | {{appName}}",
+        "ogDescription": "Mail marketing, LinkedIn, fuar, web sitesi, B2B platform ve ihracat müşteri bulma çalışmalarınızı CRM ile takip edin. Hangi kampanyanın satış getirdiğini görün."
+      },
+      "hero": {
+        "eyebrow": "CRM ve Satış",
+        "title": "CRM Kampanya Yönetimi",
+        "lead": "Kampanya yapıyorsunuz ama hangi çalışmanın gerçekten müşteri getirdiğini net göremiyor musunuz? Mail marketing yapılıyor, LinkedIn mesajları gönderiliyor, fuarlara katılım sağlanıyor, web sitesinden formlar geliyor, B2B platformlardan talepler alınıyor; ancak bu çalışmaların hangisi teklif, hangisi sipariş, hangisi gerçek satış fırsatı oluşturuyor belli değilse pazarlama bütçeniz ve satış ekibiniz verimli kullanılamaz. {{appName}} CRM Kampanya Yönetimi ile tüm pazarlama ve satış kampanyalarınızı CRM üzerinde takip edebilir; hangi kampanyadan kaç müşteri adayı geldiğini, kaç firmanın teklif istediğini, kaç fırsatın satışa dönüştüğünü ve hangi çalışmaların devam ettirilmesi gerektiğini net şekilde görebilirsiniz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Kurulum süreci nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "CRM Kampanya Yönetimi Nedir?",
+          "body": [
+            "CRM kampanya yönetimi, şirketlerin pazarlama, satış, ihracat, e-posta, LinkedIn, fuar, web sitesi ve B2B platform çalışmalarından gelen müşteri adaylarını CRM sistemi üzerinde kampanya bazlı takip etmesini sağlayan süreçtir.",
+            "Bir kampanya yalnızca reklam veya e-posta gönderimi değildir. Bir fuar katılımı, LinkedIn bağlantı çalışması, yurt dışı müşteri bulma listesi, mail marketing gönderimi, web sitesi teklif formu, telefon araması çalışması veya B2B platform ürün yayını da kampanya olarak takip edilebilir.",
+            "{{appName}}, kampanyalarınızı CRM ile takip edilebilir hale getirerek satış ve pazarlama çalışmalarınızın gerçek performansını görmenize yardımcı olur.",
+            "Kampanya adı, müşteri kaynağı, lead sayısı, teklif talepleri, satış fırsatları, siparişe dönüşen işler ve kaybedilen fırsatlar CRM üzerinden tek merkezde takip edilebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM Kampanya Yönetimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "CRM kampanya yönetimi sayesinde pazarlama ve satış çalışmalarınızın gerçek sonucunu görebilirsiniz. Hangi kampanyanın müşteri getirdiği, hangisinin teklif oluşturduğu ve hangisinin satışa dönüştüğü netleşir.",
+            "Bu yapı, pazarlama bütçesini ve satış ekibinin zamanını daha doğru yönetmenize yardımcı olur."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Kampanya Yapmak Yetmez, Sonucu Ölçmek Gerekir",
+          "intro": "Birçok şirket farklı pazarlama ve satış çalışmaları yapar. Ancak sonuçlar düzenli ölçülmediği için hangi çalışmanın işe yaradığı net olarak bilinmez. CRM kampanya yönetimi bu dağınıklığı ortadan kaldırır. Her kampanya, müşteri adayı, teklif, takip ve satış sonucu tek sistemde izlenebilir. Sonuçlar ölçülmediğinde yaşanabilecek sorunlar:",
+          "items": [
+            "Sonuç vermeyen kampanyalara zaman ayrılmaya devam edilir",
+            "İyi sonuç veren kanallara yeterince odaklanılmaz",
+            "Satış ekibi sıcak müşteri adaylarını geç takip eder",
+            "Fuar sonrası görüşülen firmalar unutulur",
+            "Mail marketing cevapları dağınık kalır",
+            "LinkedIn mesajlarından gelen fırsatlar kişisel hesaplarda kaybolur",
+            "Web sitesi formları satış sürecine düzgün aktarılmaz",
+            "B2B platformlardan gelen talepler ölçülmez"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Kampanya yapıyor ama sonuçlarını net göremiyorsanız, CRM kampanya yönetimi şirketiniz için ciddi bir ihtiyaçtır.",
+          "items": [
+            { "title": "Mail Marketing Kampanyaları Yapanlar", "body": "E-posta kampanyalarından gelen cevapları CRM ile ölçmek isteyen şirketler için uygundur." },
+            { "title": "LinkedIn ve Sales Navigator Kullananlar", "body": "LinkedIn müşteri bulma çalışmalarını kampanya bazlı takip etmek isteyen ekipler için uygundur." },
+            { "title": "Fuar Sonrası Takip Yapan Firmalar", "body": "Fuar görüşmelerini ve teklif taleplerini CRM üzerinde kampanya olarak izleyebilir." },
+            { "title": "Web Sitesinden Lead Alan İşletmeler", "body": "Teklif formlarından gelen müşteri adaylarını kampanya kaynağına göre takip edebilir." },
+            { "title": "B2B Platformlardan Talep Alanlar", "body": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages taleplerini kampanya bazlı ölçebilir." },
+            { "title": "İhracat Müşteri Bulma Çalışması Yapanlar", "body": "Konşimento, GTİP / HS kodu ve ülke bazlı müşteri kampanyalarını takip edebilir." },
+            { "title": "Pazarlama Bütçesini Verimli Kullanmak İsteyenler", "body": "Hangi kanalın müşteri, teklif ve satış getirdiğini görmek isteyen yöneticiler için uygundur." },
+            { "title": "KOBİ’ler ve Satış Ekipleri", "body": "Satış ve pazarlama çalışmalarını tek merkezden takip etmek isteyen işletmeler için uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM Kampanya Yönetimi ile Hangi Kampanyalar Takip Edilebilir?",
+          "body": [
+            "CRM kampanya yönetimi farklı müşteri kazanım çalışmalarını tek sistemde toplar. Bu çalışmalar CRM üzerinde kampanya adıyla takip edildiğinde hangi çalışmanın ne sonuç verdiği daha net görülebilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "CRM Kampanya Yönetimi ile Hangi Alanları Yönetebilirsiniz?",
+          "intro": "Kampanya yönetimi yalnızca kampanya adı yazmak değildir. Her kampanyanın hedefi, kaynağı, müşteri adayı, teklif, satış fırsatı ve sonuçları birlikte takip edilmelidir.",
+          "items": [
+            { "title": "Kampanya Kaydı Oluşturma", "body": "CRM kampanya yönetiminin ilk adımı her çalışma için ayrı kampanya kaydı oluşturmaktır. Bu yapı sayesinde kampanyalar ölçülebilir satış projelerine dönüşür. Kampanya adı, türü, hedef ülke ve hedef sektör; başlangıç ve bitiş tarihi; sorumlu kişi veya ekip; hedeflenen müşteri sayısı ve kampanya sonucu takip edilir." },
+            { "title": "Kampanya Hedef Kitlesinin Belirlenmesi", "body": "Başarılı bir kampanya için önce doğru hedef kitle belirlenmelidir. Her ürün, her ülkeye veya her sektöre aynı şekilde sunulamaz. Hedef ülke, sektör ve alıcı tipi; ithalatçı, distribütör, üretici veya toptancı; karar verici kişi ve departman; B2B satış, ihracat veya tekrar satış hedefi belirlenir." },
+            { "title": "Kampanya Kaynağı Takibi", "body": "CRM kampanya yönetiminde her müşteri adayının hangi kampanyadan geldiği kayıt altına alınmalıdır. Bu bilgi hangi kanalın daha kaliteli müşteri getirdiğini gösterir. E-posta kampanyası, LinkedIn mesajı veya Sales Navigator; fuar görüşmesi, web sitesi formu veya B2B platform talebi; telefon araması, konşimento verisi veya GTİP / HS kodu çalışması; Google araması, referans veya mevcut müşteri yönlendirmesi takip edilir." },
+            { "title": "Kampanya Bazlı Müşteri Adayı Yönetimi", "body": "Her kampanyadan gelen müşteri adayları CRM üzerinde ayrı ayrı takip edilebilir. Böylece her lead satış ekibine düzenli şekilde aktarılır. Firma adı, ilgili kişi, ülke ve sektör; ilgilendiği ürün veya hizmet; kampanya adı ve kampanya kaynağı; satış temsilcisi, ilk iletişim ve takip tarihi kaydedilir." },
+            { "title": "Satış Ekibine Kampanya Bazlı Görev Atama", "body": "Kampanyadan gelen müşteri adayları hızlı şekilde satış ekibine aktarılmazsa sıcak fırsatlar soğuyabilir. CRM üzerinden görevler oluşturulabilir: kampanyaya cevap veren firmayı ara; teklif isteyen müşteriye fiyat hazırla; LinkedIn’den dönüş yapan kişiyle toplantı planla; fuar sonrası firmaya takip maili gönder." },
+            { "title": "Kampanya Dönüşüm Takibi", "body": "Bir kampanyanın başarılı olup olmadığını anlamak için yalnızca kaç kişiye ulaşıldığına bakmak yeterli değildir. Asıl önemli olan kaç müşteri adayı, kaç teklif ve kaç satış oluştuğudur. Ulaşılan ve cevap veren firma sayısı; müşteri adayı ve teklif isteyen firma sayısı; açık satış fırsatı ve siparişe dönüşen müşteri sayısı; kampanyadan oluşan toplam teklif ve satış tutarı izlenir." },
+            { "title": "Mail Marketing Kampanya Yönetimi", "body": "Mail marketing kampanyaları CRM ile takip edildiğinde yalnızca gönderim değil, satışa bağlanan ölçülebilir bir süreç haline gelir. Gönderilen firma listesi, gönderim tarihi ve konu başlığı; cevap veren ve teklif isteyen firmalar; takip maili gönderilecek ve telefonla aranacak firmalar; satış temsilcisine atanacak leadler ve satış fırsatları takip edilir." },
+            { "title": "Fuar Kampanyası Yönetimi", "body": "Fuarlar ciddi zaman ve bütçe gerektirir. Bu nedenle fuar öncesi, fuar sırası ve fuar sonrası müşteri takipleri CRM üzerinden yönetilmelidir. Fuar adı, tarihi ve hedef müşteri listesi; görüşülen firmalar ve kartvizit alınan kişiler; teklif veya numune isteyen firmalar; fuar sonrası takip tarihi ve siparişe dönüşen fırsatlar izlenir." },
+            { "title": "LinkedIn ve Sales Navigator Kampanya Yönetimi", "body": "LinkedIn ve Sales Navigator ile yapılan B2B müşteri bulma çalışmaları da CRM’de kampanya olarak takip edilebilir. Böylece fırsatlar kişisel mesaj kutularında kaybolmaz. Hedef sektör ve hedef ülke; bağlantı ve mesaj gönderilen kişi sayısı; cevap veren kişiler ve toplantı talep eden firmalar; satış temsilcisine aktarılan leadler takip edilir." },
+            { "title": "İhracat Kampanyası Yönetimi", "body": "İhracat müşteri bulma çalışmalarında farklı ülkeler, ürün grupları, GTİP / HS kodları, müşteri listeleri ve iletişim çalışmaları aynı anda yürütülebilir. Hedef ülke, ürün grubu ve GTİP / HS kodu; konşimento verisiyle bulunan alıcı firmalar; mail gönderilen ve telefonla aranan firmalar; teklif, numune, proforma ve siparişe dönüşen fırsatlar takip edilir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Kampanya Yönetiminde En Önemli Raporlar",
+          "body": [
+            "CRM kampanya yönetimiyle yöneticiler sadece kampanya yapıldığını değil, kampanyanın sonucunu da görebilir. Bu raporlar hangi çalışmanın devam etmesi, hangisinin iyileştirilmesi ve hangisinin durdurulması gerektiğini daha net gösterir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM ile Kampanya Performansı ve Satış Dönüşüm Altyapısı",
+          "body": [
+            "CRM kampanya yönetimi; mail marketing kampanya yönetimi, satış kampanyası yönetimi, B2B kampanya yönetimi, ihracat kampanya yönetimi, kampanya performans analizi ve kampanya satış dönüşümü için kullanılabilir."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "CRM Kampanya Yönetiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Kampanyalar tek merkezden takip edilir",
+            "Hangi kampanyanın müşteri getirdiği görülür",
+            "Pazarlama ve satış ekipleri daha koordineli çalışır",
+            "Mail marketing dönüşleri satış sürecine bağlanır",
+            "Fuar görüşmeleri unutulmaz",
+            "LinkedIn ve Sales Navigator çalışmaları ölçülebilir hale gelir",
+            "B2B platformlardan gelen talepler kampanya bazlı izlenir",
+            "İhracat müşteri bulma çalışmaları ülke ve ürün bazlı analiz edilir",
+            "Teklif isteyen firmalar satış ekibine atanır",
+            "Pazarlama bütçesi daha verimli yönetilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "CRM Kampanya Yönetiminde Sık Yapılan Hatalar",
+          "items": [
+            "Kampanya hedefini net belirlememek",
+            "Her müşteri adayının kaynağını kayıt altına almamak",
+            "Mail marketing cevaplarını CRM’e aktarmamak",
+            "Fuar sonrası firmaları takip etmemek",
+            "LinkedIn dönüşlerini kişisel hesaplarda bırakmak",
+            "B2B platform taleplerini kampanya olarak ölçmemek",
+            "Satış ekibine görev atamamak",
+            "Kampanya sonuçlarını yalnızca gönderim sayısıyla değerlendirmek",
+            "Teklif ve sipariş dönüşümünü ölçmemek",
+            "Ülke, sektör ve ürün bazlı analiz yapmamak"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "CRM Kampanya Yönetimi Kurulum Süreci Nasıl İlerler?",
+          "intro": "CRM kampanya yönetimi, mevcut kampanya çalışmalarınızın, satış kanallarınızın, müşteri kaynaklarınızın ve raporlama ihtiyacınızın değerlendirilmesiyle başlar. Ardından kampanya alanları, lead kaynakları, görev yapısı ve dönüşüm raporları kurgulanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin mevcut kampanya çalışmaları, satış kanalları, müşteri kaynakları ve CRM ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Kampanya Türlerinin Belirlenmesi", "body": "Mail marketing, LinkedIn, fuar, web sitesi, B2B platform, ihracat müşteri bulma veya telefon araması gibi kampanya türleri belirlenir." },
+            { "n": 3, "title": "Kampanya Alanlarının Planlanması", "body": "Kampanya adı, hedef ülke, sektör, müşteri grubu, sorumlu kişi, başlangıç tarihi, bitiş tarihi ve dönüşüm alanları oluşturulur." },
+            { "n": 4, "title": "Lead Kaynağı Takibi", "body": "Her müşteri adayının hangi kampanyadan geldiği CRM üzerinde kayıt altına alınır." },
+            { "n": 5, "title": "Satış Ekibi Görev Yapısı", "body": "Kampanyadan gelen müşteri adaylarının satış temsilcilerine nasıl atanacağı planlanır." },
+            { "n": 6, "title": "Dönüşüm Raporları", "body": "Kampanya bazlı müşteri adayı, teklif, açık fırsat, sipariş ve kaybedilen fırsat raporları hazırlanır." },
+            { "n": 7, "title": "Ekip Eğitimi", "body": "Satış ve pazarlama ekiplerine kampanya kayıtları, lead takibi, görev yönetimi ve raporlama kullanımı anlatılır." },
+            { "n": 8, "title": "Sürekli İyileştirme", "body": "Kampanya sonuçları analiz edilerek daha iyi hedef kitle, mesaj, kanal ve takip stratejisi oluşturulur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM kampanya yönetimi nedir?",
+          "body": [
+            "CRM kampanya yönetimi; mail marketing, LinkedIn, fuar, web sitesi, B2B platform, telefon araması ve ihracat müşteri bulma çalışmalarından gelen müşteri adaylarının kampanya bazlı CRM üzerinde takip edilmesi, satış ekibine atanması, teklif sürecine alınması ve satışa dönüşümünün ölçülmesi sürecidir. {{appName}}, şirketlerin kampanya performansını müşteri, teklif ve satış sonuçlarıyla ölçülebilir hale getirir."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "CRM Kampanya Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "CRM kampanya yönetimi kimler için uygundur?", "a": "CRM kampanya yönetimi; mail marketing, LinkedIn, fuar, web sitesi, B2B platform, telefon araması veya ihracat müşteri bulma çalışmaları yapan tüm şirketler için uygundur." },
+            { "q": "CRM ile kampanya takibi yapılabilir mi?", "a": "Evet. CRM üzerinden kampanya adı, kaynak, müşteri adayı, teklif, satış fırsatı, sipariş ve kaybedilen fırsatlar takip edilebilir." },
+            { "q": "Mail marketing kampanyaları CRM’de takip edilebilir mi?", "a": "Evet. Mail gönderilen firmalar, cevap verenler, teklif isteyenler, takip edilecek müşteriler ve satışa dönüşen fırsatlar CRM üzerinde kampanya bazlı takip edilebilir." },
+            { "q": "Fuar sonrası müşteri takibi kampanya olarak yönetilebilir mi?", "a": "Evet. Fuar adıyla kampanya oluşturulabilir. Görüşülen firmalar, teklif isteyen müşteriler, takip tarihleri ve siparişe dönüşen fırsatlar CRM üzerinden izlenebilir." },
+            { "q": "LinkedIn ve Sales Navigator çalışmaları kampanya olarak takip edilebilir mi?", "a": "Evet. Bağlantı kurulan kişiler, mesaj gönderilen firmalar, cevap veren potansiyel müşteriler ve toplantı talepleri CRM kampanyası olarak takip edilebilir." },
+            { "q": "İhracat müşteri bulma kampanyaları CRM’de yönetilebilir mi?", "a": "Evet. Konşimento verileri, GTİP / HS kodu, hedef ülke, ürün grubu, mail marketing, telefon araması ve teklif süreçleri CRM kampanyası olarak yönetilebilir." },
+            { "q": "Kampanyadan gelen müşteri adayları satış ekibine atanabilir mi?", "a": "Evet. Kampanyadan gelen müşteri adayları ilgili satış temsilcisine atanabilir ve görevler oluşturulabilir." },
+            { "q": "Hangi kampanyanın satış getirdiği görülebilir mi?", "a": "Evet. Kampanya bazlı müşteri adayı, teklif, açık fırsat ve sipariş raporlarıyla hangi kampanyanın satışa katkı sağladığı görülebilir." },
+            { "q": "Kampanya yönetimi pazarlama bütçesini daha verimli kullanmaya yardımcı olur mu?", "a": "Evet. Hangi kampanyanın daha fazla müşteri, teklif ve satış oluşturduğu görüldüğünde pazarlama bütçesi daha doğru kanallara yönlendirilebilir." },
+            { "q": "CRM kampanya yönetimi satışları artırır mı?", "a": "CRM kampanya yönetimi doğrudan satış garantisi vermez; ancak kampanya sonuçlarını görünür hale getirir, müşteri adaylarının unutulmasını önler ve satış ekibinin doğru fırsatlara odaklanmasına yardımcı olur." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Hangi Kampanyanın Para Kazandırdığını Birlikte Görünür Hale Getirelim",
+        "body": "Kampanyalar yapıyor ama hangi çalışmanın gerçekten müşteri, teklif ve satış getirdiğini net göremiyorsanız, pazarlama ve satış süreciniz eksik ölçülüyor olabilir. {{appName}} CRM Kampanya Yönetimi ile mail marketing, LinkedIn, fuar, web sitesi, B2B platform ve ihracat müşteri bulma çalışmalarınızı tek sistemde takip edin.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}
