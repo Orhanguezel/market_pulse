@@ -11,7 +11,7 @@ echo "==> [1/7] git pull ($BRANCH)"
 cd "$ROOT"
 git fetch origin
 git checkout "$BRANCH"
-git pull origin "$BRANCH"
+git reset --hard "origin/$BRANCH"
 
 echo "==> [2/7] backend build"
 cd "$ROOT/backend" && bun install && bun run build

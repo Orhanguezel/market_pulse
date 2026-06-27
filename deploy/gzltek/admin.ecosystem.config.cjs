@@ -6,7 +6,7 @@ module.exports = {
     {
       name: 'market-pulse-gzltek-admin',
       cwd: '/var/www/market_pulse/admin_panel',
-      script: '/usr/bin/bun',
+      script: '/usr/local/bin/bun',
       args: 'x next start -p 3096 -H 127.0.0.1',
       exec_mode: 'fork',
       instances: 1,

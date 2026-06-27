@@ -5,7 +5,7 @@ module.exports = {
     {
       name: 'market-pulse-gzltek-backend',
       cwd: '/var/www/market_pulse/backend',
-      script: '/usr/bin/bun',
+      script: '/usr/local/bin/bun',
       args: 'dist/index.js',
       exec_mode: 'fork',
       instances: 1,
