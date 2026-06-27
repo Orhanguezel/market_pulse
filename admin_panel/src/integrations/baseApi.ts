@@ -286,6 +286,10 @@ const baseQueryWithReauth: RBQ = async (args, api, extra) => {
 export const baseApi = createApi({
   reducerPath: 'gwdApi',
   baseQuery: baseQueryWithReauth,
+  // Multi-tenant: argümansız query'ler (ör. listIcpProfiles) sabit cache anahtarına sahip;
+  // tenant değişince/sayfaya dönünce stale (boş) sonuç gösterip refetch etmiyordu
+  // ("Henüz ICP profili yok" oysa backend 4 döndürüyor). Mount/arg değişiminde tazele.
+  refetchOnMountOrArgChange: true,
   endpoints: () => ({}),
   tagTypes: tags,
 });
