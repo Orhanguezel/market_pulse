@@ -6,7 +6,7 @@ import { bulkInsertRecords, aggregateBuyers, type CustomsRecordInput } from '@/m
 import { createSearchJob } from '@/modules/lead-machine/_shared/db';
 import { runCustomsJob } from '@/modules/lead-machine/customs/customs.job';
 
-const TENANT = 'avrasya';
+const TENANT = process.env.TENANT_KEY || 'avrasya';
 
 /** Minimal RFC4180-ish CSV parser (handles quoted fields with commas/newlines). */
 function parseCsv(text: string): string[][] {
