@@ -8,6 +8,7 @@ import { runCustomsJob } from '@/modules/lead-machine/customs/customs.job';
 
 const JOB_TENANT = process.env.TENANT_KEY || 'avrasya';
 const BATCH_SIZE = Math.max(1000, Number(process.env.CUSTOMS_IMPORT_BATCH_SIZE ?? 5000));
+const TABLE_NAME_RE = /^[A-Za-z0-9_]+$/;
 
 async function* parseCsvRows(path: string): AsyncGenerator<string[]> {
   const stream = createReadStream(path, { encoding: 'utf8' });
@@ -135,6 +136,49 @@ async function importCsv(csvPath: string, opts: { reload: boolean }): Promise<nu
   return inserted;
 }
 
+function parseFlagValue(args: string[], name: string): string | null {
+  const prefix = `${name}=`;
+  const inline = args.find((arg) => arg.startsWith(prefix));
+  if (inline) return inline.slice(prefix.length).trim() || null;
+  const index = args.indexOf(name);
+  if (index >= 0) return args[index + 1]?.trim() || null;
+  return null;
+}
+
+function safeTableName(name: string): string {
+  if (!TABLE_NAME_RE.test(name)) throw new Error(`INVALID_TABLE_NAME_${name}`);
+  return `\`${name}\``;
+}
+
+async function importFromStagingTable(tableName: string, opts: { reload: boolean }): Promise<void> {
+  if (opts.reload) {
+    await pool.query('TRUNCATE TABLE customs_records');
+  }
+
+  const sourceTable = safeTableName(tableName);
+  await pool.query('SET @customs_import_row := 0');
+  await pool.query(
+    `INSERT IGNORE INTO customs_records
+      (tenant_key, hs_code, hs_description, buyer_name, exporter_name, buyer_country, total_value, total_quantity, month_year, source_file, source_row_number)
+     SELECT
+      'global',
+      NULLIF(TRIM(CAST(hs_code AS CHAR)), ''),
+      NULLIF(TRIM(CAST(hs_code_description AS CHAR)), ''),
+      NULLIF(TRIM(CAST(buyer_name AS CHAR)), ''),
+      NULLIF(TRIM(CAST(exporter_name AS CHAR)), ''),
+      NULL,
+      CAST(NULLIF(REPLACE(CAST(total_value AS CHAR), ',', ''), '') AS DECIMAL(20,2)),
+      CAST(NULLIF(REPLACE(CAST(total_quantity AS CHAR), ',', ''), '') AS DECIMAL(20,2)),
+      NULLIF(TRIM(CAST(month_year AS CHAR)), ''),
+      ?,
+      (@customs_import_row := @customs_import_row + 1)
+     FROM ${sourceTable}
+     ORDER BY hs_code, buyer_name, exporter_name, month_year, total_value, total_quantity`,
+    [tableName],
+  );
+  await pool.query('ANALYZE TABLE customs_records');
+}
+
 async function benchmark() {
   const start = performance.now();
   const rows = await aggregateBuyers({ hsPrefix: '0904', minValue: 1000, limit: 200 });
@@ -147,7 +191,13 @@ async function main() {
   const runFlag = args.includes('--run');
   const reloadFlag = args.includes('--reload');
   const benchmarkFlag = args.includes('--benchmark');
+  const fromTable = parseFlagValue(args, '--from-table');
   const csvPath = args.find(a => !a.startsWith('--'));
+
+  if (fromTable) {
+    await importFromStagingTable(fromTable, { reload: reloadFlag });
+    console.log(`[import-customs] imported staging table ${fromTable} into customs_records`);
+  }
 
   if (csvPath) {
     const inserted = await importCsv(csvPath, { reload: reloadFlag });

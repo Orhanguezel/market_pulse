@@ -25,6 +25,8 @@ CSV kolonlari:
 
 ## Import
 
+### CSV
+
 CSV dosyasi hazir oldugunda backend dizininden calistir:
 
 ```bash
@@ -42,6 +44,22 @@ Script satirlari stream ederek okur ve `CUSTOMS_IMPORT_BATCH_SIZE` ile kontrol e
 ```bash
 CUSTOMS_IMPORT_BATCH_SIZE=10000 bun src/scripts/import-customs.ts /path/to/excel_data.csv --benchmark
 ```
+
+### SQL Dump
+
+`.sql` dump geldiyse once dump'i staging tablo olarak MySQL'e yukle. Dump zaten `excel_data` tablosunu olusturuyorsa:
+
+```bash
+mysql -h "$MYSQL_HOST" -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" < /path/to/excel_data.sql
+```
+
+Sonra staging tablodan global lake'e aktar:
+
+```bash
+bun src/scripts/import-customs.ts --from-table=excel_data --reload --benchmark
+```
+
+`--from-table` modu beklenen kolonlari staging tablodan okur: `hs_code`, `buyer_name`, `exporter_name`, `hs_code_description`, `total_value`, `total_quantity`, `month_year`.
 
 ## Idempotency
 
