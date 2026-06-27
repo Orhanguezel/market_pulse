@@ -28,6 +28,11 @@ export function TenantSwitcher({ collapsed = false }: { collapsed?: boolean }) {
     if (first) {
       setSelectedTenantKey(first);
       setValue(first);
+      // İlk yüklemede (localStorage boş) tenant seçilmeden önce sorgular X-Tenant'sız
+      // gidip yanlış/boş sonuç dönüyordu (ICP listesi boş görünüyordu). Tenant'ı yazdıktan
+      // sonra bir kez reload → tüm sorgular doğru X-Tenant ile refire. Döngü yok: reload
+      // sonrası getSelectedTenantKey dolu olduğu için bu dal çalışmaz.
+      window.location.reload();
     }
   }, [tenants]);
 
