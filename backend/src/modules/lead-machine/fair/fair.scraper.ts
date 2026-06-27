@@ -1,7 +1,6 @@
 import { scrape, type FairExhibitorData, type FairExhibitorDetailData } from '../_shared/scraper.client';
 
 const MESSE_API_BASE = 'https://api.messefrankfurt.com/service/esb_api';
-const MESSE_PUBLIC_API_KEY = 'LXnMWcYQhipLAS7rImEzmZ3CkrU033FMha9cwVSngG4vbufTsAOCQQ==';
 const MESSE_EVENT_ID = 'AUTOMECHANIKA';
 const MESSE_DEFAULT_HALLS = ['3.0', '3.1', '4.0'];
 const MESSE_DETAIL_BASE = 'https://automechanika.messefrankfurt.com/frankfurt/en/exhibitor-search.detail.html';
@@ -146,6 +145,9 @@ function hitToRawExhibitor(hit: MesseHit): RawExhibitor | null {
 }
 
 async function fetchMessePage(params: { page: number; pageSize: number; hall?: string }): Promise<MesseSearchResponse> {
+  const apiKey = process.env.MESSE_FRANKFURT_API_KEY;
+  if (!apiKey) throw new Error('MESSE_FRANKFURT_API_KEY_NOT_CONFIGURED');
+
   const url = new URL(`${MESSE_API_BASE}/exhibitor-service/api/2.1/public/exhibitor/search`);
   url.searchParams.set('language', 'en-GB');
   url.searchParams.set('q', '');
@@ -157,7 +159,7 @@ async function fetchMessePage(params: { page: number; pageSize: number; hall?: s
   url.searchParams.set('findEventVariable', MESSE_EVENT_ID);
   if (params.hall) url.searchParams.set('location', params.hall);
   const res = await fetch(url, {
-    headers: { apikey: process.env.MESSE_FRANKFURT_API_KEY || MESSE_PUBLIC_API_KEY },
+    headers: { apikey: apiKey },
   });
   if (!res.ok) throw new Error(`MESSE_API_FAILED_${res.status}`);
   return res.json() as Promise<MesseSearchResponse>;

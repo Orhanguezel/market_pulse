@@ -10,6 +10,9 @@ export interface JwtUser {
   role?: string;
   roles?: string[];
   is_admin?: boolean;
+  isSuperAdmin?: boolean;
+  tenants?: string[];
+  defaultTenant?: string | null;
   [k: string]: unknown;
 }
 

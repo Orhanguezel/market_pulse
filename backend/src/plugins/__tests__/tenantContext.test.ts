@@ -2,13 +2,19 @@ import { readFileSync } from 'node:fs';
 import { afterEach, describe, expect, test } from 'bun:test';
 import fastify, { type FastifyInstance } from 'fastify';
 import { env } from '@/core/env';
+import type { JwtUser } from '@/middleware/auth';
 
 const { default: tenantContextPlugin } = await import('../tenantContext');
 const { getActiveTenantKey } = await import('@/modules/_shared/tenant-scope');
 const originalTenantKey = env.TENANT_KEY;
 
-async function buildApp(): Promise<FastifyInstance> {
+async function buildApp(user?: JwtUser): Promise<FastifyInstance> {
   const app = fastify();
+  if (user) {
+    app.addHook('onRequest', async (req) => {
+      (req as unknown as { user: JwtUser }).user = user;
+    });
+  }
   await app.register(tenantContextPlugin);
 
   // Deliberately registered outside the plugin body. Without fastify-plugin,
@@ -38,37 +44,81 @@ describe('tenant context plugin integration', () => {
     const pluginSource = readFileSync(new URL('../tenantContext.ts', import.meta.url), 'utf8');
     const contextSource = readFileSync(new URL('../../core/tenant-context.ts', import.meta.url), 'utf8');
 
-    expect(pluginSource).toContain('enterTenant(resolveTenant(req))');
+    expect(pluginSource).toContain('enterTenant(resolved.tenant)');
     expect(pluginSource).not.toContain('runWithTenant(resolveTenant(req), done)');
     expect(contextSource).toContain('tenantStorage.enterWith(tenantKey)');
   });
 
-  test('propagates request tenant through the real Fastify hook chain', async () => {
+  test('ignores client tenant on public routes and uses env fallback', async () => {
     env.TENANT_KEY = 'fallback-tenant';
     app = await buildApp();
 
     const vista = await app.inject({ method: 'GET', url: '/tenant', headers: { 'X-Tenant': 'vistaseeds' } });
     expect(vista.statusCode).toBe(200);
-    expect(vista.json()).toEqual({ tenant: 'vistaseeds' });
-
-    const bereket = await app.inject({ method: 'GET', url: '/tenant', headers: { 'X-Tenant': 'bereketfide' } });
-    expect(bereket.statusCode).toBe(200);
-    expect(bereket.json()).toEqual({ tenant: 'bereketfide' });
-  });
-
-  test('resolves query tenant and env fallback without leaking previous requests', async () => {
-    env.TENANT_KEY = 'fallback-tenant';
-    app = await buildApp();
-
-    const header = await app.inject({ method: 'GET', url: '/tenant', headers: { 'X-Tenant': 'vistaseeds' } });
-    expect(header.json()).toEqual({ tenant: 'vistaseeds' });
+    expect(vista.json()).toEqual({ tenant: 'fallback-tenant' });
 
     const query = await app.inject({ method: 'GET', url: '/tenant?tenantKey=bereketfide' });
     expect(query.statusCode).toBe(200);
-    expect(query.json()).toEqual({ tenant: 'bereketfide' });
+    expect(query.json()).toEqual({ tenant: 'fallback-tenant' });
+  });
 
-    const fallback = await app.inject({ method: 'GET', url: '/tenant' });
-    expect(fallback.statusCode).toBe(200);
-    expect(fallback.json()).toEqual({ tenant: 'fallback-tenant' });
+  test('uses default tenant for authenticated non-super-admin without client tenant', async () => {
+    env.TENANT_KEY = 'fallback-tenant';
+    app = await buildApp({
+      sub: 'user-1',
+      role: 'customer',
+      isSuperAdmin: false,
+      tenants: ['vistaseeds'],
+      defaultTenant: 'vistaseeds',
+    });
+
+    const res = await app.inject({ method: 'GET', url: '/tenant' });
+    expect(res.statusCode).toBe(200);
+    expect(res.json()).toEqual({ tenant: 'vistaseeds' });
+  });
+
+  test('rejects cross-tenant request for authenticated non-super-admin', async () => {
+    env.TENANT_KEY = 'fallback-tenant';
+    app = await buildApp({
+      sub: 'user-1',
+      role: 'customer',
+      isSuperAdmin: false,
+      tenants: ['vistaseeds'],
+      defaultTenant: 'vistaseeds',
+    });
+
+    const res = await app.inject({ method: 'GET', url: '/tenant', headers: { 'X-Tenant': 'bereketfide' } });
+    expect(res.statusCode).toBe(403);
+    expect(res.json()).toEqual({ error: { message: 'tenant_forbidden' } });
+  });
+
+  test('lets super-admin switch tenants with client tenant', async () => {
+    env.TENANT_KEY = 'fallback-tenant';
+    app = await buildApp({
+      sub: 'admin-1',
+      role: 'admin',
+      isSuperAdmin: true,
+      tenants: [],
+      defaultTenant: 'vistaseeds',
+    });
+
+    const res = await app.inject({ method: 'GET', url: '/tenant', headers: { 'X-Tenant': 'bereketfide' } });
+    expect(res.statusCode).toBe(200);
+    expect(res.json()).toEqual({ tenant: 'bereketfide' });
+  });
+
+  test('rejects authenticated non-super-admin with no tenant assignment', async () => {
+    env.TENANT_KEY = 'fallback-tenant';
+    app = await buildApp({
+      sub: 'user-1',
+      role: 'customer',
+      isSuperAdmin: false,
+      tenants: [],
+      defaultTenant: null,
+    });
+
+    const res = await app.inject({ method: 'GET', url: '/tenant' });
+    expect(res.statusCode).toBe(403);
+    expect(res.json()).toEqual({ error: { message: 'no_tenant_assigned' } });
   });
 });

@@ -8,6 +8,7 @@ export {
   setAccessCookie,
   setRefreshCookie,
   clearAuthCookies,
+  issueAccessToken,
   issueTokens,
   verifyPasswordSmart,
   parseAdminEmailAllowlist,

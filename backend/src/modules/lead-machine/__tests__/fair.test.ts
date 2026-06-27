@@ -9,6 +9,7 @@ const verifyScraperWebhook = mock(() => true);
 const fetchMock = mock(() => Promise.resolve(Response.json({ attendees: [] })));
 
 globalThis.fetch = fetchMock as unknown as typeof fetch;
+process.env.MESSE_FRANKFURT_API_KEY = 'messe-test-key';
 
 mock.module('@/db/client', () => ({
   db: dbMock.db,

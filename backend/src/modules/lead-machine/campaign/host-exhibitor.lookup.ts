@@ -5,7 +5,6 @@
 // =============================================================
 
 const MESSE_API_BASE = 'https://api.messefrankfurt.com/service/esb_api';
-const MESSE_PUBLIC_API_KEY = 'LXnMWcYQhipLAS7rImEzmZ3CkrU033FMha9cwVSngG4vbufTsAOCQQ==';
 
 export interface HostExhibitorData {
   rewrite_id: string | null;
@@ -61,6 +60,9 @@ interface SearchOpts {
 }
 
 export async function searchMesseExhibitor(opts: SearchOpts): Promise<HostExhibitorData | null> {
+  const apiKey = process.env.MESSE_FRANKFURT_API_KEY;
+  if (!apiKey) throw new Error('MESSE_FRANKFURT_API_KEY_NOT_CONFIGURED');
+
   const url = new URL(`${MESSE_API_BASE}/exhibitor-service/api/2.1/public/exhibitor/search`);
   url.searchParams.set('language', 'en-GB');
   url.searchParams.set('q', opts.query);
@@ -69,7 +71,7 @@ export async function searchMesseExhibitor(opts: SearchOpts): Promise<HostExhibi
   url.searchParams.set('findEventVariable', opts.eventId ?? 'AUTOMECHANIKA');
 
   const res = await fetch(url, {
-    headers: { apikey: process.env.MESSE_FRANKFURT_API_KEY || MESSE_PUBLIC_API_KEY },
+    headers: { apikey: apiKey },
   });
   if (!res.ok) throw new Error(`MESSE_API_FAILED_${res.status}`);
   const json = await res.json() as any;

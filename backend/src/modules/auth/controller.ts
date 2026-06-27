@@ -39,10 +39,10 @@ import {
   setAccessCookie,
   setRefreshCookie,
   clearAuthCookies,
+  issueAccessToken,
   issueTokens,
   verifyPasswordSmart,
   parseAdminEmailAllowlist,
-  ACCESS_MAX_AGE,
 } from './helpers';
 
 const adminEmails = parseAdminEmailAllowlist();
@@ -291,7 +291,6 @@ export async function googleToken(req: FastifyRequest, reply: FastifyReply) {
 /** POST /auth/token/refresh */
 export async function refresh(req: FastifyRequest, reply: FastifyReply) {
   try {
-    const jwt = getJWTFromReq(req);
     const raw = ((req.cookies as Record<string, string | undefined> | undefined)?.refresh_token ?? '').trim();
     if (!raw.includes('.')) return reply.status(401).send({ error: { message: 'no_refresh' } });
 
@@ -310,7 +309,7 @@ export async function refresh(req: FastifyRequest, reply: FastifyReply) {
 
     const role = await getPrimaryRole(u.id);
     if (rejectNonAdmin(role, reply)) return;
-    const access = jwt.sign({ sub: u.id, email: u.email ?? undefined, role }, { expiresIn: `${ACCESS_MAX_AGE}s` });
+    const access = await issueAccessToken(req.server, u, role);
     const newRaw = await repoRotateRefreshToken(raw, u.id);
     setAccessCookie(reply, access);
     setRefreshCookie(reply, newRaw);

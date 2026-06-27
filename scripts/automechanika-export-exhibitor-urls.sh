@@ -21,13 +21,18 @@
 set -euo pipefail
 
 API_BASE="${MESSE_API_BASE:-https://api.messefrankfurt.com/service/esb_api}"
-API_KEY="${MESSE_API_KEY:-LXnMWcYQhipLAS7rImEzmZ3CkrU033FMha9cwVSngG4vbufTsAOCQQ==}"
+API_KEY="${MESSE_API_KEY:-${MESSE_FRANKFURT_API_KEY:-}}"
 EVENT_ID="${MESSE_EVENT_ID:-AUTOMECHANIKA}"
 LANGUAGE="${MESSE_LANGUAGE:-en-GB}"
 PAGE_SIZE="${PAGE_SIZE:-100}"
 MAX_PAGES="${MAX_PAGES:-120}"
 DELAY="${DELAY:-0.4}"
 HALLS="${HALLS:-3.0,3.1,4.0}"
+
+if [[ -z "${API_KEY}" ]]; then
+  echo "MESSE_API_KEY veya MESSE_FRANKFURT_API_KEY env gerekli." >&2
+  exit 1
+fi
 
 RUN_ID="$(date +%s)"
 OUT_DIR="${OUT_DIR:-/tmp/automechanika_exhibitors_${RUN_ID}}"
