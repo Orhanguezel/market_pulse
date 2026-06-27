@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, mock, test } from 'bun:test';
 import { createDbMock } from '../../market/__tests__/helpers/mock-db';
 import { callHandler } from '../../market/__tests__/helpers/reply';
+import { runWithTenant } from '@/core/tenant-context';
 
 const dbMock = createDbMock();
 const scrape = mock(() => Promise.resolve({ data: {} }));
@@ -230,9 +231,9 @@ describe('lead machine controller scraper callback and jobs', () => {
   test('starts amazon job and returns created job', async () => {
     dbMock.queuePoolExecute([job()]);
 
-    const { state } = await callHandler(controller.startAmazonJob, {
+    const { state } = await runWithTenant('avrasya', () => callHandler(controller.startAmazonJob, {
       body: { keyword: 'oto aksesuar', marketplace: 'de' },
-    });
+    }));
 
     expect(state.statusCode).toBe(201);
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('INSERT INTO lead_search_jobs');
@@ -246,9 +247,9 @@ describe('lead machine controller scraper callback and jobs', () => {
   test('starts b2b and fair jobs', async () => {
     dbMock.queuePoolExecute([job({ channel: 'b2b_directory', params: '{"source":"google_maps"}' })]);
 
-    let response = await callHandler(controller.startB2bJob, {
+    let response = await runWithTenant('avrasya', () => callHandler(controller.startB2bJob, {
       body: { source: 'google_maps' },
-    });
+    }));
 
     expect(response.state.statusCode).toBe(201);
     expect(response.state.payload).toEqual(expect.objectContaining({ channel: 'b2b_directory' }));
@@ -256,9 +257,9 @@ describe('lead machine controller scraper callback and jobs', () => {
     dbMock.reset();
     dbMock.queuePoolExecute([job({ channel: 'trade_fair', params: '{"fair_name":"Automechanika"}' })]);
 
-    response = await callHandler(controller.startFairJob, {
+    response = await runWithTenant('avrasya', () => callHandler(controller.startFairJob, {
       body: { fair_name: 'Automechanika' },
-    });
+    }));
 
     expect(response.state.statusCode).toBe(201);
     expect(response.state.payload).toEqual(expect.objectContaining({ channel: 'trade_fair' }));
@@ -390,9 +391,9 @@ describe('lead machine controller icp endpoints', () => {
       updated_at: now,
     }]);
 
-    const { state } = await callHandler(controller.createIcp, {
+    const { state } = await runWithTenant('avrasya', () => callHandler(controller.createIcp, {
       body: { name: 'ICP A', definition: {}, is_active: true },
-    });
+    }));
 
     expect(state.statusCode).toBe(201);
     expect(state.payload).toEqual(expect.objectContaining({ id: 'icp-1', name: 'ICP A', definition: {} }));

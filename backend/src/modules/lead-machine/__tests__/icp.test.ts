@@ -11,6 +11,7 @@ mock.module('@/db/client', () => ({
 mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'avrasya' } }));
 
 const icpRepo = await import('../icp/icp.repository');
+const { runWithTenant } = await import('@/core/tenant-context');
 const { matchesIcp } = await import('../b2b/icp.matcher');
 
 const now = '2026-05-08 10:00:00';
@@ -60,10 +61,10 @@ describe('lead machine icp repository', () => {
   test('creates a profile with active default', async () => {
     dbMock.queuePoolExecute([profile({ name: 'Created ICP', definition: '{}' })]);
 
-    const result = await icpRepo.createIcpProfile({
+    const result = await runWithTenant('avrasya', () => icpRepo.createIcpProfile({
       name: 'Created ICP',
       definition: {},
-    });
+    }));
 
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('INSERT INTO icp_profiles');
     expect(dbMock.poolExecutions[0]?.values).toEqual([

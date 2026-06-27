@@ -12,7 +12,7 @@ function firstString(value: unknown): string | undefined {
 }
 
 type TenantResolution =
-  | { ok: true; tenant: string }
+  | { ok: true; tenant: string | undefined }
   | { ok: false; message: 'tenant_forbidden' | 'no_tenant_assigned' };
 
 function getRequestedTenant(req: { query?: unknown; headers: Record<string, unknown> }): string | undefined {
@@ -43,7 +43,10 @@ function resolveTenant(req: { query?: unknown; headers: Record<string, unknown>;
   }
 
   if (user.isSuperAdmin) {
-    return { ok: true, tenant: requested ?? user.defaultTenant ?? env.TENANT_KEY ?? 'default' };
+    // "Switcher zorunlu": super-admin acikca tenant secmeli (X-Tenant/query). Sessizce
+    // env/default'a DUSMEZ — secim yoksa store unset kalir; okumalar env'e duser (esnek)
+    // ama yazmalar getRequiredTenantKey ile reddedilir (yanlis tenant'a cop birikmesin).
+    return { ok: true, tenant: requested };
   }
 
   const tenants = getAllowedTenants(user);
@@ -68,7 +71,9 @@ const tenantContextImpl: FastifyPluginAsync = async (app) => {
       void reply.code(403).send({ error: { message: resolved.message } });
       return;
     }
-    enterTenant(resolved.tenant);
+    // tenant undefined ise (super-admin secim yapmadi) store'a yazma; okumalar env'e duser,
+    // yazmalar getRequiredTenantKey ile reddedilir.
+    if (resolved.tenant) enterTenant(resolved.tenant);
     done();
   });
 };

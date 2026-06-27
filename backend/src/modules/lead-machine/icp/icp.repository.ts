@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
-import { getActiveTenantKey } from '@/modules/_shared';
+import { getActiveTenantKey, getRequiredTenantKey } from '@/modules/_shared';
 
 export interface IcpProfile {
   id: string;
@@ -37,7 +37,7 @@ export async function getIcpProfile(id: string) {
 
 export async function createIcpProfile(data: { name: string; definition: unknown; is_active?: boolean }) {
   const id = randomUUID();
-  const tenantKey = await getActiveTenantKey();
+  const tenantKey = getRequiredTenantKey(); // switcher zorunlu: tenant secilmeden ICP kaydedilmez
   await pool.execute(
     'INSERT INTO icp_profiles (id, tenant_key, name, is_active, definition) VALUES (?, ?, ?, ?, ?)',
     [id, tenantKey, data.name, data.is_active === false ? 0 : 1, JSON.stringify(data.definition ?? {})],

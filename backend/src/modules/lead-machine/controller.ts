@@ -1,7 +1,7 @@
 import type { FastifyReply, RouteHandler } from 'fastify';
 import { pool } from '@/db/client';
 import { runWithTenant, getRequestTenantKey } from '@/core/tenant-context';
-import { getActiveTenantKey } from '@/modules/_shared';
+import { getActiveTenantKey, getRequiredTenantKey } from '@/modules/_shared';
 import { approveCandidateToMarketLead } from './_shared/candidate.helpers';
 import {
   createSearchJob,
@@ -233,7 +233,7 @@ async function createAndRunJob(channel: LeadChannel, body: Record<string, unknow
   // set edilen ALS store background devamlarina tasinmiyordu -> getActiveTenantKey() env
   // TENANT_KEY'e dusup lead'ler yanlis tenant'a (deploy default) yaziliyordu. runWithTenant
   // (AsyncLocalStorage.run) yeni scope acip tum await zincirine dogru tenant'i tasir.
-  const tenantKey = await getActiveTenantKey();
+  const tenantKey = getRequiredTenantKey(); // switcher zorunlu: tenant secilmeden tarama baslamaz
   const icpId = typeof body.icp_id === 'string' ? body.icp_id : null;
   const job = await createSearchJob(channel, body, icpId);
   if (!job) throw new Error('JOB_CREATE_FAILED');

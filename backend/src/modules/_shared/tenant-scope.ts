@@ -10,6 +10,21 @@ export function getActiveTenantKey(): string {
   return getRequestTenantKey() ?? env.TENANT_KEY ?? 'default';
 }
 
+/**
+ * Yazma islemleri icin: aktif tenant ACIKCA secilmis olmali (X-Tenant/query veya
+ * kullanicinin atanmis tenant'i). env fallback YOK — "switcher zorunlu" politikasi:
+ * tenant secilmeden lead/icp/tarama kaydi yapilamaz (yanlis tenant'a cop birikmesin).
+ */
+export function getRequiredTenantKey(): string {
+  const tenant = getRequestTenantKey();
+  if (!tenant) {
+    const err = new Error('tenant_not_selected') as Error & { statusCode: number };
+    err.statusCode = 400;
+    throw err;
+  }
+  return tenant;
+}
+
 export function tenantPredicate(
   table: TenantScopedTable,
   tenantKey: string,
