@@ -77,6 +77,12 @@ SCRAPER_SERVICE_URL=https://scraper.guezelwebdesign.com
 SCRAPER_SERVICE_API_KEY=<scraper token>
 ```
 
+Backend runtime `dotenv/config` ile `.env` okudugu icin production dosyasini bagla:
+```bash
+cd /var/www/market_pulse/backend
+ln -sfn .env.production .env
+```
+
 `frontend/.env.production`:
 ```dotenv
 NODE_ENV=production

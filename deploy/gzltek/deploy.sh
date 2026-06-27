@@ -23,7 +23,15 @@ echo "==> [4/7] admin build"
 cd "$ROOT/admin_panel" && bun install && bun run build
 
 echo "==> [5/7] db seed (idempotent, no-drop)"
-cd "$ROOT/backend" && bun run src/db/seed/index.ts --no-drop
+cd "$ROOT/backend"
+if [ ! -e .env ] && [ -f .env.production ]; then
+  ln -s .env.production .env
+fi
+set -a
+# shellcheck disable=SC1091
+[ -f .env.production ] && . ./.env.production
+set +a
+bun run src/db/seed/index.ts --no-drop
 
 echo "==> [6/7] tenant scope guard"
 cd "$ROOT/backend" && bun run tenant:guard
