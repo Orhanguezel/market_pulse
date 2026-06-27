@@ -172,8 +172,11 @@ async function importFromStagingTable(tableName: string, opts: { reload: boolean
       NULLIF(TRIM(CAST(month_year AS CHAR)), ''),
       ?,
       (@customs_import_row := @customs_import_row + 1)
-     FROM ${sourceTable}
-     ORDER BY hs_code, buyer_name, exporter_name, month_year, total_value, total_quantity`,
+     FROM ${sourceTable}`,
+    // NOT: ORDER BY YOK — milyonlarca satirda secilen mediumtext kolonlariyla
+    // birlikte filesort tmpdir'i doldurup "No space left on device" veriyordu (5.7M
+    // satir testinde patladi). InnoDB tam tarama zaten clustered PK sirasinda doner →
+    // source_row_number deterministik kalir; idempotency icin --reload kullanin.
     [tableName],
   );
   await pool.query('ANALYZE TABLE customs_records');
