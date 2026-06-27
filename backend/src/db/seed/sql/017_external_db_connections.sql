@@ -41,7 +41,7 @@ CREATE TABLE IF NOT EXISTS `external_db_connections` (
 -- Promat ERP okuma bağlantısı (boş — .env'den alınır)
 -- Prod'da host/user/pass değerleri ya .env'de ya da bu kayıtta olur.
 -- Bu satır var olması gerekiyor ki admin paneli kaydı listede göstersin.
-INSERT INTO `external_db_connections`
+INSERT IGNORE INTO `external_db_connections`
   (`id`, `key`, `name`, `description`, `host`, `port`, `db_name`, `username`, `password_enc`, `is_active`)
 VALUES
   (
