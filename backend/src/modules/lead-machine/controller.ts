@@ -1,6 +1,6 @@
 import type { FastifyReply, RouteHandler } from 'fastify';
 import { pool } from '@/db/client';
-import { runWithTenant } from '@/core/tenant-context';
+import { runWithTenant, getRequestTenantKey } from '@/core/tenant-context';
 import { getActiveTenantKey } from '@/modules/_shared';
 import { approveCandidateToMarketLead } from './_shared/candidate.helpers';
 import {
@@ -72,7 +72,11 @@ function runInBackground(task: Promise<unknown>) {
 }
 
 function queueCandidateEnrichment(candidateId: string) {
-  setTimeout(() => runInBackground(enrichCandidate(candidateId)), 0);
+  // Tenant'i request context'inde yakala; setTimeout + fire-and-forget ALS store'u kaybeder.
+  const tenantKey = getRequestTenantKey();
+  setTimeout(() => runInBackground(
+    tenantKey ? runWithTenant(tenantKey, () => enrichCandidate(candidateId)) : enrichCandidate(candidateId),
+  ), 0);
 }
 
 function callbackTenantKey(body: Record<string, unknown>): string | null {
@@ -224,13 +228,19 @@ export const deleteIcp: RouteHandler<{ Params: { id: string } }> = async (req, r
 };
 
 async function createAndRunJob(channel: LeadChannel, body: Record<string, unknown>) {
+  // Aktif tenant'i request context'inde YAKALA ve background job'u runWithTenant ile sar.
+  // runInBackground (fire-and-forget) request lifecycle'i disina ciktigindan, enterWith ile
+  // set edilen ALS store background devamlarina tasinmiyordu -> getActiveTenantKey() env
+  // TENANT_KEY'e dusup lead'ler yanlis tenant'a (deploy default) yaziliyordu. runWithTenant
+  // (AsyncLocalStorage.run) yeni scope acip tum await zincirine dogru tenant'i tasir.
+  const tenantKey = await getActiveTenantKey();
   const icpId = typeof body.icp_id === 'string' ? body.icp_id : null;
   const job = await createSearchJob(channel, body, icpId);
   if (!job) throw new Error('JOB_CREATE_FAILED');
-  if (channel === 'amazon') runInBackground(runAmazonJob(job.id));
-  if (channel === 'b2b_directory') runInBackground(runB2bJob(job.id));
-  if (channel === 'trade_fair') runInBackground(runFairJob(job.id));
-  if (channel === 'customs') runInBackground(runCustomsJob(job.id));
+  if (channel === 'amazon') runInBackground(runWithTenant(tenantKey, () => runAmazonJob(job.id)));
+  if (channel === 'b2b_directory') runInBackground(runWithTenant(tenantKey, () => runB2bJob(job.id)));
+  if (channel === 'trade_fair') runInBackground(runWithTenant(tenantKey, () => runFairJob(job.id)));
+  if (channel === 'customs') runInBackground(runWithTenant(tenantKey, () => runCustomsJob(job.id)));
   return job;
 }
 
