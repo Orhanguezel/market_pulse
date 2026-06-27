@@ -133,10 +133,22 @@ SSH ile `187.77.79.59`'a gir, sırayla:
    ```
 6. **Nginx vhost + SSL — BUILD'DEN ÖNCE** (frontend build SSR fetch atar, domain canlı olmalı):
    ```bash
-   cp deploy/gzltek/nginx-gzltek.tech.conf /etc/nginx/sites-available/gzltek.tech
-   ln -s /etc/nginx/sites-available/gzltek.tech /etc/nginx/sites-enabled/
+   # Fresh kurulum: cert dosyalari yokken gecici HTTP vhost ile basla.
+   cat >/etc/nginx/sites-available/gzltek.tech <<'EOF'
+   server {
+     listen 80;
+     server_name gzltek.tech www.gzltek.tech;
+     location / {
+       proxy_pass http://127.0.0.1:3077;
+       proxy_set_header Host $host;
+     }
+   }
+   EOF
+   ln -sfn /etc/nginx/sites-available/gzltek.tech /etc/nginx/sites-enabled/gzltek.tech
    nginx -t && systemctl reload nginx
    certbot --nginx -d gzltek.tech -d www.gzltek.tech --redirect -n --agree-tos -m orhanguzell@gmail.com
+   cp deploy/gzltek/nginx-gzltek.tech.conf /etc/nginx/sites-available/gzltek.tech
+   nginx -t && systemctl reload nginx
    ```
 7. **Install + build** (Bun):
    ```bash

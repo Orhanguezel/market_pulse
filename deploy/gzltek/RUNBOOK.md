@@ -106,11 +106,26 @@ NEXT_PUBLIC_APP_NAME=Market Pulse Panel
 ```
 
 ## 4) Nginx + SSL (build'den once)
+`deploy/gzltek/nginx-gzltek.tech.conf` final HTTPS vhost'udur ve
+`/etc/letsencrypt/live/gzltek.tech/*` dosyalarini bekler. Fresh kurulumda once
+HTTP-only gecici vhost ile certbot calistir; sertifika olustuktan sonra final
+conf'u kopyala.
+
 ```bash
-cp deploy/gzltek/nginx-gzltek.tech.conf /etc/nginx/sites-available/gzltek.tech
-ln -s /etc/nginx/sites-available/gzltek.tech /etc/nginx/sites-enabled/
+cat >/etc/nginx/sites-available/gzltek.tech <<'EOF'
+server {
+  listen 80;
+  server_name gzltek.tech www.gzltek.tech;
+  location / {
+    proxy_pass http://127.0.0.1:3077;
+    proxy_set_header Host $host;
+  }
+}
+EOF
+ln -sfn /etc/nginx/sites-available/gzltek.tech /etc/nginx/sites-enabled/gzltek.tech
 nginx -t && systemctl reload nginx
 certbot --nginx -d gzltek.tech -d www.gzltek.tech --redirect -n --agree-tos -m orhanguzell@gmail.com
+cp deploy/gzltek/nginx-gzltek.tech.conf /etc/nginx/sites-available/gzltek.tech
 nginx -t && systemctl reload nginx
 ```
 
