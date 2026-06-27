@@ -186,7 +186,7 @@ PoC'de kullanılan biber gümrük örneği (3535 kayıt) sunucuya taşınıp imp
 cd backend && bun src/scripts/import-customs.ts /path/pepper_customs.csv
 # Sonra admin panelde Discover/customs job çalıştır.
 ```
-> TENANT_KEY=gzltek ise import da gzltek tenant'ına gitmeli (script tenant context'i runWithTenant ile ayarlıyor — gzltek'e güncelle veya env TENANT_KEY kullan).
+> Import script'i `TENANT_KEY` env'ini kullanır; sunucuda `backend/.env.production` içinde `TENANT_KEY=gzltek` olduğu için kayıtlar gzltek tenant'ına gider.
 
 ---
 

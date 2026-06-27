@@ -161,6 +161,13 @@ curl -fsS -o /dev/null -w "%{http_code}\n" https://gzltek.tech/tr/hizmetler/gtip
 curl -fsS -o /dev/null -w "%{http_code}\n" https://gzltek.tech/panel/
 ```
 
+## Opsiyonel: Customs Demo Import
+CSV hazirsa import `TENANT_KEY=gzltek` ile calisir:
+```bash
+cd /var/www/market_pulse/backend
+bun src/scripts/import-customs.ts /path/pepper_customs.csv --run
+```
+
 ## Sonraki deploy'lar
 ```bash
 bash /var/www/market_pulse/deploy/gzltek/deploy.sh
