@@ -5,14 +5,12 @@ import Banner from '@/layout/banner/Breadcrum';
 import HizmetHero from '@/components/containers/hizmet/HizmetHero';
 import HizmetSections from '@/components/containers/hizmet/HizmetSections';
 import HizmetClosingCTA from '@/components/containers/hizmet/HizmetClosingCTA';
-import { getHizmetContent, getHizmetIndex } from '@/lib/hizmet-content';
+import { getHizmetContent } from '@/lib/hizmet-content';
 import { getPublicAppName, getPublicSiteOrigin } from '@/lib/site-config';
 
 type RouteParams = { locale: string; slug: string };
 
-export function generateStaticParams() {
-  return getHizmetIndex().map((item) => ({ slug: item.slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export async function generateMetadata({
   params,

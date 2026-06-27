@@ -139,7 +139,7 @@ pm2 save
 
 ## 8) Smoke Test
 ```bash
-curl -fsS http://127.0.0.1:8086/api/v1/health || echo "backend FAIL"
+curl -fsS http://127.0.0.1:8086/api/health || echo "backend FAIL"
 curl -fsS -o /dev/null -w "%{http_code}\n" https://gzltek.tech/
 curl -fsS -o /dev/null -w "%{http_code}\n" https://gzltek.tech/hizmetler
 curl -fsS -o /dev/null -w "%{http_code}\n" https://gzltek.tech/tr/hizmetler/gtip-hs-koduna-gore-musteri-bulma

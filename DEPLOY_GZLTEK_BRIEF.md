@@ -158,7 +158,7 @@ SSH ile `187.77.79.59`'a gir, sırayla:
    ```
 10. **Smoke test**:
     ```bash
-    curl -fsS http://127.0.0.1:8086/api/v1/health || echo "backend FAIL"
+    curl -fsS http://127.0.0.1:8086/api/health || echo "backend FAIL"
     curl -fsS -o /dev/null -w "%{http_code}\n" https://gzltek.tech/                 # frontend (public)
     curl -fsS -o /dev/null -w "%{http_code}\n" https://gzltek.tech/hizmetler         # 67 sayfa hub
     curl -fsS -o /dev/null -w "%{http_code}\n" https://gzltek.tech/tr/hizmetler/gtip-hs-koduna-gore-musteri-bulma
