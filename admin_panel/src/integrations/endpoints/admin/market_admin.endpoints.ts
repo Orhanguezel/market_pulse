@@ -111,7 +111,7 @@ export interface ErpListResponse<T> {
 }
 
 export type LeadCandidateStatus = 'pending' | 'approved' | 'rejected' | 'favorite';
-export type LeadCandidateChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match';
+export type LeadCandidateChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match' | 'customs';
 
 export interface LeadCandidate {
   id: string;
@@ -939,6 +939,14 @@ export const marketAdminApi = baseApi.injectEndpoints({
       query: (body) => ({ url: '/admin/lead-machine/b2b/jobs', method: 'POST', body }),
       invalidatesTags: ['LeadMachineJobs'],
     }),
+    listCustomsJobs: b.query<LeadSearchJob[], void>({
+      query: () => ({ url: '/admin/lead-machine/customs/jobs' }),
+      providesTags: ['LeadMachineJobs'],
+    }),
+    startCustomsJob: b.mutation<LeadSearchJob, Record<string, unknown>>({
+      query: (body) => ({ url: '/admin/lead-machine/customs/jobs', method: 'POST', body }),
+      invalidatesTags: ['LeadMachineJobs'],
+    }),
     listFairJobs: b.query<LeadSearchJob[], void>({
       query: () => ({ url: '/admin/lead-machine/fair/jobs' }),
       providesTags: ['LeadMachineJobs'],
@@ -1242,6 +1250,8 @@ export const {
   useGetAmazonRiskScoreQuery,
   useListB2bJobsQuery,
   useStartB2bJobMutation,
+  useListCustomsJobsQuery,
+  useStartCustomsJobMutation,
   useListFairJobsQuery,
   useStartFairJobMutation,
   useStartGenericFairRunnerMutation,

@@ -352,6 +352,13 @@ describe('lead machine admin RTK endpoints', () => {
     expect(call.method).toBe('POST');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/b2b/jobs');
 
+    call = await dispatchEndpoint('listCustomsJobs');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/jobs');
+
+    call = await dispatchEndpoint('startCustomsJob', { hs_prefix: '0904' });
+    expect(call.method).toBe('POST');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/jobs');
+
     call = await dispatchEndpoint('listFairJobs');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/fair/jobs');
 
@@ -425,6 +432,8 @@ describe('lead machine admin RTK endpoints', () => {
       'useGetAmazonRiskScoreQuery',
       'useListB2bJobsQuery',
       'useStartB2bJobMutation',
+      'useListCustomsJobsQuery',
+      'useStartCustomsJobMutation',
       'useListFairJobsQuery',
       'useStartFairJobMutation',
       'useStartGenericFairRunnerMutation',

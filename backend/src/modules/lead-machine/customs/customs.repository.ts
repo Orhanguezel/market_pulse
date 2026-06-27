@@ -9,10 +9,12 @@ export interface CustomsRecordInput {
   totalValue: number | null;
   totalQuantity: number | null;
   monthYear: string | null;
+  sourceRowNumber?: number | null;
 }
 
 export interface AggregatedBuyer {
   buyer_name: string;
+  buyer_country: string | null;
   hs_codes: string;
   exporter_names: string;
   total_value: string | number | null;
@@ -24,21 +26,22 @@ export interface AggregatedBuyer {
 export interface AggregateBuyersOptions {
   hsPrefix?: string;
   hsCodes?: string[];
+  productQuery?: string;
+  buyerCountry?: string;
   minValue?: number;
   limit?: number;
 }
 
 /**
  * Buyer (ithalatci firma = LEAD) bazinda gumruk kayitlarini gruplar ve toplar.
- * Tenant-scoped (WHERE tenant_key = ?). En yuksek ithalat degerine gore siralar.
+ * customs_records paylasimli reference lake'tir; tenant filtresi kullanilmaz.
  * GROUP_CONCAT ile distinct HS kodu ve ihracatci listesi (uzunlugu sinirli) doner.
  */
 export async function aggregateBuyers(
-  tenantKey: string,
   opts: AggregateBuyersOptions = {},
 ): Promise<AggregatedBuyer[]> {
-  const where: string[] = ['tenant_key = ?', "buyer_name IS NOT NULL", "buyer_name <> ''"];
-  const values: unknown[] = [tenantKey];
+  const where: string[] = ["buyer_name IS NOT NULL", "buyer_name <> ''"];
+  const values: unknown[] = [];
 
   if (opts.hsCodes && opts.hsCodes.length) {
     where.push(`hs_code IN (${opts.hsCodes.map(() => '?').join(', ')})`);
@@ -46,6 +49,17 @@ export async function aggregateBuyers(
   } else if (opts.hsPrefix) {
     where.push('hs_code LIKE ?');
     values.push(`${opts.hsPrefix}%`);
+  }
+
+  if (opts.productQuery?.trim()) {
+    const like = `%${opts.productQuery.trim()}%`;
+    where.push('(hs_description LIKE ? OR exporter_name LIKE ?)');
+    values.push(like, like);
+  }
+
+  if (opts.buyerCountry?.trim()) {
+    where.push('buyer_country = ?');
+    values.push(opts.buyerCountry.trim());
   }
 
   if (opts.minValue !== undefined) {
@@ -56,8 +70,9 @@ export async function aggregateBuyers(
   const limit = Math.floor(opts.limit && opts.limit > 0 ? opts.limit : 200);
 
   const [rows] = await pool.execute(
-    `SELECT
+     `SELECT
         buyer_name,
+        SUBSTRING(GROUP_CONCAT(DISTINCT buyer_country ORDER BY buyer_country SEPARATOR ', '), 1, 100) AS buyer_country,
         GROUP_CONCAT(DISTINCT hs_code ORDER BY hs_code SEPARATOR ', ')                       AS hs_codes,
         SUBSTRING(GROUP_CONCAT(DISTINCT exporter_name ORDER BY exporter_name SEPARATOR ', '), 1, 500) AS exporter_names,
         SUM(total_value)                                                                     AS total_value,
@@ -75,24 +90,23 @@ export async function aggregateBuyers(
 }
 
 /**
- * Chunked bulk insert (500/batch) into customs_records. Tenant-scoped via
- * explicit tenant_key column on every row.
+ * Chunked bulk insert into global customs_records lake. tenant_key is provenance
+ * only; lead_candidates remain tenant-scoped at job write time.
  */
 export async function bulkInsertRecords(
-  tenantKey: string,
   rows: CustomsRecordInput[],
   sourceFile: string,
 ): Promise<number> {
-  const CHUNK = 500;
+  const CHUNK = 5000;
   let inserted = 0;
   for (let i = 0; i < rows.length; i += CHUNK) {
     const batch = rows.slice(i, i + CHUNK);
     if (!batch.length) continue;
-    const placeholders = batch.map(() => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').join(', ');
+    const placeholders = batch.map(() => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').join(', ');
     const values: unknown[] = [];
     for (const r of batch) {
       values.push(
-        tenantKey,
+        'global',
         r.hsCode,
         r.hsDescription,
         r.buyerName,
@@ -102,11 +116,12 @@ export async function bulkInsertRecords(
         r.totalQuantity,
         r.monthYear,
         sourceFile,
+        r.sourceRowNumber ?? null,
       );
     }
     await pool.query(
-      `INSERT INTO customs_records
-        (tenant_key, hs_code, hs_description, buyer_name, exporter_name, buyer_country, total_value, total_quantity, month_year, source_file)
+      `INSERT IGNORE INTO customs_records
+        (tenant_key, hs_code, hs_description, buyer_name, exporter_name, buyer_country, total_value, total_quantity, month_year, source_file, source_row_number)
        VALUES ${placeholders}`,
       values as never[],
     );

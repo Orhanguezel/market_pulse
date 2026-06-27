@@ -83,6 +83,7 @@ export type AdminNavItemKey =
   | 'market_lead_scan'
   | 'market_lead_amazon'
   | 'market_lead_b2b'
+  | 'market_lead_customs'
   | 'market_lead_fair'
   | 'market_lead_fair_day'
   | 'market_lead_icp'
@@ -152,6 +153,7 @@ export const adminNavConfig: AdminNavConfigGroup[] = [
       { key: 'market_lead_candidates',  url: '/admin/market/lead-machine/candidates',     icon: Flame, badgeKey: 'lead_candidates_pending' },
       { key: 'market_lead_amazon',      url: '/admin/market/lead-machine/amazon',         icon: Search, developerOnly: true },
       { key: 'market_lead_b2b',         url: '/admin/market/lead-machine/b2b',            icon: Building2, developerOnly: true },
+      { key: 'market_lead_customs',     url: '/admin/market/lead-machine/customs',        icon: Database, developerOnly: true },
       { key: 'market_lead_fair',        url: '/admin/market/lead-machine/fair',           icon: MapPin, developerOnly: true },
       { key: 'market_lead_fair_day',    url: '/admin/market/lead-machine/fair-day',       icon: CalendarDays },
       { key: 'market_lead_outreach',    url: '/admin/market/lead-machine/outreach',       icon: Mail },
@@ -193,6 +195,7 @@ const FALLBACK_TITLES: Record<AdminNavItemKey, string> = {
   market_lead_scan:        'Lead Tarama',
   market_lead_amazon:      'Amazon Arama',
   market_lead_b2b:         'B2B Arama',
+  market_lead_customs:     'Gümrük Verisi',
   market_lead_fair:        'Fuar Tarama',
   market_lead_fair_day:    'Fuar Günü',
   market_lead_icp:         'ICP Profilleri',

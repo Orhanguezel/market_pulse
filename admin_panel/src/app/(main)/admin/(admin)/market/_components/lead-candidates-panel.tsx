@@ -56,6 +56,7 @@ const CHANNEL_LABELS: Record<string, string> = {
   trade_fair: 'Fuar',
   trade_fair_in_person: 'Fuar Kartvizit',
   icp_match: 'ICP',
+  customs: 'Gümrük',
 };
 
 const CHANNEL_BADGE_CLS: Record<string, string> = {
@@ -64,6 +65,7 @@ const CHANNEL_BADGE_CLS: Record<string, string> = {
   trade_fair: 'border-purple-500/40 bg-purple-500/10 text-purple-400',
   trade_fair_in_person: 'border-gm-success/40 bg-gm-success/10 text-gm-success',
   icp_match: 'border-gm-success/40 bg-gm-success/10 text-gm-success',
+  customs: 'border-cyan-400/40 bg-cyan-500/10 text-cyan-300',
 };
 
 function channelBadgeCls(channel: string): string {
@@ -904,6 +906,7 @@ export default function LeadCandidatesPanel({
                     <SelectItem value="amazon">Amazon</SelectItem>
                     <SelectItem value="b2b_directory">B2B Dizin</SelectItem>
                     <SelectItem value="trade_fair">Fuar</SelectItem>
+                    <SelectItem value="customs">Gümrük</SelectItem>
                     <SelectItem value="icp_match">ICP</SelectItem>
                   </SelectContent>
                 </Select>

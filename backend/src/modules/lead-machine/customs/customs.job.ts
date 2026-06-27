@@ -5,6 +5,8 @@ import { aggregateBuyers, type AggregatedBuyer } from './customs.repository';
 interface CustomsJobParams {
   hs_prefix?: string;
   hs_codes?: string[];
+  product_query?: string;
+  buyer_country?: string;
   min_value?: number;
   limit?: number;
 }
@@ -47,11 +49,14 @@ export async function runCustomsJob(jobId: string) {
   const params = job.params as CustomsJobParams;
   await updateSearchJob(jobId, { status: 'running', started: true, errorMsg: null });
   try {
-    const tenantKey = getActiveTenantKey();
+    // Validates that candidate writes below still use the active tenant context.
+    void getActiveTenantKey();
     const limit = params.limit && params.limit > 0 ? params.limit : 200;
-    const buyers = await aggregateBuyers(tenantKey, {
+    const buyers = await aggregateBuyers({
       hsPrefix: params.hs_prefix,
       hsCodes: params.hs_codes,
+      productQuery: params.product_query,
+      buyerCountry: params.buyer_country,
       minValue: params.min_value,
       limit,
     });
@@ -72,7 +77,7 @@ export async function runCustomsJob(jobId: string) {
       await insertCandidate({
         jobId,
         channel: 'customs',
-        country: null,
+        country: buyer.buyer_country,
         name: buyer.buyer_name,
         rawData: {
           hs_codes: hsCodes,

@@ -196,6 +196,8 @@ mock.module('@/integrations/hooks', () => ({
   useGetAmazonRiskScoreQuery: () => query(null),
   useListB2bJobsQuery: () => query([{ ...sampleJob, channel: 'b2b_directory' }]),
   useStartB2bJobMutation: () => mutationTuple(),
+  useListCustomsJobsQuery: () => query([{ ...sampleJob, channel: 'customs', params: { hs_prefix: '0904', min_value: 1000, limit: 200 } }]),
+  useStartCustomsJobMutation: () => mutationTuple(),
   useListFairJobsQuery: () => query([{ ...sampleJob, channel: 'trade_fair' }]),
   useStartFairJobMutation: () => mutationTuple(),
   useListIcpProfilesQuery: () => query([sampleIcp]),
@@ -243,6 +245,7 @@ const SignalsPanel = (await import('../signals-panel')).default;
 const LeadCandidatesPanel = (await import('../lead-candidates-panel')).default;
 const AmazonLeadSearchPanel = (await import('../amazon-lead-search-panel')).default;
 const B2bLeadSearchPanel = (await import('../b2b-lead-search-panel')).default;
+const CustomsLeadSearchPanel = (await import('../customs-lead-search-panel')).default;
 const FairLeadSearchPanel = (await import('../fair-lead-search-panel')).default;
 const IcpProfilesPanel = (await import('../icp-profiles-panel')).default;
 const OutreachDraftsPanel = (await import('../outreach-drafts-panel')).default;
@@ -327,6 +330,7 @@ describe('market admin component smoke tests', () => {
     expect(render(<LeadCandidatesPanel />)).toContain('Gamma Seller');
     expect(render(<AmazonLeadSearchPanel />)).toContain('car mats');
     expect(render(<B2bLeadSearchPanel />)).toContain('B2B Job Listesi');
+    expect(render(<CustomsLeadSearchPanel />)).toContain('Gümrük Job Listesi');
     expect(render(<FairLeadSearchPanel />)).toContain('Fuar Job Listesi');
     const riskHtml = render(<RiskScoreCard report={sampleRiskReport} />);
     expect(riskHtml).toContain('Yüksek riskli kategori');

@@ -1,45 +1,62 @@
-import { readFileSync } from 'node:fs';
+import { createReadStream } from 'node:fs';
+import { basename } from 'node:path';
 import { pool } from '@/db/client';
 import { runWithTenant } from '@/core/tenant-context';
-import { basename } from 'node:path';
 import { bulkInsertRecords, aggregateBuyers, type CustomsRecordInput } from '@/modules/lead-machine/customs/customs.repository';
 import { createSearchJob } from '@/modules/lead-machine/_shared/db';
 import { runCustomsJob } from '@/modules/lead-machine/customs/customs.job';
 
-const TENANT = process.env.TENANT_KEY || 'avrasya';
+const JOB_TENANT = process.env.TENANT_KEY || 'avrasya';
+const BATCH_SIZE = Math.max(1000, Number(process.env.CUSTOMS_IMPORT_BATCH_SIZE ?? 5000));
 
-/** Minimal RFC4180-ish CSV parser (handles quoted fields with commas/newlines). */
-function parseCsv(text: string): string[][] {
-  const rows: string[][] = [];
+async function* parseCsvRows(path: string): AsyncGenerator<string[]> {
+  const stream = createReadStream(path, { encoding: 'utf8' });
   let field = '';
   let row: string[] = [];
   let inQuotes = false;
-  for (let i = 0; i < text.length; i++) {
-    const c = text[i];
-    if (inQuotes) {
-      if (c === '"') {
-        if (text[i + 1] === '"') { field += '"'; i++; }
-        else inQuotes = false;
-      } else field += c;
-    } else if (c === '"') {
-      inQuotes = true;
-    } else if (c === ',') {
-      row.push(field); field = '';
-    } else if (c === '\n') {
-      row.push(field); rows.push(row); field = ''; row = [];
-    } else if (c === '\r') {
-      // skip
-    } else {
-      field += c;
+
+  for await (const chunk of stream) {
+    for (let i = 0; i < chunk.length; i += 1) {
+      const c = chunk[i];
+      if (inQuotes) {
+        if (c === '"') {
+          if (chunk[i + 1] === '"') {
+            field += '"';
+            i += 1;
+          } else {
+            inQuotes = false;
+          }
+        } else {
+          field += c;
+        }
+      } else if (c === '"') {
+        inQuotes = true;
+      } else if (c === ',') {
+        row.push(field);
+        field = '';
+      } else if (c === '\n') {
+        row.push(field);
+        yield row;
+        field = '';
+        row = [];
+      } else if (c !== '\r') {
+        field += c;
+      }
     }
   }
-  if (field.length || row.length) { row.push(field); rows.push(row); }
-  return rows;
+
+  if (field.length || row.length) {
+    row.push(field);
+    yield row;
+  }
 }
 
 function toDecimal(value: string | undefined): number | null {
   if (value === undefined) return null;
-  const cleaned = value.replace(/[^0-9.\-]/g, '');
+  const normalized = value.includes(',') && !value.includes('.')
+    ? value.replace(',', '.')
+    : value;
+  const cleaned = normalized.replace(/[^0-9.\-]/g, '');
   if (!cleaned) return null;
   const n = Number(cleaned);
   return Number.isFinite(n) ? n : null;
@@ -50,51 +67,97 @@ function nz(value: string | undefined): string | null {
   return v.length ? v : null;
 }
 
-async function importCsv(csvPath: string): Promise<number> {
-  const text = readFileSync(csvPath, 'utf8');
-  const parsed = parseCsv(text);
-  if (!parsed.length) return 0;
-  const header = parsed[0].map(h => h.trim().toLowerCase());
-  const idx = (name: string) => header.indexOf(name);
-  const iHs = idx('hs_code');
-  const iBuyer = idx('buyer_name');
-  const iExporter = idx('exporter_name');
-  const iDesc = idx('hs_code_description');
-  const iValue = idx('total_value');
-  const iQty = idx('total_quantity');
-  const iMonth = idx('month_year');
+function headerIndex(header: string[]) {
+  const normalized = header.map((h) => h.trim().toLowerCase());
+  const idx = (...names: string[]) => {
+    for (const name of names) {
+      const found = normalized.indexOf(name);
+      if (found >= 0) return found;
+    }
+    return -1;
+  };
+  return {
+    hs: idx('hs_code', 'hscode', 'gtip'),
+    buyer: idx('buyer_name', 'buyer', 'importer_name', 'importer'),
+    exporter: idx('exporter_name', 'exporter', 'shipper_name', 'shipper'),
+    desc: idx('hs_code_description', 'hs_description', 'description', 'product_description'),
+    country: idx('buyer_country', 'country', 'importer_country'),
+    value: idx('total_value', 'value', 'usd_value'),
+    qty: idx('total_quantity', 'quantity', 'qty'),
+    month: idx('month_year', 'date', 'period'),
+  };
+}
 
-  const records: CustomsRecordInput[] = [];
-  for (let r = 1; r < parsed.length; r++) {
-    const cols = parsed[r];
-    if (!cols || cols.every(c => c.trim() === '')) continue;
-    records.push({
-      hsCode: nz(cols[iHs]),
-      hsDescription: nz(cols[iDesc]),
-      buyerName: nz(cols[iBuyer]),
-      exporterName: nz(cols[iExporter]),
-      buyerCountry: null,
-      totalValue: toDecimal(cols[iValue]),
-      totalQuantity: toDecimal(cols[iQty]),
-      monthYear: nz(cols[iMonth]),
-    });
+function cell(cols: string[], index: number): string | undefined {
+  return index >= 0 ? cols[index] : undefined;
+}
+
+async function importCsv(csvPath: string, opts: { reload: boolean }): Promise<number> {
+  if (opts.reload) {
+    await pool.query('TRUNCATE TABLE customs_records');
   }
 
-  return runWithTenant(TENANT, () => bulkInsertRecords(TENANT, records, basename(csvPath)));
+  const sourceFile = basename(csvPath);
+  let indexes: ReturnType<typeof headerIndex> | null = null;
+  let sourceRowNumber = 0;
+  let inserted = 0;
+  let batch: CustomsRecordInput[] = [];
+
+  for await (const cols of parseCsvRows(csvPath)) {
+    sourceRowNumber += 1;
+    if (!indexes) {
+      indexes = headerIndex(cols);
+      continue;
+    }
+    if (!cols || cols.every((c) => c.trim() === '')) continue;
+
+    batch.push({
+      hsCode: nz(cell(cols, indexes.hs)),
+      hsDescription: nz(cell(cols, indexes.desc)),
+      buyerName: nz(cell(cols, indexes.buyer)),
+      exporterName: nz(cell(cols, indexes.exporter)),
+      buyerCountry: nz(cell(cols, indexes.country)),
+      totalValue: toDecimal(cell(cols, indexes.value)),
+      totalQuantity: toDecimal(cell(cols, indexes.qty)),
+      monthYear: nz(cell(cols, indexes.month)),
+      sourceRowNumber,
+    });
+
+    if (batch.length >= BATCH_SIZE) {
+      inserted += await bulkInsertRecords(batch, sourceFile);
+      batch = [];
+      if (inserted % 100000 === 0) console.log(`[import-customs] processed ${inserted} rows...`);
+    }
+  }
+
+  if (batch.length) inserted += await bulkInsertRecords(batch, sourceFile);
+  await pool.query('ANALYZE TABLE customs_records');
+  return inserted;
+}
+
+async function benchmark() {
+  const start = performance.now();
+  const rows = await aggregateBuyers({ hsPrefix: '0904', minValue: 1000, limit: 200 });
+  const ms = Math.round(performance.now() - start);
+  console.log(`[import-customs] benchmark hs_prefix=0904 min_value=1000 limit=200: ${rows.length} buyers in ${ms}ms`);
 }
 
 async function main() {
   const args = process.argv.slice(2);
   const runFlag = args.includes('--run');
+  const reloadFlag = args.includes('--reload');
+  const benchmarkFlag = args.includes('--benchmark');
   const csvPath = args.find(a => !a.startsWith('--'));
 
   if (csvPath) {
-    const inserted = await importCsv(csvPath);
-    console.log(`[import-customs] inserted ${inserted} rows from ${csvPath}`);
+    const inserted = await importCsv(csvPath, { reload: reloadFlag });
+    console.log(`[import-customs] inserted/processed ${inserted} rows from ${csvPath}`);
   }
 
+  if (benchmarkFlag) await benchmark();
+
   if (runFlag) {
-    await runWithTenant(TENANT, async () => {
+    await runWithTenant(JOB_TENANT, async () => {
       const job = await createSearchJob('customs', { hs_prefix: '0904', limit: 200 });
       if (!job) throw new Error('JOB_CREATE_FAILED');
       console.log(`[import-customs] created job ${job.id}, running...`);
@@ -103,7 +166,7 @@ async function main() {
       const [stats] = await pool.execute(
         `SELECT COUNT(*) AS cnt, AVG(lead_score) AS avg_score, MAX(lead_score) AS max_score
          FROM lead_candidates WHERE tenant_key = ? AND channel = 'customs'`,
-        [TENANT],
+        [JOB_TENANT],
       );
       console.log('[import-customs] lead_candidates(customs) stats:', (stats as unknown[])[0]);
 
@@ -111,7 +174,7 @@ async function main() {
         `SELECT name, lead_score, JSON_EXTRACT(raw_data, '$.total_value') AS total_value
          FROM lead_candidates WHERE tenant_key = ? AND channel = 'customs'
          ORDER BY lead_score DESC, JSON_EXTRACT(raw_data, '$.total_value') DESC LIMIT 5`,
-        [TENANT],
+        [JOB_TENANT],
       );
       console.log('[import-customs] sample leads:');
       for (const row of samples as Array<Record<string, unknown>>) {
