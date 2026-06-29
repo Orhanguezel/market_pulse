@@ -6,6 +6,7 @@ import { usePathname, useSearchParams } from 'next/navigation';
 import type { PublicMenuItemDto } from '@/integrations/shared';
 import IyHeader from '../components/iy/IyHeader';
 import IyFooter from '../components/iy/IyFooter';
+import AppShell from '../components/iy/AppShell';
 import ScrollProgress from '../layout/ScrollProgress';
 
 import AnalyticsScripts from '../features/analytics/AnalyticsScripts';
@@ -36,6 +37,9 @@ export default function ClientLayout({
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [deferWidgets, setDeferWidgets] = useState(false);
+
+  // Uygulama (giriş sonrası) sayfaları: marketing chrome yerine AppShell.
+  const isAppPath = /^\/[^/]+\/(dashboard|amazon)(\/|$)/.test(pathname || '');
 
   useEffect(() => {
      // Reset SEO store on route change
@@ -134,12 +138,19 @@ export default function ClientLayout({
         {locale === 'tr' ? 'Ana içeriğe geç' : 'Skip to main content'}
       </a>
       
-      <IyHeader locale={locale} />
-      <main id="main-content" className="min-h-screen bg-bg-primary" tabIndex={-1}>
-        {children}
-      </main>
-
-      <IyFooter locale={locale} />
+      {isAppPath ? (
+        <main id="main-content" tabIndex={-1}>
+          <AppShell locale={locale}>{children}</AppShell>
+        </main>
+      ) : (
+        <>
+          <IyHeader locale={locale} />
+          <main id="main-content" className="min-h-screen bg-bg-primary" tabIndex={-1}>
+            {children}
+          </main>
+          <IyFooter locale={locale} />
+        </>
+      )}
       <ScrollProgress />
 
       <CookieConsentBanner />

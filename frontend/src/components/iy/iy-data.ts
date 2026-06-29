@@ -296,6 +296,45 @@ export const IY_FOOTER_COLUMNS: IyMenuColumn[] = [
   },
 ];
 
+// ── Uygulama (dashboard) sol menü modülleri ──
+// icon: lucide adı (AppSidebar'da map'lenir). path: /{locale}{path}. soon: sayfası yok (yakında).
+// module: entitlement anahtarı (faz 2'de tenant_modules ile filtre).
+export type IyAppNavItem = {
+  key: string; label: string; icon: string; path?: string; soon?: boolean; module?: string;
+};
+export type IyAppNavGroup = { title: string; items: IyAppNavItem[] };
+
+export const IY_APP_NAV: IyAppNavGroup[] = [
+  {
+    title: 'Menü',
+    items: [
+      { key: 'dashboard', label: 'Haber Akışı', icon: 'LayoutDashboard', path: '/dashboard' },
+      { key: 'leads', label: 'Potansiyel Müşteriler', icon: 'Target', soon: true, module: 'crm' },
+      { key: 'accounts', label: 'Müşteriler', icon: 'Building2', soon: true, module: 'crm' },
+      { key: 'deals', label: 'Satış Fırsatları', icon: 'TrendingUp', soon: true, module: 'crm' },
+      { key: 'quotes', label: 'Teklifler', icon: 'FileText', soon: true, module: 'crm' },
+      { key: 'orders', label: 'Siparişler', icon: 'ShoppingCart', soon: true, module: 'crm' },
+      { key: 'products', label: 'Ürünler', icon: 'Package', soon: true, module: 'crm' },
+      { key: 'documents', label: 'Belgeler', icon: 'Folder', soon: true, module: 'crm' },
+      { key: 'activities', label: 'Aktiviteler', icon: 'CalendarCheck', soon: true, module: 'crm' },
+      { key: 'tasks', label: 'Görevler', icon: 'ListChecks', soon: true, module: 'crm' },
+      { key: 'reminders', label: 'Hatırlatma Yönetimi', icon: 'BellRing', soon: true, module: 'crm' },
+      { key: 'mail', label: 'Mail Yönetimi', icon: 'Mail', soon: true, module: 'email-marketing' },
+      { key: 'lead-machine', label: 'Leads', icon: 'Radar', soon: true, module: 'leads' },
+      { key: 'amazon', label: 'Amazon Analizi', icon: 'BarChart3', path: '/amazon', module: 'leads' },
+    ],
+  },
+  {
+    title: 'Hesap',
+    items: [
+      { key: 'business', label: 'İşletme Yönetimi', icon: 'Briefcase', soon: true },
+      { key: 'users', label: 'Kullanıcılar', icon: 'Users', soon: true },
+      { key: 'reports', label: 'Raporlar', icon: 'PieChart', soon: true },
+      { key: 'profile', label: 'Profilim', icon: 'User', path: '/profile' },
+    ],
+  },
+];
+
 // Locale-aware hizmet linki
 export function iyHref(locale: string | undefined, slug: string): string {
   const l = locale || 'tr';
