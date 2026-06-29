@@ -2,10 +2,11 @@
 
 import React, { useMemo } from 'react';
 
-import Banner from '@/layout/banner/Breadcrum';
 import { LayoutSeoBridge } from '@/seo';
 
 import ContactPage from '@/components/containers/contact/ContactPage';
+import IyPageHeader from '@/components/iy/IyPageHeader';
+import { IY_SURFACE_STYLE } from '@/components/iy/iy-data';
 
 import { useLocaleShort } from '@/i18n';
 import { getPublicAppName, titleWithAppName } from '@/lib/site-config';
@@ -57,15 +58,9 @@ export default function TeklifAlPage() {
         description={seoDescription}
         noindex={false}
       />
-      <Banner title={copy.bannerTitle} />
+      <IyPageHeader eyebrow="Teklif / Demo" title={copy.bannerTitle} subtitle={copy.intro} />
 
-      <div className="bg-bg-primary">
-        <div className="container mx-auto px-4 pt-12">
-          <p className="max-w-3xl mx-auto text-center text-text-secondary leading-relaxed">
-            {copy.intro}
-          </p>
-        </div>
-
+      <div style={IY_SURFACE_STYLE} className="bg-bg-primary">
         {/* İletişim formunu yeniden kullan */}
         <ContactPage />
       </div>
