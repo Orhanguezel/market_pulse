@@ -40,6 +40,14 @@ export const googleBody = z.object({
   id_token: z.string().min(10),
 });
 
+// Public sosyal giriş (frontend pazarlama yüzeyi) — şimdilik Google.
+export const socialLoginBody = z.object({
+  type: z.enum(['google', 'facebook', 'apple']),
+  id_token: z.string().optional(),
+  access_token: z.string().optional(),
+  email: z.string().email().optional(),
+});
+
 export const passwordResetRequestBody = z.object({
   email: z.string().trim().email(),
 });

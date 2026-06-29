@@ -11,6 +11,7 @@ import {
   signupBody,
   tokenBody,
   googleBody,
+  socialLoginBody,
   updateBody,
   passwordResetRequestBody,
   passwordResetConfirmBody,
@@ -285,6 +286,145 @@ export async function googleToken(req: FastifyRequest, reply: FastifyReply) {
     });
   } catch (e) {
     return handleRouteError(reply, req, e, 'auth_google');
+  }
+}
+
+/**
+ * Google access_token'ı doğrula (tokeninfo ile audience kontrolü) ve profili getir.
+ * tokeninfo: aud + email doğrular (token-substitution'a karşı). userinfo: ad/avatar (best-effort).
+ */
+async function resolveGoogleProfileFromAccessToken(accessToken: string) {
+  const { clientId } = await getGoogleSettings();
+  if (!clientId) return { ok: false as const, code: 'google_oauth_not_configured' };
+
+  try {
+    const ti = await fetch(
+      `https://oauth2.googleapis.com/tokeninfo?access_token=${encodeURIComponent(accessToken)}`,
+    );
+    if (!ti.ok) return { ok: false as const, code: 'invalid_google_token' };
+    const info = (await ti.json()) as {
+      aud?: string; email?: string; email_verified?: string | boolean;
+    };
+    if (info.aud !== clientId) return { ok: false as const, code: 'google_audience_mismatch' };
+    const email = (info.email ?? '').toLowerCase();
+    if (!email) return { ok: false as const, code: 'google_email_missing' };
+    if (info.email_verified === false || info.email_verified === 'false') {
+      return { ok: false as const, code: 'google_email_not_verified' };
+    }
+
+    // Profil detayı (ad/avatar) — başarısız olursa giriş yine de devam eder.
+    let full_name: string | undefined;
+    let avatar_url: string | undefined;
+    try {
+      const ui = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      if (ui.ok) {
+        const p = (await ui.json()) as { name?: string; picture?: string };
+        full_name = p.name?.trim() || undefined;
+        avatar_url = p.picture?.trim() || undefined;
+      }
+    } catch { /* yoksay */ }
+
+    return { ok: true as const, email, full_name, avatar_url };
+  } catch {
+    return { ok: false as const, code: 'invalid_google_token' };
+  }
+}
+
+/** POST /auth/social-login — public müşteri sosyal girişi (şimdilik Google) */
+export async function socialLogin(req: FastifyRequest, reply: FastifyReply) {
+  try {
+    const parsed = socialLoginBody.safeParse(req.body);
+    if (!parsed.success) return reply.status(400).send({ error: { message: 'invalid_body' } });
+
+    const { type } = parsed.data;
+    let email = '';
+    let full_name: string | undefined;
+    let avatar_url: string | undefined;
+
+    if (type === 'google') {
+      if (parsed.data.id_token) {
+        const v = await verifyGoogleIdentityToken(parsed.data.id_token);
+        if (!v.ok) {
+          const status = v.code === 'google_oauth_not_configured' ? 503 : 401;
+          return reply.status(status).send({ error: { message: v.code } });
+        }
+        email = (v.payload.email ?? '').toLowerCase();
+        full_name = v.payload.name?.trim() || undefined;
+        avatar_url = typeof v.payload.picture === 'string' ? v.payload.picture.trim() || undefined : undefined;
+      } else if (parsed.data.access_token) {
+        const v = await resolveGoogleProfileFromAccessToken(parsed.data.access_token);
+        if (!v.ok) {
+          const status = v.code === 'google_oauth_not_configured' ? 503 : 401;
+          return reply.status(status).send({ error: { message: v.code } });
+        }
+        email = v.email;
+        full_name = v.full_name;
+        avatar_url = v.avatar_url;
+      } else {
+        return reply.status(400).send({ error: { message: 'missing_token' } });
+      }
+    } else {
+      return reply.status(400).send({ error: { message: 'social_provider_not_supported' } });
+    }
+
+    if (!email) return reply.status(401).send({ error: { message: 'social_email_missing' } });
+
+    let user = await repoGetUserByEmail(email);
+    if (!user) {
+      const id = randomUUID();
+      const password_hash = await argonHash(randomUUID());
+      const role: Role = adminEmails.has(email) ? 'admin' : 'customer';
+      await repoCreateUser({
+        id, email, password_hash, full_name,
+        rules_accepted_at: new Date(), email_verified: true,
+      });
+      await repoAssignRole(id, role);
+      await repoEnsureProfileRow(id, {
+        full_name: full_name ?? null, phone: null, avatar_url: avatar_url ?? null,
+      });
+      void sendWelcomeMail({
+        to: email, user_name: full_name || email.split('@')[0], user_email: email,
+      }).catch((err) => req.log?.error?.(err, 'social_welcome_mail_failed'));
+      void telegramNotify({
+        event: 'new_user',
+        data: {
+          user_name: full_name || email.split('@')[0], user_email: email,
+          role, source: type, created_at: new Date().toISOString(),
+        },
+      });
+      user = await repoGetUserById(id);
+    } else {
+      await repoSyncGoogleUser(user.id, {
+        full_name: full_name ?? user.full_name ?? null, email_verified: true,
+      });
+      await repoEnsureProfileRow(user.id, {
+        full_name: full_name ?? user.full_name ?? null, phone: null, avatar_url: avatar_url ?? null,
+      });
+      user = await repoGetUserById(user.id);
+    }
+
+    if (!user) return reply.status(500).send({ error: { message: 'social_user_resolution_failed' } });
+
+    await repoUpdateLastSignIn(user.id);
+    const role = await getPrimaryRole(user.id);
+    const { access, refresh } = await issueTokens(req.server, user, role);
+    setAccessCookie(reply, access);
+    setRefreshCookie(reply, refresh);
+
+    return reply.send({
+      access_token: access,
+      token_type: 'bearer',
+      user: {
+        id: user.id, email: user.email,
+        full_name: user.full_name ?? full_name ?? null,
+        phone: user.phone ?? null, email_verified: 1,
+        is_active: user.is_active, ecosystem_id: user.ecosystem_id ?? null, role,
+      },
+    });
+  } catch (e) {
+    return handleRouteError(reply, req, e, 'auth_social_login');
   }
 }
 
