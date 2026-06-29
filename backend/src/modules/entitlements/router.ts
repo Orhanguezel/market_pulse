@@ -1,6 +1,7 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
-import { activateModule, listCatalog, listTenantModules, suspendModule } from './service';
+import { getActiveTenantKey } from '@/modules/_shared';
+import { activateModule, listActiveTenantModules, listCatalog, listTenantModules, suspendModule } from './service';
 
 const tenantParamsSchema = z.object({
   tenantKey: z.string().trim().min(1).max(64),
@@ -17,8 +18,23 @@ function badRequest(reply: FastifyReply) {
   return reply.code(400).send({ error: { message: 'invalid_body' } });
 }
 
+export async function myEntitlementsHandler() {
+  const tenantKey = getActiveTenantKey();
+  const modules = await listActiveTenantModules(tenantKey);
+  return {
+    tenant_key: tenantKey,
+    modules: modules.map((module) => ({
+      module_key: module.module_key,
+      status: module.status,
+      name: module.name,
+      category: module.category,
+    })),
+  };
+}
+
 export async function registerEntitlementsAdmin(app: FastifyInstance) {
   app.get('/entitlements/catalog', async () => listCatalog());
+  app.get('/entitlements/me', myEntitlementsHandler);
 
   app.get('/entitlements/tenant/:tenantKey', async (req: FastifyRequest<{ Params: { tenantKey: string } }>, reply) => {
     const parsed = tenantParamsSchema.safeParse(req.params);

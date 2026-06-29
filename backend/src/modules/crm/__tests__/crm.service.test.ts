@@ -12,6 +12,8 @@ mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'tenant-a' } }));
 
 const accounts = await import('../accounts.service');
 const convert = await import('../convert.service');
+const dashboard = await import('../dashboard.service');
+const { runWithTenant } = await import('@/core/tenant-context');
 
 beforeEach(() => {
   dbMock.reset();
@@ -70,5 +72,45 @@ describe('crm lead conversion service', () => {
     expect(dbMock.poolExecutions.some((entry) => entry.sql.startsWith('INSERT INTO crm_contacts'))).toBe(true);
     expect(dbMock.poolExecutions.some((entry) => entry.sql.startsWith('INSERT INTO crm_deals'))).toBe(true);
     expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-a', 'candidate-1']);
+  });
+});
+
+describe('crm dashboard summary service', () => {
+  test('builds tenant-scoped dashboard counts and chart data', async () => {
+    dbMock.queuePoolExecute([{ cnt: '2' }]);
+    dbMock.queuePoolExecute([{ cnt: '3' }]);
+    dbMock.queuePoolExecute([{ cnt: '4' }]);
+    dbMock.queuePoolExecute([{ cnt: '1' }]);
+    dbMock.queuePoolExecute([{ cnt: '5' }]);
+    dbMock.queuePoolExecute([{ cnt: '6' }]);
+    dbMock.queuePoolExecute([{ cnt: '1' }]);
+    dbMock.queuePoolExecute([{ month: '2026-01', amount: '14000.50' }]);
+    dbMock.queuePoolExecute([
+      { done: 0, count: '5' },
+      { done: 1, count: '7' },
+    ]);
+
+    const result = await runWithTenant('tenant-b', () => dashboard.getDashboardSummary());
+
+    expect(result.counts).toEqual({
+      accounts: 2,
+      contacts: 3,
+      deals_open: 4,
+      deals_won: 1,
+      activities_pending: 5,
+      quotes: 1,
+      orders: 1,
+      leads: 6,
+    });
+    expect(result.pending).toEqual({ quotes: 1, open_deals: 4 });
+    expect(result.sales_summary).toEqual([{ month: '2026-01', amount: 14000.5 }]);
+    expect(result.team_breakdown).toEqual([
+      { label: 'Açık Aktivite', count: 5 },
+      { label: 'Tamamlanan Aktivite', count: 7 },
+    ]);
+    expect(result.totals.records).toBe(21);
+    expect(dbMock.poolExecutions).toHaveLength(9);
+    expect(dbMock.poolExecutions.every((entry) => entry.values?.[0] === 'tenant-b')).toBe(true);
+    expect(dbMock.poolExecutions.every((entry) => entry.sql.includes('tenant_key = ?'))).toBe(true);
   });
 });

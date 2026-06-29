@@ -6,6 +6,7 @@ const scrape = mock(() => Promise.resolve({ data: {}, text: null }));
 const searchGoogleMaps = mock(() => Promise.resolve({ places: [] }));
 const verifyScraperWebhook = mock(() => true);
 const askBestAvailable = mock(() => Promise.reject(new Error('AI unavailable')));
+const getGoogleMapsKey = mock(() => Promise.resolve(null));
 
 mock.module('@/db/client', () => ({
   db: dbMock.db,
@@ -24,6 +25,10 @@ mock.module('@/modules/lead-machine/_shared/ai.client', () => ({
   askBestAvailable,
 }));
 
+mock.module('../../siteSettings', () => ({
+  getGoogleMapsKey,
+}));
+
 const { searchDirectory } = await import('../b2b/directory.scraper');
 const { analyzeCompanyWebsite } = await import('../b2b/website.analyzer');
 const { runB2bJob } = await import('../b2b/b2b.job');
@@ -33,9 +38,11 @@ beforeEach(() => {
   scrape.mockReset();
   searchGoogleMaps.mockReset();
   askBestAvailable.mockReset();
+  getGoogleMapsKey.mockReset();
   scrape.mockImplementation(() => Promise.resolve({ data: {}, text: null }));
   searchGoogleMaps.mockImplementation(() => Promise.resolve({ places: [] }));
   askBestAvailable.mockImplementation(() => Promise.reject(new Error('AI unavailable')));
+  getGoogleMapsKey.mockImplementation(() => Promise.resolve(null));
 });
 
 describe('b2b lead machine job runner', () => {

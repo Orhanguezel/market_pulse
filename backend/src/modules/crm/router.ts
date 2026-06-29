@@ -7,6 +7,7 @@ import {
   createContactHandler,
   createDealHandler,
   createPipelineHandler,
+  dashboardSummaryHandler,
   getAccountHandler,
   getContactHandler,
   getDealHandler,
@@ -24,6 +25,8 @@ import {
 
 export async function registerCrmAdmin(app: FastifyInstance) {
   app.addHook('preHandler', requireModule('crm'));
+
+  app.get('/crm/dashboard/summary', dashboardSummaryHandler);
 
   app.get('/crm/accounts', listAccountsHandler);
   app.post('/crm/accounts', createAccountHandler);

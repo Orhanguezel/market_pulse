@@ -20,6 +20,7 @@ import { createPipeline, listPipelines, listStages } from './pipelines.service';
 import { createDeal, getDeal, listDeals, moveDealStage, updateDeal } from './deals.service';
 import { createActivity, listActivities, updateActivity } from './activities.service';
 import { convertLeadCandidate } from './convert.service';
+import { getDashboardSummary } from './dashboard.service';
 
 function badRequest(reply: FastifyReply) {
   return reply.code(400).send({ error: { message: 'invalid_request' } });
@@ -33,6 +34,10 @@ export async function listAccountsHandler(req: FastifyRequest, reply: FastifyRep
   const query = listQuerySchema.safeParse(req.query);
   if (!query.success) return badRequest(reply);
   return listAccounts(query.data);
+}
+
+export async function dashboardSummaryHandler() {
+  return getDashboardSummary();
 }
 
 export async function createAccountHandler(req: FastifyRequest, reply: FastifyReply) {

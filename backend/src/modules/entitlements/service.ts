@@ -69,6 +69,20 @@ export async function listTenantModules(tenantKey: string): Promise<TenantModule
   return (rows as TenantModule[]).map(parseConfig);
 }
 
+export async function listActiveTenantModules(tenantKey: string): Promise<TenantModule[]> {
+  const [rows] = await pool.execute(
+    `SELECT tm.*, mc.name, mc.description, mc.category
+       FROM tenant_modules tm
+       JOIN module_catalog mc ON mc.module_key = tm.module_key
+      WHERE tm.tenant_key = ?
+        AND tm.status IN ('trial', 'active')
+        AND (tm.expires_at IS NULL OR tm.expires_at > NOW())
+      ORDER BY mc.sort ASC, tm.module_key ASC`,
+    [tenantKey],
+  );
+  return (rows as TenantModule[]).map(parseConfig);
+}
+
 function parseConfig(row: TenantModule): TenantModule {
   if (typeof row.config !== 'string') return row;
   try {

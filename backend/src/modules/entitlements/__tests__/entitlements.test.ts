@@ -12,6 +12,8 @@ mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'tenant-a' } }));
 
 const service = await import('../service');
 const { requireModule } = await import('../guard');
+const { myEntitlementsHandler } = await import('../router');
+const { runWithTenant } = await import('@/core/tenant-context');
 
 beforeEach(() => {
   dbMock.reset();
@@ -63,6 +65,49 @@ describe('module entitlements service', () => {
       '{"seats":3}',
     ]);
     expect(result?.config).toEqual({ seats: 3 });
+  });
+
+  test('listActiveTenantModules only returns active or trial unexpired modules', async () => {
+    dbMock.queuePoolExecute([{
+      id: 'tm-1',
+      tenant_key: 'tenant-a',
+      module_key: 'crm',
+      status: 'active',
+      price_snapshot: '99.00',
+      currency: 'USD',
+      activated_at: '2026-06-29 10:00:00',
+      expires_at: null,
+      config: '{"seats":3}',
+      created_at: '2026-06-29 10:00:00',
+      updated_at: '2026-06-29 10:00:00',
+      name: 'CRM',
+      category: 'sales',
+    }]);
+
+    const result = await service.listActiveTenantModules('tenant-a');
+
+    expect(dbMock.poolExecutions[0]?.sql).toContain("tm.status IN ('trial', 'active')");
+    expect(dbMock.poolExecutions[0]?.sql).toContain('tm.expires_at IS NULL OR tm.expires_at > NOW()');
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-a']);
+    expect(result[0]?.config).toEqual({ seats: 3 });
+  });
+
+  test('myEntitlementsHandler returns sidebar-ready modules for the active tenant', async () => {
+    dbMock.queuePoolExecute([
+      { module_key: 'leads', status: 'active', name: 'Leads', category: 'growth', config: null },
+      { module_key: 'crm', status: 'trial', name: 'CRM', category: 'sales', config: null },
+    ]);
+
+    const result = await runWithTenant('tenant-b', () => myEntitlementsHandler());
+
+    expect(result).toEqual({
+      tenant_key: 'tenant-b',
+      modules: [
+        { module_key: 'leads', status: 'active', name: 'Leads', category: 'growth' },
+        { module_key: 'crm', status: 'trial', name: 'CRM', category: 'sales' },
+      ],
+    });
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-b']);
   });
 });
 
