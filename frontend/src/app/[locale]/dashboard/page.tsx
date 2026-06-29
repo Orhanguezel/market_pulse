@@ -65,11 +65,11 @@ export default function DashboardPage() {
   const soon = `/${l}/dashboard`;
   const cards = [
     { icon: Target, label: 'Potansiyel Müşteriler', value: d.counts.leads, href: soon },
-    { icon: TrendingUp, label: 'Satış Fırsatları', value: d.counts.deals_open, href: soon },
+    { icon: TrendingUp, label: 'Satış Fırsatları', value: d.counts.deals_open, href: `/${l}/satis-firsatlari` },
     { icon: ShoppingCart, label: 'Siparişler', value: d.counts.orders ?? d.counts.deals_won, href: soon, accent: true },
-    { icon: Building2, label: 'Müşteriler', value: d.counts.accounts, href: soon },
+    { icon: Building2, label: 'Müşteriler', value: d.counts.accounts, href: `/${l}/musteriler` },
     { icon: FileText, label: 'Teklifler', value: d.counts.quotes, href: soon },
-    { icon: CalendarCheck, label: 'Aktiviteler', value: d.counts.activities_pending, href: soon, accent: true },
+    { icon: CalendarCheck, label: 'Aktiviteler', value: d.counts.activities_pending, href: `/${l}/aktiviteler`, accent: true },
   ];
 
   return (
