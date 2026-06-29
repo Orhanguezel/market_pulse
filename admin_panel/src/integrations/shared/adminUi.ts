@@ -72,6 +72,7 @@ const emptyNav: AdminNavCopy = {
     general: '',
     system: '',
     market: '',
+    crm: '',
   },
   items: {
     dashboard: '',
@@ -83,6 +84,7 @@ const emptyNav: AdminNavCopy = {
     db: '',
     external_db: '',
     tenants: '',
+    modules: '',
     platform_settings: '',
     audit: '',
     profile: '',
@@ -106,6 +108,9 @@ const emptyNav: AdminNavCopy = {
     market_test_center: '',
     market_developer_notes: '',
     market_docs: '',
+    crm_pipeline: '',
+    crm_accounts: '',
+    crm_contacts: '',
   },
 };
 
@@ -119,6 +124,7 @@ export function normalizeAdminUiCopy(raw: unknown): AdminUiCopy {
     general: uiText(labelsRaw.general),
     system: uiText(labelsRaw.system),
     market: uiText(labelsRaw.market),
+    crm: uiText(labelsRaw.crm),
   };
 
   const items: AdminNavCopy['items'] = {
@@ -131,6 +137,7 @@ export function normalizeAdminUiCopy(raw: unknown): AdminUiCopy {
     db: uiText(itemsRaw.db),
     external_db: uiText(itemsRaw.external_db),
     tenants: uiText(itemsRaw.tenants),
+    modules: uiText(itemsRaw.modules),
     platform_settings: uiText(itemsRaw.platform_settings),
     audit: uiText(itemsRaw.audit),
     profile: uiText(itemsRaw.profile),
@@ -154,6 +161,9 @@ export function normalizeAdminUiCopy(raw: unknown): AdminUiCopy {
     market_test_center: uiText(itemsRaw.market_test_center),
     market_developer_notes: uiText(itemsRaw.market_developer_notes),
     market_docs: uiText(itemsRaw.market_docs),
+    crm_pipeline: uiText(itemsRaw.crm_pipeline),
+    crm_accounts: uiText(itemsRaw.crm_accounts),
+    crm_contacts: uiText(itemsRaw.crm_contacts),
   };
 
   const commonRaw = parseJsonObject(o.common);

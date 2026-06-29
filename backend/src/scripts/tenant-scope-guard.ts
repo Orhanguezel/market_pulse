@@ -32,6 +32,12 @@ const businessTables = [
   'outreach_campaigns',
   'outreach_recipient_lists',
   'outreach_recipients',
+  'crm_accounts',
+  'crm_contacts',
+  'crm_pipelines',
+  'crm_stages',
+  'crm_deals',
+  'crm_activities',
 ];
 
 function walk(dir: string): string[] {

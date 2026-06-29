@@ -16,7 +16,9 @@ import {
   ClipboardCheck,
   Clock,
   Code2,
+  Columns3,
   Database,
+  Grid3X3,
   FileSearch,
   Flame,
   Globe2,
@@ -73,6 +75,7 @@ export type AdminNavItemKey =
   | 'db'
   | 'external_db'
   | 'tenants'
+  | 'modules'
   | 'platform_settings'
   | 'audit'
   | 'profile'
@@ -95,9 +98,12 @@ export type AdminNavItemKey =
   | 'market_reports'
   | 'market_test_center'
   | 'market_developer_notes'
-  | 'market_docs';
+  | 'market_docs'
+  | 'crm_pipeline'
+  | 'crm_accounts'
+  | 'crm_contacts';
 
-export type AdminNavGroupKey = 'general' | 'system' | 'market';
+export type AdminNavGroupKey = 'general' | 'system' | 'market' | 'crm';
 
 export type AdminNavConfigItem = {
   key: AdminNavItemKey;
@@ -135,6 +141,7 @@ export const adminNavConfig: AdminNavConfigGroup[] = [
       { key: 'notifications', url: '/admin/notifications', icon: Bell, badgeKey: 'notifications_unread' },
       { key: 'site_settings', url: '/admin/site-settings', icon: Settings },
       { key: 'tenants', url: '/admin/tenants', icon: Building2 },
+      { key: 'modules', url: '/admin/modules', icon: Grid3X3 },
       { key: 'platform_settings', url: '/admin/platform-settings', icon: Globe2 },
       { key: 'storage', url: '/admin/storage', icon: HardDrive, developerOnly: true },
       { key: 'db', url: '/admin/db', icon: Database, developerOnly: true },
@@ -168,6 +175,15 @@ export const adminNavConfig: AdminNavConfigGroup[] = [
       { key: 'market_docs',             url: '/admin/market/docs',                        icon: BookOpenText,   developerOnly: true },
     ],
   },
+  {
+    id: 4,
+    key: 'crm',
+    items: [
+      { key: 'crm_pipeline', url: '/admin/crm/pipeline', icon: Columns3 },
+      { key: 'crm_accounts', url: '/admin/crm/accounts', icon: Building2 },
+      { key: 'crm_contacts', url: '/admin/crm/contacts', icon: Users },
+    ],
+  },
 ];
 
 export type AdminNavCopy = {
@@ -185,6 +201,7 @@ const FALLBACK_TITLES: Record<AdminNavItemKey, string> = {
   db: 'Veritabanı',
   external_db: 'Harici Veritabanları',
   tenants: 'Tenant Yönetimi',
+  modules: 'Modüller',
   platform_settings: 'Platform Ayarları',
   audit: 'Denetim Kayıtları',
   profile: 'Profil',
@@ -208,12 +225,16 @@ const FALLBACK_TITLES: Record<AdminNavItemKey, string> = {
   market_test_center:      'Test Merkezi',
   market_developer_notes:  'Yazılımcı Notları',
   market_docs:             'Dokümantasyon',
+  crm_pipeline:            'CRM Pipeline',
+  crm_accounts:            'Hesaplar',
+  crm_contacts:            'Kontaklar',
 };
 
 const FALLBACK_LABELS: Record<AdminNavGroupKey, string> = {
   general: 'Genel',
   system: 'Sistem',
   market: 'Market Pulse',
+  crm: 'CRM',
 };
 
 function buildGroupItems(

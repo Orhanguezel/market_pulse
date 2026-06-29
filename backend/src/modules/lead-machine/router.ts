@@ -1,4 +1,5 @@
 import type { FastifyInstance } from 'fastify';
+import { requireModule } from '@/modules/entitlements';
 import {
   createOutreachCampaign,
   deleteOutreachCampaign,
@@ -77,6 +78,8 @@ export async function registerLeadMachinePublic(app: FastifyInstance) {
 }
 
 export async function registerLeadMachineAdmin(app: FastifyInstance) {
+  app.addHook('preHandler', requireModule('leads'));
+
   app.get('/lead-machine/candidates', listLeadCandidates);
   app.get('/lead-machine/candidates/:id', getLeadCandidate);
   app.patch('/lead-machine/candidates/:id/review', reviewCandidate);

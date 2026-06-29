@@ -39,6 +39,8 @@ export const tags = [
   'ScanRules',
   'SavedSearches',
   'Tenants',
+  'ModuleEntitlements',
+  'Crm',
   'PlatformSettings',
 ] as const;
 

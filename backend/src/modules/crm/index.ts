@@ -1,0 +1,1 @@
+export { registerCrmAdmin } from './router';

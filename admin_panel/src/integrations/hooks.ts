@@ -35,6 +35,8 @@ export * from '@/integrations/endpoints/admin/users/roles_admin.endpoints';
 export * from '@/integrations/endpoints/admin/mail_admin.endpoints';
 export * from '@/integrations/endpoints/admin/notifications_admin.endpoints';
 export * from '@/integrations/endpoints/admin/menu_items_admin.endpoints';
+export * from '@/integrations/endpoints/admin/entitlements_admin.endpoints';
+export * from '@/integrations/endpoints/admin/crm_admin.endpoints';
 
 // MarketPulse
 export * from '@/integrations/endpoints/admin/market_admin.endpoints';
