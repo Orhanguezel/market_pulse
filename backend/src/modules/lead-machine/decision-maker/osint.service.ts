@@ -150,20 +150,33 @@ function companyMatches(company: string, hay: string): boolean {
   return tokens.some((t) => h.includes(t));
 }
 
+function isDecisionTitle(title: string | null): boolean {
+  const t = (title ?? '').toLowerCase();
+  return [...TITLE_A, ...TITLE_B].some((k) => t.includes(k));
+}
+
 async function resolveLinkedinFromGoogle(input: CompanyLookupInput): Promise<ResolvedDecisionMaker | null> {
   if (!env.SERPER_API_KEY) return null;
-  const operators = buildGoogleOperators(input).slice(0, 3);
-  for (const operator of operators) {
-    const organics = await serperSearch(operator, input.country);
+  const cityToken = input.city ? ` "${input.city}"` : '';
+  const titleList = (input.titles ?? DEFAULT_SERP_TITLES).slice(0, 3);
+  // Önce unvan-özel (hassas), sonra firma-adı (geniş — sadece karar-verici unvanlıysa kabul).
+  const ops: Array<{ q: string; broad: boolean }> = [
+    ...titleList.map((t) => ({ q: `site:linkedin.com/in "${t}" "${input.company}"${cityToken}`, broad: false })),
+    { q: `site:linkedin.com/in "${input.company}"${cityToken}`, broad: true },
+  ];
+  for (const op of ops) {
+    const organics = await serperSearch(op.q, input.country);
     for (const item of organics) {
       const link = item.link ?? '';
       if (!/linkedin\.com\/in\//i.test(link)) continue;
       const hay = `${item.title ?? ''} ${item.snippet ?? ''}`;
       if (!companyMatches(input.company, hay)) continue;
       const parsed = parseSerpPerson(item.title ?? '');
+      const title = parsed.title ?? extractTitleNear(hay, link, titleList);
+      // Geniş operatörde: yalnız gerçek karar verici unvanı kabul (junior çalışan eleme).
+      if (op.broad && !isDecisionTitle(title)) continue;
       const name = parsed.name ?? linkedinNameFromUrl(link);
-      const title = parsed.title ?? extractTitleNear(hay, link, input.titles ?? DEFAULT_SERP_TITLES);
-      const companyLinkedin = firstMatch(organics.map((o) => o.link ?? '').join('\n'), LINKEDIN_COMPANY_RE);
+      if (!name) continue;
       return {
         name,
         title,
@@ -172,8 +185,8 @@ async function resolveLinkedinFromGoogle(input: CompanyLookupInput): Promise<Res
         evidence: {
           source: 'linkedin_serp',
           source_url: link,
-          google_operator: operator,
-          company_linkedin_url: companyLinkedin,
+          google_operator: op.q,
+          company_linkedin_url: firstMatch(organics.map((o) => o.link ?? '').join('\n'), LINKEDIN_COMPANY_RE),
           raw_title: item.title ?? null,
         },
       };
@@ -240,13 +253,14 @@ async function resolveFromApollo(input: CompanyLookupInput): Promise<ResolvedDec
   const domain = domainFromWebsite(input.website);
   if (!domain) return null;
   const rows: DecisionMaker[] = await searchDecisionMakers(domain, input.titles ?? DEFAULT_SERP_TITLES, 3);
-  const best = rows.find((row) => row.linkedin_url && row.name) ?? rows.find((row) => row.name);
+  // Apollo TR KOBİ'de zayıf + LinkedIn'siz tek-isim çöp üretiyor → SADECE LinkedIn'li + 2+ kelime isim kabul.
+  const best = rows.find((row) => row.linkedin_url && row.name && row.name.trim().split(/\s+/).length >= 2);
   if (!best) return null;
   return {
     name: best.name,
     title: best.title,
     linkedin_url: best.linkedin_url,
-    confidence: best.linkedin_url ? titleConfidence(best.title, 'apollo') : 'B',
+    confidence: titleConfidence(best.title, 'apollo'),
     evidence: { source: 'apollo', source_url: best.linkedin_url, raw_title: best.title },
   };
 }
