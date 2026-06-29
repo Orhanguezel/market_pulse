@@ -12,6 +12,7 @@ import {
 } from 'recharts';
 import { useMeQuery } from '@/integrations/rtk/public/auth.endpoints';
 import { useGetMyProfileQuery } from '@/integrations/rtk/public/profiles.endpoints';
+import { useGetCrmDashboardSummaryQuery } from '@/integrations/rtk/public/crm.endpoints';
 
 // TODO: Codex /crm/dashboard/summary gelince RTK query ile değiştir (kontrat: docs/crm/DASHBOARD_PLAN.md §5.1)
 const MOCK = {
@@ -53,7 +54,9 @@ export default function DashboardPage() {
   const l = locale || 'tr';
   const { data: me } = useMeQuery();
   const { data: profile } = useGetMyProfileQuery();
-  const d = MOCK;
+  const { data: summary } = useGetCrmDashboardSummaryQuery();
+  const d = summary ?? MOCK;
+  const team = d.team_breakdown ?? [];
 
   const name = profile?.full_name || me?.user?.full_name || me?.user?.email?.split('@')[0] || '';
   const avatar = profile?.avatar_url;
@@ -63,7 +66,7 @@ export default function DashboardPage() {
   const cards = [
     { icon: Target, label: 'Potansiyel Müşteriler', value: d.counts.leads, href: soon },
     { icon: TrendingUp, label: 'Satış Fırsatları', value: d.counts.deals_open, href: soon },
-    { icon: ShoppingCart, label: 'Siparişler', value: d.counts.orders, href: soon, accent: true },
+    { icon: ShoppingCart, label: 'Siparişler', value: d.counts.orders ?? d.counts.deals_won, href: soon, accent: true },
     { icon: Building2, label: 'Müşteriler', value: d.counts.accounts, href: soon },
     { icon: FileText, label: 'Teklifler', value: d.counts.quotes, href: soon },
     { icon: CalendarCheck, label: 'Aktiviteler', value: d.counts.activities_pending, href: soon, accent: true },
@@ -135,8 +138,8 @@ export default function DashboardPage() {
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
-                <Pie data={d.team_breakdown} dataKey="count" nameKey="label" innerRadius={50} outerRadius={80} paddingAngle={2}>
-                  {d.team_breakdown.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+                <Pie data={team} dataKey="count" nameKey="label" innerRadius={50} outerRadius={80} paddingAngle={2}>
+                  {team.map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
                 </Pie>
                 <Tooltip />
               </PieChart>

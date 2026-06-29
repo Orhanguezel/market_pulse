@@ -38,6 +38,12 @@ const businessTables = [
   'crm_stages',
   'crm_deals',
   'crm_activities',
+  'crm_products',
+  'crm_quotes',
+  'crm_orders',
+  'crm_documents',
+  'crm_tasks',
+  'crm_reminders',
 ];
 
 function walk(dir: string): string[] {

@@ -88,6 +88,90 @@ export const convertLeadBodySchema = z.object({
   owner_user_id: z.string().trim().max(36).nullable().optional(),
 });
 
+export const productBodySchema = z.object({
+  sku: z.string().trim().max(120).nullable().optional(),
+  name: z.string().trim().min(1).max(255),
+  description: z.string().trim().nullable().optional(),
+  unit_price: z.coerce.number().nullable().optional(),
+  currency: z.string().trim().length(3).optional(),
+  status: z.enum(['active', 'inactive']).optional(),
+  raw_data: z.unknown().optional(),
+});
+export const productPatchSchema = productBodySchema.partial();
+
+export const quoteBodySchema = z.object({
+  deal_id: z.string().trim().max(36).nullable().optional(),
+  account_id: z.string().trim().max(36).nullable().optional(),
+  contact_id: z.string().trim().max(36).nullable().optional(),
+  quote_no: z.string().trim().max(80).nullable().optional(),
+  title: z.string().trim().min(1).max(255),
+  amount: z.coerce.number().nullable().optional(),
+  currency: z.string().trim().length(3).optional(),
+  status: z.enum(['draft', 'sent', 'accepted', 'rejected', 'expired', 'cancelled']).optional(),
+  valid_until: z.string().trim().max(10).nullable().optional(),
+  sent_at: z.string().trim().nullable().optional(),
+  accepted_at: z.string().trim().nullable().optional(),
+  raw_data: z.unknown().optional(),
+});
+export const quotePatchSchema = quoteBodySchema.partial();
+
+export const orderBodySchema = z.object({
+  quote_id: z.string().trim().max(36).nullable().optional(),
+  deal_id: z.string().trim().max(36).nullable().optional(),
+  account_id: z.string().trim().max(36).nullable().optional(),
+  contact_id: z.string().trim().max(36).nullable().optional(),
+  order_no: z.string().trim().max(80).nullable().optional(),
+  title: z.string().trim().min(1).max(255),
+  amount: z.coerce.number().nullable().optional(),
+  currency: z.string().trim().length(3).optional(),
+  status: z.enum(['draft', 'confirmed', 'fulfilled', 'cancelled']).optional(),
+  ordered_at: z.string().trim().nullable().optional(),
+  raw_data: z.unknown().optional(),
+});
+export const orderPatchSchema = orderBodySchema.partial();
+
+export const documentBodySchema = z.object({
+  ref_type: z.enum(['account', 'contact', 'deal', 'quote', 'order']),
+  ref_id: z.string().trim().min(1).max(36),
+  title: z.string().trim().min(1).max(255),
+  file_url: z.string().trim().max(1000).nullable().optional(),
+  mime_type: z.string().trim().max(120).nullable().optional(),
+  status: z.enum(['active', 'archived']).optional(),
+  raw_data: z.unknown().optional(),
+});
+export const documentPatchSchema = documentBodySchema.partial();
+
+export const taskBodySchema = z.object({
+  ref_type: z.enum(['account', 'contact', 'deal', 'quote', 'order']).nullable().optional(),
+  ref_id: z.string().trim().max(36).nullable().optional(),
+  subject: z.string().trim().min(1).max(255),
+  body: z.string().trim().nullable().optional(),
+  due_at: z.string().trim().nullable().optional(),
+  priority: z.enum(['low', 'normal', 'high', 'urgent']).optional(),
+  status: z.enum(['open', 'done', 'cancelled']).optional(),
+  owner_user_id: z.string().trim().max(36).nullable().optional(),
+  created_by: z.string().trim().max(36).nullable().optional(),
+  completed_at: z.string().trim().nullable().optional(),
+  raw_data: z.unknown().optional(),
+});
+export const taskPatchSchema = taskBodySchema.partial();
+
+export const reminderBodySchema = z.object({
+  ref_type: z.enum(['account', 'contact', 'deal', 'quote', 'order', 'task', 'activity']).nullable().optional(),
+  ref_id: z.string().trim().max(36).nullable().optional(),
+  title: z.string().trim().min(1).max(255),
+  body: z.string().trim().nullable().optional(),
+  remind_at: z.string().trim().min(1),
+  channel: z.enum(['in_app', 'email', 'sms', 'whatsapp']).optional(),
+  status: z.enum(['scheduled', 'sent', 'snoozed', 'cancelled']).optional(),
+  owner_user_id: z.string().trim().max(36).nullable().optional(),
+  created_by: z.string().trim().max(36).nullable().optional(),
+  sent_at: z.string().trim().nullable().optional(),
+  snoozed_until: z.string().trim().nullable().optional(),
+  raw_data: z.unknown().optional(),
+});
+export const reminderPatchSchema = reminderBodySchema.partial();
+
 export type ListQuery = z.infer<typeof listQuerySchema>;
 export type AccountBody = z.infer<typeof accountBodySchema>;
 export type ContactBody = z.infer<typeof contactBodySchema>;
@@ -95,3 +179,9 @@ export type PipelineBody = z.infer<typeof pipelineBodySchema>;
 export type DealBody = z.infer<typeof dealBodySchema>;
 export type ActivityBody = z.infer<typeof activityBodySchema>;
 export type ConvertLeadBody = z.infer<typeof convertLeadBodySchema>;
+export type ProductBody = z.infer<typeof productBodySchema>;
+export type QuoteBody = z.infer<typeof quoteBodySchema>;
+export type OrderBody = z.infer<typeof orderBodySchema>;
+export type DocumentBody = z.infer<typeof documentBodySchema>;
+export type TaskBody = z.infer<typeof taskBodySchema>;
+export type ReminderBody = z.infer<typeof reminderBodySchema>;

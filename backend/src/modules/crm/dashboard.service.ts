@@ -38,6 +38,8 @@ export async function getDashboardSummary() {
     activitiesPending,
     leads,
     quotes,
+    orders,
+    remindersScheduled,
   ] = await Promise.all([
     readCount('SELECT COUNT(*) AS cnt FROM crm_accounts WHERE tenant_key = ?', [tenantKey]),
     readCount('SELECT COUNT(*) AS cnt FROM crm_contacts WHERE tenant_key = ?', [tenantKey]),
@@ -45,15 +47,9 @@ export async function getDashboardSummary() {
     readCount("SELECT COUNT(*) AS cnt FROM crm_deals WHERE tenant_key = ? AND status = 'won'", [tenantKey]),
     readCount('SELECT COUNT(*) AS cnt FROM crm_activities WHERE tenant_key = ? AND done = 0', [tenantKey]),
     readCount('SELECT COUNT(*) AS cnt FROM lead_candidates WHERE tenant_key = ?', [tenantKey]),
-    readCount(
-      `SELECT COUNT(*) AS cnt
-         FROM crm_deals d
-         JOIN crm_stages s ON s.id = d.stage_id AND s.tenant_key = d.tenant_key
-        WHERE d.tenant_key = ?
-          AND d.status = 'open'
-          AND (LOWER(s.name) LIKE '%quote%' OR LOWER(s.name) LIKE '%teklif%')`,
-      [tenantKey],
-    ),
+    readCount("SELECT COUNT(*) AS cnt FROM crm_quotes WHERE tenant_key = ? AND status IN ('draft', 'sent')", [tenantKey]),
+    readCount("SELECT COUNT(*) AS cnt FROM crm_orders WHERE tenant_key = ? AND status <> 'cancelled'", [tenantKey]),
+    readCount("SELECT COUNT(*) AS cnt FROM crm_reminders WHERE tenant_key = ? AND status = 'scheduled'", [tenantKey]),
   ]);
 
   const [salesRows] = await pool.execute(
@@ -92,8 +88,9 @@ export async function getDashboardSummary() {
     deals_won: dealsWon,
     activities_pending: activitiesPending,
     quotes,
-    orders: dealsWon,
+    orders,
     leads,
+    reminders_scheduled: remindersScheduled,
   };
 
   return {
@@ -110,13 +107,14 @@ export async function getDashboardSummary() {
       { label: 'Kontak', count: contacts },
       { label: 'Açık Fırsat', count: dealsOpen },
       { label: 'Bekleyen Aktivite', count: activitiesPending },
+      { label: 'Planlı Hatırlatma', count: remindersScheduled },
     ],
     team_breakdown: [
       { label: 'Açık Aktivite', count: teamCounts.pending },
       { label: 'Tamamlanan Aktivite', count: teamCounts.done },
     ],
     totals: {
-      records: accounts + contacts + dealsOpen + dealsWon + activitiesPending + leads,
+      records: accounts + contacts + dealsOpen + dealsWon + activitiesPending + leads + quotes + orders + remindersScheduled,
     },
   };
 }

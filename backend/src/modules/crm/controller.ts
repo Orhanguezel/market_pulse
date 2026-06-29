@@ -10,9 +10,21 @@ import {
   dealBodySchema,
   dealPatchSchema,
   dealStageBodySchema,
+  documentBodySchema,
+  documentPatchSchema,
   idParamsSchema,
   listQuerySchema,
+  orderBodySchema,
+  orderPatchSchema,
   pipelineBodySchema,
+  productBodySchema,
+  productPatchSchema,
+  quoteBodySchema,
+  quotePatchSchema,
+  reminderBodySchema,
+  reminderPatchSchema,
+  taskBodySchema,
+  taskPatchSchema,
 } from './schema';
 import { createAccount, getAccount, listAccounts, updateAccount } from './accounts.service';
 import { createContact, getContact, listContacts, updateContact } from './contacts.service';
@@ -21,6 +33,8 @@ import { createDeal, getDeal, listDeals, moveDealStage, updateDeal } from './dea
 import { createActivity, listActivities, updateActivity } from './activities.service';
 import { convertLeadCandidate } from './convert.service';
 import { getDashboardSummary } from './dashboard.service';
+import { createBusinessRecord, getBusinessRecord, listBusinessRecords, updateBusinessRecord } from './business-records.service';
+import { getBusinessSummary, getMailSummary, getReportsSummary, getUsersSummary } from './insights.service';
 
 function badRequest(reply: FastifyReply) {
   return reply.code(400).send({ error: { message: 'invalid_request' } });
@@ -38,6 +52,22 @@ export async function listAccountsHandler(req: FastifyRequest, reply: FastifyRep
 
 export async function dashboardSummaryHandler() {
   return getDashboardSummary();
+}
+
+export async function mailSummaryHandler() {
+  return getMailSummary();
+}
+
+export async function reportsSummaryHandler() {
+  return getReportsSummary();
+}
+
+export async function usersSummaryHandler() {
+  return getUsersSummary();
+}
+
+export async function businessSummaryHandler() {
+  return getBusinessSummary();
 }
 
 export async function createAccountHandler(req: FastifyRequest, reply: FastifyReply) {
@@ -170,4 +200,172 @@ export async function convertLeadHandler(req: FastifyRequest, reply: FastifyRepl
   if (!body.success) return badRequest(reply);
   const result = await convertLeadCandidate(body.data);
   return result ?? notFound(reply);
+}
+
+export async function listProductsHandler(req: FastifyRequest, reply: FastifyReply) {
+  const query = listQuerySchema.safeParse(req.query);
+  if (!query.success) return badRequest(reply);
+  return listBusinessRecords('products', query.data);
+}
+
+export async function createProductHandler(req: FastifyRequest, reply: FastifyReply) {
+  const body = productBodySchema.safeParse(req.body);
+  if (!body.success) return badRequest(reply);
+  const record = await createBusinessRecord('products', body.data);
+  return reply.code(201).send(record);
+}
+
+export async function getProductHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  if (!params.success) return badRequest(reply);
+  const record = await getBusinessRecord('products', params.data.id);
+  return record ?? notFound(reply);
+}
+
+export async function updateProductHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  const body = productPatchSchema.safeParse(req.body);
+  if (!params.success || !body.success) return badRequest(reply);
+  const record = await updateBusinessRecord('products', params.data.id, body.data);
+  return record ?? notFound(reply);
+}
+
+export async function listQuotesHandler(req: FastifyRequest, reply: FastifyReply) {
+  const query = listQuerySchema.safeParse(req.query);
+  if (!query.success) return badRequest(reply);
+  return listBusinessRecords('quotes', query.data);
+}
+
+export async function createQuoteHandler(req: FastifyRequest, reply: FastifyReply) {
+  const body = quoteBodySchema.safeParse(req.body);
+  if (!body.success) return badRequest(reply);
+  const record = await createBusinessRecord('quotes', body.data);
+  return reply.code(201).send(record);
+}
+
+export async function getQuoteHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  if (!params.success) return badRequest(reply);
+  const record = await getBusinessRecord('quotes', params.data.id);
+  return record ?? notFound(reply);
+}
+
+export async function updateQuoteHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  const body = quotePatchSchema.safeParse(req.body);
+  if (!params.success || !body.success) return badRequest(reply);
+  const record = await updateBusinessRecord('quotes', params.data.id, body.data);
+  return record ?? notFound(reply);
+}
+
+export async function listOrdersHandler(req: FastifyRequest, reply: FastifyReply) {
+  const query = listQuerySchema.safeParse(req.query);
+  if (!query.success) return badRequest(reply);
+  return listBusinessRecords('orders', query.data);
+}
+
+export async function createOrderHandler(req: FastifyRequest, reply: FastifyReply) {
+  const body = orderBodySchema.safeParse(req.body);
+  if (!body.success) return badRequest(reply);
+  const record = await createBusinessRecord('orders', body.data);
+  return reply.code(201).send(record);
+}
+
+export async function getOrderHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  if (!params.success) return badRequest(reply);
+  const record = await getBusinessRecord('orders', params.data.id);
+  return record ?? notFound(reply);
+}
+
+export async function updateOrderHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  const body = orderPatchSchema.safeParse(req.body);
+  if (!params.success || !body.success) return badRequest(reply);
+  const record = await updateBusinessRecord('orders', params.data.id, body.data);
+  return record ?? notFound(reply);
+}
+
+export async function listDocumentsHandler(req: FastifyRequest, reply: FastifyReply) {
+  const query = listQuerySchema.safeParse(req.query);
+  if (!query.success) return badRequest(reply);
+  return listBusinessRecords('documents', query.data);
+}
+
+export async function createDocumentHandler(req: FastifyRequest, reply: FastifyReply) {
+  const body = documentBodySchema.safeParse(req.body);
+  if (!body.success) return badRequest(reply);
+  const record = await createBusinessRecord('documents', body.data);
+  return reply.code(201).send(record);
+}
+
+export async function getDocumentHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  if (!params.success) return badRequest(reply);
+  const record = await getBusinessRecord('documents', params.data.id);
+  return record ?? notFound(reply);
+}
+
+export async function updateDocumentHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  const body = documentPatchSchema.safeParse(req.body);
+  if (!params.success || !body.success) return badRequest(reply);
+  const record = await updateBusinessRecord('documents', params.data.id, body.data);
+  return record ?? notFound(reply);
+}
+
+export async function listTasksHandler(req: FastifyRequest, reply: FastifyReply) {
+  const query = listQuerySchema.safeParse(req.query);
+  if (!query.success) return badRequest(reply);
+  return listBusinessRecords('tasks', query.data);
+}
+
+export async function createTaskHandler(req: FastifyRequest, reply: FastifyReply) {
+  const body = taskBodySchema.safeParse(req.body);
+  if (!body.success) return badRequest(reply);
+  const record = await createBusinessRecord('tasks', body.data);
+  return reply.code(201).send(record);
+}
+
+export async function getTaskHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  if (!params.success) return badRequest(reply);
+  const record = await getBusinessRecord('tasks', params.data.id);
+  return record ?? notFound(reply);
+}
+
+export async function updateTaskHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  const body = taskPatchSchema.safeParse(req.body);
+  if (!params.success || !body.success) return badRequest(reply);
+  const record = await updateBusinessRecord('tasks', params.data.id, body.data);
+  return record ?? notFound(reply);
+}
+
+export async function listRemindersHandler(req: FastifyRequest, reply: FastifyReply) {
+  const query = listQuerySchema.safeParse(req.query);
+  if (!query.success) return badRequest(reply);
+  return listBusinessRecords('reminders', query.data);
+}
+
+export async function createReminderHandler(req: FastifyRequest, reply: FastifyReply) {
+  const body = reminderBodySchema.safeParse(req.body);
+  if (!body.success) return badRequest(reply);
+  const record = await createBusinessRecord('reminders', body.data);
+  return reply.code(201).send(record);
+}
+
+export async function getReminderHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  if (!params.success) return badRequest(reply);
+  const record = await getBusinessRecord('reminders', params.data.id);
+  return record ?? notFound(reply);
+}
+
+export async function updateReminderHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  const body = reminderPatchSchema.safeParse(req.body);
+  if (!params.success || !body.success) return badRequest(reply);
+  const record = await updateBusinessRecord('reminders', params.data.id, body.data);
+  return record ?? notFound(reply);
 }

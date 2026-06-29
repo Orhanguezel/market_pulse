@@ -19,7 +19,8 @@
 - [x] Tenant kullanıcısı için `/entitlements/me` yok. → `GET /api/v1/admin/entitlements/me` eklendi.
 - [ ] Frontend app shell yok; marketing chrome çoğu sayfayı sarıyor.
 - [ ] Chart kütüphanesi yok.
-- [ ] Teklifler/Siparişler/Ürünler/Belgeler/Görevler/Hatırlatma tabloları yok.
+- [x] Teklifler/Siparişler/Ürünler/Belgeler/Görevler tabloları yok. → `035_crm_business_records_schema.sql` eklendi.
+- [x] Hatırlatma tabloları yok. → `crm_reminders` eklendi.
 
 ---
 
@@ -136,8 +137,8 @@ Sorgu kaynakları:
 - [x] `deals_won`: `crm_deals.status = 'won'`
 - [x] `activities_pending`: `crm_activities.done = 0`
 - [x] `leads`: `lead_candidates`
-- [x] `quotes`: geçici olarak stage adı `quote|teklif` veya açık deal sayısından türetilir.
-- [x] `orders`: geçici olarak `deals_won`.
+- [x] `quotes`: `crm_quotes.status IN ('draft', 'sent')`
+- [x] `orders`: `crm_orders.status <> 'cancelled'`
 - [x] `sales_summary`: son 6 ay won deal amount toplamı.
 - [x] `status_breakdown`: accounts/contacts/open deals/pending activities.
 - [x] `team_breakdown`: done/pending activities veya owner bazlı aktivite dağılımı.
@@ -225,16 +226,16 @@ GET /api/v1/admin/entitlements/me
 | Aktiviteler | `crm_activities` var | Gerçek sayı |
 | Leads | lead-machine/customs var | Gerçek link |
 | Amazon Analizi | mevcut araç var | Ayrı modül |
-| Teklifler | ayrı tablo yok | Deal stage/status'tan türet veya yakında |
-| Siparişler | ayrı tablo yok | Won deal'den türet veya yakında |
-| Ürünler | tablo yok | Yakında |
-| Belgeler | tablo yok | Yakında |
-| Görevler | aktivitelerle kısmi | Yakında veya aktivite filtresi |
-| Hatırlatma Yönetimi | tablo yok | Yakında |
-| Mail Yönetimi | outreach var | Sonraki faz |
-| İşletme Yönetimi | admin/site settings kısmi | Sonraki faz |
-| Kullanıcılar | auth/admin kısmi | Sonraki faz |
-| Raporlar | kısmi | Sonraki faz |
+| Teklifler | `crm_quotes` var | Gerçek veri |
+| Siparişler | `crm_orders` var | Gerçek veri |
+| Ürünler | `crm_products` var | Gerçek veri |
+| Belgeler | `crm_documents` var | Gerçek veri |
+| Görevler | `crm_tasks` + aktiviteler var | Gerçek veri |
+| Hatırlatma Yönetimi | `crm_reminders` var | Gerçek veri |
+| Mail Yönetimi | outreach + `/crm/mail/summary` var | Gerçek veri |
+| İşletme Yönetimi | tenant/settings/modules + `/crm/business/summary` var | Gerçek veri |
+| Kullanıcılar | auth/tenant roles + `/crm/users/summary` var | Gerçek veri |
+| Raporlar | market reports + `/crm/reports/summary` var | Gerçek veri |
 
 ---
 
@@ -242,9 +243,9 @@ GET /api/v1/admin/entitlements/me
 
 ### Faz 1 — Dashboard Temeli
 
-- [ ] Codex: `/crm/dashboard/summary`
-- [ ] Codex: `/entitlements/me`
-- [ ] Codex: testler
+- [x] Codex: `/crm/dashboard/summary`
+- [x] Codex: `/entitlements/me`
+- [x] Codex: testler
 - [ ] Claude: `(app)` shell
 - [ ] Claude: CRM dashboard UI
 - [ ] Claude: Amazon aracını alt modüle taşıma
@@ -254,16 +255,18 @@ GET /api/v1/admin/entitlements/me
 
 - [ ] Müşteriler/contacts/deals/activities tenant tarafı liste ve detay.
 - [ ] Sidebar entitlement filtre/kilit.
-- [ ] Teklifler/Siparişler deal'den türetilir veya ayrı modele hazırlık yapılır.
+- [x] Teklifler/Siparişler ayrı modele hazırlık yapılır.
+- [x] Ürünler/Belgeler/Görevler ayrı modele hazırlık yapılır.
+- [x] Hatırlatma Yönetimi ayrı modeli yapılır.
 
 ### Faz 3 — Eksik Modüller
 
-- [ ] Ürünler
-- [ ] Belgeler
-- [ ] Görevler
-- [ ] Hatırlatma Yönetimi
-- [ ] Mail Yönetimi
-- [ ] Raporlar
+- [x] Ürünler
+- [x] Belgeler
+- [x] Görevler
+- [x] Hatırlatma Yönetimi
+- [x] Mail Yönetimi
+- [x] Raporlar
 
 ---
 
