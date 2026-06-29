@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import Image from 'next/image';
 import { Mail, Phone, MessageCircle } from 'lucide-react';
 import { IY_BRAND, IY_FOOTER_COLUMNS, iyLinkHref, iyTeklifHref, IY_DARK_SURFACE_STYLE } from './iy-data';
 
@@ -39,10 +40,8 @@ export default function IyFooter({ locale }: { locale?: string }) {
         <div className="grid grid-cols-1 gap-10 pb-10 sm:grid-cols-2 lg:grid-cols-5">
           {/* Brand */}
           <div className="lg:col-span-1">
-            <div className="mb-3 flex items-center gap-2">
-              <span className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-[#60a5fa] to-[#2563eb] text-base font-extrabold text-white">
-                İ
-              </span>
+            <div className="mb-3 flex items-center gap-2.5">
+              <Image src="/iy/mark.png" alt="" width={40} height={40} className="h-9 w-9" />
               <span className="text-[18px] font-extrabold text-white">
                 İşletmeni<span className="text-[#60a5fa]">Yönet</span>
               </span>

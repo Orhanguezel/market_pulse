@@ -1,6 +1,7 @@
 'use client';
 
 import Link from 'next/link';
+import Image from 'next/image';
 import { useState } from 'react';
 import { ChevronDown, Menu, X } from 'lucide-react';
 import { IY_MENU, iyLinkHref, iyTeklifHref, IY_SURFACE_STYLE } from './iy-data';
@@ -18,13 +19,15 @@ export default function IyHeader({ locale }: { locale?: string }) {
     >
       <div className="mx-auto flex min-h-[72px] max-w-[1320px] items-center justify-between gap-4 px-5 py-3 lg:px-9">
         {/* Logo */}
-        <Link href={`/${l}`} className="flex shrink-0 items-center gap-2">
-          <span className="grid h-9 w-9 place-items-center rounded-lg bg-gradient-to-br from-[#1e40af] to-[#2563eb] text-base font-extrabold text-white">
-            İ
-          </span>
-          <span className="text-[19px] font-extrabold tracking-tight text-[#0f172a]">
-            İşletmeni<span className="text-[#1e40af]">Yönet</span>
-          </span>
+        <Link href={`/${l}`} className="flex shrink-0 items-center">
+          <Image
+            src="/iy/logo.png"
+            alt="İşletmeni Yönet"
+            width={300}
+            height={91}
+            priority
+            className="h-10 w-auto"
+          />
         </Link>
 
         {/* Desktop menu */}
