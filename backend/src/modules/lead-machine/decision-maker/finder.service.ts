@@ -106,11 +106,10 @@ export async function runDecisionMakerFinder(params: FinderParams): Promise<{ ro
   const targetCount = Math.min(params.targetCount ?? 50, 200);
   const now = new Date().toISOString().slice(0, 10);
 
-  const rows: DecisionMakerRow[] = [];
+  // 1) İşletme havuzu (Places) — hızlı sıralı topla, dedup + sınırla.
   const seen = new Set<string>();
-  let companies = 0;
-  let withDM = 0;
-
+  const queue: Array<{ name: string; website: string | null; mapsUri: string | null; city: string; type: string }> = [];
+  const maxCompanies = Math.min(targetCount, 24); // senkron timeout koruması
   outer:
   for (const city of params.cities) {
     for (const type of businessTypes) {
@@ -119,38 +118,44 @@ export async function runDecisionMakerFinder(params: FinderParams): Promise<{ ro
         const compKey = `${place.name}|${city}`.toLowerCase();
         if (seen.has(compKey)) continue;
         seen.add(compKey);
-        companies++;
-
-        const resolved = await resolveDecisionMaker({
-          company: place.name,
-          city,
-          country,
-          website: place.website,
-          googleMapsUrl: place.mapsUri,
-          titles,
-        });
-        if (resolved.name || resolved.linkedin_url) withDM++;
-        rows.push({
-          company_name: place.name, city, business_type: type,
-          decision_maker_name: resolved.name, title: resolved.title, linkedin_profile_url: resolved.linkedin_url,
-          company_website: place.website,
-          social_url: resolved.evidence.social_url ?? resolved.evidence.company_linkedin_url ?? null,
-          source_url: sourceUrlFor({ company: place.name, city, country, website: place.website, googleMapsUrl: place.mapsUri, titles }, resolved),
-          fit_note: resolved.confidence === 'A'
-            ? 'LinkedIn/karar verici eşleşmesi güçlü.'
-            : resolved.confidence === 'B'
-              ? 'Website OSINT ile karar verici adayı bulundu.'
-              : 'İşletme doğrulandı; karar verici bulunamadı (manuel araştırma önerilir).',
-          confidence_score: resolved.confidence,
-          last_verified_at: now,
-        });
-        if (rows.length >= targetCount) break outer;
+        queue.push({ name: place.name, website: place.website, mapsUri: place.mapsUri, city, type });
+        if (queue.length >= maxCompanies) break outer;
       }
+    }
+  }
+
+  // 2) Karar verici çözümü — PARALEL (concurrency); website OSINT atlanır (Serper+Apollo hızlı, timeout önleme).
+  const rows: DecisionMakerRow[] = [];
+  let withDM = 0;
+  const CONCURRENCY = 6;
+  for (let i = 0; i < queue.length; i += CONCURRENCY) {
+    const batch = queue.slice(i, i + CONCURRENCY);
+    const results = await Promise.all(batch.map(async (q) => {
+      const lookup = { company: q.name, city: q.city, country, website: q.website, googleMapsUrl: q.mapsUri, titles };
+      const resolved = await resolveDecisionMaker(lookup, { skipWebsite: true });
+      return { q, resolved, lookup };
+    }));
+    for (const { q, resolved, lookup } of results) {
+      if (resolved.name || resolved.linkedin_url) withDM++;
+      rows.push({
+        company_name: q.name, city: q.city, business_type: q.type,
+        decision_maker_name: resolved.name, title: resolved.title, linkedin_profile_url: resolved.linkedin_url,
+        company_website: q.website,
+        social_url: resolved.evidence.social_url ?? resolved.evidence.company_linkedin_url ?? null,
+        source_url: sourceUrlFor(lookup, resolved),
+        fit_note: resolved.confidence === 'A'
+          ? 'LinkedIn/karar verici eşleşmesi güçlü.'
+          : resolved.confidence === 'B'
+            ? 'Karar verici adayı bulundu.'
+            : 'İşletme doğrulandı; karar verici bulunamadı (manuel araştırma önerilir).',
+        confidence_score: resolved.confidence,
+        last_verified_at: now,
+      });
     }
   }
 
   // A > B > C sırala
   const order = { A: 0, B: 1, C: 2 };
   rows.sort((a, b) => order[a.confidence_score] - order[b.confidence_score]);
-  return { rows: rows.slice(0, targetCount), stats: { companies, withDecisionMaker: withDM } };
+  return { rows: rows.slice(0, targetCount), stats: { companies: queue.length, withDecisionMaker: withDM } };
 }

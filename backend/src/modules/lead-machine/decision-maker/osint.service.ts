@@ -42,7 +42,8 @@ const TITLE_B = [
 ];
 
 const DEFAULT_SERP_TITLES = ['Founder', 'Owner', 'CEO', 'General Manager', 'Kurucu', 'Genel Müdür'];
-const WEBSITE_PATHS = ['', '/hakkimizda', '/hakkimizda/', '/about', '/about-us', '/ekibimiz', '/team', '/iletisim', '/contact'];
+// Performans: senkron find'da firma başına az sayfa (timeout önleme). Serper asıl yol.
+const WEBSITE_PATHS = ['', '/hakkimizda', '/about'];
 const LINKEDIN_IN_RE = /https?:\/\/(?:[\w-]+\.)?linkedin\.com\/in\/[^\s"'<>?#)]+/ig;
 const LINKEDIN_COMPANY_RE = /https?:\/\/(?:[\w-]+\.)?linkedin\.com\/company\/[^\s"'<>?#)]+/ig;
 const URL_RE = /https?:\/\/[^\s"'<>]+/ig;
@@ -117,6 +118,7 @@ async function serperSearch(query: string, country?: string | null): Promise<Ser
         hl: 'tr',
         num: 10,
       }),
+      signal: AbortSignal.timeout(8000),
     });
     if (!res.ok) return [];
     const data = (await res.json()) as { organic?: SerperOrganic[] };
@@ -249,11 +251,15 @@ async function resolveFromApollo(input: CompanyLookupInput): Promise<ResolvedDec
   };
 }
 
-export async function resolveDecisionMaker(input: CompanyLookupInput): Promise<ResolvedDecisionMaker> {
+export async function resolveDecisionMaker(
+  input: CompanyLookupInput,
+  opts?: { skipWebsite?: boolean },
+): Promise<ResolvedDecisionMaker> {
   const linkedin = await resolveLinkedinFromGoogle(input);
   if (linkedin?.linkedin_url) return linkedin;
 
-  const website = await resolveFromWebsite(input);
+  // Website OSINT yavaş (scraper). Senkron find'da atlanır; batch enrich'te çalışır.
+  const website = opts?.skipWebsite ? null : await resolveFromWebsite(input);
   if (website?.name) return website;
 
   const apollo = await resolveFromApollo(input);
