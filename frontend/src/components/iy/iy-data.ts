@@ -320,7 +320,7 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
       { key: 'tasks', label: 'Görevler', icon: 'ListChecks', path: '/gorevler', module: 'crm' },
       { key: 'reminders', label: 'Hatırlatma Yönetimi', icon: 'BellRing', path: '/hatirlatmalar', module: 'crm' },
       { key: 'mail', label: 'Mail Yönetimi', icon: 'Mail', soon: true, module: 'email-marketing' },
-      { key: 'lead-machine', label: 'Leads', icon: 'Radar', soon: true, module: 'leads' },
+      { key: 'lead-machine', label: 'Karar Verici Bulma', icon: 'Radar', path: '/karar-vericiler', module: 'leads' },
       { key: 'amazon', label: 'Amazon Analizi', icon: 'BarChart3', path: '/amazon', module: 'leads' },
     ],
   },
