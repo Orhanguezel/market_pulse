@@ -2,6 +2,7 @@ import type { FastifyInstance } from 'fastify';
 import { requireAuth } from '@/middleware/auth';
 import { requireModule } from '@/modules/entitlements';
 import { runDecisionMakerFinder, buildSearchHints, SECTOR_PRESETS, DEFAULT_TITLES, EXPORT_B2B_TITLES, type FinderParams } from './finder.service';
+import { saveDecisionMakers, listSavedDecisionMakers } from './persist.service';
 
 /**
  * Karar Verici Bulma (OSINT) — Places havuzu + Apollo people-search.
@@ -40,6 +41,14 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
       perCityLimit: body.perCityLimit,
       targetCount: body.targetCount,
     });
-    return result;
+    // Kalıcı kaydet (UPSERT) — sayfa yenilense de kalır, tekrar aramada birikir.
+    const savedCount = await saveDecisionMakers(result.rows, body.sector).catch(() => 0);
+    return { ...result, saved: savedCount };
+  });
+
+  // Kayıtlı (birikmiş) karar vericiler — sayfa açılışında yüklenir.
+  app.get('/lead-machine/decision-makers/saved', guard, async () => {
+    const rows = await listSavedDecisionMakers();
+    return { rows, stats: { companies: rows.length, withDecisionMaker: rows.filter((r) => r.decision_maker_name).length } };
   });
 }

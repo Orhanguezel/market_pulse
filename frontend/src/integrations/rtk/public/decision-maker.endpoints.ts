@@ -30,11 +30,14 @@ export type FindBody = {
 
 export const decisionMakerApi = baseApi.injectEndpoints({
   endpoints: (b) => ({
-    findDecisionMakers: b.mutation<FindResult, FindBody>({
+    findDecisionMakers: b.mutation<FindResult & { saved?: number }, FindBody>({
       query: (body) => ({ url: '/lead-machine/decision-makers/find', method: 'POST', body }),
+    }),
+    getSavedDecisionMakers: b.query<FindResult, void>({
+      query: () => ({ url: '/lead-machine/decision-makers/saved', method: 'GET' }),
     }),
   }),
   overrideExisting: true,
 });
 
-export const { useFindDecisionMakersMutation } = decisionMakerApi;
+export const { useFindDecisionMakersMutation, useGetSavedDecisionMakersQuery } = decisionMakerApi;

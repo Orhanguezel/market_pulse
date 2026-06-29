@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import { Loader2, Search, Download, Radar } from 'lucide-react';
-import { useFindDecisionMakersMutation, type DecisionMakerRow } from '@/integrations/rtk/public/decision-maker.endpoints';
+import { useFindDecisionMakersMutation, useGetSavedDecisionMakersQuery, type DecisionMakerRow } from '@/integrations/rtk/public/decision-maker.endpoints';
 
 const POPPINS = { fontFamily: 'var(--font-poppins), system-ui, sans-serif' } as const;
 const TR_CITIES = ['İstanbul', 'Ankara', 'İzmir', 'Antalya', 'Bursa', 'Kocaeli', 'Konya', 'Adana'];
@@ -22,18 +22,22 @@ export default function KararVicilerPage() {
   const [sector, setSector] = useState('fitness');
   const [cities, setCities] = useState<string[]>(['İstanbul', 'Ankara', 'İzmir']);
   const [target, setTarget] = useState(50);
-  const [find, { data, isLoading, isError }] = useFindDecisionMakersMutation();
+  const [find, { data: runData, isLoading, isError }] = useFindDecisionMakersMutation();
+  const { data: saved, refetch: refetchSaved } = useGetSavedDecisionMakersQuery();
+  const rows = saved?.rows ?? [];
 
   const toggleCity = (c: string) => setCities((p) => (p.includes(c) ? p.filter((x) => x !== c) : [...p, c]));
 
-  const run = () => {
+  const run = async () => {
     if (cities.length === 0 || isLoading) return;
-    find({ sector, cities, country: 'TR', targetCount: target, perCityLimit: 5 });
+    try { await find({ sector, cities, country: 'TR', targetCount: target, perCityLimit: 5 }).unwrap(); }
+    catch { /* isError gösterir */ }
+    finally { refetchSaved(); }
   };
 
   const download = () => {
-    if (!data?.rows?.length) return;
-    const blob = new Blob([toCsv(data.rows)], { type: 'text/csv;charset=utf-8;' });
+    if (!rows.length) return;
+    const blob = new Blob([toCsv(rows)], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url; a.download = `karar-vericiler-${sector}-${new Date().toISOString().slice(0, 10)}.csv`; a.click();
@@ -78,20 +82,20 @@ export default function KararVicilerPage() {
             {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
             {isLoading ? 'Aranıyor… (1-2 dk sürebilir)' : 'Karar Vericileri Bul'}
           </button>
-          {data?.rows?.length ? (
+          {rows.length ? (
             <button type="button" onClick={download} className="inline-flex items-center gap-2 rounded-lg border border-[#1e40af]/30 px-4 py-2.5 text-[14px] font-semibold text-[#1e40af] hover:bg-[#eff6ff]">
-              <Download className="h-4 w-4" /> CSV İndir
+              <Download className="h-4 w-4" /> CSV İndir ({rows.length})
             </button>
           ) : null}
         </div>
-        {data?.stats && (
-          <p className="mt-3 text-[12.5px] text-[#64748b]">{data.stats.companies} işletme tarandı · {data.stats.withDecisionMaker} karar verici bulundu · {data.rows.length} kayıt</p>
+        {runData?.stats && (
+          <p className="mt-3 text-[12.5px] text-[#64748b]">Bu aramada: {runData.stats.companies} işletme tarandı · {runData.stats.withDecisionMaker} karar verici · {runData.saved ?? 0} kaydedildi. Toplam kayıtlı: {rows.length}</p>
         )}
       </div>
 
       {/* Sonuç */}
       {isError && <div className="rounded-2xl border border-[#fecaca] bg-[#fef2f2] px-5 py-4 text-[14px] text-[#991b1b]">Arama başarısız. Modül aktif değilse veya API limiti dolduysa tekrar deneyin.</div>}
-      {data?.rows?.length ? (
+      {rows.length ? (
         <div className="overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[900px] text-left text-[13px]">
@@ -102,7 +106,7 @@ export default function KararVicilerPage() {
                 </tr>
               </thead>
               <tbody>
-                {data.rows.map((r, i) => (
+                {rows.map((r, i) => (
                   <tr key={i} className="border-b border-[#f1f5f9] last:border-0 hover:bg-[#eff6ff]/40">
                     <td className="px-3 py-2.5 font-medium text-[#0f172a]">{r.company_name}</td>
                     <td className="px-3 py-2.5">{r.city}</td>
