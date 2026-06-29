@@ -10,6 +10,12 @@ import {
   listDealsHandler,
   getDealHandler,
   listActivitiesHandler,
+  listProductsHandler,
+  listQuotesHandler,
+  listOrdersHandler,
+  listDocumentsHandler,
+  listTasksHandler,
+  listRemindersHandler,
 } from './controller';
 
 /**
@@ -29,4 +35,12 @@ export async function registerCrmTenant(app: FastifyInstance) {
   app.get('/crm/deals', guard, listDealsHandler);
   app.get('/crm/deals/:id', guard, getDealHandler);
   app.get('/crm/activities', guard, listActivitiesHandler);
+
+  // İş kayıtları (okuma) — Codex business-records modülü
+  app.get('/crm/products', guard, listProductsHandler);
+  app.get('/crm/quotes', guard, listQuotesHandler);
+  app.get('/crm/orders', guard, listOrdersHandler);
+  app.get('/crm/documents', guard, listDocumentsHandler);
+  app.get('/crm/tasks', guard, listTasksHandler);
+  app.get('/crm/reminders', guard, listRemindersHandler);
 }

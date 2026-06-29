@@ -39,7 +39,7 @@ export default function ClientLayout({
   const [deferWidgets, setDeferWidgets] = useState(false);
 
   // Uygulama (giriş sonrası) sayfaları: marketing chrome yerine AppShell.
-  const isAppPath = /^\/[^/]+\/(dashboard|amazon|musteriler|satis-firsatlari|aktiviteler|kontaklar)(\/|$)/.test(pathname || '');
+  const isAppPath = /^\/[^/]+\/(dashboard|amazon|musteriler|satis-firsatlari|aktiviteler|kontaklar|potansiyel-musteriler|teklifler|siparisler|urunler|belgeler|gorevler|hatirlatmalar)(\/|$)/.test(pathname || '');
 
   useEffect(() => {
      // Reset SEO store on route change
