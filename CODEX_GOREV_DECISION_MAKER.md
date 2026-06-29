@@ -17,6 +17,16 @@
 5. **Sektör presetleri genişlet:** oteller (satınalma müdürü), medikal estetik, otomotiv distribütörü.
 6. **Google-operatör ipucu üreteci** (yarı-manuel asist): `site:linkedin.com/in "Founder" "{sector}" "Turkey"`.
 
+## "LinkedIn ile B2B Müşteri Bulma" iddiası eksikleri (bkz. docs/lead-machine/LINKEDIN_B2B_CLAIM_GAP.md)
+7. **Batch karar-verici enrichment:** lead_candidates (customs/GTİP alıcı firmaları) üzerinde
+   Apollo people-search by domain + EXPORT_B2B_TITLES → her firmaya karar verici(ler) iliştir
+   (raw_data.decision_makers[] veya ayrı tablo). Endpoint: POST /lead-machine/candidates/enrich-decision-makers.
+   (finder.service apollo-people.ts'i yeniden kullan.)
+8. **LinkedIn mesaj/bağlantı şablonu (AI):** draft.service'e LinkedIn modu — connection request + ilk mesaj +
+   2-3 adım takip; lead bazlı (askBestAvailable zaten var). 
+9. **Takip planı / sequence:** outreach'i çok adımlı LinkedIn cadence ile genişlet.
+NOT (Claude bu turda ekledi): EXPORT_B2B_TITLES preset + /decision-makers/search-hints (Google operatör + LinkedIn URL).
+
 ## Konvansiyon
 - tenant scope + requireModule('leads'); Apollo key env.APOLLO_API_KEY (canlıda set); Places getGoogleMapsKey.
 - `frontend/` Claude'da. `bun run build` + `bun test` + tenant:guard yeşil.

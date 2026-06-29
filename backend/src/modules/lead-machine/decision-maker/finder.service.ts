@@ -14,6 +14,31 @@ export const SECTOR_PRESETS: Record<string, string[]> = {
   fitness: ['fitness center', 'gym', 'wellness center', 'pilates studio', 'reformer pilates studio', 'personal training studio'],
 };
 
+// İhracat/B2B alıcı firma karar verici unvanları (LinkedIn ile B2B müşteri bulma iddiası)
+export const EXPORT_B2B_TITLES = [
+  'Purchasing Manager', 'Procurement Manager', 'Import Manager', 'Supply Chain Manager',
+  'Category Manager', 'Buyer', 'Head of Procurement', 'Foreign Trade Manager',
+  'General Manager', 'Business Development Manager', 'Owner', 'Founder',
+];
+
+export type SearchHints = {
+  google_operators: string[];
+  linkedin_people_search_url: string;
+  sales_navigator_note: string;
+};
+
+/** Yarı-manuel OSINT asistanı: Google operatörleri + LinkedIn arama URL'i (scrape YOK, operatör çalıştırır). */
+export function buildSearchHints(company: string, country?: string | null, titles: string[] = EXPORT_B2B_TITLES): SearchHints {
+  const c = country || '';
+  const ops = titles.slice(0, 5).map((t) => `site:linkedin.com/in "${t}" "${company}"`);
+  if (c) ops.push(`site:linkedin.com/in "${titles[0]}" "${company}" "${c}"`);
+  return {
+    google_operators: ops,
+    linkedin_people_search_url: `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(`${company} ${titles[0]}`)}`,
+    sales_navigator_note: 'Sales Navigator: şirket adı + unvan filtresi ile aday listesi oluşturun, ardından doğrulayın.',
+  };
+}
+
 export type DecisionMakerRow = {
   company_name: string;
   city: string;

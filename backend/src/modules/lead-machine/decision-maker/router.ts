@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { requireAuth } from '@/middleware/auth';
 import { requireModule } from '@/modules/entitlements';
-import { runDecisionMakerFinder, SECTOR_PRESETS, DEFAULT_TITLES, type FinderParams } from './finder.service';
+import { runDecisionMakerFinder, buildSearchHints, SECTOR_PRESETS, DEFAULT_TITLES, EXPORT_B2B_TITLES, type FinderParams } from './finder.service';
 
 /**
  * Karar Verici Bulma (OSINT) — Places havuzu + Apollo people-search.
@@ -15,7 +15,15 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
     sectors: Object.keys(SECTOR_PRESETS),
     business_types: SECTOR_PRESETS,
     default_titles: DEFAULT_TITLES,
+    export_b2b_titles: EXPORT_B2B_TITLES,
   }));
+
+  // Yarı-manuel OSINT asistanı: Google operatörleri + LinkedIn arama URL'i (firma bazlı)
+  app.post('/lead-machine/decision-makers/search-hints', guard, async (req, reply) => {
+    const body = (req.body ?? {}) as { company?: string; country?: string; titles?: string[] };
+    if (!body.company) return reply.status(400).send({ error: { message: 'company_required' } });
+    return buildSearchHints(body.company, body.country, body.titles);
+  });
 
   // Senkron çalıştır → satırlar + istatistik (ilk faz; ileride job'a alınabilir)
   app.post('/lead-machine/decision-makers/find', guard, async (req, reply) => {
