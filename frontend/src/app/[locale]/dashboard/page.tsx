@@ -70,7 +70,7 @@ export default function DashboardPage() {
   ];
 
   return (
-    <div className="mx-auto max-w-[1280px] space-y-6">
+    <div className="space-y-6">
       {/* Welcome */}
       <div className="flex flex-col gap-4 rounded-2xl border border-[#e2e8f0] bg-white p-6 md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-4">
