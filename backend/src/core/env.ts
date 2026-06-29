@@ -84,6 +84,7 @@ export const env = {
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
   GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY || '',
+  SERPER_API_KEY: process.env.SERPER_API_KEY || '',
   AUTH_ADMIN_EMAILS: process.env.AUTH_ADMIN_EMAILS || process.env.ADMIN_EMAIL || '',
   ALLOW_TEMP_LOGIN: process.env.ALLOW_TEMP_LOGIN || '',
   TEMP_PASSWORD: process.env.TEMP_PASSWORD || '',

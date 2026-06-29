@@ -1,3 +1,4 @@
+import { env } from '@/core/env';
 import { scrape, type LeadPageData } from '../_shared/scraper.client';
 import { searchDecisionMakers, domainFromWebsite, type DecisionMaker } from './apollo-people';
 
@@ -101,31 +102,79 @@ function extractTitleNear(text: string, linkedinUrl: string, titles: string[]): 
   return candidates.find((title) => window.toLowerCase().includes(title.toLowerCase())) ?? null;
 }
 
+type SerperOrganic = { title?: string; link?: string; snippet?: string };
+
+/** Serper.dev Google SERP API (doğrudan Google scrape yerine — güvenilir). */
+async function serperSearch(query: string, country?: string | null): Promise<SerperOrganic[]> {
+  if (!env.SERPER_API_KEY) return [];
+  try {
+    const res = await fetch('https://google.serper.dev/search', {
+      method: 'POST',
+      headers: { 'X-API-KEY': env.SERPER_API_KEY, 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        q: query,
+        gl: (country || 'tr').toLowerCase().slice(0, 2),
+        hl: 'tr',
+        num: 10,
+      }),
+    });
+    if (!res.ok) return [];
+    const data = (await res.json()) as { organic?: SerperOrganic[] };
+    return data.organic ?? [];
+  } catch {
+    return [];
+  }
+}
+
+/** Organic başlık: "Ad Soyad - Unvan - Şirket | LinkedIn" → {name, title}. */
+function parseSerpPerson(title: string): { name: string | null; title: string | null } {
+  const cleaned = normalizeSpace(title.replace(/\s*[|·-]\s*LinkedIn.*$/i, '').replace(/\s*\|\s*LinkedIn.*$/i, ''));
+  const parts = cleaned.split(/\s+[-–—|]\s+/).map((p) => p.trim()).filter(Boolean);
+  const name = parts[0] || null;
+  const titlePart = parts[1] || null;
+  // İsim makul mü? (2-3 kelime, kurumsal kelime değil)
+  if (!name || name.split(/\s+/).length < 2 || /fitness|pilates|studio|gym|center|wellness|spa|linkedin/i.test(name)) {
+    return { name: null, title: titlePart };
+  }
+  return { name, title: titlePart };
+}
+
+/** Firma adı sonuçla eşleşiyor mu (yanlış kişi engeli) — anlamlı tokenlardan biri geçmeli. */
+function companyMatches(company: string, hay: string): boolean {
+  const tokens = company.toLowerCase().split(/[^a-zçğıöşü0-9]+/i)
+    .filter((t) => t.length >= 4 && !/fitness|pilates|studio|gym|center|wellness|spa|club|sport|spor|reformer|personal|training/.test(t));
+  if (!tokens.length) return true; // ayırt edici token yoksa eşleşme zorlama
+  const h = hay.toLowerCase();
+  return tokens.some((t) => h.includes(t));
+}
+
 async function resolveLinkedinFromGoogle(input: CompanyLookupInput): Promise<ResolvedDecisionMaker | null> {
-  const operators = buildGoogleOperators(input);
+  if (!env.SERPER_API_KEY) return null;
+  const operators = buildGoogleOperators(input).slice(0, 3);
   for (const operator of operators) {
-    const url = `https://www.google.com/search?q=${encodeURIComponent(operator)}`;
-    try {
-      const res = await scrape(url, { mode: 'stealthy', return_text: true, return_html: true });
-      const blob = `${res.text ?? ''}\n${res.html ?? ''}`;
-      const linkedinUrl = firstMatch(blob, LINKEDIN_IN_RE);
-      if (!linkedinUrl) continue;
-      const title = extractTitleNear(blob, linkedinUrl, input.titles ?? DEFAULT_SERP_TITLES);
+    const organics = await serperSearch(operator, input.country);
+    for (const item of organics) {
+      const link = item.link ?? '';
+      if (!/linkedin\.com\/in\//i.test(link)) continue;
+      const hay = `${item.title ?? ''} ${item.snippet ?? ''}`;
+      if (!companyMatches(input.company, hay)) continue;
+      const parsed = parseSerpPerson(item.title ?? '');
+      const name = parsed.name ?? linkedinNameFromUrl(link);
+      const title = parsed.title ?? extractTitleNear(hay, link, input.titles ?? DEFAULT_SERP_TITLES);
+      const companyLinkedin = firstMatch(organics.map((o) => o.link ?? '').join('\n'), LINKEDIN_COMPANY_RE);
       return {
-        name: linkedinNameFromUrl(linkedinUrl),
+        name,
         title,
-        linkedin_url: linkedinUrl,
+        linkedin_url: link.replace(/[),.;]+$/, ''),
         confidence: titleConfidence(title, 'linkedin_serp'),
         evidence: {
           source: 'linkedin_serp',
-          source_url: linkedinUrl,
+          source_url: link,
           google_operator: operator,
-          company_linkedin_url: firstMatch(blob, LINKEDIN_COMPANY_RE),
-          raw_title: title,
+          company_linkedin_url: companyLinkedin,
+          raw_title: item.title ?? null,
         },
       };
-    } catch {
-      // Google can block SERP fetches. Keep this resolver best-effort.
     }
   }
   return null;
