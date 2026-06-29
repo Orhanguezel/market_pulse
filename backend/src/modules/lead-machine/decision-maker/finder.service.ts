@@ -1,5 +1,5 @@
 import { getGoogleMapsKey } from '@/modules/siteSettings';
-import { searchDecisionMakers, domainFromWebsite, type DecisionMaker } from './apollo-people';
+import { resolveDecisionMaker, sourceUrlFor } from './osint.service';
 
 // Karar verici unvanları (A = doğrudan, B = yönetici)
 const TITLES_A = ['founder', 'co-founder', 'owner', 'ceo', 'general manager', 'managing director', 'genel müdür', 'kurucu', 'sahip'];
@@ -28,10 +28,11 @@ export type SearchHints = {
 };
 
 /** Yarı-manuel OSINT asistanı: Google operatörleri + LinkedIn arama URL'i (scrape YOK, operatör çalıştırır). */
-export function buildSearchHints(company: string, country?: string | null, titles: string[] = EXPORT_B2B_TITLES): SearchHints {
+export function buildSearchHints(company: string, country?: string | null, titles: string[] = EXPORT_B2B_TITLES, city?: string | null): SearchHints {
   const c = country || '';
-  const ops = titles.slice(0, 5).map((t) => `site:linkedin.com/in "${t}" "${company}"`);
-  if (c) ops.push(`site:linkedin.com/in "${titles[0]}" "${company}" "${c}"`);
+  const location = city || c;
+  const ops = titles.slice(0, 5).map((t) => `site:linkedin.com/in "${t}" "${company}"${location ? ` "${location}"` : ''}`);
+  if (c && city) ops.push(`site:linkedin.com/in "${titles[0]}" "${company}" "${city}" "${c}"`);
   return {
     google_operators: ops,
     linkedin_people_search_url: `https://www.linkedin.com/search/results/people/?keywords=${encodeURIComponent(`${company} ${titles[0]}`)}`,
@@ -120,32 +121,29 @@ export async function runDecisionMakerFinder(params: FinderParams): Promise<{ ro
         seen.add(compKey);
         companies++;
 
-        const domain = domainFromWebsite(place.website);
-        let dms: DecisionMaker[] = [];
-        if (domain) dms = await searchDecisionMakers(domain, titles, 3);
-
-        if (dms.length === 0) {
-          // İşletme doğrulandı ama kişi yok → C
-          rows.push({
-            company_name: place.name, city, business_type: type,
-            decision_maker_name: null, title: null, linkedin_profile_url: null,
-            company_website: place.website, social_url: null, source_url: place.mapsUri,
-            fit_note: 'İşletme doğrulandı; karar verici bulunamadı (manuel araştırma önerilir).',
-            confidence_score: 'C', last_verified_at: now,
-          });
-        } else {
-          for (const dm of dms) {
-            const conf = scoreTitle(dm.title) ?? 'B';
-            withDM++;
-            rows.push({
-              company_name: place.name, city, business_type: type,
-              decision_maker_name: dm.name, title: dm.title, linkedin_profile_url: dm.linkedin_url,
-              company_website: place.website, social_url: null, source_url: place.mapsUri,
-              fit_note: conf === 'A' ? 'Doğrudan karar verici.' : 'Muhtemel yönetici/karar verici.',
-              confidence_score: conf, last_verified_at: now,
-            });
-          }
-        }
+        const resolved = await resolveDecisionMaker({
+          company: place.name,
+          city,
+          country,
+          website: place.website,
+          googleMapsUrl: place.mapsUri,
+          titles,
+        });
+        if (resolved.name || resolved.linkedin_url) withDM++;
+        rows.push({
+          company_name: place.name, city, business_type: type,
+          decision_maker_name: resolved.name, title: resolved.title, linkedin_profile_url: resolved.linkedin_url,
+          company_website: place.website,
+          social_url: resolved.evidence.social_url ?? resolved.evidence.company_linkedin_url ?? null,
+          source_url: sourceUrlFor({ company: place.name, city, country, website: place.website, googleMapsUrl: place.mapsUri, titles }, resolved),
+          fit_note: resolved.confidence === 'A'
+            ? 'LinkedIn/karar verici eşleşmesi güçlü.'
+            : resolved.confidence === 'B'
+              ? 'Website OSINT ile karar verici adayı bulundu.'
+              : 'İşletme doğrulandı; karar verici bulunamadı (manuel araştırma önerilir).',
+          confidence_score: resolved.confidence,
+          last_verified_at: now,
+        });
         if (rows.length >= targetCount) break outer;
       }
     }

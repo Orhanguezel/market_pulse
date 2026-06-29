@@ -26,37 +26,39 @@
 
 ## 🔴 GÖREV A — KAZANAN yöntemi otomatikleştir: Google-operatör → LinkedIn (ÖNCELİK 1)
 Codex'in 10/10 A listeyi ürettiği akış. Apollo'ya bağlı kalma.
-- [ ] **Google-operatör → LinkedIn profil çözümü:** her firma için `buildSearchHints` operatörlerini
+- [x] **Google-operatör → LinkedIn profil çözümü:** her firma için `buildSearchHints` operatörlerini
       (`site:linkedin.com/in "Founder|Owner|Genel Müdür" "Firma" "şehir"`) **scraper-service** ile Google'a
       sorgula (SERP fetch; gerekirse residential proxy — kullanıcı onayladı), sonuçlardan `linkedin.com/in/...`
       URL'lerini çıkar, firma adı/şehirle eşleştir → isim + unvan + LinkedIn URL.
       (Google bot koruması: scraper-service stealthy + proxy; alternatif SERP API gerekirse not düş.)
-- [ ] **Website-OSINT yedeği:** profil bulunamazsa `enrichment.analyzeCompanyWebsite(website)`
+- [x] **Website-OSINT yedeği:** profil bulunamazsa `enrichment.analyzeCompanyWebsite(website)`
       (scraper /team /about /impressum isim+unvan) → row'a yaz. Sosyal linkleri de çek (row.social_url).
-- [ ] **Skor:** LinkedIn profil + unvan eşleşti → **A**; website isim+unvan → **B**; sadece firma → **C**.
-- [ ] **Doğrulama linki:** source_url'e LinkedIn profil + Google Maps cid + (varsa) şirket LinkedIn sayfası.
+- [x] **Skor:** LinkedIn profil + unvan eşleşti → **A**; website isim+unvan → **B**; sadece firma → **C**.
+- [x] **Doğrulama linki:** source_url'e LinkedIn profil + Google Maps cid + (varsa) şirket LinkedIn sayfası.
 - [ ] **Kabul:** fitness/TR çalıştırınca çıktı `fitness_b2b_10_saglam_ornek_liste.csv` kalitesine yaklaşmalı
       (A-satırlar gerçek LinkedIn URL + isim + unvan). Apollo yalnızca uluslararası firmalarda yardımcı.
+      _Durum:_ backend resolver + testler hazır; canlıda proxy/SERP hit oranı smoke edilmeli.
 
 ## 🔴 GÖREV B — Batch karar-verici enrichment (mevcut adaylara)
 İhracat iddiası: elimdeki customs/GTİP alıcı firmalarına kişi bul.
-- [ ] `POST /lead-machine/candidates/enrich-decision-makers` (requireModule('leads'), tenant-scope):
+- [x] `POST /lead-machine/candidates/enrich-decision-makers` (requireModule('leads'), tenant-scope):
       body { icp_id?|job_id?|candidate_ids[]?, titles? } → seçili lead_candidates üzerinde
       domain → Apollo people-search (EXPORT_B2B_TITLES) + website-OSINT fallback (Görev A).
-- [ ] Sonucu lead_candidates.raw_data.decision_makers[] (name/title/linkedin_url/source/confidence) olarak yaz;
+- [x] Sonucu lead_candidates.raw_data.decision_makers[] (name/title/linkedin_url/source/confidence) olarak yaz;
       idempotent (tekrar koşumda güncelle).
 - [ ] Kabul: customs ile bulunmuş bir firmaya en az bir karar verici eklenebiliyor.
+      _Durum:_ unit test var; canlı customs adayıyla smoke edilmeli.
 
 ## 🔴 GÖREV C — LinkedIn bağlantı + mesaj şablonu (AI)
-- [ ] `draft.service`'e LinkedIn modu: lead bazlı **connection request** + **ilk mesaj** + **2-3 adım takip**
+- [x] `draft.service`'e LinkedIn modu: lead bazlı **connection request** + **ilk mesaj** + **2-3 adım takip**
       üret (askBestAvailable zaten var; dil TR/EN, kişi adı+unvan+firma+ürün bağlamı).
-- [ ] Endpoint: `POST /lead-machine/outreach/linkedin-templates` { candidate_id|context } → { connection, first_message, followups[] }.
-- [ ] Kabul: bir lead için 3 adımlı, kişiselleştirilmiş, profesyonel LinkedIn metin seti döner.
+- [x] Endpoint: `POST /lead-machine/outreach/linkedin-templates` { candidate_id|context } → { connection, first_message, followups[] }.
+- [x] Kabul: bir lead için 3 adımlı, kişiselleştirilmiş, profesyonel LinkedIn metin seti döner.
 
 ## 🔴 GÖREV D — Takip planı / sequence
-- [ ] outreach'i çok adımlı LinkedIn cadence ile genişlet (gün-0 bağlantı, gün-3 mesaj, gün-7 takip…);
+- [x] outreach'i çok adımlı LinkedIn cadence ile genişlet (gün-0 bağlantı, gün-3 mesaj, gün-7 takip…);
       durum takibi (gönderildi/yanıt). lead_outreach_drafts/outreach_campaigns yapısını kullan.
-- [ ] Kabul: bir aday için sequence oluşturulup adımları listelenebiliyor.
+- [x] Kabul: bir aday için sequence oluşturulup adımları listelenebiliyor.
 
 ## ⚪ GÖREV E — Sertleştirme (sonra)
 - [ ] find senkron→background job (lead_search_jobs channel='b2b_decision_makers'), timeout riski.

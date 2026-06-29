@@ -15,6 +15,7 @@ import {
   competitorScan,
   createIcp,
   createRule,
+  createLinkedInSequenceHandler,
   createSavedSearchHandler,
   deleteIcp,
   deleteRule,
@@ -23,12 +24,14 @@ import {
   feedbackRejectionStats,
   getLeadCandidate,
   enrichBatch,
+  enrichDecisionMakersBatch,
   enrichOne,
   fairSuggestions,
   fairBriefingBulkPdf,
   fairBriefingCandidatePdf,
   fairBriefingDayPdf,
   generateOutreach,
+  generateLinkedInTemplatesHandler,
   getAmazonJob,
   getAmazonRiskScores,
   getBulkAmazonRiskScores,
@@ -45,6 +48,7 @@ import {
   listFairJobs,
   listIcp,
   listLeadCandidates,
+  listLinkedInSequenceHandler,
   listRules,
   listSavedSearchesHandler,
   openTrackingPixel,
@@ -122,8 +126,12 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.post('/lead-machine/enrich/:candidateId', enrichOne);
   app.get('/lead-machine/enrich/:candidateId', listEnrichment);
   app.post('/lead-machine/enrich/batch', enrichBatch);
+  app.post('/lead-machine/candidates/enrich-decision-makers', enrichDecisionMakersBatch);
 
   app.post('/lead-machine/outreach/generate/:candidateId', generateOutreach);
+  app.post('/lead-machine/outreach/linkedin-templates', generateLinkedInTemplatesHandler);
+  app.post('/lead-machine/outreach/linkedin-sequence', createLinkedInSequenceHandler);
+  app.get('/lead-machine/outreach/linkedin-sequence', listLinkedInSequenceHandler);
   app.get('/lead-machine/outreach/drafts', listDrafts);
   app.patch('/lead-machine/outreach/drafts/:id', updateDraft);
   app.post('/lead-machine/outreach/drafts/:id/send', sendDraft);

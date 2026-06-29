@@ -1,7 +1,9 @@
 import { pool } from '@/db/client';
+import { randomUUID } from 'node:crypto';
 import { env } from '@/core/env';
 import { sendMailRaw } from '@/modules/mail';
 import { getActiveTenantKey } from '@/modules/_shared';
+import { askBestAvailable } from '../_shared/ai.client';
 import { getCandidate } from '../_shared/db';
 import { listCandidateEnrichment } from '../enrichment/enrichment.service';
 export { generateOutreachEmail } from './draft.service';
@@ -37,6 +39,10 @@ const FOLLOWUP_STAGES = [
 
 function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' ? value as Record<string, unknown> : {};
+}
+
+function firstString(value: unknown): string | null {
+  return typeof value === 'string' && value.trim() ? value.trim() : null;
 }
 
 function textToHtml(body: string) {
@@ -189,6 +195,178 @@ export async function listOutreachDrafts(candidateId?: string, marketLeadId?: st
   }
   const [rows] = await pool.execute(
     `SELECT * FROM lead_outreach_drafts ${where.length ? `WHERE ${where.join(' AND ')}` : ''} ORDER BY created_at DESC LIMIT 100`,
+    values as never[],
+  );
+  return rows;
+}
+
+type LinkedInTemplateParams = {
+  candidateId?: string;
+  context?: Record<string, unknown>;
+  language?: string;
+};
+
+function normalizeLinkedInLanguage(input?: string): 'TR' | 'EN' | 'DE' {
+  const value = String(input ?? '').toUpperCase();
+  if (value === 'DE') return 'DE';
+  if (value === 'EN') return 'EN';
+  return 'TR';
+}
+
+async function linkedinTemplateContext(params: LinkedInTemplateParams) {
+  if (params.candidateId) {
+    const candidate = await getCandidate(params.candidateId);
+    if (!candidate) throw new Error('CANDIDATE_NOT_FOUND');
+    const raw = asRecord(candidate.raw_data);
+    const dms = Array.isArray(raw.decision_makers) ? raw.decision_makers.map(asRecord) : [];
+    const dm = dms[0] ?? {};
+    return {
+      candidateId: params.candidateId,
+      company: candidate.name,
+      website: candidate.website,
+      country: candidate.country,
+      city: candidate.city,
+      decisionMakerName: firstString(dm.name) ?? candidate.contact_name,
+      decisionMakerTitle: firstString(dm.title),
+      linkedinUrl: firstString(dm.linkedin_url),
+      productContext: firstString(raw.product_context) ?? firstString(raw.hs_code_description) ?? firstString(candidate.ai_summary),
+      raw,
+    };
+  }
+
+  const context = params.context ?? {};
+  const company = firstString(context.company) ?? firstString(context.company_name);
+  if (!company) throw new Error('LINKEDIN_CONTEXT_REQUIRED');
+  return {
+    candidateId: null,
+    company,
+    website: firstString(context.website),
+    country: firstString(context.country),
+    city: firstString(context.city),
+    decisionMakerName: firstString(context.decision_maker_name) ?? firstString(context.name),
+    decisionMakerTitle: firstString(context.title),
+    linkedinUrl: firstString(context.linkedin_url),
+    productContext: firstString(context.product_context) ?? firstString(context.fit_note),
+    raw: context,
+  };
+}
+
+function fallbackLinkedInTemplates(ctx: Awaited<ReturnType<typeof linkedinTemplateContext>>, language: 'TR' | 'EN' | 'DE') {
+  const name = ctx.decisionMakerName ? ctx.decisionMakerName.split(/\s+/)[0] : null;
+  const company = ctx.company;
+  const product = ctx.productContext || 'B2B iş geliştirme tarafında';
+  if (language === 'EN') {
+    return {
+      connection: `Hi ${name || ''}, I noticed your work at ${company}. Would be glad to connect.`.replace(/\s+/g, ' ').trim(),
+      first_message: `Thanks for connecting${name ? `, ${name}` : ''}. I saw ${company} is active in our target segment. We help teams identify relevant B2B opportunities with verified company and decision-maker data. Would a short exchange make sense?`,
+      followups: [
+        `Quick follow-up${name ? `, ${name}` : ''}: I can share a small sample list for ${company}'s segment if useful.`,
+        `Would it help if I sent a 10-record verified sample before discussing a broader list?`,
+        `No pressure. I will close the loop here, but happy to reconnect if verified B2B lead data becomes relevant later.`,
+      ],
+    };
+  }
+  if (language === 'DE') {
+    return {
+      connection: `Hallo ${name || ''}, ich habe Ihre Rolle bei ${company} gesehen und würde mich gern vernetzen.`.replace(/\s+/g, ' ').trim(),
+      first_message: `Danke für die Vernetzung${name ? `, ${name}` : ''}. ${product} sehen wir eine mögliche Überschneidung. Wir erstellen geprüfte B2B-Ziellisten mit Firmen- und Entscheiderdaten. Wäre ein kurzer Austausch sinnvoll?`,
+      followups: [
+        `Kurze Nachfrage${name ? `, ${name}` : ''}: Ich kann gern eine kleine geprüfte Musterliste für Ihr Segment senden.`,
+        `Würde eine 10er-Beispielliste helfen, bevor wir über eine größere Recherche sprechen?`,
+        `Kein Problem, falls es aktuell nicht passt. Ich schließe den Thread hier und melde mich später gern wieder.`,
+      ],
+    };
+  }
+  return {
+    connection: `Merhaba ${name || ''}, ${company} tarafındaki çalışmalarınızı gördüm. Bağlantıda kalmak isterim.`.replace(/\s+/g, ' ').trim(),
+    first_message: `Bağlantı için teşekkürler${name ? ` ${name}` : ''}. ${product} tarafında ${company} ile ilgili net bir eşleşme görüyoruz. Doğrulanmış firma + karar verici verisiyle B2B hedef liste hazırlıyoruz. Kısa bir görüşme uygun olur mu?`,
+    followups: [
+      `Kısa bir takip${name ? ` ${name}` : ''}: İsterseniz sektörünüz için 10 kayıtlık doğrulanmış örnek liste paylaşabilirim.`,
+      `200 kişilik listeye geçmeden önce 10 satırlık örnek veri üzerinden kaliteyi görmeniz faydalı olur mu?`,
+      `Şu an öncelik değilse sorun değil. Konuyu burada kapatıyorum; ileride doğrulanmış B2B veri ihtiyacı olursa memnuniyetle destek olurum.`,
+    ],
+  };
+}
+
+export async function generateLinkedInTemplates(params: LinkedInTemplateParams) {
+  const ctx = await linkedinTemplateContext(params);
+  const language = normalizeLinkedInLanguage(params.language ?? String(ctx.country ?? ''));
+  const prompt = `Create LinkedIn outreach copy. Output strict JSON with keys: connection, first_message, followups (array of 3 strings).
+
+Rules:
+- Language: ${language}
+- Connection request max 220 characters.
+- First message max 650 characters.
+- Followups max 450 characters each.
+- Professional, specific, low-pressure.
+- Do not invent facts.
+
+Prospect:
+Company: ${ctx.company}
+Website: ${ctx.website ?? ''}
+City/Country: ${[ctx.city, ctx.country].filter(Boolean).join(', ')}
+Decision maker: ${ctx.decisionMakerName ?? ''}
+Title: ${ctx.decisionMakerTitle ?? ''}
+LinkedIn: ${ctx.linkedinUrl ?? ''}
+Context: ${ctx.productContext ?? ''}`;
+
+  try {
+    const raw = (await askBestAvailable(prompt, 'gpt-4o-mini')).trim();
+    const parsed = JSON.parse(raw) as { connection?: unknown; first_message?: unknown; followups?: unknown };
+    const fallback = fallbackLinkedInTemplates(ctx, language);
+    return {
+      candidate_id: ctx.candidateId,
+      language,
+      connection: firstString(parsed.connection) ?? fallback.connection,
+      first_message: firstString(parsed.first_message) ?? fallback.first_message,
+      followups: Array.isArray(parsed.followups)
+        ? parsed.followups.filter((item): item is string => typeof item === 'string' && item.trim().length > 0).slice(0, 3)
+        : fallback.followups,
+    };
+  } catch {
+    return { candidate_id: ctx.candidateId, language, ...fallbackLinkedInTemplates(ctx, language) };
+  }
+}
+
+export async function createLinkedInSequence(params: LinkedInTemplateParams) {
+  const templates = await generateLinkedInTemplates(params);
+  const tenantKey = await getActiveTenantKey();
+  const candidateId = params.candidateId ?? null;
+  const steps = [
+    { day: 0, step: 'linkedin_connection', body: templates.connection },
+    { day: 3, step: 'linkedin_first_message', body: templates.first_message },
+    ...templates.followups.map((body, index) => ({
+      day: [7, 14, 21][index] ?? 21 + index * 7,
+      step: `linkedin_followup_${index + 1}`,
+      body,
+    })),
+  ];
+
+  const inserted = [];
+  for (const item of steps) {
+    const id = randomUUID();
+    await pool.execute(
+      `INSERT INTO lead_outreach_drafts
+       (id, tenant_key, candidate_id, subject, body, ai_model, status, sequence_step)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      [id, tenantKey, candidateId, `[LinkedIn] ${item.step}`, item.body, 'gpt-4o-mini', 'draft', item.step],
+    );
+    inserted.push({ id, ...item, status: 'draft' });
+  }
+
+  return { candidate_id: candidateId, channel: 'linkedin', steps: inserted };
+}
+
+export async function listLinkedInSequence(candidateId?: string) {
+  const tenantKey = await getActiveTenantKey();
+  const where = ['tenant_key = ?', 'sequence_step LIKE ?'];
+  const values: unknown[] = [tenantKey, 'linkedin_%'];
+  if (candidateId) {
+    where.push('candidate_id = ?');
+    values.push(candidateId);
+  }
+  const [rows] = await pool.execute(
+    `SELECT * FROM lead_outreach_drafts WHERE ${where.join(' AND ')} ORDER BY created_at ASC LIMIT 100`,
     values as never[],
   );
   return rows;

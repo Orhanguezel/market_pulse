@@ -20,9 +20,9 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
 
   // Yarı-manuel OSINT asistanı: Google operatörleri + LinkedIn arama URL'i (firma bazlı)
   app.post('/lead-machine/decision-makers/search-hints', guard, async (req, reply) => {
-    const body = (req.body ?? {}) as { company?: string; country?: string; titles?: string[] };
+    const body = (req.body ?? {}) as { company?: string; city?: string; country?: string; titles?: string[] };
     if (!body.company) return reply.status(400).send({ error: { message: 'company_required' } });
-    return buildSearchHints(body.company, body.country, body.titles);
+    return buildSearchHints(body.company, body.country, body.titles, body.city);
   });
 
   // Senkron çalıştır → satırlar + istatistik (ilk faz; ileride job'a alınabilir)

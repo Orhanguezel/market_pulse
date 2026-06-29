@@ -18,12 +18,13 @@ export async function searchDecisionMakers(
 ): Promise<DecisionMaker[]> {
   if (!env.APOLLO_API_KEY || !domain) return [];
   try {
-    const res = await fetch('https://api.apollo.io/v1/mixed_people/search', {
+    const res = await fetch('https://api.apollo.io/api/v1/mixed_people/api_search', {
       method: 'POST',
       headers: { 'content-type': 'application/json', 'x-api-key': env.APOLLO_API_KEY },
       body: JSON.stringify({
-        q_organization_domains: domain,
+        q_organization_domains_list: [domain],
         person_titles: titles,
+        include_similar_titles: false,
         page: 1,
         per_page: Math.min(Math.max(limit, 1), 10),
       }),

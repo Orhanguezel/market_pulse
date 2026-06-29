@@ -31,8 +31,12 @@ import {
   updateIcpProfile,
 } from './icp/icp.repository';
 import { enrichCandidate, listCandidateEnrichment } from './enrichment/enrichment.service';
+import { enrichCandidateDecisionMakers } from './decision-maker/candidate-enrichment.service';
 import {
+  createLinkedInSequence,
+  generateLinkedInTemplates,
   generateOutreachEmail,
+  listLinkedInSequence,
   listOutreachDrafts,
   sendOutreachDraft,
   trackOutreachOpen,
@@ -358,7 +362,56 @@ export const enrichBatch: RouteHandler<{ Body: unknown }> = async (req, reply) =
   return { queued: selected.length };
 };
 
+export const enrichDecisionMakersBatch: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  const candidateIds = Array.isArray(body.candidate_ids)
+    ? body.candidate_ids.filter((id): id is string => typeof id === 'string' && id.trim().length > 0)
+    : undefined;
+  const titles = Array.isArray(body.titles)
+    ? body.titles.filter((title): title is string => typeof title === 'string' && title.trim().length > 0)
+    : undefined;
+  return enrichCandidateDecisionMakers({
+    candidate_ids: candidateIds,
+    job_id: typeof body.job_id === 'string' ? body.job_id : null,
+    icp_id: typeof body.icp_id === 'string' ? body.icp_id : null,
+    titles,
+    limit: Number(body.limit ?? 50),
+  });
+};
+
 export const generateOutreach: RouteHandler<{ Params: { candidateId: string } }> = async (req, reply) => reply.code(201).send(await generateOutreachEmail(req.params.candidateId));
+export const generateLinkedInTemplatesHandler: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  try {
+    return reply.code(201).send(await generateLinkedInTemplates({
+      candidateId: typeof body.candidate_id === 'string' ? body.candidate_id : undefined,
+      context: asRecord(body.context),
+      language: typeof body.language === 'string' ? body.language : undefined,
+    }));
+  } catch (e) {
+    if (e instanceof Error && e.message === 'CANDIDATE_NOT_FOUND') return reply.code(404).send({ error: { message: 'not_found' } });
+    if (e instanceof Error && e.message === 'LINKEDIN_CONTEXT_REQUIRED') return reply.code(400).send({ error: { message: 'context_required' } });
+    throw e;
+  }
+};
+export const createLinkedInSequenceHandler: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  try {
+    return reply.code(201).send(await createLinkedInSequence({
+      candidateId: typeof body.candidate_id === 'string' ? body.candidate_id : undefined,
+      context: asRecord(body.context),
+      language: typeof body.language === 'string' ? body.language : undefined,
+    }));
+  } catch (e) {
+    if (e instanceof Error && e.message === 'CANDIDATE_NOT_FOUND') return reply.code(404).send({ error: { message: 'not_found' } });
+    if (e instanceof Error && e.message === 'LINKEDIN_CONTEXT_REQUIRED') return reply.code(400).send({ error: { message: 'context_required' } });
+    throw e;
+  }
+};
+export const listLinkedInSequenceHandler: RouteHandler<{ Querystring: unknown }> = async (req) => {
+  const q = asRecord(req.query);
+  return listLinkedInSequence(typeof q.candidate_id === 'string' ? q.candidate_id : undefined);
+};
 export const listDrafts: RouteHandler<{ Querystring: unknown }> = async (req) => {
   const q = asRecord(req.query);
   return listOutreachDrafts(typeof q.candidate_id === 'string' ? q.candidate_id : undefined, typeof q.market_lead_id === 'string' ? q.market_lead_id : undefined);
