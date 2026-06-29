@@ -70,3 +70,25 @@ Codex'in 10/10 A listeyi ürettiği akış. Apollo'ya bağlı kalma.
 ## Önerilen sıra
 A (website-OSINT — test'te hemen değer) → B (customs adaylarına kişi) → C (mesaj) → D (sequence) → E.
 A + B, "temiz isimli liste" beklentisini Apollo'ya bağımlı kalmadan karşılar.
+
+---
+
+## 🔴 CANLI SMOKE BULGUSU (2026-06-29) — KALİTE SORUNU, ÖNCELİK 1
+Fitness/TR canlı: 48 tarandı, 12 "karar verici" AMA **0 LinkedIn URL**, isimler ÇÖP
+("Meena" 6 farklı Adana firmasında Founder; "Mario"/"Nick" tek-isim), hepsi B.
+Hedef = `fitness_b2b_10_saglam_ornek_liste.xlsx` kalitesi (gerçek isim+unvan+LinkedIn URL, A).
+
+Teşhis:
+- `resolveLinkedinFromGoogle` scraper ile `google.com/search?q=` çekiyor → **Google bot koruması/consent** →
+  linkedin.com/in DÖNMÜYOR (0 URL). Google'ı doğrudan scrape GÜVENİLMEZ.
+- Fallback `resolveFromWebsite` küçük gym sitelerinde gerçek /team olmadığından **şablon/widget metninden
+  rastgele isim** çekiyor → tekrarlayan/çöp. Açık kalite bug'ı.
+
+Çözüm:
+1. **SERP API (asıl iş):** `resolveLinkedinFromGoogle`'ı Google-scrape yerine güvenilir SERP API ile
+   (öneri **Serper.dev** — ucuz JSON; `q=site:linkedin.com/in "Founder" "Firma"` → organic → linkedin.com/in).
+   env `SERPER_API_KEY` (+ DB site_settings fallback). Kullanıcı key/bütçe onayı verecek. Manuel CSV
+   yöntemini otomatikleştiren tek sağlam yol.
+2. **Website-OSINT kalite kapısı:** tek-token isim reddet; isim karar-verici label'a yakın olmalı;
+   aynı isim birden çok firmada → ele; doğrulanmamışsa isim YAZMA → C (uydurma yok). "Kötü veri yerine boş".
+3. **Skor:** A = SERP-doğrulanmış LinkedIn; website-only güçlü → B; aksi C (isimsiz).
