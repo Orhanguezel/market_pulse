@@ -1,5 +1,64 @@
 import type { IcpProfile } from '../icp/icp.repository';
 import { scrape, searchGoogleMaps, type DirectoryListingData, type Place } from '../_shared/scraper.client';
+import { getGoogleMapsKey } from '../../siteSettings';
+
+/**
+ * Resmi Google Places API (New) — Text Search. Server-to-server; API anahtarı
+ * VPS IP'lerine kısıtlı. scraper-service GMaps yolunun aksine datacenter IP'den çalışır.
+ */
+async function searchPlacesApi(
+  query: string,
+  opts: { country?: string; limit?: number },
+): Promise<Partial<Place>[]> {
+  const apiKey = await getGoogleMapsKey();
+  if (!apiKey) return [];
+
+  const regionCode =
+    opts.country && /^[A-Za-z]{2}$/.test(opts.country) ? opts.country.toUpperCase() : undefined;
+
+  const res = await fetch('https://places.googleapis.com/v1/places:searchText', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'X-Goog-Api-Key': apiKey,
+      'X-Goog-FieldMask':
+        'places.displayName,places.websiteUri,places.nationalPhoneNumber,places.internationalPhoneNumber,places.formattedAddress,places.googleMapsUri',
+    },
+    body: JSON.stringify({
+      textQuery: query,
+      languageCode: 'en',
+      maxResultCount: Math.min(Math.max(opts.limit ?? 10, 1), 20),
+      ...(regionCode ? { regionCode } : {}),
+    }),
+  });
+
+  if (!res.ok) {
+    throw new Error(`PLACES_API_${res.status}`);
+  }
+
+  const data = (await res.json()) as {
+    places?: Array<{
+      displayName?: { text?: string };
+      websiteUri?: string;
+      nationalPhoneNumber?: string;
+      internationalPhoneNumber?: string;
+      formattedAddress?: string;
+      googleMapsUri?: string;
+    }>;
+  };
+
+  return (data.places ?? [])
+    .map((p) => ({
+      name: p.displayName?.text ?? null,
+      website: p.websiteUri ?? null,
+      phone: p.nationalPhoneNumber ?? p.internationalPhoneNumber ?? null,
+      email: null,
+      description: null,
+      address: p.formattedAddress ?? null,
+      place_url: p.googleMapsUri ?? null,
+    }))
+    .filter((p) => p.name);
+}
 
 export async function searchDirectory(
   source: string,
@@ -10,9 +69,12 @@ export async function searchDirectory(
   const query = params.search_query || definition.sectors?.[0] || 'automotive accessories distributor';
 
   if (source === 'google_maps') {
-    // scraper-service /places/google-maps validates region against /^[a-z]{2}$/
-    // and our ICP geographies are stored uppercase ('DE','TR','PL'). Normalise
-    // here so the caller doesn't have to remember.
+    // Önce resmi Google Places API (VPS IP-kısıtlı anahtar, datacenter'dan çalışır).
+    const placesKey = await getGoogleMapsKey();
+    if (placesKey) {
+      return searchPlacesApi(query, { country: params.country, limit: params.limit });
+    }
+    // Anahtar yoksa eski scraper-service yoluna düş (datacenter IP'den engellenebilir).
     const region = params.country ? params.country.toLowerCase().slice(0, 2) : undefined;
     const data = await searchGoogleMaps(query, {
       total:    Math.min(params.limit ?? 10, 10),

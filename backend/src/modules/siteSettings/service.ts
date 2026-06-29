@@ -320,6 +320,18 @@ export async function getGoogleSettings(locale?: string | null): Promise<GoogleS
   return { clientId, clientSecret };
 }
 
+// Google Maps/Places API anahtarı (B2B firma bulma — resmi Places API).
+// DB site_settings.google_maps_api_key → env.GOOGLE_MAPS_API_KEY fallback.
+export async function getGoogleMapsKey(locale?: string | null): Promise<string | null> {
+  const localeCandidates = await buildLocaleFallbackChain({ requested: locale });
+  const map = await loadSettingsMap({ keys: ['google_maps_api_key'], localeCandidates });
+  return (
+    normalizeSettingString(map.get('google_maps_api_key')) ??
+    normalizeSettingString(env.GOOGLE_MAPS_API_KEY) ??
+    null
+  );
+}
+
 // ---------------------------------------------------------------------------
 // PUBLIC BASE URL
 // ---------------------------------------------------------------------------

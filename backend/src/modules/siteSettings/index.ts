@@ -23,6 +23,7 @@ export {
   getGlobalSettingValue,
   getStorageSettings,
   getGoogleSettings,
+  getGoogleMapsKey,
   getPublicBaseUrl,
   getGa4MeasurementId,
   getGtmContainerId,
