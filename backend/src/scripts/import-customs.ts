@@ -183,10 +183,23 @@ async function importFromStagingTable(tableName: string, opts: { reload: boolean
 }
 
 async function benchmark() {
-  const start = performance.now();
-  const rows = await aggregateBuyers({ hsPrefix: '0904', minValue: 1000, limit: 200 });
-  const ms = Math.round(performance.now() - start);
-  console.log(`[import-customs] benchmark hs_prefix=0904 min_value=1000 limit=200: ${rows.length} buyers in ${ms}ms`);
+  const cases = [
+    { label: 'pepper', hsPrefix: process.env.CUSTOMS_BENCH_HS_PREFIX_1 ?? '0904', productQuery: process.env.CUSTOMS_BENCH_PRODUCT_1 },
+    { label: 'automotive', hsPrefix: process.env.CUSTOMS_BENCH_HS_PREFIX_2 ?? '8708', productQuery: process.env.CUSTOMS_BENCH_PRODUCT_2 },
+  ];
+  const minValue = Number(process.env.CUSTOMS_BENCH_MIN_VALUE ?? 1000);
+  const limit = Number(process.env.CUSTOMS_BENCH_LIMIT ?? 200);
+  for (const bench of cases) {
+    const start = performance.now();
+    const rows = await aggregateBuyers({
+      hsPrefix: bench.hsPrefix,
+      productQuery: bench.productQuery,
+      minValue,
+      limit,
+    });
+    const ms = Math.round(performance.now() - start);
+    console.log(`[import-customs] benchmark ${bench.label} hs_prefix=${bench.hsPrefix} product_query=${bench.productQuery ?? '-'} min_value=${minValue} limit=${limit}: ${rows.length} buyers in ${ms}ms`);
+  }
 }
 
 async function main() {

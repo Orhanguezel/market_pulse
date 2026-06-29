@@ -70,12 +70,18 @@ export async function runB2bJob(jobId: string) {
     const trustQuery = params.source === 'europages' || params.source === 'tobb';
     for (const lead of leads) {
       if (!lead.name) continue;
-      const match = matchesIcp({ ...lead, country: params.country }, icpDefinition);
-      if (!match.matches && !trustQuery) continue;
       const analysis = lead.website ? await analyzeCompanyWebsite(lead.website) : null;
-      const directoryFloor = trustQuery ? 5 : 0;
+      const enrichedDescription = [
+        (lead as { description?: string | null }).description ?? null,
+        analysis?.summary ?? null,
+        ...(analysis?.sells ?? []),
+        analysis?.firm_type ?? null,
+      ].filter((s): s is string => typeof s === 'string' && s.length > 0).join(' ');
+      const match = matchesIcp({ ...lead, country: params.country, description: enrichedDescription }, icpDefinition);
+      if (!match.matches && !trustQuery) continue;
+      const directoryFloor = trustQuery ? 3 : 0;
       const icpScore = analysis?.is_b2b
-        ? Math.min(10, Math.max(match.score, directoryFloor) + 2)
+        ? Math.min(10, Math.max(match.score, directoryFloor) + 1.5)
         : Math.max(match.score, directoryFloor);
       const icpScoreAfterRules = Math.max(0, icpScore - rulePenalty);
       if (icpScoreAfterRules < 3) continue;

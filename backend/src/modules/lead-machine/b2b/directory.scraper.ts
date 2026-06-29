@@ -41,6 +41,8 @@ export async function searchDirectory(
     name:    c.name,
     website: c.website,
     phone:   c.phone,
+    email:   c.email,
+    description: c.description,
     address: null,
     place_url: c.source_url,
   }));

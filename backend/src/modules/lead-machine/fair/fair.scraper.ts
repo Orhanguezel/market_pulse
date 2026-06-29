@@ -76,6 +76,15 @@ export function isMesseFrankfurtUrl(url: string): boolean {
   }
 }
 
+export function isInformaVisitWidgetUrl(url: string): boolean {
+  try {
+    const parsed = new URL(url);
+    return parsed.hostname.startsWith('visit.') && parsed.pathname.includes('/widget/event/');
+  } catch {
+    return false;
+  }
+}
+
 function cleanHtmlText(value: string | null | undefined): string | undefined {
   if (!value) return undefined;
   return value
@@ -84,6 +93,17 @@ function cleanHtmlText(value: string | null | undefined): string | undefined {
     .replace(/&#39;/g, "'")
     .replace(/&lt;/g, '<')
     .replace(/&gt;/g, '>')
+    .trim() || undefined;
+}
+
+function cleanRichText(value: string | null | undefined): string | undefined {
+  const cleaned = cleanHtmlText(value);
+  if (!cleaned) return undefined;
+  return cleaned
+    .replace(/<br\s*\/?>/gi, ' ')
+    .replace(/<\/(p|div|li|h[1-6])>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/\s+/g, ' ')
     .trim() || undefined;
 }
 
@@ -199,12 +219,188 @@ async function scrapeMesseFrankfurtExhibitorList(opts?: {
   return exhibitors;
 }
 
+function asRecord(value: unknown): Record<string, unknown> | null {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return null;
+  return value as Record<string, unknown>;
+}
+
+function asString(value: unknown): string | undefined {
+  return typeof value === 'string' ? cleanHtmlText(value) : undefined;
+}
+
+function stringArrayFromUnknown(value: unknown): string[] {
+  if (!value) return [];
+  if (Array.isArray(value)) {
+    return value
+      .flatMap((item) => {
+        if (typeof item === 'string') return [item];
+        const record = asRecord(item);
+        return [record?.name, record?.label, record?.title]
+          .filter((v): v is string => typeof v === 'string');
+      })
+      .map((item) => cleanRichText(item))
+      .filter((item): item is string => Boolean(item));
+  }
+  if (typeof value === 'string') {
+    return value.split(/[,;|]/)
+      .map((item) => cleanRichText(item))
+      .filter((item): item is string => Boolean(item));
+  }
+  return [];
+}
+
+const SWAPCARD_PRODUCT_HINTS: Array<[RegExp, string]> = [
+  [/\b(seed|seeds|tohum|tohumculuk|fide)\b/i, 'Seeds'],
+  [/\b(greenhouse|sera)\b/i, 'Greenhouse'],
+  [/\b(irrigation|sulama)\b/i, 'Irrigation'],
+  [/\b(fertilizer|fertiliser|gübre|gubre|nutritional|nutrition)\b/i, 'Plant nutrition'],
+  [/\b(crop protection|pest|disease|pesticide|bitki koruma)\b/i, 'Crop protection'],
+  [/\b(biological|bio-?stimulant|biyolojik|biostimulant)\b/i, 'Biological products'],
+  [/\b(hydroponic|hidroponik)\b/i, 'Hydroponics'],
+  [/\b(soil|toprak)\b/i, 'Soil products'],
+  [/\b(water|su arıtma|su aritma|reverse osmosis|ters osmoz)\b/i, 'Water technologies'],
+  [/\b(agronutrition|agronutritional|agronutrici[oó]n)\b/i, 'Agronutrition'],
+];
+
+function inferSwapcardProductGroups(text: string | undefined): string[] {
+  if (!text) return [];
+  return SWAPCARD_PRODUCT_HINTS
+    .filter(([pattern]) => pattern.test(text))
+    .map(([, label]) => label);
+}
+
+function extractNextDataJson(html: string): unknown | null {
+  const match = html.match(/<script[^>]+id=["']__NEXT_DATA__["'][^>]*>([\s\S]*?)<\/script>/i);
+  if (!match?.[1]) return null;
+  try {
+    return JSON.parse(match[1]);
+  } catch {
+    return null;
+  }
+}
+
+function firstNestedString(record: Record<string, unknown>, keys: string[]): string | undefined {
+  for (const key of keys) {
+    const value = asString(record[key]);
+    if (value) return value;
+    const nested = asRecord(record[key]);
+    if (nested) {
+      const nestedValue = firstNestedString(nested, ['name', 'label', 'value', 'text']);
+      if (nestedValue) return nestedValue;
+    }
+  }
+  return undefined;
+}
+
+function swapcardBooth(exhibitor: Record<string, unknown>): string | undefined {
+  for (const [key, value] of Object.entries(exhibitor)) {
+    const eventData = asRecord(value);
+    if (!eventData) continue;
+    const booth = firstNestedString(eventData, ['booth', 'stand', 'standNumber']);
+    if (booth && (key.startsWith('withEvent(') || key.toLowerCase().includes('event'))) return booth;
+  }
+  return firstNestedString(exhibitor, ['booth', 'stand', 'standNumber']);
+}
+
+function swapcardWebsite(exhibitor: Record<string, unknown>): string | undefined {
+  const direct = firstNestedString(exhibitor, ['websiteUrl', 'website', 'url']);
+  if (direct) return normalizeWebsite(direct);
+  for (const key of ['links', 'socialLinks', 'contactInfo']) {
+    const value = exhibitor[key];
+    if (!Array.isArray(value)) continue;
+    for (const item of value) {
+      const record = asRecord(item);
+      const url = firstNestedString(record ?? {}, ['url', 'href', 'website']);
+      if (url && /https?:\/\/|www\./i.test(url) && !/facebook|instagram|linkedin|twitter|x\.com/i.test(url)) {
+        return normalizeWebsite(url);
+      }
+    }
+  }
+  return undefined;
+}
+
+function swapcardExhibitorToRaw(exhibitor: Record<string, unknown>, fairUrl: string): RawExhibitor | null {
+  const name = firstNestedString(exhibitor, ['name', 'companyName']);
+  if (!name) return null;
+  const id = asString(exhibitor._id) ?? asString(exhibitor.id);
+  const description = cleanRichText(asString(exhibitor.htmlDescription) ?? asString(exhibitor.description));
+  const productGroups = [
+    ...stringArrayFromUnknown(exhibitor.categories),
+    ...stringArrayFromUnknown(exhibitor.productCategories),
+    ...stringArrayFromUnknown(exhibitor.products),
+    ...stringArrayFromUnknown(exhibitor.tags),
+    ...inferSwapcardProductGroups(`${name} ${description ?? ''}`),
+  ];
+
+  return {
+    name,
+    website: swapcardWebsite(exhibitor),
+    country: firstNestedString(exhibitor, ['country', 'countryName']),
+    city: firstNestedString(exhibitor, ['city']),
+    address: firstNestedString(exhibitor, ['address']),
+    phone: firstNestedString(exhibitor, ['phone', 'phoneNumber']),
+    email: firstNestedString(exhibitor, ['email']),
+    detail_url: id ? `${fairUrl.split('#')[0]}#${encodeURIComponent(id)}` : fairUrl,
+    booth_number: swapcardBooth(exhibitor),
+    description,
+    product_groups: [...new Set(productGroups)],
+  };
+}
+
+function collectSwapcardExhibitors(root: unknown, fairUrl: string): RawExhibitor[] {
+  const result: RawExhibitor[] = [];
+  const seenObjects = new Set<object>();
+  const seenKeys = new Set<string>();
+
+  const visit = (value: unknown) => {
+    if (!value || typeof value !== 'object') return;
+    if (seenObjects.has(value)) return;
+    seenObjects.add(value);
+    if (Array.isArray(value)) {
+      value.forEach(visit);
+      return;
+    }
+
+    const record = value as Record<string, unknown>;
+    if (record.__typename === 'Core_Exhibitor' && typeof record.name === 'string') {
+      const exhibitor = swapcardExhibitorToRaw(record, fairUrl);
+      const key = exhibitor?.detail_url ?? exhibitor?.name;
+      if (exhibitor && key && !seenKeys.has(key)) {
+        seenKeys.add(key);
+        result.push(exhibitor);
+      }
+    }
+    Object.values(record).forEach(visit);
+  };
+
+  visit(root);
+  return result;
+}
+
+async function scrapeInformaVisitWidget(fairUrl: string, opts?: { maxExhibitors?: number }): Promise<RawExhibitor[]> {
+  const res = await fetch(fairUrl, {
+    headers: {
+      accept: 'text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8',
+      'user-agent': 'MarketPulseLeadMachine/1.0',
+    },
+  });
+  if (!res.ok) throw new Error(`INFORMA_WIDGET_FAILED_${res.status}`);
+  const html = await res.text();
+  const nextData = extractNextDataJson(html);
+  if (!nextData) return [];
+  const exhibitors = collectSwapcardExhibitors(nextData, fairUrl);
+  return opts?.maxExhibitors ? exhibitors.slice(0, opts.maxExhibitors) : exhibitors;
+}
+
 export async function scrapeOfficialExhibitorList(
   fairUrl: string,
   opts?: { halls?: string[]; maxPages?: number; maxExhibitors?: number },
 ): Promise<RawExhibitor[]> {
   if (isMesseFrankfurtUrl(fairUrl)) {
     return scrapeMesseFrankfurtExhibitorList(opts);
+  }
+  if (isInformaVisitWidgetUrl(fairUrl)) {
+    return scrapeInformaVisitWidget(fairUrl, opts);
   }
   const result = await scrape(fairUrl, {
     profile:     'fair-exhibitor',

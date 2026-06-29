@@ -1,18 +1,10 @@
 # Customs Import Runbook
 
-Tarih: 2026-06-27
-
-## Model
-
-`customs_records` paylasimli reference lake'tir. Tek kopya import edilir, tum tenant'lar ayni havuzu sorgular. `lead_candidates` ise mevcut lead-machine yazim yolu ile aktif tenant context'ine yazilir.
-
-`customs_records` tenant-scope-guard `businessTables` listesine eklenmemelidir.
+Bu runbook, isletmeniyonet canlı DB `isle4509_vt.excel_data` kaynağındaki yaklaşık 10M gümrük kaydını MarketPulse paylaşımlı `customs_records` lake'ine aktarmak için kullanılır.
 
 ## Kaynak
 
-Beklenen kaynak: isletmeniyonet canli DB `isle4509_vt.excel_data` dump'i.
-
-CSV kolonlari:
+Beklenen kolonlar:
 
 - `hs_code`
 - `buyer_name`
@@ -21,70 +13,90 @@ CSV kolonlari:
 - `total_value`
 - `total_quantity`
 - `month_year`
-- opsiyonel: `buyer_country`
 
-## Import
+Opsiyonel kolonlar:
 
-### CSV
+- `buyer_country`
+- `country`
+- `importer_country`
 
-CSV dosyasi hazir oldugunda backend dizininden calistir:
+## Strateji
 
-```bash
-bun src/scripts/import-customs.ts /path/to/excel_data.csv --reload --benchmark
-```
+`customs_records` global reference lake'tir. `tenant_key` sadece provenance için `global` yazılır; üretilen `lead_candidates` aktif tenant'a scoped kalır.
 
-`--reload`, global lake'i yeniden yuklemek icin `TRUNCATE TABLE customs_records` calistirir. Incremental/idempotent yukleme icin `--reload` kullanma:
+Import iki şekilde yapılabilir:
 
-```bash
-bun src/scripts/import-customs.ts /path/to/excel_data.csv --benchmark
-```
+- CSV stream: dosyayı RAM'e almadan satır satır okur, batch insert yapar.
+- Staging table: dump önce MySQL staging tabloya yüklenir, sonra `INSERT IGNORE ... SELECT` ile lake'e aktarılır.
 
-Script satirlari stream ederek okur ve `CUSTOMS_IMPORT_BATCH_SIZE` ile kontrol edilen batch'lerle yazar. Varsayilan batch boyutu `5000`.
+Canlı 10M yükte önerilen yol staging table + `--reload`. Büyük mediumtext/string kolonlarında `ORDER BY` yoktur; temp disk dolmasını önlemek için tam tarama InnoDB doğal sırasıyla yapılır.
 
-```bash
-CUSTOMS_IMPORT_BATCH_SIZE=10000 bun src/scripts/import-customs.ts /path/to/excel_data.csv --benchmark
-```
+## Komutlar
 
-### SQL Dump
-
-`.sql` dump geldiyse once dump'i staging tablo olarak MySQL'e yukle. Dump zaten `excel_data` tablosunu olusturuyorsa:
+CSV:
 
 ```bash
-mysql -h "$MYSQL_HOST" -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" "$MYSQL_DATABASE" < /path/to/excel_data.sql
+cd backend
+CUSTOMS_IMPORT_BATCH_SIZE=5000 bun src/scripts/import-customs.ts /path/to/excel_data.csv --reload --benchmark
 ```
 
-Sonra staging tablodan global lake'e aktar:
+Staging table:
 
 ```bash
-bun src/scripts/import-customs.ts --from-table=excel_data --reload --benchmark
+cd backend
+bun src/scripts/import-customs.ts --from-table excel_data --reload --benchmark
 ```
 
-`--from-table` modu beklenen kolonlari staging tablodan okur: `hs_code`, `buyer_name`, `exporter_name`, `hs_code_description`, `total_value`, `total_quantity`, `month_year`.
+Sadece benchmark:
 
-## Idempotency
+```bash
+cd backend
+bun src/scripts/import-customs.ts --benchmark
+```
 
-Idempotency stratejisi: `source_file + source_row_number`.
+Benchmark override:
 
-Tabloda `UNIQUE KEY uq_customs_source_row (source_file, source_row_number)` vardir ve import `INSERT IGNORE` kullanir. Ayni dosya tekrar yuklenirse ayni satirlar duplicate uretilmez.
+```bash
+cd backend
+CUSTOMS_BENCH_HS_PREFIX_1=0904 \
+CUSTOMS_BENCH_HS_PREFIX_2=8708 \
+CUSTOMS_BENCH_MIN_VALUE=1000 \
+CUSTOMS_BENCH_LIMIT=200 \
+bun src/scripts/import-customs.ts --benchmark
+```
 
-Kaynak dosyanin icerigi degisti ama dosya adi ayni kaldiysa tam yenileme icin `--reload` kullan.
+Örnek customs job smoke:
 
-## Sonrasi
+```bash
+cd backend
+TENANT_KEY=vistaseeds bun src/scripts/import-customs.ts --run
+```
 
-Import bittiginde script `ANALYZE TABLE customs_records` calistirir. `--benchmark` tipik bir HS sorgusunu olcer:
+## Kabul Kanıtı
+
+Import sonrası kaydedilecek değerler:
+
+```sql
+SELECT COUNT(*) AS rows_total FROM customs_records;
+SELECT COUNT(DISTINCT buyer_name) AS buyers_total FROM customs_records WHERE buyer_name IS NOT NULL AND buyer_name <> '';
+SELECT hs_code, COUNT(*) AS cnt FROM customs_records GROUP BY hs_code ORDER BY cnt DESC LIMIT 10;
+```
+
+Benchmark çıktısında iki tipik sorgu alt-saniye hedeflenir:
+
+- biber/agri: `hs_prefix=0904`, `min_value=1000`, `limit=200`
+- otomotiv: `hs_prefix=8708`, `min_value=1000`, `limit=200`
+
+Örnek çıktı:
 
 ```text
-hs_prefix=0904 min_value=1000 limit=200
+[import-customs] benchmark pepper hs_prefix=0904 product_query=- min_value=1000 limit=200: 200 buyers in 312ms
+[import-customs] benchmark automotive hs_prefix=8708 product_query=- min_value=1000 limit=200: 200 buyers in 428ms
 ```
 
-Hedef: tipik HS prefix + min value + limit 200 sorgusu 1 saniyenin altinda.
+## Sorun Giderme
 
-## Demo Job
-
-Importtan sonra test lead uretimi icin:
-
-```bash
-TENANT_KEY=avrasya bun src/scripts/import-customs.ts --run
-```
-
-Bu komut import yapmaz; `0904` prefix'iyle customs job baslatir ve aday istatistiklerini yazar.
+- Sorgular 1 sn üstündeyse önce `ANALYZE TABLE customs_records` tekrar çalıştır.
+- HS prefix sorgusu yavaşsa `030_customs_schema.sql` içindeki `idx_customs_hs_value (hs_code, total_value)` indexinin canlı tabloda olduğunu doğrula.
+- Product query yavaşsa HS prefix ile birlikte kullan; full text arama eklenene kadar boş ürün adı + HS prefix ana yol kabul edilir.
+- Tekrar importta duplikasyon istemiyorsan `--reload` kullan. CSV yolunda `source_file + source_row_number` unique key'i tekrar çalıştırmayı idempotent hale getirir.

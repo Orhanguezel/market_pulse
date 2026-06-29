@@ -157,7 +157,9 @@ describe('b2b lead machine directory scraper', () => {
           {
             name: 'Europages Dealer',
             website: 'https://dealer.example',
+            email: 'sales@dealer.example',
             phone: '+31',
+            description: 'Floor mats distributor',
             source_url: 'https://source.example/dealer',
           },
         ],
@@ -180,10 +182,55 @@ describe('b2b lead machine directory scraper', () => {
     expect(result).toEqual([{
       name: 'Europages Dealer',
       website: 'https://dealer.example',
+      email: 'sales@dealer.example',
       phone: '+31',
+      description: 'Floor mats distributor',
       address: null,
       place_url: 'https://source.example/dealer',
     }]);
+  });
+
+  test('uses website analysis before ICP gate so real product signals can qualify a lead', async () => {
+    dbMock.queuePoolExecute([{
+      id: 'job-1',
+      channel: 'b2b_directory',
+      status: 'pending',
+      icp_id: 'icp-1',
+      params: '{"icp_id":"icp-1","source":"google_maps","search_query":"agro dealer","country":"TR","limit":5}',
+      result_count: 0,
+      error_msg: null,
+      created_by: null,
+      created_at: '2026-05-08',
+      started_at: null,
+      finished_at: null,
+    }]);
+    dbMock.queuePoolExecute([{
+      id: 'icp-1',
+      name: 'VistaSeeds ICP',
+      is_active: 1,
+      definition: '{"priority_crop":"pepper","keywords":{"tr":["biber tohumu"],"en":["pepper seeds"]},"firm_types":["seed distributor"],"min_lead_score_for_candidate":5}',
+      created_at: '2026-05-08',
+      updated_at: '2026-05-08',
+    }]);
+    searchGoogleMaps.mockImplementation(() => Promise.resolve({
+      places: [{ name: 'Anadolu Tarim', website: 'https://seed.example' }],
+    }));
+    scrape.mockImplementation(() => Promise.resolve({
+      text: 'Biber tohumu ve pepper seeds distributor',
+      data: {
+        title: 'Anadolu Tarim',
+        description: 'Biber tohumu ve pepper seeds distributor',
+        product_keywords: ['biber tohumu', 'pepper seeds'],
+        has_b2b_signals: true,
+        firm_type_hints: ['seed distributor'],
+      },
+    }));
+
+    await runB2bJob('job-1');
+
+    const insert = dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'));
+    expect(insert?.values).toEqual(expect.arrayContaining(['Anadolu Tarim']));
+    expect(insert?.values).toContain(9.5);
   });
 });
 

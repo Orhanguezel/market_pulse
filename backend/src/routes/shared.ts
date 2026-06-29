@@ -10,6 +10,7 @@ import { registerNotifications } from '@/modules/notifications';
 import { registerAuditAdmin } from '@/modules/audit';
 import { registerTenants } from '@/modules/tenants';
 import { registerPlatformSettings, registerPlatformSettingsAdmin } from '@/modules/platform-settings';
+import { registerEntitlementsAdmin } from '@/modules/entitlements';
 
 export async function registerSharedPublic(api: FastifyInstance) {
   await registerAuth(api);
@@ -33,4 +34,5 @@ export async function registerSharedAdmin(adminApi: FastifyInstance) {
   await registerNotifications(adminApi);
   await registerAuditAdmin(adminApi);
   await registerPlatformSettingsAdmin(adminApi);
+  await registerEntitlementsAdmin(adminApi);
 }

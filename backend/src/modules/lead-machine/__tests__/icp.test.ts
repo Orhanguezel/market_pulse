@@ -177,4 +177,57 @@ describe('lead machine icp matcher', () => {
       reasons: [],
     });
   });
+
+  test('uses multilingual keywords and priority crop signals for seed ICPs', () => {
+    const result = matchesIcp(
+      {
+        name: 'Anadolu Agro Dealer',
+        description: 'Biber tohumu ve F1 pepper seeds ithalatçısı, seed distributor',
+        country: 'TR',
+        website: 'https://seed.example',
+      },
+      {
+        priority_crop: 'pepper',
+        sectors: ['vegetable seeds'],
+        priority_sectors: ['pepper seeds'],
+        keywords: {
+          tr: ['biber tohumu'],
+          en: ['F1 pepper seeds'],
+        },
+        firm_types: ['seed distributor'],
+        priority_firm_types: ['agro-dealer'],
+        geographies: ['TR'],
+        priority_geographies: ['TR'],
+        min_lead_score_for_candidate: 5,
+      },
+    );
+
+    expect(result.matches).toBe(true);
+    expect(result.score).toBe(10);
+    expect(result.reasons).toEqual(expect.arrayContaining([
+      'priority_crop:pepper',
+      'keyword:biber tohumu',
+      'keyword:F1 pepper seeds',
+      'geography:TR',
+    ]));
+  });
+
+  test('penalizes culinary pepper noise instead of giving a flat floor score', () => {
+    const result = matchesIcp(
+      {
+        name: 'Pepper Spice Export',
+        description: 'Dried pepper powder and culinary seasoning supplier',
+      },
+      {
+        priority_crop: 'pepper',
+        keywords: ['pepper seeds'],
+        sectors: ['vegetable seeds'],
+        min_lead_score_for_candidate: 5,
+      },
+    );
+
+    expect(result.matches).toBe(false);
+    expect(result.score).toBe(0);
+    expect(result.reasons).toEqual(expect.arrayContaining(['negative_term:spice', 'negative_term:culinary']));
+  });
 });

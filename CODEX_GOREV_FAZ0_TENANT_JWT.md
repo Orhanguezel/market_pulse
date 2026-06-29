@@ -86,8 +86,8 @@ user YOKSA (public istek):
 6. Regresyon: mevcut `tenant-isolation` + `plugins/__tests__/tenantContext.test.ts` yeşil kalmalı.
 
 ## Kabul kriterleri (hepsi)
-- [ ] JWT'de `isSuperAdmin` + `tenants` + `defaultTenant` (tüm token üretim yolları).
-- [ ] tenantContext §2.2 mantığı; non-super-admin cross-tenant → 403; public route env-only.
-- [ ] `bun run build` + `bun run tenant:guard` + `bun test` yeşil.
-- [ ] Commit'li secret rotate + koddan kaldırıldı.
-- [ ] ALTER yok (şema değişikliği gerekirse CREATE TABLE seed + db:seed fresh — CLAUDE.md kuralı).
+- [x] JWT'de `isSuperAdmin` + `tenants` + `defaultTenant` (tüm access-token üretim yolları `issueAccessToken`/`issueTokens` üstünden).
+- [x] tenantContext §2.2 mantığı; non-super-admin cross-tenant → 403; public route env-only.
+- [x] `bun run build` + `bun run tenant:guard` + `bun test` yeşil. Son doğrulama: 2026-06-29, backend 223 test.
+- [ ] Commit'li secret rotate + koddan kaldırıldı. Kod taraması: Messe key hardcoded değil, `MESSE_FRANKFURT_API_KEY` env'den okunuyor; gerçek anahtar rotasyonu dış sistemde yapılmalı.
+- [x] ALTER yok (şema değişikliği gerekirse CREATE TABLE seed + db:seed fresh — CLAUDE.md kuralı).

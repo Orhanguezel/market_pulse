@@ -15,6 +15,13 @@
 
 **EKSİK:** (1) paylaşımlı-lake refaktoru, (2) 10M gerçek import, (3) admin panel UI.
 
+**Codex durum (2026-06-29):**
+- [x] Paylaşımlı lake refaktörü kodda tamam: `aggregateBuyers(opts)` tenant filtresiz okuyor; candidate yazımı aktif tenant context'iyle kalıyor.
+- [x] Import mekanikleri hazır: CSV stream/chunk, staging table import, `source_file + source_row_number` idempotency, `--reload`, `ANALYZE TABLE`, çoklu benchmark.
+- [x] Import/perf runbook hazır: `docs/teknik/CUSTOMS_IMPORT_RUNBOOK.md`.
+- [ ] 10M gerçek veri importu ve canlı performans kanıtı bekliyor: Orhan dump/staging veri kaynağı gerekli.
+- [x] Admin panel "Gümrük Verisi" sekmesi hazır: `/admin/market/lead-machine/customs`, RTK customs job hook'ları ve job→candidates linki var.
+
 ---
 
 ## KARAR — Paylaşımlı reference lake (Orhan onayı 2026-06-27)
@@ -34,6 +41,8 @@ Gümrük verisi **global varlık** (tüm tenant'lar aynı havuzu sorgular: vista
 
 **Kabul:** tek import sonrası tüm tenant'lar (vistaseeds, avrasya...) aynı lake'i sorgular; her tenant'ın ürettiği candidate'lar kendi tenant_key'iyle ayrışır.
 
+**Durum:** [x] Kod ve test tamam (`customs.test.ts`: shared lake, global provenance/idempotency, scoreBuyer).
+
 ---
 
 ## İŞ 2 — 10M gerçek import
@@ -47,6 +56,9 @@ Gümrük verisi **global varlık** (tüm tenant'lar aynı havuzu sorgular: vista
 5. **Performans doğrula:** import sonrası tipik sorgu (`aggregateBuyers` HS prefix + min_value + LIMIT 200) **< 1 sn** olmalı. Değilse index/sorgu ayarla (gerekirse `total_value`'ya yardımcı index).
 
 **Kabul:** ~10M satır `customs_records`'ta; örnek HS sorgusu (biber 0904 + otomotiv bir HS) anlamlı buyer listesi + alt-saniye yanıt.
+
+**Durum:** [ ] Import aracı hazır; gerçek ~10M dump yüklenmediği için satır sayısı ve alt-saniye performans kabulü açık.
+**Codex ek not (2026-06-29):** `CUSTOMS_IMPORT_RUNBOOK.md` eklendi. `--benchmark` artık biber/agri (`0904`) ve otomotiv (`8708`) sorgularını ölçüyor; env ile HS prefix/min_value/limit override edilebilir.
 
 ---
 
@@ -66,6 +78,8 @@ Gümrük verisi **global varlık** (tüm tenant'lar aynı havuzu sorgular: vista
 5. Backend gerekirse `product_query` param'ını `aggregateBuyers`'a ekle (hs_description LIKE).
 
 **Kabul:** Operatör panelde HS/ürün/ülke/min-değer girip tarama başlatır → buyer firmalar candidates'a düşer → mevcut onay/enrichment/outreach pipeline'ı devralır (sıfır redesign).
+
+**Durum:** [x] Backend `product_query` hazır; admin panel route/component/RTK işi tamam.
 
 ---
 

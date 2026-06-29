@@ -47,6 +47,22 @@ describe('customs reference lake', () => {
     expect(call?.values).toEqual(['0904%', '%pepper%', '%pepper%', 'DE', 1000]);
   });
 
+  test('aggregates exact HS code lists before prefix fallback', async () => {
+    dbMock.queuePoolExecute([]);
+
+    await customsRepo.aggregateBuyers({
+      hsCodes: ['090421', '090422'],
+      hsPrefix: '0904',
+      minValue: 500,
+      limit: 20,
+    });
+
+    const call = dbMock.poolExecutions[0];
+    expect(call?.sql).toContain('hs_code IN (?, ?)');
+    expect(call?.sql).not.toContain('hs_code LIKE ?');
+    expect(call?.values).toEqual(['090421', '090422', 500]);
+  });
+
   test('bulk import writes global provenance and source row numbers idempotently', async () => {
     await customsRepo.bulkInsertRecords([
       {

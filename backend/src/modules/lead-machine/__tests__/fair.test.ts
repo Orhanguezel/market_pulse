@@ -255,6 +255,71 @@ describe('fair lead machine scraper', () => {
     })]);
   });
 
+  test('extracts Growtech Swapcard widget exhibitors from embedded Apollo state', async () => {
+    const widgetUrl = 'https://visit.growtech.com.tr/widget/event/growtech-antalya-2025/exhibitors/RXZlbnRWaWV3XzEyMDk1Mjk=?paginationMode=infinite&lng=tr-TR';
+    const nextData = {
+      props: {
+        pageProps: {
+          apolloState: {
+            'Core_Exhibitor:RXhoaWJpdG9yXzE=': {
+              __typename: 'Core_Exhibitor',
+              _id: 'RXhoaWJpdG9yXzE=',
+              name: 'AGROTAN TOHUMCULUK',
+              websiteUrl: 'www.agrotan.example',
+              htmlDescription: '<p>Vegetable seed producer &amp; greenhouse supplier</p>',
+              categories: [{ name: 'Seeds' }, { label: 'Greenhouse' }],
+              country: { name: 'Turkiye' },
+              city: 'Antalya',
+              'withEvent({"eventId":"RXZlbnRfMjczNjY1OQ=="})': {
+                booth: '3-B102',
+              },
+            },
+            'Core_Exhibitor:RXhoaWJpdG9yXzI=': {
+              __typename: 'Core_Exhibitor',
+              _id: 'RXhoaWJpdG9yXzI=',
+              name: 'Pepper Seeds BV',
+              description: 'Pepper and tomato seed distributor',
+              tags: ['Pepper seed', 'Distributor'],
+              withEvent: {
+                booth: '2-A14',
+              },
+            },
+          },
+        },
+      },
+    };
+    const html = `<html><body><script id="__NEXT_DATA__" type="application/json">${JSON.stringify(nextData)}</script></body></html>`;
+    fetchMock.mockImplementation(() => Promise.resolve(new Response(html, {
+      status: 200,
+      headers: { 'content-type': 'text/html' },
+    })));
+
+    const result = await scrapeOfficialExhibitorList(widgetUrl, { maxExhibitors: 10 });
+
+    expect(scrape).not.toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalledWith(widgetUrl, expect.objectContaining({
+      headers: expect.objectContaining({ accept: expect.stringContaining('text/html') }),
+    }));
+    expect(result).toEqual([
+      expect.objectContaining({
+        name: 'AGROTAN TOHUMCULUK',
+        website: 'https://www.agrotan.example',
+        country: 'Turkiye',
+        city: 'Antalya',
+        booth_number: '3-B102',
+        detail_url: `${widgetUrl}#RXhoaWJpdG9yXzE%3D`,
+        description: 'Vegetable seed producer & greenhouse supplier',
+        product_groups: ['Seeds', 'Greenhouse'],
+      }),
+      expect.objectContaining({
+        name: 'Pepper Seeds BV',
+        booth_number: '2-A14',
+        description: 'Pepper and tomato seed distributor',
+        product_groups: ['Pepper seed', 'Distributor', 'Seeds'],
+      }),
+    ]);
+  });
+
   test('scrapes exhibitor detail with fair-exhibitor-detail profile', async () => {
     scrape.mockImplementation(() => Promise.resolve({
       data: {

@@ -26,10 +26,12 @@ vistaseeds ICP'siyle (biber/sebze tohumu alıcısı, id `9393730e-...`) B2B tara
 - Geçmiş commit `066d1ff`: "directory hits get a 5.0 floor score" → muhtemelen bir **taban/floor** skoru var; candidate'larda veri (country/description/sector) olmadığı için herkes floor/sabit skora düşüyor.
 
 **Yapılacak:**
-1. Doğrula: scoring sırasında AKTİF tenant'ın ICP'si (vistaseeds, biber sektörleri) gerçekten yükleniyor mu — yoksa default/avrasya mı? (runtime tenant context + getActiveTenantKey ile.)
-2. Candidate'ın elindeki sinyalleri kullan: en azından **firma adı + (varsa) açıklama** ICP `sectors`/`keywords` (çok dilli) ile eşleştir; eşleşme yoksa skoru DÜŞÜR (floor'a yapışmasın).
-3. `priority_crop`/`priority_sectors` (biber) ve `priority_geographies` (TR) bonuslarını uygula; `exclude_sectors` (baharat/gıda biberi → culinary) negatif sinyal olsun.
-4. Skor dağılımı anlamlı olmalı (hepsi 7.0 değil). Test: farklı candidate'lar farklı skor.
+- [x] Doğrula: scoring sırasında AKTİF tenant'ın ICP'si (vistaseeds, biber sektörleri) gerçekten yükleniyor mu — yoksa default/avrasya mı? (runtime tenant context + getActiveTenantKey ile.)
+- [x] Candidate'ın elindeki sinyalleri kullan: en azından **firma adı + (varsa) açıklama** ICP `sectors`/`keywords` (çok dilli) ile eşleştir; eşleşme yoksa skoru DÜŞÜR (floor'a yapışmasın).
+- [x] `priority_crop`/`priority_sectors` (biber) ve `priority_geographies` (TR) bonuslarını uygula; `exclude_sectors` (baharat/gıda biberi → culinary) negatif sinyal olsun.
+- [x] Skor dağılımı anlamlı olmalı (hepsi 7.0 değil). Test: farklı candidate'lar farklı skor.
+
+**Codex durum (2026-06-29):** `icp.matcher.ts` çok dilli keyword / priority crop-sector / culinary pepper negatif sinyallerini kullanıyor. `b2b.job.ts` directory floor'u düşürüyor ve website analizini ICP gate öncesine alıyor. Odak testleri eklendi/geçti.
 
 **Kabul:** vistaseeds candidate'larında lead_score dağılır; biber/tohum sinyali olanlar yüksek, alakasız (baharat/genel ticaret) düşük.
 
@@ -44,10 +46,12 @@ vistaseeds ICP'siyle (biber/sebze tohumu alıcısı, id `9393730e-...`) B2B tara
 - scraper-service extractor'ları: `services/scraper-service/src/engine/extractors.py` (profile `directory-listing`).
 
 **Yapılacak:**
-1. Europages profil linkinden **gerçek firma web sitesini** çöz (profil sayfasını fetch et → outbound "visit website" linkini al), VEYA `directory-listing` extractor'ı gerçek site + ülke + sektör döndürsün.
-2. Gerçek siteyi scrape + analiz et (website.analyzer): firma ne satıyor (tohum mu? biber mi? distribütör mü?), ülke, ürün anahtar kelimeleri → candidate alanlarını (country, description/ai_summary, sells) doldur.
-3. Bu zenginleştirilmiş veriyi **İŞ 1'deki ICP matcher'a** besle → skor anlamlı farklılaşsın.
-4. Robustluk: proxy desteği (env `OXYLABS_USERNAME/PASSWORD`, scraper `FAIR_PROXY_URL`/`PLACES_PROXY_URL`) varsa kullan; yoksa graceful degrade.
+- [x] Europages profil linkinden **gerçek firma web sitesini** çöz (profil sayfasını fetch et → outbound "visit website" linkini al), VEYA `directory-listing` extractor'ı gerçek site + ülke + sektör döndürsün.
+- [x] Gerçek siteyi scrape + analiz et (website.analyzer): firma ne satıyor (tohum mu? biber mi? distribütör mü?), ülke, ürün anahtar kelimeleri → candidate alanlarını (country, description/ai_summary, sells) doldur.
+- [x] Bu zenginleştirilmiş veriyi **İŞ 1'deki ICP matcher'a** besle → skor anlamlı farklılaşsın.
+- [x] Robustluk: proxy desteği (env `OXYLABS_USERNAME/PASSWORD`, scraper `FAIR_PROXY_URL`/`PLACES_PROXY_URL`) varsa kullan; yoksa graceful degrade.
+
+**Codex durum (2026-06-29):** `directory-listing` Europages kartlarında profil linkini `source_url`, Europages dışı outbound domaini `website` yapıyor; email/description korunuyor. B2B job gerçek `lead.website` için `website.analyzer` sonucunu ICP matcher'a besliyor. `PLACES_PROXY_URL` zaten Google Maps route/worker akışında kullanılıyor; `FAIR_PROXY_URL` artık fair scrape profillerinde env boşsa no-op, doluysa proxy olarak uygulanıyor. Oxylabs hesap/env kurulumu Orhan bağımlılığı.
 
 **Kabul:** Europages candidate'larında `website` gerçek domain, `country`/`ai_summary` dolu; ICP skoru bu veriyle hesaplanıyor.
 
@@ -65,18 +69,24 @@ vistaseeds ICP'siyle (biber/sebze tohumu alıcısı, id `9393730e-...`) B2B tara
 - scraper-service `fair-exhibitor` extractor.
 
 **Yapılacak:**
-1. Widget'ın **altındaki JSON API'sini** bul (infinite-scroll exhibitor'ları XHR ile yüklüyor — network inspect / widget'ın `/api/.../exhibitors?page=` endpoint'i). Informa "visit" platformu genelde JSON döner.
-2. `fair.scraper.ts`'e `isInformaVisitWidgetUrl()` branch ekle → JSON API'yi sayfalayarak çek (name, website, country, booth, description, product_groups).
-3. Generic JS fuarlar için fallback: scraper-service'te 'fair-exhibitor' extractor'ı infinite-scroll + render destekli yap (scroll-to-load), VEYA Informa widget'ına özel handler.
+- [x] Widget'ın **altındaki JSON API'sini** bul (infinite-scroll exhibitor'ları XHR ile yüklüyor — network inspect / widget'ın `/api/.../exhibitors?page=` endpoint'i). Informa "visit" platformu genelde JSON döner.
+- [x] `fair.scraper.ts`'e `isInformaVisitWidgetUrl()` branch ekle → JSON API'yi sayfalayarak çek (name, website, country, booth, description, product_groups).
+- [x] Generic JS fuarlar için fallback: scraper-service'te 'fair-exhibitor' extractor'ı infinite-scroll + render destekli yap (scroll-to-load), VEYA Informa widget'ına özel handler.
+
+**Codex durum (2026-06-29):** Growtech widget HTML'inde `__NEXT_DATA__` / Apollo state içinde `Core_Exhibitor` kayıtları bulundu. `fair.scraper.ts` özel Informa/Swapcard branch'i bu embedded state'i okuyup name, website, country/city, booth, description, product_groups alanlarına normalize ediyor.
+Canlı smoke: Growtech widget URL'i `maxExhibitors=3` ile 3 kayıt döndürdü; booth ve açıklamadan çıkarılan `product_groups` dolu (`2MBIO CO.,LTD` → `Plant nutrition`, `Crop protection`; `A.O. SMITH...` → `Water technologies`; `ABAXTON` → `Plant nutrition`, `Agronutrition`).
 
 **Kabul:** Growtech widget URL'i ile fuar taraması exhibitor (tohum/sera/agri firmaları) döndürüyor; candidate'lar oluşuyor.
 
 ---
 
 ## Doğrulama (genel)
-- `cd backend && bun run build && bun run tenant:guard && bun test`
-- `cd services/scraper-service && python -m pytest` (varsa)
-- Canlı kanıt: vistaseeds taramasında skor dağılımı + zengin candidate + Growtech exhibitor.
+- [x] `cd backend && bun run build && bun run tenant:guard && bun test`
+- [x] `cd services/scraper-service && python -m pytest` (varsa)
+- [ ] Canlı kanıt: vistaseeds taramasında skor dağılımı + zengin candidate + Growtech exhibitor.
+
+**Codex durum (2026-06-29):** Backend tam doğrulama geçti: `bun run build && bun run tenant:guard && bun test` (229 test). Scraper-service için izole `.venv` kuruldu ve `.venv/bin/python -m pytest` geçti (40 test). Odak backend Lead Quality testleri tekrar geçti (35 test).
+Canlı Growtech read-only smoke geçti; vistaseeds DB job koşusu için canlı backend/login ve tenant verisi gerekiyor.
 
 ## Bağımlılık (Codex'in işi DEĞİL — Orhan)
 - **Oxylabs proxy** hesabı → yerel TR Google Maps + sağlam enrichment için. Eklenince env'e girilecek (`OXYLABS_USERNAME/PASSWORD`, scraper `PLACES_PROXY_URL`/`FAIR_PROXY_URL`).
