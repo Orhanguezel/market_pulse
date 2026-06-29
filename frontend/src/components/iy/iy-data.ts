@@ -310,3 +310,10 @@ export function iyLinkHref(locale: string | undefined, link: IyMenuLink): string
 export function iyTeklifHref(locale: string | undefined): string {
   return `/${locale || 'tr'}/teklif-al`;
 }
+// Giriş/kayıt: site adresinden bağımsız — uygulamanın kendi auth route'u (Google girişli)
+export function iyLoginHref(locale: string | undefined): string {
+  return `/${locale || 'tr'}/login`;
+}
+export function iyRegisterHref(locale: string | undefined): string {
+  return `/${locale || 'tr'}/register`;
+}

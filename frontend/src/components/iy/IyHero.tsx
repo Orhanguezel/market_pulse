@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { iyTeklifHref, IY_SURFACE_STYLE } from './iy-data';
+import { iyTeklifHref, iyRegisterHref, IY_SURFACE_STYLE } from './iy-data';
 
 const TYPING = [
   'Müşteri Bilgilerine Anında Ulaşın',
@@ -42,7 +42,7 @@ function useTyping(phrases: string[]) {
 export default function IyHero({ locale }: { locale?: string }) {
   const l = locale || 'tr';
   const typed = useTyping(TYPING);
-  const signUpUrl = 'https://isletmeniyonet.com/salecrm/sign-up.php';
+  const signUpUrl = iyRegisterHref(l);
 
   return (
     <section

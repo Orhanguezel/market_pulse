@@ -4,13 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { ChevronDown, Menu, X } from 'lucide-react';
-import { IY_MENU, iyLinkHref, iyTeklifHref, IY_SURFACE_STYLE } from './iy-data';
+import { IY_MENU, iyLinkHref, iyTeklifHref, iyLoginHref, IY_SURFACE_STYLE } from './iy-data';
 
 export default function IyHeader({ locale }: { locale?: string }) {
   const l = locale || 'tr';
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
-  const signInUrl = 'https://isletmeniyonet.com/salecrm/sign-in.php';
+  const signInUrl = iyLoginHref(l);
 
   return (
     <header

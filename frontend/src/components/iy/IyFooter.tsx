@@ -1,11 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, Phone, MessageCircle } from 'lucide-react';
-import { IY_BRAND, IY_FOOTER_COLUMNS, iyLinkHref, iyTeklifHref, IY_DARK_SURFACE_STYLE } from './iy-data';
+import { IY_BRAND, IY_FOOTER_COLUMNS, iyLinkHref, iyTeklifHref, iyLoginHref, IY_DARK_SURFACE_STYLE } from './iy-data';
 
 export default function IyFooter({ locale }: { locale?: string }) {
   const l = locale || 'tr';
-  const signInUrl = 'https://isletmeniyonet.com/salecrm/sign-in.php';
+  const signInUrl = iyLoginHref(l);
 
   return (
     <footer
