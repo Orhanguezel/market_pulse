@@ -5,12 +5,14 @@
 > **Sınır:** Codex backend (`backend/`). Frontend Claude'da. Konvansiyon: tenant scope + requireModule('leads'),
 > Apollo key env.APOLLO_API_KEY, Places getGoogleMapsKey, `bun run build`+`bun test`+`tenant:guard` yeşil.
 
-## 0. CANLI TEST BULGUSU (KRİTİK — önceliği belirler)
-Fitness/TR canlı testte **Apollo people-search 0 kişi döndürdü** (tüm satırlar "C"). Apollo Türk KOBİ'lerinde
-zayıf; ABD/uluslararası firmalarda güçlü. Sonuç:
-- TR yerel segment (fitness/wellness vb.) → **website-OSINT + Google operatör** asıl yol.
-- Uluslararası/büyük alıcı (ihracat) → Apollo people-search değerli kalır.
-- Çoğu firmada web sitesi VAR → `/team /about /impressum` taraması isim/unvan verebilir.
+## 0. CANLI TEST + KANITLANMIŞ YÖNTEM (KRİTİK)
+- **Apollo people-search 0 kişi döndürdü** (fitness/TR, tüm satır "C"). Apollo Türk KOBİ'de zayıf →
+  otomatik akışın Apollo'ya bağlı olması BACKEND SORUNU.
+- **Codex manuel/araç ile 10/10 "A" liste üretti** (kanıt: `fitness_b2b_10_saglam_ornek_liste.csv` repo kökü).
+  Kullandığı KAZANAN yöntem: **Google operatörü (`site:linkedin.com/in "Founder" "Firma"`) → LinkedIn profili
+  → Places/web ile doğrulama.** Çıktı: gerçek isim + unvan + LinkedIn URL + kaynak link, hepsi A.
+- **HEDEF:** bu manuel yöntemi OTOMATİKLEŞTİR. Kalite çıtası = o CSV (kolonlar + A skoru + doğrulama linki).
+- Segment stratejisi: TR yerel → Google-operatör/LinkedIn + website OSINT (asıl); uluslararası/ihracat → Apollo.
 
 ---
 
@@ -22,14 +24,19 @@ zayıf; ABD/uluslararası firmalarda güçlü. Sonuç:
 
 ---
 
-## 🔴 GÖREV A — Website-OSINT karar verici fallback (ÖNCELİK 1, test bulgusu)
-Apollo 0 dönünce finder, firmanın web sitesinden karar verici çıkarsın.
-- [ ] `finder.service.runDecisionMakerFinder`: company.website varsa ve Apollo boşsa
-      `enrichment.analyzeCompanyWebsite(website)` çağır (zaten scraper-service ile /team /about /impressum
-      isim+unvan regex çıkarımı yapıyor) → bulunan isim/unvanı row'a yaz.
-- [ ] Sosyal medya linklerini de çek (Instagram/LinkedIn company) → row.social_url.
-- [ ] Skor: website'tan isim+karar-verici unvan → **B**; sadece isim → **C+**; hiç yok → **C**.
-- [ ] Kabul: fitness/TR testinde C satırların önemli kısmı isimli (B) hale gelmeli.
+## 🔴 GÖREV A — KAZANAN yöntemi otomatikleştir: Google-operatör → LinkedIn (ÖNCELİK 1)
+Codex'in 10/10 A listeyi ürettiği akış. Apollo'ya bağlı kalma.
+- [ ] **Google-operatör → LinkedIn profil çözümü:** her firma için `buildSearchHints` operatörlerini
+      (`site:linkedin.com/in "Founder|Owner|Genel Müdür" "Firma" "şehir"`) **scraper-service** ile Google'a
+      sorgula (SERP fetch; gerekirse residential proxy — kullanıcı onayladı), sonuçlardan `linkedin.com/in/...`
+      URL'lerini çıkar, firma adı/şehirle eşleştir → isim + unvan + LinkedIn URL.
+      (Google bot koruması: scraper-service stealthy + proxy; alternatif SERP API gerekirse not düş.)
+- [ ] **Website-OSINT yedeği:** profil bulunamazsa `enrichment.analyzeCompanyWebsite(website)`
+      (scraper /team /about /impressum isim+unvan) → row'a yaz. Sosyal linkleri de çek (row.social_url).
+- [ ] **Skor:** LinkedIn profil + unvan eşleşti → **A**; website isim+unvan → **B**; sadece firma → **C**.
+- [ ] **Doğrulama linki:** source_url'e LinkedIn profil + Google Maps cid + (varsa) şirket LinkedIn sayfası.
+- [ ] **Kabul:** fitness/TR çalıştırınca çıktı `fitness_b2b_10_saglam_ornek_liste.csv` kalitesine yaklaşmalı
+      (A-satırlar gerçek LinkedIn URL + isim + unvan). Apollo yalnızca uluslararası firmalarda yardımcı.
 
 ## 🔴 GÖREV B — Batch karar-verici enrichment (mevcut adaylara)
 İhracat iddiası: elimdeki customs/GTİP alıcı firmalarına kişi bul.
