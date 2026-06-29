@@ -79,7 +79,7 @@ export async function generateMetadata(): Promise<Metadata> {
     icons: {
       icon: faviconUrl,
       shortcut: faviconUrl,
-      apple: faviconUrl,
+      apple: '/apple-touch-icon.png',
     },
   };
 

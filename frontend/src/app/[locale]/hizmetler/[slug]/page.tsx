@@ -1,10 +1,7 @@
 import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
-import Banner from '@/layout/banner/Breadcrum';
-import HizmetHero from '@/components/containers/hizmet/HizmetHero';
-import HizmetSections from '@/components/containers/hizmet/HizmetSections';
-import HizmetClosingCTA from '@/components/containers/hizmet/HizmetClosingCTA';
+import IyHizmetDetail from '@/components/iy/IyHizmetDetail';
 import { getHizmetContent } from '@/lib/hizmet-content';
 import { getPublicAppName, getPublicSiteOrigin } from '@/lib/site-config';
 
@@ -56,15 +53,5 @@ export default async function HizmetDetailPage({
     notFound();
   }
 
-  return (
-    <>
-      <Banner title={content.hero.title} />
-
-      <div className="bg-bg-primary">
-        <HizmetHero hero={content.hero} icon={content.icon} />
-        <HizmetSections sections={content.sections} />
-        <HizmetClosingCTA cta={content.closingCTA} />
-      </div>
-    </>
-  );
+  return <IyHizmetDetail content={content} />;
 }
