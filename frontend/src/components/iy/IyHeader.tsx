@@ -4,13 +4,13 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { useState } from 'react';
 import { ChevronDown, Menu, X } from 'lucide-react';
-import { IY_MENU, iyLinkHref, iyTeklifHref, iyLoginHref, IY_SURFACE_STYLE } from './iy-data';
+import { IY_MENU, iyLinkHref, IY_SURFACE_STYLE } from './iy-data';
+import IyUserMenu from './IyUserMenu';
 
 export default function IyHeader({ locale }: { locale?: string }) {
   const l = locale || 'tr';
   const [mobileOpen, setMobileOpen] = useState(false);
   const [openGroup, setOpenGroup] = useState<string | null>(null);
-  const signInUrl = iyLoginHref(l);
 
   return (
     <header
@@ -81,19 +81,8 @@ export default function IyHeader({ locale }: { locale?: string }) {
         </nav>
 
         {/* Right actions */}
-        <div className="hidden items-center gap-2 lg:flex">
-          <a
-            href={signInUrl}
-            className="rounded-lg border border-[#111827]/15 px-4 py-2 text-[14px] font-semibold text-[#111827] hover:border-[#1e40af] hover:text-[#1e40af]"
-          >
-            Giriş Yap
-          </a>
-          <Link
-            href={iyTeklifHref(l)}
-            className="rounded-lg bg-[#1e40af] px-4 py-2 text-[14px] font-semibold text-white hover:bg-[#15317f]"
-          >
-            Teklif Al
-          </Link>
+        <div className="hidden lg:block">
+          <IyUserMenu locale={l} layout="desktop" />
         </div>
 
         {/* Mobile toggle */}
@@ -152,20 +141,8 @@ export default function IyHeader({ locale }: { locale?: string }) {
               )}
             </div>
           ))}
-          <div className="mt-3 flex flex-col gap-2 border-t border-[#f1f5f9] pt-3">
-            <a
-              href={signInUrl}
-              className="rounded-lg border border-[#111827]/15 px-4 py-2.5 text-center text-[14px] font-semibold text-[#111827]"
-            >
-              Giriş Yap
-            </a>
-            <Link
-              href={iyTeklifHref(l)}
-              onClick={() => setMobileOpen(false)}
-              className="rounded-lg bg-[#1e40af] px-4 py-2.5 text-center text-[14px] font-semibold text-white"
-            >
-              Teklif Al
-            </Link>
+          <div className="mt-3">
+            <IyUserMenu locale={l} layout="mobile" onNavigate={() => setMobileOpen(false)} />
           </div>
         </div>
       )}
