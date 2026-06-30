@@ -16,8 +16,65 @@ import {
 } from '@/integrations/rtk/public/decision-maker.endpoints';
 
 const POPPINS = { fontFamily: 'var(--font-poppins), system-ui, sans-serif' } as const;
-const TR_CITIES = ['Istanbul', 'Ankara', 'Izmir', 'Antalya', 'Bursa', 'Kocaeli', 'Konya', 'Adana', 'Mersin', 'Mugla'];
+const CITY_SUGGEST = ['Istanbul', 'Ankara', 'Izmir', 'Antalya', 'Bursa', 'Kocaeli', 'Konya', 'Adana', 'Mersin', 'Mugla', 'Gaziantep', 'Berlin', 'Amsterdam', 'Dubai', 'London'];
+const COUNTRY_SUGGEST = ['TR', 'DE', 'NL', 'FR', 'GB', 'US', 'AE', 'SA', 'AZ', 'QA'];
 const DEFAULT_TITLES = ['Founder', 'Owner', 'CEO', 'General Manager', 'Kurucu', 'Isletme Sahibi', 'Genel Mudur'];
+
+/** Apollo benzeri serbest etiket girisi: yaz + Enter/virgul ile ekle, x ile sil. */
+function TagInput({ value, onChange, placeholder, suggestions, tone = 'primary' }: {
+  value: string[];
+  onChange: (next: string[]) => void;
+  placeholder: string;
+  suggestions?: string[];
+  tone?: 'primary' | 'dark';
+}) {
+  const [text, setText] = useState('');
+  const chipCls = tone === 'dark' ? 'bg-[#0f172a]' : 'bg-[#1e40af]';
+  const add = (raw: string) => {
+    const items = raw.split(/[,\n;]+/).map((s) => s.trim()).filter(Boolean);
+    if (!items.length) return;
+    const next = [...value];
+    for (const item of items) {
+      if (!next.some((v) => v.toLowerCase() === item.toLowerCase())) next.push(item);
+    }
+    onChange(next);
+    setText('');
+  };
+  const remove = (item: string) => onChange(value.filter((v) => v !== item));
+  const available = (suggestions ?? []).filter((s) => !value.some((v) => v.toLowerCase() === s.toLowerCase()));
+  return (
+    <div>
+      <div className="flex flex-wrap items-center gap-1.5 rounded-md border border-[#cbd5e1] px-2 py-1.5 focus-within:border-[#1e40af]">
+        {value.map((item) => (
+          <span key={item} className={`inline-flex items-center gap-1 rounded-md ${chipCls} px-2 py-1 text-[12.5px] font-semibold text-white`}>
+            {item}
+            <button type="button" onClick={() => remove(item)} aria-label={`${item} kaldir`} className="leading-none text-white/70 hover:text-white">×</button>
+          </span>
+        ))}
+        <input
+          value={text}
+          onChange={(e) => setText(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter' || e.key === ',') { e.preventDefault(); add(text); }
+            else if (e.key === 'Backspace' && !text && value.length) { remove(value[value.length - 1]); }
+          }}
+          onBlur={() => { if (text.trim()) add(text); }}
+          placeholder={value.length ? '' : placeholder}
+          className="min-w-[140px] flex-1 border-0 bg-transparent px-1 py-1 text-[14px] outline-none"
+        />
+      </div>
+      {available.length ? (
+        <div className="mt-1.5 flex flex-wrap gap-1.5">
+          {available.map((s) => (
+            <button key={s} type="button" onClick={() => add(s)} className="rounded-md border border-dashed border-[#cbd5e1] px-2 py-1 text-[12px] font-semibold text-[#475569] transition-colors hover:border-[#1e40af] hover:text-[#1e40af]">
+              + {s}
+            </button>
+          ))}
+        </div>
+      ) : null}
+    </div>
+  );
+}
 
 const CONF_CLS: Record<DecisionMakerConfidence, string> = {
   A: 'bg-[#dcfce7] text-[#166534]',
@@ -67,6 +124,7 @@ export default function KararVericilerPage() {
   const [exportXlsx, exportXlsxState] = useLazyExportDecisionMakersXlsxQuery();
 
   const [sector, setSector] = useState('fitness');
+  const [country, setCountry] = useState('TR');
   const [cities, setCities] = useState<string[]>(['Istanbul', 'Ankara', 'Izmir']);
   const [target, setTarget] = useState(100);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
@@ -109,14 +167,6 @@ export default function KararVericilerPage() {
   }, [hideEmptyPeople, onlyLinkedin, results?.rows]);
   const poolRows = companyPool?.rows ?? [];
 
-  const toggleCity = (city: string) => {
-    setCities((current) => current.includes(city) ? current.filter((item) => item !== city) : [...current, city]);
-  };
-
-  const toggleType = (type: string) => {
-    setSelectedTypes((current) => current.includes(type) ? current.filter((item) => item !== type) : [...current, type]);
-  };
-
   const run = async () => {
     if (!cities.length || startState.isLoading) return;
     setError(null);
@@ -124,7 +174,7 @@ export default function KararVericilerPage() {
       const job = await startJob({
         sector,
         cities,
-        country: 'TR',
+        country: (country || 'TR').trim().toUpperCase(),
         businessTypes: selectedTypes.length ? selectedTypes : undefined,
         titles: splitLines(titleText),
         excludeKeywords: splitLines(excludeText || (presets?.default_exclude_keywords ?? []).join('\n')),
@@ -188,14 +238,36 @@ export default function KararVericilerPage() {
       <div className="rounded-lg border border-[#e2e8f0] bg-white p-4">
         <div className="grid gap-4 lg:grid-cols-[1.1fr_1fr]">
           <div className="space-y-4">
-            <div className="grid gap-3 sm:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-3">
               <label className="block">
                 <span className="mb-1 block text-[12px] font-semibold text-[#475569]">Sektor</span>
-                <select value={sector} onChange={(e) => { setSector(e.target.value); setSelectedTypes([]); }} className="w-full rounded-md border border-[#cbd5e1] px-3 py-2 text-[14px]">
+                <input
+                  list="sector-options"
+                  value={sector}
+                  onChange={(e) => setSector(e.target.value)}
+                  placeholder="Sektor yaz veya sec"
+                  className="w-full rounded-md border border-[#cbd5e1] px-3 py-2 text-[14px]"
+                />
+                <datalist id="sector-options">
                   {(presets?.sectors ?? ['fitness', 'pilates', 'wellness', 'boutique']).map((item) => (
-                    <option key={item} value={item}>{item}</option>
+                    <option key={item} value={item} />
                   ))}
-                </select>
+                </datalist>
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-[12px] font-semibold text-[#475569]">Ulke</span>
+                <input
+                  list="country-options"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  placeholder="TR"
+                  className="w-full rounded-md border border-[#cbd5e1] px-3 py-2 text-[14px] uppercase"
+                />
+                <datalist id="country-options">
+                  {COUNTRY_SUGGEST.map((item) => (
+                    <option key={item} value={item} />
+                  ))}
+                </datalist>
               </label>
               <label className="block">
                 <span className="mb-1 block text-[12px] font-semibold text-[#475569]">Hedef kayit</span>
@@ -204,35 +276,24 @@ export default function KararVericilerPage() {
             </div>
 
             <div>
-              <span className="mb-1.5 block text-[12px] font-semibold text-[#475569]">Sehirler</span>
-              <div className="flex flex-wrap gap-2">
-                {TR_CITIES.map((city) => (
-                  <button
-                    key={city}
-                    type="button"
-                    onClick={() => toggleCity(city)}
-                    className={`rounded-md px-3 py-1.5 text-[13px] font-semibold transition-colors ${cities.includes(city) ? 'bg-[#1e40af] text-white' : 'border border-[#cbd5e1] text-[#475569] hover:border-[#1e40af]'}`}
-                  >
-                    {city}
-                  </button>
-                ))}
-              </div>
+              <span className="mb-1.5 block text-[12px] font-semibold text-[#475569]">Sehirler <span className="font-normal text-[#94a3b8]">— yaz + Enter, tum Turkiye / diger ulkeler</span></span>
+              <TagInput
+                value={cities}
+                onChange={setCities}
+                placeholder="Sehir yaz, Enter'a bas (or. Istanbul, Berlin, Dubai)"
+                suggestions={CITY_SUGGEST}
+              />
             </div>
 
             <div>
-              <span className="mb-1.5 block text-[12px] font-semibold text-[#475569]">Isletme turleri</span>
-              <div className="flex flex-wrap gap-2">
-                {sectorTypes.map((type) => (
-                  <button
-                    key={type}
-                    type="button"
-                    onClick={() => toggleType(type)}
-                    className={`rounded-md px-3 py-1.5 text-[13px] font-semibold transition-colors ${selectedTypes.includes(type) ? 'bg-[#0f172a] text-white' : 'border border-[#cbd5e1] text-[#475569] hover:border-[#0f172a]'}`}
-                  >
-                    {type}
-                  </button>
-                ))}
-              </div>
+              <span className="mb-1.5 block text-[12px] font-semibold text-[#475569]">Isletme turleri <span className="font-normal text-[#94a3b8]">— sektore gore oneriler, serbest ekle</span></span>
+              <TagInput
+                value={selectedTypes}
+                onChange={setSelectedTypes}
+                placeholder="Tur ekle (or. crossfit box, yoga studio)"
+                suggestions={sectorTypes}
+                tone="dark"
+              />
             </div>
           </div>
 
