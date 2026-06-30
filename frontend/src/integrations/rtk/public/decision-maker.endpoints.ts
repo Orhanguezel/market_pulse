@@ -1,5 +1,8 @@
 import { baseApi } from '@/integrations/rtk/baseApi';
 
+export type DecisionMakerConfidence = 'A' | 'B' | 'C';
+export type CompanyQualityStatus = 'qualified' | 'possible' | 'manual_review' | 'excluded';
+
 export type DecisionMakerRow = {
   company_name: string;
   city: string;
@@ -11,7 +14,7 @@ export type DecisionMakerRow = {
   social_url: string | null;
   source_url: string | null;
   fit_note: string;
-  confidence_score: 'A' | 'B' | 'C';
+  confidence_score: DecisionMakerConfidence;
   last_verified_at: string;
 };
 
@@ -20,24 +23,158 @@ export type FindResult = {
   stats: { companies: number; withDecisionMaker: number };
 };
 
+export type CompanyPoolRow = {
+  company_name: string;
+  city: string | null;
+  business_type: string | null;
+  website: string | null;
+  phone: string | null;
+  google_maps_url: string | null;
+  address: string | null;
+  quality_score: number;
+  quality_status: CompanyQualityStatus;
+  exclude_reason: string | null;
+  source: string;
+  last_verified_at: string | null;
+};
+
+export type CompanyPoolResult = {
+  rows: CompanyPoolRow[];
+  stats: { total: number; qualified: number; possible: number; manualReview: number; excluded: number };
+};
+
+export type DecisionMakerJob = {
+  id: string;
+  channel: 'decision_maker';
+  status: 'pending' | 'running' | 'done' | 'failed';
+  icp_id: string | null;
+  params: Record<string, unknown>;
+  result_count: number;
+  error_msg: string | null;
+  created_by: string | null;
+  created_at: string;
+  started_at: string | null;
+  finished_at: string | null;
+};
+
+export type DecisionMakerPresets = {
+  sectors: string[];
+  business_types: Record<string, string[]>;
+  default_titles: string[];
+  export_b2b_titles: string[];
+  default_exclude_keywords: string[];
+};
+
 export type FindBody = {
   sector?: string;
+  businessTypes?: string[];
   cities: string[];
   country?: string;
+  titles?: string[];
+  excludeKeywords?: string[];
+  apolloFallback?: boolean;
   targetCount?: number;
   perCityLimit?: number;
 };
 
+export type DecisionMakerResultParams = {
+  job_id?: string;
+  confidence?: 'A' | 'B' | 'C' | 'all';
+  sector?: string;
+  limit?: number;
+};
+
+export type CompanyPoolParams = {
+  job_id?: string;
+  status?: CompanyQualityStatus | 'all';
+  include_excluded?: boolean;
+  limit?: number;
+};
+
 export const decisionMakerApi = baseApi.injectEndpoints({
   endpoints: (b) => ({
+    getDecisionMakerPresets: b.query<DecisionMakerPresets, void>({
+      query: () => ({ url: '/lead-machine/decision-makers/presets', method: 'GET' }),
+    }),
     findDecisionMakers: b.mutation<FindResult & { saved?: number }, FindBody>({
       query: (body) => ({ url: '/lead-machine/decision-makers/find', method: 'POST', body }),
+      invalidatesTags: ['DecisionMakerResults'],
+    }),
+    startDecisionMakerJob: b.mutation<DecisionMakerJob, FindBody>({
+      query: (body) => ({ url: '/lead-machine/decision-makers/jobs', method: 'POST', body }),
+      invalidatesTags: ['DecisionMakerJobs', 'DecisionMakerResults'],
+    }),
+    listDecisionMakerJobs: b.query<DecisionMakerJob[], void>({
+      query: () => ({ url: '/lead-machine/decision-makers/jobs', method: 'GET' }),
+      providesTags: ['DecisionMakerJobs'],
+    }),
+    getDecisionMakerJob: b.query<DecisionMakerJob, string>({
+      query: (id) => ({ url: `/lead-machine/decision-makers/jobs/${id}`, method: 'GET' }),
+      providesTags: ['DecisionMakerJobs'],
+    }),
+    listDecisionMakerResults: b.query<FindResult, DecisionMakerResultParams | void>({
+      query: (params) => ({
+        url: '/lead-machine/decision-makers/results',
+        method: 'GET',
+        params: params ? {
+          ...params,
+          confidence: params.confidence && params.confidence !== 'all' ? params.confidence : undefined,
+        } : undefined,
+      }),
+      providesTags: ['DecisionMakerResults'],
+    }),
+    listDecisionMakerCompanyPool: b.query<CompanyPoolResult, CompanyPoolParams | void>({
+      query: (params) => ({
+        url: '/lead-machine/decision-makers/company-pool',
+        method: 'GET',
+        params: params ? {
+          ...params,
+          status: params.status && params.status !== 'all' ? params.status : undefined,
+        } : undefined,
+      }),
+      providesTags: ['DecisionMakerResults'],
+    }),
+    exportDecisionMakersCsv: b.query<string, DecisionMakerResultParams | void>({
+      query: (params) => ({
+        url: '/lead-machine/decision-makers/export.csv',
+        method: 'GET',
+        params: params ? {
+          ...params,
+          confidence: params.confidence && params.confidence !== 'all' ? params.confidence : undefined,
+        } : undefined,
+        responseHandler: async (response) => response.text(),
+      }),
+    }),
+    exportDecisionMakersXlsx: b.query<ArrayBuffer, DecisionMakerResultParams | void>({
+      query: (params) => ({
+        url: '/lead-machine/decision-makers/export.xlsx',
+        method: 'GET',
+        params: params ? {
+          ...params,
+          confidence: params.confidence && params.confidence !== 'all' ? params.confidence : undefined,
+        } : undefined,
+        responseHandler: async (response) => response.arrayBuffer(),
+      }),
     }),
     getSavedDecisionMakers: b.query<FindResult, void>({
       query: () => ({ url: '/lead-machine/decision-makers/saved', method: 'GET' }),
+      providesTags: ['DecisionMakerResults'],
     }),
   }),
   overrideExisting: true,
 });
 
-export const { useFindDecisionMakersMutation, useGetSavedDecisionMakersQuery } = decisionMakerApi;
+export const {
+  useGetDecisionMakerPresetsQuery,
+  useFindDecisionMakersMutation,
+  useStartDecisionMakerJobMutation,
+  useListDecisionMakerJobsQuery,
+  useGetDecisionMakerJobQuery,
+  useListDecisionMakerResultsQuery,
+  useListDecisionMakerCompanyPoolQuery,
+  useExportDecisionMakersCsvQuery,
+  useLazyExportDecisionMakersCsvQuery,
+  useExportDecisionMakersXlsxQuery,
+  useLazyExportDecisionMakersXlsxQuery,
+  useGetSavedDecisionMakersQuery,
+} = decisionMakerApi;

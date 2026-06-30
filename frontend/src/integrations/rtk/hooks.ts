@@ -36,3 +36,4 @@ export * from './public/orders.endpoints';
 
 // Amazon scan (public SaaS)
 export * from './public/amazon_scan.endpoints';
+export * from './public/decision-maker.endpoints';

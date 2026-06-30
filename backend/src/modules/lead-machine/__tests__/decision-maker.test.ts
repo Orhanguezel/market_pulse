@@ -1,16 +1,20 @@
-import { beforeEach, describe, expect, mock, test } from 'bun:test';
+import { afterAll, beforeEach, describe, expect, mock, test } from 'bun:test';
 import { createDbMock } from '../../market/__tests__/helpers/mock-db';
 import { runWithTenant } from '@/core/tenant-context';
 
 const dbMock = createDbMock();
 const scrape = mock(() => Promise.resolve({ text: '', html: '', data: {}, final_url: null }));
 const askBestAvailable = mock(() => Promise.resolve('not-json'));
+const getGoogleMapsKey = mock(() => Promise.resolve('maps-test-key'));
 const env = {
   TENANT_KEY: 'tenant-a',
   APOLLO_API_KEY: '',
+  SERPER_API_KEY: '',
   SCRAPER_SERVICE_URL: 'http://scraper.local',
   SCRAPER_SERVICE_API_KEY: '',
 };
+const originalFetch = globalThis.fetch;
+const fetchMock = mock(() => Promise.resolve(new Response(JSON.stringify({ organic: [] }), { status: 200 })));
 
 mock.module('@/db/client', () => ({
   db: dbMock.db,
@@ -27,16 +31,28 @@ mock.module('@/modules/lead-machine/_shared/ai.client', () => ({
   askBestAvailable,
 }));
 
+mock.module('@/modules/siteSettings', () => ({
+  getGoogleMapsKey,
+}));
+
 const osint = await import('../decision-maker/osint.service');
 const batch = await import('../decision-maker/candidate-enrichment.service');
 const outreach = await import('../outreach/outreach.service');
+const jobService = await import('../decision-maker/job.service');
+const exportService = await import('../decision-maker/export.service');
 
 beforeEach(() => {
   dbMock.reset();
   scrape.mockReset();
+  fetchMock.mockReset();
+  getGoogleMapsKey.mockReset();
   askBestAvailable.mockReset();
   askBestAvailable.mockImplementation(() => Promise.resolve('not-json'));
+  getGoogleMapsKey.mockImplementation(() => Promise.resolve('maps-test-key'));
   env.APOLLO_API_KEY = '';
+  env.SERPER_API_KEY = '';
+  globalThis.fetch = fetchMock as unknown as typeof fetch;
+  fetchMock.mockImplementation(() => Promise.resolve(new Response(JSON.stringify({ organic: [] }), { status: 200 })));
   scrape.mockImplementation(() => Promise.resolve({ text: '', html: '', data: {}, final_url: null }));
 });
 
@@ -67,14 +83,41 @@ function candidate(overrides: Record<string, unknown> = {}) {
   };
 }
 
+function decisionMakerJob(overrides: Record<string, unknown> = {}) {
+  return {
+    id: 'dm-job-1',
+    channel: 'decision_maker',
+    status: 'pending',
+    icp_id: null,
+    params: JSON.stringify({
+      sector: 'fitness',
+      cities: ['Istanbul'],
+      country: 'TR',
+      businessTypes: ['fitness center'],
+      titles: ['Founder'],
+      targetCount: 10,
+      perCityLimit: 2,
+    }),
+    result_count: 0,
+    error_msg: null,
+    created_by: null,
+    created_at: '2026-06-30 10:00:00',
+    started_at: null,
+    finished_at: null,
+    ...overrides,
+  };
+}
+
 describe('decision maker OSINT resolver', () => {
-  test('resolves LinkedIn profile from Google operator scrape', async () => {
-    scrape.mockImplementation(() => Promise.resolve({
-      text: 'Founder Acme Fitness https://tr.linkedin.com/in/ayse-demir-123',
-      html: '<a href="https://tr.linkedin.com/in/ayse-demir-123">Ayse Demir Founder</a>',
-      data: {},
-      final_url: 'https://google.example',
-    }));
+  test('resolves LinkedIn profile from Serper Google operator results', async () => {
+    env.SERPER_API_KEY = 'serper-test-key';
+    fetchMock.mockImplementation(() => Promise.resolve(new Response(JSON.stringify({
+      organic: [{
+        title: 'Ayşe Demir - Founder - Acme Fitness | LinkedIn',
+        link: 'https://tr.linkedin.com/in/ayse-demir-123',
+        snippet: 'Founder at Acme Fitness in Istanbul',
+      }],
+    }), { status: 200 })));
 
     const result = await osint.resolveDecisionMaker({
       company: 'Acme Fitness',
@@ -91,20 +134,16 @@ describe('decision maker OSINT resolver', () => {
   });
 
   test('falls back to website OSINT when SERP has no profile', async () => {
-    scrape.mockImplementation((url: string) => {
-      if (url.includes('google.com/search')) {
-        return Promise.resolve({ text: '', html: '', data: {}, final_url: url });
-      }
-      return Promise.resolve({
-        text: '',
-        html: '',
-        final_url: 'https://acme.example/hakkimizda',
-        data: {
-          text_content: 'Acme Fitness ekibimiz. Kurucu Ayşe Demir uzun yıllardır spor sektöründe çalışıyor.',
-          social_profiles: [{ platform: 'instagram', url: 'https://instagram.com/acmefitness' }],
-        },
-      });
-    });
+    env.SERPER_API_KEY = 'serper-test-key';
+    scrape.mockImplementation(() => Promise.resolve({
+      text: '',
+      html: '',
+      final_url: 'https://acme.example/hakkimizda',
+      data: {
+        text_content: 'Acme Fitness ekibimiz. Kurucu Ayşe Demir uzun yıllardır spor sektöründe çalışıyor.',
+        social_profiles: [{ platform: 'instagram', url: 'https://instagram.com/acmefitness' }],
+      },
+    }));
 
     const result = await osint.resolveDecisionMaker({
       company: 'Acme Fitness',
@@ -123,13 +162,15 @@ describe('decision maker OSINT resolver', () => {
 
 describe('candidate decision-maker enrichment', () => {
   test('updates candidate raw_data decision_makers idempotently', async () => {
+    env.SERPER_API_KEY = 'serper-test-key';
     dbMock.queuePoolExecute([candidate()]);
-    scrape.mockImplementation(() => Promise.resolve({
-      text: 'Founder Acme Fitness https://tr.linkedin.com/in/ayse-demir-123',
-      html: '',
-      data: {},
-      final_url: null,
-    }));
+    fetchMock.mockImplementation(() => Promise.resolve(new Response(JSON.stringify({
+      organic: [{
+        title: 'Ayşe Demir - Founder - Acme Fitness | LinkedIn',
+        link: 'https://tr.linkedin.com/in/ayse-demir-123',
+        snippet: 'Founder at Acme Fitness',
+      }],
+    }), { status: 200 })));
 
     const result = await runWithTenant('tenant-a', () => batch.enrichCandidateDecisionMakers({
       candidate_ids: ['candidate-1'],
@@ -144,6 +185,90 @@ describe('candidate decision-maker enrichment', () => {
       linkedin_url: 'https://tr.linkedin.com/in/ayse-demir-123',
       confidence: 'A',
     }));
+  });
+});
+
+afterAll(() => {
+  globalThis.fetch = originalFetch;
+});
+
+describe('decision maker jobs and export', () => {
+  test('runs a decision maker job and persists job-scoped A results', async () => {
+    env.SERPER_API_KEY = 'serper-test-key';
+    dbMock.queuePoolExecute([decisionMakerJob()]);
+    fetchMock.mockImplementation((url: string | URL | Request) => {
+      const href = String(url);
+      if (href.includes('places.googleapis.com')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          places: [{
+            displayName: { text: 'Acme Fitness' },
+            websiteUri: 'https://acme.example',
+            nationalPhoneNumber: '+90 212 000 00 00',
+            googleMapsUri: 'https://maps.example/acme',
+          }],
+        }), { status: 200 }));
+      }
+      return Promise.resolve(new Response(JSON.stringify({
+        organic: [{
+          title: 'Ayşe Demir - Founder - Acme Fitness | LinkedIn',
+          link: 'https://tr.linkedin.com/in/ayse-demir-123',
+          snippet: 'Founder at Acme Fitness',
+        }],
+      }), { status: 200 }));
+    });
+
+    const result = await runWithTenant('tenant-a', () => jobService.runDecisionMakerJob('dm-job-1'));
+
+    expect(result.stats.withDecisionMaker).toBe(1);
+    expect(result.companyPool[0]).toEqual(expect.objectContaining({
+      company_name: 'Acme Fitness',
+      quality_status: 'qualified',
+    }));
+    const poolInsert = dbMock.poolExecutions.find((item) => item.sql.includes('INSERT INTO lead_company_pool'));
+    expect(poolInsert?.values).toEqual(expect.arrayContaining([
+      'tenant-a',
+      'dm-job-1',
+      'Acme Fitness',
+      'qualified',
+    ]));
+    const insert = dbMock.poolExecutions.find((item) => item.sql.includes('INSERT INTO lead_decision_makers'));
+    expect(insert?.values).toEqual(expect.arrayContaining([
+      'tenant-a',
+      'dm-job-1',
+      'Acme Fitness',
+      'Ayşe Demir',
+      'https://tr.linkedin.com/in/ayse-demir-123',
+      'A',
+    ]));
+    expect(dbMock.poolExecutions.at(-1)?.sql).toContain('UPDATE lead_search_jobs SET status = ?, result_count = ?, finished_at = CURRENT_TIMESTAMP');
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'dm-job-1', 'tenant-a']);
+  });
+
+  test('exports decision maker rows as utf8 csv', () => {
+    const rows = [{
+      company_name: 'Acme Fitness',
+      city: 'Istanbul',
+      business_type: 'fitness center',
+      decision_maker_name: 'Ayşe Demir',
+      title: 'Founder',
+      linkedin_profile_url: 'https://linkedin.com/in/ayse',
+      company_website: 'https://acme.example',
+      social_url: null,
+      source_url: 'https://linkedin.com/in/ayse | https://maps.example/acme',
+      fit_note: 'LinkedIn/karar verici eşleşmesi güçlü.',
+      confidence_score: 'A',
+      last_verified_at: '2026-06-30',
+    }] as const;
+    const csv = exportService.decisionMakersToCsv([...rows]);
+
+    expect(csv.charCodeAt(0)).toBe(0xfeff);
+    expect(csv).toContain('"Company Name"');
+    expect(csv).toContain('"Ayşe Demir"');
+    expect(csv).toContain('"A"');
+    const xlsx = exportService.decisionMakersToXlsx([...rows]);
+    expect(xlsx[0]).toBe(0x50);
+    expect(xlsx[1]).toBe(0x4b);
+    expect(xlsx.length).toBeGreaterThan(1000);
   });
 });
 

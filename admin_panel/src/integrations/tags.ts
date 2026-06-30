@@ -28,6 +28,8 @@ export const tags = [
   'MarketStats',
   'LeadCandidates',
   'LeadMachineJobs',
+  'DecisionMakerJobs',
+  'DecisionMakerResults',
   'AmazonRiskScores',
   'IcpProfiles',
   'LeadEnrichment',

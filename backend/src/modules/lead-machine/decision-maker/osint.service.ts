@@ -250,6 +250,7 @@ async function resolveFromWebsite(input: CompanyLookupInput): Promise<ResolvedDe
 }
 
 async function resolveFromApollo(input: CompanyLookupInput): Promise<ResolvedDecisionMaker | null> {
+  if (!env.APOLLO_DECISION_MAKER_ENABLED) return null;
   const domain = domainFromWebsite(input.website);
   if (!domain) return null;
   const rows: DecisionMaker[] = await searchDecisionMakers(domain, input.titles ?? DEFAULT_SERP_TITLES, 3);
@@ -267,7 +268,7 @@ async function resolveFromApollo(input: CompanyLookupInput): Promise<ResolvedDec
 
 export async function resolveDecisionMaker(
   input: CompanyLookupInput,
-  opts?: { skipWebsite?: boolean },
+  opts?: { skipWebsite?: boolean; allowApollo?: boolean },
 ): Promise<ResolvedDecisionMaker> {
   const linkedin = await resolveLinkedinFromGoogle(input);
   if (linkedin?.linkedin_url) return linkedin;
@@ -276,7 +277,7 @@ export async function resolveDecisionMaker(
   const website = opts?.skipWebsite ? null : await resolveFromWebsite(input);
   if (website?.name) return website;
 
-  const apollo = await resolveFromApollo(input);
+  const apollo = opts?.allowApollo ? await resolveFromApollo(input) : null;
   if (apollo?.name) return apollo;
 
   if (website) return website;

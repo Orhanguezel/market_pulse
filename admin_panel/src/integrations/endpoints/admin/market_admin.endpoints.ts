@@ -111,7 +111,7 @@ export interface ErpListResponse<T> {
 }
 
 export type LeadCandidateStatus = 'pending' | 'approved' | 'rejected' | 'favorite';
-export type LeadCandidateChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match' | 'customs';
+export type LeadCandidateChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match' | 'customs' | 'decision_maker';
 
 export interface LeadCandidate {
   id: string;
@@ -150,6 +150,83 @@ export interface LeadSearchJob {
   started_at: string | null;
   finished_at: string | null;
   risk_report?: AmazonRiskReport;
+}
+
+export type DecisionMakerConfidence = 'A' | 'B' | 'C';
+export type CompanyQualityStatus = 'qualified' | 'possible' | 'manual_review' | 'excluded';
+
+export interface DecisionMakerRow {
+  company_name: string;
+  city: string | null;
+  business_type: string | null;
+  decision_maker_name: string | null;
+  title: string | null;
+  linkedin_profile_url: string | null;
+  company_website: string | null;
+  social_url: string | null;
+  source_url: string | null;
+  fit_note: string | null;
+  confidence_score: DecisionMakerConfidence;
+  last_verified_at: string | null;
+}
+
+export interface CompanyPoolRow {
+  company_name: string;
+  city: string | null;
+  business_type: string | null;
+  website: string | null;
+  phone: string | null;
+  google_maps_url: string | null;
+  address: string | null;
+  quality_score: number;
+  quality_status: CompanyQualityStatus;
+  exclude_reason: string | null;
+  source: string;
+  last_verified_at: string | null;
+}
+
+export interface CompanyPoolResults {
+  rows: CompanyPoolRow[];
+  stats: { total: number; qualified: number; possible: number; manualReview: number; excluded: number };
+}
+
+export interface DecisionMakerResults {
+  rows: DecisionMakerRow[];
+  stats: { companies: number; withDecisionMaker: number };
+}
+
+export interface DecisionMakerPresets {
+  sectors: string[];
+  business_types: Record<string, string[]>;
+  default_titles: string[];
+  export_b2b_titles: string[];
+  default_exclude_keywords: string[];
+}
+
+export interface StartDecisionMakerJobBody {
+  sector?: string;
+  businessTypes?: string[];
+  cities: string[];
+  country?: string;
+  titles?: string[];
+  excludeKeywords?: string[];
+  apolloFallback?: boolean;
+  perCityLimit?: number;
+  targetCount?: number;
+}
+
+export interface DecisionMakerResultsParams {
+  job_id?: string;
+  confidence?: DecisionMakerConfidence | 'all';
+  sector?: string;
+  limit?: number;
+}
+
+export interface CompanyPoolParams {
+  job_id?: string;
+  status?: CompanyQualityStatus | 'all';
+  include_excluded?: boolean;
+  limit?: number;
 }
 
 export interface IcpDefinition {
@@ -939,6 +1016,82 @@ export const marketAdminApi = baseApi.injectEndpoints({
       query: (body) => ({ url: '/admin/lead-machine/b2b/jobs', method: 'POST', body }),
       invalidatesTags: ['LeadMachineJobs'],
     }),
+    getDecisionMakerPresets: b.query<DecisionMakerPresets, void>({
+      query: () => ({ url: '/admin/lead-machine/decision-makers/presets' }),
+      providesTags: ['DecisionMakerResults'],
+    }),
+    listDecisionMakerJobs: b.query<LeadSearchJob[], void>({
+      query: () => ({ url: '/admin/lead-machine/decision-makers/jobs' }),
+      providesTags: ['DecisionMakerJobs', 'LeadMachineJobs'],
+    }),
+    startDecisionMakerJob: b.mutation<LeadSearchJob, StartDecisionMakerJobBody>({
+      query: (body) => ({ url: '/admin/lead-machine/decision-makers/jobs', method: 'POST', body }),
+      invalidatesTags: ['DecisionMakerJobs', 'LeadMachineJobs', 'DecisionMakerResults'],
+    }),
+    listDecisionMakerResults: b.query<DecisionMakerResults, DecisionMakerResultsParams | void>({
+      query: (params) => ({
+        url: '/admin/lead-machine/decision-makers/results',
+        params: params ? {
+          ...params,
+          confidence: params.confidence && params.confidence !== 'all' ? params.confidence : undefined,
+        } : undefined,
+      }),
+      providesTags: ['DecisionMakerResults'],
+    }),
+    listDecisionMakerCompanyPool: b.query<CompanyPoolResults, CompanyPoolParams | void>({
+      query: (params) => ({
+        url: '/admin/lead-machine/decision-makers/company-pool',
+        params: params ? {
+          ...params,
+          status: params.status && params.status !== 'all' ? params.status : undefined,
+        } : undefined,
+      }),
+      providesTags: ['DecisionMakerResults'],
+    }),
+    exportDecisionMakersCsv: b.query<string, DecisionMakerResultsParams | void>({
+      query: (params) => ({
+        url: '/admin/lead-machine/decision-makers/export.csv',
+        params: params ? {
+          ...params,
+          confidence: params.confidence && params.confidence !== 'all' ? params.confidence : undefined,
+        } : undefined,
+        responseHandler: async (response) => response.text(),
+      }),
+    }),
+    exportDecisionMakersXlsx: b.query<ArrayBuffer, DecisionMakerResultsParams | void>({
+      query: (params) => ({
+        url: '/admin/lead-machine/decision-makers/export.xlsx',
+        params: params ? {
+          ...params,
+          confidence: params.confidence && params.confidence !== 'all' ? params.confidence : undefined,
+        } : undefined,
+        responseHandler: async (response) => response.arrayBuffer(),
+      }),
+    }),
+    promoteDecisionMakersToCandidates: b.mutation<{ created: number; total: number }, {
+      job_id: string;
+      confidence?: DecisionMakerConfidence | 'all';
+      limit?: number;
+    }>({
+      query: (body) => ({
+        url: '/admin/lead-machine/decision-makers/promote-candidates',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['LeadCandidates'],
+    }),
+    promoteDecisionMakersToCrm: b.mutation<{ accounts: number; contacts: number; total: number }, {
+      job_id: string;
+      confidence?: DecisionMakerConfidence | 'all';
+      limit?: number;
+    }>({
+      query: (body) => ({
+        url: '/admin/lead-machine/decision-makers/promote-crm',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Crm'],
+    }),
     listCustomsJobs: b.query<LeadSearchJob[], void>({
       query: () => ({ url: '/admin/lead-machine/customs/jobs' }),
       providesTags: ['LeadMachineJobs'],
@@ -1250,6 +1403,17 @@ export const {
   useGetAmazonRiskScoreQuery,
   useListB2bJobsQuery,
   useStartB2bJobMutation,
+  useGetDecisionMakerPresetsQuery,
+  useListDecisionMakerJobsQuery,
+  useStartDecisionMakerJobMutation,
+  useListDecisionMakerResultsQuery,
+  useListDecisionMakerCompanyPoolQuery,
+  useExportDecisionMakersCsvQuery,
+  useLazyExportDecisionMakersCsvQuery,
+  useExportDecisionMakersXlsxQuery,
+  useLazyExportDecisionMakersXlsxQuery,
+  usePromoteDecisionMakersToCandidatesMutation,
+  usePromoteDecisionMakersToCrmMutation,
   useListCustomsJobsQuery,
   useStartCustomsJobMutation,
   useListFairJobsQuery,

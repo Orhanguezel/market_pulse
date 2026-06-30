@@ -200,6 +200,62 @@ mock.module('@/integrations/hooks', () => ({
   useStartCustomsJobMutation: () => mutationTuple(),
   useListFairJobsQuery: () => query([{ ...sampleJob, channel: 'trade_fair' }]),
   useStartFairJobMutation: () => mutationTuple(),
+  useGetDecisionMakerPresetsQuery: () => query({
+    sectors: ['fitness'],
+    business_types: { fitness: ['fitness center', 'gym'] },
+    default_titles: ['Founder', 'Owner'],
+    export_b2b_titles: ['Owner'],
+    default_exclude_keywords: ['supplement'],
+  }),
+  useListDecisionMakerJobsQuery: () => query([
+    {
+      ...sampleJob,
+      id: 'decision-maker-job-1',
+      channel: 'decision_maker',
+      params: { sector: 'fitness', cities: ['Istanbul'], targetCount: 50 },
+    },
+  ]),
+  useStartDecisionMakerJobMutation: () => mutationTuple(),
+  usePromoteDecisionMakersToCandidatesMutation: () => mutationTuple(),
+  usePromoteDecisionMakersToCrmMutation: () => mutationTuple(),
+  useListDecisionMakerResultsQuery: () => query({
+    rows: [
+      {
+        company_name: 'Acme Fitness',
+        city: 'Istanbul',
+        business_type: 'fitness center',
+        decision_maker_name: 'Ayse Demir',
+        title: 'Founder',
+        linkedin_profile_url: 'https://linkedin.com/in/ayse',
+        company_website: 'https://acme.example',
+        social_url: null,
+        source_url: 'https://linkedin.com/in/ayse',
+        fit_note: 'LinkedIn/karar verici eslesmesi guclu.',
+        confidence_score: 'A',
+        last_verified_at: '2026-06-30',
+      },
+    ],
+    stats: { companies: 1, withDecisionMaker: 1 },
+  }),
+  useListDecisionMakerCompanyPoolQuery: () => query({
+    rows: [
+      {
+        company_name: 'Acme Fitness',
+        city: 'Istanbul',
+        business_type: 'fitness center',
+        website: 'https://acme.example',
+        phone: '+90',
+        google_maps_url: 'https://maps.example/acme',
+        address: 'Istanbul',
+        quality_score: 85,
+        quality_status: 'qualified',
+        exclude_reason: null,
+        source: 'google_places',
+        last_verified_at: '2026-06-30',
+      },
+    ],
+    stats: { total: 1, qualified: 1, possible: 0, manualReview: 0, excluded: 0 },
+  }),
   useListIcpProfilesQuery: () => query([sampleIcp]),
   useCreateIcpProfileMutation: () => mutationTuple(),
   useUpdateIcpProfileMutation: () => mutationTuple(),
@@ -247,6 +303,7 @@ const AmazonLeadSearchPanel = (await import('../amazon-lead-search-panel')).defa
 const B2bLeadSearchPanel = (await import('../b2b-lead-search-panel')).default;
 const CustomsLeadSearchPanel = (await import('../customs-lead-search-panel')).default;
 const FairLeadSearchPanel = (await import('../fair-lead-search-panel')).default;
+const DecisionMakerPanel = (await import('../decision-maker-panel')).default;
 const IcpProfilesPanel = (await import('../icp-profiles-panel')).default;
 const OutreachDraftsPanel = (await import('../outreach-drafts-panel')).default;
 const ReportsPanel = (await import('../reports-panel')).default;
@@ -332,6 +389,7 @@ describe('market admin component smoke tests', () => {
     expect(render(<B2bLeadSearchPanel />)).toContain('B2B Job Listesi');
     expect(render(<CustomsLeadSearchPanel />)).toContain('Gümrük Job Listesi');
     expect(render(<FairLeadSearchPanel />)).toContain('Fuar Job Listesi');
+    expect(render(<DecisionMakerPanel />)).toContain('Acme Fitness');
     const riskHtml = render(<RiskScoreCard report={sampleRiskReport} />);
     expect(riskHtml).toContain('Yüksek riskli kategori');
     expect(riskHtml).toContain('Risk Profili (5 Boyut)');

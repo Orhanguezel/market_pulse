@@ -19,6 +19,7 @@ const fetchMock = mock(async (input: RequestInfo | URL, init?: RequestInit) => {
   const body = init?.body ?? (request ? await request.clone().text() : null);
   capturedFetchCalls.push({ url: new URL(rawUrl), method, body: body || null });
   if (contentType.includes('text/csv')) return Promise.resolve(new Response('name,category\n'));
+  if (rawUrl.includes('export.xlsx')) return Promise.resolve(new Response(new Uint8Array([80, 75])));
   return Promise.resolve(Response.json({ ok: true }));
 });
 
@@ -352,6 +353,66 @@ describe('lead machine admin RTK endpoints', () => {
     expect(call.method).toBe('POST');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/b2b/jobs');
 
+    call = await dispatchEndpoint('getDecisionMakerPresets');
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/presets');
+
+    call = await dispatchEndpoint('listDecisionMakerJobs');
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/jobs');
+
+    call = await dispatchEndpoint('startDecisionMakerJob', {
+      sector: 'fitness',
+      cities: ['Istanbul'],
+      targetCount: 200,
+      excludeKeywords: ['supplement'],
+    });
+    expect(call.method).toBe('POST');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/jobs');
+    expect(jsonBody(call)).toEqual({
+      sector: 'fitness',
+      cities: ['Istanbul'],
+      targetCount: 200,
+      excludeKeywords: ['supplement'],
+    });
+
+    call = await dispatchEndpoint('listDecisionMakerResults', { job_id: 'job-1', confidence: 'A', limit: 50 });
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/results');
+    expect(call.url.searchParams.get('job_id')).toBe('job-1');
+    expect(call.url.searchParams.get('confidence')).toBe('A');
+    expect(call.url.searchParams.get('limit')).toBe('50');
+
+    call = await dispatchEndpoint('listDecisionMakerCompanyPool', { job_id: 'job-1', status: 'qualified', include_excluded: true, limit: 25 });
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/company-pool');
+    expect(call.url.searchParams.get('job_id')).toBe('job-1');
+    expect(call.url.searchParams.get('status')).toBe('qualified');
+    expect(call.url.searchParams.get('include_excluded')).toBe('true');
+    expect(call.url.searchParams.get('limit')).toBe('25');
+
+    call = await dispatchEndpoint('exportDecisionMakersCsv', { job_id: 'job-1', confidence: 'all' });
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/export.csv');
+    expect(call.url.searchParams.get('job_id')).toBe('job-1');
+    expect(call.url.searchParams.get('confidence')).toBeNull();
+
+    call = await dispatchEndpoint('exportDecisionMakersXlsx', { job_id: 'job-1', confidence: 'A' });
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/export.xlsx');
+    expect(call.url.searchParams.get('job_id')).toBe('job-1');
+    expect(call.url.searchParams.get('confidence')).toBe('A');
+
+    call = await dispatchEndpoint('promoteDecisionMakersToCandidates', { job_id: 'job-1', confidence: 'A', limit: 100 });
+    expect(call.method).toBe('POST');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/promote-candidates');
+    expect(jsonBody(call)).toEqual({ job_id: 'job-1', confidence: 'A', limit: 100 });
+
+    call = await dispatchEndpoint('promoteDecisionMakersToCrm', { job_id: 'job-1', confidence: 'A', limit: 100 });
+    expect(call.method).toBe('POST');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/promote-crm');
+    expect(jsonBody(call)).toEqual({ job_id: 'job-1', confidence: 'A', limit: 100 });
+
     call = await dispatchEndpoint('listCustomsJobs');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/jobs');
 
@@ -432,6 +493,17 @@ describe('lead machine admin RTK endpoints', () => {
       'useGetAmazonRiskScoreQuery',
       'useListB2bJobsQuery',
       'useStartB2bJobMutation',
+      'useGetDecisionMakerPresetsQuery',
+      'useListDecisionMakerJobsQuery',
+      'useStartDecisionMakerJobMutation',
+      'useListDecisionMakerResultsQuery',
+      'useListDecisionMakerCompanyPoolQuery',
+      'useExportDecisionMakersCsvQuery',
+      'useLazyExportDecisionMakersCsvQuery',
+      'useExportDecisionMakersXlsxQuery',
+      'useLazyExportDecisionMakersXlsxQuery',
+      'usePromoteDecisionMakersToCandidatesMutation',
+      'usePromoteDecisionMakersToCrmMutation',
       'useListCustomsJobsQuery',
       'useStartCustomsJobMutation',
       'useListFairJobsQuery',

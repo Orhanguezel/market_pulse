@@ -5,7 +5,7 @@ import { registerMarketAdmin } from '@/modules/market/router';
 import { registerPublicApi } from '@/modules/public-api/public.router';
 import { registerCrmAdmin } from '@/modules/crm';
 import { registerCrmTenant } from '@/modules/crm/tenant.router';
-import { registerDecisionMakerPublic } from '@/modules/lead-machine/decision-maker/router';
+import { registerDecisionMakerAdmin, registerDecisionMakerPublic } from '@/modules/lead-machine/decision-maker/router';
 
 export async function registerProjectPublic(api: FastifyInstance) {
   // Tenant müşteri CRM (giriş yapmış, admin değil) — kendi encapsulated scope'unda,
@@ -24,5 +24,6 @@ export async function registerProjectAdmin(adminApi: FastifyInstance) {
   await registerExternalDbAdmin(adminApi);
   await registerMarketAdmin(adminApi);
   await registerLeadMachineAdmin(adminApi);
+  await registerDecisionMakerAdmin(adminApi);
   await registerCrmAdmin(adminApi);
 }

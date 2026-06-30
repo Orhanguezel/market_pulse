@@ -46,6 +46,8 @@ export const metahubTags = [
   'AmazonScanJob',
   'AmazonHistory',
   'ByokKey',
+  'DecisionMakerJobs',
+  'DecisionMakerResults',
 ] as const;
 
 export type MetahubTag = (typeof metahubTags)[number];

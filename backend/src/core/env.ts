@@ -107,6 +107,7 @@ export const env = {
   KEEPA_API_KEY: process.env.KEEPA_API_KEY || '',
   KEEPA_DAILY_TOKEN_BUDGET: parseEnvInt(process.env.KEEPA_DAILY_TOKEN_BUDGET, 1000),
   APOLLO_API_KEY: process.env.APOLLO_API_KEY || '',
+  APOLLO_DECISION_MAKER_ENABLED: process.env.APOLLO_DECISION_MAKER_ENABLED === 'true',
   TENTIMES_API_KEY: process.env.TENTIMES_API_KEY || '',
   WHRAI_API_KEY: process.env.WHRAI_API_KEY || '',
 } as const;

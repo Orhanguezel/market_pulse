@@ -83,6 +83,7 @@ export type AdminNavItemKey =
   | 'market_targets'
   | 'market_leads'
   | 'market_lead_candidates'
+  | 'market_decision_makers'
   | 'market_lead_scan'
   | 'market_lead_amazon'
   | 'market_lead_b2b'
@@ -158,6 +159,7 @@ export const adminNavConfig: AdminNavConfigGroup[] = [
       { key: 'market_leads',            url: '/admin/market/leads',                       icon: Users },
       { key: 'market_lead_scan',        url: '/admin/market/lead-machine/scan',          icon: ScanLine },
       { key: 'market_lead_candidates',  url: '/admin/market/lead-machine/candidates',     icon: Flame, badgeKey: 'lead_candidates_pending' },
+      { key: 'market_decision_makers',   url: '/admin/market/lead-machine/decision-makers', icon: Search },
       { key: 'market_lead_amazon',      url: '/admin/market/lead-machine/amazon',         icon: Search, developerOnly: true },
       { key: 'market_lead_b2b',         url: '/admin/market/lead-machine/b2b',            icon: Building2, developerOnly: true },
       { key: 'market_lead_customs',     url: '/admin/market/lead-machine/customs',        icon: Database },
@@ -209,6 +211,7 @@ const FALLBACK_TITLES: Record<AdminNavItemKey, string> = {
   market_targets:          'Hedef Firmalar',
   market_leads:            'Lead Pipeline',
   market_lead_candidates:  'Lead Adayları',
+  market_decision_makers:  'Karar Vericiler',
   market_lead_scan:        'Lead Tarama',
   market_lead_amazon:      'Amazon Arama',
   market_lead_b2b:         'B2B Arama',
