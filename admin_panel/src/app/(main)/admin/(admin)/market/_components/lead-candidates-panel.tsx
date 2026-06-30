@@ -231,6 +231,37 @@ function formatMatchReason(reason: string): string {
   return reason;
 }
 
+type RawDecisionMaker = {
+  name: string | null;
+  title: string | null;
+  linkedin_url: string | null;
+  confidence: 'A' | 'B' | 'C' | null;
+  source_url: string | null;
+};
+
+const DM_CONFIDENCE_CLS: Record<string, string> = {
+  A: 'border-gm-success/30 bg-gm-success/10 text-gm-success',
+  B: 'border-gm-warning/30 bg-gm-warning/10 text-gm-warning',
+  C: 'border-gm-border-soft bg-gm-surface/20 text-gm-muted',
+};
+
+/** raw_data.decision_makers[] — karar verici modülünün adaya işlediği kişiler (A/B/C). */
+function rawDecisionMakers(candidate: LeadCandidate): RawDecisionMaker[] {
+  const data = candidate.raw_data;
+  if (!data || typeof data !== 'object') return [];
+  const list = (data as Record<string, unknown>).decision_makers;
+  if (!Array.isArray(list)) return [];
+  return list
+    .filter((item): item is Record<string, unknown> => !!item && typeof item === 'object')
+    .map((item) => ({
+      name: typeof item.name === 'string' ? item.name : null,
+      title: typeof item.title === 'string' ? item.title : null,
+      linkedin_url: typeof item.linkedin_url === 'string' ? item.linkedin_url : null,
+      confidence: item.confidence === 'A' || item.confidence === 'B' || item.confidence === 'C' ? item.confidence : null,
+      source_url: typeof item.source_url === 'string' ? item.source_url : null,
+    }));
+}
+
 function CandidateCard({
   candidate,
   icpProfiles,
@@ -282,6 +313,7 @@ function CandidateCard({
   const painPoints: string[] = Array.isArray(analysis?.pain_points) ? analysis.pain_points as string[] : [];
   const sellsChina = analysis?.sells_china === true;
   const privateLabel = analysis?.private_label === true;
+  const dmRows = rawDecisionMakers(candidate);
 
   return (
     <Card className="bg-gm-bg-deep/60 border-gm-border-soft rounded-[28px] overflow-hidden shadow-xl">
@@ -521,6 +553,41 @@ function CandidateCard({
                   </a>
                 ) : latestEnrichment.source_vendor ?? 'Yok'}
               </div>
+            </div>
+          </div>
+        )}
+
+        {dmRows.length > 0 && (
+          <div className="space-y-2 rounded-2xl border border-gm-gold/20 bg-gm-gold/5 p-4">
+            <div className="flex items-center justify-between">
+              <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-gm-muted">Karar Vericiler</div>
+              <span className="text-[9px] font-bold uppercase tracking-widest text-gm-muted">{dmRows.length} kişi</span>
+            </div>
+            <div className="space-y-2">
+              {dmRows.map((dm, idx) => (
+                <div key={`${dm.linkedin_url ?? dm.name ?? 'dm'}-${idx}`} className="flex flex-wrap items-center gap-2 rounded-xl border border-gm-border-soft bg-gm-bg-deep/30 px-3 py-2">
+                  <Badge variant="outline" className={cn('rounded-full text-[9px] font-bold uppercase tracking-widest', DM_CONFIDENCE_CLS[dm.confidence ?? 'C'])}>
+                    {dm.confidence ?? 'C'}
+                  </Badge>
+                  <span className="text-sm text-gm-text">{dm.name ?? 'Manuel araştırma'}</span>
+                  {dm.title && <span className="text-xs text-gm-muted">· {dm.title}</span>}
+                  {dm.confidence === 'C' && !dm.name && (
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-gm-warning">Manuel araştırma kuyruğu</span>
+                  )}
+                  <div className="ml-auto flex items-center gap-2">
+                    {dm.linkedin_url && (
+                      <a href={dm.linkedin_url} target="_blank" rel="noreferrer" className="text-[10px] font-bold uppercase tracking-widest text-gm-gold hover:underline" title="LinkedIn profili (tek tık)">
+                        LinkedIn
+                      </a>
+                    )}
+                    {dm.source_url && !dm.linkedin_url && (
+                      <a href={dm.source_url} target="_blank" rel="noreferrer" className="text-[10px] font-bold uppercase tracking-widest text-gm-muted hover:text-gm-text" title="Kaynak">
+                        Kaynak
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
             </div>
           </div>
         )}

@@ -21,6 +21,7 @@ CREATE TABLE IF NOT EXISTS `lead_decision_makers` (
   `source_url`           text         DEFAULT NULL,
   `fit_note`             varchar(500) DEFAULT NULL,
   `confidence_score`     enum('A','B','C') NOT NULL DEFAULT 'C',
+  `review_status`        enum('pending','verified','rejected','manual_review') NOT NULL DEFAULT 'pending',
   `sector`               varchar(64)  DEFAULT NULL,
   `last_verified_at`     date         DEFAULT NULL,
   `created_at`           datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -30,6 +31,7 @@ CREATE TABLE IF NOT EXISTS `lead_decision_makers` (
   KEY `idx_ldm_tenant` (`tenant_key`),
   KEY `idx_ldm_job` (`job_id`),
   KEY `idx_ldm_conf` (`confidence_score`),
+  KEY `idx_ldm_review` (`review_status`),
   KEY `idx_ldm_sector` (`sector`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -42,6 +44,19 @@ SET @add_ldm_job_id := IF(
   'SELECT 1'
 );
 PREPARE stmt FROM @add_ldm_job_id;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+-- Mevcut prod tablosuna review_status kolonu (manuel doğrul/reddet aksiyonları) — veri kaybısız.
+SET @add_ldm_review := IF(
+  (SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'lead_decision_makers'
+     AND COLUMN_NAME = 'review_status') = 0,
+  'ALTER TABLE `lead_decision_makers` ADD COLUMN `review_status` enum(''pending'',''verified'',''rejected'',''manual_review'') NOT NULL DEFAULT ''pending'' AFTER `confidence_score`, ADD KEY `idx_ldm_review` (`review_status`)',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_ldm_review;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 

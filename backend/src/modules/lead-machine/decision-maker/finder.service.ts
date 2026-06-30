@@ -63,7 +63,10 @@ export function buildSearchHints(company: string, country?: string | null, title
   };
 }
 
+export type DecisionMakerReviewStatus = 'pending' | 'verified' | 'rejected' | 'manual_review';
+
 export type DecisionMakerRow = {
+  id?: string;
   company_name: string;
   city: string;
   business_type: string;
@@ -75,12 +78,14 @@ export type DecisionMakerRow = {
   source_url: string | null;
   fit_note: string;
   confidence_score: 'A' | 'B' | 'C';
+  review_status?: DecisionMakerReviewStatus;
   last_verified_at: string;
 };
 
 export type CompanyQualityStatus = 'qualified' | 'possible' | 'manual_review' | 'excluded';
 
 export type CompanyPoolRow = {
+  id?: string;
   company_name: string;
   city: string;
   business_type: string;

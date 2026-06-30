@@ -6,8 +6,8 @@ import { getRequiredTenantKey } from '@/modules/_shared';
 import { createAccount } from '@/modules/crm/accounts.service';
 import { createContact } from '@/modules/crm/contacts.service';
 import { createSearchJob, getSearchJob, insertCandidate, listSearchJobs } from '../_shared/db';
-import { runDecisionMakerFinder, buildSearchHints, SECTOR_PRESETS, DEFAULT_TITLES, EXPORT_B2B_TITLES, DEFAULT_EXCLUDE_KEYWORDS, type FinderParams } from './finder.service';
-import { saveCompanyPool, saveDecisionMakers, listCompanyPool, listSavedDecisionMakers } from './persist.service';
+import { runDecisionMakerFinder, buildSearchHints, SECTOR_PRESETS, DEFAULT_TITLES, EXPORT_B2B_TITLES, DEFAULT_EXCLUDE_KEYWORDS, type FinderParams, type CompanyQualityStatus, type DecisionMakerReviewStatus } from './finder.service';
+import { saveCompanyPool, saveDecisionMakers, listCompanyPool, listSavedDecisionMakers, updateDecisionMakerReview, updateCompanyPoolStatus } from './persist.service';
 import { runDecisionMakerJob, isDecisionMakerJob } from './job.service';
 import { decisionMakersToCsv, decisionMakersToXlsx } from './export.service';
 
@@ -147,14 +147,47 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
       .header('Content-Disposition', 'attachment; filename="decision-makers.xlsx"')
       .send(decisionMakersToXlsx(rows));
   });
+
+  registerReviewRoutes(app, guard);
 }
 
 function parseFinderBody(body: unknown): Partial<FinderParams> {
   return body && typeof body === 'object' ? body as Partial<FinderParams> : {};
 }
 
+/** Manuel inceleme/red aksiyonları — hem public (guard) hem admin register'da paylaşılır. */
+function registerReviewRoutes(app: FastifyInstance, routeOpts: Record<string, unknown>) {
+  app.post('/lead-machine/decision-makers/:id/review', routeOpts, async (req, reply) => {
+    const id = (req.params as { id: string }).id;
+    const status = parseReviewStatus((req.body as { status?: unknown } | undefined)?.status);
+    if (!status) return reply.status(400).send({ error: { message: 'invalid_status' } });
+    const ok = await updateDecisionMakerReview(id, status);
+    if (!ok) return reply.status(404).send({ error: { message: 'not_found' } });
+    return { id, review_status: status };
+  });
+
+  app.post('/lead-machine/decision-makers/company-pool/:id/status', routeOpts, async (req, reply) => {
+    const id = (req.params as { id: string }).id;
+    const body = (req.body ?? {}) as { status?: unknown; exclude_reason?: unknown };
+    const status = parseQualityStatus(body.status);
+    if (!status) return reply.status(400).send({ error: { message: 'invalid_status' } });
+    const reason = typeof body.exclude_reason === 'string' ? body.exclude_reason : null;
+    const ok = await updateCompanyPoolStatus(id, status, reason);
+    if (!ok) return reply.status(404).send({ error: { message: 'not_found' } });
+    return { id, quality_status: status };
+  });
+}
+
 function parseConfidence(value: unknown): 'A' | 'B' | 'C' | null {
   return value === 'A' || value === 'B' || value === 'C' ? value : null;
+}
+
+function parseReviewStatus(value: unknown): DecisionMakerReviewStatus | null {
+  return value === 'pending' || value === 'verified' || value === 'rejected' || value === 'manual_review' ? value : null;
+}
+
+function parseQualityStatus(value: unknown): CompanyQualityStatus | null {
+  return value === 'qualified' || value === 'possible' || value === 'manual_review' || value === 'excluded' ? value : null;
 }
 
 function runInBackground(task: Promise<unknown>) {
@@ -273,6 +306,8 @@ export async function registerDecisionMakerAdmin(app: FastifyInstance) {
       .header('Content-Disposition', 'attachment; filename="decision-makers.xlsx"')
       .send(decisionMakersToXlsx(rows));
   });
+
+  registerReviewRoutes(app, {});
 
   app.post('/lead-machine/decision-makers/promote-candidates', async (req, reply) => {
     const body = (req.body ?? {}) as { job_id?: string; confidence?: string; limit?: number };

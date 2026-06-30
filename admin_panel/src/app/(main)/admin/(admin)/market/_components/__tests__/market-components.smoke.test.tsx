@@ -218,6 +218,8 @@ mock.module('@/integrations/hooks', () => ({
   useStartDecisionMakerJobMutation: () => mutationTuple(),
   usePromoteDecisionMakersToCandidatesMutation: () => mutationTuple(),
   usePromoteDecisionMakersToCrmMutation: () => mutationTuple(),
+  useReviewDecisionMakerMutation: () => mutationTuple(),
+  useUpdateCompanyPoolStatusMutation: () => mutationTuple(),
   useListDecisionMakerResultsQuery: () => query({
     rows: [
       {

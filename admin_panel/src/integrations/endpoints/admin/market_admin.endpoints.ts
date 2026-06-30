@@ -154,8 +154,10 @@ export interface LeadSearchJob {
 
 export type DecisionMakerConfidence = 'A' | 'B' | 'C';
 export type CompanyQualityStatus = 'qualified' | 'possible' | 'manual_review' | 'excluded';
+export type DecisionMakerReviewStatus = 'pending' | 'verified' | 'rejected' | 'manual_review';
 
 export interface DecisionMakerRow {
+  id?: string;
   company_name: string;
   city: string | null;
   business_type: string | null;
@@ -167,10 +169,12 @@ export interface DecisionMakerRow {
   source_url: string | null;
   fit_note: string | null;
   confidence_score: DecisionMakerConfidence;
+  review_status?: DecisionMakerReviewStatus;
   last_verified_at: string | null;
 }
 
 export interface CompanyPoolRow {
+  id?: string;
   company_name: string;
   city: string | null;
   business_type: string | null;
@@ -1092,6 +1096,29 @@ export const marketAdminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['Crm'],
     }),
+    reviewDecisionMaker: b.mutation<{ id: string; review_status: DecisionMakerReviewStatus }, {
+      id: string;
+      status: DecisionMakerReviewStatus;
+    }>({
+      query: ({ id, status }) => ({
+        url: `/admin/lead-machine/decision-makers/${id}/review`,
+        method: 'POST',
+        body: { status },
+      }),
+      invalidatesTags: ['DecisionMakerResults'],
+    }),
+    updateCompanyPoolStatus: b.mutation<{ id: string; quality_status: CompanyQualityStatus }, {
+      id: string;
+      status: CompanyQualityStatus;
+      exclude_reason?: string;
+    }>({
+      query: ({ id, status, exclude_reason }) => ({
+        url: `/admin/lead-machine/decision-makers/company-pool/${id}/status`,
+        method: 'POST',
+        body: { status, exclude_reason },
+      }),
+      invalidatesTags: ['DecisionMakerResults'],
+    }),
     listCustomsJobs: b.query<LeadSearchJob[], void>({
       query: () => ({ url: '/admin/lead-machine/customs/jobs' }),
       providesTags: ['LeadMachineJobs'],
@@ -1414,6 +1441,8 @@ export const {
   useLazyExportDecisionMakersXlsxQuery,
   usePromoteDecisionMakersToCandidatesMutation,
   usePromoteDecisionMakersToCrmMutation,
+  useReviewDecisionMakerMutation,
+  useUpdateCompanyPoolStatusMutation,
   useListCustomsJobsQuery,
   useStartCustomsJobMutation,
   useListFairJobsQuery,

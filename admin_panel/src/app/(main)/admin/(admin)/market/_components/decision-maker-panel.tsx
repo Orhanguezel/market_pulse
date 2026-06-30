@@ -24,9 +24,12 @@ import {
   useListDecisionMakerResultsQuery,
   usePromoteDecisionMakersToCandidatesMutation,
   usePromoteDecisionMakersToCrmMutation,
+  useReviewDecisionMakerMutation,
   useStartDecisionMakerJobMutation,
+  useUpdateCompanyPoolStatusMutation,
   type CompanyQualityStatus,
   type DecisionMakerConfidence,
+  type DecisionMakerReviewStatus,
   type LeadSearchJob,
 } from '@/integrations/hooks';
 import { BASE_URL } from '@/integrations/apiBase';
@@ -55,6 +58,20 @@ const QUALITY_CONFIG: Record<CompanyQualityStatus, { label: string; cls: string 
   manual_review: { label: 'Manual', cls: 'border-gm-warning/30 bg-gm-warning/10 text-gm-warning' },
   excluded: { label: 'Excluded', cls: 'border-gm-error/30 bg-gm-error/10 text-gm-error' },
 };
+
+const REVIEW_CONFIG: Record<string, { label: string; cls: string }> = {
+  pending: { label: 'Bekliyor', cls: 'border-gm-border-soft bg-gm-surface/20 text-gm-muted' },
+  verified: { label: 'Doğrulandı', cls: 'border-gm-success/30 bg-gm-success/10 text-gm-success' },
+  rejected: { label: 'Reddedildi', cls: 'border-gm-error/30 bg-gm-error/10 text-gm-error' },
+  manual_review: { label: 'Manuel', cls: 'border-gm-warning/30 bg-gm-warning/10 text-gm-warning' },
+};
+
+function reviewBadge(value?: string) {
+  const cfg = REVIEW_CONFIG[value ?? 'pending'] ?? REVIEW_CONFIG.pending;
+  return <Badge variant="outline" className={cn('rounded-full text-[9px] font-bold uppercase tracking-widest', cfg.cls)}>{cfg.label}</Badge>;
+}
+
+const ACTION_BTN = 'inline-flex h-7 items-center rounded-full border px-3 text-[9px] font-bold uppercase tracking-widest transition-colors';
 
 function statusBadge(job: LeadSearchJob) {
   const cfg = STATUS_CONFIG[job.status] ?? STATUS_CONFIG.pending;
@@ -89,6 +106,8 @@ export default function DecisionMakerPanel() {
   const [startJob, startState] = useStartDecisionMakerJobMutation();
   const [promoteToCandidates, promoteState] = usePromoteDecisionMakersToCandidatesMutation();
   const [promoteToCrm, promoteCrmState] = usePromoteDecisionMakersToCrmMutation();
+  const [reviewDecisionMaker] = useReviewDecisionMakerMutation();
+  const [updateCompanyPoolStatus] = useUpdateCompanyPoolStatusMutation();
 
   const [sector, setSector] = React.useState('fitness');
   const [cities, setCities] = React.useState<string[]>(['Istanbul', 'Ankara', 'Izmir']);
@@ -197,6 +216,34 @@ export default function DecisionMakerPanel() {
       toast.success(`${result.accounts} hesap ve ${result.contacts} kontak CRM'e aktarıldı`);
     } catch {
       toast.error('CRM aktarımı başarısız');
+    }
+  };
+
+  const handleReview = async (id: string | undefined, status: DecisionMakerReviewStatus) => {
+    if (!id) {
+      toast.error('Satır kimliği yok (yeniden arama gerekebilir)');
+      return;
+    }
+    try {
+      await reviewDecisionMaker({ id, status }).unwrap();
+      toast.success(status === 'rejected' ? 'Karar verici reddedildi' : status === 'verified' ? 'Manuel doğrulandı' : 'Manuel kontrole alındı');
+      refetchResults();
+    } catch {
+      toast.error('Durum güncellenemedi');
+    }
+  };
+
+  const handlePoolStatus = async (id: string | undefined, status: CompanyQualityStatus) => {
+    if (!id) {
+      toast.error('Satır kimliği yok (yeniden arama gerekebilir)');
+      return;
+    }
+    try {
+      await updateCompanyPoolStatus({ id, status }).unwrap();
+      toast.success(status === 'excluded' ? 'Şirket hariç tutuldu' : status === 'qualified' ? 'Qualified olarak işaretlendi' : 'Manuel kontrole alındı');
+      refetchPool();
+    } catch {
+      toast.error('Durum güncellenemedi');
     }
   };
 
@@ -416,6 +463,7 @@ export default function DecisionMakerPanel() {
                         <th className="px-4 py-3">Durum</th>
                         <th className="px-4 py-3">Kaynak</th>
                         <th className="px-4 py-3">Not</th>
+                        <th className="px-4 py-3 text-right">Aksiyon</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gm-border-soft">
@@ -444,6 +492,13 @@ export default function DecisionMakerPanel() {
                             </div>
                           </td>
                           <td className="max-w-[220px] px-4 py-3 text-xs text-gm-muted">{row.exclude_reason ?? 'Uygun görünüyor'}</td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center justify-end gap-1.5">
+                              <button type="button" disabled={!row.id || row.quality_status === 'qualified'} onClick={() => handlePoolStatus(row.id, 'qualified')} className={cn(ACTION_BTN, 'border-gm-success/30 text-gm-success hover:bg-gm-success/10 disabled:opacity-30')} title="Qualified işaretle">Onayla</button>
+                              <button type="button" disabled={!row.id || row.quality_status === 'manual_review'} onClick={() => handlePoolStatus(row.id, 'manual_review')} className={cn(ACTION_BTN, 'border-gm-warning/30 text-gm-warning hover:bg-gm-warning/10 disabled:opacity-30')} title="Manuel kontrol">Manuel</button>
+                              <button type="button" disabled={!row.id || row.quality_status === 'excluded'} onClick={() => handlePoolStatus(row.id, 'excluded')} className={cn(ACTION_BTN, 'border-gm-error/30 text-gm-error hover:bg-gm-error/10 disabled:opacity-30')} title="Hariç tut">Reddet</button>
+                            </div>
+                          </td>
                         </tr>
                       ))}
                     </tbody>
@@ -531,7 +586,9 @@ export default function DecisionMakerPanel() {
                         <th className="px-4 py-3">Karar Verici</th>
                         <th className="px-4 py-3">Unvan</th>
                         <th className="px-4 py-3">Skor</th>
+                        <th className="px-4 py-3">Durum</th>
                         <th className="px-4 py-3">Kaynak</th>
+                        <th className="px-4 py-3 text-right">Aksiyon</th>
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-gm-border-soft">
@@ -545,6 +602,7 @@ export default function DecisionMakerPanel() {
                           <td className="px-4 py-3">{row.decision_maker_name ?? 'Manuel araştırma'}</td>
                           <td className="px-4 py-3 text-gm-muted">{row.title ?? '—'}</td>
                           <td className="px-4 py-3">{confidenceBadge(row.confidence_score)}</td>
+                          <td className="px-4 py-3">{reviewBadge(row.review_status)}</td>
                           <td className="px-4 py-3">
                             <div className="flex items-center gap-2">
                               {row.linkedin_profile_url && (
@@ -557,6 +615,13 @@ export default function DecisionMakerPanel() {
                                   <ExternalLink className="size-4" />
                                 </a>
                               )}
+                            </div>
+                          </td>
+                          <td className="px-4 py-3">
+                            <div className="flex items-center justify-end gap-1.5">
+                              <button type="button" disabled={!row.id || row.review_status === 'verified'} onClick={() => handleReview(row.id, 'verified')} className={cn(ACTION_BTN, 'border-gm-success/30 text-gm-success hover:bg-gm-success/10 disabled:opacity-30')} title="Manuel doğrula">Doğrula</button>
+                              <button type="button" disabled={!row.id || row.review_status === 'manual_review'} onClick={() => handleReview(row.id, 'manual_review')} className={cn(ACTION_BTN, 'border-gm-warning/30 text-gm-warning hover:bg-gm-warning/10 disabled:opacity-30')} title="Manuel araştırma kuyruğu">Manuel</button>
+                              <button type="button" disabled={!row.id || row.review_status === 'rejected'} onClick={() => handleReview(row.id, 'rejected')} className={cn(ACTION_BTN, 'border-gm-error/30 text-gm-error hover:bg-gm-error/10 disabled:opacity-30')} title="Reddet (export dışı)">Reddet</button>
                             </div>
                           </td>
                         </tr>

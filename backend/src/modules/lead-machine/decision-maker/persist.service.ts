@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import { pool } from '@/db/client';
 import { getActiveTenantKey } from '@/modules/_shared';
-import type { CompanyPoolRow, CompanyQualityStatus, DecisionMakerRow } from './finder.service';
+import type { CompanyPoolRow, CompanyQualityStatus, DecisionMakerReviewStatus, DecisionMakerRow } from './finder.service';
 
 /**
  * Karar verici sonuçlarını kalıcı kaydet (UPSERT, tenant-scoped).
@@ -11,6 +11,7 @@ export type DecisionMakerListFilters = {
   jobId?: string | null;
   confidence?: 'A' | 'B' | 'C' | null;
   sector?: string | null;
+  includeRejected?: boolean;
   limit?: number;
 };
 
@@ -112,10 +113,14 @@ export async function listSavedDecisionMakers(filters: number | DecisionMakerLis
     where.push('sector = ?');
     values.push(opts.sector);
   }
+  // Reddedilen satırlar varsayılan listede/export'ta gözükmez (checklist: excluded/rejected default dışında).
+  if (!opts.includeRejected) {
+    where.push("review_status <> 'rejected'");
+  }
   const limit = Math.min(Math.max(Number(opts.limit ?? 500), 1), 1000);
   const [rows] = await pool.execute(
-    `SELECT company_name, city, business_type, decision_maker_name, title, linkedin_profile_url,
-            company_website, social_url, source_url, fit_note, confidence_score,
+    `SELECT id, company_name, city, business_type, decision_maker_name, title, linkedin_profile_url,
+            company_website, social_url, source_url, fit_note, confidence_score, review_status,
             DATE_FORMAT(last_verified_at, '%Y-%m-%d') AS last_verified_at
        FROM lead_decision_makers
       WHERE ${where.join(' AND ')}
@@ -124,6 +129,17 @@ export async function listSavedDecisionMakers(filters: number | DecisionMakerLis
     values as never[],
   );
   return rows as DecisionMakerRow[];
+}
+
+/** Karar verici satırının manuel inceleme durumunu güncelle (tenant-scoped). */
+export async function updateDecisionMakerReview(id: string, status: DecisionMakerReviewStatus): Promise<boolean> {
+  const tenantKey = getActiveTenantKey();
+  if (!tenantKey || !id) return false;
+  const [result] = await pool.execute(
+    'UPDATE lead_decision_makers SET review_status = ? WHERE id = ? AND tenant_key = ?',
+    [status, id, tenantKey] as never[],
+  );
+  return (result as { affectedRows?: number }).affectedRows ? true : false;
 }
 
 function parsePoolStatus(value: unknown): CompanyQualityStatus | null {
@@ -148,7 +164,7 @@ export async function listCompanyPool(filters: CompanyPoolListFilters = {}): Pro
   }
   const limit = Math.min(Math.max(Number(filters.limit ?? 500), 1), 1000);
   const [rows] = await pool.execute(
-    `SELECT company_name, city, business_type, website, phone, google_maps_url, address,
+    `SELECT id, company_name, city, business_type, website, phone, google_maps_url, address,
             quality_score, quality_status, exclude_reason, source,
             DATE_FORMAT(last_verified_at, '%Y-%m-%d') AS last_verified_at
        FROM lead_company_pool
@@ -158,4 +174,20 @@ export async function listCompanyPool(filters: CompanyPoolListFilters = {}): Pro
     values as never[],
   );
   return rows as CompanyPoolRow[];
+}
+
+/** Şirket havuzu satırının kalite durumunu manuel güncelle (tenant-scoped). */
+export async function updateCompanyPoolStatus(
+  id: string,
+  status: CompanyQualityStatus,
+  excludeReason?: string | null,
+): Promise<boolean> {
+  const tenantKey = getActiveTenantKey();
+  if (!tenantKey || !id) return false;
+  const reason = status === 'excluded' ? (excludeReason ?? 'Manuel olarak hariç tutuldu') : null;
+  const [result] = await pool.execute(
+    'UPDATE lead_company_pool SET quality_status = ?, exclude_reason = ? WHERE id = ? AND tenant_key = ?',
+    [status, reason, id, tenantKey] as never[],
+  );
+  return (result as { affectedRows?: number }).affectedRows ? true : false;
 }

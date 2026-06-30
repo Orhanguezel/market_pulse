@@ -9,6 +9,7 @@ const getGoogleMapsKey = mock(() => Promise.resolve('maps-test-key'));
 const env = {
   TENANT_KEY: 'tenant-a',
   APOLLO_API_KEY: '',
+  APOLLO_DECISION_MAKER_ENABLED: false,
   SERPER_API_KEY: '',
   SCRAPER_SERVICE_URL: 'http://scraper.local',
   SCRAPER_SERVICE_API_KEY: '',
@@ -36,6 +37,8 @@ mock.module('@/modules/siteSettings', () => ({
 }));
 
 const osint = await import('../decision-maker/osint.service');
+const finder = await import('../decision-maker/finder.service');
+const persist = await import('../decision-maker/persist.service');
 const batch = await import('../decision-maker/candidate-enrichment.service');
 const outreach = await import('../outreach/outreach.service');
 const jobService = await import('../decision-maker/job.service');
@@ -50,6 +53,7 @@ beforeEach(() => {
   askBestAvailable.mockImplementation(() => Promise.resolve('not-json'));
   getGoogleMapsKey.mockImplementation(() => Promise.resolve('maps-test-key'));
   env.APOLLO_API_KEY = '';
+  env.APOLLO_DECISION_MAKER_ENABLED = false;
   env.SERPER_API_KEY = '';
   globalThis.fetch = fetchMock as unknown as typeof fetch;
   fetchMock.mockImplementation(() => Promise.resolve(new Response(JSON.stringify({ organic: [] }), { status: 200 })));
@@ -157,6 +161,151 @@ describe('decision maker OSINT resolver', () => {
     expect(result.name).toBe('Ayşe Demir');
     expect(result.evidence.source).toBe('website_osint');
     expect(result.evidence.social_url).toBe('https://instagram.com/acmefitness');
+  });
+});
+
+describe('decision maker quality gates (edge cases)', () => {
+  test('Serper key yok + skipWebsite → C fallback (uydurma kişi yazılmaz)', async () => {
+    env.SERPER_API_KEY = '';
+    const res = await osint.resolveDecisionMaker(
+      { company: 'Acme Fitness', city: 'Istanbul', country: 'TR', website: 'https://acme.example', titles: ['Founder'] },
+      { skipWebsite: true },
+    );
+    expect(res.confidence).toBe('C');
+    expect(res.name).toBeNull();
+    expect(res.linkedin_url).toBeNull();
+    expect(res.evidence.source).toBe('none');
+  });
+
+  test('Apollo LinkedIn URL yoksa reddedilir (C kalır)', async () => {
+    env.SERPER_API_KEY = '';
+    env.APOLLO_API_KEY = 'apollo-test-key';
+    env.APOLLO_DECISION_MAKER_ENABLED = true;
+    fetchMock.mockImplementation((url: string | URL | Request) => {
+      if (String(url).includes('apollo.io')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          people: [{ name: 'Mehmet Yilmaz', title: 'Owner', linkedin_url: null }],
+        }), { status: 200 }));
+      }
+      return Promise.resolve(new Response(JSON.stringify({ organic: [] }), { status: 200 }));
+    });
+    const res = await osint.resolveDecisionMaker(
+      { company: 'Acme Fitness', city: 'Istanbul', country: 'TR', website: 'https://acme.example', titles: ['Owner'] },
+      { skipWebsite: true, allowApollo: true },
+    );
+    expect(res.name).toBeNull();
+    expect(res.confidence).toBe('C');
+  });
+
+  test('Apollo LinkedIn + tam isim varsa kabul edilir', async () => {
+    env.SERPER_API_KEY = '';
+    env.APOLLO_API_KEY = 'apollo-test-key';
+    env.APOLLO_DECISION_MAKER_ENABLED = true;
+    fetchMock.mockImplementation((url: string | URL | Request) => {
+      if (String(url).includes('apollo.io')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          people: [{ name: 'Mehmet Yilmaz', title: 'Owner', linkedin_url: 'https://linkedin.com/in/mehmet-yilmaz' }],
+        }), { status: 200 }));
+      }
+      return Promise.resolve(new Response(JSON.stringify({ organic: [] }), { status: 200 }));
+    });
+    const res = await osint.resolveDecisionMaker(
+      { company: 'Acme Fitness', city: 'Istanbul', country: 'TR', website: 'https://acme.example', titles: ['Owner'] },
+      { skipWebsite: true, allowApollo: true },
+    );
+    expect(res.name).toBe('Mehmet Yilmaz');
+    expect(res.linkedin_url).toBe('https://linkedin.com/in/mehmet-yilmaz');
+    expect(res.evidence.source).toBe('apollo');
+  });
+
+  test('Apollo fallback default kapalı: allowApollo verilmezse Apollo çağrılmaz (C)', async () => {
+    env.SERPER_API_KEY = '';
+    env.APOLLO_API_KEY = 'apollo-test-key';
+    env.APOLLO_DECISION_MAKER_ENABLED = true;
+    let apolloCalled = false;
+    fetchMock.mockImplementation((url: string | URL | Request) => {
+      if (String(url).includes('apollo.io')) apolloCalled = true;
+      return Promise.resolve(new Response(JSON.stringify({ organic: [] }), { status: 200 }));
+    });
+    const res = await osint.resolveDecisionMaker(
+      { company: 'Acme Fitness', city: 'Istanbul', country: 'TR', website: 'https://acme.example', titles: ['Owner'] },
+      { skipWebsite: true },
+    );
+    expect(apolloCalled).toBe(false);
+    expect(res.confidence).toBe('C');
+  });
+
+  test('Website OSINT: unvan ön-ekinden sonra tek kelime isim reddedilir (C)', async () => {
+    env.SERPER_API_KEY = '';
+    scrape.mockImplementation(() => Promise.resolve({
+      text: '', html: '', final_url: 'https://acme.example/hakkimizda',
+      data: { text_content: 'Kurucu Mehmet uzun yıllardır sektörde.', social_profiles: [] },
+    }));
+    const res = await osint.resolveDecisionMaker(
+      { company: 'Acme Fitness', city: 'Istanbul', country: 'TR', website: 'https://acme.example', titles: ['Founder'] },
+      { skipWebsite: false },
+    );
+    expect(res.name).toBeNull();
+    expect(res.confidence).toBe('C');
+  });
+
+  test('Website OSINT: kurumsal kelimeli isim (Acme Fitness) reddedilir (C)', async () => {
+    env.SERPER_API_KEY = '';
+    scrape.mockImplementation(() => Promise.resolve({
+      text: '', html: '', final_url: 'https://acme.example/about',
+      data: { text_content: 'Founder Acme Fitness Center kurulduğundan beri hizmet veriyor.', social_profiles: [] },
+    }));
+    const res = await osint.resolveDecisionMaker(
+      { company: 'Acme Fitness', city: 'Istanbul', country: 'TR', website: 'https://acme.example', titles: ['Founder'] },
+      { skipWebsite: false },
+    );
+    expect(res.name).toBeNull();
+    expect(res.confidence).toBe('C');
+  });
+
+  test('Fitness preset: exclude keyword (supplement) firması excluded olur, enrich edilmez', async () => {
+    fetchMock.mockImplementation((url: string | URL | Request) => {
+      if (String(url).includes('places.googleapis.com')) {
+        return Promise.resolve(new Response(JSON.stringify({
+          places: [
+            { displayName: { text: 'Mega Supplement Store' }, websiteUri: 'https://megasupp.example' },
+            { displayName: { text: 'Acme Fitness Club' }, websiteUri: 'https://acme.example', nationalPhoneNumber: '+90 212 000 00 00', googleMapsUri: 'https://maps.example/acme' },
+          ],
+        }), { status: 200 }));
+      }
+      return Promise.resolve(new Response(JSON.stringify({ organic: [] }), { status: 200 }));
+    });
+    const pool = await finder.buildCompanyPool({
+      sector: 'fitness', cities: ['Istanbul'], country: 'TR', businessTypes: ['fitness center'], perCityLimit: 5,
+    });
+    const supplement = pool.rows.find((row) => row.company_name === 'Mega Supplement Store');
+    expect(supplement?.quality_status).toBe('excluded');
+    expect(supplement?.exclude_reason).toContain('supplement');
+    expect(pool.stats.excluded).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe('manual review/reject (tenant-scoped)', () => {
+  test('updateDecisionMakerReview UPDATE tenant + id ile scope edilir', async () => {
+    await runWithTenant('tenant-a', () => persist.updateDecisionMakerReview('dm-1', 'rejected'));
+    const upd = dbMock.poolExecutions.find((item) => item.sql.startsWith('UPDATE lead_decision_makers SET review_status'));
+    expect(upd?.sql).toContain('WHERE id = ? AND tenant_key = ?');
+    expect(upd?.values).toEqual(['rejected', 'dm-1', 'tenant-a']);
+  });
+
+  test('updateCompanyPoolStatus excluded → reason yazılır, tenant scope', async () => {
+    await runWithTenant('tenant-a', () => persist.updateCompanyPoolStatus('cp-1', 'excluded', 'manuel'));
+    const upd = dbMock.poolExecutions.find((item) => item.sql.startsWith('UPDATE lead_company_pool SET quality_status'));
+    expect(upd?.sql).toContain('WHERE id = ? AND tenant_key = ?');
+    expect(upd?.values).toEqual(['excluded', 'manuel', 'cp-1', 'tenant-a']);
+  });
+
+  test('updateCompanyPoolStatus non-excluded → reason temizlenir', async () => {
+    await runWithTenant('tenant-a', () => persist.updateCompanyPoolStatus('cp-2', 'qualified'));
+    const upd = dbMock.poolExecutions
+      .filter((item) => item.sql.startsWith('UPDATE lead_company_pool SET quality_status'))
+      .at(-1);
+    expect(upd?.values).toEqual(['qualified', null, 'cp-2', 'tenant-a']);
   });
 });
 

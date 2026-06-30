@@ -211,6 +211,8 @@ function extractWebsitePerson(text: string, sourceUrl: string): ResolvedDecision
     const window = text.slice(Math.max(0, index - 160), index + 220);
     const names = [...window.matchAll(NAME_RE)]
       .map((match) => stripTitlePrefix(normalizeSpace(match[1] ?? ''), label))
+      // Kalite kapısı: unvan ön-eki sıyrıldıktan sonra tek kelime kalan isimler (ör. "Mehmet") kabul edilmez.
+      .filter((name) => name.split(/\s+/).filter(Boolean).length >= 2)
       .filter((name) => !/fitness|pilates|studio|center|salon|club|training|hakkımızda|iletisim|iletişim/i.test(name));
     if (!names.length) continue;
     return {
