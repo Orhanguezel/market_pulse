@@ -1,7 +1,7 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { AlertCircle, CheckCircle2, Download, ExternalLink, Loader2, Play, Radar, RefreshCw, Search } from 'lucide-react';
+import { AlertCircle, CheckCircle2, ChevronDown, Download, ExternalLink, Loader2, Play, Radar, RefreshCw, Search } from 'lucide-react';
 import {
   useGetDecisionMakerPresetsQuery,
   useLazyExportDecisionMakersCsvQuery,
@@ -17,8 +17,84 @@ import {
 
 const POPPINS = { fontFamily: 'var(--font-poppins), system-ui, sans-serif' } as const;
 const CITY_SUGGEST = ['Istanbul', 'Ankara', 'Izmir', 'Antalya', 'Bursa', 'Kocaeli', 'Konya', 'Adana', 'Mersin', 'Mugla', 'Gaziantep', 'Berlin', 'Amsterdam', 'Dubai', 'London'];
-const COUNTRY_SUGGEST = ['TR', 'DE', 'NL', 'FR', 'GB', 'US', 'AE', 'SA', 'AZ', 'QA'];
 const DEFAULT_TITLES = ['Founder', 'Owner', 'CEO', 'General Manager', 'Kurucu', 'Isletme Sahibi', 'Genel Mudur'];
+
+const COUNTRIES: Array<{ code: string; name: string }> = [
+  { code: 'TR', name: 'Turkiye' }, { code: 'DE', name: 'Almanya' }, { code: 'NL', name: 'Hollanda' },
+  { code: 'FR', name: 'Fransa' }, { code: 'GB', name: 'Birlesik Krallik' }, { code: 'US', name: 'ABD' },
+  { code: 'AE', name: 'Birlesik Arap Emirlikleri' }, { code: 'SA', name: 'Suudi Arabistan' }, { code: 'QA', name: 'Katar' },
+  { code: 'AZ', name: 'Azerbaycan' }, { code: 'IT', name: 'Italya' }, { code: 'ES', name: 'Ispanya' },
+  { code: 'BE', name: 'Belcika' }, { code: 'AT', name: 'Avusturya' }, { code: 'CH', name: 'Isvicre' },
+  { code: 'SE', name: 'Isvec' }, { code: 'NO', name: 'Norvec' }, { code: 'DK', name: 'Danimarka' },
+  { code: 'FI', name: 'Finlandiya' }, { code: 'PL', name: 'Polonya' }, { code: 'CZ', name: 'Cekya' },
+  { code: 'RO', name: 'Romanya' }, { code: 'BG', name: 'Bulgaristan' }, { code: 'GR', name: 'Yunanistan' },
+  { code: 'PT', name: 'Portekiz' }, { code: 'IE', name: 'Irlanda' }, { code: 'HU', name: 'Macaristan' },
+  { code: 'RU', name: 'Rusya' }, { code: 'UA', name: 'Ukrayna' }, { code: 'KZ', name: 'Kazakistan' },
+  { code: 'UZ', name: 'Ozbekistan' }, { code: 'GE', name: 'Gurcistan' }, { code: 'IQ', name: 'Irak' },
+  { code: 'KW', name: 'Kuveyt' }, { code: 'BH', name: 'Bahreyn' }, { code: 'OM', name: 'Umman' },
+  { code: 'JO', name: 'Urdun' }, { code: 'LB', name: 'Lubnan' }, { code: 'EG', name: 'Misir' },
+  { code: 'MA', name: 'Fas' }, { code: 'DZ', name: 'Cezayir' }, { code: 'TN', name: 'Tunus' },
+  { code: 'LY', name: 'Libya' }, { code: 'IL', name: 'Israil' }, { code: 'CA', name: 'Kanada' },
+  { code: 'MX', name: 'Meksika' }, { code: 'BR', name: 'Brezilya' }, { code: 'AR', name: 'Arjantin' },
+  { code: 'IN', name: 'Hindistan' }, { code: 'CN', name: 'Cin' }, { code: 'JP', name: 'Japonya' },
+  { code: 'KR', name: 'Guney Kore' }, { code: 'SG', name: 'Singapur' }, { code: 'MY', name: 'Malezya' },
+  { code: 'ID', name: 'Endonezya' }, { code: 'TH', name: 'Tayland' }, { code: 'VN', name: 'Vietnam' },
+  { code: 'AU', name: 'Avustralya' }, { code: 'NZ', name: 'Yeni Zelanda' }, { code: 'ZA', name: 'Guney Afrika' },
+  { code: 'NG', name: 'Nijerya' }, { code: 'KE', name: 'Kenya' }, { code: 'PK', name: 'Pakistan' },
+  { code: 'BD', name: 'Banglades' }, { code: 'IR', name: 'Iran' }, { code: 'CY', name: 'Kibris' },
+  { code: 'RS', name: 'Sirbistan' }, { code: 'HR', name: 'Hirvatistan' }, { code: 'SK', name: 'Slovakya' },
+  { code: 'SI', name: 'Slovenya' }, { code: 'LT', name: 'Litvanya' }, { code: 'LV', name: 'Letonya' },
+  { code: 'EE', name: 'Estonya' }, { code: 'MD', name: 'Moldova' }, { code: 'AL', name: 'Arnavutluk' },
+  { code: 'MK', name: 'Kuzey Makedonya' }, { code: 'BA', name: 'Bosna Hersek' }, { code: 'XK', name: 'Kosova' },
+  { code: 'TM', name: 'Turkmenistan' }, { code: 'KG', name: 'Kirgizistan' }, { code: 'TJ', name: 'Tacikistan' },
+];
+
+/** Aranabilir ulke secici (find ile): listede ara, sec; backend regionCode (2 harf) kullanir. */
+function CountrySelect({ value, onChange }: { value: string; onChange: (code: string) => void }) {
+  const [open, setOpen] = useState(false);
+  const [q, setQ] = useState('');
+  const selected = COUNTRIES.find((c) => c.code === value.toUpperCase());
+  const term = q.trim().toLowerCase();
+  const filtered = COUNTRIES.filter((c) => !term || c.name.toLowerCase().includes(term) || c.code.toLowerCase().includes(term)).slice(0, 60);
+  return (
+    <div className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((o) => !o)}
+        className="flex w-full items-center justify-between rounded-md border border-[#cbd5e1] px-3 py-2 text-[14px] hover:border-[#1e40af]"
+      >
+        <span className={selected ? '' : 'text-[#94a3b8]'}>{selected ? `${selected.name} (${selected.code})` : (value || 'Ulke sec / ara')}</span>
+        <ChevronDown className="h-4 w-4 text-[#94a3b8]" />
+      </button>
+      {open ? (
+        <>
+          <button type="button" aria-hidden onClick={() => setOpen(false)} className="fixed inset-0 z-10 cursor-default" />
+          <div className="absolute z-20 mt-1 w-full overflow-hidden rounded-md border border-[#cbd5e1] bg-white shadow-lg">
+            <div className="border-b border-[#e2e8f0] p-2">
+              <div className="flex items-center gap-2 rounded-md border border-[#cbd5e1] px-2 focus-within:border-[#1e40af]">
+                <Search className="h-3.5 w-3.5 text-[#94a3b8]" />
+                <input autoFocus value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ulke ara..." className="w-full bg-transparent py-1.5 text-[13px] outline-none" />
+              </div>
+            </div>
+            <div className="max-h-56 overflow-y-auto py-1">
+              {filtered.length ? filtered.map((c) => (
+                <button
+                  key={c.code}
+                  type="button"
+                  onClick={() => { onChange(c.code); setOpen(false); setQ(''); }}
+                  className={`flex w-full items-center justify-between px-3 py-1.5 text-left text-[13px] hover:bg-[#eff6ff] ${c.code === value.toUpperCase() ? 'bg-[#eff6ff] font-semibold text-[#1e40af]' : 'text-[#334155]'}`}
+                >
+                  <span>{c.name}</span>
+                  <span className="text-[11px] text-[#94a3b8]">{c.code}</span>
+                </button>
+              )) : <div className="px-3 py-2 text-[13px] text-[#94a3b8]">Sonuc yok</div>}
+            </div>
+          </div>
+        </>
+      ) : null}
+    </div>
+  );
+}
 
 /** Apollo benzeri serbest etiket girisi: yaz + Enter/virgul ile ekle, x ile sil. */
 function TagInput({ value, onChange, placeholder, suggestions, tone = 'primary' }: {
@@ -128,7 +204,7 @@ export default function KararVericilerPage() {
   const [cities, setCities] = useState<string[]>(['Istanbul', 'Ankara', 'Izmir']);
   const [target, setTarget] = useState(100);
   const [selectedTypes, setSelectedTypes] = useState<string[]>([]);
-  const [titleText, setTitleText] = useState(DEFAULT_TITLES.join('\n'));
+  const [titles, setTitles] = useState<string[]>(DEFAULT_TITLES);
   const [excludeText, setExcludeText] = useState('');
   const [apolloFallback, setApolloFallback] = useState(false);
   const [activeJobId, setActiveJobId] = useState<string | null>(null);
@@ -138,6 +214,16 @@ export default function KararVericilerPage() {
   const [error, setError] = useState<string | null>(null);
 
   const sectorTypes = presets?.business_types?.[sector] ?? [];
+  const titleSuggestions = useMemo(() => {
+    const all = [...DEFAULT_TITLES, ...(presets?.default_titles ?? []), ...(presets?.export_b2b_titles ?? [])];
+    const seen = new Set<string>();
+    const out: string[] = [];
+    for (const t of all) {
+      const key = t.toLowerCase();
+      if (!seen.has(key)) { seen.add(key); out.push(t); }
+    }
+    return out;
+  }, [presets?.default_titles, presets?.export_b2b_titles]);
   const activeJob = jobs.find((job) => job.id === activeJobId) ?? jobs[0] ?? null;
 
   const { data: results, isFetching: resultsFetching, refetch: refetchResults } = useListDecisionMakerResultsQuery({
@@ -176,7 +262,7 @@ export default function KararVericilerPage() {
         cities,
         country: (country || 'TR').trim().toUpperCase(),
         businessTypes: selectedTypes.length ? selectedTypes : undefined,
-        titles: splitLines(titleText),
+        titles: titles.length ? titles : DEFAULT_TITLES,
         excludeKeywords: splitLines(excludeText || (presets?.default_exclude_keywords ?? []).join('\n')),
         apolloFallback,
         targetCount: Math.min(Math.max(target, 10), 200),
@@ -254,21 +340,10 @@ export default function KararVericilerPage() {
                   ))}
                 </datalist>
               </label>
-              <label className="block">
+              <div className="block">
                 <span className="mb-1 block text-[12px] font-semibold text-[#475569]">Ulke</span>
-                <input
-                  list="country-options"
-                  value={country}
-                  onChange={(e) => setCountry(e.target.value)}
-                  placeholder="TR"
-                  className="w-full rounded-md border border-[#cbd5e1] px-3 py-2 text-[14px] uppercase"
-                />
-                <datalist id="country-options">
-                  {COUNTRY_SUGGEST.map((item) => (
-                    <option key={item} value={item} />
-                  ))}
-                </datalist>
-              </label>
+                <CountrySelect value={country} onChange={setCountry} />
+              </div>
               <label className="block">
                 <span className="mb-1 block text-[12px] font-semibold text-[#475569]">Hedef kayit</span>
                 <input type="number" min={10} max={200} value={target} onChange={(e) => setTarget(Number(e.target.value))} className="w-full rounded-md border border-[#cbd5e1] px-3 py-2 text-[14px]" />
@@ -298,10 +373,15 @@ export default function KararVericilerPage() {
           </div>
 
           <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-1">
-            <label className="block">
-              <span className="mb-1 block text-[12px] font-semibold text-[#475569]">Karar verici unvanlari</span>
-              <textarea value={titleText} onChange={(e) => setTitleText(e.target.value)} rows={5} className="w-full rounded-md border border-[#cbd5e1] px-3 py-2 text-[13px]" />
-            </label>
+            <div className="block">
+              <span className="mb-1 block text-[12px] font-semibold text-[#475569]">Karar verici unvanlari <span className="font-normal text-[#94a3b8]">— sec / yaz ekle, x ile kaldir</span></span>
+              <TagInput
+                value={titles}
+                onChange={setTitles}
+                placeholder="Unvan ekle (or. Founder, Purchasing Manager)"
+                suggestions={titleSuggestions}
+              />
+            </div>
             <label className="block">
               <span className="mb-1 block text-[12px] font-semibold text-[#475569]">Hariç tutulacak kelimeler</span>
               <textarea
