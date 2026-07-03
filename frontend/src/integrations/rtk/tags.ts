@@ -48,6 +48,7 @@ export const metahubTags = [
   'ByokKey',
   'DecisionMakerJobs',
   'DecisionMakerResults',
+  'OutreachLists',
 ] as const;
 
 export type MetahubTag = (typeof metahubTags)[number];

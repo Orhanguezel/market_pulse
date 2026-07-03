@@ -39,6 +39,7 @@ mock.module('@/modules/siteSettings', () => ({
 const osint = await import('../decision-maker/osint.service');
 const finder = await import('../decision-maker/finder.service');
 const persist = await import('../decision-maker/persist.service');
+const emailFinder = await import('../decision-maker/email-finder.service');
 const batch = await import('../decision-maker/candidate-enrichment.service');
 const outreach = await import('../outreach/outreach.service');
 const jobService = await import('../decision-maker/job.service');
@@ -282,6 +283,84 @@ describe('decision maker quality gates (edge cases)', () => {
     expect(supplement?.quality_status).toBe('excluded');
     expect(supplement?.exclude_reason).toContain('supplement');
     expect(pool.stats.excluded).toBeGreaterThanOrEqual(1);
+  });
+});
+
+describe('email finder (kademeli: ucretsiz scrape -> apollo fallback)', () => {
+  test('website scrape ile kisisel email bulur (ucretsiz, apollo cagrilmaz)', async () => {
+    let apolloCalled = false;
+    fetchMock.mockImplementation((url: string | URL | Request) => {
+      if (String(url).includes('apollo.io')) apolloCalled = true;
+      return Promise.resolve(new Response('{}', { status: 200 }));
+    });
+    scrape.mockImplementation(() => Promise.resolve({
+      success: true, text: '', html: '', final_url: 'https://acme.example',
+      data: { contact_emails: ['ayse.demir@acme.com', 'info@acme.com'] },
+    }));
+    const res = await emailFinder.findDecisionMakerEmail(
+      { id: 'dm-1', company_name: 'Acme', decision_maker_name: 'Ayse Demir', company_website: 'https://acme.example' },
+      { allowApollo: true },
+    );
+    expect(res.email).toBe('ayse.demir@acme.com');
+    expect(res.email_source).toBe('website');
+    expect(res.personal).toBe(true);
+    expect(apolloCalled).toBe(false);
+  });
+
+  test('scrape sadece generic bulursa + apollo acik -> apollo kisisel email', async () => {
+    env.APOLLO_API_KEY = 'apollo-test';
+    env.APOLLO_DECISION_MAKER_ENABLED = true;
+    scrape.mockImplementation(() => Promise.resolve({
+      success: true, text: '', html: '', final_url: 'https://acme.example',
+      data: { contact_emails: ['info@acme.com'] },
+    }));
+    fetchMock.mockImplementation((url: string | URL | Request) => {
+      if (String(url).includes('apollo.io')) {
+        return Promise.resolve(new Response(JSON.stringify({ person: { email: 'm.yilmaz@acme.com' } }), { status: 200 }));
+      }
+      return Promise.resolve(new Response('{}', { status: 200 }));
+    });
+    const res = await emailFinder.findDecisionMakerEmail(
+      { id: 'dm-2', company_name: 'Acme', decision_maker_name: 'Mehmet Yilmaz', company_website: 'https://acme.example' },
+      { allowApollo: true },
+    );
+    expect(res.email).toBe('m.yilmaz@acme.com');
+    expect(res.email_source).toBe('apollo');
+  });
+
+  test('apollo kapali -> generic scrape email kullanilir, apollo cagrilmaz', async () => {
+    let apolloCalled = false;
+    scrape.mockImplementation(() => Promise.resolve({
+      success: true, text: '', html: '', final_url: 'https://acme.example',
+      data: { contact_emails: ['info@acme.com'] },
+    }));
+    fetchMock.mockImplementation((url: string | URL | Request) => {
+      if (String(url).includes('apollo.io')) apolloCalled = true;
+      return Promise.resolve(new Response('{}', { status: 200 }));
+    });
+    const res = await emailFinder.findDecisionMakerEmail(
+      { id: 'dm-3', company_name: 'Acme', decision_maker_name: 'Mehmet Yilmaz', company_website: 'https://acme.example' },
+      { allowApollo: false },
+    );
+    expect(res.email).toBe('info@acme.com');
+    expect(res.email_source).toBe('website');
+    expect(apolloCalled).toBe(false);
+  });
+
+  test('findEmailsForDecisionMakers DB update tenant-scoped', async () => {
+    scrape.mockImplementation(() => Promise.resolve({
+      success: true, text: '', html: '', final_url: 'https://acme.example',
+      data: { contact_emails: ['ayse.demir@acme.com'] },
+    }));
+    const out = await runWithTenant('tenant-a', () => emailFinder.findEmailsForDecisionMakers(
+      [{ id: 'dm-1', company_name: 'Acme', decision_maker_name: 'Ayse Demir', company_website: 'https://acme.example' }],
+      { allowApollo: false },
+    ));
+    expect(out.found).toBe(1);
+    expect(out.apollo).toBe(0);
+    const upd = dbMock.poolExecutions.find((item) => item.sql.startsWith('UPDATE lead_decision_makers SET email'));
+    expect(upd?.sql).toContain('WHERE id = ? AND tenant_key = ?');
+    expect(upd?.values).toEqual(['ayse.demir@acme.com', 'website', 'dm-1', 'tenant-a']);
   });
 });
 

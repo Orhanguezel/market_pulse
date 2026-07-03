@@ -22,6 +22,8 @@ CREATE TABLE IF NOT EXISTS `lead_decision_makers` (
   `fit_note`             varchar(500) DEFAULT NULL,
   `confidence_score`     enum('A','B','C') NOT NULL DEFAULT 'C',
   `review_status`        enum('pending','verified','rejected','manual_review') NOT NULL DEFAULT 'pending',
+  `email`                varchar(255) DEFAULT NULL,         -- bulunan email (scrape/apollo/manual)
+  `email_source`         varchar(32)  DEFAULT NULL,         -- 'website' | 'apollo' | 'manual'
   `sector`               varchar(64)  DEFAULT NULL,
   `last_verified_at`     date         DEFAULT NULL,
   `created_at`           datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -57,6 +59,19 @@ SET @add_ldm_review := IF(
   'SELECT 1'
 );
 PREPARE stmt FROM @add_ldm_review;
+EXECUTE stmt;
+DEALLOCATE PREPARE stmt;
+
+-- Mevcut prod tablosuna email + email_source (outreach icin) — veri kaybisiz.
+SET @add_ldm_email := IF(
+  (SELECT COUNT(*) FROM information_schema.COLUMNS
+   WHERE TABLE_SCHEMA = DATABASE()
+     AND TABLE_NAME = 'lead_decision_makers'
+     AND COLUMN_NAME = 'email') = 0,
+  'ALTER TABLE `lead_decision_makers` ADD COLUMN `email` varchar(255) DEFAULT NULL AFTER `review_status`, ADD COLUMN `email_source` varchar(32) DEFAULT NULL AFTER `email`',
+  'SELECT 1'
+);
+PREPARE stmt FROM @add_ldm_email;
 EXECUTE stmt;
 DEALLOCATE PREPARE stmt;
 

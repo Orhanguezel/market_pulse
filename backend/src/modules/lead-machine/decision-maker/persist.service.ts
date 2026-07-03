@@ -121,6 +121,7 @@ export async function listSavedDecisionMakers(filters: number | DecisionMakerLis
   const [rows] = await pool.execute(
     `SELECT id, company_name, city, business_type, decision_maker_name, title, linkedin_profile_url,
             company_website, social_url, source_url, fit_note, confidence_score, review_status,
+            email, email_source,
             DATE_FORMAT(last_verified_at, '%Y-%m-%d') AS last_verified_at
        FROM lead_decision_makers
       WHERE ${where.join(' AND ')}
@@ -129,6 +130,65 @@ export async function listSavedDecisionMakers(filters: number | DecisionMakerLis
     values as never[],
   );
   return rows as DecisionMakerRow[];
+}
+
+type DecisionMakerSelector = { jobId?: string | null; ids?: string[]; confidence?: 'A' | 'B' | 'C' | null; limit?: number };
+
+function buildSelectorWhere(tenantKey: string, sel: DecisionMakerSelector) {
+  const where = ['tenant_key = ?'];
+  const values: unknown[] = [tenantKey];
+  if (sel.ids && sel.ids.length) {
+    where.push(`id IN (${sel.ids.map(() => '?').join(', ')})`);
+    values.push(...sel.ids.slice(0, 500));
+  } else if (sel.jobId) {
+    where.push('job_id = ?');
+    values.push(sel.jobId);
+  }
+  if (sel.confidence) {
+    where.push('confidence_score = ?');
+    values.push(sel.confidence);
+  }
+  where.push("review_status <> 'rejected'");
+  return { where, values };
+}
+
+export type EmailTargetRow = { id: string; company_name: string; decision_maker_name: string | null; company_website: string | null; email: string | null };
+
+/** Email bulma hedefleri (website'i olan satirlar). */
+export async function listDecisionMakerEmailTargets(sel: DecisionMakerSelector): Promise<EmailTargetRow[]> {
+  const tenantKey = getActiveTenantKey();
+  if (!tenantKey) return [];
+  const { where, values } = buildSelectorWhere(tenantKey, sel);
+  const limit = Math.min(Math.max(Number(sel.limit ?? 200), 1), 500);
+  const [rows] = await pool.execute(
+    `SELECT id, company_name, decision_maker_name, company_website, email
+       FROM lead_decision_makers
+      WHERE ${where.join(' AND ')}
+      ORDER BY FIELD(confidence_score,'A','B','C'), updated_at DESC
+      LIMIT ${limit}`,
+    values as never[],
+  );
+  return rows as EmailTargetRow[];
+}
+
+export type DecisionMakerRecipient = { id: string; email: string; decision_maker_name: string | null; company_name: string; city: string | null };
+
+/** Email'i OLAN karar vericiler → outreach alicilari. */
+export async function listDecisionMakerRecipients(sel: DecisionMakerSelector): Promise<DecisionMakerRecipient[]> {
+  const tenantKey = getActiveTenantKey();
+  if (!tenantKey) return [];
+  const { where, values } = buildSelectorWhere(tenantKey, sel);
+  where.push("email IS NOT NULL", "email <> ''");
+  const limit = Math.min(Math.max(Number(sel.limit ?? 500), 1), 1000);
+  const [rows] = await pool.execute(
+    `SELECT id, email, decision_maker_name, company_name, city
+       FROM lead_decision_makers
+      WHERE ${where.join(' AND ')}
+      ORDER BY FIELD(confidence_score,'A','B','C'), updated_at DESC
+      LIMIT ${limit}`,
+    values as never[],
+  );
+  return rows as DecisionMakerRecipient[];
 }
 
 /** Karar verici satırının manuel inceleme durumunu güncelle (tenant-scoped). */

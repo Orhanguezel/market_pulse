@@ -1,4 +1,5 @@
 import type { FastifyInstance } from 'fastify';
+import { pool } from '@/db/client';
 import { requireAuth } from '@/middleware/auth';
 import { requireModule } from '@/modules/entitlements';
 import { runWithTenant } from '@/core/tenant-context';
@@ -7,9 +8,13 @@ import { createAccount } from '@/modules/crm/accounts.service';
 import { createContact } from '@/modules/crm/contacts.service';
 import { createSearchJob, getSearchJob, insertCandidate, listSearchJobs } from '../_shared/db';
 import { runDecisionMakerFinder, buildSearchHints, SECTOR_PRESETS, DEFAULT_TITLES, EXPORT_B2B_TITLES, DEFAULT_EXCLUDE_KEYWORDS, type FinderParams, type CompanyQualityStatus, type DecisionMakerReviewStatus } from './finder.service';
-import { saveCompanyPool, saveDecisionMakers, listCompanyPool, listSavedDecisionMakers, updateDecisionMakerReview, updateCompanyPoolStatus } from './persist.service';
+import { saveCompanyPool, saveDecisionMakers, listCompanyPool, listSavedDecisionMakers, updateDecisionMakerReview, updateCompanyPoolStatus, listDecisionMakerEmailTargets, listDecisionMakerRecipients } from './persist.service';
 import { runDecisionMakerJob, isDecisionMakerJob } from './job.service';
 import { decisionMakersToCsv, decisionMakersToXlsx } from './export.service';
+import { findEmailsForDecisionMakers } from './email-finder.service';
+import { createList, addRecipients, getList } from '../outreach/bulk-list.repository';
+import { sendList } from '../outreach/bulk-list.service';
+import { listBulkLists, getBulkList, listBulkRecipients, generateBulkDrafts } from '../outreach/bulk-list.controller';
 
 /**
  * Karar Verici Bulma (OSINT) — Places havuzu + Apollo people-search.
@@ -149,6 +154,54 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
   });
 
   registerReviewRoutes(app, guard);
+
+  // ---- Outreach / Email (dashboard) — karar vericilerden email bul + toplu gönder ----
+
+  // Seçili karar vericiler için email bul (ÜCRETSİZ scrape → Apollo fallback). Arka planda.
+  app.post('/lead-machine/decision-makers/find-emails', guard, async (req, reply) => {
+    const body = (req.body ?? {}) as { job_id?: string; ids?: unknown; confidence?: string; allowApollo?: boolean };
+    const ids = Array.isArray(body.ids) ? body.ids.filter((x): x is string => typeof x === 'string') : undefined;
+    if (!body.job_id && !(ids && ids.length)) return reply.status(400).send({ error: { message: 'job_id_or_ids_required' } });
+    const tenantKey = getRequiredTenantKey();
+    const targets = await listDecisionMakerEmailTargets({ jobId: body.job_id, ids, confidence: parseConfidence(body.confidence), limit: 200 });
+    const withSite = targets.filter((t) => t.company_website);
+    const inputs = withSite.map((t) => ({ id: t.id, company_name: t.company_name, decision_maker_name: t.decision_maker_name, company_website: t.company_website }));
+    runInBackground(runWithTenant(tenantKey, () => findEmailsForDecisionMakers(inputs, { allowApollo: body.allowApollo === true })));
+    return reply.status(202).send({ queued: inputs.length, no_website: targets.length - withSite.length, allow_apollo: body.allowApollo === true });
+  });
+
+  // Email'i olan karar vericilerden outreach listesi oluştur.
+  app.post('/lead-machine/decision-makers/to-outreach-list', guard, async (req, reply) => {
+    const body = (req.body ?? {}) as { job_id?: string; ids?: unknown; confidence?: string; name?: string };
+    const ids = Array.isArray(body.ids) ? body.ids.filter((x): x is string => typeof x === 'string') : undefined;
+    if (!body.job_id && !(ids && ids.length)) return reply.status(400).send({ error: { message: 'job_id_or_ids_required' } });
+    const recipients = await listDecisionMakerRecipients({ jobId: body.job_id, ids, confidence: parseConfidence(body.confidence), limit: 1000 });
+    if (!recipients.length) return reply.status(400).send({ error: { message: 'no_recipients_with_email' } });
+    const tenantKey = getRequiredTenantKey();
+    const name = (typeof body.name === 'string' && body.name.trim()) ? body.name.trim() : `Karar Verici Listesi (${recipients.length})`;
+    const list = await createList(tenantKey, { name, source: 'decision_maker' });
+    const inserted = await addRecipients(tenantKey, list.id, recipients.map((r) => ({ email: r.email, name: r.decision_maker_name, company: r.company_name })));
+    await pool.execute('UPDATE outreach_recipient_lists SET total_count = ? WHERE tenant_key = ? AND id = ?', [inserted, tenantKey, list.id] as never[]);
+    return reply.status(201).send({ list, inserted });
+  });
+
+  // Outreach listeleri (tenant) — admin bulk-list controller handler'ları yeniden kullanılır.
+  app.get('/lead-machine/outreach/lists', guard, listBulkLists);
+  app.get('/lead-machine/outreach/lists/:id', guard, getBulkList);
+  app.get('/lead-machine/outreach/lists/:id/recipients', guard, listBulkRecipients);
+  app.post('/lead-machine/outreach/lists/:id/generate', guard, generateBulkDrafts);
+
+  // Toplu gönderim — rate-limitli, arka planda (istek bloklanmaz).
+  app.post('/lead-machine/outreach/lists/:id/send', guard, async (req, reply) => {
+    const listId = (req.params as { id: string }).id;
+    const body = (req.body ?? {}) as { ratePerMinute?: number };
+    const tenantKey = getRequiredTenantKey();
+    const list = await getList(tenantKey, listId);
+    if (!list) return reply.status(404).send({ error: { message: 'not_found' } });
+    const rate = typeof body.ratePerMinute === 'number' && body.ratePerMinute > 0 ? body.ratePerMinute : 30;
+    runInBackground(runWithTenant(tenantKey, () => sendList(tenantKey, listId, { ratePerMinute: rate })));
+    return reply.status(202).send({ queued: true, list_id: listId, rate_per_minute: rate });
+  });
 }
 
 function parseFinderBody(body: unknown): Partial<FinderParams> {

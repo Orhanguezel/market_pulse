@@ -83,7 +83,7 @@ function extractDecisionMakersFromText(text: string, sourceUrl: string): Decisio
   return results;
 }
 
-function rankEmail(email: string): number {
+export function rankEmail(email: string): number {
   const local = email.split('@')[0]?.toLowerCase() ?? '';
   if (/^[a-z]+\.[a-z]+$/.test(local)) return 5;         // firstname.lastname
   if (/^[a-z]\.[a-z]+$/.test(local)) return 4;          // f.lastname
@@ -94,7 +94,7 @@ function rankEmail(email: string): number {
   return 0;
 }
 
-function pickBestEmail(emails: string[]): string | null {
+export function pickBestEmail(emails: string[]): string | null {
   if (!emails.length) return null;
   const sorted = [...new Set(emails.map((e) => e.toLowerCase()))]
     .filter((e) => /@/.test(e) && !/no-?reply|do-?not-?reply|abuse@|postmaster@|webmaster@/i.test(e))
@@ -102,7 +102,7 @@ function pickBestEmail(emails: string[]): string | null {
   return sorted[0] ?? null;
 }
 
-interface DeepScrapeResult {
+export interface DeepScrapeResult {
   emails: string[];
   phones: string[];
   decisionMakers: DecisionMakerCandidate[];
@@ -110,11 +110,11 @@ interface DeepScrapeResult {
   pages_failed: string[];
 }
 
-function hasPersonalEmail(emails: string[]): boolean {
+export function hasPersonalEmail(emails: string[]): boolean {
   return emails.some((e) => rankEmail(e) >= 4);
 }
 
-async function deepScrapeContactInfo(websiteUrl: string): Promise<DeepScrapeResult> {
+export async function deepScrapeContactInfo(websiteUrl: string): Promise<DeepScrapeResult> {
   const out: DeepScrapeResult = { emails: [], phones: [], decisionMakers: [], pages_visited: [], pages_failed: [] };
   const baseUrl = websiteUrl.replace(/\/+$/, '');
   const seen = new Set<string>();

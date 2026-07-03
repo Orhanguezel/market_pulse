@@ -1,7 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
-import { AlertCircle, CheckCircle2, ChevronDown, Download, ExternalLink, Loader2, Play, Radar, RefreshCw, Search } from 'lucide-react';
+import { AlertCircle, CheckCircle2, ChevronDown, Download, ExternalLink, Loader2, Mail, Play, Radar, RefreshCw, Search, Send } from 'lucide-react';
+import { toast } from 'sonner';
 import {
   useGetDecisionMakerPresetsQuery,
   useLazyExportDecisionMakersCsvQuery,
@@ -10,6 +11,11 @@ import {
   useListDecisionMakerJobsQuery,
   useListDecisionMakerResultsQuery,
   useStartDecisionMakerJobMutation,
+  useFindDecisionMakerEmailsMutation,
+  useDecisionMakersToOutreachListMutation,
+  useListOutreachListsQuery,
+  useGenerateOutreachDraftsMutation,
+  useSendOutreachListMutation,
   type CompanyQualityStatus,
   type DecisionMakerConfidence,
   type DecisionMakerRow,
@@ -198,6 +204,11 @@ export default function KararVericilerPage() {
   const [startJob, startState] = useStartDecisionMakerJobMutation();
   const [exportCsv, exportState] = useLazyExportDecisionMakersCsvQuery();
   const [exportXlsx, exportXlsxState] = useLazyExportDecisionMakersXlsxQuery();
+  const [findEmails, findEmailsState] = useFindDecisionMakerEmailsMutation();
+  const [toOutreachList, toListState] = useDecisionMakersToOutreachListMutation();
+  const { data: outreachLists = [], refetch: refetchLists } = useListOutreachListsQuery(undefined, { pollingInterval: 15000 });
+  const [genDrafts, genState] = useGenerateOutreachDraftsMutation();
+  const [sendList, sendState] = useSendOutreachListMutation();
 
   const [sector, setSector] = useState('fitness');
   const [country, setCountry] = useState('TR');
@@ -212,6 +223,13 @@ export default function KararVericilerPage() {
   const [onlyLinkedin, setOnlyLinkedin] = useState(false);
   const [hideEmptyPeople, setHideEmptyPeople] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // Outreach / email state
+  const [selectedIds, setSelectedIds] = useState<Set<string>>(new Set());
+  const [emailApollo, setEmailApollo] = useState(false);
+  const [activeListId, setActiveListId] = useState<string | null>(null);
+  const [subjectTpl, setSubjectTpl] = useState('{company} icin is birligi');
+  const [bodyTpl, setBodyTpl] = useState('Merhaba {name},\n\n{company} olarak ...\n\nSaygilarimla,');
+  const [ratePerMinute, setRatePerMinute] = useState(30);
 
   const sectorTypes = presets?.business_types?.[sector] ?? [];
   const titleSuggestions = useMemo(() => {
@@ -252,6 +270,73 @@ export default function KararVericilerPage() {
     });
   }, [hideEmptyPeople, onlyLinkedin, results?.rows]);
   const poolRows = companyPool?.rows ?? [];
+  const selectableRows = useMemo(() => rows.filter((r): r is DecisionMakerRow & { id: string } => !!r.id), [rows]);
+  const withEmailCount = useMemo(() => rows.filter((r) => r.email).length, [rows]);
+  const activeList = outreachLists.find((l) => l.id === activeListId) ?? null;
+
+  const toggleSelect = (id: string) => {
+    setSelectedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id); else next.add(id);
+      return next;
+    });
+  };
+  const selectAllVisible = () => setSelectedIds(new Set(selectableRows.map((r) => r.id)));
+  const selectByConfidence = (conf: DecisionMakerConfidence) => setSelectedIds(new Set(selectableRows.filter((r) => r.confidence_score === conf).map((r) => r.id)));
+  const clearSelection = () => setSelectedIds(new Set());
+
+  const selectionBody = () => {
+    const ids = [...selectedIds];
+    return ids.length ? { ids } : { job_id: activeJob?.id, confidence };
+  };
+
+  const handleFindEmails = async () => {
+    if (!activeJob?.id && !selectedIds.size) return;
+    setError(null);
+    try {
+      const res = await findEmails({ ...selectionBody(), allowApollo: emailApollo }).unwrap();
+      toast.success(`Email bulma basladi: ${res.queued} firma taraniyor${res.no_website ? ` (${res.no_website} website yok)` : ''}`);
+      window.setTimeout(() => refetchResults(), 8000);
+      window.setTimeout(() => refetchResults(), 20000);
+    } catch {
+      setError('Email bulma baslatilamadi.');
+    }
+  };
+
+  const handleToOutreachList = async () => {
+    if (!activeJob?.id && !selectedIds.size) return;
+    setError(null);
+    try {
+      const res = await toOutreachList(selectionBody()).unwrap();
+      setActiveListId(res.list.id);
+      await refetchLists();
+      toast.success(`Liste olusturuldu: ${res.inserted} alici (email'i olanlar)`);
+    } catch {
+      setError('Liste olusturulamadi (email’i olan lead yok olabilir).');
+    }
+  };
+
+  const handleGenerateDrafts = async () => {
+    if (!activeListId) return;
+    try {
+      const res = await genDrafts({ id: activeListId, subjectTemplate: subjectTpl, bodyTemplate: bodyTpl }).unwrap();
+      toast.success(`${res.generated} taslak uretildi${res.skipped ? `, ${res.skipped} atlandi` : ''}`);
+      await refetchLists();
+    } catch {
+      toast.error('Taslak uretilemedi.');
+    }
+  };
+
+  const handleSendList = async () => {
+    if (!activeListId) return;
+    try {
+      const res = await sendList({ id: activeListId, ratePerMinute }).unwrap();
+      toast.success(`Toplu gonderim basladi (${res.rate_per_minute}/dk). Durum listede guncellenecek.`);
+      await refetchLists();
+    } catch {
+      toast.error('Gonderim baslatilamadi.');
+    }
+  };
 
   const run = async () => {
     if (!cities.length || startState.isLoading) return;
@@ -507,40 +592,97 @@ export default function KararVericilerPage() {
           </div>
         </div>
 
+        <div className="flex flex-wrap items-center gap-2 border-b border-[#e2e8f0] bg-[#f8fafc]/60 px-4 py-3">
+          <span className="text-[12px] font-semibold text-[#475569]">
+            {selectedIds.size ? `${selectedIds.size} secili` : 'Secim yok'} · {withEmailCount}/{rows.length} email bulundu
+          </span>
+          <div className="mx-1 h-4 w-px bg-[#cbd5e1]" />
+          <button type="button" onClick={selectAllVisible} className="rounded-md border border-[#cbd5e1] px-2.5 py-1.5 text-[11px] font-semibold text-[#475569] hover:border-[#1e40af]">Tumunu sec</button>
+          <button type="button" onClick={() => selectByConfidence('A')} className="rounded-md border border-[#cbd5e1] px-2.5 py-1.5 text-[11px] font-semibold text-[#166534] hover:border-[#16a34a]">Tum A</button>
+          <button type="button" onClick={() => selectByConfidence('B')} className="rounded-md border border-[#cbd5e1] px-2.5 py-1.5 text-[11px] font-semibold text-[#854d0e] hover:border-[#ca8a04]">Tum B</button>
+          {selectedIds.size ? <button type="button" onClick={clearSelection} className="rounded-md border border-[#cbd5e1] px-2.5 py-1.5 text-[11px] font-semibold text-[#475569] hover:border-[#1e40af]">Temizle</button> : null}
+          <div className="mx-1 h-4 w-px bg-[#cbd5e1]" />
+          <label className="inline-flex cursor-pointer items-center gap-1.5 text-[11px] font-semibold text-[#475569]" title="Ucretsiz website scrape yeterli degilse Apollo ile karar vericinin kisisel email'ini bul (kredi harcar)">
+            <input type="checkbox" checked={emailApollo} onChange={(e) => setEmailApollo(e.target.checked)} className="h-3.5 w-3.5" />
+            Apollo email (kredi)
+          </label>
+          <button
+            type="button"
+            onClick={handleFindEmails}
+            disabled={findEmailsState.isLoading || (!activeJob?.id && !selectedIds.size)}
+            className="inline-flex items-center gap-2 rounded-md bg-[#0f766e] px-3 py-2 text-[12px] font-semibold text-white hover:bg-[#0d5f59] disabled:opacity-50"
+          >
+            {findEmailsState.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Search className="h-4 w-4" />}
+            Email Bul {selectedIds.size ? `(${selectedIds.size})` : '(tumu)'}
+          </button>
+          <button
+            type="button"
+            onClick={handleToOutreachList}
+            disabled={toListState.isLoading || (!activeJob?.id && !selectedIds.size)}
+            className="inline-flex items-center gap-2 rounded-md border border-[#1e40af] px-3 py-2 text-[12px] font-semibold text-[#1e40af] hover:bg-[#eff6ff] disabled:opacity-50"
+          >
+            {toListState.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
+            Outreach Listesine Ekle
+          </button>
+        </div>
+
         {rows.length ? (
           <div className="overflow-x-auto">
             <table className="w-full min-w-[980px] text-left text-[13px]">
               <thead>
                 <tr className="border-b border-[#e2e8f0] bg-[#f8fafc] text-[11.5px] uppercase text-[#64748b]">
+                  <th className="px-3 py-2.5">
+                    <input
+                      type="checkbox"
+                      aria-label="Tumunu sec"
+                      checked={selectableRows.length > 0 && selectedIds.size === selectableRows.length}
+                      onChange={(e) => (e.target.checked ? selectAllVisible() : clearSelection())}
+                      className="h-4 w-4"
+                    />
+                  </th>
                   <th className="px-3 py-2.5">Firma</th>
                   <th className="px-3 py-2.5">Sehir</th>
-                  <th className="px-3 py-2.5">Tur</th>
                   <th className="px-3 py-2.5">Karar Verici</th>
                   <th className="px-3 py-2.5">Unvan</th>
+                  <th className="px-3 py-2.5">Email</th>
                   <th className="px-3 py-2.5">Kanallar</th>
                   <th className="px-3 py-2.5">Skor</th>
-                  <th className="px-3 py-2.5">Not</th>
                 </tr>
               </thead>
               <tbody>
                 {rows.map((row: DecisionMakerRow, index) => (
-                  <tr key={`${row.company_name}-${row.linkedin_profile_url ?? index}`} className="border-b border-[#f1f5f9] last:border-0 hover:bg-[#eff6ff]/40">
+                  <tr key={row.id ?? `${row.company_name}-${row.linkedin_profile_url ?? index}`} className={`border-b border-[#f1f5f9] last:border-0 hover:bg-[#eff6ff]/40 ${row.id && selectedIds.has(row.id) ? 'bg-[#eff6ff]/60' : ''}`}>
+                    <td className="px-3 py-2.5">
+                      <input
+                        type="checkbox"
+                        aria-label={`${row.company_name} sec`}
+                        disabled={!row.id}
+                        checked={!!row.id && selectedIds.has(row.id)}
+                        onChange={() => row.id && toggleSelect(row.id)}
+                        className="h-4 w-4"
+                      />
+                    </td>
                     <td className="px-3 py-2.5 font-semibold">{row.company_name}</td>
                     <td className="px-3 py-2.5 text-[#475569]">{row.city || '-'}</td>
-                    <td className="px-3 py-2.5 text-[#475569]">{row.business_type || '-'}</td>
                     <td className="px-3 py-2.5">{row.decision_maker_name || <span className="text-[#94a3b8]">Manuel kontrol</span>}</td>
                     <td className="px-3 py-2.5 text-[#475569]">{row.title || '-'}</td>
+                    <td className="px-3 py-2.5">
+                      {row.email ? (
+                        <span className="inline-flex items-center gap-1.5">
+                          <a href={`mailto:${row.email}`} className="font-semibold text-[#1e40af] hover:underline">{row.email}</a>
+                          {row.email_source ? <span className={`rounded px-1.5 py-0.5 text-[9px] font-bold uppercase ${row.email_source === 'apollo' ? 'bg-[#fef3c7] text-[#92400e]' : 'bg-[#dcfce7] text-[#166534]'}`}>{row.email_source === 'apollo' ? 'Apollo' : 'Web'}</span> : null}
+                        </span>
+                      ) : <span className="text-[#94a3b8]">-</span>}
+                    </td>
                     <td className="px-3 py-2.5">
                       <div className="flex flex-wrap gap-2">
                         {row.linkedin_profile_url ? <a href={row.linkedin_profile_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-semibold text-[#1e40af] hover:underline">LinkedIn <ExternalLink className="h-3 w-3" /></a> : null}
                         {row.company_website ? <a href={row.company_website} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-semibold text-[#1e40af] hover:underline">Web <ExternalLink className="h-3 w-3" /></a> : null}
-                        {row.source_url && row.source_url !== row.linkedin_profile_url ? <a href={row.source_url} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1 font-semibold text-[#475569] hover:underline">Kaynak <ExternalLink className="h-3 w-3" /></a> : null}
                       </div>
                     </td>
                     <td className="px-3 py-2.5">
                       <span className={`rounded-md px-2 py-1 text-[11px] font-bold ${CONF_CLS[row.confidence_score]}`}>{row.confidence_score}</span>
                     </td>
-                    <td className="max-w-[260px] px-3 py-2.5 text-[12px] text-[#64748b]">{row.fit_note || '-'}</td>
                   </tr>
                 ))}
               </tbody>
@@ -555,6 +697,61 @@ export default function KararVericilerPage() {
           </div>
         )}
       </div>
+
+      {(outreachLists.length > 0 || activeListId) ? (
+        <div className="rounded-lg border border-[#e2e8f0] bg-white">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e2e8f0] px-4 py-3">
+            <div>
+              <h2 className="flex items-center gap-2 text-[15px] font-bold"><Send className="h-4 w-4 text-[#0f766e]" /> Outreach / Email Gonderimi</h2>
+              <p className="mt-0.5 text-[12px] text-[#64748b]">Listeye email’i bulunan karar vericiler eklenir. Sablonda {'{name}'} / {'{company}'} degiskenleri kullanilabilir.</p>
+            </div>
+            <select
+              value={activeListId ?? ''}
+              onChange={(e) => setActiveListId(e.target.value || null)}
+              className="max-w-[280px] rounded-md border border-[#cbd5e1] px-2 py-2 text-[12px]"
+            >
+              <option value="">Liste sec...</option>
+              {outreachLists.map((list) => (
+                <option key={list.id} value={list.id}>{list.name} · {list.sent_count}/{list.total_count} gonderildi · {list.status}</option>
+              ))}
+            </select>
+          </div>
+
+          {activeList ? (
+            <div className="space-y-4 p-4">
+              <div className="grid gap-3 rounded-md bg-[#f8fafc] p-3 text-[12px] text-[#475569] sm:grid-cols-4">
+                <div><span className="block text-[10px] uppercase text-[#94a3b8]">Alici</span><span className="font-semibold">{activeList.total_count}</span></div>
+                <div><span className="block text-[10px] uppercase text-[#94a3b8]">Gonderildi</span><span className="font-semibold text-[#166534]">{activeList.sent_count}</span></div>
+                <div><span className="block text-[10px] uppercase text-[#94a3b8]">Durum</span><span className="font-semibold">{activeList.status}</span></div>
+                <div><span className="block text-[10px] uppercase text-[#94a3b8]">Hiz (dk)</span>
+                  <input type="number" min={1} max={120} value={ratePerMinute} onChange={(e) => setRatePerMinute(Number(e.target.value))} className="w-20 rounded border border-[#cbd5e1] px-2 py-1 text-[12px]" />
+                </div>
+              </div>
+              <label className="block">
+                <span className="mb-1 block text-[12px] font-semibold text-[#475569]">Konu sablonu</span>
+                <input value={subjectTpl} onChange={(e) => setSubjectTpl(e.target.value)} className="w-full rounded-md border border-[#cbd5e1] px-3 py-2 text-[13px]" />
+              </label>
+              <label className="block">
+                <span className="mb-1 block text-[12px] font-semibold text-[#475569]">Metin sablonu</span>
+                <textarea value={bodyTpl} onChange={(e) => setBodyTpl(e.target.value)} rows={6} className="w-full rounded-md border border-[#cbd5e1] px-3 py-2 text-[13px]" />
+              </label>
+              <div className="flex flex-wrap items-center gap-3">
+                <button type="button" onClick={handleGenerateDrafts} disabled={genState.isLoading} className="inline-flex items-center gap-2 rounded-md border border-[#1e40af] px-4 py-2 text-[13px] font-semibold text-[#1e40af] hover:bg-[#eff6ff] disabled:opacity-50">
+                  {genState.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
+                  Taslak Uret
+                </button>
+                <button type="button" onClick={handleSendList} disabled={sendState.isLoading} className="inline-flex items-center gap-2 rounded-md bg-[#0f766e] px-4 py-2 text-[13px] font-semibold text-white hover:bg-[#0d5f59] disabled:opacity-50">
+                  {sendState.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                  Toplu Gonder ({ratePerMinute}/dk)
+                </button>
+                <span className="text-[12px] text-[#64748b]">Once “Taslak Uret”, sonra “Toplu Gonder”. Gonderim arka planda, hiz limitli calisir.</span>
+              </div>
+            </div>
+          ) : (
+            <div className="px-4 py-6 text-center text-[13px] text-[#64748b]">Bir liste secin veya yukaridan “Outreach Listesine Ekle” ile olusturun.</div>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -4,6 +4,7 @@ export type DecisionMakerConfidence = 'A' | 'B' | 'C';
 export type CompanyQualityStatus = 'qualified' | 'possible' | 'manual_review' | 'excluded';
 
 export type DecisionMakerRow = {
+  id?: string;
   company_name: string;
   city: string;
   business_type: string;
@@ -15,7 +16,19 @@ export type DecisionMakerRow = {
   source_url: string | null;
   fit_note: string;
   confidence_score: DecisionMakerConfidence;
+  review_status?: 'pending' | 'verified' | 'rejected' | 'manual_review';
+  email?: string | null;
+  email_source?: string | null;
   last_verified_at: string;
+};
+
+export type OutreachList = {
+  id: string;
+  name: string;
+  status: string;
+  total_count: number;
+  sent_count: number;
+  created_at: string;
 };
 
 export type FindResult = {
@@ -160,6 +173,31 @@ export const decisionMakerApi = baseApi.injectEndpoints({
       query: () => ({ url: '/lead-machine/decision-makers/saved', method: 'GET' }),
       providesTags: ['DecisionMakerResults'],
     }),
+
+    // ---- Outreach / Email ----
+    findDecisionMakerEmails: b.mutation<{ queued: number; no_website: number; allow_apollo: boolean }, { job_id?: string; ids?: string[]; confidence?: DecisionMakerConfidence | 'all'; allowApollo?: boolean }>({
+      query: (body) => ({ url: '/lead-machine/decision-makers/find-emails', method: 'POST', body }),
+    }),
+    decisionMakersToOutreachList: b.mutation<{ list: OutreachList; inserted: number }, { job_id?: string; ids?: string[]; confidence?: DecisionMakerConfidence | 'all'; name?: string }>({
+      query: (body) => ({ url: '/lead-machine/decision-makers/to-outreach-list', method: 'POST', body }),
+      invalidatesTags: ['OutreachLists'],
+    }),
+    listOutreachLists: b.query<OutreachList[], void>({
+      query: () => ({ url: '/lead-machine/outreach/lists', method: 'GET' }),
+      providesTags: ['OutreachLists'],
+    }),
+    getOutreachList: b.query<OutreachList, string>({
+      query: (id) => ({ url: `/lead-machine/outreach/lists/${id}`, method: 'GET' }),
+      providesTags: ['OutreachLists'],
+    }),
+    generateOutreachDrafts: b.mutation<{ listId: string; generated: number; skipped: number }, { id: string; subjectTemplate: string; bodyTemplate: string }>({
+      query: ({ id, ...body }) => ({ url: `/lead-machine/outreach/lists/${id}/generate`, method: 'POST', body }),
+      invalidatesTags: ['OutreachLists'],
+    }),
+    sendOutreachList: b.mutation<{ queued: boolean; list_id: string; rate_per_minute: number }, { id: string; ratePerMinute?: number }>({
+      query: ({ id, ...body }) => ({ url: `/lead-machine/outreach/lists/${id}/send`, method: 'POST', body }),
+      invalidatesTags: ['OutreachLists'],
+    }),
   }),
   overrideExisting: true,
 });
@@ -177,4 +215,10 @@ export const {
   useExportDecisionMakersXlsxQuery,
   useLazyExportDecisionMakersXlsxQuery,
   useGetSavedDecisionMakersQuery,
+  useFindDecisionMakerEmailsMutation,
+  useDecisionMakersToOutreachListMutation,
+  useListOutreachListsQuery,
+  useGetOutreachListQuery,
+  useGenerateOutreachDraftsMutation,
+  useSendOutreachListMutation,
 } = decisionMakerApi;

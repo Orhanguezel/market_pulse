@@ -79,6 +79,8 @@ export type DecisionMakerRow = {
   fit_note: string;
   confidence_score: 'A' | 'B' | 'C';
   review_status?: DecisionMakerReviewStatus;
+  email?: string | null;
+  email_source?: string | null;
   last_verified_at: string;
 };
 
