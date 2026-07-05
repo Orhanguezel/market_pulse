@@ -1,8 +1,15 @@
 import fp from 'fastify-plugin';
 import type { FastifyPluginAsync } from 'fastify';
 import { env } from '@/core/env';
-import { enterTenant } from '@/core/tenant-context';
+import { enterTenant, enterUser } from '@/core/tenant-context';
 import type { JwtUser } from '@/middleware/auth';
+
+function readUserId(user: unknown): string | undefined {
+  if (typeof user !== 'object' || user === null || Array.isArray(user)) return undefined;
+  const record = user as Record<string, unknown>;
+  const sub = record.sub ?? record.id;
+  return sub ? String(sub) : undefined;
+}
 
 function firstString(value: unknown): string | undefined {
   if (Array.isArray(value)) return firstString(value[0]);
@@ -65,16 +72,23 @@ function resolveTenant(req: { query?: unknown; headers: Record<string, unknown>;
 // fp ile sarılır ki onRequest hook'u izole edilmesin ve TÜM route'lara uygulansın.
 // (Sarılmazsa hook sadece bu plugin'in alt scope'una etki eder → route'lar tenant context görmez.)
 const tenantContextImpl: FastifyPluginAsync = async (app) => {
-  app.addHook('onRequest', (req, reply, done) => {
+  app.addHook('onRequest', async (req, reply) => {
     const resolved = resolveTenant(req);
     if (!resolved.ok) {
-      void reply.code(403).send({ error: { message: resolved.message } });
-      return;
+      return reply.code(403).send({ error: { message: resolved.message } });
     }
     // tenant undefined ise (super-admin secim yapmadi) store'a yazma; okumalar env'e duser,
     // yazmalar getRequiredTenantKey ile reddedilir.
     if (resolved.tenant) enterTenant(resolved.tenant);
-    done();
+    // Kullanici context'i (owner-scope icin): requireAuth preHandler'da enterUser yapiyor ama
+    // AsyncLocalStorage.enterWith preHandler'dan handler'a tasinmadigi icin getRequestUserId()
+    // null donuyordu (owner-scoped tasks/reminders 401). Burada onRequest'te, tenant COZULDUKTEN
+    // sonra best-effort verify + enterUser: tenant cozumu degismez, user id guvenilir set edilir.
+    let uid = readUserId(req.user);
+    if (!uid && (typeof req.headers.authorization === 'string' || Boolean(req.cookies?.access_token))) {
+      try { await req.jwtVerify(); uid = readUserId(req.user); } catch { /* public/gecersiz token: user context yok */ }
+    }
+    if (uid) enterUser(uid);
   });
 };
 
