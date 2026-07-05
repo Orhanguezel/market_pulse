@@ -1,6 +1,7 @@
 'use client';
 
 import React from 'react';
+import { toast } from 'sonner';
 import { BellRing, Check, ChevronLeft, ChevronRight, Loader2, Plus, Trash2 } from 'lucide-react';
 import {
   useCreateCrmReminderMutation,
@@ -81,24 +82,38 @@ export default function TakvimPage() {
     return tasks.filter((t) => { if (!isTaskOpen(t) || !t.due_at) return false; const d = new Date(t.due_at); return d >= base && d < in7; }).length;
   }, [tasks]);
 
+  const failMsg = (e: unknown, fallback: string) => {
+    const status = (e as { status?: number } | undefined)?.status;
+    return status === 401 ? 'Oturumun süresi dolmuş görünüyor. Sayfayı yenileyip (Ctrl+Shift+R) tekrar deneyin.' : fallback;
+  };
   const addTask = async () => {
     const subject = taskInput.trim(); if (!subject) return;
-    await createTask({ subject, priority: taskPriority, due_at: `${selectedKey} 09:00:00`, status: 'open' }).unwrap().catch(() => undefined);
-    setTaskInput('');
+    try {
+      await createTask({ subject, priority: taskPriority, due_at: `${selectedKey} 09:00:00`, status: 'open' }).unwrap();
+      setTaskInput('');
+      toast.success('Görev eklendi');
+    } catch (e) { toast.error(failMsg(e, 'Görev eklenemedi.')); }
   };
   const addReminder = async () => {
     const title = reminderInput.trim(); if (!title) return;
-    await createReminder({ title, remind_at: `${selectedKey} 09:00:00`, status: 'scheduled' }).unwrap().catch(() => undefined);
-    setReminderInput('');
+    try {
+      await createReminder({ title, remind_at: `${selectedKey} 09:00:00`, status: 'scheduled' }).unwrap();
+      setReminderInput('');
+      toast.success('Hatırlatma eklendi');
+    } catch (e) { toast.error(failMsg(e, 'Hatırlatma eklenemedi.')); }
   };
   const toggleTask = async (t: CrmTask) => {
-    await updateTask({ id: t.id, patch: isTaskDone(t) ? { status: 'open', completed_at: null } : { status: 'done', completed_at: new Date().toISOString() } }).unwrap().catch(() => undefined);
+    try {
+      await updateTask({ id: t.id, patch: isTaskDone(t) ? { status: 'open', completed_at: null } : { status: 'done', completed_at: new Date().toISOString() } }).unwrap();
+    } catch (e) { toast.error(failMsg(e, 'Görev güncellenemedi.')); }
   };
   const reschedule = async (targetKey: string) => {
     const item = dragItem; setDragItem(null); setDragOverKey(null);
     if (!item) return;
-    if (item.kind === 'task') await updateTask({ id: item.id, patch: { due_at: `${targetKey} 09:00:00` } }).unwrap().catch(() => undefined);
-    else await updateReminder({ id: item.id, patch: { remind_at: `${targetKey} 09:00:00` } }).unwrap().catch(() => undefined);
+    try {
+      if (item.kind === 'task') await updateTask({ id: item.id, patch: { due_at: `${targetKey} 09:00:00` } }).unwrap();
+      else await updateReminder({ id: item.id, patch: { remind_at: `${targetKey} 09:00:00` } }).unwrap();
+    } catch (e) { toast.error(failMsg(e, 'Taşınamadı.')); }
   };
 
   const [dy, dm, dd] = selectedKey.split('-').map(Number);
