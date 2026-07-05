@@ -428,7 +428,7 @@ function AccountsPanel() {
                   <p className="mt-1 text-[13px] text-[#64748b]">{account.email} · {account.provider === 'gmail_oauth' ? 'Gmail OAuth' : 'IMAP/SMTP'}</p>
                 </div>
                 <div className="flex items-center gap-2">
-                  <span className={`rounded-full px-2 py-1 text-[12px] font-semibold ${account.status === 'connected' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{account.status}</span>
+                  <span className={`rounded-full px-2 py-1 text-[12px] font-semibold ${account.status === 'connected' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{STATUS_LABELS[account.status] ?? account.status}</span>
                   <button disabled={deleteState.isLoading} onClick={() => deleteAccount(account.id).unwrap().then(() => refetch())} className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-rose-200 text-rose-700 disabled:opacity-50">
                     <Trash2 className="h-4 w-4" />
                   </button>
@@ -466,6 +466,13 @@ function AccountsPanel() {
   );
 }
 
+const STATUS_LABELS: Record<string, string> = {
+  connected: 'Bağlı',
+  expired: 'Süresi doldu',
+  error: 'Hata',
+  disconnected: 'Bağlantı kesildi',
+};
+
 function InboxPanel() {
   const [folder, setFolder] = React.useState('inbox');
   const [selected, setSelected] = React.useState<MailInboxMessage | null>(null);
@@ -494,8 +501,8 @@ function InboxPanel() {
           <button onClick={() => refetch()} className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[#cbd5e1] text-[#334155]"><RefreshCw className="h-4 w-4" /></button>
         </div>
         <div className="grid grid-cols-2 gap-2 border-b border-[#e2e8f0] p-3">
-          {['inbox', 'sent', 'drafts', 'trash'].map((item) => (
-            <button key={item} onClick={() => { setFolder(item); setSelected(null); }} className={`h-8 rounded-md text-[13px] font-semibold ${folder === item ? 'bg-[#1e40af] text-white' : 'border border-[#cbd5e1] text-[#475569]'}`}>{item}</button>
+          {([['inbox', 'Gelen'], ['sent', 'Gönderilen'], ['drafts', 'Taslaklar'], ['trash', 'Çöp']] as const).map(([item, label]) => (
+            <button key={item} onClick={() => { setFolder(item); setSelected(null); }} className={`h-8 rounded-md text-[13px] font-semibold ${folder === item ? 'bg-[#1e40af] text-white' : 'border border-[#cbd5e1] text-[#475569]'}`}>{label}</button>
           ))}
         </div>
         <div className="max-h-[640px] overflow-auto">
@@ -515,18 +522,32 @@ function InboxPanel() {
         </div>
       </aside>
 
-      <main className="rounded-lg border border-[#e2e8f0] bg-white">
-        <div className="border-b border-[#e2e8f0] px-4 py-3">
-          <h2 className="truncate text-[15px] font-bold text-[#0f172a]">{message?.subject || selected?.subject || 'Mesaj seçin'}</h2>
-          <p className="mt-1 truncate text-[12px] text-[#64748b]">{message?.from || selected?.from || ''}</p>
-        </div>
-        <div className="p-4 text-[#0f172a]">
-          {message?.html ? (
-            <iframe title="mail-message" sandbox="" srcDoc={message.html} className="h-[560px] w-full rounded-md border border-[#e2e8f0] bg-white" />
-          ) : (
-            <pre className="whitespace-pre-wrap font-sans text-[13px]">{message?.text || selected?.snippet || 'Listeden bir mesaj seçin.'}</pre>
-          )}
-        </div>
+      <main className="flex min-h-[560px] flex-col rounded-lg border border-[#e2e8f0] bg-white">
+        {!selected ? (
+          <div className="flex flex-1 flex-col items-center justify-center gap-3 p-8 text-center">
+            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#eff6ff]">
+              <Inbox className="h-6 w-6 text-[#1e40af]" />
+            </div>
+            <p className="text-[14px] font-semibold text-[#334155]">Okumak için bir mesaj seçin</p>
+            <p className="text-[13px] text-[#94a3b8]">Soldaki listeden bir e-postaya tıklayın.</p>
+          </div>
+        ) : (
+          <>
+            <div className="border-b border-[#e2e8f0] px-4 py-3">
+              <h2 className="truncate text-[15px] font-bold text-[#0f172a]">{message?.subject || selected.subject || '(konu yok)'}</h2>
+              <p className="mt-1 truncate text-[12px] text-[#64748b]">{message?.from || selected.from || ''}</p>
+            </div>
+            <div className="flex-1 p-4 text-[#0f172a]">
+              {message?.html ? (
+                <iframe title="mail-message" sandbox="" srcDoc={message.html} className="h-[560px] w-full rounded-md border border-[#e2e8f0] bg-white" />
+              ) : message?.text || selected.snippet ? (
+                <pre className="whitespace-pre-wrap font-sans text-[13px]">{message?.text || selected.snippet}</pre>
+              ) : (
+                <div className="flex items-center justify-center py-12"><Loader2 className="h-5 w-5 animate-spin text-[#1e40af]" /></div>
+              )}
+            </div>
+          </>
+        )}
       </main>
 
       <aside className="rounded-lg border border-[#e2e8f0] bg-white">
