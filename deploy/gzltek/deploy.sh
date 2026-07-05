@@ -22,7 +22,7 @@ cd "$ROOT/frontend" && bun install && bun run build
 echo "==> [4/7] admin build"
 cd "$ROOT/admin_panel" && bun install && bun run build
 
-echo "==> [5/7] db seed (idempotent, no-drop)"
+echo "==> [5/8] db seed (idempotent, no-drop)"
 cd "$ROOT/backend"
 if [ ! -e .env ] && [ -f .env.production ]; then
   ln -s .env.production .env
@@ -33,10 +33,13 @@ set -a
 set +a
 bun run src/db/seed/index.ts --no-drop
 
-echo "==> [6/7] tenant scope guard"
+echo "==> [6/8] db migrate (idempotent, additive)"
+cd "$ROOT/backend" && bun run db:migrate
+
+echo "==> [7/8] tenant scope guard"
 cd "$ROOT/backend" && bun run tenant:guard
 
-echo "==> [7/7] pm2 reload"
+echo "==> [8/8] pm2 reload"
 pm2 reload "$ECO/backend.ecosystem.config.cjs"  || pm2 start "$ECO/backend.ecosystem.config.cjs"
 pm2 reload "$ECO/frontend.ecosystem.config.cjs" || pm2 start "$ECO/frontend.ecosystem.config.cjs"
 pm2 reload "$ECO/admin.ecosystem.config.cjs"    || pm2 start "$ECO/admin.ecosystem.config.cjs"
