@@ -33,11 +33,38 @@ export interface TenantModule {
   category?: string;
 }
 
+export interface UserModuleRow {
+  module_key: string;
+  name: string;
+  category: string | null;
+  tenant_status: ModuleStatus;
+  default_on: boolean;
+  user_status: 'active' | 'suspended' | 'none';
+}
+
+export interface UserModulesResponse {
+  tenant_key: string;
+  user_id: string;
+  modules: UserModuleRow[];
+}
+
 export const entitlementsAdminApi = baseApi.injectEndpoints({
   endpoints: (b) => ({
     listModuleCatalog: b.query<ModuleCatalogItem[], void>({
       query: () => ({ url: '/entitlements/catalog' }),
       providesTags: ['ModuleEntitlements' as never],
+    }),
+    getUserModules: b.query<UserModulesResponse, { tenantKey: string; userId: string }>({
+      query: ({ tenantKey, userId }) => ({ url: `/entitlements/tenant/${tenantKey}/user/${userId}` }),
+      providesTags: ['ModuleEntitlements' as never],
+    }),
+    setUserModule: b.mutation<{ ok: boolean }, { tenantKey: string; userId: string; module_key: string; status: 'active' | 'suspended' }>({
+      query: ({ tenantKey, userId, module_key, status }) => ({
+        url: `/entitlements/tenant/${tenantKey}/user/${userId}/set`,
+        method: 'POST',
+        body: { module_key, status },
+      }),
+      invalidatesTags: ['ModuleEntitlements' as never],
     }),
     listTenantModules: b.query<TenantModule[], string>({
       query: (tenantKey) => ({ url: `/entitlements/tenant/${tenantKey}` }),
@@ -74,4 +101,6 @@ export const {
   useListTenantModulesQuery,
   useActivateTenantModuleMutation,
   useSuspendTenantModuleMutation,
+  useGetUserModulesQuery,
+  useSetUserModuleMutation,
 } = entitlementsAdminApi;

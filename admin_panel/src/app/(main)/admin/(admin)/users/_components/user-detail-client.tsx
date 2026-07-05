@@ -26,6 +26,8 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { getSelectedTenantKey } from '@/integrations/core/tenant';
+import { useGetUserModulesQuery, useSetUserModuleMutation } from '@/integrations/endpoints/admin/entitlements_admin.endpoints';
 
 import type { UserRoleName, AdminUserView } from '@/integrations/shared';
 import {
@@ -411,6 +413,61 @@ export default function UserDetailClient({ id }: { id: string }) {
           </Card>
         </div>
       </div>
+
+      <UserModulesCard userId={u.id} />
     </div>
+  );
+}
+
+function UserModulesCard({ userId }: { userId: string }) {
+  const tenantKey = getSelectedTenantKey();
+  const { data, isLoading } = useGetUserModulesQuery({ tenantKey, userId });
+  const [setUserModule, setState] = useSetUserModuleMutation();
+
+  const toggle = async (moduleKey: string, next: boolean) => {
+    try {
+      await setUserModule({ tenantKey, userId, module_key: moduleKey, status: next ? 'active' : 'suspended' }).unwrap();
+      toast.success('Modül erişimi güncellendi');
+    } catch {
+      toast.error('Güncellenemedi');
+    }
+  };
+
+  return (
+    <Card className="bg-gm-surface/20 border-gm-border-soft rounded-[32px] overflow-hidden backdrop-blur-sm shadow-xl">
+      <CardHeader className="p-8 pb-4 bg-gm-surface/40 border-b border-gm-border-soft">
+        <CardTitle className="font-serif text-2xl flex items-center gap-3">Modül Erişimi</CardTitle>
+        <CardDescription className="font-serif italic text-gm-muted opacity-70">
+          Bu kullanıcının dashboard'da hangi modülleri göreceğini yönetin. Mail ve Takvim herkese açıktır.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="p-8 space-y-4">
+        {isLoading ? (
+          <div className="text-sm text-gm-muted">Yükleniyor…</div>
+        ) : !data || data.modules.length === 0 ? (
+          <div className="text-sm text-gm-muted">Bu tenant için modül yok.</div>
+        ) : (
+          data.modules.map((m) => (
+            <div key={m.module_key} className="flex items-center justify-between border-b border-gm-border-soft/50 pb-3">
+              <div className="space-y-0.5">
+                <div className="text-sm font-semibold text-gm-text">{m.name}</div>
+                <div className="text-[11px] uppercase tracking-wider text-gm-muted/60">{m.module_key}{m.category ? ` · ${m.category}` : ''}</div>
+              </div>
+              {m.default_on ? (
+                <Badge variant="outline" className="rounded-full border-gm-success/30 bg-gm-success/10 text-gm-success text-[10px] font-bold tracking-widest uppercase px-3 py-1">
+                  Herkese açık
+                </Badge>
+              ) : (
+                <Switch
+                  checked={m.user_status === 'active'}
+                  disabled={setState.isLoading}
+                  onCheckedChange={(v) => toggle(m.module_key, v)}
+                />
+              )}
+            </div>
+          ))
+        )}
+      </CardContent>
+    </Card>
   );
 }
