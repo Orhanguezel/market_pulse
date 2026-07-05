@@ -26,6 +26,7 @@ import {
   repoUpdateLastSignIn,
   repoSyncGoogleUser,
   repoAssignRole,
+  repoEnsureTenantMembership,
   repoEnsureProfileRow,
   repoGetRefreshToken,
   repoRevokeRefreshToken,
@@ -58,9 +59,23 @@ function getGoogleClient() {
 }
 
 function rejectNonAdmin(role: Role, reply: FastifyReply) {
+  // Acik kayit (varsayilan): normal kullanicilar da girebilir. Sadece ADMIN_ONLY_LOGIN=1
+  // ise platform admin'e kilitlenir.
+  if (env.ADMIN_ONLY_LOGIN !== '1') return false;
   if (role === 'admin') return false;
   reply.status(403).send({ error: { message: 'admin_only' } });
   return true;
+}
+
+/** Yeni kullaniciyi default tenant'a (env.TENANT_KEY) otomatik uye yapar. Best-effort. */
+async function assignDefaultTenant(userId: string, role: Role, req: FastifyRequest) {
+  const tenantKey = env.TENANT_KEY;
+  if (!tenantKey) return;
+  try {
+    await repoEnsureTenantMembership(userId, tenantKey, role === 'admin' ? 'tenant_admin' : 'tenant_editor');
+  } catch (err) {
+    req.log?.error?.(err, 'default_tenant_assign_failed');
+  }
 }
 
 async function verifyGoogleIdentityToken(idToken: string) {
@@ -138,6 +153,7 @@ export async function signup(req: FastifyRequest, reply: FastifyReply) {
     const assignedRole: Role = isAdmin ? 'admin' : requestedRole;
     await repoAssignRole(id, assignedRole);
     await repoEnsureProfileRow(id, { full_name: full_name ?? null, phone: phone ?? null });
+    await assignDefaultTenant(id, assignedRole, req);
 
     void sendWelcomeMail({ to: email, user_name: full_name || email.split('@')[0], user_email: email }).catch((err) => req.log?.error?.(err, 'welcome_mail_failed'));
     void telegramNotify({ event: 'new_user', data: { user_name: full_name || email.split('@')[0], user_email: email, role: assignedRole, created_at: new Date().toISOString() } });
@@ -254,6 +270,7 @@ export async function googleToken(req: FastifyRequest, reply: FastifyReply) {
         phone: null,
         avatar_url: avatar_url ?? null,
       });
+      await assignDefaultTenant(id, role, req);
 
       void sendWelcomeMail({
         to: email,
@@ -411,6 +428,7 @@ export async function socialLogin(req: FastifyRequest, reply: FastifyReply) {
       await repoEnsureProfileRow(id, {
         full_name: full_name ?? null, phone: null, avatar_url: avatar_url ?? null,
       });
+      await assignDefaultTenant(id, role, req);
       void sendWelcomeMail({
         to: email, user_name: full_name || email.split('@')[0], user_email: email,
       }).catch((err) => req.log?.error?.(err, 'social_welcome_mail_failed'));

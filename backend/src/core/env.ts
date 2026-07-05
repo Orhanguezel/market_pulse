@@ -89,6 +89,9 @@ export const env = {
   GMAIL_OAUTH_CLIENT_SECRET: process.env.GMAIL_OAUTH_CLIENT_SECRET || process.env.GOOGLE_CLIENT_SECRET || '',
   GOOGLE_MAPS_API_KEY: process.env.GOOGLE_MAPS_API_KEY || '',
   SERPER_API_KEY: process.env.SERPER_API_KEY || '',
+  // '1' ise sadece global-admin rolu signup/login yapabilir (kapali platform).
+  // Bos/varsayilan: acik kayit — normal kullanicilar da girebilir.
+  ADMIN_ONLY_LOGIN: process.env.ADMIN_ONLY_LOGIN || '',
   AUTH_ADMIN_EMAILS: process.env.AUTH_ADMIN_EMAILS || process.env.ADMIN_EMAIL || '',
   ALLOW_TEMP_LOGIN: process.env.ALLOW_TEMP_LOGIN || '',
   TEMP_PASSWORD: process.env.TEMP_PASSWORD || '',

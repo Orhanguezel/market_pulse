@@ -1,4 +1,4 @@
-import { db } from '../../db/client';
+import { db, pool } from '../../db/client';
 import { randomUUID } from 'crypto';
 import { eq } from 'drizzle-orm';
 import { hash as argonHash } from 'argon2';
@@ -87,6 +87,24 @@ export async function repoSyncGoogleUser(
 
 export async function repoAssignRole(userId: string, role: RoleName) {
   await db.insert(userRoles).values({ id: randomUUID(), user_id: userId, role });
+}
+
+/**
+ * Kullaniciyi bir tenant'a (workspace) uye yapar — zaten uyeyse dokunmaz (idempotent).
+ * Yeni kayitlarda default tenant'a otomatik atama icin. Rol: admin -> tenant_admin,
+ * diger -> tenant_editor.
+ */
+export async function repoEnsureTenantMembership(
+  userId: string,
+  tenantKey: string,
+  role: 'tenant_admin' | 'tenant_editor' = 'tenant_editor',
+) {
+  await pool.execute(
+    `INSERT INTO tenant_user_roles (id, user_id, tenant_key, role)
+     SELECT ?, ?, ?, ? FROM DUAL
+     WHERE NOT EXISTS (SELECT 1 FROM tenant_user_roles t WHERE t.user_id = ? AND t.tenant_key = ?)`,
+    [randomUUID(), userId, tenantKey, role, userId, tenantKey],
+  );
 }
 
 /* -------------------- Profiles -------------------- */
