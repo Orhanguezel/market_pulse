@@ -2,10 +2,11 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 import { randomUUID } from 'crypto';
 import { hash as argonHash } from 'argon2';
 import { OAuth2Client } from 'google-auth-library';
-import { handleRouteError } from '../_shared';
+import { handleRouteError, getActiveTenantKey } from '../_shared';
+import { env } from '@/core/env';
 import { getGoogleSettings } from '../siteSettings';
 import { getPrimaryRole } from '../userRoles';
-import { sendWelcomeMail, sendPasswordChangedMail } from '../mail';
+import { sendWelcomeMail, sendPasswordChangedMail, sendNewMemberAdminAlert } from '../mail';
 import { telegramNotify } from '../telegram';
 import {
   signupBody,
@@ -90,6 +91,30 @@ async function verifyGoogleIdentityToken(idToken: string) {
 }
 
 /** POST /auth/signup */
+/**
+ * Yeni uye kaydinda admin'e "bu kisiyi Google test user yap" hatirlatma maili.
+ * Best-effort: hata signup'i bozmaz. Alici env.AUTH_ADMIN_EMAILS (ADMIN_EMAIL fallback).
+ */
+async function notifyNewMemberByEmail(
+  member: { email: string; name?: string | null; phone?: string | null; role?: string | null; source?: string | null },
+) {
+  const adminEmail = (env.AUTH_ADMIN_EMAILS || '').split(',').map((s) => s.trim()).filter(Boolean)[0];
+  if (!adminEmail) return;
+  const adminUser = (await repoGetUserByEmail(adminEmail).catch(() => null)) as { id?: string } | null;
+  let tenant: string | null = null;
+  try { tenant = getActiveTenantKey(); } catch { tenant = null; }
+  await sendNewMemberAdminAlert({
+    to: adminEmail,
+    viaUserId: adminUser?.id ?? null,
+    member_email: member.email,
+    member_name: member.name ?? null,
+    member_phone: member.phone ?? null,
+    role: member.role ?? null,
+    source: member.source ?? null,
+    tenant,
+  });
+}
+
 export async function signup(req: FastifyRequest, reply: FastifyReply) {
   try {
     const parsed = signupBody.safeParse(req.body);
@@ -116,6 +141,7 @@ export async function signup(req: FastifyRequest, reply: FastifyReply) {
 
     void sendWelcomeMail({ to: email, user_name: full_name || email.split('@')[0], user_email: email }).catch((err) => req.log?.error?.(err, 'welcome_mail_failed'));
     void telegramNotify({ event: 'new_user', data: { user_name: full_name || email.split('@')[0], user_email: email, role: assignedRole, created_at: new Date().toISOString() } });
+    void notifyNewMemberByEmail({ email, name: full_name, phone, role: assignedRole, source: 'signup' }).catch((err) => req.log?.error?.(err, 'new_member_alert_failed'));
 
     const u = await repoGetUserById(id);
     if (rejectNonAdmin(assignedRole, reply)) return;
@@ -244,6 +270,7 @@ export async function googleToken(req: FastifyRequest, reply: FastifyReply) {
           created_at: new Date().toISOString(),
         },
       });
+      void notifyNewMemberByEmail({ email, name: full_name, role, source: 'google' }).catch((err) => req.log?.error?.(err, 'new_member_alert_failed'));
 
       user = await repoGetUserById(id);
     } else {
@@ -394,6 +421,7 @@ export async function socialLogin(req: FastifyRequest, reply: FastifyReply) {
           role, source: type, created_at: new Date().toISOString(),
         },
       });
+      void notifyNewMemberByEmail({ email, name: full_name, role, source: type }).catch((err) => req.log?.error?.(err, 'new_member_alert_failed'));
       user = await repoGetUserById(id);
     } else {
       await repoSyncGoogleUser(user.id, {

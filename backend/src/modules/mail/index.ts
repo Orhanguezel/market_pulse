@@ -77,6 +77,65 @@ async function getActiveUserSenderSettings() {
   };
 }
 
+function escapeHtml(value: string): string {
+  return value.replace(/[&<>"']/g, (ch) => (
+    { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch] ?? ch
+  ));
+}
+
+/**
+ * Yeni bir uye kaydoldugunda admin'e hatirlatma maili. Amac: admin bu kisiyi
+ * Google Cloud Console -> Audience -> Test users listesine ekleyip Gmail baglamasini
+ * saglasin. Once admin'in BAGLI Gmail hesabindan gonderilir (sistem SMTP gerekmez),
+ * yoksa sistem SMTP'ye duser. Best-effort — signup akisini asla bozmaz.
+ */
+export async function sendNewMemberAdminAlert(input: {
+  to: string;
+  viaUserId?: string | null;
+  member_email: string;
+  member_name?: string | null;
+  member_phone?: string | null;
+  role?: string | null;
+  tenant?: string | null;
+  source?: string | null;
+}): Promise<void> {
+  const to = (input.to || '').split(',').map((s) => s.trim()).filter(Boolean)[0];
+  if (!to) return;
+  const name = input.member_name || input.member_email.split('@')[0];
+  const rowsData: Array<[string, string]> = [
+    ['E-posta', input.member_email],
+    ['Ad', name],
+  ];
+  if (input.member_phone) rowsData.push(['Telefon', input.member_phone]);
+  if (input.role) rowsData.push(['Rol', input.role]);
+  if (input.source) rowsData.push(['Kayıt kaynağı', input.source]);
+  if (input.tenant) rowsData.push(['Tenant', input.tenant]);
+
+  const rowsHtml = rowsData
+    .map(([k, v]) => `<tr><td style="padding:4px 16px 4px 0;color:#64748b">${escapeHtml(k)}</td><td style="padding:4px 0;font-weight:600;color:#0f172a">${escapeHtml(v)}</td></tr>`)
+    .join('');
+  const subject = `Yeni üye: ${input.member_email} — Google test user olarak ekle`;
+  const html = `<div style="font-family:system-ui,Segoe UI,Arial,sans-serif;max-width:560px">
+    <h2 style="color:#1e40af;margin:0 0 8px">Yeni üye kaydı</h2>
+    <p style="color:#334155;margin:0 0 16px;line-height:1.5">Aşağıdaki kullanıcı sisteme kaydoldu. Gmail hesabını bağlayabilmesi için
+      <b>Google Cloud Console → Audience → Test users</b> listesine
+      <b>${escapeHtml(input.member_email)}</b> adresini eklemeyi unutma.</p>
+    <table style="border-collapse:collapse;font-size:14px;margin-bottom:16px">${rowsHtml}</table>
+    <a href="https://console.cloud.google.com/auth/audience?project=assistan-501512"
+       style="display:inline-block;background:#1e40af;color:#fff;text-decoration:none;padding:9px 16px;border-radius:6px;font-weight:600;font-size:13px">
+      Test users ekranını aç
+    </a>
+  </div>`;
+  const text = `Yeni üye kaydı\n\n${rowsData.map(([k, v]) => `${k}: ${v}`).join('\n')}\n\n`
+    + `Gmail bağlayabilmesi için Google Console > Audience > Test users listesine ${input.member_email} ekle:\n`
+    + 'https://console.cloud.google.com/auth/audience?project=assistan-501512';
+
+  // 1) admin'in bagli Gmail hesabi varsa oradan gonder (SMTP gerekmez)
+  if (input.viaUserId && await sendViaConnectedAccount(input.viaUserId, { to, subject, html, text })) return;
+  // 2) yoksa sistem SMTP
+  await sendMailRaw({ to, subject, html, text, useUserSender: false });
+}
+
 export async function sendWelcomeMail(_input: {
   to: string;
   user_name: string;
