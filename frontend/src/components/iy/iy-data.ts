@@ -322,6 +322,7 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
       { key: 'documents', label: 'Belgeler', icon: 'Folder', path: '/belgeler', module: 'crm' },
       { key: 'activities', label: 'Aktiviteler', icon: 'CalendarCheck', path: '/aktiviteler', module: 'crm' },
       { key: 'tasks', label: 'Görevler', icon: 'ListChecks', path: '/gorevler', module: 'crm' },
+      { key: 'calendar', label: 'Takvim', icon: 'CalendarDays', path: '/takvim', module: 'crm' },
       { key: 'reminders', label: 'Hatırlatma Yönetimi', icon: 'BellRing', path: '/hatirlatmalar', module: 'crm' },
       { key: 'mail', label: 'Mail Yönetimi', icon: 'Mail', path: '/mail-yonetimi', module: 'email-marketing' },
       { key: 'lead-machine', label: 'Karar Verici Bulma', icon: 'Radar', path: '/karar-vericiler', module: 'leads' },

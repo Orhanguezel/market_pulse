@@ -6,7 +6,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 import {
   LayoutDashboard, Target, Building2, TrendingUp, FileText, ShoppingCart,
-  Package, Folder, CalendarCheck, ListChecks, BellRing, Mail, Radar, BarChart3,
+  Package, Folder, CalendarCheck, CalendarDays, ListChecks, BellRing, Mail, Radar, BarChart3,
   Briefcase, Users, PieChart, User, Menu, X, Plus, Loader2, PanelLeftClose, PanelLeft, Lock, Bell,
 } from 'lucide-react';
 import { IY_APP_NAV, IY_SURFACE_STYLE } from './iy-data';
@@ -17,7 +17,7 @@ import { useGetUnreadNotificationsCountQuery } from '@/integrations/rtk/public/n
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   LayoutDashboard, Target, Building2, TrendingUp, FileText, ShoppingCart,
-  Package, Folder, CalendarCheck, ListChecks, BellRing, Mail, Radar, BarChart3,
+  Package, Folder, CalendarCheck, CalendarDays, ListChecks, BellRing, Mail, Radar, BarChart3,
   Briefcase, Users, PieChart, User,
 };
 
