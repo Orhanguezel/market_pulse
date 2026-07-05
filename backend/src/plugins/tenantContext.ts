@@ -11,6 +11,35 @@ function readUserId(user: unknown): string | undefined {
   return sub ? String(sub) : undefined;
 }
 
+function extractToken(req: { headers: Record<string, unknown>; cookies?: Record<string, unknown> }): string | undefined {
+  const auth = req.headers.authorization;
+  if (typeof auth === 'string' && auth.startsWith('Bearer ')) {
+    const token = auth.slice(7).trim();
+    if (token) return token;
+  }
+  const cookie = req.cookies?.access_token;
+  return typeof cookie === 'string' && cookie ? cookie : undefined;
+}
+
+/**
+ * JWT payload'unu SENKRON decode edip sub'u alir (imza DOGRULAMAZ). Amac: onRequest
+ * hook'unda senkron `enterUser` yapabilmek (enterWith await sonrasi handler'a tasinmaz;
+ * senkron cagri tasinir — enterTenant gibi). Guvenlik: imza dogrulamasi korunan tum
+ * route'larda requireAuth preHandler'inda yapilir; sahte token requireAuth'ta 401 alir,
+ * handler hic calismaz, dolayisiyla decode edilen sub gercek bir islemde kullanilmaz.
+ */
+function decodeJwtSub(token: string): string | undefined {
+  const part = token.split('.')[1];
+  if (!part) return undefined;
+  try {
+    const payload = JSON.parse(Buffer.from(part, 'base64url').toString('utf8')) as Record<string, unknown>;
+    const sub = payload.sub ?? payload.id;
+    return sub ? String(sub) : undefined;
+  } catch {
+    return undefined;
+  }
+}
+
 function firstString(value: unknown): string | undefined {
   if (Array.isArray(value)) return firstString(value[0]);
   if (typeof value !== 'string') return undefined;
@@ -72,23 +101,26 @@ function resolveTenant(req: { query?: unknown; headers: Record<string, unknown>;
 // fp ile sarılır ki onRequest hook'u izole edilmesin ve TÜM route'lara uygulansın.
 // (Sarılmazsa hook sadece bu plugin'in alt scope'una etki eder → route'lar tenant context görmez.)
 const tenantContextImpl: FastifyPluginAsync = async (app) => {
-  app.addHook('onRequest', async (req, reply) => {
+  app.addHook('onRequest', (req, reply, done) => {
     const resolved = resolveTenant(req);
     if (!resolved.ok) {
-      return reply.code(403).send({ error: { message: resolved.message } });
+      void reply.code(403).send({ error: { message: resolved.message } });
+      return;
     }
     // tenant undefined ise (super-admin secim yapmadi) store'a yazma; okumalar env'e duser,
     // yazmalar getRequiredTenantKey ile reddedilir.
     if (resolved.tenant) enterTenant(resolved.tenant);
-    // Kullanici context'i (owner-scope icin): requireAuth preHandler'da enterUser yapiyor ama
-    // AsyncLocalStorage.enterWith preHandler'dan handler'a tasinmadigi icin getRequestUserId()
-    // null donuyordu (owner-scoped tasks/reminders 401). Burada onRequest'te, tenant COZULDUKTEN
-    // sonra best-effort verify + enterUser: tenant cozumu degismez, user id guvenilir set edilir.
+    // Kullanici context'i (owner-scope icin): requireAuth preHandler'da enterUser cagriliyor ama
+    // AsyncLocalStorage.enterWith preHandler'dan handler'a TASINMIYOR → getRequestUserId() null →
+    // owner-scoped tasks/reminders 401. Cozum: burada (onRequest) SENKRON decode + enterUser.
+    // Senkron enterWith handler'a tasinir (enterTenant gibi). Imza dogrulamasi requireAuth'ta.
     let uid = readUserId(req.user);
-    if (!uid && (typeof req.headers.authorization === 'string' || Boolean(req.cookies?.access_token))) {
-      try { await req.jwtVerify(); uid = readUserId(req.user); } catch { /* public/gecersiz token: user context yok */ }
+    if (!uid) {
+      const token = extractToken(req);
+      if (token) uid = decodeJwtSub(token);
     }
     if (uid) enterUser(uid);
+    done();
   });
 };
 
