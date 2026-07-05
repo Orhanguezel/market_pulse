@@ -1,6 +1,7 @@
 import type { RouteHandler } from 'fastify';
 import type { JwtUser } from '@/middleware/auth';
 import { pool } from '@/db/client';
+import { runWithTenantAndUser } from '@/core/tenant-context';
 import { getActiveTenantKey } from '@/modules/_shared';
 import { createSearchJob, getSearchJob } from '@/modules/lead-machine/_shared/db';
 import { runAmazonJob } from '@/modules/lead-machine/amazon/amazon.job';
@@ -47,7 +48,8 @@ export const publicStartScan: RouteHandler<{ Body: unknown }> = async (req, repl
 
   const job = await createSearchJob('amazon', { keyword, marketplace, created_by: userId }, null, userId);
   if (!job) return reply.code(500).send({ error: { message: 'job_create_failed' } });
-  runInBackground(runAmazonJob(job.id));
+  const tenantKey = await getActiveTenantKey();
+  runInBackground(runWithTenantAndUser(tenantKey, userId, () => runAmazonJob(job.id)));
 
   return reply.code(201).send({ ...job, quota });
 };

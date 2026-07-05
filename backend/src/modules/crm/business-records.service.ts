@@ -1,5 +1,5 @@
 import { pool } from '@/db/client';
-import { getActiveTenantKey } from '@/modules/_shared';
+import { getActiveTenantKey, getRequiredUserId } from '@/modules/_shared';
 import type { DocumentBody, ListQuery, OrderBody, ProductBody, QuoteBody, ReminderBody, TaskBody } from './schema';
 import { buildPatchSql, jsonOrNull, newId, parseJsonField } from './utils';
 
@@ -122,11 +122,21 @@ function normalizeBody(resource: CrmResource, body: Partial<BodyByResource[CrmRe
   return applyDefaults ? { ...value, priority: value.priority ?? 'normal', status: value.status ?? 'open' } : value;
 }
 
+function withOwner(resource: CrmResource, body: Record<string, unknown>) {
+  if (resource !== 'tasks' && resource !== 'reminders') return body;
+  const ownerUserId = getRequiredUserId();
+  return { ...body, owner_user_id: ownerUserId, created_by: ownerUserId };
+}
+
 export async function listBusinessRecords(resource: CrmResource, query: ListQuery) {
   const tenantKey = getActiveTenantKey();
   const table = tableByResource[resource];
   const where = ['tenant_key = ?'];
   const values: unknown[] = [tenantKey];
+  if (resource === 'tasks' || resource === 'reminders') {
+    where.push('owner_user_id = ?');
+    values.push(getRequiredUserId());
+  }
   if (query.status) {
     where.push('status = ?');
     values.push(query.status);
@@ -142,7 +152,13 @@ export async function listBusinessRecords(resource: CrmResource, query: ListQuer
 export async function getBusinessRecord(resource: CrmResource, id: string) {
   const tenantKey = getActiveTenantKey();
   const table = tableByResource[resource];
-  const [rows] = await pool.execute(`SELECT * FROM ${table} WHERE tenant_key = ? AND id = ? LIMIT 1`, [tenantKey, id]);
+  const where = ['tenant_key = ?', 'id = ?'];
+  const values: unknown[] = [tenantKey, id];
+  if (resource === 'tasks' || resource === 'reminders') {
+    where.push('owner_user_id = ?');
+    values.push(getRequiredUserId());
+  }
+  const [rows] = await pool.execute(`SELECT * FROM ${table} WHERE ${where.join(' AND ')} LIMIT 1`, values as never[]);
   const row = (rows as Array<Record<string, unknown>>)[0];
   return row ? parseJsonField(row, 'raw_data') : null;
 }
@@ -152,7 +168,10 @@ export async function createBusinessRecord<T extends CrmResource>(resource: T, b
   const id = newId();
   const table = tableByResource[resource];
   const columns = insertColumns[resource];
-  const normalized = normalizeBody(resource, body as BodyByResource[CrmResource], true) as Record<string, unknown>;
+  const normalized = withOwner(
+    resource,
+    normalizeBody(resource, body as BodyByResource[CrmResource], true) as Record<string, unknown>,
+  );
   const values = columns.map((column) => {
     if (column === 'id') return id;
     if (column === 'tenant_key') return tenantKey;
@@ -167,6 +186,18 @@ export async function createBusinessRecord<T extends CrmResource>(resource: T, b
   return getBusinessRecord(resource, id);
 }
 
+export async function deleteBusinessRecord<T extends CrmResource>(resource: T, id: string) {
+  const tenantKey = getActiveTenantKey();
+  const table = tableByResource[resource];
+  const where = ['tenant_key = ?', 'id = ?'];
+  const values: unknown[] = [tenantKey, id];
+  if (resource === 'tasks' || resource === 'reminders') {
+    where.push('owner_user_id = ?');
+    values.push(getRequiredUserId());
+  }
+  await pool.execute(`DELETE FROM ${table} WHERE ${where.join(' AND ')}`, values as never[]);
+}
+
 export async function updateBusinessRecord<T extends CrmResource>(
   resource: T,
   id: string,
@@ -179,8 +210,13 @@ export async function updateBusinessRecord<T extends CrmResource>(
   if (!sets.length) return getBusinessRecord(resource, id);
 
   const tenantKey = getActiveTenantKey();
+  const where = ['tenant_key = ?', 'id = ?'];
   values.push(tenantKey, id);
+  if (resource === 'tasks' || resource === 'reminders') {
+    where.push('owner_user_id = ?');
+    values.push(getRequiredUserId());
+  }
   const table = tableByResource[resource];
-  await pool.execute(`UPDATE ${table} SET ${sets.join(', ')} WHERE tenant_key = ? AND id = ?`, values as never[]);
+  await pool.execute(`UPDATE ${table} SET ${sets.join(', ')} WHERE ${where.join(' AND ')}`, values as never[]);
   return getBusinessRecord(resource, id);
 }

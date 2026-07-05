@@ -527,3 +527,20 @@ describe('LinkedIn outreach templates', () => {
     expect(inserts[0]?.values?.[7]).toBe('linkedin_connection');
   });
 });
+
+describe('decision maker owner scope', () => {
+  test('filters saved decision makers by owner before CRM promotion reads rows', async () => {
+    dbMock.queuePoolExecute([]);
+
+    await runWithTenant('tenant-a', () => persist.listSavedDecisionMakers({
+      jobId: 'dm-job-1',
+      confidence: 'A',
+      ownerUserId: 'user-1',
+      limit: 200,
+    }));
+
+    const query = dbMock.poolExecutions.at(-1);
+    expect(query?.sql).toContain('owner_user_id = ?');
+    expect(query?.values).toEqual(['tenant-a', 'dm-job-1', 'A', 'user-1']);
+  });
+});

@@ -1,6 +1,5 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
-import { sendOutreachDraft } from './outreach.service';
 import {
   addRecipients,
   bumpListCounts,
@@ -8,9 +7,11 @@ import {
   getList,
   listRecipients,
   markRecipient,
+  type RecipientRow,
   type RecipientListRow,
 } from './bulk-list.repository';
 import { parseRecipientFile } from './bulk-list.parser';
+import { assertMailQueueAvailable, enqueueBulkRecipientEmails } from './mail-queue';
 
 // Outreach bulk-list servisi: ince katman. Mevcut gönderim/tracking AYNEN kullanılır.
 // lead_outreach_drafts'a candidate_id/market_lead_id NULL, recipient_* set ile draft yazar.
@@ -31,12 +32,12 @@ export interface GenerateResult {
 
 export interface SendResult {
   listId: string;
-  sent: number;
+  queued: boolean;
+  queuedCount: number;
   bounced: number;
   total: number;
+  ratePerMinute: number;
 }
-
-const sleep = (ms: number) => new Promise<void>((resolve) => setTimeout(resolve, ms));
 
 /** {{name}} / {{company}} / {{country}} + custom_fields anahtarlarını değerle değiştirir. */
 export function substitutePlaceholders(
@@ -51,7 +52,7 @@ export function substitutePlaceholders(
 
 export async function uploadList(
   tenantKey: string,
-  opts: { campaignId?: string | null; name: string; fileBuffer: Buffer; filename: string },
+  opts: { campaignId?: string | null; ownerUserId?: string | null; name: string; fileBuffer: Buffer; filename: string },
 ): Promise<UploadResult> {
   const parsed = parseRecipientFile(opts.fileBuffer, opts.filename);
   const ext = opts.filename.toLowerCase().split('.').pop() ?? '';
@@ -59,16 +60,17 @@ export async function uploadList(
 
   const list = await createList(tenantKey, {
     campaignId: opts.campaignId ?? null,
+    ownerUserId: opts.ownerUserId ?? null,
     name: opts.name,
     source,
   });
 
   let inserted = 0;
   if (parsed.rows.length) {
-    inserted = await addRecipients(tenantKey, list.id, parsed.rows);
+    inserted = await addRecipients(tenantKey, list.id, parsed.rows, opts.ownerUserId ?? null);
   }
-  await bumpListCounts(tenantKey, list.id, { totalCount: inserted });
-  const refreshed = (await getList(tenantKey, list.id)) ?? list;
+  await bumpListCounts(tenantKey, list.id, { totalCount: inserted }, opts.ownerUserId ?? null);
+  const refreshed = (await getList(tenantKey, list.id, opts.ownerUserId ?? null)) ?? list;
 
   return { list: refreshed, inserted, invalid: parsed.invalid, duplicates: parsed.duplicates };
 }
@@ -76,12 +78,12 @@ export async function uploadList(
 export async function generateDraftsFromList(
   tenantKey: string,
   listId: string,
-  opts: { subjectTemplate: string; bodyTemplate: string },
+  opts: { subjectTemplate: string; bodyTemplate: string; ownerUserId?: string | null },
 ): Promise<GenerateResult> {
-  const list = await getList(tenantKey, listId);
+  const list = await getList(tenantKey, listId, opts.ownerUserId ?? null);
   if (!list) throw new Error('LIST_NOT_FOUND');
 
-  const recipients = await listRecipients(tenantKey, listId, 'pending');
+  const recipients = await listRecipients(tenantKey, listId, 'pending', opts.ownerUserId ?? null);
   const draftIds: string[] = [];
   let generated = 0;
   let skipped = 0;
@@ -103,12 +105,13 @@ export async function generateDraftsFromList(
     // Pipeline'sız (candidate_id/market_lead_id NULL) bulk draft. recipient_* set.
     await pool.execute(
       `INSERT INTO lead_outreach_drafts
-        (id, tenant_key, candidate_id, market_lead_id, campaign_id,
+        (id, tenant_key, owner_user_id, candidate_id, market_lead_id, campaign_id,
          recipient_list_id, recipient_email, recipient_name, subject, body, status)
-       VALUES (?, ?, NULL, NULL, ?, ?, ?, ?, ?, ?, 'draft')`,
+       VALUES (?, ?, ?, NULL, NULL, ?, ?, ?, ?, ?, ?, 'draft')`,
       [
         draftId,
         tenantKey,
+        opts.ownerUserId ?? null,
         list.campaign_id ?? null,
         listId,
         recipient.email,
@@ -118,7 +121,7 @@ export async function generateDraftsFromList(
       ],
     );
 
-    await markRecipient(tenantKey, recipient.id, { status: 'drafted', draftId });
+    await markRecipient(tenantKey, recipient.id, { status: 'drafted', draftId }, opts.ownerUserId ?? null);
     draftIds.push(draftId);
     generated += 1;
   }
@@ -127,46 +130,45 @@ export async function generateDraftsFromList(
 }
 
 /**
- * drafted alıcıları rate-limit ile gönderir. Her biri mevcut sendOutreachDraft(draftId, recipient_email).
- * Throttle: 60000/ratePerMinute ms bekleme. Başarısız → recipient.status='bounced', devam eder (durmaz).
+ * drafted alıcıları kalıcı BullMQ kuyruğuna yazar.
+ * Throttle: worker job delay'i 60000/ratePerMinute hesabıyla uygulanır.
  * Açılma takibi otomatik (mevcut pixel, draft id ile).
  */
 export async function sendList(
   tenantKey: string,
   listId: string,
-  opts: { ratePerMinute?: number } = {},
+  opts: { ratePerMinute?: number; ownerUserId?: string | null } = {},
 ): Promise<SendResult> {
-  const list = await getList(tenantKey, listId);
+  const list = await getList(tenantKey, listId, opts.ownerUserId ?? null);
   if (!list) throw new Error('LIST_NOT_FOUND');
+  assertMailQueueAvailable();
 
   const ratePerMinute = opts.ratePerMinute && opts.ratePerMinute > 0 ? opts.ratePerMinute : 30;
-  const delayMs = Math.floor(60000 / ratePerMinute);
 
-  const recipients = await listRecipients(tenantKey, listId, 'drafted');
-  await bumpListCounts(tenantKey, listId, { status: 'sending' });
+  const recipients = await listRecipients(tenantKey, listId, 'drafted', opts.ownerUserId ?? null);
+  await bumpListCounts(tenantKey, listId, { status: 'sending' }, opts.ownerUserId ?? null);
 
-  let sent = 0;
   let bounced = 0;
+  const queueable: RecipientRow[] = [];
 
-  for (let i = 0; i < recipients.length; i++) {
-    const recipient = recipients[i];
+  for (const recipient of recipients) {
     if (!recipient.draft_id || !recipient.email) {
-      await markRecipient(tenantKey, recipient.id, { status: 'bounced' });
+      await markRecipient(tenantKey, recipient.id, { status: 'bounced' }, opts.ownerUserId ?? null);
       bounced += 1;
       continue;
     }
-    try {
-      await sendOutreachDraft(recipient.draft_id, recipient.email);
-      await markRecipient(tenantKey, recipient.id, { status: 'sent' });
-      await bumpListCounts(tenantKey, listId, { sentDelta: 1 });
-      sent += 1;
-    } catch {
-      await markRecipient(tenantKey, recipient.id, { status: 'bounced' });
-      bounced += 1;
-    }
-    if (i < recipients.length - 1 && delayMs > 0) await sleep(delayMs);
+    await markRecipient(tenantKey, recipient.id, { status: 'queued' }, opts.ownerUserId ?? null);
+    queueable.push(recipient);
   }
 
-  await bumpListCounts(tenantKey, listId, { status: 'sent' });
-  return { listId, sent, bounced, total: recipients.length };
+  let queued: { queued: number };
+  try {
+    queued = await enqueueBulkRecipientEmails(tenantKey, listId, queueable, { ownerUserId: opts.ownerUserId ?? null, ratePerMinute });
+  } catch (error) {
+    await Promise.all(queueable.map((recipient) => markRecipient(tenantKey, recipient.id, { status: 'drafted' }, opts.ownerUserId ?? null)));
+    await bumpListCounts(tenantKey, listId, { status: 'ready' }, opts.ownerUserId ?? null);
+    throw error;
+  }
+  if (!queued.queued && bounced === recipients.length) await bumpListCounts(tenantKey, listId, { status: 'sent' }, opts.ownerUserId ?? null);
+  return { listId, queued: queued.queued > 0, queuedCount: queued.queued, bounced, total: recipients.length, ratePerMinute };
 }

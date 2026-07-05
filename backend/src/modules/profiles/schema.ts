@@ -4,6 +4,8 @@ import {
   varchar,
   text,
   datetime,
+  int,
+  tinyint,
   foreignKey,
 } from 'drizzle-orm/mysql-core';
 import { sql } from 'drizzle-orm';
@@ -25,6 +27,14 @@ export const profiles = mysqlTable(
     city: varchar('city', { length: 128 }),
     country: varchar('country', { length: 128 }),
     postal_code: varchar('postal_code', { length: 32 }),
+    sender_enabled: tinyint('sender_enabled').notNull().default(0),
+    sender_name: varchar('sender_name', { length: 191 }),
+    sender_email: varchar('sender_email', { length: 255 }),
+    sender_smtp_host: varchar('sender_smtp_host', { length: 255 }),
+    sender_smtp_port: int('sender_smtp_port'),
+    sender_smtp_username: varchar('sender_smtp_username', { length: 255 }),
+    sender_smtp_password: text('sender_smtp_password'),
+    sender_smtp_secure: tinyint('sender_smtp_secure'),
 
     created_at: datetime('created_at', { fsp: 3 })
       .notNull()

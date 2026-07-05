@@ -1,9 +1,10 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
-import { getActiveTenantKey } from '@/modules/_shared';
+import { getActiveTenantKey, getActiveUserId } from '@/modules/_shared';
 
 export interface OutreachCampaign {
   id: string;
+  owner_user_id: string | null;
   slug: string;
   name: string;
   is_active: number;
@@ -58,20 +59,32 @@ function parseRow(row: OutreachCampaign): OutreachCampaign {
   return row;
 }
 
-export async function listCampaigns() {
+export async function listCampaigns(filters: { ownerUserId?: string | null } = {}) {
   const tenantKey = await getActiveTenantKey();
+  const where = ['tenant_key = ?'];
+  const values: unknown[] = [tenantKey];
+  if (filters.ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(filters.ownerUserId);
+  }
   const [rows] = await pool.execute(
-    'SELECT * FROM outreach_campaigns WHERE tenant_key = ? ORDER BY is_active DESC, updated_at DESC',
-    [tenantKey],
+    `SELECT * FROM outreach_campaigns WHERE ${where.join(' AND ')} ORDER BY is_active DESC, updated_at DESC`,
+    values as never[],
   );
   return (rows as OutreachCampaign[]).map(parseRow);
 }
 
-export async function getCampaign(id: string) {
+export async function getCampaign(id: string, filters: { ownerUserId?: string | null } = {}) {
   const tenantKey = await getActiveTenantKey();
+  const where = ['tenant_key = ?', 'id = ?'];
+  const values: unknown[] = [tenantKey, id];
+  if (filters.ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(filters.ownerUserId);
+  }
   const [rows] = await pool.execute(
-    'SELECT * FROM outreach_campaigns WHERE tenant_key = ? AND id = ? LIMIT 1',
-    [tenantKey, id],
+    `SELECT * FROM outreach_campaigns WHERE ${where.join(' AND ')} LIMIT 1`,
+    values as never[],
   );
   const row = (rows as OutreachCampaign[])[0];
   return row ? parseRow(row) : null;
@@ -118,9 +131,10 @@ function serializeValue(key: ColumnKey, value: unknown): unknown {
 export async function createCampaign(input: OutreachCampaignInput) {
   const id = randomUUID();
   const tenantKey = await getActiveTenantKey();
-  const cols: string[] = ['id', 'tenant_key'];
-  const placeholders: string[] = ['?', '?'];
-  const values: unknown[] = [id, tenantKey];
+  const ownerUserId = input.owner_user_id ?? getActiveUserId() ?? null;
+  const cols: string[] = ['id', 'tenant_key', 'owner_user_id'];
+  const placeholders: string[] = ['?', '?', '?'];
+  const values: unknown[] = [id, tenantKey, ownerUserId];
 
   for (const col of COLUMNS) {
     if (input[col] !== undefined) {
@@ -137,7 +151,7 @@ export async function createCampaign(input: OutreachCampaignInput) {
   return getCampaign(id);
 }
 
-export async function updateCampaign(id: string, input: OutreachCampaignInput) {
+export async function updateCampaign(id: string, input: OutreachCampaignInput, filters: { ownerUserId?: string | null } = {}) {
   const sets: string[] = [];
   const values: unknown[] = [];
 
@@ -150,16 +164,27 @@ export async function updateCampaign(id: string, input: OutreachCampaignInput) {
 
   if (sets.length === 0) return getCampaign(id);
   const tenantKey = await getActiveTenantKey();
+  const where = ['id = ?', 'tenant_key = ?'];
   values.push(id);
   values.push(tenantKey);
+  if (filters.ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(filters.ownerUserId);
+  }
   await pool.execute(
-    `UPDATE outreach_campaigns SET ${sets.join(', ')} WHERE id = ? AND tenant_key = ?`,
+    `UPDATE outreach_campaigns SET ${sets.join(', ')} WHERE ${where.join(' AND ')}`,
     values as never[],
   );
-  return getCampaign(id);
+  return getCampaign(id, filters);
 }
 
-export async function deleteCampaign(id: string) {
+export async function deleteCampaign(id: string, filters: { ownerUserId?: string | null } = {}) {
   const tenantKey = await getActiveTenantKey();
-  await pool.execute('DELETE FROM outreach_campaigns WHERE tenant_key = ? AND id = ?', [tenantKey, id]);
+  const where = ['tenant_key = ?', 'id = ?'];
+  const values: unknown[] = [tenantKey, id];
+  if (filters.ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(filters.ownerUserId);
+  }
+  await pool.execute(`DELETE FROM outreach_campaigns WHERE ${where.join(' AND ')}`, values as never[]);
 }

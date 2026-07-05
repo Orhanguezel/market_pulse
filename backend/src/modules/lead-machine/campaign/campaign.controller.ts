@@ -1,4 +1,5 @@
 import type { RouteHandler } from 'fastify';
+import { getRequiredUserId } from '@/modules/_shared';
 import {
   createCampaign,
   deleteCampaign,
@@ -56,10 +57,15 @@ function sanitizeInput(body: unknown): OutreachCampaignInput {
   return out;
 }
 
-export const listOutreachCampaigns: RouteHandler = async () => listCampaigns();
+function ownerUserIdForRoute(url: string): string | null {
+  return url.includes('/admin/') ? null : getRequiredUserId();
+}
+
+export const listOutreachCampaigns: RouteHandler = async (req) => listCampaigns({ ownerUserId: ownerUserIdForRoute(req.url) });
 
 export const getOutreachCampaign: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const row = await getCampaign(req.params.id);
+  const ownerUserId = ownerUserIdForRoute(req.url);
+  const row = await getCampaign(req.params.id, { ownerUserId });
   if (!row) {
     reply.code(404);
     return { error: 'NOT_FOUND' };
@@ -69,6 +75,8 @@ export const getOutreachCampaign: RouteHandler<{ Params: { id: string } }> = asy
 
 export const createOutreachCampaign: RouteHandler<{ Body: unknown }> = async (req, reply) => {
   const input = sanitizeInput(req.body);
+  const ownerUserId = ownerUserIdForRoute(req.url);
+  if (ownerUserId) input.owner_user_id = ownerUserId;
   if (!input.slug || !input.name || !input.brand_name || !input.sender_email || !input.product_en) {
     reply.code(400);
     return { error: 'VALIDATION', message: 'slug, name, brand_name, sender_email, product_en zorunlu' };
@@ -80,23 +88,24 @@ export const createOutreachCampaign: RouteHandler<{ Body: unknown }> = async (re
 
 export const updateOutreachCampaign: RouteHandler<{ Params: { id: string }; Body: unknown }> = async (req, reply) => {
   const input = sanitizeInput(req.body);
-  const existing = await getCampaign(req.params.id);
+  const ownerUserId = ownerUserIdForRoute(req.url);
+  const existing = await getCampaign(req.params.id, { ownerUserId });
   if (!existing) {
     reply.code(404);
     return { error: 'NOT_FOUND' };
   }
-  const row = await updateCampaign(req.params.id, input);
+  const row = await updateCampaign(req.params.id, input, { ownerUserId });
   return row;
 };
 
 export const deleteOutreachCampaign: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  await deleteCampaign(req.params.id);
+  await deleteCampaign(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
   reply.code(204);
   return null;
 };
 
 export const generateOutreachDrafts: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const existing = await getCampaign(req.params.id);
+  const existing = await getCampaign(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
   if (!existing) {
     reply.code(404);
     return { error: 'NOT_FOUND' };
@@ -107,7 +116,7 @@ export const generateOutreachDrafts: RouteHandler<{ Params: { id: string } }> = 
 };
 
 export const syncHostKeywords: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const existing = await getCampaign(req.params.id);
+  const existing = await getCampaign(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
   if (!existing) {
     reply.code(404);
     return { error: 'NOT_FOUND' };

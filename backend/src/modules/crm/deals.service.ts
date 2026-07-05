@@ -1,13 +1,17 @@
 import { pool } from '@/db/client';
-import { getActiveTenantKey } from '@/modules/_shared';
+import { getActiveTenantKey, getRequiredUserId } from '@/modules/_shared';
 import type { DealBody, ListQuery } from './schema';
 import { buildPatchSql, jsonOrNull, newId, parseJsonField } from './utils';
 import { getDefaultPipelineAndStage } from './pipelines.service';
 
-export async function listDeals(query: ListQuery & { stage_id?: string; account_id?: string }) {
+export async function listDeals(query: ListQuery & { stage_id?: string; account_id?: string }, ownerUserId?: string | null) {
   const tenantKey = getActiveTenantKey();
   const where = ['d.tenant_key = ?'];
   const values: unknown[] = [tenantKey];
+  if (ownerUserId) {
+    where.push('d.owner_user_id = ?');
+    values.push(ownerUserId);
+  }
   if (query.status) {
     where.push('d.status = ?');
     values.push(query.status);
@@ -35,15 +39,22 @@ export async function listDeals(query: ListQuery & { stage_id?: string; account_
   return (rows as Array<Record<string, unknown>>).map((row) => parseJsonField(row, 'raw_data'));
 }
 
-export async function getDeal(id: string) {
+export async function getDeal(id: string, ownerUserId?: string | null) {
   const tenantKey = getActiveTenantKey();
-  const [rows] = await pool.execute('SELECT * FROM crm_deals WHERE tenant_key = ? AND id = ? LIMIT 1', [tenantKey, id]);
+  const where = ['tenant_key = ?', 'id = ?'];
+  const values: unknown[] = [tenantKey, id];
+  if (ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(ownerUserId);
+  }
+  const [rows] = await pool.execute(`SELECT * FROM crm_deals WHERE ${where.join(' AND ')} LIMIT 1`, values as never[]);
   const row = (rows as Array<Record<string, unknown>>)[0];
   return row ? parseJsonField(row, 'raw_data') : null;
 }
 
 export async function createDeal(body: DealBody & { source_lead_id?: string | null }) {
   const tenantKey = getActiveTenantKey();
+  const ownerUserId = getRequiredUserId();
   const id = newId();
   const defaults = await getDefaultPipelineAndStage({ pipelineId: body.pipeline_id, stageId: body.stage_id });
   await pool.execute(
@@ -61,7 +72,7 @@ export async function createDeal(body: DealBody & { source_lead_id?: string | nu
       body.amount ?? null,
       body.currency ?? 'USD',
       body.expected_close_date ?? null,
-      body.owner_user_id ?? null,
+      ownerUserId,
       body.status ?? 'open',
       body.lost_reason ?? null,
       body.source_lead_id ?? null,
@@ -71,7 +82,7 @@ export async function createDeal(body: DealBody & { source_lead_id?: string | nu
   return getDeal(id);
 }
 
-export async function updateDeal(id: string, body: Partial<DealBody>) {
+export async function updateDeal(id: string, body: Partial<DealBody>, ownerUserId?: string | null) {
   const patch = {
     ...body,
     raw_data: body.raw_data === undefined ? undefined : jsonOrNull(body.raw_data),
@@ -79,12 +90,17 @@ export async function updateDeal(id: string, body: Partial<DealBody>) {
   const { sets, values } = buildPatchSql(patch);
   if (!sets.length) return getDeal(id);
   const tenantKey = getActiveTenantKey();
+  const where = ['tenant_key = ?', 'id = ?'];
   values.push(tenantKey, id);
-  await pool.execute(`UPDATE crm_deals SET ${sets.join(', ')} WHERE tenant_key = ? AND id = ?`, values as never[]);
-  return getDeal(id);
+  if (ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(ownerUserId);
+  }
+  await pool.execute(`UPDATE crm_deals SET ${sets.join(', ')} WHERE ${where.join(' AND ')}`, values as never[]);
+  return getDeal(id, ownerUserId);
 }
 
-export async function moveDealStage(id: string, stageId: string) {
+export async function moveDealStage(id: string, stageId: string, ownerUserId?: string | null) {
   const tenantKey = getActiveTenantKey();
   const [stageRows] = await pool.execute(
     'SELECT pipeline_id, is_won, is_lost FROM crm_stages WHERE tenant_key = ? AND id = ? LIMIT 1',
@@ -93,9 +109,26 @@ export async function moveDealStage(id: string, stageId: string) {
   const stage = (stageRows as Array<{ pipeline_id: string; is_won: number; is_lost: number }>)[0];
   if (!stage) return null;
   const status = stage.is_won ? 'won' : stage.is_lost ? 'lost' : 'open';
+  const where = ['tenant_key = ?', 'id = ?'];
+  const values: unknown[] = [stage.pipeline_id, stageId, status, tenantKey, id];
+  if (ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(ownerUserId);
+  }
   await pool.execute(
-    'UPDATE crm_deals SET pipeline_id = ?, stage_id = ?, status = ? WHERE tenant_key = ? AND id = ?',
-    [stage.pipeline_id, stageId, status, tenantKey, id],
+    `UPDATE crm_deals SET pipeline_id = ?, stage_id = ?, status = ? WHERE ${where.join(' AND ')}`,
+    values as never[],
   );
-  return getDeal(id);
+  return getDeal(id, ownerUserId);
+}
+
+export async function deleteDeal(id: string, ownerUserId?: string | null) {
+  const tenantKey = getActiveTenantKey();
+  const where = ['tenant_key = ?', 'id = ?'];
+  const values: unknown[] = [tenantKey, id];
+  if (ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(ownerUserId);
+  }
+  await pool.execute(`DELETE FROM crm_deals WHERE ${where.join(' AND ')}`, values as never[]);
 }

@@ -1,14 +1,18 @@
 import { randomUUID } from 'node:crypto';
 import type { RouteHandler } from 'fastify';
 import type { RowDataPacket } from 'mysql2/promise';
+import { hash as argonHash } from 'argon2';
 import { pool } from '@/db/client';
 import { encryptTenantSecret, invalidateActiveTenantCache } from '@/core/tenant';
+import { getActiveTenantKey, getActiveUserId } from '@/modules/_shared';
 import {
   tenantKeySchema,
   tenantOnboardSchema,
   tenantProfilePatchSchema,
   tenantRoleCreateSchema,
   tenantSecretUpsertSchema,
+  workspaceInviteSchema,
+  workspaceRolePatchSchema,
 } from './validation';
 
 type TenantRow = RowDataPacket & {
@@ -34,6 +38,45 @@ function toTenantDto(row: TenantRow) {
     plan: row.plan,
     branding: parseJson(row.branding) ?? {},
   };
+}
+
+function isSuperAdmin(req: Parameters<RouteHandler>[0]) {
+  const user = (req as unknown as { user?: Record<string, unknown> }).user;
+  return user?.isSuperAdmin === true || user?.is_admin === true || user?.role === 'admin';
+}
+
+async function requireTenantAdmin(req: Parameters<RouteHandler>[0], reply: Parameters<RouteHandler>[1], tenantKey: string) {
+  if (isSuperAdmin(req)) return true;
+  const userId = getActiveUserId();
+  if (!userId) {
+    reply.code(401).send({ error: { message: 'unauthorized' } });
+    return false;
+  }
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT 1
+       FROM tenant_user_roles
+      WHERE tenant_key = ? AND user_id = ? AND role = 'tenant_admin'
+      LIMIT 1`,
+    [tenantKey, userId],
+  );
+  if (rows[0]) return true;
+  reply.code(403).send({ error: { message: 'tenant_admin_required' } });
+  return false;
+}
+
+async function workspaceMemberDto(tenantKey: string, userId: string) {
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT tur.id, tur.user_id, tur.tenant_key, tur.role, tur.created_at,
+            u.email, u.full_name, u.is_active, u.email_verified, u.last_sign_in_at,
+            p.full_name AS profile_name
+       FROM tenant_user_roles tur
+       JOIN users u ON u.id = tur.user_id
+       LEFT JOIN profiles p ON p.id = u.id
+      WHERE tur.tenant_key = ? AND tur.user_id = ?
+      LIMIT 1`,
+    [tenantKey, userId],
+  );
+  return rows[0] ?? null;
 }
 
 async function upsertTenantSetting(tenantKey: string, key: string, value: unknown) {
@@ -154,6 +197,88 @@ export const createTenantRole: RouteHandler<{ Params: { key: string }; Body: unk
     [randomUUID(), parsed.data.user_id, key.data, parsed.data.role],
   );
   return reply.code(201).send({ ok: true });
+};
+
+export const listWorkspaceUsers: RouteHandler = async (req, reply) => {
+  const tenantKey = getActiveTenantKey();
+  if (!await requireTenantAdmin(req, reply, tenantKey)) return;
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT tur.id, tur.user_id, tur.tenant_key, tur.role, tur.created_at,
+            u.email, u.full_name, u.is_active, u.email_verified, u.last_sign_in_at,
+            p.full_name AS profile_name
+       FROM tenant_user_roles tur
+       JOIN users u ON u.id = tur.user_id
+       LEFT JOIN profiles p ON p.id = u.id
+      WHERE tur.tenant_key = ?
+      ORDER BY FIELD(tur.role, 'tenant_admin', 'tenant_editor'), COALESCE(p.full_name, u.full_name, u.email) ASC`,
+    [tenantKey],
+  );
+  return rows;
+};
+
+export const inviteWorkspaceUser: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const tenantKey = getActiveTenantKey();
+  if (!await requireTenantAdmin(req, reply, tenantKey)) return;
+  const parsed = workspaceInviteSchema.safeParse(req.body);
+  if (!parsed.success) return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
+  const body = parsed.data;
+  const email = body.email.toLowerCase();
+
+  const [existingRows] = await pool.execute<RowDataPacket[]>('SELECT id FROM users WHERE email = ? LIMIT 1', [email]);
+  let userId = existingRows[0]?.id as string | undefined;
+  let temporaryPassword: string | null = null;
+
+  if (!userId) {
+    userId = randomUUID();
+    temporaryPassword = randomUUID().replace(/-/g, '').slice(0, 14);
+    await pool.execute(
+      `INSERT INTO users (id, email, password_hash, full_name, is_active, email_verified)
+       VALUES (?, ?, ?, ?, 1, 0)`,
+      [userId, email, await argonHash(temporaryPassword), body.full_name ?? null],
+    );
+    await pool.execute(
+      `INSERT INTO profiles (id, full_name, created_at, updated_at)
+       VALUES (?, ?, CURRENT_TIMESTAMP(3), CURRENT_TIMESTAMP(3))
+       ON DUPLICATE KEY UPDATE full_name = COALESCE(VALUES(full_name), full_name), updated_at = CURRENT_TIMESTAMP(3)`,
+      [userId, body.full_name ?? null],
+    );
+  }
+
+  await pool.execute(
+    `INSERT INTO tenant_user_roles (id, user_id, tenant_key, role)
+     VALUES (?, ?, ?, ?)
+     ON DUPLICATE KEY UPDATE role = VALUES(role)`,
+    [randomUUID(), userId, tenantKey, body.role],
+  );
+
+  return reply.code(201).send({
+    member: await workspaceMemberDto(tenantKey, userId),
+    temporary_password: temporaryPassword,
+  });
+};
+
+export const updateWorkspaceUserRole: RouteHandler<{ Params: { userId: string }; Body: unknown }> = async (req, reply) => {
+  const tenantKey = getActiveTenantKey();
+  if (!await requireTenantAdmin(req, reply, tenantKey)) return;
+  const parsed = workspaceRolePatchSchema.safeParse(req.body);
+  if (!parsed.success) return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
+  await pool.execute(
+    'UPDATE tenant_user_roles SET role = ? WHERE tenant_key = ? AND user_id = ?',
+    [parsed.data.role, tenantKey, req.params.userId],
+  );
+  const member = await workspaceMemberDto(tenantKey, req.params.userId);
+  if (!member) return reply.code(404).send({ error: { message: 'not_found' } });
+  return member;
+};
+
+export const removeWorkspaceUser: RouteHandler<{ Params: { userId: string } }> = async (req, reply) => {
+  const tenantKey = getActiveTenantKey();
+  if (!await requireTenantAdmin(req, reply, tenantKey)) return;
+  if (getActiveUserId() === req.params.userId && !isSuperAdmin(req)) {
+    return reply.code(400).send({ error: { message: 'cannot_remove_self' } });
+  }
+  await pool.execute('DELETE FROM tenant_user_roles WHERE tenant_key = ? AND user_id = ?', [tenantKey, req.params.userId]);
+  return reply.code(204).send();
 };
 
 export const listTenantSecrets: RouteHandler<{ Params: { key: string } }> = async (req, reply) => {

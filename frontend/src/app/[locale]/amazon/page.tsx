@@ -25,7 +25,9 @@ import {
   useStartPublicScanMutation,
   useGetPublicScanQuery,
   useGetAmazonHistoryQuery,
+  useRescoreAmazonJobMutation,
   type RiskReport,
+  type ScanJob,
   type ScanHistoryItem,
 } from '@/integrations/rtk/hooks';
 import { PublicRiskCard } from '@/components/amazon/public-risk-card';
@@ -34,6 +36,7 @@ import PublicEvidenceTable from '@/components/amazon/public-evidence-table';
 import PublicMultiKeyword from '@/components/amazon/public-multi-keyword';
 import PublicSavedSearches from '@/components/amazon/public-saved-searches';
 import KeepaBudgetWidget from '@/components/amazon/keepa-budget-widget';
+import { useJobPolling } from '@/hooks/useJobPolling';
 import { cn } from '@/lib/utils';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
@@ -65,16 +68,16 @@ function JobPoller({
   jobId: string;
   onDone: (report: RiskReport, keyword: string, marketplace: string, completedJobId: string) => void;
 }) {
-  const { data, isError } = useGetPublicScanQuery(jobId, {
-    pollingInterval: 3000,
+  const { data, isError } = useJobPolling<ScanJob>({
+    jobId,
+    useJobQuery: useGetPublicScanQuery,
+    intervalMs: 3000,
+    onDone: (job) => {
+      if (!job.risk_report) return;
+      const p = job.params ?? {};
+      onDone(job.risk_report, p.keyword ?? '', p.marketplace ?? 'com', jobId);
+    },
   });
-
-  React.useEffect(() => {
-    if (data?.status === 'done' && data.risk_report) {
-      const p = data.params ?? {};
-      onDone(data.risk_report, p.keyword ?? '', p.marketplace ?? 'com', jobId);
-    }
-  }, [data, jobId, onDone]);
 
   if (isError) {
     return (
@@ -186,6 +189,7 @@ export default function DashboardPage() {
   const { data: quota, refetch: refetchQuota } = useGetMyQuotaQuery(undefined, { skip: !user });
   const { data: history, refetch: refetchHistory } = useGetAmazonHistoryQuery(undefined, { skip: !user });
   const [startScan, { isLoading: isScanning }] = useStartPublicScanMutation();
+  const [rescoreJob, { isLoading: isRescoring }] = useRescoreAmazonJobMutation();
 
   React.useEffect(() => {
     if (isReady && !user) {
@@ -220,6 +224,20 @@ export default function DashboardPage() {
     setMarketplace(item.marketplace ?? 'com');
     if (item.status === 'done' && item.decision) {
       // Trigger a fresh lookup via refetch or just re-scan
+    }
+  };
+
+  const handleRescore = async () => {
+    if (!result?.jobId) return;
+    const job = await rescoreJob({ jobId: result.jobId }).unwrap();
+    if (job.risk_report) {
+      setResult({
+        report: job.risk_report,
+        keyword: job.params?.keyword ?? result.keyword,
+        marketplace: job.params?.marketplace ?? result.marketplace,
+        jobId: job.id,
+      });
+      refetchHistory();
     }
   };
 
@@ -320,6 +338,15 @@ export default function DashboardPage() {
                 Analiz Sonucu — <span className="text-(--gm-text)">{result.keyword}</span>
               </p>
               <div className="flex gap-2">
+                <button
+                  type="button"
+                  onClick={handleRescore}
+                  disabled={isRescoring}
+                  className="flex h-8 items-center gap-1.5 rounded-full border border-(--gm-border-soft) bg-(--gm-surface)/20 px-4 text-[10px] font-bold uppercase tracking-widest text-(--gm-text) hover:bg-(--gm-surface)/40 transition-colors disabled:opacity-50"
+                >
+                  {isRescoring ? <Loader2 className="size-3 animate-spin" /> : <RefreshCw className="size-3" />}
+                  Rescore
+                </button>
                 <button
                   type="button"
                   onClick={() => exportCsv(result.report, result.keyword, result.marketplace)}

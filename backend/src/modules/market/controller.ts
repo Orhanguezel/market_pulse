@@ -34,7 +34,8 @@ import { scanMarketplaceForTarget, type Marketplace } from './marketplace.signal
 import { scanAllMarketplaces } from '@/jobs/marketplace.job';
 import { generateWeeklyReport, sendWeeklyReportEmail } from './report.service';
 import { syncErpCustomersToTargets, type ErpSyncMode } from './external/erp/sync';
-import { andTenant, getActiveTenantKey, tenantValues } from '@/modules/_shared';
+import { andTenant, getActiveTenantKey, getRequiredUserId, tenantValues } from '@/modules/_shared';
+import { checkAndConsumeDailyUsage } from '@/modules/public-api/quota.repository';
 
 function getRequestUserId(req: { user?: unknown }) {
   const user = req.user;
@@ -850,6 +851,14 @@ export const sendWeeklyReport: RouteHandler<{ Body: unknown }> = async (req, rep
   const body = (req.body ?? {}) as { to?: unknown };
   const to = typeof body.to === 'string' ? body.to.trim() : '';
   if (!to || !to.includes('@')) return reply.code(400).send({ error: { message: 'valid_recipient_required' } });
+  if (req.url && !req.url.includes('/admin/')) {
+    const quota = await checkAndConsumeDailyUsage(getRequiredUserId(), 'weekly_report_send');
+    if (!quota.allowed) {
+      return reply.code(429).send({
+        error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit },
+      });
+    }
+  }
   await sendWeeklyReportEmail(to);
   return { ok: true };
 };

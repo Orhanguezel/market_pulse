@@ -1,6 +1,8 @@
 'use client';
 
 import { useMemo, useState } from 'react';
+import Link from 'next/link';
+import { useParams } from 'next/navigation';
 import { AlertCircle, CheckCircle2, ChevronDown, Download, ExternalLink, Loader2, Mail, Play, Radar, RefreshCw, Search, Send } from 'lucide-react';
 import { toast } from 'sonner';
 import {
@@ -13,6 +15,7 @@ import {
   useStartDecisionMakerJobMutation,
   useFindDecisionMakerEmailsMutation,
   useDecisionMakersToOutreachListMutation,
+  usePromoteDecisionMakersToCrmMutation,
   useListOutreachListsQuery,
   useGenerateOutreachDraftsMutation,
   useSendOutreachListMutation,
@@ -199,6 +202,8 @@ function buildFilename(jobId: string | null, confidence: string, format: 'csv' |
 }
 
 export default function KararVericilerPage() {
+  const { locale } = useParams<{ locale: string }>();
+  const mailPath = `/${locale || 'tr'}/mail-yonetimi`;
   const { data: presets } = useGetDecisionMakerPresetsQuery();
   const { data: jobs = [], isFetching: jobsFetching, refetch: refetchJobs } = useListDecisionMakerJobsQuery(undefined, { pollingInterval: 10000 });
   const [startJob, startState] = useStartDecisionMakerJobMutation();
@@ -206,6 +211,7 @@ export default function KararVericilerPage() {
   const [exportXlsx, exportXlsxState] = useLazyExportDecisionMakersXlsxQuery();
   const [findEmails, findEmailsState] = useFindDecisionMakerEmailsMutation();
   const [toOutreachList, toListState] = useDecisionMakersToOutreachListMutation();
+  const [promoteCrm, promoteCrmState] = usePromoteDecisionMakersToCrmMutation();
   const { data: outreachLists = [], refetch: refetchLists } = useListOutreachListsQuery(undefined, { pollingInterval: 15000 });
   const [genDrafts, genState] = useGenerateOutreachDraftsMutation();
   const [sendList, sendState] = useSendOutreachListMutation();
@@ -335,6 +341,16 @@ export default function KararVericilerPage() {
       await refetchLists();
     } catch {
       toast.error('Gonderim baslatilamadi.');
+    }
+  };
+
+  const handlePromoteCrm = async () => {
+    if (!activeJob?.id) return;
+    try {
+      const res = await promoteCrm({ job_id: activeJob.id, confidence, limit: 500 }).unwrap();
+      toast.success(`${res.accounts} müşteri ve ${res.contacts} kontak CRM'e aktarıldı`);
+    } catch {
+      toast.error('CRM aktarımı başlatılamadı.');
     }
   };
 
@@ -624,6 +640,15 @@ export default function KararVericilerPage() {
             {toListState.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />}
             Outreach Listesine Ekle
           </button>
+          <button
+            type="button"
+            onClick={handlePromoteCrm}
+            disabled={promoteCrmState.isLoading || !activeJob?.id}
+            className="inline-flex items-center gap-2 rounded-md bg-[#1e40af] px-3 py-2 text-[12px] font-semibold text-white hover:bg-[#15317f] disabled:opacity-50"
+          >
+            {promoteCrmState.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
+            CRM'e Aktar
+          </button>
         </div>
 
         {rows.length ? (
@@ -705,16 +730,21 @@ export default function KararVericilerPage() {
               <h2 className="flex items-center gap-2 text-[15px] font-bold"><Send className="h-4 w-4 text-[#0f766e]" /> Outreach / Email Gonderimi</h2>
               <p className="mt-0.5 text-[12px] text-[#64748b]">Listeye email’i bulunan karar vericiler eklenir. Sablonda {'{name}'} / {'{company}'} degiskenleri kullanilabilir.</p>
             </div>
-            <select
-              value={activeListId ?? ''}
-              onChange={(e) => setActiveListId(e.target.value || null)}
-              className="max-w-[280px] rounded-md border border-[#cbd5e1] px-2 py-2 text-[12px]"
-            >
-              <option value="">Liste sec...</option>
-              {outreachLists.map((list) => (
-                <option key={list.id} value={list.id}>{list.name} · {list.sent_count}/{list.total_count} gonderildi · {list.status}</option>
-              ))}
-            </select>
+            <div className="flex flex-wrap items-center gap-2">
+              <Link href={mailPath} className="inline-flex items-center gap-2 rounded-md border border-[#1e40af] px-3 py-2 text-[12px] font-semibold text-[#1e40af] hover:bg-[#eff6ff]">
+                <Mail className="h-4 w-4" /> Mail Yönetimi
+              </Link>
+              <select
+                value={activeListId ?? ''}
+                onChange={(e) => setActiveListId(e.target.value || null)}
+                className="max-w-[280px] rounded-md border border-[#cbd5e1] px-2 py-2 text-[12px]"
+              >
+                <option value="">Liste sec...</option>
+                {outreachLists.map((list) => (
+                  <option key={list.id} value={list.id}>{list.name} · {list.sent_count}/{list.total_count} gonderildi · {list.status}</option>
+                ))}
+              </select>
+            </div>
           </div>
 
           {activeList ? (

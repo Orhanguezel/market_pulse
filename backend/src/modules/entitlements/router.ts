@@ -1,5 +1,6 @@
 import type { FastifyInstance, FastifyReply, FastifyRequest } from 'fastify';
 import { z } from 'zod';
+import { requireAuth } from '@/middleware/auth';
 import { getActiveTenantKey } from '@/modules/_shared';
 import { activateModule, listActiveTenantModules, listCatalog, listTenantModules, suspendModule } from './service';
 
@@ -63,4 +64,8 @@ export async function registerEntitlementsAdmin(app: FastifyInstance) {
     const module = await suspendModule(params.data.tenantKey, body.data.module_key);
     return { module };
   });
+}
+
+export async function registerEntitlementsPublic(app: FastifyInstance) {
+  app.get('/entitlements/me', { preHandler: requireAuth }, myEntitlementsHandler);
 }

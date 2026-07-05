@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { pool } from '@/db/client';
-import { getActiveTenantKey } from '@/modules/_shared';
+import { getActiveTenantKey, getActiveUserId } from '@/modules/_shared';
 import type { CompanyPoolRow, CompanyQualityStatus, DecisionMakerReviewStatus, DecisionMakerRow } from './finder.service';
 
 /**
@@ -12,6 +12,7 @@ export type DecisionMakerListFilters = {
   confidence?: 'A' | 'B' | 'C' | null;
   sector?: string | null;
   includeRejected?: boolean;
+  ownerUserId?: string | null;
   limit?: number;
 };
 
@@ -19,20 +20,22 @@ export type CompanyPoolListFilters = {
   jobId?: string | null;
   status?: CompanyQualityStatus | 'all' | null;
   includeExcluded?: boolean;
+  ownerUserId?: string | null;
   limit?: number;
 };
 
 export async function saveDecisionMakers(rows: DecisionMakerRow[], sector?: string | null, jobId?: string | null): Promise<number> {
   const tenantKey = getActiveTenantKey();
+  const ownerUserId = getActiveUserId() ?? null;
   if (!tenantKey || !rows.length) return 0;
   let saved = 0;
   for (const r of rows) {
     await pool.execute(
       `INSERT INTO lead_decision_makers
-         (id, tenant_key, job_id, company_name, city, business_type, decision_maker_name, title,
+         (id, tenant_key, owner_user_id, job_id, company_name, city, business_type, decision_maker_name, title,
           linkedin_profile_url, company_website, social_url, source_url, fit_note,
           confidence_score, sector, last_verified_at)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
        ON DUPLICATE KEY UPDATE
          job_id=VALUES(job_id),
          business_type=VALUES(business_type),
@@ -47,7 +50,7 @@ export async function saveDecisionMakers(rows: DecisionMakerRow[], sector?: stri
          sector=VALUES(sector),
          last_verified_at=VALUES(last_verified_at)`,
       [
-        randomUUID(), tenantKey, jobId ?? null, r.company_name, r.city ?? null, r.business_type ?? null,
+        randomUUID(), tenantKey, ownerUserId, jobId ?? null, r.company_name, r.city ?? null, r.business_type ?? null,
         r.decision_maker_name ?? null, r.title ?? null, r.linkedin_profile_url ?? null,
         r.company_website ?? null, r.social_url ?? null, r.source_url ?? null, r.fit_note ?? null,
         r.confidence_score, sector ?? null, r.last_verified_at ?? null,
@@ -60,15 +63,16 @@ export async function saveDecisionMakers(rows: DecisionMakerRow[], sector?: stri
 
 export async function saveCompanyPool(rows: CompanyPoolRow[], sector?: string | null, jobId?: string | null): Promise<number> {
   const tenantKey = getActiveTenantKey();
+  const ownerUserId = getActiveUserId() ?? null;
   if (!tenantKey || !rows.length) return 0;
   let saved = 0;
   for (const r of rows) {
     await pool.execute(
       `INSERT INTO lead_company_pool
-         (id, tenant_key, job_id, company_name, city, business_type, website, phone,
+         (id, tenant_key, owner_user_id, job_id, company_name, city, business_type, website, phone,
           google_maps_url, address, quality_score, quality_status, exclude_reason,
           source, sector, last_verified_at)
-       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+       VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
        ON DUPLICATE KEY UPDATE
          job_id=VALUES(job_id),
          business_type=VALUES(business_type),
@@ -83,7 +87,7 @@ export async function saveCompanyPool(rows: CompanyPoolRow[], sector?: string | 
          sector=VALUES(sector),
          last_verified_at=VALUES(last_verified_at)`,
       [
-        randomUUID(), tenantKey, jobId ?? null, r.company_name, r.city ?? null, r.business_type ?? null,
+        randomUUID(), tenantKey, ownerUserId, jobId ?? null, r.company_name, r.city ?? null, r.business_type ?? null,
         r.website ?? null, r.phone ?? null, r.google_maps_url ?? null, r.address ?? null,
         r.quality_score, r.quality_status, r.exclude_reason ?? null, r.source, sector ?? null,
         r.last_verified_at ?? null,
@@ -113,6 +117,10 @@ export async function listSavedDecisionMakers(filters: number | DecisionMakerLis
     where.push('sector = ?');
     values.push(opts.sector);
   }
+  if (opts.ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(opts.ownerUserId);
+  }
   // Reddedilen satırlar varsayılan listede/export'ta gözükmez (checklist: excluded/rejected default dışında).
   if (!opts.includeRejected) {
     where.push("review_status <> 'rejected'");
@@ -132,7 +140,7 @@ export async function listSavedDecisionMakers(filters: number | DecisionMakerLis
   return rows as DecisionMakerRow[];
 }
 
-type DecisionMakerSelector = { jobId?: string | null; ids?: string[]; confidence?: 'A' | 'B' | 'C' | null; limit?: number };
+type DecisionMakerSelector = { jobId?: string | null; ids?: string[]; confidence?: 'A' | 'B' | 'C' | null; ownerUserId?: string | null; limit?: number };
 
 function buildSelectorWhere(tenantKey: string, sel: DecisionMakerSelector) {
   const where = ['tenant_key = ?'];
@@ -147,6 +155,10 @@ function buildSelectorWhere(tenantKey: string, sel: DecisionMakerSelector) {
   if (sel.confidence) {
     where.push('confidence_score = ?');
     values.push(sel.confidence);
+  }
+  if (sel.ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(sel.ownerUserId);
   }
   where.push("review_status <> 'rejected'");
   return { where, values };
@@ -192,12 +204,18 @@ export async function listDecisionMakerRecipients(sel: DecisionMakerSelector): P
 }
 
 /** Karar verici satırının manuel inceleme durumunu güncelle (tenant-scoped). */
-export async function updateDecisionMakerReview(id: string, status: DecisionMakerReviewStatus): Promise<boolean> {
+export async function updateDecisionMakerReview(id: string, status: DecisionMakerReviewStatus, ownerUserId?: string | null): Promise<boolean> {
   const tenantKey = getActiveTenantKey();
   if (!tenantKey || !id) return false;
+  const where = ['id = ?', 'tenant_key = ?'];
+  const values: unknown[] = [id, tenantKey];
+  if (ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(ownerUserId);
+  }
   const [result] = await pool.execute(
-    'UPDATE lead_decision_makers SET review_status = ? WHERE id = ? AND tenant_key = ?',
-    [status, id, tenantKey] as never[],
+    `UPDATE lead_decision_makers SET review_status = ? WHERE ${where.join(' AND ')}`,
+    [status, ...values] as never[],
   );
   return (result as { affectedRows?: number }).affectedRows ? true : false;
 }
@@ -222,6 +240,10 @@ export async function listCompanyPool(filters: CompanyPoolListFilters = {}): Pro
   } else if (!filters.includeExcluded) {
     where.push("quality_status <> 'excluded'");
   }
+  if (filters.ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(filters.ownerUserId);
+  }
   const limit = Math.min(Math.max(Number(filters.limit ?? 500), 1), 1000);
   const [rows] = await pool.execute(
     `SELECT id, company_name, city, business_type, website, phone, google_maps_url, address,
@@ -241,13 +263,20 @@ export async function updateCompanyPoolStatus(
   id: string,
   status: CompanyQualityStatus,
   excludeReason?: string | null,
+  ownerUserId?: string | null,
 ): Promise<boolean> {
   const tenantKey = getActiveTenantKey();
   if (!tenantKey || !id) return false;
   const reason = status === 'excluded' ? (excludeReason ?? 'Manuel olarak hariç tutuldu') : null;
+  const where = ['id = ?', 'tenant_key = ?'];
+  const values: unknown[] = [id, tenantKey];
+  if (ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(ownerUserId);
+  }
   const [result] = await pool.execute(
-    'UPDATE lead_company_pool SET quality_status = ?, exclude_reason = ? WHERE id = ? AND tenant_key = ?',
-    [status, reason, id, tenantKey] as never[],
+    `UPDATE lead_company_pool SET quality_status = ?, exclude_reason = ? WHERE ${where.join(' AND ')}`,
+    [status, reason, ...values] as never[],
   );
   return (result as { affectedRows?: number }).affectedRows ? true : false;
 }

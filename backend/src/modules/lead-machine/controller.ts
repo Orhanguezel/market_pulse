@@ -1,7 +1,8 @@
 import type { FastifyReply, RouteHandler } from 'fastify';
 import { pool } from '@/db/client';
-import { runWithTenant, getRequestTenantKey } from '@/core/tenant-context';
-import { getActiveTenantKey, getRequiredTenantKey } from '@/modules/_shared';
+import { runWithTenant, runWithTenantAndUser, getRequestTenantKey } from '@/core/tenant-context';
+import { getActiveTenantKey, getActiveUserId, getRequiredTenantKey, getRequiredUserId } from '@/modules/_shared';
+import { checkAndConsumeDailyUsage, type DailyUsageType } from '@/modules/public-api/quota.repository';
 import { approveCandidateToMarketLead } from './_shared/candidate.helpers';
 import {
   createSearchJob,
@@ -78,8 +79,11 @@ function runInBackground(task: Promise<unknown>) {
 function queueCandidateEnrichment(candidateId: string) {
   // Tenant'i request context'inde yakala; setTimeout + fire-and-forget ALS store'u kaybeder.
   const tenantKey = getRequestTenantKey();
+  const userId = getActiveUserId();
   setTimeout(() => runInBackground(
-    tenantKey ? runWithTenant(tenantKey, () => enrichCandidate(candidateId)) : enrichCandidate(candidateId),
+    tenantKey && userId
+      ? runWithTenantAndUser(tenantKey, userId, () => enrichCandidate(candidateId))
+      : tenantKey ? runWithTenant(tenantKey, () => enrichCandidate(candidateId)) : enrichCandidate(candidateId),
   ), 0);
 }
 
@@ -87,14 +91,30 @@ function callbackTenantKey(body: Record<string, unknown>): string | null {
   return typeof body.tenant_key === 'string' && /^[a-z0-9_-]{1,64}$/i.test(body.tenant_key) ? body.tenant_key : null;
 }
 
+function isUserRoute(url?: string): boolean {
+  return Boolean(url && !url.includes('/admin/'));
+}
+
+function ownerUserIdForRoute(url?: string): string | null {
+  return isUserRoute(url) ? getRequiredUserId() : null;
+}
+
+async function consumeDailyUsageForRoute(url: string | undefined, usageType: DailyUsageType, amount = 1) {
+  if (!isUserRoute(url)) return null;
+  const result = await checkAndConsumeDailyUsage(getRequiredUserId(), usageType, amount);
+  return result.allowed ? null : result;
+}
+
 export const listLeadCandidates: RouteHandler<{ Querystring: unknown }> = async (req, reply) => {
   const q = asRecord(req.query);
   const limit = Math.min(100, Math.max(1, Number(q.limit ?? 25)));
   const page = Math.max(1, Number(q.page ?? 1));
+  const ownerUserId = ownerUserIdForRoute(req.url);
   const result = await listCandidates({
     channel: typeof q.channel === 'string' ? q.channel : undefined,
     status: typeof q.status === 'string' ? q.status : undefined,
     jobId: typeof q.job_id === 'string' ? q.job_id : undefined,
+    ownerUserId,
     limit,
     offset: (page - 1) * limit,
   });
@@ -117,6 +137,7 @@ export const reviewCandidate: RouteHandler<{ Params: { id: string }; Body: unkno
     typeof body.reject_reason === 'string' ? body.reject_reason : null,
     null,
     rejectTags?.length ? rejectTags : null,
+    ownerUserIdForRoute(req.url),
   );
   if (!candidate) return reply.code(404).send({ error: { message: 'not_found' } });
   if (status === 'approved' || status === 'favorite') queueCandidateEnrichment(req.params.id);
@@ -124,12 +145,44 @@ export const reviewCandidate: RouteHandler<{ Params: { id: string }; Body: unkno
 };
 
 export const approveToLead: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const candidate = await getCandidate(req.params.id);
+  const candidate = await getCandidate(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
   if (!candidate) return reply.code(404).send({ error: { message: 'not_found' } });
   const lead = await approveCandidateToMarketLead(candidate);
-  await updateCandidateReview(req.params.id, 'approved');
+  await updateCandidateReview(req.params.id, 'approved', null, null, null, ownerUserIdForRoute(req.url));
   queueCandidateEnrichment(req.params.id);
   return reply.code(201).send(lead);
+};
+
+export const createLeadCandidate: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  const name = typeof body.name === 'string' ? body.name.trim() : '';
+  if (!name) return reply.code(400).send({ error: { message: 'name_required' } });
+  const userId = getRequiredUserId();
+  const channel = typeof body.channel === 'string' ? body.channel as LeadChannel : 'icp_match';
+  const icpId = typeof body.icp_id === 'string' ? body.icp_id : null;
+  const jobId = typeof body.job_id === 'string'
+    ? body.job_id
+    : (await createSearchJob(channel, { source: 'manual' }, icpId, userId))?.id;
+  if (!jobId) return reply.code(500).send({ error: { message: 'job_create_failed' } });
+  const id = await insertCandidate({
+    jobId,
+    channel,
+    icpId,
+    name,
+    website: typeof body.website === 'string' ? body.website : null,
+    country: typeof body.country === 'string' ? body.country : null,
+    city: typeof body.city === 'string' ? body.city : null,
+    phone: typeof body.phone === 'string' ? body.phone : null,
+    email: typeof body.email === 'string' ? body.email : null,
+    contactName: typeof body.contact_name === 'string' ? body.contact_name : null,
+    rawData: body.raw_data ?? body,
+    aiSummary: typeof body.ai_summary === 'string' ? body.ai_summary : null,
+    leadScore: typeof body.lead_score === 'number' ? body.lead_score : null,
+    decision: typeof body.decision === 'string' ? body.decision : null,
+    ownerUserId: userId,
+  });
+  const candidate = await getCandidate(id);
+  return reply.code(201).send(candidate);
 };
 
 export const scraperCallback: RouteHandler<{ Body: unknown }> = async (req, reply) => {
@@ -165,6 +218,7 @@ export const scraperCallback: RouteHandler<{ Body: unknown }> = async (req, repl
         rawData: candidate.raw_data ?? candidate,
         aiSummary: typeof candidate.ai_summary === 'string' ? candidate.ai_summary : null,
         leadScore: typeof candidate.lead_score === 'number' ? candidate.lead_score : 0,
+        ownerUserId: job.created_by,
       });
       inserted += 1;
     }
@@ -239,21 +293,31 @@ async function createAndRunJob(channel: LeadChannel, body: Record<string, unknow
   // (AsyncLocalStorage.run) yeni scope acip tum await zincirine dogru tenant'i tasir.
   const tenantKey = getRequiredTenantKey(); // switcher zorunlu: tenant secilmeden tarama baslamaz
   const icpId = typeof body.icp_id === 'string' ? body.icp_id : null;
-  const job = await createSearchJob(channel, body, icpId);
+  const job = await createSearchJob(channel, body, icpId, getActiveUserId() ?? null);
   if (!job) throw new Error('JOB_CREATE_FAILED');
-  if (channel === 'amazon') runInBackground(runWithTenant(tenantKey, () => runAmazonJob(job.id)));
-  if (channel === 'b2b_directory') runInBackground(runWithTenant(tenantKey, () => runB2bJob(job.id)));
-  if (channel === 'trade_fair') runInBackground(runWithTenant(tenantKey, () => runFairJob(job.id)));
-  if (channel === 'customs') runInBackground(runWithTenant(tenantKey, () => runCustomsJob(job.id)));
+  const ownerUserId = job.created_by;
+  const runJob = (task: () => Promise<unknown>) => ownerUserId
+    ? runWithTenantAndUser(tenantKey, ownerUserId, task)
+    : runWithTenant(tenantKey, task);
+  if (channel === 'amazon') runInBackground(runJob(() => runAmazonJob(job.id)));
+  if (channel === 'b2b_directory') runInBackground(runJob(() => runB2bJob(job.id)));
+  if (channel === 'trade_fair') runInBackground(runJob(() => runFairJob(job.id)));
+  if (channel === 'customs') runInBackground(runJob(() => runCustomsJob(job.id)));
   return job;
 }
 
-export const startAmazonJob: RouteHandler<{ Body: unknown }> = async (req, reply) => reply.code(201).send(await createAndRunJob('amazon', asRecord(req.body)));
+export const startAmazonJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+  if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
+  return reply.code(201).send(await createAndRunJob('amazon', asRecord(req.body)));
+};
 export const startAmazonScan: RouteHandler<{ Body: unknown }> = async (req, reply) => {
   const body = asRecord(req.body);
   if (typeof body.keyword !== 'string' || !body.keyword.trim()) {
     return reply.code(400).send({ error: { message: 'keyword_required' } });
   }
+  const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+  if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
   return reply.code(201).send(await createAndRunJob('amazon', {
     ...body,
     keyword: body.keyword.trim(),
@@ -297,18 +361,48 @@ export const getAmazonScan: RouteHandler<{ Params: { jobId: string } }> = async 
   return row;
 };
 
-export const startB2bJob: RouteHandler<{ Body: unknown }> = async (req, reply) => reply.code(201).send(await createAndRunJob('b2b_directory', asRecord(req.body)));
-export const listB2bJobs: RouteHandler = async () => listSearchJobs('b2b_directory');
+export const startB2bJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+  if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
+  return reply.code(201).send(await createAndRunJob('b2b_directory', asRecord(req.body)));
+};
+export const listB2bJobs: RouteHandler = async (req) => listSearchJobs('b2b_directory', { ownerUserId: ownerUserIdForRoute(req.url) });
+export const getB2bJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
+  if (!job || job.channel !== 'b2b_directory') return reply.code(404).send({ error: { message: 'not_found' } });
+  return job;
+};
 
-export const startCustomsJob: RouteHandler<{ Body: unknown }> = async (req, reply) => reply.code(201).send(await createAndRunJob('customs', asRecord(req.body)));
-export const listCustomsJobs: RouteHandler = async () => listSearchJobs('customs');
+export const startCustomsJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+  if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
+  return reply.code(201).send(await createAndRunJob('customs', asRecord(req.body)));
+};
+export const listCustomsJobs: RouteHandler = async (req) => listSearchJobs('customs', { ownerUserId: ownerUserIdForRoute(req.url) });
+export const getCustomsJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
+  if (!job || job.channel !== 'customs') return reply.code(404).send({ error: { message: 'not_found' } });
+  return job;
+};
 
-export const startFairJob: RouteHandler<{ Body: unknown }> = async (req, reply) => reply.code(201).send(await createAndRunJob('trade_fair', asRecord(req.body)));
-export const listFairJobs: RouteHandler = async () => listSearchJobs('trade_fair');
+export const startFairJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+  if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
+  return reply.code(201).send(await createAndRunJob('trade_fair', asRecord(req.body)));
+};
+export const listFairJobs: RouteHandler = async (req) => listSearchJobs('trade_fair', { ownerUserId: ownerUserIdForRoute(req.url) });
+export const getFairJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
+  if (!job || job.channel !== 'trade_fair') return reply.code(404).send({ error: { message: 'not_found' } });
+  return job;
+};
 export const fairSuggestions: RouteHandler = async () => [];
 export const startGenericFairRunner: RouteHandler<{ Body: unknown }> = async (req, reply) => {
   try {
-    return reply.code(201).send(await createAndRunJob('trade_fair', { ...buildGenericFairRunnerParams(asRecord(req.body)) }));
+    const params = buildGenericFairRunnerParams(asRecord(req.body));
+    const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+    if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
+    return reply.code(201).send(await createAndRunJob('trade_fair', { ...params }));
   } catch (e) {
     if (e instanceof Error && (e.message === 'FAIR_URL_REQUIRED' || e.message === 'ICP_ID_REQUIRED')) {
       return reply.code(400).send({ error: { message: e.message.toLowerCase() } });
@@ -379,7 +473,9 @@ export const enrichDecisionMakersBatch: RouteHandler<{ Body: unknown }> = async 
   });
 };
 
-export const generateOutreach: RouteHandler<{ Params: { candidateId: string } }> = async (req, reply) => reply.code(201).send(await generateOutreachEmail(req.params.candidateId));
+export const generateOutreach: RouteHandler<{ Params: { candidateId: string } }> = async (req, reply) => reply.code(201).send(await generateOutreachEmail(req.params.candidateId, {
+  ownerUserId: ownerUserIdForRoute(req.url),
+}));
 export const generateLinkedInTemplatesHandler: RouteHandler<{ Body: unknown }> = async (req, reply) => {
   const body = asRecord(req.body);
   try {
@@ -431,6 +527,8 @@ export const updateDraft: RouteHandler<{ Params: { id: string }; Body: unknown }
 export const sendDraft: RouteHandler<{ Params: { id: string }; Body: unknown }> = async (req, reply) => {
   const body = asRecord(req.body);
   try {
+    const quota = await consumeDailyUsageForRoute(req.url, 'email_send');
+    if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
     return await sendOutreachDraft(req.params.id, typeof body.to === 'string' ? body.to : null);
   } catch (e) {
     if (e instanceof Error && e.message === 'DRAFT_NOT_FOUND') {
@@ -454,7 +552,7 @@ export const openTrackingPixel: RouteHandler<{ Params: { id: string } }> = async
 };
 
 export const getLeadCandidate: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const candidate = await getCandidate(req.params.id);
+  const candidate = await getCandidate(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
   if (!candidate) return reply.code(404).send({ error: { message: 'not_found' } });
   return candidate;
 };
@@ -548,7 +646,7 @@ export const feedbackApprovedStats: RouteHandler = async () => getApprovedStats(
 export const listRules: RouteHandler<{ Querystring: unknown }> = async (req) => {
   const q = asRecord(req.query);
   const icpId = typeof q.icp_id === 'string' ? q.icp_id : undefined;
-  return listScanRules(icpId);
+  return listScanRules(icpId, ownerUserIdForRoute(req.url));
 };
 
 export const createRule: RouteHandler<{ Body: unknown }> = async (req, reply) => {
@@ -562,12 +660,13 @@ export const createRule: RouteHandler<{ Body: unknown }> = async (req, reply) =>
     rule_type: typeof body.rule_type === 'string' ? body.rule_type : 'exclude_reject_tag',
     value: body.value.trim(),
     label: typeof body.label === 'string' ? body.label : null,
+    owner_user_id: ownerUserIdForRoute(req.url),
   });
   return reply.code(201).send(rule);
 };
 
 export const deleteRule: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  await deleteScanRule(req.params.id);
+  await deleteScanRule(req.params.id, ownerUserIdForRoute(req.url));
   return reply.code(204).send();
 };
 

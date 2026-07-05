@@ -2,8 +2,9 @@ import type { FastifyInstance } from 'fastify';
 import { pool } from '@/db/client';
 import { requireAuth } from '@/middleware/auth';
 import { requireModule } from '@/modules/entitlements';
-import { runWithTenant } from '@/core/tenant-context';
-import { getRequiredTenantKey } from '@/modules/_shared';
+import { checkAndConsumeDailyUsage } from '@/modules/public-api/quota.repository';
+import { runWithTenant, runWithTenantAndUser } from '@/core/tenant-context';
+import { getRequiredTenantKey, getRequiredUserId } from '@/modules/_shared';
 import { createAccount } from '@/modules/crm/accounts.service';
 import { createContact } from '@/modules/crm/contacts.service';
 import { createSearchJob, getSearchJob, insertCandidate, listSearchJobs } from '../_shared/db';
@@ -12,9 +13,7 @@ import { saveCompanyPool, saveDecisionMakers, listCompanyPool, listSavedDecision
 import { runDecisionMakerJob, isDecisionMakerJob } from './job.service';
 import { decisionMakersToCsv, decisionMakersToXlsx } from './export.service';
 import { findEmailsForDecisionMakers } from './email-finder.service';
-import { createList, addRecipients, getList } from '../outreach/bulk-list.repository';
-import { sendList } from '../outreach/bulk-list.service';
-import { listBulkLists, getBulkList, listBulkRecipients, generateBulkDrafts } from '../outreach/bulk-list.controller';
+import { createList, addRecipients } from '../outreach/bulk-list.repository';
 
 /**
  * Karar Verici Bulma (OSINT) — Places havuzu + Apollo people-search.
@@ -22,6 +21,7 @@ import { listBulkLists, getBulkList, listBulkRecipients, generateBulkDrafts } fr
  */
 export async function registerDecisionMakerPublic(app: FastifyInstance) {
   const guard = { preHandler: [requireAuth, requireModule('leads')] };
+  const emailMarketingGuard = { preHandler: [requireAuth, requireModule('leads'), requireModule('email-marketing')] };
 
   // Sektör/unvan presetleri (UI için)
   app.get('/lead-machine/decision-makers/presets', guard, async () => ({
@@ -66,7 +66,7 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
 
   // Kayıtlı (birikmiş) karar vericiler — sayfa açılışında yüklenir.
   app.get('/lead-machine/decision-makers/saved', guard, async () => {
-    const rows = await listSavedDecisionMakers();
+    const rows = await listSavedDecisionMakers({ ownerUserId: getRequiredUserId() });
     return { rows, stats: { companies: rows.length, withDecisionMaker: rows.filter((r) => r.decision_maker_name).length } };
   });
 
@@ -76,6 +76,7 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
       jobId: q.job_id,
       status: q.status === 'all' ? 'all' : q.status as never,
       includeExcluded: q.include_excluded === 'true',
+      ownerUserId: getRequiredUserId(),
       limit: Number(q.limit ?? 500),
     });
     return {
@@ -96,20 +97,27 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
       return reply.status(400).send({ error: { message: 'cities_required' } });
     }
     const tenantKey = getRequiredTenantKey();
+    const ownerUserId = getRequiredUserId();
+    const quota = await checkAndConsumeDailyUsage(ownerUserId, 'lead_job');
+    if (!quota.allowed) {
+      return reply.status(429).send({
+        error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit },
+      });
+    }
     const job = await createSearchJob('decision_maker', {
       ...body,
       cities: body.cities.slice(0, 20),
       targetCount: Math.min(Number(body.targetCount ?? 50), 200),
-    }, null);
+    }, null, ownerUserId);
     if (!job) return reply.status(500).send({ error: { message: 'job_create_failed' } });
-    runInBackground(runWithTenant(tenantKey, () => runDecisionMakerJob(job.id)));
+    runInBackground(runWithTenantAndUser(tenantKey, ownerUserId, () => runDecisionMakerJob(job.id)));
     return reply.status(201).send(job);
   });
 
-  app.get('/lead-machine/decision-makers/jobs', guard, async () => listSearchJobs('decision_maker'));
+  app.get('/lead-machine/decision-makers/jobs', guard, async () => listSearchJobs('decision_maker', { ownerUserId: getRequiredUserId() }));
 
   app.get('/lead-machine/decision-makers/jobs/:id', guard, async (req, reply) => {
-    const job = await getSearchJob((req.params as { id: string }).id);
+    const job = await getSearchJob((req.params as { id: string }).id, { ownerUserId: getRequiredUserId() });
     if (!isDecisionMakerJob(job)) return reply.status(404).send({ error: { message: 'not_found' } });
     return job;
   });
@@ -120,6 +128,7 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
       jobId: q.job_id,
       confidence: parseConfidence(q.confidence),
       sector: q.sector,
+      ownerUserId: getRequiredUserId(),
       limit: Number(q.limit ?? 500),
     });
     return { rows, stats: { companies: rows.length, withDecisionMaker: rows.filter((row) => row.decision_maker_name).length } };
@@ -131,6 +140,7 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
       jobId: q.job_id,
       confidence: parseConfidence(q.confidence),
       sector: q.sector,
+      ownerUserId: getRequiredUserId(),
       limit: Number(q.limit ?? 1000),
     });
     return reply
@@ -145,6 +155,7 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
       jobId: q.job_id,
       confidence: parseConfidence(q.confidence),
       sector: q.sector,
+      ownerUserId: getRequiredUserId(),
       limit: Number(q.limit ?? 1000),
     });
     return reply
@@ -158,50 +169,133 @@ export async function registerDecisionMakerPublic(app: FastifyInstance) {
   // ---- Outreach / Email (dashboard) — karar vericilerden email bul + toplu gönder ----
 
   // Seçili karar vericiler için email bul (ÜCRETSİZ scrape → Apollo fallback). Arka planda.
-  app.post('/lead-machine/decision-makers/find-emails', guard, async (req, reply) => {
+  app.post('/lead-machine/decision-makers/find-emails', emailMarketingGuard, async (req, reply) => {
     const body = (req.body ?? {}) as { job_id?: string; ids?: unknown; confidence?: string; allowApollo?: boolean };
     const ids = Array.isArray(body.ids) ? body.ids.filter((x): x is string => typeof x === 'string') : undefined;
     if (!body.job_id && !(ids && ids.length)) return reply.status(400).send({ error: { message: 'job_id_or_ids_required' } });
     const tenantKey = getRequiredTenantKey();
-    const targets = await listDecisionMakerEmailTargets({ jobId: body.job_id, ids, confidence: parseConfidence(body.confidence), limit: 200 });
+    const ownerUserId = getRequiredUserId();
+    const targets = await listDecisionMakerEmailTargets({ jobId: body.job_id, ids, confidence: parseConfidence(body.confidence), ownerUserId, limit: 200 });
     const withSite = targets.filter((t) => t.company_website);
     const inputs = withSite.map((t) => ({ id: t.id, company_name: t.company_name, decision_maker_name: t.decision_maker_name, company_website: t.company_website }));
-    runInBackground(runWithTenant(tenantKey, () => findEmailsForDecisionMakers(inputs, { allowApollo: body.allowApollo === true })));
+    runInBackground(runWithTenantAndUser(tenantKey, ownerUserId, () => findEmailsForDecisionMakers(inputs, { allowApollo: body.allowApollo === true })));
     return reply.status(202).send({ queued: inputs.length, no_website: targets.length - withSite.length, allow_apollo: body.allowApollo === true });
   });
 
   // Email'i olan karar vericilerden outreach listesi oluştur.
-  app.post('/lead-machine/decision-makers/to-outreach-list', guard, async (req, reply) => {
+  app.post('/lead-machine/decision-makers/to-outreach-list', emailMarketingGuard, async (req, reply) => {
     const body = (req.body ?? {}) as { job_id?: string; ids?: unknown; confidence?: string; name?: string };
     const ids = Array.isArray(body.ids) ? body.ids.filter((x): x is string => typeof x === 'string') : undefined;
     if (!body.job_id && !(ids && ids.length)) return reply.status(400).send({ error: { message: 'job_id_or_ids_required' } });
-    const recipients = await listDecisionMakerRecipients({ jobId: body.job_id, ids, confidence: parseConfidence(body.confidence), limit: 1000 });
+    const recipients = await listDecisionMakerRecipients({ jobId: body.job_id, ids, confidence: parseConfidence(body.confidence), ownerUserId: getRequiredUserId(), limit: 1000 });
     if (!recipients.length) return reply.status(400).send({ error: { message: 'no_recipients_with_email' } });
     const tenantKey = getRequiredTenantKey();
+    const ownerUserId = getRequiredUserId();
     const name = (typeof body.name === 'string' && body.name.trim()) ? body.name.trim() : `Karar Verici Listesi (${recipients.length})`;
-    const list = await createList(tenantKey, { name, source: 'decision_maker' });
-    const inserted = await addRecipients(tenantKey, list.id, recipients.map((r) => ({ email: r.email, name: r.decision_maker_name, company: r.company_name })));
-    await pool.execute('UPDATE outreach_recipient_lists SET total_count = ? WHERE tenant_key = ? AND id = ?', [inserted, tenantKey, list.id] as never[]);
+    const list = await createList(tenantKey, { name, source: 'decision_maker', ownerUserId });
+    const inserted = await addRecipients(
+      tenantKey,
+      list.id,
+      recipients.map((r) => ({ email: r.email, name: r.decision_maker_name, company: r.company_name })),
+      ownerUserId,
+    );
+    await pool.execute(
+      'UPDATE outreach_recipient_lists SET total_count = ? WHERE tenant_key = ? AND owner_user_id = ? AND id = ?',
+      [inserted, tenantKey, ownerUserId, list.id] as never[],
+    );
     return reply.status(201).send({ list, inserted });
   });
 
-  // Outreach listeleri (tenant) — admin bulk-list controller handler'ları yeniden kullanılır.
-  app.get('/lead-machine/outreach/lists', guard, listBulkLists);
-  app.get('/lead-machine/outreach/lists/:id', guard, getBulkList);
-  app.get('/lead-machine/outreach/lists/:id/recipients', guard, listBulkRecipients);
-  app.post('/lead-machine/outreach/lists/:id/generate', guard, generateBulkDrafts);
-
-  // Toplu gönderim — rate-limitli, arka planda (istek bloklanmaz).
-  app.post('/lead-machine/outreach/lists/:id/send', guard, async (req, reply) => {
-    const listId = (req.params as { id: string }).id;
-    const body = (req.body ?? {}) as { ratePerMinute?: number };
-    const tenantKey = getRequiredTenantKey();
-    const list = await getList(tenantKey, listId);
-    if (!list) return reply.status(404).send({ error: { message: 'not_found' } });
-    const rate = typeof body.ratePerMinute === 'number' && body.ratePerMinute > 0 ? body.ratePerMinute : 30;
-    runInBackground(runWithTenant(tenantKey, () => sendList(tenantKey, listId, { ratePerMinute: rate })));
-    return reply.status(202).send({ queued: true, list_id: listId, rate_per_minute: rate });
+  app.post('/lead-machine/decision-makers/promote-candidates', guard, async (req, reply) => {
+    const body = (req.body ?? {}) as { job_id?: string; confidence?: string; limit?: number };
+    if (!body.job_id) return reply.status(400).send({ error: { message: 'job_id_required' } });
+    const ownerUserId = getRequiredUserId();
+    const confidence = body.confidence === 'all' ? null : parseConfidence(body.confidence);
+    const rows = await listSavedDecisionMakers({
+      jobId: body.job_id,
+      confidence,
+      ownerUserId,
+      limit: Math.min(Math.max(Number(body.limit ?? 200), 1), 500),
+    });
+    let created = 0;
+    for (const row of rows) {
+      await insertCandidate({
+        jobId: body.job_id,
+        channel: 'decision_maker',
+        name: row.company_name,
+        website: row.company_website,
+        country: 'TR',
+        city: row.city,
+        contactName: row.decision_maker_name,
+        rawData: {
+          source: 'decision_maker_module',
+          business_type: row.business_type,
+          source_url: row.source_url,
+          social_url: row.social_url,
+          confidence_score: row.confidence_score,
+          fit_note: row.fit_note,
+          decision_makers: row.decision_maker_name ? [{
+            name: row.decision_maker_name,
+            title: row.title,
+            linkedin_url: row.linkedin_profile_url,
+            confidence: row.confidence_score,
+            source_url: row.source_url,
+          }] : [],
+        },
+        aiSummary: row.fit_note,
+        leadScore: scoreForConfidence(row.confidence_score),
+        decision: row.confidence_score === 'C' ? 'MANUAL_REVIEW' : 'GO',
+        ownerUserId,
+      });
+      created++;
+    }
+    return { created, total: rows.length };
   });
+
+  app.post('/lead-machine/decision-makers/promote-crm', guard, async (req, reply) => {
+    const body = (req.body ?? {}) as { job_id?: string; confidence?: string; limit?: number };
+    if (!body.job_id) return reply.status(400).send({ error: { message: 'job_id_required' } });
+    const rows = await listSavedDecisionMakers({
+      jobId: body.job_id,
+      confidence: body.confidence === 'all' ? null : parseConfidence(body.confidence),
+      ownerUserId: getRequiredUserId(),
+      limit: Math.min(Math.max(Number(body.limit ?? 200), 1), 500),
+    });
+    let accounts = 0;
+    let contacts = 0;
+    for (const row of rows) {
+      const account = await createAccount({
+        name: row.company_name,
+        website: row.company_website,
+        country: 'TR',
+        city: row.city,
+        industry: row.business_type,
+        raw_data: {
+          source: 'decision_maker_module',
+          confidence_score: row.confidence_score,
+          source_url: row.source_url,
+          fit_note: row.fit_note,
+        },
+      });
+      accounts++;
+      const accountId = typeof (account as Record<string, unknown> | null)?.id === 'string'
+        ? (account as Record<string, string>).id
+        : null;
+      if (row.decision_maker_name || row.linkedin_profile_url) {
+        const name = splitPersonName(row.decision_maker_name);
+        await createContact({
+          account_id: accountId,
+          first_name: name.first_name,
+          last_name: name.last_name,
+          title: row.title,
+          linkedin_url: row.linkedin_profile_url,
+        });
+        contacts++;
+      }
+    }
+    return { accounts, contacts, total: rows.length };
+  });
+
 }
 
 function parseFinderBody(body: unknown): Partial<FinderParams> {
@@ -214,7 +308,8 @@ function registerReviewRoutes(app: FastifyInstance, routeOpts: Record<string, un
     const id = (req.params as { id: string }).id;
     const status = parseReviewStatus((req.body as { status?: unknown } | undefined)?.status);
     if (!status) return reply.status(400).send({ error: { message: 'invalid_status' } });
-    const ok = await updateDecisionMakerReview(id, status);
+    const ownerUserId = req.url.includes('/admin/') ? null : getRequiredUserId();
+    const ok = await updateDecisionMakerReview(id, status, ownerUserId);
     if (!ok) return reply.status(404).send({ error: { message: 'not_found' } });
     return { id, review_status: status };
   });
@@ -225,7 +320,8 @@ function registerReviewRoutes(app: FastifyInstance, routeOpts: Record<string, un
     const status = parseQualityStatus(body.status);
     if (!status) return reply.status(400).send({ error: { message: 'invalid_status' } });
     const reason = typeof body.exclude_reason === 'string' ? body.exclude_reason : null;
-    const ok = await updateCompanyPoolStatus(id, status, reason);
+    const ownerUserId = req.url.includes('/admin/') ? null : getRequiredUserId();
+    const ok = await updateCompanyPoolStatus(id, status, reason, ownerUserId);
     if (!ok) return reply.status(404).send({ error: { message: 'not_found' } });
     return { id, quality_status: status };
   });

@@ -4,6 +4,7 @@ import { getActiveTenantKey } from '@/modules/_shared';
 
 export interface ScanRule {
   id: string;
+  owner_user_id: string | null;
   icp_id: string | null;
   channel: string | null;
   rule_type: string;
@@ -12,16 +13,20 @@ export interface ScanRule {
   created_at: string;
 }
 
-export async function listScanRules(icpId?: string | null): Promise<ScanRule[]> {
+export async function listScanRules(icpId?: string | null, ownerUserId?: string | null): Promise<ScanRule[]> {
   const tenantKey = await getActiveTenantKey();
+  const ownerWhere = ownerUserId ? ' AND owner_user_id = ?' : '';
   if (icpId !== undefined) {
     const [rows] = await pool.execute(
-      'SELECT * FROM lead_scan_rules WHERE tenant_key = ? AND (icp_id = ? OR icp_id IS NULL) ORDER BY created_at DESC',
-      [tenantKey, icpId],
+      `SELECT * FROM lead_scan_rules WHERE tenant_key = ? AND (icp_id = ? OR icp_id IS NULL)${ownerWhere} ORDER BY created_at DESC`,
+      ownerUserId ? [tenantKey, icpId, ownerUserId] : [tenantKey, icpId],
     );
     return rows as ScanRule[];
   }
-  const [rows] = await pool.execute('SELECT * FROM lead_scan_rules WHERE tenant_key = ? ORDER BY created_at DESC', [tenantKey]);
+  const [rows] = await pool.execute(
+    `SELECT * FROM lead_scan_rules WHERE tenant_key = ?${ownerWhere} ORDER BY created_at DESC`,
+    ownerUserId ? [tenantKey, ownerUserId] : [tenantKey],
+  );
   return rows as ScanRule[];
 }
 
@@ -31,12 +36,13 @@ export async function createScanRule(input: {
   rule_type?: string;
   value: string;
   label?: string | null;
+  owner_user_id?: string | null;
 }): Promise<ScanRule> {
   const tenantKey = await getActiveTenantKey();
   const id = randomUUID();
   await pool.execute(
-    'INSERT IGNORE INTO lead_scan_rules (id, tenant_key, icp_id, channel, rule_type, value, label) VALUES (?, ?, ?, ?, ?, ?, ?)',
-    [id, tenantKey, input.icp_id ?? null, input.channel ?? null, input.rule_type ?? 'exclude_reject_tag', input.value, input.label ?? null],
+    'INSERT IGNORE INTO lead_scan_rules (id, tenant_key, owner_user_id, icp_id, channel, rule_type, value, label) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+    [id, tenantKey, input.owner_user_id ?? null, input.icp_id ?? null, input.channel ?? null, input.rule_type ?? 'exclude_reject_tag', input.value, input.label ?? null],
   );
   const [rows] = await pool.execute('SELECT * FROM lead_scan_rules WHERE tenant_key = ? AND id = ?', [tenantKey, id]);
   const row = (rows as ScanRule[])[0];
@@ -51,9 +57,15 @@ export async function createScanRule(input: {
   return row;
 }
 
-export async function deleteScanRule(id: string): Promise<void> {
+export async function deleteScanRule(id: string, ownerUserId?: string | null): Promise<void> {
   const tenantKey = await getActiveTenantKey();
-  await pool.execute('DELETE FROM lead_scan_rules WHERE tenant_key = ? AND id = ?', [tenantKey, id]);
+  const where = ['tenant_key = ?', 'id = ?'];
+  const values: unknown[] = [tenantKey, id];
+  if (ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(ownerUserId);
+  }
+  await pool.execute(`DELETE FROM lead_scan_rules WHERE ${where.join(' AND ')}`, values as never[]);
 }
 
 export async function getRulesForJob(icpId: string | null, channel: string): Promise<ScanRule[]> {

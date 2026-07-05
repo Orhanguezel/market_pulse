@@ -8,6 +8,7 @@ declare module 'fastify' {
   interface FastifyInstance {
     redis?: {
       ping(): Promise<string>;
+      quit(): Promise<unknown>;
     };
   }
 }

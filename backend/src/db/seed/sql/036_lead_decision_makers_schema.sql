@@ -9,6 +9,7 @@ SET NAMES utf8mb4;
 CREATE TABLE IF NOT EXISTS `lead_decision_makers` (
   `id`                   char(36)     NOT NULL,
   `tenant_key`           varchar(64)  NOT NULL,
+  `owner_user_id`        char(36)     DEFAULT NULL,
   `job_id`               char(36)     DEFAULT NULL,
   `company_name`         varchar(255) NOT NULL,
   `city`                 varchar(120) DEFAULT NULL,
@@ -29,8 +30,9 @@ CREATE TABLE IF NOT EXISTS `lead_decision_makers` (
   `created_at`           datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`           datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_ldm_tenant_company_city` (`tenant_key`, `company_name`, `city`),
+  UNIQUE KEY `uq_ldm_tenant_company_city` (`tenant_key`, `owner_user_id`, `company_name`, `city`),
   KEY `idx_ldm_tenant` (`tenant_key`),
+  KEY `idx_ldm_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_ldm_job` (`job_id`),
   KEY `idx_ldm_conf` (`confidence_score`),
   KEY `idx_ldm_review` (`review_status`),
@@ -78,6 +80,7 @@ DEALLOCATE PREPARE stmt;
 CREATE TABLE IF NOT EXISTS `lead_company_pool` (
   `id`                char(36)     NOT NULL,
   `tenant_key`        varchar(64)  NOT NULL,
+  `owner_user_id`     char(36)     DEFAULT NULL,
   `job_id`            char(36)     DEFAULT NULL,
   `company_name`      varchar(255) NOT NULL,
   `city`              varchar(120) DEFAULT NULL,
@@ -95,8 +98,9 @@ CREATE TABLE IF NOT EXISTS `lead_company_pool` (
   `created_at`        datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`        datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_lcp_tenant_company_city` (`tenant_key`, `company_name`, `city`),
+  UNIQUE KEY `uq_lcp_tenant_company_city` (`tenant_key`, `owner_user_id`, `company_name`, `city`),
   KEY `idx_lcp_tenant` (`tenant_key`),
+  KEY `idx_lcp_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_lcp_job` (`job_id`),
   KEY `idx_lcp_status` (`quality_status`),
   KEY `idx_lcp_sector` (`sector`)

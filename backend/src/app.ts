@@ -8,6 +8,7 @@ import type { FastifyInstance } from 'fastify';
 
 import authPlugin from './plugins/authPlugin';
 import mysqlPlugin from '@/plugins/mysql';
+import redisPlugin from '@/plugins/redis';
 import sentryPlugin from '@/plugins/sentry';
 import swaggerPlugin from '@/plugins/swagger';
 import tenantContextPlugin from '@/plugins/tenantContext';
@@ -60,6 +61,7 @@ export async function createApp() {
   await app.register(authPlugin);
   await app.register(tenantContextPlugin);
   await app.register(mysqlPlugin);
+  await app.register(redisPlugin);
   await app.register(sentryPlugin);
   await app.register(swaggerPlugin);
 

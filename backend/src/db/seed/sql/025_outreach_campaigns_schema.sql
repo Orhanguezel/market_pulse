@@ -9,6 +9,7 @@
 CREATE TABLE IF NOT EXISTS `outreach_campaigns` (
   `id`             char(36)     NOT NULL,
   `tenant_key`     varchar(64)  NOT NULL DEFAULT 'avrasya',
+  `owner_user_id`  char(36)     DEFAULT NULL,
   `slug`           varchar(100) NOT NULL,        -- 'avrasya-automechanika-2026'
   `name`           varchar(200) NOT NULL,        -- 'Avrasya - Automechanika 2026'
   `is_active`      tinyint(1)   NOT NULL DEFAULT 1,
@@ -59,6 +60,7 @@ CREATE TABLE IF NOT EXISTS `outreach_campaigns` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `uq_outreach_campaign_slug` (`tenant_key`, `slug`),
   KEY `idx_outreach_campaign_tenant` (`tenant_key`),
+  KEY `idx_outreach_campaign_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_outreach_campaign_active` (`is_active`),
   KEY `idx_outreach_campaign_icp` (`icp_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

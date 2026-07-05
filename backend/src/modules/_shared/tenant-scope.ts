@@ -1,6 +1,6 @@
 import { and, eq, type SQL } from 'drizzle-orm';
 import { env } from '@/core/env';
-import { getRequestTenantKey } from '@/core/tenant-context';
+import { getRequestTenantKey, getRequestUserId } from '@/core/tenant-context';
 
 type TenantScopedTable = {
   tenant_key: unknown;
@@ -23,6 +23,20 @@ export function getRequiredTenantKey(): string {
     throw err;
   }
   return tenant;
+}
+
+export function getActiveUserId(): string | undefined {
+  return getRequestUserId();
+}
+
+export function getRequiredUserId(): string {
+  const userId = getRequestUserId();
+  if (!userId) {
+    const err = new Error('unauthorized') as Error & { statusCode: number };
+    err.statusCode = 401;
+    throw err;
+  }
+  return userId;
 }
 
 export function tenantPredicate(

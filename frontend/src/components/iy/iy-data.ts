@@ -309,6 +309,10 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
     title: 'Menü',
     items: [
       { key: 'dashboard', label: 'Haber Akışı', icon: 'LayoutDashboard', path: '/dashboard' },
+      { key: 'firma-bulucu', label: 'Firma Bulucu', icon: 'Radar', path: '/firma-bulucu/tarama', module: 'leads' },
+      { key: 'firma-bulucu-jobs', label: 'Tarama İşleri', icon: 'ListChecks', path: '/firma-bulucu/jobs', module: 'leads' },
+      { key: 'firma-bulucu-fair-day', label: 'Fuar Günü', icon: 'CalendarCheck', path: '/firma-bulucu/fuar-gunu', module: 'leads' },
+      { key: 'firma-bulucu-icp', label: 'ICP Profilleri', icon: 'User', path: '/firma-bulucu/icp', module: 'leads' },
       { key: 'leads', label: 'Potansiyel Müşteriler', icon: 'Target', path: '/potansiyel-musteriler', module: 'leads' },
       { key: 'accounts', label: 'Müşteriler', icon: 'Building2', path: '/musteriler', module: 'crm' },
       { key: 'deals', label: 'Satış Fırsatları', icon: 'TrendingUp', path: '/satis-firsatlari', module: 'crm' },
@@ -319,7 +323,7 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
       { key: 'activities', label: 'Aktiviteler', icon: 'CalendarCheck', path: '/aktiviteler', module: 'crm' },
       { key: 'tasks', label: 'Görevler', icon: 'ListChecks', path: '/gorevler', module: 'crm' },
       { key: 'reminders', label: 'Hatırlatma Yönetimi', icon: 'BellRing', path: '/hatirlatmalar', module: 'crm' },
-      { key: 'mail', label: 'Mail Yönetimi', icon: 'Mail', soon: true, module: 'email-marketing' },
+      { key: 'mail', label: 'Mail Yönetimi', icon: 'Mail', path: '/mail-yonetimi', module: 'email-marketing' },
       { key: 'lead-machine', label: 'Karar Verici Bulma', icon: 'Radar', path: '/karar-vericiler', module: 'leads' },
       { key: 'amazon', label: 'Amazon Analizi', icon: 'BarChart3', path: '/amazon', module: 'leads' },
     ],
@@ -327,9 +331,10 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
   {
     title: 'Hesap',
     items: [
-      { key: 'business', label: 'İşletme Yönetimi', icon: 'Briefcase', soon: true },
-      { key: 'users', label: 'Kullanıcılar', icon: 'Users', soon: true },
-      { key: 'reports', label: 'Raporlar', icon: 'PieChart', soon: true },
+      { key: 'business', label: 'İşletme Yönetimi', icon: 'Briefcase', path: '/isletme-yonetimi/hedef-firmalar', module: 'crm' },
+      { key: 'business-signals', label: 'Sinyaller', icon: 'BellRing', path: '/isletme-yonetimi/sinyaller', module: 'crm' },
+      { key: 'users', label: 'Kullanıcılar', icon: 'Users', path: '/kullanicilar', module: 'crm' },
+      { key: 'reports', label: 'Raporlar', icon: 'PieChart', path: '/raporlar', module: 'crm' },
       { key: 'profile', label: 'Profilim', icon: 'User', path: '/profile' },
     ],
   },

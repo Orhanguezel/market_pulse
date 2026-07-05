@@ -95,6 +95,7 @@ export const env = {
   SMTP_PASSWORD: process.env.SMTP_PASSWORD || '',
   SMTP_FROM: process.env.SMTP_FROM || 'noreply@localhost',
   REPORT_EMAIL_TO: process.env.REPORT_EMAIL_TO || '',
+  REDIS_URL: process.env.REDIS_URL || '',
 
   SCRAPER_SERVICE_URL:      process.env.SCRAPER_SERVICE_URL      || 'http://localhost:8200',
   SCRAPER_SERVICE_API_KEY:  process.env.SCRAPER_SERVICE_API_KEY  || '',

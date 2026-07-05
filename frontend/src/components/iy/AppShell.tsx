@@ -7,11 +7,13 @@ import { useEffect, useState } from 'react';
 import {
   LayoutDashboard, Target, Building2, TrendingUp, FileText, ShoppingCart,
   Package, Folder, CalendarCheck, ListChecks, BellRing, Mail, Radar, BarChart3,
-  Briefcase, Users, PieChart, User, Menu, X, Plus, Loader2, PanelLeftClose, PanelLeft,
+  Briefcase, Users, PieChart, User, Menu, X, Plus, Loader2, PanelLeftClose, PanelLeft, Lock, Bell,
 } from 'lucide-react';
 import { IY_APP_NAV, IY_SURFACE_STYLE } from './iy-data';
 import IyUserMenu from './IyUserMenu';
-import { useMeQuery } from '@/integrations/rtk/public/auth.endpoints';
+import { useAuthStore } from '@/features/auth/auth.store';
+import { useMyEntitlementsQuery } from '@/integrations/rtk/public/entitlements.endpoints';
+import { useGetUnreadNotificationsCountQuery } from '@/integrations/rtk/public/notifications.endpoints';
 
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   LayoutDashboard, Target, Building2, TrendingUp, FileText, ShoppingCart,
@@ -27,7 +29,19 @@ export default function AppShell({ children, locale }: { children: React.ReactNo
   const router = useRouter();
   const [mobileOpen, setMobileOpen] = useState(false);
   const [collapsed, setCollapsed] = useState(false);
-  const { data: me, isLoading, isError } = useMeQuery();
+  const { user, isLoading, isReady, isAuthenticated } = useAuthStore();
+  const { data: entitlements } = useMyEntitlementsQuery(undefined, {
+    skip: !isAuthenticated,
+  });
+  const { data: unread } = useGetUnreadNotificationsCountQuery(undefined, {
+    skip: !isAuthenticated,
+    pollingInterval: 30000,
+  });
+  const activeModules = new Set(
+    entitlements?.modules
+      ?.filter((module) => module.status === 'active' || module.status === 'trial')
+      .map((module) => module.module_key) ?? [],
+  );
 
   useEffect(() => {
     try { setCollapsed(localStorage.getItem(COLLAPSE_KEY) === '1'); } catch { /* */ }
@@ -39,17 +53,17 @@ export default function AppShell({ children, locale }: { children: React.ReactNo
   });
 
   useEffect(() => {
-    if (!isLoading && (isError || !me?.user)) router.replace(`/${l}/login`);
-  }, [isLoading, isError, me, l, router]);
+    if (isReady && !isAuthenticated) router.replace(`/${l}/login`);
+  }, [isReady, isAuthenticated, l, router]);
 
-  if (isLoading) {
+  if (isLoading || !isReady) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-[#eaeaea]">
         <Loader2 className="h-8 w-8 animate-spin text-[#1e40af]" />
       </div>
     );
   }
-  if (!me?.user) return null;
+  if (!user) return null;
 
   const isActive = (path?: string) =>
     !!path && (pathname === `/${l}${path}` || pathname?.startsWith(`/${l}${path}/`));
@@ -70,16 +84,20 @@ export default function AppShell({ children, locale }: { children: React.ReactNo
               {group.items.map((item) => {
                 const Icon = ICONS[item.icon] ?? LayoutDashboard;
                 const active = isActive(item.path);
-                const disabled = item.soon || !item.path;
+                const locked = Boolean(item.module && !activeModules.has(item.module));
+                const disabled = item.soon || !item.path || locked;
                 const row = `flex items-center gap-3 rounded-lg px-2.5 py-2 text-[13.5px] font-medium transition-colors ${compact ? 'justify-center' : ''}`;
-                const tip = item.label + (disabled ? ' (yakında)' : '');
+                const tip = item.label + (locked ? ' (kilitli)' : item.soon ? ' (yakında)' : '');
                 if (disabled) {
                   return (
                     <li key={item.key}>
                       <span className={`${row} cursor-not-allowed text-[#94a3b8]`} title={tip}>
                         <Icon className="h-[18px] w-[18px] shrink-0" />
                         {!compact && <><span className="flex-1 truncate">{item.label}</span>
-                          <span className="rounded-full bg-[#f1f5f9] px-1.5 py-0.5 text-[8.5px] font-semibold uppercase text-[#94a3b8]">yakında</span></>}
+                          <span className="inline-flex items-center gap-1 rounded-full bg-[#f1f5f9] px-1.5 py-0.5 text-[8.5px] font-semibold uppercase text-[#94a3b8]">
+                            {locked && <Lock className="h-2.5 w-2.5" />}
+                            {locked ? 'kilitli' : 'yakında'}
+                          </span></>}
                       </span>
                     </li>
                   );
@@ -123,6 +141,10 @@ export default function AppShell({ children, locale }: { children: React.ReactNo
           <Link href={`/${l}/teklif-al`}
             className="hidden items-center gap-1.5 rounded-lg bg-[#1e40af] px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-[#15317f] sm:flex">
             <Plus className="h-4 w-4" /> Hızlı Ekle
+          </Link>
+          <Link href={`/${l}/bildirimler`} className="relative grid h-9 w-9 place-items-center rounded-lg border border-[#edf0f4] text-[#475569] hover:text-[#1e40af]" title="Bildirimler" aria-label="Bildirimler">
+            <Bell className="h-5 w-5" />
+            {unread?.count ? <span className="absolute -right-1 -top-1 grid min-w-5 place-items-center rounded-full bg-rose-600 px-1 text-[10px] font-bold text-white">{unread.count > 99 ? '99+' : unread.count}</span> : null}
           </Link>
           <IyUserMenu locale={l} layout="desktop" />
         </div>

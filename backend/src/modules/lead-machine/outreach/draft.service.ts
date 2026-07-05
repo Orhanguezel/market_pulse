@@ -96,8 +96,9 @@ Avrasya / ProMats | www.promats.com.tr`;
 export async function generateOutreachEmail(candidateId: string, opts?: {
   calendlyLink?: string;
   senderName?: string;
+  ownerUserId?: string | null;
 }) {
-  const candidate = await getCandidate(candidateId);
+  const candidate = await getCandidate(candidateId, { ownerUserId: opts?.ownerUserId });
   if (!candidate) throw new Error('CANDIDATE_NOT_FOUND');
 
   const raw = asRecord(candidate.raw_data);

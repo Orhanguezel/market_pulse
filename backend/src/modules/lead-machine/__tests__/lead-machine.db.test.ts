@@ -144,6 +144,7 @@ describe('lead machine db candidates', () => {
     expect(dbMock.poolExecutions[0]?.values).toEqual([
       expect.any(String),
       'avrasya',
+      null,
       'job-1',
       'amazon',
       'icp-1',

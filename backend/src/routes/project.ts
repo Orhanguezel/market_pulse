@@ -1,7 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { registerExternalDbAdmin } from '@/modules/externalDb/router';
-import { registerLeadMachineAdmin, registerLeadMachinePublic } from '@/modules/lead-machine/router';
-import { registerMarketAdmin } from '@/modules/market/router';
+import { registerLeadMachineAdmin, registerLeadMachinePublic, registerLeadMachineUser, registerOutreachUser } from '@/modules/lead-machine/router';
+import { registerMarketAdmin, registerMarketUser } from '@/modules/market/router';
 import { registerPublicApi } from '@/modules/public-api/public.router';
 import { registerCrmAdmin } from '@/modules/crm';
 import { registerCrmTenant } from '@/modules/crm/tenant.router';
@@ -15,6 +15,15 @@ export async function registerProjectPublic(api: FastifyInstance) {
   });
   await api.register(async (dmApi) => {
     await registerDecisionMakerPublic(dmApi);
+  });
+  await api.register(async (leadMachineApi) => {
+    await registerLeadMachineUser(leadMachineApi);
+  });
+  await api.register(async (outreachApi) => {
+    await registerOutreachUser(outreachApi);
+  });
+  await api.register(async (marketApi) => {
+    await registerMarketUser(marketApi);
   });
   await registerPublicApi(api);
   await registerLeadMachinePublic(api);

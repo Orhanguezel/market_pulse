@@ -1,6 +1,7 @@
 import type { FastifyRequest, FastifyReply } from "fastify";
 import "@fastify/jwt";
 import "@fastify/cookie";
+import { enterUser } from '@/core/tenant-context';
 import { setSentryUserContext } from "../plugins/sentry";
 
 /** JWT payload'ın bizde aradığımız minimum alanları */
@@ -36,7 +37,10 @@ export async function requireAuth(req: FastifyRequest, _reply: FastifyReply) {
       await req.jwtVerify<JwtUser>();
       const u = (req as unknown as { user?: JwtUser }).user;
       if (!u) throw authError("invalid_token");
-      if (u.sub) setSentryUserContext(String(u.sub));
+      if (u.sub) {
+        enterUser(String(u.sub));
+        setSentryUserContext(String(u.sub));
+      }
       return;
     } catch (err) {
       if (err instanceof Error && (err as Error & { statusCode?: number }).statusCode === 401) throw err;
@@ -52,7 +56,10 @@ export async function requireAuth(req: FastifyRequest, _reply: FastifyReply) {
     try {
       const payload = (await req.server.jwt.verify(cookieToken)) as JwtUser;
       (req as unknown as { user: JwtUser }).user = payload;
-      if (payload.sub) setSentryUserContext(String(payload.sub));
+      if (payload.sub) {
+        enterUser(String(payload.sub));
+        setSentryUserContext(String(payload.sub));
+      }
       return;
     } catch {
       // Cookie token expired or invalid — no fallback left

@@ -49,7 +49,6 @@ export async function convertLeadCandidate(body: ConvertLeadBody) {
     phone: candidate.phone,
     email: candidate.email,
     source_lead_id: candidate.id,
-    owner_user_id: body.owner_user_id ?? null,
     raw_data: {
       candidate: candidate.raw_data ?? null,
       ai_summary: candidate.ai_summary ?? null,
@@ -67,7 +66,6 @@ export async function convertLeadCandidate(body: ConvertLeadBody) {
         email: candidate.email,
         phone: candidate.phone,
         source_lead_id: candidate.id,
-        owner_user_id: body.owner_user_id ?? null,
       })
     : null;
 
@@ -80,7 +78,6 @@ export async function convertLeadCandidate(body: ConvertLeadBody) {
     title: body.deal_title ?? `${candidate.name} fırsatı`,
     amount: body.amount ?? null,
     currency: body.currency ?? 'USD',
-    owner_user_id: body.owner_user_id ?? null,
     source_lead_id: candidate.id,
     raw_data: { candidate_id: candidate.id },
   });

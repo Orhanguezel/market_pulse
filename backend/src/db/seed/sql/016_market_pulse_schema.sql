@@ -3,6 +3,7 @@
 CREATE TABLE IF NOT EXISTS `market_targets` (
   `id`                  char(36)     NOT NULL,
   `tenant_key`          varchar(64)  NOT NULL DEFAULT 'avrasya',
+  `owner_user_id`       char(36)     DEFAULT NULL,
   `name`                varchar(255) NOT NULL,
   `category`            varchar(50)  NOT NULL DEFAULT 'dealer',
   `status`              varchar(30)  NOT NULL DEFAULT 'active',
@@ -25,6 +26,7 @@ CREATE TABLE IF NOT EXISTS `market_targets` (
   `updated_at`          datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_market_targets_tenant` (`tenant_key`),
+  KEY `idx_market_targets_owner` (`tenant_key`, `owner_user_id`),
   UNIQUE KEY `uq_market_targets_external_customer_id` (`tenant_key`, `external_customer_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -55,6 +57,7 @@ DEALLOCATE PREPARE stmt;
 CREATE TABLE IF NOT EXISTS `market_leads` (
   `id`           char(36)     NOT NULL,
   `tenant_key`   varchar(64)  NOT NULL DEFAULT 'avrasya',
+  `owner_user_id` char(36)    DEFAULT NULL,
   `name`         varchar(255) NOT NULL,
   `category`     varchar(100) DEFAULT NULL,
   `source`       varchar(100) NOT NULL DEFAULT 'manual',
@@ -73,12 +76,14 @@ CREATE TABLE IF NOT EXISTS `market_leads` (
   `created_at`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  KEY `idx_market_leads_tenant` (`tenant_key`)
+  KEY `idx_market_leads_tenant` (`tenant_key`),
+  KEY `idx_market_leads_owner` (`tenant_key`, `owner_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 CREATE TABLE IF NOT EXISTS `market_signals` (
   `id`          char(36)      NOT NULL,
   `tenant_key`  varchar(64)   NOT NULL DEFAULT 'avrasya',
+  `owner_user_id` char(36)    DEFAULT NULL,
   `target_id`   char(36)      DEFAULT NULL,
   `lead_id`     char(36)      DEFAULT NULL,
   `signal_type` varchar(100)  NOT NULL DEFAULT 'manual',
@@ -91,6 +96,7 @@ CREATE TABLE IF NOT EXISTS `market_signals` (
   `created_at`  datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_market_signals_tenant`      (`tenant_key`),
+  KEY `idx_market_signals_owner`       (`tenant_key`, `owner_user_id`),
   KEY `idx_market_signals_target`      (`target_id`),
   KEY `idx_market_signals_lead`        (`lead_id`),
   KEY `idx_market_signals_is_reviewed` (`is_reviewed`)

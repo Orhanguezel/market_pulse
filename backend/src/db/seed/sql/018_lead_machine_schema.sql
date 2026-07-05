@@ -9,6 +9,7 @@
 CREATE TABLE IF NOT EXISTS `icp_profiles` (
   `id`         char(36)      NOT NULL,
   `tenant_key` varchar(64)   NOT NULL DEFAULT 'avrasya',
+  `owner_user_id` char(36)   DEFAULT NULL,
   `name`       varchar(100)  NOT NULL,
   `is_active`  tinyint(1)    NOT NULL DEFAULT 1,
   -- JSON yapısı:
@@ -19,6 +20,7 @@ CREATE TABLE IF NOT EXISTS `icp_profiles` (
   `updated_at` datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_icp_profiles_tenant` (`tenant_key`),
+  KEY `idx_icp_profiles_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_icp_is_active` (`is_active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
@@ -52,6 +54,7 @@ CREATE TABLE IF NOT EXISTS `lead_search_jobs` (
 CREATE TABLE IF NOT EXISTS `lead_candidates` (
   `id`             char(36)      NOT NULL,
   `tenant_key`     varchar(64)   NOT NULL DEFAULT 'avrasya',
+  `owner_user_id`  char(36)      DEFAULT NULL,
   `job_id`         char(36)      NOT NULL,
   `channel`        varchar(30)   NOT NULL,
   `icp_id`         char(36)      DEFAULT NULL,
@@ -81,6 +84,7 @@ CREATE TABLE IF NOT EXISTS `lead_candidates` (
   `created_at`     datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_lead_candidates_tenant` (`tenant_key`),
+  KEY `idx_lead_candidates_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_candidates_job`     (`job_id`),
   KEY `idx_candidates_status`  (`status`),
   KEY `idx_candidates_channel` (`channel`),
@@ -107,6 +111,7 @@ ALTER TABLE `lead_candidates`
 CREATE TABLE IF NOT EXISTS `lead_enrichment` (
   `id`             char(36)    NOT NULL,
   `tenant_key`     varchar(64) NOT NULL DEFAULT 'avrasya',
+  `owner_user_id`  char(36)    DEFAULT NULL,
   `candidate_id`   char(36)    DEFAULT NULL,
   `market_lead_id` char(36)    DEFAULT NULL,
   -- { name, title, linkedin_url, email, phone }
@@ -122,6 +127,7 @@ CREATE TABLE IF NOT EXISTS `lead_enrichment` (
   `enriched_at`    datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_lead_enrichment_tenant` (`tenant_key`),
+  KEY `idx_lead_enrichment_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_enrichment_candidate`   (`candidate_id`),
   KEY `idx_enrichment_market_lead` (`market_lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -130,6 +136,7 @@ CREATE TABLE IF NOT EXISTS `lead_enrichment` (
 CREATE TABLE IF NOT EXISTS `lead_outreach_drafts` (
   `id`             char(36)     NOT NULL,
   `tenant_key`     varchar(64)  NOT NULL DEFAULT 'avrasya',
+  `owner_user_id`  char(36)     DEFAULT NULL,
   `candidate_id`   char(36)     DEFAULT NULL,
   `market_lead_id` char(36)     DEFAULT NULL,
   `campaign_id`    char(36)     DEFAULT NULL,
@@ -152,6 +159,7 @@ CREATE TABLE IF NOT EXISTS `lead_outreach_drafts` (
   `created_at`     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_lead_outreach_drafts_tenant` (`tenant_key`),
+  KEY `idx_lead_outreach_drafts_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_outreach_candidate`   (`candidate_id`),
   KEY `idx_outreach_market_lead` (`market_lead_id`),
   KEY `idx_outreach_draft_campaign` (`campaign_id`),
@@ -260,6 +268,7 @@ CREATE TABLE IF NOT EXISTS `lead_rejection_patterns` (
 CREATE TABLE IF NOT EXISTS `lead_scan_rules` (
   `id`         char(36)     NOT NULL,
   `tenant_key` varchar(64)  NOT NULL DEFAULT 'avrasya',
+  `owner_user_id` char(36)  DEFAULT NULL,
   `icp_id`     char(36)     DEFAULT NULL,  -- NULL = tüm ICP'ler
   `channel`    varchar(30)  DEFAULT NULL,  -- NULL = tüm kanallar
   `rule_type`  varchar(30)  NOT NULL DEFAULT 'exclude_reject_tag',
@@ -268,6 +277,7 @@ CREATE TABLE IF NOT EXISTS `lead_scan_rules` (
   `created_at` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `idx_lead_scan_rules_tenant` (`tenant_key`),
+  KEY `idx_lead_scan_rules_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_scan_rule_icp` (`icp_id`),
   KEY `idx_scan_rule_channel` (`channel`),
   UNIQUE KEY `uq_scan_rule` (`tenant_key`, `icp_id`, `channel`, `value`(100))

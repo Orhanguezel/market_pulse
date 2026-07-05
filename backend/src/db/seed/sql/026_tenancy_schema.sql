@@ -36,6 +36,7 @@ CREATE TABLE IF NOT EXISTS tenant_secrets (
 INSERT INTO tenants (tenant_key, name, locale, status, plan)
 VALUES
   ('avrasya', 'Avrasya Otomotiv', 'tr', 'active', 'agency'),
+  ('gzltek', 'GzlTek', 'tr', 'active', 'agency'),
   ('tarvista', 'TarVista', 'tr', 'active', 'agency'),
   ('vistaseeds', 'VistaSeeds', 'tr', 'active', 'agency'),
   ('bereketfide', 'Bereket Fide', 'tr', 'active', 'agency'),
@@ -60,6 +61,21 @@ VALUES
         'products', 'urunler',
         'orders', 'satis_siparisleri',
         'orderLines', 'siparis_kalemleri'
+      )
+    )
+  ),
+  (
+    'gzltek',
+    'external_erp',
+    JSON_OBJECT(
+      'enabled', FALSE,
+      'provider', '',
+      'connectionKey', '',
+      'tables', JSON_OBJECT(
+        'customers', '',
+        'products', '',
+        'orders', '',
+        'orderLines', ''
       )
     )
   ),
@@ -130,6 +146,11 @@ VALUES
     )
   ),
   (
+    'gzltek',
+    'external_db',
+    JSON_OBJECT('enabled', FALSE)
+  ),
+  (
     'tarvista',
     'external_db',
     JSON_OBJECT('enabled', FALSE)
@@ -147,6 +168,16 @@ VALUES
       'displayName', 'Avrasya Otomotiv',
       'logoUrl', '',
       'sector', 'automotive'
+    )
+  ),
+  (
+    'gzltek',
+    'branding',
+    JSON_OBJECT(
+      'appName', 'MarketPulse',
+      'displayName', 'GzlTek',
+      'logoUrl', '',
+      'sector', 'platform'
     )
   ),
   (
@@ -190,6 +221,7 @@ VALUES
     )
   ),
   ('avrasya', 'locale', JSON_OBJECT('default', 'tr')),
+  ('gzltek', 'locale', JSON_OBJECT('default', 'tr')),
   ('tarvista', 'locale', JSON_OBJECT('default', 'tr')),
   ('vistaseeds', 'locale', JSON_OBJECT('default', 'tr')),
   ('bereketfide', 'locale', JSON_OBJECT('default', 'tr')),

@@ -15,7 +15,7 @@ const convert = await import('../convert.service');
 const dashboard = await import('../dashboard.service');
 const businessRecords = await import('../business-records.service');
 const insights = await import('../insights.service');
-const { runWithTenant } = await import('@/core/tenant-context');
+const { runWithTenant, runWithTenantAndUser } = await import('@/core/tenant-context');
 
 beforeEach(() => {
   dbMock.reset();
@@ -30,7 +30,11 @@ describe('crm accounts service', () => {
       raw_data: '{"source":"manual"}',
     }]);
 
-    const result = await accounts.createAccount({ name: 'Acme', raw_data: { source: 'manual' } });
+    const result = await runWithTenantAndUser(
+      'tenant-a',
+      'user-1',
+      () => accounts.createAccount({ name: 'Acme', raw_data: { source: 'manual' } }),
+    );
 
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('INSERT INTO crm_accounts');
     expect(dbMock.poolExecutions[0]?.values?.slice(0, 4)).toEqual([
@@ -39,6 +43,7 @@ describe('crm accounts service', () => {
       'Acme',
       null,
     ]);
+    expect(dbMock.poolExecutions[0]?.values?.[10]).toBe('user-1');
     expect(result).toEqual(expect.objectContaining({ id: 'account-1', raw_data: { source: 'manual' } }));
   });
 });
@@ -63,7 +68,11 @@ describe('crm lead conversion service', () => {
     dbMock.queuePoolExecute([{ id: 'stage-1' }]);
     dbMock.queuePoolExecute([{ id: 'deal-1', title: 'Buyer Co fırsatı', raw_data: '{}' }]);
 
-    const result = await convert.convertLeadCandidate({ candidate_id: 'candidate-1' });
+    const result = await runWithTenantAndUser(
+      'tenant-a',
+      'user-1',
+      () => convert.convertLeadCandidate({ candidate_id: 'candidate-1', owner_user_id: 'client-spoof' }),
+    );
 
     expect(result).toEqual({
       account: expect.objectContaining({ id: 'account-1' }),
@@ -74,6 +83,9 @@ describe('crm lead conversion service', () => {
     expect(dbMock.poolExecutions.some((entry) => entry.sql.startsWith('INSERT INTO crm_contacts'))).toBe(true);
     expect(dbMock.poolExecutions.some((entry) => entry.sql.startsWith('INSERT INTO crm_deals'))).toBe(true);
     expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-a', 'candidate-1']);
+    expect(dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO crm_accounts'))?.values?.[10]).toBe('user-1');
+    expect(dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO crm_contacts'))?.values?.[10]).toBe('user-1');
+    expect(dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO crm_deals'))?.values?.[10]).toBe('user-1');
   });
 });
 
@@ -130,11 +142,14 @@ describe('crm dashboard summary service', () => {
       raw_data: '{"source":"manual"}',
     }]);
 
-    const result = await runWithTenant('tenant-b', () => businessRecords.createBusinessRecord('reminders', {
-      title: 'Teklifi ara',
-      remind_at: '2026-07-01 09:00:00',
-      raw_data: { source: 'manual' },
-    }));
+    const result = await runWithTenantAndUser('tenant-b', 'user-2', () =>
+      businessRecords.createBusinessRecord('reminders', {
+        title: 'Teklifi ara',
+        remind_at: '2026-07-01 09:00:00',
+        owner_user_id: 'client-spoof',
+        created_by: 'client-spoof',
+        raw_data: { source: 'manual' },
+      }));
 
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('INSERT INTO crm_reminders');
     expect(dbMock.poolExecutions[0]?.values?.slice(0, 9)).toEqual([
@@ -148,6 +163,8 @@ describe('crm dashboard summary service', () => {
       'in_app',
       'scheduled',
     ]);
+    expect(dbMock.poolExecutions[0]?.values?.[9]).toBe('user-2');
+    expect(dbMock.poolExecutions[0]?.values?.[10]).toBe('user-2');
     expect(result).toEqual(expect.objectContaining({ id: 'reminder-1', raw_data: { source: 'manual' } }));
   });
 });
@@ -197,10 +214,10 @@ describe('crm business records service', () => {
   test('gets a business record by active tenant and id', async () => {
     dbMock.queuePoolExecute([{ id: 'task-1', tenant_key: 'tenant-b', subject: 'Ara', raw_data: '{"source":"manual"}' }]);
 
-    const result = await runWithTenant('tenant-b', () => businessRecords.getBusinessRecord('tasks', 'task-1'));
+    const result = await runWithTenantAndUser('tenant-b', 'user-2', () => businessRecords.getBusinessRecord('tasks', 'task-1'));
 
-    expect(dbMock.poolExecutions[0]?.sql).toBe('SELECT * FROM crm_tasks WHERE tenant_key = ? AND id = ? LIMIT 1');
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-b', 'task-1']);
+    expect(dbMock.poolExecutions[0]?.sql).toBe('SELECT * FROM crm_tasks WHERE tenant_key = ? AND id = ? AND owner_user_id = ? LIMIT 1');
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-b', 'task-1', 'user-2']);
     expect(result).toEqual(expect.objectContaining({ id: 'task-1', raw_data: { source: 'manual' } }));
   });
 

@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { User, Bell, ShieldAlert, Trash2, Save } from 'lucide-react';
+import { User, Bell, ShieldAlert, Trash2, Save, Mail } from 'lucide-react';
 import {
   useGetMyProfileQuery,
   useUpsertMyProfileMutation,
@@ -18,6 +18,14 @@ export default function SettingsPage() {
     full_name: '',
     push_notifications: true,
     email_notifications: true,
+    sender_enabled: false,
+    sender_name: '',
+    sender_email: '',
+    sender_smtp_host: '',
+    sender_smtp_port: 587,
+    sender_smtp_username: '',
+    sender_smtp_password: '',
+    sender_smtp_secure: false,
   });
 
   useEffect(() => {
@@ -26,6 +34,14 @@ export default function SettingsPage() {
         full_name: profile.full_name || '',
         push_notifications: !!profile.push_notifications,
         email_notifications: !!profile.email_notifications,
+        sender_enabled: !!profile.sender_enabled,
+        sender_name: profile.sender_name || '',
+        sender_email: profile.sender_email || '',
+        sender_smtp_host: profile.sender_smtp_host || '',
+        sender_smtp_port: profile.sender_smtp_port || 587,
+        sender_smtp_username: profile.sender_smtp_username || '',
+        sender_smtp_password: '',
+        sender_smtp_secure: !!profile.sender_smtp_secure,
       });
     }
   }, [profile]);
@@ -37,6 +53,14 @@ export default function SettingsPage() {
           full_name: formData.full_name,
           push_notifications: formData.push_notifications ? 1 : 0,
           email_notifications: formData.email_notifications ? 1 : 0,
+          sender_enabled: formData.sender_enabled ? 1 : 0,
+          sender_name: formData.sender_name || null,
+          sender_email: formData.sender_email || null,
+          sender_smtp_host: formData.sender_smtp_host || null,
+          sender_smtp_port: formData.sender_smtp_port || null,
+          sender_smtp_username: formData.sender_smtp_username || null,
+          sender_smtp_password: formData.sender_smtp_password || undefined,
+          sender_smtp_secure: formData.sender_smtp_secure ? 1 : 0,
         },
       }).unwrap();
       toast.success('Profil güncellendi');
@@ -46,36 +70,36 @@ export default function SettingsPage() {
   };
 
   return (
-    <main className="min-h-screen bg-background pb-20 pt-32 px-4">
-      <div className="mx-auto max-w-3xl space-y-12">
-        <div className="space-y-4 text-center">
-          <h1 className="font-serif text-4xl text-foreground md:text-5xl">Ayarlar</h1>
-          <p className="font-serif italic text-muted-foreground">Kişisel bilgilerinizi ve tercihlerinizi yönetin.</p>
+    <div className="space-y-5">
+      <div className="max-w-3xl space-y-5">
+        <div>
+          <h1 className="text-xl font-bold text-[#0f172a]">Ayarlar</h1>
+          <p className="mt-0.5 text-[13px] text-[#64748b]">Kişisel bilgilerinizi ve tercihlerinizi yönetin.</p>
         </div>
 
-        <div className="space-y-8">
-          <section className="space-y-8 rounded-[2.5rem] border border-border/20 bg-surface/30 p-8 md:p-10">
-            <div className="flex items-center gap-4 text-brand-gold">
+        <div className="space-y-4">
+          <section className="space-y-5 rounded-lg border border-[#e2e8f0] bg-white p-5">
+            <div className="flex items-center gap-3 text-[#1d4ed8]">
               <User className="size-6" />
-              <h2 className="font-serif text-xl tracking-wider">Kişisel Bilgiler</h2>
+              <h2 className="text-[15px] font-semibold text-[#0f172a]">Kişisel Bilgiler</h2>
             </div>
             <div className="grid gap-6">
               <div className="space-y-2">
-                <label className="ml-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">Ad Soyad</label>
+                <label className="text-xs font-bold uppercase text-[#64748b]">Ad Soyad</label>
                 <input
                   type="text"
                   value={formData.full_name}
                   onChange={(e) => setFormData({ ...formData, full_name: e.target.value })}
-                  className="w-full rounded-2xl border border-border/20 bg-surface-high/50 px-6 py-4 text-foreground outline-none transition-all focus:border-brand-gold/50 focus:ring-2 focus:ring-brand-gold/20"
+                  className="h-10 w-full rounded-md border border-[#cbd5e1] bg-white px-3 text-[#0f172a] outline-none focus:border-[#2563eb]"
                 />
               </div>
             </div>
           </section>
 
-          <section className="space-y-8 rounded-[2.5rem] border border-border/20 bg-surface/30 p-8 md:p-10">
-            <div className="flex items-center gap-4 text-brand-gold">
+          <section className="space-y-5 rounded-lg border border-[#e2e8f0] bg-white p-5">
+            <div className="flex items-center gap-3 text-[#1d4ed8]">
               <Bell className="size-6" />
-              <h2 className="font-serif text-xl tracking-wider">Bildirimler</h2>
+              <h2 className="text-[15px] font-semibold text-[#0f172a]">Bildirimler</h2>
             </div>
             <div className="space-y-6">
               {[
@@ -84,12 +108,12 @@ export default function SettingsPage() {
               ].map((item) => (
                 <div key={item.key} className="flex items-center justify-between gap-8">
                   <div className="space-y-1">
-                    <div className="font-bold text-foreground">{item.label}</div>
-                    <div className="text-sm text-muted-foreground">{item.desc}</div>
+                    <div className="font-bold text-[#0f172a]">{item.label}</div>
+                    <div className="text-sm text-[#64748b]">{item.desc}</div>
                   </div>
                   <button
                     onClick={() => setFormData({ ...formData, [item.key]: !formData[item.key as keyof typeof formData] })}
-                    className={`relative h-8 w-14 rounded-full transition-colors ${formData[item.key as keyof typeof formData] ? 'bg-brand-gold' : 'bg-surface-high'}`}
+                    className={`relative h-8 w-14 rounded-full transition-colors ${formData[item.key as keyof typeof formData] ? 'bg-[#2563eb]' : 'bg-[#cbd5e1]'}`}
                   >
                     <motion.div
                       animate={{ x: formData[item.key as keyof typeof formData] ? 24 : 4 }}
@@ -101,36 +125,93 @@ export default function SettingsPage() {
             </div>
           </section>
 
-          <section className="rounded-[2.5rem] border border-border/20 bg-surface/30 p-8 md:p-10">
+          <section className="space-y-5 rounded-lg border border-[#e2e8f0] bg-white p-5">
+            <div className="flex items-center gap-3 text-[#1d4ed8]">
+              <Mail className="size-6" />
+              <h2 className="text-[15px] font-semibold text-[#0f172a]">Gönderici Ayarları</h2>
+            </div>
+            <div className="flex items-center justify-between gap-8 rounded-md bg-[#f8fafc] p-3">
+              <div>
+                <div className="text-[13px] font-bold text-[#0f172a]">Kendi SMTP hesabımı kullan</div>
+                <div className="text-[12px] text-[#64748b]">Outreach ve toplu mailler bu kimlikle gönderilir.</div>
+              </div>
+              <button
+                onClick={() => setFormData({ ...formData, sender_enabled: !formData.sender_enabled })}
+                className={`relative h-8 w-14 rounded-full transition-colors ${formData.sender_enabled ? 'bg-[#2563eb]' : 'bg-[#cbd5e1]'}`}
+              >
+                <motion.div animate={{ x: formData.sender_enabled ? 24 : 4 }} className="absolute top-1 size-6 rounded-full bg-white shadow-md" />
+              </button>
+            </div>
+            <div className="grid gap-4 md:grid-cols-2">
+              <label className="space-y-2">
+                <span className="text-xs font-bold uppercase text-[#64748b]">Gönderen adı</span>
+                <input value={formData.sender_name} onChange={(e) => setFormData({ ...formData, sender_name: e.target.value })} className="h-10 w-full rounded-md border border-[#cbd5e1] bg-white px-3 text-[#0f172a] outline-none focus:border-[#2563eb]" />
+              </label>
+              <label className="space-y-2">
+                <span className="text-xs font-bold uppercase text-[#64748b]">Gönderen e-posta</span>
+                <input type="email" value={formData.sender_email} onChange={(e) => setFormData({ ...formData, sender_email: e.target.value })} className="h-10 w-full rounded-md border border-[#cbd5e1] bg-white px-3 text-[#0f172a] outline-none focus:border-[#2563eb]" />
+              </label>
+              <label className="space-y-2">
+                <span className="text-xs font-bold uppercase text-[#64748b]">SMTP host</span>
+                <input value={formData.sender_smtp_host} onChange={(e) => setFormData({ ...formData, sender_smtp_host: e.target.value })} className="h-10 w-full rounded-md border border-[#cbd5e1] bg-white px-3 text-[#0f172a] outline-none focus:border-[#2563eb]" />
+              </label>
+              <label className="space-y-2">
+                <span className="text-xs font-bold uppercase text-[#64748b]">SMTP port</span>
+                <input type="number" min={1} max={65535} value={formData.sender_smtp_port} onChange={(e) => setFormData({ ...formData, sender_smtp_port: Number(e.target.value || 587) })} className="h-10 w-full rounded-md border border-[#cbd5e1] bg-white px-3 text-[#0f172a] outline-none focus:border-[#2563eb]" />
+              </label>
+              <label className="space-y-2">
+                <span className="text-xs font-bold uppercase text-[#64748b]">SMTP kullanıcı</span>
+                <input value={formData.sender_smtp_username} onChange={(e) => setFormData({ ...formData, sender_smtp_username: e.target.value })} className="h-10 w-full rounded-md border border-[#cbd5e1] bg-white px-3 text-[#0f172a] outline-none focus:border-[#2563eb]" />
+              </label>
+              <label className="space-y-2">
+                <span className="text-xs font-bold uppercase text-[#64748b]">SMTP parola</span>
+                <input type="password" value={formData.sender_smtp_password} placeholder={profile?.sender_smtp_configured ? 'Kayıtlı, değiştirmek için yazın' : ''} onChange={(e) => setFormData({ ...formData, sender_smtp_password: e.target.value })} className="h-10 w-full rounded-md border border-[#cbd5e1] bg-white px-3 text-[#0f172a] outline-none focus:border-[#2563eb]" />
+              </label>
+            </div>
+            <div className="flex items-center justify-between gap-8 rounded-md bg-[#f8fafc] p-3">
+              <div>
+                <div className="text-[13px] font-bold text-[#0f172a]">TLS / SSL</div>
+                <div className="text-[12px] text-[#64748b]">465 gibi güvenli portlar için açık bırakın.</div>
+              </div>
+              <button
+                onClick={() => setFormData({ ...formData, sender_smtp_secure: !formData.sender_smtp_secure })}
+                className={`relative h-8 w-14 rounded-full transition-colors ${formData.sender_smtp_secure ? 'bg-[#2563eb]' : 'bg-[#cbd5e1]'}`}
+              >
+                <motion.div animate={{ x: formData.sender_smtp_secure ? 24 : 4 }} className="absolute top-1 size-6 rounded-full bg-white shadow-md" />
+              </button>
+            </div>
+          </section>
+
+          <section className="rounded-lg border border-[#e2e8f0] bg-white p-5">
             <ByokSettings />
           </section>
 
-          <section className="space-y-8 rounded-[2.5rem] border border-rose-500/10 bg-rose-500/5 p-8 md:p-10">
-            <div className="flex items-center gap-4 text-rose-400">
+          <section className="space-y-5 rounded-lg border border-rose-200 bg-rose-50 p-5">
+            <div className="flex items-center gap-3 text-rose-600">
               <ShieldAlert className="size-6" />
-              <h2 className="font-serif text-xl tracking-wider">Tehlikeli Bölge</h2>
+              <h2 className="text-[15px] font-semibold text-rose-700">Tehlikeli Bölge</h2>
             </div>
             <div className="flex flex-col items-center justify-between gap-6 md:flex-row">
               <div className="space-y-1 text-center md:text-left">
-                <div className="font-bold text-foreground">Hesabı Kapat</div>
-                <div className="text-sm text-muted-foreground">Tüm verileriniz 7 gün sonra kalıcı olarak silinecektir.</div>
+                <div className="font-bold text-[#0f172a]">Hesabı Kapat</div>
+                <div className="text-sm text-[#64748b]">Tüm verileriniz 7 gün sonra kalıcı olarak silinecektir.</div>
               </div>
-              <button className="flex items-center gap-2 rounded-2xl border border-rose-500/20 bg-rose-500/10 px-6 py-3 text-sm font-bold tracking-widest text-rose-400 transition-all hover:bg-rose-500/20">
+              <button className="flex items-center gap-2 rounded-md border border-rose-300 bg-rose-100 px-4 py-2 text-sm font-bold text-rose-700 transition-all hover:bg-rose-200">
                 <Trash2 className="size-4" /> HESABI SİL
               </button>
             </div>
           </section>
 
-          <div className="flex justify-center pt-8">
+          <div className="flex justify-end">
             <button
               onClick={handleSaveProfile}
-              className="flex items-center gap-3 rounded-2xl bg-brand-gold px-12 py-5 font-bold tracking-widest text-bg-base shadow-xl shadow-brand-gold/20 transition-all hover:scale-105 active:scale-95"
+              className="flex items-center gap-2 rounded-md bg-[#2563eb] px-4 py-2 text-sm font-bold text-white transition-all hover:bg-[#1d4ed8]"
             >
               <Save className="size-5" /> DEĞİŞİKLİKLERİ KAYDET
             </button>
           </div>
         </div>
       </div>
-    </main>
+    </div>
   );
 }

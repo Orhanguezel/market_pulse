@@ -1,6 +1,7 @@
 import type { FastifyInstance } from 'fastify';
 import { env } from '@/core/env';
 import { sendDueOutreachReminders, sendDuePostShowFollowups } from '@/modules/lead-machine/outreach/outreach.service';
+import { registerMailQueueWorker } from '@/modules/lead-machine/outreach/mail-queue';
 import { aggregateRejectionPatterns } from '@/modules/lead-machine/scan-rules.service';
 import { captureServerException } from '@/plugins/sentry';
 
@@ -17,6 +18,8 @@ export async function checkScraperServiceHealth() {
 }
 
 export function registerLeadMachineJobs(app: FastifyInstance) {
+  registerMailQueueWorker(app);
+
   let interval: NodeJS.Timeout | null = null;
   let reminderInterval: NodeJS.Timeout | null = null;
   let scraperHealthInterval: NodeJS.Timeout | null = null;

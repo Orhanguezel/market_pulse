@@ -102,6 +102,10 @@ export const amazonScanApi = baseApi.injectEndpoints({
     getBulkPublicRiskScores: b.mutation<BulkScoreRow[], { keywords: string[]; marketplace: string }>({
       query: (body) => ({ url: '/amazon/bulk-scores', method: 'POST', body }),
     }),
+    rescoreAmazonJob: b.mutation<ScanJob, { jobId: string; weights?: Record<string, number> }>({
+      query: ({ jobId, ...body }) => ({ url: `/lead-machine/amazon/jobs/${jobId}/rescore`, method: 'POST', body }),
+      invalidatesTags: (_r, _e, { jobId }) => [{ type: 'AmazonScanJob', id: jobId }, 'AmazonHistory'],
+    }),
     getByokStatus: b.query<ByokStatus, void>({
       query: () => '/amazon/byok',
       providesTags: ['ByokKey'],
@@ -126,6 +130,7 @@ export const {
   useGetPublicRiskScoresQuery,
   useGetAmazonHistoryQuery,
   useGetBulkPublicRiskScoresMutation,
+  useRescoreAmazonJobMutation,
   useGetByokStatusQuery,
   useSaveByokKeyMutation,
   useDeleteByokKeyMutation,

@@ -1,4 +1,5 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
+import { getActiveUserId } from '@/modules/_shared';
 import {
   accountBodySchema,
   accountPatchSchema,
@@ -26,14 +27,14 @@ import {
   taskBodySchema,
   taskPatchSchema,
 } from './schema';
-import { createAccount, getAccount, listAccounts, updateAccount } from './accounts.service';
-import { createContact, getContact, listContacts, updateContact } from './contacts.service';
+import { createAccount, deleteAccount, getAccount, listAccounts, updateAccount } from './accounts.service';
+import { createContact, deleteContact, getContact, listContacts, updateContact } from './contacts.service';
 import { createPipeline, listPipelines, listStages } from './pipelines.service';
-import { createDeal, getDeal, listDeals, moveDealStage, updateDeal } from './deals.service';
-import { createActivity, listActivities, updateActivity } from './activities.service';
+import { createDeal, deleteDeal, getDeal, listDeals, moveDealStage, updateDeal } from './deals.service';
+import { createActivity, deleteActivity, listActivities, updateActivity } from './activities.service';
 import { convertLeadCandidate } from './convert.service';
 import { getDashboardSummary } from './dashboard.service';
-import { createBusinessRecord, getBusinessRecord, listBusinessRecords, updateBusinessRecord } from './business-records.service';
+import { createBusinessRecord, deleteBusinessRecord, getBusinessRecord, listBusinessRecords, updateBusinessRecord } from './business-records.service';
 import { getBusinessSummary, getMailSummary, getReportsSummary, getUsersSummary } from './insights.service';
 
 function badRequest(reply: FastifyReply) {
@@ -44,10 +45,25 @@ function notFound(reply: FastifyReply) {
   return reply.code(404).send({ error: { message: 'not_found' } });
 }
 
+function ownerForRequest(req: FastifyRequest): string | null {
+  return req.url.includes('/admin/') ? null : getActiveUserId() ?? null;
+}
+
+async function deleteBusinessRecordHandler(
+  resource: 'products' | 'quotes' | 'orders' | 'documents' | 'tasks' | 'reminders',
+  req: FastifyRequest,
+  reply: FastifyReply,
+) {
+  const params = idParamsSchema.safeParse(req.params);
+  if (!params.success) return badRequest(reply);
+  await deleteBusinessRecord(resource, params.data.id);
+  return reply.code(204).send();
+}
+
 export async function listAccountsHandler(req: FastifyRequest, reply: FastifyReply) {
   const query = listQuerySchema.safeParse(req.query);
   if (!query.success) return badRequest(reply);
-  return listAccounts(query.data);
+  return listAccounts(query.data, ownerForRequest(req));
 }
 
 export async function dashboardSummaryHandler() {
@@ -80,7 +96,7 @@ export async function createAccountHandler(req: FastifyRequest, reply: FastifyRe
 export async function getAccountHandler(req: FastifyRequest, reply: FastifyReply) {
   const params = idParamsSchema.safeParse(req.params);
   if (!params.success) return badRequest(reply);
-  const account = await getAccount(params.data.id);
+  const account = await getAccount(params.data.id, ownerForRequest(req));
   return account ?? notFound(reply);
 }
 
@@ -88,14 +104,21 @@ export async function updateAccountHandler(req: FastifyRequest, reply: FastifyRe
   const params = idParamsSchema.safeParse(req.params);
   const body = accountPatchSchema.safeParse(req.body);
   if (!params.success || !body.success) return badRequest(reply);
-  const account = await updateAccount(params.data.id, body.data);
+  const account = await updateAccount(params.data.id, body.data, ownerForRequest(req));
   return account ?? notFound(reply);
+}
+
+export async function deleteAccountHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  if (!params.success) return badRequest(reply);
+  await deleteAccount(params.data.id, ownerForRequest(req));
+  return reply.code(204).send();
 }
 
 export async function listContactsHandler(req: FastifyRequest, reply: FastifyReply) {
   const query = listQuerySchema.extend({ account_id: idParamsSchema.shape.id.optional() }).safeParse(req.query);
   if (!query.success) return badRequest(reply);
-  return listContacts(query.data);
+  return listContacts(query.data, ownerForRequest(req));
 }
 
 export async function createContactHandler(req: FastifyRequest, reply: FastifyReply) {
@@ -108,7 +131,7 @@ export async function createContactHandler(req: FastifyRequest, reply: FastifyRe
 export async function getContactHandler(req: FastifyRequest, reply: FastifyReply) {
   const params = idParamsSchema.safeParse(req.params);
   if (!params.success) return badRequest(reply);
-  const contact = await getContact(params.data.id);
+  const contact = await getContact(params.data.id, ownerForRequest(req));
   return contact ?? notFound(reply);
 }
 
@@ -116,8 +139,15 @@ export async function updateContactHandler(req: FastifyRequest, reply: FastifyRe
   const params = idParamsSchema.safeParse(req.params);
   const body = contactPatchSchema.safeParse(req.body);
   if (!params.success || !body.success) return badRequest(reply);
-  const contact = await updateContact(params.data.id, body.data);
+  const contact = await updateContact(params.data.id, body.data, ownerForRequest(req));
   return contact ?? notFound(reply);
+}
+
+export async function deleteContactHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  if (!params.success) return badRequest(reply);
+  await deleteContact(params.data.id, ownerForRequest(req));
+  return reply.code(204).send();
 }
 
 export async function listPipelinesHandler() {
@@ -138,7 +168,7 @@ export async function listDealsHandler(req: FastifyRequest, reply: FastifyReply)
     account_id: idParamsSchema.shape.id.optional(),
   }).safeParse(req.query);
   if (!query.success) return badRequest(reply);
-  return listDeals(query.data);
+  return listDeals(query.data, ownerForRequest(req));
 }
 
 export async function createDealHandler(req: FastifyRequest, reply: FastifyReply) {
@@ -151,7 +181,7 @@ export async function createDealHandler(req: FastifyRequest, reply: FastifyReply
 export async function getDealHandler(req: FastifyRequest, reply: FastifyReply) {
   const params = idParamsSchema.safeParse(req.params);
   if (!params.success) return badRequest(reply);
-  const deal = await getDeal(params.data.id);
+  const deal = await getDeal(params.data.id, ownerForRequest(req));
   return deal ?? notFound(reply);
 }
 
@@ -159,7 +189,7 @@ export async function updateDealHandler(req: FastifyRequest, reply: FastifyReply
   const params = idParamsSchema.safeParse(req.params);
   const body = dealPatchSchema.safeParse(req.body);
   if (!params.success || !body.success) return badRequest(reply);
-  const deal = await updateDeal(params.data.id, body.data);
+  const deal = await updateDeal(params.data.id, body.data, ownerForRequest(req));
   return deal ?? notFound(reply);
 }
 
@@ -167,8 +197,15 @@ export async function moveDealStageHandler(req: FastifyRequest, reply: FastifyRe
   const params = idParamsSchema.safeParse(req.params);
   const body = dealStageBodySchema.safeParse(req.body);
   if (!params.success || !body.success) return badRequest(reply);
-  const deal = await moveDealStage(params.data.id, body.data.stage_id);
+  const deal = await moveDealStage(params.data.id, body.data.stage_id, ownerForRequest(req));
   return deal ?? notFound(reply);
+}
+
+export async function deleteDealHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  if (!params.success) return badRequest(reply);
+  await deleteDeal(params.data.id, ownerForRequest(req));
+  return reply.code(204).send();
 }
 
 export async function listActivitiesHandler(req: FastifyRequest, reply: FastifyReply) {
@@ -177,7 +214,7 @@ export async function listActivitiesHandler(req: FastifyRequest, reply: FastifyR
     ref_id: idParamsSchema.shape.id.optional(),
   }).safeParse(req.query);
   if (!query.success) return badRequest(reply);
-  return listActivities(query.data);
+  return listActivities(query.data, ownerForRequest(req));
 }
 
 export async function createActivityHandler(req: FastifyRequest, reply: FastifyReply) {
@@ -191,8 +228,15 @@ export async function updateActivityHandler(req: FastifyRequest, reply: FastifyR
   const params = idParamsSchema.safeParse(req.params);
   const body = activityPatchSchema.safeParse(req.body);
   if (!params.success || !body.success) return badRequest(reply);
-  const activity = await updateActivity(params.data.id, body.data);
+  const activity = await updateActivity(params.data.id, body.data, ownerForRequest(req));
   return activity ?? notFound(reply);
+}
+
+export async function deleteActivityHandler(req: FastifyRequest, reply: FastifyReply) {
+  const params = idParamsSchema.safeParse(req.params);
+  if (!params.success) return badRequest(reply);
+  await deleteActivity(params.data.id, ownerForRequest(req));
+  return reply.code(204).send();
 }
 
 export async function convertLeadHandler(req: FastifyRequest, reply: FastifyReply) {
@@ -230,6 +274,10 @@ export async function updateProductHandler(req: FastifyRequest, reply: FastifyRe
   return record ?? notFound(reply);
 }
 
+export async function deleteProductHandler(req: FastifyRequest, reply: FastifyReply) {
+  return deleteBusinessRecordHandler('products', req, reply);
+}
+
 export async function listQuotesHandler(req: FastifyRequest, reply: FastifyReply) {
   const query = listQuerySchema.safeParse(req.query);
   if (!query.success) return badRequest(reply);
@@ -256,6 +304,10 @@ export async function updateQuoteHandler(req: FastifyRequest, reply: FastifyRepl
   if (!params.success || !body.success) return badRequest(reply);
   const record = await updateBusinessRecord('quotes', params.data.id, body.data);
   return record ?? notFound(reply);
+}
+
+export async function deleteQuoteHandler(req: FastifyRequest, reply: FastifyReply) {
+  return deleteBusinessRecordHandler('quotes', req, reply);
 }
 
 export async function listOrdersHandler(req: FastifyRequest, reply: FastifyReply) {
@@ -286,6 +338,10 @@ export async function updateOrderHandler(req: FastifyRequest, reply: FastifyRepl
   return record ?? notFound(reply);
 }
 
+export async function deleteOrderHandler(req: FastifyRequest, reply: FastifyReply) {
+  return deleteBusinessRecordHandler('orders', req, reply);
+}
+
 export async function listDocumentsHandler(req: FastifyRequest, reply: FastifyReply) {
   const query = listQuerySchema.safeParse(req.query);
   if (!query.success) return badRequest(reply);
@@ -312,6 +368,10 @@ export async function updateDocumentHandler(req: FastifyRequest, reply: FastifyR
   if (!params.success || !body.success) return badRequest(reply);
   const record = await updateBusinessRecord('documents', params.data.id, body.data);
   return record ?? notFound(reply);
+}
+
+export async function deleteDocumentHandler(req: FastifyRequest, reply: FastifyReply) {
+  return deleteBusinessRecordHandler('documents', req, reply);
 }
 
 export async function listTasksHandler(req: FastifyRequest, reply: FastifyReply) {
@@ -342,6 +402,10 @@ export async function updateTaskHandler(req: FastifyRequest, reply: FastifyReply
   return record ?? notFound(reply);
 }
 
+export async function deleteTaskHandler(req: FastifyRequest, reply: FastifyReply) {
+  return deleteBusinessRecordHandler('tasks', req, reply);
+}
+
 export async function listRemindersHandler(req: FastifyRequest, reply: FastifyReply) {
   const query = listQuerySchema.safeParse(req.query);
   if (!query.success) return badRequest(reply);
@@ -368,4 +432,8 @@ export async function updateReminderHandler(req: FastifyRequest, reply: FastifyR
   if (!params.success || !body.success) return badRequest(reply);
   const record = await updateBusinessRecord('reminders', params.data.id, body.data);
   return record ?? notFound(reply);
+}
+
+export async function deleteReminderHandler(req: FastifyRequest, reply: FastifyReply) {
+  return deleteBusinessRecordHandler('reminders', req, reply);
 }

@@ -182,6 +182,10 @@ export const decisionMakerApi = baseApi.injectEndpoints({
       query: (body) => ({ url: '/lead-machine/decision-makers/to-outreach-list', method: 'POST', body }),
       invalidatesTags: ['OutreachLists'],
     }),
+    promoteDecisionMakersToCrm: b.mutation<{ accounts: number; contacts: number; total: number }, { job_id: string; confidence?: DecisionMakerConfidence | 'all'; limit?: number }>({
+      query: (body) => ({ url: '/lead-machine/decision-makers/promote-crm', method: 'POST', body }),
+      invalidatesTags: ['CrmAccounts', 'CrmContacts', 'CrmDashboard'],
+    }),
     listOutreachLists: b.query<OutreachList[], void>({
       query: () => ({ url: '/lead-machine/outreach/lists', method: 'GET' }),
       providesTags: ['OutreachLists'],
@@ -194,7 +198,7 @@ export const decisionMakerApi = baseApi.injectEndpoints({
       query: ({ id, ...body }) => ({ url: `/lead-machine/outreach/lists/${id}/generate`, method: 'POST', body }),
       invalidatesTags: ['OutreachLists'],
     }),
-    sendOutreachList: b.mutation<{ queued: boolean; list_id: string; rate_per_minute: number }, { id: string; ratePerMinute?: number }>({
+    sendOutreachList: b.mutation<{ queued: boolean; list_id: string; rate_per_minute: number; queued_count?: number; bounced?: number; total?: number }, { id: string; ratePerMinute?: number }>({
       query: ({ id, ...body }) => ({ url: `/lead-machine/outreach/lists/${id}/send`, method: 'POST', body }),
       invalidatesTags: ['OutreachLists'],
     }),
@@ -217,6 +221,7 @@ export const {
   useGetSavedDecisionMakersQuery,
   useFindDecisionMakerEmailsMutation,
   useDecisionMakersToOutreachListMutation,
+  usePromoteDecisionMakersToCrmMutation,
   useListOutreachListsQuery,
   useGetOutreachListQuery,
   useGenerateOutreachDraftsMutation,

@@ -190,6 +190,24 @@ async function ensureSaasMultitenantTables(conn: mysql.Connection): Promise<void
   }
 }
 
+async function ensureProfileSenderColumns(conn: mysql.Connection): Promise<void> {
+  if (!(await tableExists(conn, 'profiles'))) return;
+  const columns: Array<{ name: string; ddl: string }> = [
+    { name: 'sender_enabled', ddl: '`sender_enabled` TINYINT(1) NOT NULL DEFAULT 0' },
+    { name: 'sender_name', ddl: '`sender_name` VARCHAR(191) DEFAULT NULL' },
+    { name: 'sender_email', ddl: '`sender_email` VARCHAR(255) DEFAULT NULL' },
+    { name: 'sender_smtp_host', ddl: '`sender_smtp_host` VARCHAR(255) DEFAULT NULL' },
+    { name: 'sender_smtp_port', ddl: '`sender_smtp_port` INT DEFAULT NULL' },
+    { name: 'sender_smtp_username', ddl: '`sender_smtp_username` VARCHAR(255) DEFAULT NULL' },
+    { name: 'sender_smtp_password', ddl: '`sender_smtp_password` TEXT DEFAULT NULL' },
+    { name: 'sender_smtp_secure', ddl: '`sender_smtp_secure` TINYINT(1) DEFAULT NULL' },
+  ];
+  for (const column of columns) {
+    if (await columnExists(conn, 'profiles', column.name)) continue;
+    await query(conn, `ALTER TABLE \`profiles\` ADD COLUMN ${column.ddl}`);
+  }
+}
+
 async function migrateTenantColumns(conn: mysql.Connection): Promise<void> {
   for (const table of TENANT_TABLES) {
     if (!(await tableExists(conn, table.name))) {
@@ -212,6 +230,7 @@ async function main(): Promise<void> {
     await migrateTenantColumns(conn);
     await ensureExternalCustomerColumn(conn);
     await ensureSaasMultitenantTables(conn);
+    await ensureProfileSenderColumns(conn);
     console.log('[migrate] completed');
   } finally {
     await conn.end();
