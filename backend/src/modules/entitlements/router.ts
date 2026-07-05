@@ -11,6 +11,7 @@ import {
   listTenantModules,
   listUserActiveModules,
   listUserModuleGrants,
+  listUserTenants,
   setUserModule,
   suspendModule,
 } from './service';
@@ -88,6 +89,13 @@ export async function registerEntitlementsAdmin(app: FastifyInstance) {
 
     const module = await suspendModule(params.data.tenantKey, body.data.module_key);
     return { module };
+  });
+
+  // Cross-tenant: kullanıcının üye olduğu tenant'lar (admin panel kullanıcı detayı)
+  app.get('/entitlements/user/:userId/tenants', async (req: FastifyRequest<{ Params: { userId: string } }>, reply) => {
+    const userId = z.string().trim().min(1).max(36).safeParse(req.params.userId);
+    if (!userId.success) return badRequest(reply);
+    return { user_id: userId.data, tenants: await listUserTenants(userId.data) };
   });
 
   // Kişi-bazlı modül matrisi (admin panel kullanıcı detayı için)

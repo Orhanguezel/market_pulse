@@ -54,6 +54,10 @@ export const entitlementsAdminApi = baseApi.injectEndpoints({
       query: () => ({ url: '/entitlements/catalog' }),
       providesTags: ['ModuleEntitlements' as never],
     }),
+    getUserTenants: b.query<{ user_id: string; tenants: Array<{ tenant_key: string; role: string }> }, string>({
+      query: (userId) => ({ url: `/entitlements/user/${userId}/tenants` }),
+      providesTags: ['ModuleEntitlements' as never],
+    }),
     getUserModules: b.query<UserModulesResponse, { tenantKey: string; userId: string }>({
       query: ({ tenantKey, userId }) => ({ url: `/entitlements/tenant/${tenantKey}/user/${userId}` }),
       providesTags: ['ModuleEntitlements' as never],
@@ -101,6 +105,7 @@ export const {
   useListTenantModulesQuery,
   useActivateTenantModuleMutation,
   useSuspendTenantModuleMutation,
+  useGetUserTenantsQuery,
   useGetUserModulesQuery,
   useSetUserModuleMutation,
 } = entitlementsAdminApi;

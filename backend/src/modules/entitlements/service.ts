@@ -81,6 +81,17 @@ export async function listUserActiveModules(
   return tenantActive.filter((m) => DEFAULT_USER_MODULES.has(m.module_key) || granted.has(m.module_key));
 }
 
+/** Admin (cross-tenant): kullanıcının üye olduğu tenant'lar + rolü. */
+export async function listUserTenants(
+  userId: string,
+): Promise<Array<{ tenant_key: string; role: string }>> {
+  const [rows] = await pool.execute(
+    `SELECT tenant_key, role FROM tenant_user_roles WHERE user_id = ? ORDER BY created_at ASC`,
+    [userId],
+  );
+  return rows as Array<{ tenant_key: string; role: string }>;
+}
+
 /** Admin: kullanıcının kişi-bazlı modül grant kayıtları. */
 export async function listUserModuleGrants(
   tenantKey: string,
