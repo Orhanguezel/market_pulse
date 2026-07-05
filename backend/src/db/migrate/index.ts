@@ -34,6 +34,28 @@ const TENANT_TABLES: MigrationTable[] = [
   { name: 'outreach_campaigns', indexes: [{ name: 'idx_outreach_campaign_tenant', columns: ['tenant_key'] }] },
 ];
 
+const OWNER_TABLES: MigrationTable[] = [
+  { name: 'market_targets', indexes: [{ name: 'idx_market_targets_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'market_leads', indexes: [{ name: 'idx_market_leads_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'market_signals', indexes: [{ name: 'idx_market_signals_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'icp_profiles', indexes: [{ name: 'idx_icp_profiles_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'lead_candidates', indexes: [{ name: 'idx_lead_candidates_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'lead_enrichment', indexes: [{ name: 'idx_lead_enrichment_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'lead_outreach_drafts', indexes: [{ name: 'idx_lead_outreach_drafts_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'lead_scan_rules', indexes: [{ name: 'idx_lead_scan_rules_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'lead_decision_makers', indexes: [{ name: 'idx_ldm_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'lead_company_pool', indexes: [{ name: 'idx_lcp_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'outreach_campaigns', indexes: [{ name: 'idx_outreach_campaign_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'outreach_recipient_lists', indexes: [{ name: 'idx_reclist_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'outreach_recipients', indexes: [{ name: 'idx_recipient_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'crm_accounts', indexes: [{ name: 'idx_crm_accounts_owner_tenant', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'crm_contacts', indexes: [{ name: 'idx_crm_contacts_owner_tenant', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'crm_deals', indexes: [{ name: 'idx_crm_deals_owner_tenant', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'crm_activities', indexes: [{ name: 'idx_crm_activities_owner_tenant', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'crm_tasks', indexes: [{ name: 'idx_crm_tasks_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'crm_reminders', indexes: [{ name: 'idx_crm_reminders_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+];
+
 function quoteIdent(value: string): string {
   return `\`${value.replaceAll('`', '``')}\``;
 }
@@ -110,6 +132,16 @@ async function ensureTenantColumn(conn: mysql.Connection, tableName: string): Pr
     conn,
     `ALTER TABLE ${quoteIdent(tableName)}
      ADD COLUMN ${quoteIdent('tenant_key')} VARCHAR(64) NOT NULL DEFAULT 'avrasya'`,
+  );
+}
+
+async function ensureOwnerColumn(conn: mysql.Connection, tableName: string): Promise<void> {
+  if (await columnExists(conn, tableName, 'owner_user_id')) return;
+
+  await query(
+    conn,
+    `ALTER TABLE ${quoteIdent(tableName)}
+     ADD COLUMN ${quoteIdent('owner_user_id')} CHAR(36) DEFAULT NULL`,
   );
 }
 
@@ -223,11 +255,28 @@ async function migrateTenantColumns(conn: mysql.Connection): Promise<void> {
   }
 }
 
+async function migrateOwnerColumns(conn: mysql.Connection): Promise<void> {
+  for (const table of OWNER_TABLES) {
+    if (!(await tableExists(conn, table.name))) {
+      console.warn(`[migrate] skipped missing owner table: ${table.name}`);
+      continue;
+    }
+
+    await ensureTenantColumn(conn, table.name);
+    await ensureOwnerColumn(conn, table.name);
+    for (const index of table.indexes ?? []) {
+      await ensureIndex(conn, table.name, index);
+    }
+    console.log(`[migrate] owner ready: ${table.name}`);
+  }
+}
+
 async function main(): Promise<void> {
   const conn = await createConn();
   try {
     await query(conn, 'SET NAMES utf8mb4');
     await migrateTenantColumns(conn);
+    await migrateOwnerColumns(conn);
     await ensureExternalCustomerColumn(conn);
     await ensureSaasMultitenantTables(conn);
     await ensureProfileSenderColumns(conn);
