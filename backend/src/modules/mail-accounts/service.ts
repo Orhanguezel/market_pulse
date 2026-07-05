@@ -108,9 +108,16 @@ function verifyState(state: string): { tenantKey: string; userId: string; exp: n
 }
 
 async function oauthClient() {
-  const settings = await getGoogleSettings();
-  if (!settings.clientId || !settings.clientSecret) throw new Error('google_oauth_not_configured');
-  return new google.auth.OAuth2(settings.clientId, settings.clientSecret, callbackUrl());
+  // Gmail'e ozel client (login'den bagimsiz); yoksa genel Google ayarina duser.
+  let clientId = env.GMAIL_OAUTH_CLIENT_ID;
+  let clientSecret = env.GMAIL_OAUTH_CLIENT_SECRET;
+  if (!clientId || !clientSecret) {
+    const settings = await getGoogleSettings();
+    clientId = settings.clientId ?? '';
+    clientSecret = settings.clientSecret ?? '';
+  }
+  if (!clientId || !clientSecret) throw new Error('google_oauth_not_configured');
+  return new google.auth.OAuth2(clientId, clientSecret, callbackUrl());
 }
 
 function safeAccount(row: MailAccountRow): SafeMailAccount {
