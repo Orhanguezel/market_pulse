@@ -33,7 +33,7 @@ export async function scanAndCreateSignals(targetId: string): Promise<{
 }> {
   const tenantKey = await getActiveTenantKey();
   const [target] = await db
-    .select({ id: marketTargets.id, name: marketTargets.name, website: marketTargets.website })
+    .select({ id: marketTargets.id, name: marketTargets.name, website: marketTargets.website, owner_user_id: marketTargets.owner_user_id })
     .from(marketTargets)
     .where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, targetId)]))
     .limit(1);
@@ -54,6 +54,7 @@ export async function scanAndCreateSignals(targetId: string): Promise<{
   if (changedFields.length > 0) {
     await db.insert(marketSignals).values(tenantValues(tenantKey, {
       id:          randomUUID(),
+      owner_user_id: target.owner_user_id ?? null,
       target_id:   targetId,
       signal_type: 'competitor_change',
       severity:    severityFor(changedFields),

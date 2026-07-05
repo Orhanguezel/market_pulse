@@ -26,16 +26,18 @@ function splitContactName(name: string | null) {
   return { first_name: parts.slice(0, -1).join(' '), last_name: parts.at(-1) ?? null };
 }
 
-export async function convertLeadCandidate(body: ConvertLeadBody) {
+export async function convertLeadCandidate(body: ConvertLeadBody, ownerUserId?: string | null) {
   const tenantKey = getActiveTenantKey();
+  const ownerAnd = ownerUserId ? ' AND owner_user_id = ?' : '';
+  const values = ownerUserId ? [tenantKey, body.candidate_id, ownerUserId] : [tenantKey, body.candidate_id];
   const [rows] = await pool.execute(
     `SELECT *
        FROM lead_candidates
       WHERE tenant_key = ?
         AND id = ?
-        AND status IN ('approved', 'favorite')
+        AND status IN ('approved', 'favorite')${ownerAnd}
       LIMIT 1`,
-    [tenantKey, body.candidate_id],
+    values,
   );
   const candidateRaw = (rows as LeadCandidateRow[])[0];
   if (!candidateRaw) return null;

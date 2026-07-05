@@ -18,13 +18,16 @@ function toNumber(value: unknown): number {
   return Number.isFinite(parsed) ? parsed : 0;
 }
 
-async function readCount(sql: string, tenantKey: string): Promise<number> {
-  const [rows] = await pool.execute(sql, [tenantKey]);
+async function readCount(sql: string, tenantKey: string, ownerUserId?: string | null): Promise<number> {
+  const withOwner = ownerUserId ? sql.replace(/WHERE tenant_key = \?/, 'WHERE tenant_key = ? AND owner_user_id = ?') : sql;
+  const values = ownerUserId ? [tenantKey, ownerUserId] : [tenantKey];
+  const [rows] = await pool.execute(withOwner, values);
   return toNumber((rows as CountRow[])[0]?.cnt);
 }
 
-export async function getMailSummary() {
+export async function getMailSummary(ownerUserId?: string | null) {
   const tenantKey = getActiveTenantKey();
+  const o = ownerUserId ?? null;
   const [
     campaignsActive,
     draftsTotal,
@@ -35,14 +38,14 @@ export async function getMailSummary() {
     recipientLists,
     recipientsPending,
   ] = await Promise.all([
-    readCount('SELECT COUNT(*) AS cnt FROM outreach_campaigns WHERE tenant_key = ? AND is_active = 1', tenantKey),
-    readCount('SELECT COUNT(*) AS cnt FROM lead_outreach_drafts WHERE tenant_key = ?', tenantKey),
-    readCount("SELECT COUNT(*) AS cnt FROM lead_outreach_drafts WHERE tenant_key = ? AND status = 'draft'", tenantKey),
-    readCount("SELECT COUNT(*) AS cnt FROM lead_outreach_drafts WHERE tenant_key = ? AND status = 'sent'", tenantKey),
-    readCount('SELECT COUNT(*) AS cnt FROM lead_outreach_drafts WHERE tenant_key = ? AND (opened_at IS NOT NULL OR open_count > 0)', tenantKey),
-    readCount('SELECT COUNT(*) AS cnt FROM lead_outreach_drafts WHERE tenant_key = ? AND (replied_at IS NOT NULL OR reply_status IS NOT NULL)', tenantKey),
-    readCount('SELECT COUNT(*) AS cnt FROM outreach_recipient_lists WHERE tenant_key = ?', tenantKey),
-    readCount("SELECT COUNT(*) AS cnt FROM outreach_recipients WHERE tenant_key = ? AND status IN ('pending', 'drafted')", tenantKey),
+    readCount('SELECT COUNT(*) AS cnt FROM outreach_campaigns WHERE tenant_key = ? AND is_active = 1', tenantKey, o),
+    readCount('SELECT COUNT(*) AS cnt FROM lead_outreach_drafts WHERE tenant_key = ?', tenantKey, o),
+    readCount("SELECT COUNT(*) AS cnt FROM lead_outreach_drafts WHERE tenant_key = ? AND status = 'draft'", tenantKey, o),
+    readCount("SELECT COUNT(*) AS cnt FROM lead_outreach_drafts WHERE tenant_key = ? AND status = 'sent'", tenantKey, o),
+    readCount('SELECT COUNT(*) AS cnt FROM lead_outreach_drafts WHERE tenant_key = ? AND (opened_at IS NOT NULL OR open_count > 0)', tenantKey, o),
+    readCount('SELECT COUNT(*) AS cnt FROM lead_outreach_drafts WHERE tenant_key = ? AND (replied_at IS NOT NULL OR reply_status IS NOT NULL)', tenantKey, o),
+    readCount('SELECT COUNT(*) AS cnt FROM outreach_recipient_lists WHERE tenant_key = ?', tenantKey, o),
+    readCount("SELECT COUNT(*) AS cnt FROM outreach_recipients WHERE tenant_key = ? AND status IN ('pending', 'drafted')", tenantKey, o),
   ]);
 
   return {
@@ -62,8 +65,9 @@ export async function getMailSummary() {
   };
 }
 
-export async function getReportsSummary() {
+export async function getReportsSummary(ownerUserId?: string | null) {
   const tenantKey = getActiveTenantKey();
+  const o = ownerUserId ?? null;
   const [
     targetsTotal,
     activeLeads,
@@ -72,10 +76,10 @@ export async function getReportsSummary() {
     weeklyHighSignals,
     marketTestRuns,
   ] = await Promise.all([
-    readCount('SELECT COUNT(*) AS cnt FROM market_targets WHERE tenant_key = ?', tenantKey),
-    readCount("SELECT COUNT(*) AS cnt FROM market_leads WHERE tenant_key = ? AND status NOT IN ('converted', 'rejected')", tenantKey),
-    readCount('SELECT COUNT(*) AS cnt FROM market_signals WHERE tenant_key = ? AND is_reviewed = 0', tenantKey),
-    readCount('SELECT COUNT(*) AS cnt FROM market_targets WHERE tenant_key = ? AND churn_risk_score >= 60', tenantKey),
+    readCount('SELECT COUNT(*) AS cnt FROM market_targets WHERE tenant_key = ?', tenantKey, o),
+    readCount("SELECT COUNT(*) AS cnt FROM market_leads WHERE tenant_key = ? AND status NOT IN ('converted', 'rejected')", tenantKey, o),
+    readCount('SELECT COUNT(*) AS cnt FROM market_signals WHERE tenant_key = ? AND is_reviewed = 0', tenantKey, o),
+    readCount('SELECT COUNT(*) AS cnt FROM market_targets WHERE tenant_key = ? AND churn_risk_score >= 60', tenantKey, o),
     readCount(
       `SELECT COUNT(*) AS cnt
          FROM market_signals
@@ -83,7 +87,9 @@ export async function getReportsSummary() {
           AND created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
           AND severity IN ('critical', 'high')`,
       tenantKey,
+      o,
     ),
+    // market_test_runs: owner kolonu yok (developer aracı) → tenant-geneli
     readCount('SELECT COUNT(*) AS cnt FROM market_test_runs WHERE tenant_key = ?', tenantKey),
   ]);
 

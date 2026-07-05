@@ -66,16 +66,16 @@ export async function listAccountsHandler(req: FastifyRequest, reply: FastifyRep
   return listAccounts(query.data, ownerForRequest(req));
 }
 
-export async function dashboardSummaryHandler() {
-  return getDashboardSummary();
+export async function dashboardSummaryHandler(req: FastifyRequest) {
+  return getDashboardSummary(ownerForRequest(req));
 }
 
-export async function mailSummaryHandler() {
-  return getMailSummary();
+export async function mailSummaryHandler(req: FastifyRequest) {
+  return getMailSummary(ownerForRequest(req));
 }
 
-export async function reportsSummaryHandler() {
-  return getReportsSummary();
+export async function reportsSummaryHandler(req: FastifyRequest) {
+  return getReportsSummary(ownerForRequest(req));
 }
 
 export async function usersSummaryHandler() {
@@ -242,7 +242,7 @@ export async function deleteActivityHandler(req: FastifyRequest, reply: FastifyR
 export async function convertLeadHandler(req: FastifyRequest, reply: FastifyReply) {
   const body = convertLeadBodySchema.safeParse(req.body);
   if (!body.success) return badRequest(reply);
-  const result = await convertLeadCandidate(body.data);
+  const result = await convertLeadCandidate(body.data, ownerForRequest(req));
   return result ?? notFound(reply);
 }
 

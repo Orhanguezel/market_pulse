@@ -250,10 +250,10 @@ export const rejectionPatterns: RouteHandler = async () => {
 
 export const aggregateRejectionPatternsHandler: RouteHandler = async () => aggregateRejectionPatterns();
 
-export const listIcp: RouteHandler = async () => listIcpProfiles();
+export const listIcp: RouteHandler = async (req) => listIcpProfiles(ownerUserIdForRoute(req.url));
 
 export const getIcp: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const profile = await getIcpProfile(req.params.id);
+  const profile = await getIcpProfile(req.params.id, ownerUserIdForRoute(req.url));
   if (!profile) return reply.code(404).send({ error: { message: 'not_found' } });
   return profile;
 };
@@ -270,14 +270,14 @@ export const updateIcp: RouteHandler<{ Params: { id: string }; Body: unknown }> 
     name: typeof body.name === 'string' ? body.name : undefined,
     definition: body.definition,
     is_active: typeof body.is_active === 'boolean' ? body.is_active : undefined,
-  });
+  }, ownerUserIdForRoute(req.url));
   if (!profile) return reply.code(404).send({ error: { message: 'not_found' } });
   return profile;
 };
 
 export const deleteIcp: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   try {
-    await deleteIcpProfile(req.params.id);
+    await deleteIcpProfile(req.params.id, ownerUserIdForRoute(req.url));
     return reply.code(204).send();
   } catch (e) {
     if (e instanceof Error && 'statusCode' in e) return reply.code(Number((e as Error & { statusCode: number }).statusCode)).send({ error: { message: e.message } });
@@ -510,7 +510,11 @@ export const listLinkedInSequenceHandler: RouteHandler<{ Querystring: unknown }>
 };
 export const listDrafts: RouteHandler<{ Querystring: unknown }> = async (req) => {
   const q = asRecord(req.query);
-  return listOutreachDrafts(typeof q.candidate_id === 'string' ? q.candidate_id : undefined, typeof q.market_lead_id === 'string' ? q.market_lead_id : undefined);
+  return listOutreachDrafts(
+    typeof q.candidate_id === 'string' ? q.candidate_id : undefined,
+    typeof q.market_lead_id === 'string' ? q.market_lead_id : undefined,
+    ownerUserIdForRoute(req.url),
+  );
 };
 export const updateDraft: RouteHandler<{ Params: { id: string }; Body: unknown }> = async (req, reply) => {
   const body = asRecord(req.body);

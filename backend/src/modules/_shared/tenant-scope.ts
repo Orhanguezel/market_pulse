@@ -61,6 +61,37 @@ export function tenantValues<T extends Record<string, unknown>>(
   return { tenant_key: tenantKey, ...values };
 }
 
+type OwnerScopedTable = {
+  tenant_key: unknown;
+  owner_user_id: unknown;
+};
+
+/**
+ * Kisi-bazli izolasyon: kullanici uclarinda (admin DEGIL) sorguyu owner_user_id ile
+ * daraltir. `ownerUserId` null/undefined ise (admin path) sadece tenant filtresi uygulanir.
+ * Drizzle where zinciri icin `andTenant`'in owner-farkinda surumu.
+ */
+export function andTenantOwner(
+  table: OwnerScopedTable,
+  tenantKey: string,
+  ownerUserId: string | null | undefined,
+  conditions: Array<SQL<unknown> | undefined>,
+): SQL<unknown> {
+  const scoped = ownerUserId
+    ? [...conditions, eq(table.owner_user_id as never, ownerUserId)]
+    : conditions;
+  return andTenant(table, tenantKey, scoped);
+}
+
+/**
+ * Request URL'ine gore owner scope cozer: `/admin/` iceren yollar tenant-geneli gorur
+ * (null), diger (kullanici) yollar aktif kullaniciyla sinirlanir.
+ */
+export function ownerScopeForUrl(url: string | undefined): string | null {
+  if (url && url.includes('/admin/')) return null;
+  return getActiveUserId() ?? null;
+}
+
 export function tenantWhereSql(alias?: string): string {
   return `${alias ? `${alias}.` : ''}tenant_key = ?`;
 }

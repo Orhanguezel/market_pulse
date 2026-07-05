@@ -181,10 +181,14 @@ async function resolveDraftRecipient(draft: OutreachDraftRow) {
   return null;
 }
 
-export async function listOutreachDrafts(candidateId?: string, marketLeadId?: string) {
+export async function listOutreachDrafts(candidateId?: string, marketLeadId?: string, ownerUserId?: string | null) {
   const tenantKey = await getActiveTenantKey();
   const where: string[] = ['tenant_key = ?'];
   const values: unknown[] = [tenantKey];
+  if (ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(ownerUserId);
+  }
   if (candidateId) {
     where.push('candidate_id = ?');
     values.push(candidateId);

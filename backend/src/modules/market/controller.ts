@@ -34,7 +34,7 @@ import { scanMarketplaceForTarget, type Marketplace } from './marketplace.signal
 import { scanAllMarketplaces } from '@/jobs/marketplace.job';
 import { generateWeeklyReport, sendWeeklyReportEmail } from './report.service';
 import { syncErpCustomersToTargets, type ErpSyncMode } from './external/erp/sync';
-import { andTenant, getActiveTenantKey, getRequiredUserId, tenantValues } from '@/modules/_shared';
+import { andTenant, andTenantOwner, getActiveTenantKey, getActiveUserId, getRequiredUserId, ownerScopeForUrl, tenantValues } from '@/modules/_shared';
 import { checkAndConsumeDailyUsage } from '@/modules/public-api/quota.repository';
 
 function getRequestUserId(req: { user?: unknown }) {
@@ -42,6 +42,22 @@ function getRequestUserId(req: { user?: unknown }) {
   if (typeof user !== 'object' || user === null) return null;
   const id = 'id' in user ? user.id : undefined;
   return id ? String(id) : null;
+}
+
+/**
+ * Per-id target aksiyonlari (intel/churn/scan/history) icin sahiplik kapisi.
+ * Kullanici yolunda (admin DEGIL) target istekte bulunan kullaniciya ait degilse
+ * false doner — cagiran 404 verir. Admin yolunda her zaman true.
+ */
+async function targetInScope(req: { url?: string }, tenantKey: string, targetId: string): Promise<boolean> {
+  const owner = ownerScopeForUrl(req.url);
+  if (!owner) return true;
+  const rows = await db
+    .select({ id: marketTargets.id })
+    .from(marketTargets)
+    .where(andTenantOwner(marketTargets, tenantKey, owner, [eq(marketTargets.id, targetId)]))
+    .limit(1);
+  return Boolean(rows[0]);
 }
 
 // ─── Targets ────────────────────────────────────────────────────────────────
@@ -53,12 +69,13 @@ export const listTargets: RouteHandler<{ Querystring: unknown }> = async (req, r
 
   const q = parsed.data;
   const tenantKey = await getActiveTenantKey();
+  const owner = ownerScopeForUrl(req.url);
   const conditions = [];
   if (q.q)        conditions.push(or(like(marketTargets.name, `%${q.q}%`), like(marketTargets.city, `%${q.q}%`)));
   if (q.category) conditions.push(eq(marketTargets.category, q.category));
   if (q.status)   conditions.push(eq(marketTargets.status, q.status));
 
-  const where = andTenant(marketTargets, tenantKey, conditions);
+  const where = andTenantOwner(marketTargets, tenantKey, owner, conditions);
   const orderCol = q.sort === 'name' ? marketTargets.name
     : q.sort === 'churn_risk_score' ? marketTargets.churn_risk_score
     : marketTargets.created_at;
@@ -74,7 +91,8 @@ export const listTargets: RouteHandler<{ Querystring: unknown }> = async (req, r
 
 export const getTarget: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   const tenantKey = await getActiveTenantKey();
-  const rows = await db.select().from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, req.params.id)])).limit(1);
+  const owner = ownerScopeForUrl(req.url);
+  const rows = await db.select().from(marketTargets).where(andTenantOwner(marketTargets, tenantKey, owner, [eq(marketTargets.id, req.params.id)])).limit(1);
   if (!rows[0]) return reply.code(404).send({ error: { message: 'not_found' } });
   return targetToDto(rows[0]);
 };
@@ -86,7 +104,7 @@ export const createTarget: RouteHandler<{ Body: unknown }> = async (req, reply) 
 
   const id = randomUUID();
   const tenantKey = await getActiveTenantKey();
-  await db.insert(marketTargets).values(tenantValues(tenantKey, { id, ...parsed.data }));
+  await db.insert(marketTargets).values(tenantValues(tenantKey, { id, owner_user_id: getActiveUserId() ?? null, ...parsed.data }));
   const rows = await db.select().from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, id)])).limit(1);
   return reply.code(201).send(targetToDto(rows[0]!));
 };
@@ -97,15 +115,17 @@ export const updateTarget: RouteHandler<{ Params: { id: string }; Body: unknown 
     return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
 
   const tenantKey = await getActiveTenantKey();
-  await db.update(marketTargets).set(parsed.data).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, req.params.id)]));
-  const rows = await db.select().from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, req.params.id)])).limit(1);
+  const owner = ownerScopeForUrl(req.url);
+  await db.update(marketTargets).set(parsed.data).where(andTenantOwner(marketTargets, tenantKey, owner, [eq(marketTargets.id, req.params.id)]));
+  const rows = await db.select().from(marketTargets).where(andTenantOwner(marketTargets, tenantKey, owner, [eq(marketTargets.id, req.params.id)])).limit(1);
   if (!rows[0]) return reply.code(404).send({ error: { message: 'not_found' } });
   return targetToDto(rows[0]);
 };
 
 export const deleteTarget: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   const tenantKey = await getActiveTenantKey();
-  await db.delete(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, req.params.id)]));
+  const owner = ownerScopeForUrl(req.url);
+  await db.delete(marketTargets).where(andTenantOwner(marketTargets, tenantKey, owner, [eq(marketTargets.id, req.params.id)]));
   return reply.code(204).send();
 };
 
@@ -118,13 +138,14 @@ export const listLeads: RouteHandler<{ Querystring: unknown }> = async (req, rep
 
   const q = parsed.data;
   const tenantKey = await getActiveTenantKey();
+  const owner = ownerScopeForUrl(req.url);
   const conditions = [];
   if (q.q)        conditions.push(or(like(marketLeads.name, `%${q.q}%`), like(marketLeads.city, `%${q.q}%`), like(marketLeads.contact_name, `%${q.q}%`)));
   if (q.status)   conditions.push(eq(marketLeads.status, q.status));
   if (q.priority) conditions.push(eq(marketLeads.priority, q.priority));
   if (q.source)   conditions.push(eq(marketLeads.source, q.source));
 
-  const where = andTenant(marketLeads, tenantKey, conditions);
+  const where = andTenantOwner(marketLeads, tenantKey, owner, conditions);
   const orderCol = q.sort === 'name' ? marketLeads.name
     : q.sort === 'score' ? marketLeads.score
     : q.sort === 'priority' ? marketLeads.priority
@@ -141,7 +162,8 @@ export const listLeads: RouteHandler<{ Querystring: unknown }> = async (req, rep
 
 export const getLead: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   const tenantKey = await getActiveTenantKey();
-  const rows = await db.select().from(marketLeads).where(andTenant(marketLeads, tenantKey, [eq(marketLeads.id, req.params.id)])).limit(1);
+  const owner = ownerScopeForUrl(req.url);
+  const rows = await db.select().from(marketLeads).where(andTenantOwner(marketLeads, tenantKey, owner, [eq(marketLeads.id, req.params.id)])).limit(1);
   if (!rows[0]) return reply.code(404).send({ error: { message: 'not_found' } });
   return leadToDto(rows[0]);
 };
@@ -153,7 +175,7 @@ export const createLead: RouteHandler<{ Body: unknown }> = async (req, reply) =>
 
   const id = randomUUID();
   const tenantKey = await getActiveTenantKey();
-  await db.insert(marketLeads).values(tenantValues(tenantKey, { id, ...parsed.data }));
+  await db.insert(marketLeads).values(tenantValues(tenantKey, { id, owner_user_id: getActiveUserId() ?? null, ...parsed.data }));
   const rows = await db.select().from(marketLeads).where(andTenant(marketLeads, tenantKey, [eq(marketLeads.id, id)])).limit(1);
   return reply.code(201).send(leadToDto(rows[0]!));
 };
@@ -168,19 +190,21 @@ export const updateLead: RouteHandler<{ Params: { id: string }; Body: unknown }>
     payload.converted_at = new Date();
   }
   const tenantKey = await getActiveTenantKey();
-  await db.update(marketLeads).set(payload).where(andTenant(marketLeads, tenantKey, [eq(marketLeads.id, req.params.id)]));
-  const rows = await db.select().from(marketLeads).where(andTenant(marketLeads, tenantKey, [eq(marketLeads.id, req.params.id)])).limit(1);
+  const owner = ownerScopeForUrl(req.url);
+  await db.update(marketLeads).set(payload).where(andTenantOwner(marketLeads, tenantKey, owner, [eq(marketLeads.id, req.params.id)]));
+  const rows = await db.select().from(marketLeads).where(andTenantOwner(marketLeads, tenantKey, owner, [eq(marketLeads.id, req.params.id)])).limit(1);
   if (!rows[0]) return reply.code(404).send({ error: { message: 'not_found' } });
   return leadToDto(rows[0]);
 };
 
-export const getConversionStats: RouteHandler = async () => {
+export const getConversionStats: RouteHandler = async (req) => {
   const tenantKey = await getActiveTenantKey();
+  const owner = ownerScopeForUrl(req.url);
   const [stageCounts, recentConversions, bySource] = await Promise.all([
     db.select({
       status: marketLeads.status,
       count:  sql<number>`count(*)`,
-    }).from(marketLeads).where(andTenant(marketLeads, tenantKey, [])).groupBy(marketLeads.status),
+    }).from(marketLeads).where(andTenantOwner(marketLeads, tenantKey, owner, [])).groupBy(marketLeads.status),
 
     db.select({
       id:           marketLeads.id,
@@ -189,7 +213,7 @@ export const getConversionStats: RouteHandler = async () => {
       score:        marketLeads.score,
       converted_at: marketLeads.converted_at,
     }).from(marketLeads)
-      .where(andTenant(marketLeads, tenantKey, [eq(marketLeads.status, 'converted')]))
+      .where(andTenantOwner(marketLeads, tenantKey, owner, [eq(marketLeads.status, 'converted')]))
       .orderBy(desc(marketLeads.converted_at))
       .limit(5),
 
@@ -197,7 +221,7 @@ export const getConversionStats: RouteHandler = async () => {
       source: marketLeads.source,
       count:  sql<number>`count(*)`,
     }).from(marketLeads)
-      .where(andTenant(marketLeads, tenantKey, [eq(marketLeads.status, 'converted')]))
+      .where(andTenantOwner(marketLeads, tenantKey, owner, [eq(marketLeads.status, 'converted')]))
       .groupBy(marketLeads.source)
       .orderBy(desc(sql<number>`count(*)`)),
   ]);
@@ -223,7 +247,8 @@ export const getConversionStats: RouteHandler = async () => {
 
 export const deleteLead: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   const tenantKey = await getActiveTenantKey();
-  await db.delete(marketLeads).where(andTenant(marketLeads, tenantKey, [eq(marketLeads.id, req.params.id)]));
+  const owner = ownerScopeForUrl(req.url);
+  await db.delete(marketLeads).where(andTenantOwner(marketLeads, tenantKey, owner, [eq(marketLeads.id, req.params.id)]));
   return reply.code(204).send();
 };
 
@@ -236,13 +261,14 @@ export const listSignals: RouteHandler<{ Querystring: unknown }> = async (req, r
 
   const q = parsed.data;
   const tenantKey = await getActiveTenantKey();
+  const owner = ownerScopeForUrl(req.url);
   const conditions = [];
   if (q.target_id !== undefined)   conditions.push(eq(marketSignals.target_id, q.target_id));
   if (q.lead_id !== undefined)     conditions.push(eq(marketSignals.lead_id, q.lead_id));
   if (q.severity)                  conditions.push(eq(marketSignals.severity, q.severity));
   if (q.is_reviewed !== undefined) conditions.push(eq(marketSignals.is_reviewed, q.is_reviewed ? 1 : 0));
 
-  const where = andTenant(marketSignals, tenantKey, conditions);
+  const where = andTenantOwner(marketSignals, tenantKey, owner, conditions);
 
   const [rows, countResult] = await Promise.all([
     db.select().from(marketSignals).where(where).orderBy(desc(marketSignals.created_at)).limit(q.limit).offset(q.offset),
@@ -259,24 +285,26 @@ export const createSignal: RouteHandler<{ Body: unknown }> = async (req, reply) 
 
   const id = randomUUID();
   const tenantKey = await getActiveTenantKey();
-  await db.insert(marketSignals).values(tenantValues(tenantKey, { id, ...parsed.data }));
+  await db.insert(marketSignals).values(tenantValues(tenantKey, { id, owner_user_id: getActiveUserId() ?? null, ...parsed.data }));
   const rows = await db.select().from(marketSignals).where(andTenant(marketSignals, tenantKey, [eq(marketSignals.id, id)])).limit(1);
   return reply.code(201).send(signalToDto(rows[0]!));
 };
 
 export const reviewSignal: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   const tenantKey = await getActiveTenantKey();
+  const owner = ownerScopeForUrl(req.url);
   await db.update(marketSignals)
     .set({ is_reviewed: 1, reviewed_at: new Date() })
-    .where(andTenant(marketSignals, tenantKey, [eq(marketSignals.id, req.params.id)]));
-  const rows = await db.select().from(marketSignals).where(andTenant(marketSignals, tenantKey, [eq(marketSignals.id, req.params.id)])).limit(1);
+    .where(andTenantOwner(marketSignals, tenantKey, owner, [eq(marketSignals.id, req.params.id)]));
+  const rows = await db.select().from(marketSignals).where(andTenantOwner(marketSignals, tenantKey, owner, [eq(marketSignals.id, req.params.id)])).limit(1);
   if (!rows[0]) return reply.code(404).send({ error: { message: 'not_found' } });
   return signalToDto(rows[0]);
 };
 
 export const deleteSignal: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   const tenantKey = await getActiveTenantKey();
-  await db.delete(marketSignals).where(andTenant(marketSignals, tenantKey, [eq(marketSignals.id, req.params.id)]));
+  const owner = ownerScopeForUrl(req.url);
+  await db.delete(marketSignals).where(andTenantOwner(marketSignals, tenantKey, owner, [eq(marketSignals.id, req.params.id)]));
   return reply.code(204).send();
 };
 
@@ -459,12 +487,13 @@ export const deleteMarketDeveloperNote: RouteHandler<{ Params: { id: string } }>
 
 // ─── Stats ───────────────────────────────────────────────────────────────────
 
-export const getMarketStats: RouteHandler = async (_req, _reply) => {
+export const getMarketStats: RouteHandler = async (req, _reply) => {
   const tenantKey = await getActiveTenantKey();
+  const owner = ownerScopeForUrl(req.url);
   const [targets, leads, signals] = await Promise.all([
-    db.select({ count: sql<number>`count(*)` }).from(marketTargets).where(andTenant(marketTargets, tenantKey, [])),
-    db.select({ count: sql<number>`count(*)` }).from(marketLeads).where(andTenant(marketLeads, tenantKey, [])),
-    db.select({ count: sql<number>`count(*)` }).from(marketSignals).where(andTenant(marketSignals, tenantKey, [eq(marketSignals.is_reviewed, 0)])),
+    db.select({ count: sql<number>`count(*)` }).from(marketTargets).where(andTenantOwner(marketTargets, tenantKey, owner, [])),
+    db.select({ count: sql<number>`count(*)` }).from(marketLeads).where(andTenantOwner(marketLeads, tenantKey, owner, [])),
+    db.select({ count: sql<number>`count(*)` }).from(marketSignals).where(andTenantOwner(marketSignals, tenantKey, owner, [eq(marketSignals.is_reviewed, 0)])),
   ]);
 
   return {
@@ -527,6 +556,10 @@ export const listErpCustomerOrders: RouteHandler<{ Params: { id: string } }> = a
 
 export const recalculateTargetChurn: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   try {
+    const tenantKey = await getActiveTenantKey();
+    if (!(await targetInScope(req, tenantKey, req.params.id))) {
+      return reply.code(404).send({ error: { message: 'not_found' } });
+    }
     const score = await recalculateChurnScore(req.params.id);
     return { id: req.params.id, churnRiskScore: score };
   } catch (e) {
@@ -582,16 +615,17 @@ export const bulkImportTargets: RouteHandler<{ Body: unknown }> = async (req, re
 
   const { rows, dry_run, on_conflict } = parsed.data;
   const tenantKey = await getActiveTenantKey();
+  const owner = ownerScopeForUrl(req.url);
   let inserted = 0;
   let updated  = 0;
   let skipped  = 0;
   const preview: Array<typeof rows[number] & { _action: 'insert' | 'update' | 'skip' }> = [];
 
   for (const row of rows) {
-    // Duplicate detection: website öncelikli, yoksa name
+    // Duplicate detection: website öncelikli, yoksa name (kullanici yolunda owner-scoped)
     const existingRows = row.website
-      ? await db.select({ id: marketTargets.id }).from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.website, row.website)])).limit(1)
-      : await db.select({ id: marketTargets.id }).from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.name, row.name)])).limit(1);
+      ? await db.select({ id: marketTargets.id }).from(marketTargets).where(andTenantOwner(marketTargets, tenantKey, owner, [eq(marketTargets.website, row.website)])).limit(1)
+      : await db.select({ id: marketTargets.id }).from(marketTargets).where(andTenantOwner(marketTargets, tenantKey, owner, [eq(marketTargets.name, row.name)])).limit(1);
 
     const existing = existingRows[0];
 
@@ -608,7 +642,7 @@ export const bulkImportTargets: RouteHandler<{ Body: unknown }> = async (req, re
             city:         row.city ?? null,
             district:     row.district ?? null,
             notes:        row.notes ?? null,
-          }).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, existing.id)]));
+          }).where(andTenantOwner(marketTargets, tenantKey, owner, [eq(marketTargets.id, existing.id)]));
         }
         preview.push({ ...row, _action: 'update' });
         updated++;
@@ -620,6 +654,7 @@ export const bulkImportTargets: RouteHandler<{ Body: unknown }> = async (req, re
       if (!dry_run) {
         await db.insert(marketTargets).values(tenantValues(tenantKey, {
           id:           randomUUID(),
+          owner_user_id: getActiveUserId() ?? null,
           name:         row.name,
           category:     row.category ?? 'prospect',
           status:       'active',
@@ -659,6 +694,9 @@ export const marketplaceHistory: RouteHandler<{
   // to an int in JS and inline it. Range is clamped above.
   const limit = Math.min(Math.max(parseInt(req.query.limit ?? '60', 10) || 60, 1), 365);
   const tenantKey = await getActiveTenantKey();
+  if (!(await targetInScope(req, tenantKey, req.params.id))) {
+    return reply.code(404).send({ error: { message: 'not_found' } });
+  }
   const [rows] = await pool.execute<RowDataPacket[]>(
     `SELECT id, created_at, description
        FROM market_signals
@@ -697,7 +735,8 @@ export const marketplaceHistory: RouteHandler<{
 
 export const targetIntel: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   const tenantKey = await getActiveTenantKey();
-  const rows = await db.select().from(marketTargets).where(andTenant(marketTargets, tenantKey, [eq(marketTargets.id, req.params.id)])).limit(1);
+  const owner = ownerScopeForUrl(req.url);
+  const rows = await db.select().from(marketTargets).where(andTenantOwner(marketTargets, tenantKey, owner, [eq(marketTargets.id, req.params.id)])).limit(1);
   const row = rows[0];
   if (!row) return reply.code(404).send({ error: { message: 'not_found' } });
 
@@ -760,6 +799,10 @@ export const targetIntel: RouteHandler<{ Params: { id: string } }> = async (req,
 
 export const scanCompetitor: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   try {
+    const tenantKey = await getActiveTenantKey();
+    if (!(await targetInScope(req, tenantKey, req.params.id))) {
+      return reply.code(404).send({ error: { message: 'not_found' } });
+    }
     const result = await scanAndCreateSignals(req.params.id);
     // Each scan creates new signals; churn score depends on signals, so refresh
     // it immediately so the UI doesn't display a stale value.
@@ -793,6 +836,10 @@ export const scanMarketplace: RouteHandler<{
     return reply.code(400).send({ error: { message: 'invalid_platform' } });
   }
   try {
+    const tenantKey = await getActiveTenantKey();
+    if (!(await targetInScope(req, tenantKey, req.params.id))) {
+      return reply.code(404).send({ error: { message: 'not_found' } });
+    }
     const result = await scanMarketplaceForTarget(req.params.id, platform);
     await recalculateChurnScore(req.params.id);
     return result;
@@ -839,8 +886,8 @@ export const scanAllCompetitors: RouteHandler = async (_req, _reply) => {
 
 // ─── Reports ────────────────────────────────────────────────────────────────
 
-export const previewWeeklyReport: RouteHandler = async (_req, reply) => {
-  const pdf = await generateWeeklyReport();
+export const previewWeeklyReport: RouteHandler = async (req, reply) => {
+  const pdf = await generateWeeklyReport(ownerScopeForUrl(req.url));
   return reply
     .header('Content-Type', 'application/pdf')
     .header('Content-Disposition', 'inline; filename="marketpulse-weekly-report.pdf"')
@@ -859,6 +906,6 @@ export const sendWeeklyReport: RouteHandler<{ Body: unknown }> = async (req, rep
       });
     }
   }
-  await sendWeeklyReportEmail(to);
+  await sendWeeklyReportEmail(to, ownerScopeForUrl(req.url));
   return { ok: true };
 };

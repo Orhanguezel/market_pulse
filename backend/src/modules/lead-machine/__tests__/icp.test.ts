@@ -70,6 +70,7 @@ describe('lead machine icp repository', () => {
     expect(dbMock.poolExecutions[0]?.values).toEqual([
       expect.any(String),
       'avrasya',
+      null, // owner_user_id — test baglaminda aktif kullanici yok
       'Created ICP',
       1,
       '{}',

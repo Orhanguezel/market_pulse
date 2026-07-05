@@ -27,8 +27,17 @@ async function readCount(sql: string, values: SqlValue[]): Promise<number> {
   return toNumber((rows as CountRow[])[0]?.cnt);
 }
 
-export async function getDashboardSummary() {
+export async function getDashboardSummary(ownerUserId?: string | null) {
   const tenantKey = getActiveTenantKey();
+  // Kisi-bazli izolasyon: owner_user_id kolonu olan tablolarda kullanici yolunda
+  // owner filtresi uygulanir. crm_quotes/crm_orders'ta owner kolonu YOK (035 semasi),
+  // bu iki sayac tenant-geneli kalir (owner kolonlari ayri sema degisikligiyle gelecek).
+  const ownerAnd = ownerUserId ? ' AND owner_user_id = ?' : '';
+  const ownerVal: SqlValue[] = ownerUserId ? [ownerUserId] : [];
+  const scoped = (base: string, ...extra: SqlValue[]): [string, SqlValue[]] => [
+    base + ownerAnd,
+    [tenantKey, ...extra, ...ownerVal],
+  ];
 
   const [
     accounts,
@@ -41,15 +50,16 @@ export async function getDashboardSummary() {
     orders,
     remindersScheduled,
   ] = await Promise.all([
-    readCount('SELECT COUNT(*) AS cnt FROM crm_accounts WHERE tenant_key = ?', [tenantKey]),
-    readCount('SELECT COUNT(*) AS cnt FROM crm_contacts WHERE tenant_key = ?', [tenantKey]),
-    readCount("SELECT COUNT(*) AS cnt FROM crm_deals WHERE tenant_key = ? AND status = 'open'", [tenantKey]),
-    readCount("SELECT COUNT(*) AS cnt FROM crm_deals WHERE tenant_key = ? AND status = 'won'", [tenantKey]),
-    readCount('SELECT COUNT(*) AS cnt FROM crm_activities WHERE tenant_key = ? AND done = 0', [tenantKey]),
-    readCount('SELECT COUNT(*) AS cnt FROM lead_candidates WHERE tenant_key = ?', [tenantKey]),
+    readCount(...scoped('SELECT COUNT(*) AS cnt FROM crm_accounts WHERE tenant_key = ?')),
+    readCount(...scoped('SELECT COUNT(*) AS cnt FROM crm_contacts WHERE tenant_key = ?')),
+    readCount(...scoped("SELECT COUNT(*) AS cnt FROM crm_deals WHERE tenant_key = ? AND status = 'open'")),
+    readCount(...scoped("SELECT COUNT(*) AS cnt FROM crm_deals WHERE tenant_key = ? AND status = 'won'")),
+    readCount(...scoped('SELECT COUNT(*) AS cnt FROM crm_activities WHERE tenant_key = ? AND done = 0')),
+    readCount(...scoped('SELECT COUNT(*) AS cnt FROM lead_candidates WHERE tenant_key = ?')),
+    // crm_quotes/crm_orders: owner kolonu yok → tenant-geneli
     readCount("SELECT COUNT(*) AS cnt FROM crm_quotes WHERE tenant_key = ? AND status IN ('draft', 'sent')", [tenantKey]),
     readCount("SELECT COUNT(*) AS cnt FROM crm_orders WHERE tenant_key = ? AND status <> 'cancelled'", [tenantKey]),
-    readCount("SELECT COUNT(*) AS cnt FROM crm_reminders WHERE tenant_key = ? AND status = 'scheduled'", [tenantKey]),
+    readCount(...scoped("SELECT COUNT(*) AS cnt FROM crm_reminders WHERE tenant_key = ? AND status = 'scheduled'")),
   ]);
 
   const [salesRows] = await pool.execute(
@@ -58,18 +68,18 @@ export async function getDashboardSummary() {
        FROM crm_deals
       WHERE tenant_key = ?
         AND status = 'won'
-        AND COALESCE(expected_close_date, DATE(created_at)) >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)
+        AND COALESCE(expected_close_date, DATE(created_at)) >= DATE_SUB(CURDATE(), INTERVAL 6 MONTH)${ownerAnd}
       GROUP BY month
       ORDER BY month ASC`,
-    [tenantKey],
+    [tenantKey, ...ownerVal],
   );
 
   const [activityRows] = await pool.execute(
     `SELECT done, COUNT(*) AS count
        FROM crm_activities
-      WHERE tenant_key = ?
+      WHERE tenant_key = ?${ownerAnd}
       GROUP BY done`,
-    [tenantKey],
+    [tenantKey, ...ownerVal],
   );
 
   const teamCounts = (activityRows as ActivityDoneRow[]).reduce(

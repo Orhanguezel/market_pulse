@@ -77,6 +77,7 @@ export async function scanMarketplaceForTarget(targetId: string, platform: Marke
     .select({
       id: marketTargets.id,
       name: marketTargets.name,
+      owner_user_id: marketTargets.owner_user_id,
       hepsiburada_url: marketTargets.hepsiburada_url,
       trendyol_url: marketTargets.trendyol_url,
       amazon_url: marketTargets.amazon_url,
@@ -125,6 +126,7 @@ export async function scanMarketplaceForTarget(targetId: string, platform: Marke
   // so it doesn't clutter the operator's signal inbox.
   await db.insert(marketSignals).values(tenantValues(tenantKey, {
     id:          randomUUID(),
+    owner_user_id: target.owner_user_id ?? null,
     target_id:   targetId,
     signal_type: `marketplace_${platform}_snapshot`,
     severity:    'low',
@@ -143,6 +145,7 @@ export async function scanMarketplaceForTarget(targetId: string, platform: Marke
 
     await db.insert(marketSignals).values(tenantValues(tenantKey, {
       id:          randomUUID(),
+      owner_user_id: target.owner_user_id ?? null,
       target_id:   targetId,
       signal_type: `marketplace_${platform}_diff`,
       severity,

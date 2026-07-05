@@ -13,6 +13,7 @@ import { sql } from 'drizzle-orm';
 export const marketTargets = mysqlTable('market_targets', {
   id:               char('id', { length: 36 }).primaryKey().notNull(),
   tenant_key:       varchar('tenant_key', { length: 64 }).notNull().default('avrasya'),
+  owner_user_id:    char('owner_user_id', { length: 36 }),
   name:             varchar('name', { length: 255 }).notNull(),
   category:         varchar('category', { length: 50 }).notNull().default('dealer'),
   status:           varchar('status', { length: 30 }).notNull().default('active'),
@@ -38,6 +39,7 @@ export const marketTargets = mysqlTable('market_targets', {
 export const marketLeads = mysqlTable('market_leads', {
   id:           char('id', { length: 36 }).primaryKey().notNull(),
   tenant_key:   varchar('tenant_key', { length: 64 }).notNull().default('avrasya'),
+  owner_user_id: char('owner_user_id', { length: 36 }),
   name:         varchar('name', { length: 255 }).notNull(),
   category:     varchar('category', { length: 100 }),
   source:       varchar('source', { length: 100 }).notNull().default('manual'),
@@ -60,6 +62,7 @@ export const marketLeads = mysqlTable('market_leads', {
 export const marketSignals = mysqlTable('market_signals', {
   id:          char('id', { length: 36 }).primaryKey().notNull(),
   tenant_key:  varchar('tenant_key', { length: 64 }).notNull().default('avrasya'),
+  owner_user_id: char('owner_user_id', { length: 36 }),
   target_id:   char('target_id', { length: 36 }),
   lead_id:     char('lead_id', { length: 36 }),
   signal_type: varchar('signal_type', { length: 100 }).notNull().default('manual'),
