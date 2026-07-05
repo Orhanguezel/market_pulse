@@ -94,11 +94,23 @@ function slugify(value: string) {
     .replace(/^-+|-+$/g, '');
 }
 
-function Metric({ label, value }: { label: string; value?: number }) {
+function Metric({ label, value, icon: Icon, accent = '#1e40af' }: {
+  label: string;
+  value?: number;
+  icon?: React.ComponentType<{ className?: string }>;
+  accent?: string;
+}) {
   return (
-    <div className="rounded-lg border border-[#e2e8f0] bg-white p-4">
-      <p className="text-[12px] font-semibold uppercase text-[#64748b]">{label}</p>
-      <p className="mt-1 text-2xl font-bold text-[#0f172a]">{value ?? 0}</p>
+    <div className="flex items-center gap-3 rounded-lg border border-[#e2e8f0] bg-white p-4 shadow-sm">
+      {Icon ? (
+        <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg" style={{ backgroundColor: `${accent}14`, color: accent }}>
+          <Icon className="h-5 w-5" />
+        </div>
+      ) : null}
+      <div className="min-w-0">
+        <p className="truncate text-[11px] font-semibold uppercase tracking-wide text-[#64748b]">{label}</p>
+        <p className="mt-0.5 text-2xl font-bold leading-tight text-[#0f172a]">{value ?? 0}</p>
+      </div>
     </div>
   );
 }
@@ -660,18 +672,28 @@ export default function MailYonetimiPage() {
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-        <Metric label="Aktif kampanya" value={summary?.campaigns_active} />
-        <Metric label="Taslak" value={summary?.drafts_total} />
-        <Metric label="Gönderilen" value={summary?.sent} />
-        <Metric label="Bekleyen alıcı" value={summary?.recipients_pending} />
+        <Metric label="Aktif kampanya" value={summary?.campaigns_active} icon={Sparkles} accent="#1e40af" />
+        <Metric label="Taslak" value={summary?.drafts_total} icon={Edit3} accent="#d97706" />
+        <Metric label="Gönderilen" value={summary?.sent} icon={Send} accent="#059669" />
+        <Metric label="Bekleyen alıcı" value={summary?.recipients_pending} icon={Inbox} accent="#7c3aed" />
       </div>
 
-      <div className="inline-flex rounded-lg border border-[#cbd5e1] bg-white p-1">
-        <button onClick={() => setActiveTab('campaigns')} className={`h-8 rounded-md px-3 text-[13px] font-semibold ${activeTab === 'campaigns' ? 'bg-[#1e40af] text-white' : 'text-[#475569]'}`}>Kampanyalar</button>
-        <button onClick={() => setActiveTab('drafts')} className={`h-8 rounded-md px-3 text-[13px] font-semibold ${activeTab === 'drafts' ? 'bg-[#1e40af] text-white' : 'text-[#475569]'}`}>Taslaklar</button>
-        <button onClick={() => setActiveTab('bulk')} className={`h-8 rounded-md px-3 text-[13px] font-semibold ${activeTab === 'bulk' ? 'bg-[#1e40af] text-white' : 'text-[#475569]'}`}>Toplu Liste</button>
-        <button onClick={() => setActiveTab('accounts')} className={`h-8 rounded-md px-3 text-[13px] font-semibold ${activeTab === 'accounts' ? 'bg-[#1e40af] text-white' : 'text-[#475569]'}`}>Hesap & Ayarlar</button>
-        <button onClick={() => setActiveTab('inbox')} className={`inline-flex h-8 items-center gap-2 rounded-md px-3 text-[13px] font-semibold ${activeTab === 'inbox' ? 'bg-[#1e40af] text-white' : 'text-[#475569]'}`}><Inbox className="h-4 w-4" /> Gelen Kutusu</button>
+      <div className="flex gap-1 overflow-x-auto rounded-lg border border-[#cbd5e1] bg-white p-1">
+        {([
+          ['campaigns', 'Kampanyalar', Sparkles],
+          ['drafts', 'Taslaklar', Edit3],
+          ['bulk', 'Toplu Liste', Upload],
+          ['accounts', 'Hesap & Ayarlar', Settings],
+          ['inbox', 'Gelen Kutusu', Inbox],
+        ] as const).map(([key, label, TabIcon]) => (
+          <button
+            key={key}
+            onClick={() => setActiveTab(key)}
+            className={`inline-flex h-8 shrink-0 items-center gap-1.5 rounded-md px-3 text-[13px] font-semibold transition ${activeTab === key ? 'bg-[#1e40af] text-white' : 'text-[#475569] hover:bg-[#f1f5f9]'}`}
+          >
+            <TabIcon className="h-4 w-4" /> {label}
+          </button>
+        ))}
       </div>
 
       {activeTab === 'campaigns' ? (
