@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import {
   LayoutDashboard, Target, Building2, TrendingUp, FileText, ShoppingCart,
   Package, Folder, CalendarCheck, CalendarDays, ListChecks, BellRing, Mail, Radar, BarChart3,
-  Briefcase, Users, PieChart, User, Menu, X, Plus, Loader2, PanelLeftClose, PanelLeft, Lock, Bell,
+  Briefcase, Users, PieChart, User, Menu, X, Plus, Loader2, PanelLeftClose, PanelLeft, Bell,
 } from 'lucide-react';
 import { IY_APP_NAV, IY_SURFACE_STYLE } from './iy-data';
 import IyUserMenu from './IyUserMenu';
@@ -84,10 +84,12 @@ export default function AppShell({ children, locale }: { children: React.ReactNo
               {group.items.map((item) => {
                 const Icon = ICONS[item.icon] ?? LayoutDashboard;
                 const active = isActive(item.path);
-                const locked = Boolean(item.module && !activeModules.has(item.module));
-                const disabled = item.soon || !item.path || locked;
+                // Izinsiz modul: entitlement YUKLENDIYSE ve kullanicida yoksa NAV'DAN GIZLE.
+                const locked = Boolean(entitlements) && Boolean(item.module && !activeModules.has(item.module));
+                if (locked) return null;
+                const disabled = item.soon || !item.path;
                 const row = `flex items-center gap-3 rounded-lg px-2.5 py-2 text-[13.5px] font-medium transition-colors ${compact ? 'justify-center' : ''}`;
-                const tip = item.label + (locked ? ' (kilitli)' : item.soon ? ' (yakında)' : '');
+                const tip = item.label + (item.soon ? ' (yakında)' : '');
                 if (disabled) {
                   return (
                     <li key={item.key}>
@@ -95,8 +97,7 @@ export default function AppShell({ children, locale }: { children: React.ReactNo
                         <Icon className="h-[18px] w-[18px] shrink-0" />
                         {!compact && <><span className="flex-1 truncate">{item.label}</span>
                           <span className="inline-flex items-center gap-1 rounded-full bg-[#f1f5f9] px-1.5 py-0.5 text-[8.5px] font-semibold uppercase text-[#94a3b8]">
-                            {locked && <Lock className="h-2.5 w-2.5" />}
-                            {locked ? 'kilitli' : 'yakında'}
+                            yakında
                           </span></>}
                       </span>
                     </li>

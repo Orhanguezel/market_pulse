@@ -48,6 +48,66 @@ export async function hasModule(tenantKey: string, moduleKey: string): Promise<b
   return (rows as unknown[]).length > 0;
 }
 
+// Herkese default-açık modüller (kişi izni gerekmez). Nav'da mail-yonetimi + takvim.
+export const DEFAULT_USER_MODULES = new Set(['mail', 'calendar']);
+
+/** Kullanıcı bu tenant'ta tenant_admin mi? (admin'ler tüm modülleri görür) */
+export async function isTenantAdmin(tenantKey: string, userId: string): Promise<boolean> {
+  const [rows] = await pool.execute(
+    `SELECT 1 FROM tenant_user_roles WHERE tenant_key = ? AND user_id = ? AND role = 'tenant_admin' LIMIT 1`,
+    [tenantKey, userId],
+  );
+  return (rows as unknown[]).length > 0;
+}
+
+/**
+ * Kullanıcının GÖREBİLECEĞİ aktif modüller (kişi-bazlı).
+ * fullAccess (super-admin veya tenant_admin) → tenant'ın tüm aktif modülleri.
+ * Aksi halde: tenant-aktif modüllerden yalnızca default-açık (mail/calendar) VEYA
+ * kullanıcıya açıkça verilmiş (user_modules active) olanlar.
+ */
+export async function listUserActiveModules(
+  tenantKey: string,
+  userId: string,
+  fullAccess: boolean,
+): Promise<TenantModule[]> {
+  const tenantActive = await listActiveTenantModules(tenantKey);
+  if (fullAccess) return tenantActive;
+  const [rows] = await pool.execute(
+    `SELECT module_key FROM user_modules WHERE tenant_key = ? AND user_id = ? AND status = 'active'`,
+    [tenantKey, userId],
+  );
+  const granted = new Set((rows as Array<{ module_key: string }>).map((r) => r.module_key));
+  return tenantActive.filter((m) => DEFAULT_USER_MODULES.has(m.module_key) || granted.has(m.module_key));
+}
+
+/** Admin: kullanıcının kişi-bazlı modül grant kayıtları. */
+export async function listUserModuleGrants(
+  tenantKey: string,
+  userId: string,
+): Promise<Array<{ module_key: string; status: string }>> {
+  const [rows] = await pool.execute(
+    `SELECT module_key, status FROM user_modules WHERE tenant_key = ? AND user_id = ?`,
+    [tenantKey, userId],
+  );
+  return rows as Array<{ module_key: string; status: string }>;
+}
+
+/** Admin: kullanıcıya modül izni ver/askıya al (upsert). */
+export async function setUserModule(
+  tenantKey: string,
+  userId: string,
+  moduleKey: string,
+  status: 'active' | 'suspended',
+): Promise<void> {
+  await pool.execute(
+    `INSERT INTO user_modules (id, tenant_key, user_id, module_key, status)
+     VALUES (?, ?, ?, ?, ?)
+     ON DUPLICATE KEY UPDATE status = VALUES(status), updated_at = CURRENT_TIMESTAMP(3)`,
+    [randomUUID(), tenantKey, userId, moduleKey, status],
+  );
+}
+
 export async function listCatalog(): Promise<ModuleCatalogItem[]> {
   const [rows] = await pool.execute(
     `SELECT *
