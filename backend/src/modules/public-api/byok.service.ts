@@ -1,33 +1,14 @@
 import crypto from 'node:crypto';
 import { pool } from '@/db/client';
 import { getActiveTenantKey } from '@/modules/_shared';
-
-function getEncryptionKey(): Buffer {
-  const hex = process.env.KEEPA_ENCRYPTION_KEY;
-  if (!hex || hex.length < 64) {
-    throw new Error('KEEPA_ENCRYPTION_KEY must be a 32-byte (64 hex chars) env var');
-  }
-  return Buffer.from(hex.slice(0, 64), 'hex');
-}
+import { decryptAes256Gcm, encryptAes256Gcm } from '@/modules/_shared/crypto';
 
 function encrypt(text: string): string {
-  const key = getEncryptionKey();
-  const iv = crypto.randomBytes(12);
-  const cipher = crypto.createCipheriv('aes-256-gcm', key, iv);
-  const enc = Buffer.concat([cipher.update(text, 'utf8'), cipher.final()]);
-  const tag = cipher.getAuthTag();
-  return Buffer.concat([iv, tag, enc]).toString('base64');
+  return encryptAes256Gcm(text, process.env.KEEPA_ENCRYPTION_KEY, 'KEEPA_ENCRYPTION_KEY');
 }
 
 function decrypt(stored: string): string {
-  const key = getEncryptionKey();
-  const buf = Buffer.from(stored, 'base64');
-  const iv = buf.subarray(0, 12);
-  const tag = buf.subarray(12, 28);
-  const enc = buf.subarray(28);
-  const decipher = crypto.createDecipheriv('aes-256-gcm', key, iv);
-  decipher.setAuthTag(tag);
-  return Buffer.concat([decipher.update(enc), decipher.final()]).toString('utf8');
+  return decryptAes256Gcm(stored, process.env.KEEPA_ENCRYPTION_KEY, 'KEEPA_ENCRYPTION_KEY');
 }
 
 export interface ByokStatus {

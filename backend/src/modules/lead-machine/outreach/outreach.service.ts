@@ -12,6 +12,7 @@ type OutreachDraftRow = {
   id: string;
   candidate_id: string | null;
   market_lead_id: string | null;
+  campaign_id?: string | null;
   subject: string;
   body: string;
   status: string;
@@ -179,6 +180,17 @@ async function resolveDraftRecipient(draft: OutreachDraftRow) {
   }
 
   return null;
+}
+
+async function resolveDraftReplyTo(draft: OutreachDraftRow): Promise<string | null> {
+  if (!draft.campaign_id) return null;
+  const tenantKey = await getActiveTenantKey();
+  const [rows] = await pool.execute(
+    'SELECT reply_to_email, sender_email FROM outreach_campaigns WHERE tenant_key = ? AND id = ? LIMIT 1',
+    [tenantKey, draft.campaign_id],
+  );
+  const row = (rows as Array<{ reply_to_email?: string | null; sender_email?: string | null }>)[0];
+  return row?.reply_to_email || row?.sender_email || null;
 }
 
 export async function listOutreachDrafts(candidateId?: string, marketLeadId?: string, ownerUserId?: string | null) {
@@ -411,6 +423,7 @@ export async function sendOutreachDraft(id: string, toOverride?: string | null) 
     subject: draft.subject,
     html: `${textToHtml(draft.body)}\n${trackingPixelHtml(id)}`,
     text: draft.body,
+    replyTo: await resolveDraftReplyTo(draft),
   });
 
   await pool.execute(
@@ -464,6 +477,7 @@ export async function sendDueOutreachReminders(now = new Date()) {
       subject: content.subject,
       html: `${textToHtml(content.body)}\n${trackingPixelHtml(draft.id)}`,
       text: content.body,
+      replyTo: await resolveDraftReplyTo(draft),
     });
     await pool.execute(
       'UPDATE lead_outreach_drafts SET sequence_step = ?, last_reminder_at = CURRENT_TIMESTAMP WHERE tenant_key = ? AND id = ?',
@@ -512,6 +526,7 @@ export async function sendDuePostShowFollowups(now = new Date()) {
         subject: content.subject,
         html: `${textToHtml(content.body)}\n${trackingPixelHtml(draft.id)}`,
         text: content.body,
+        replyTo: await resolveDraftReplyTo(draft),
       });
       await pool.execute(
         'UPDATE lead_outreach_drafts SET followup_step = ?, last_followup_at = CURRENT_TIMESTAMP WHERE tenant_key = ? AND id = ?',

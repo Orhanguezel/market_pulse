@@ -240,6 +240,41 @@ async function ensureProfileSenderColumns(conn: mysql.Connection): Promise<void>
   }
 }
 
+async function ensureUserMailAccountsTable(conn: mysql.Connection): Promise<void> {
+  if (await tableExists(conn, 'user_mail_accounts')) return;
+  await query(
+    conn,
+    `CREATE TABLE ${quoteIdent('user_mail_accounts')} (
+      ${quoteIdent('id')} CHAR(36) NOT NULL,
+      ${quoteIdent('tenant_key')} VARCHAR(64) NOT NULL DEFAULT 'avrasya',
+      ${quoteIdent('owner_user_id')} CHAR(36) NOT NULL,
+      ${quoteIdent('provider')} ENUM('gmail_oauth','imap_smtp') NOT NULL DEFAULT 'gmail_oauth',
+      ${quoteIdent('email')} VARCHAR(255) NOT NULL,
+      ${quoteIdent('display_name')} VARCHAR(255) DEFAULT NULL,
+      ${quoteIdent('enc_access_token')} TEXT DEFAULT NULL,
+      ${quoteIdent('enc_refresh_token')} TEXT DEFAULT NULL,
+      ${quoteIdent('token_expiry')} DATETIME(3) DEFAULT NULL,
+      ${quoteIdent('scopes')} TEXT DEFAULT NULL,
+      ${quoteIdent('imap_host')} VARCHAR(255) DEFAULT NULL,
+      ${quoteIdent('imap_port')} INT DEFAULT NULL,
+      ${quoteIdent('smtp_host')} VARCHAR(255) DEFAULT NULL,
+      ${quoteIdent('smtp_port')} INT DEFAULT NULL,
+      ${quoteIdent('smtp_secure')} TINYINT(1) DEFAULT NULL,
+      ${quoteIdent('smtp_username')} VARCHAR(255) DEFAULT NULL,
+      ${quoteIdent('enc_password')} TEXT DEFAULT NULL,
+      ${quoteIdent('status')} ENUM('connected','expired','error','disconnected') NOT NULL DEFAULT 'connected',
+      ${quoteIdent('last_error')} VARCHAR(500) DEFAULT NULL,
+      ${quoteIdent('last_synced_at')} DATETIME(3) DEFAULT NULL,
+      ${quoteIdent('created_at')} DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3),
+      ${quoteIdent('updated_at')} DATETIME(3) NOT NULL DEFAULT CURRENT_TIMESTAMP(3) ON UPDATE CURRENT_TIMESTAMP(3),
+      PRIMARY KEY (${quoteIdent('id')}),
+      UNIQUE KEY ${quoteIdent('uq_user_mail_account_email')} (${quoteIdent('tenant_key')}, ${quoteIdent('owner_user_id')}, ${quoteIdent('email')}),
+      KEY ${quoteIdent('idx_user_mail_accounts_owner')} (${quoteIdent('tenant_key')}, ${quoteIdent('owner_user_id')}),
+      KEY ${quoteIdent('idx_user_mail_accounts_provider')} (${quoteIdent('tenant_key')}, ${quoteIdent('provider')}, ${quoteIdent('status')})
+    ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+  );
+}
+
 async function migrateTenantColumns(conn: mysql.Connection): Promise<void> {
   for (const table of TENANT_TABLES) {
     if (!(await tableExists(conn, table.name))) {
@@ -280,6 +315,7 @@ async function main(): Promise<void> {
     await ensureExternalCustomerColumn(conn);
     await ensureSaasMultitenantTables(conn);
     await ensureProfileSenderColumns(conn);
+    await ensureUserMailAccountsTable(conn);
     console.log('[migrate] completed');
   } finally {
     await conn.end();

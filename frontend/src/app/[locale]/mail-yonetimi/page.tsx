@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { Edit3, Loader2, Mail, Plus, RefreshCw, Save, Send, Sparkles, Trash2, Upload } from 'lucide-react';
+import { Edit3, Inbox, Loader2, Mail, Plug, Plus, RefreshCw, Save, Send, Settings, Sparkles, Trash2, Upload } from 'lucide-react';
 import { toast } from 'sonner';
 import { z } from 'zod';
 import { ConfirmDeleteDialog } from '@/components/iy/ConfirmDeleteDialog';
@@ -24,7 +24,17 @@ import {
   useUpdateOutreachDraftMutation,
   useUpdateOutreachCampaignMutation,
 } from '@/integrations/rtk/public/outreach.endpoints';
+import {
+  useCreateImapSmtpAccountMutation,
+  useDeleteMailAccountMutation,
+  useLazyGmailConnectUrlQuery,
+  useListMailAccountsQuery,
+  useListMailInboxQuery,
+  useGetMailMessageQuery,
+  useSendUserMailMutation,
+} from '@/integrations/rtk/public/mail-accounts.endpoints';
 import type { OutreachCampaign, OutreachDraft } from '@/integrations/shared/outreach.types';
+import type { MailInboxMessage } from '@/integrations/shared/mail-account.types';
 
 type FormState = Partial<OutreachCampaign> & { country_to_lang_json: string };
 
@@ -346,6 +356,197 @@ function BulkListsPanel({ campaigns }: { campaigns: OutreachCampaign[] }) {
   );
 }
 
+function AccountsPanel() {
+  const { data: accounts = [], isLoading, refetch } = useListMailAccountsQuery();
+  const [getConnectUrl, connectState] = useLazyGmailConnectUrlQuery();
+  const [deleteAccount, deleteState] = useDeleteMailAccountMutation();
+  const [createImap, imapState] = useCreateImapSmtpAccountMutation();
+  const [form, setForm] = React.useState({
+    email: '',
+    displayName: '',
+    smtpHost: '',
+    smtpPort: 587,
+    smtpSecure: false,
+    smtpUsername: '',
+    password: '',
+    imapHost: '',
+    imapPort: 993,
+  });
+
+  const connectGmail = async () => {
+    try {
+      const { url } = await getConnectUrl().unwrap();
+      window.location.href = url;
+    } catch {
+      toast.error('Gmail bağlantısı başlatılamadı.');
+    }
+  };
+
+  const saveImap = async () => {
+    try {
+      await createImap({
+        email: form.email,
+        displayName: form.displayName || null,
+        smtpHost: form.smtpHost,
+        smtpPort: Number(form.smtpPort),
+        smtpSecure: form.smtpSecure,
+        smtpUsername: form.smtpUsername || null,
+        password: form.password,
+        imapHost: form.imapHost || null,
+        imapPort: form.imapHost ? Number(form.imapPort) : null,
+      }).unwrap();
+      toast.success('Mail hesabı kaydedildi');
+      setForm({ email: '', displayName: '', smtpHost: '', smtpPort: 587, smtpSecure: false, smtpUsername: '', password: '', imapHost: '', imapPort: 993 });
+      await refetch();
+    } catch {
+      toast.error('Mail hesabı kaydedilemedi.');
+    }
+  };
+
+  return (
+    <div className="grid gap-5 lg:grid-cols-[1fr_360px]">
+      <section className="rounded-lg border border-[#e2e8f0] bg-white">
+        <div className="flex items-center justify-between border-b border-[#e2e8f0] px-4 py-3">
+          <div className="flex items-center gap-2">
+            <Plug className="h-5 w-5 text-[#1e40af]" />
+            <h2 className="text-[15px] font-bold text-[#0f172a]">Bağlı Hesaplar</h2>
+          </div>
+          <button disabled={connectState.isFetching} onClick={connectGmail} className="inline-flex h-9 items-center gap-2 rounded-md bg-[#1e40af] px-3 text-[13px] font-semibold text-white disabled:opacity-50">
+            {connectState.isFetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <Mail className="h-4 w-4" />} Gmail Bağla
+          </button>
+        </div>
+        {isLoading ? (
+          <div className="flex items-center justify-center py-16"><Loader2 className="h-5 w-5 animate-spin text-[#1e40af]" /></div>
+        ) : accounts.length === 0 ? (
+          <p className="px-4 py-12 text-center text-[13px] text-[#64748b]">Bağlı mail hesabı yok.</p>
+        ) : (
+          <div className="divide-y divide-[#e2e8f0]">
+            {accounts.map((account) => (
+              <div key={account.id} className="flex flex-col gap-3 px-4 py-4 md:flex-row md:items-center md:justify-between">
+                <div>
+                  <p className="font-bold text-[#0f172a]">{account.display_name || account.email}</p>
+                  <p className="mt-1 text-[13px] text-[#64748b]">{account.email} · {account.provider === 'gmail_oauth' ? 'Gmail OAuth' : 'IMAP/SMTP'}</p>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className={`rounded-full px-2 py-1 text-[12px] font-semibold ${account.status === 'connected' ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>{account.status}</span>
+                  <button disabled={deleteState.isLoading} onClick={() => deleteAccount(account.id).unwrap().then(() => refetch())} className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-rose-200 text-rose-700 disabled:opacity-50">
+                    <Trash2 className="h-4 w-4" />
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </section>
+
+      <aside className="rounded-lg border border-[#e2e8f0] bg-white">
+        <div className="flex items-center gap-2 border-b border-[#e2e8f0] px-4 py-3">
+          <Settings className="h-5 w-5 text-[#1e40af]" />
+          <h2 className="text-[15px] font-bold text-[#0f172a]">Manuel SMTP</h2>
+        </div>
+        <div className="grid gap-3 p-4">
+          <Field label="E-posta"><input className="h-9 rounded-md border border-[#cbd5e1] px-3 text-[13px]" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} /></Field>
+          <Field label="Ad"><input className="h-9 rounded-md border border-[#cbd5e1] px-3 text-[13px]" value={form.displayName} onChange={(e) => setForm({ ...form, displayName: e.target.value })} /></Field>
+          <Field label="SMTP host"><input className="h-9 rounded-md border border-[#cbd5e1] px-3 text-[13px]" value={form.smtpHost} onChange={(e) => setForm({ ...form, smtpHost: e.target.value })} /></Field>
+          <div className="grid grid-cols-2 gap-3">
+            <Field label="SMTP port"><input type="number" className="h-9 rounded-md border border-[#cbd5e1] px-3 text-[13px]" value={form.smtpPort} onChange={(e) => setForm({ ...form, smtpPort: Number(e.target.value) })} /></Field>
+            <label className="mt-6 flex h-9 items-center gap-2 text-[13px] text-[#334155]">
+              <input type="checkbox" checked={form.smtpSecure} onChange={(e) => setForm({ ...form, smtpSecure: e.target.checked })} /> SSL
+            </label>
+          </div>
+          <Field label="SMTP kullanıcı"><input className="h-9 rounded-md border border-[#cbd5e1] px-3 text-[13px]" value={form.smtpUsername} onChange={(e) => setForm({ ...form, smtpUsername: e.target.value })} /></Field>
+          <Field label="Şifre / app password"><input type="password" className="h-9 rounded-md border border-[#cbd5e1] px-3 text-[13px]" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} /></Field>
+          <Field label="IMAP host"><input className="h-9 rounded-md border border-[#cbd5e1] px-3 text-[13px]" value={form.imapHost} onChange={(e) => setForm({ ...form, imapHost: e.target.value })} /></Field>
+          <button disabled={imapState.isLoading} onClick={saveImap} className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-[#1e40af] px-3 text-[13px] font-semibold text-white disabled:opacity-50">
+            {imapState.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Save className="h-4 w-4" />} Kaydet
+          </button>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
+function InboxPanel() {
+  const [folder, setFolder] = React.useState('inbox');
+  const [selected, setSelected] = React.useState<MailInboxMessage | null>(null);
+  const [compose, setCompose] = React.useState({ to: '', subject: '', html: '' });
+  const { data, isLoading, isError, refetch } = useListMailInboxQuery({ folder, limit: 20 });
+  const { data: message } = useGetMailMessageQuery(selected?.id ?? '', { skip: !selected });
+  const [sendMail, sendState] = useSendUserMailMutation();
+  const messages = data?.messages ?? [];
+
+  const send = async () => {
+    try {
+      await sendMail({ to: compose.to, subject: compose.subject, html: compose.html }).unwrap();
+      toast.success('Mail gönderildi');
+      setCompose({ to: '', subject: '', html: '' });
+      await refetch();
+    } catch {
+      toast.error('Mail gönderilemedi.');
+    }
+  };
+
+  return (
+    <div className="grid gap-5 xl:grid-cols-[300px_1fr_340px]">
+      <aside className="rounded-lg border border-[#e2e8f0] bg-white">
+        <div className="flex items-center justify-between border-b border-[#e2e8f0] px-4 py-3">
+          <h2 className="text-[15px] font-bold text-[#0f172a]">Gelen Kutusu</h2>
+          <button onClick={() => refetch()} className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-[#cbd5e1] text-[#334155]"><RefreshCw className="h-4 w-4" /></button>
+        </div>
+        <div className="grid grid-cols-2 gap-2 border-b border-[#e2e8f0] p-3">
+          {['inbox', 'sent', 'drafts', 'trash'].map((item) => (
+            <button key={item} onClick={() => { setFolder(item); setSelected(null); }} className={`h-8 rounded-md text-[13px] font-semibold ${folder === item ? 'bg-[#1e40af] text-white' : 'border border-[#cbd5e1] text-[#475569]'}`}>{item}</button>
+          ))}
+        </div>
+        <div className="max-h-[640px] overflow-auto">
+          {isLoading ? (
+            <div className="flex justify-center py-12"><Loader2 className="h-5 w-5 animate-spin text-[#1e40af]" /></div>
+          ) : isError ? (
+            <p className="px-3 py-8 text-center text-[13px] text-[#64748b]">Inbox alınamadı.</p>
+          ) : messages.length === 0 ? (
+            <p className="px-3 py-8 text-center text-[13px] text-[#64748b]">{data?.account ? 'Mesaj yok.' : 'Önce Gmail hesabı bağlayın.'}</p>
+          ) : messages.map((item) => (
+            <button key={item.id} onClick={() => setSelected(item)} className={`w-full border-b border-[#f1f5f9] p-3 text-left hover:bg-[#f8fafc] ${selected?.id === item.id ? 'bg-[#eff6ff]' : ''}`}>
+              <p className="truncate text-[13px] font-bold text-[#0f172a]">{item.subject}</p>
+              <p className="mt-1 truncate text-[12px] text-[#64748b]">{item.from || item.to || '-'}</p>
+              <p className="mt-1 line-clamp-2 text-[12px] text-[#94a3b8]">{item.snippet}</p>
+            </button>
+          ))}
+        </div>
+      </aside>
+
+      <main className="rounded-lg border border-[#e2e8f0] bg-white">
+        <div className="border-b border-[#e2e8f0] px-4 py-3">
+          <h2 className="truncate text-[15px] font-bold text-[#0f172a]">{message?.subject || selected?.subject || 'Mesaj seçin'}</h2>
+          <p className="mt-1 truncate text-[12px] text-[#64748b]">{message?.from || selected?.from || ''}</p>
+        </div>
+        <div className="p-4 text-[#0f172a]">
+          {message?.html ? (
+            <iframe title="mail-message" sandbox="" srcDoc={message.html} className="h-[560px] w-full rounded-md border border-[#e2e8f0] bg-white" />
+          ) : (
+            <pre className="whitespace-pre-wrap font-sans text-[13px]">{message?.text || selected?.snippet || 'Listeden bir mesaj seçin.'}</pre>
+          )}
+        </div>
+      </main>
+
+      <aside className="rounded-lg border border-[#e2e8f0] bg-white">
+        <div className="flex items-center gap-2 border-b border-[#e2e8f0] px-4 py-3">
+          <Send className="h-5 w-5 text-[#1e40af]" />
+          <h2 className="text-[15px] font-bold text-[#0f172a]">Yeni Mail</h2>
+        </div>
+        <div className="grid gap-3 p-4">
+          <Field label="Alıcı"><input className="h-9 rounded-md border border-[#cbd5e1] px-3 text-[13px]" value={compose.to} onChange={(e) => setCompose({ ...compose, to: e.target.value })} /></Field>
+          <Field label="Konu"><input className="h-9 rounded-md border border-[#cbd5e1] px-3 text-[13px]" value={compose.subject} onChange={(e) => setCompose({ ...compose, subject: e.target.value })} /></Field>
+          <Field label="Mesaj"><textarea className="min-h-48 rounded-md border border-[#cbd5e1] px-3 py-2 text-[13px]" value={compose.html} onChange={(e) => setCompose({ ...compose, html: e.target.value })} /></Field>
+          <button disabled={sendState.isLoading} onClick={send} className="inline-flex h-9 items-center justify-center gap-2 rounded-md bg-[#1e40af] px-3 text-[13px] font-semibold text-white disabled:opacity-50">
+            {sendState.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />} Gönder
+          </button>
+        </div>
+      </aside>
+    </div>
+  );
+}
+
 export default function MailYonetimiPage() {
   const { data: summary } = useGetCrmMailSummaryQuery();
   const { data: campaigns = [], isLoading, isError, refetch } = useListOutreachCampaignsQuery();
@@ -357,7 +558,7 @@ export default function MailYonetimiPage() {
   const [selectedId, setSelectedId] = React.useState<string | null>(null);
   const [form, setForm] = React.useState<FormState>(EMPTY);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
-  const [activeTab, setActiveTab] = React.useState<'campaigns' | 'drafts' | 'bulk'>('campaigns');
+  const [activeTab, setActiveTab] = React.useState<'campaigns' | 'drafts' | 'bulk' | 'accounts' | 'inbox'>('campaigns');
 
   const selected = campaigns.find((campaign) => campaign.id === selectedId) ?? null;
   const busy = createState.isLoading || updateState.isLoading || deleteState.isLoading || generateState.isLoading || syncState.isLoading;
@@ -448,6 +649,8 @@ export default function MailYonetimiPage() {
         <button onClick={() => setActiveTab('campaigns')} className={`h-8 rounded-md px-3 text-[13px] font-semibold ${activeTab === 'campaigns' ? 'bg-[#1e40af] text-white' : 'text-[#475569]'}`}>Kampanyalar</button>
         <button onClick={() => setActiveTab('drafts')} className={`h-8 rounded-md px-3 text-[13px] font-semibold ${activeTab === 'drafts' ? 'bg-[#1e40af] text-white' : 'text-[#475569]'}`}>Taslaklar</button>
         <button onClick={() => setActiveTab('bulk')} className={`h-8 rounded-md px-3 text-[13px] font-semibold ${activeTab === 'bulk' ? 'bg-[#1e40af] text-white' : 'text-[#475569]'}`}>Toplu Liste</button>
+        <button onClick={() => setActiveTab('accounts')} className={`h-8 rounded-md px-3 text-[13px] font-semibold ${activeTab === 'accounts' ? 'bg-[#1e40af] text-white' : 'text-[#475569]'}`}>Hesap & Ayarlar</button>
+        <button onClick={() => setActiveTab('inbox')} className={`inline-flex h-8 items-center gap-2 rounded-md px-3 text-[13px] font-semibold ${activeTab === 'inbox' ? 'bg-[#1e40af] text-white' : 'text-[#475569]'}`}><Inbox className="h-4 w-4" /> Gelen Kutusu</button>
       </div>
 
       {activeTab === 'campaigns' ? (
@@ -563,7 +766,7 @@ export default function MailYonetimiPage() {
         </main>
       </div>
       ) : (
-        activeTab === 'drafts' ? <DraftsPanel /> : <BulkListsPanel campaigns={campaigns} />
+        activeTab === 'drafts' ? <DraftsPanel /> : activeTab === 'bulk' ? <BulkListsPanel campaigns={campaigns} /> : activeTab === 'accounts' ? <AccountsPanel /> : <InboxPanel />
       )}
 
       <ConfirmDeleteDialog

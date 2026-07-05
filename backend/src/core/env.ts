@@ -89,6 +89,7 @@ export const env = {
   ALLOW_TEMP_LOGIN: process.env.ALLOW_TEMP_LOGIN || '',
   TEMP_PASSWORD: process.env.TEMP_PASSWORD || '',
   DB_ENCRYPTION_KEY: process.env.DB_ENCRYPTION_KEY || '',
+  MAIL_ENCRYPTION_KEY: process.env.MAIL_ENCRYPTION_KEY || process.env.DB_ENCRYPTION_KEY || '',
   SMTP_HOST: process.env.SMTP_HOST || '',
   SMTP_PORT: parseEnvInt(process.env.SMTP_PORT, 587),
   SMTP_USER: process.env.SMTP_USER || '',
@@ -96,6 +97,7 @@ export const env = {
   SMTP_FROM: process.env.SMTP_FROM || 'noreply@localhost',
   REPORT_EMAIL_TO: process.env.REPORT_EMAIL_TO || '',
   REDIS_URL: process.env.REDIS_URL || '',
+  GMAIL_DAILY_SEND_LIMIT: parseEnvInt(process.env.GMAIL_DAILY_SEND_LIMIT, 500),
 
   SCRAPER_SERVICE_URL:      process.env.SCRAPER_SERVICE_URL      || 'http://localhost:8200',
   SCRAPER_SERVICE_API_KEY:  process.env.SCRAPER_SERVICE_API_KEY  || '',

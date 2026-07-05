@@ -2,6 +2,7 @@ import { createRequire } from 'node:module';
 import { env } from '@/core/env';
 import { pool } from '@/db/client';
 import { getActiveUserId } from '@/modules/_shared';
+import { sendViaConnectedAccount } from '@/modules/mail-accounts';
 import { getSmtpSettings } from '../siteSettings/service';
 
 const require = createRequire(import.meta.url);
@@ -11,8 +12,11 @@ export async function sendMailRaw(input: {
   subject: string;
   html: string;
   text?: string;
+  replyTo?: string | null;
   useUserSender?: boolean;
 }): Promise<void> {
+  if (input.useUserSender !== false && await sendViaConnectedAccount(getActiveUserId() ?? null, input)) return;
+
   const userSender = input.useUserSender === false ? null : await getActiveUserSenderSettings();
   const settings = await getSmtpSettings().catch(() => null);
   const host = userSender?.host || settings?.host || env.SMTP_HOST;
@@ -37,6 +41,7 @@ export async function sendMailRaw(input: {
     subject: input.subject,
     html: input.html,
     text: input.text,
+    replyTo: input.replyTo || undefined,
   });
 }
 

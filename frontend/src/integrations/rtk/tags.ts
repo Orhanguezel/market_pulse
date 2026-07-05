@@ -27,6 +27,8 @@ export const metahubTags = [
   'FooterSections',
   'FooterSectionsBySlug',
   'Mail',
+  'MailAccounts',
+  'MailInbox',
   'Newsletter',
   'Notifications',
   'Notification',

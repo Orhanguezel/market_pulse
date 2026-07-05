@@ -11,7 +11,7 @@ const PLAN_DAILY_LIMITS: Record<PlanCode, number> = {
   agency:  -1, // unlimited
 };
 
-export type DailyUsageType = 'lead_job' | 'email_send' | 'bulk_email_send' | 'weekly_report_send';
+export type DailyUsageType = 'lead_job' | 'email_send' | 'bulk_email_send' | 'weekly_report_send' | 'gmail_send' | 'gmail_send_provider';
 
 const PLAN_DAILY_USAGE_LIMITS: Record<PlanCode, Record<DailyUsageType, number>> = {
   free: {
@@ -19,24 +19,32 @@ const PLAN_DAILY_USAGE_LIMITS: Record<PlanCode, Record<DailyUsageType, number>> 
     email_send: 10,
     bulk_email_send: 1,
     weekly_report_send: 2,
+    gmail_send: 10,
+    gmail_send_provider: -1,
   },
   starter: {
     lead_job: 30,
     email_send: 100,
     bulk_email_send: 10,
     weekly_report_send: 10,
+    gmail_send: 100,
+    gmail_send_provider: -1,
   },
   pro: {
     lead_job: -1,
     email_send: 500,
     bulk_email_send: 50,
     weekly_report_send: 30,
+    gmail_send: 500,
+    gmail_send_provider: -1,
   },
   agency: {
     lead_job: -1,
     email_send: -1,
     bulk_email_send: -1,
     weekly_report_send: -1,
+    gmail_send: -1,
+    gmail_send_provider: -1,
   },
 };
 

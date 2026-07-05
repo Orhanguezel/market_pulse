@@ -135,34 +135,34 @@ RTK: yeni `mail-accounts.endpoints.ts` (connect/list/delete/inbox/message/send) 
 - [ ] Gmail API'yi etkinleştir. Scope'lar: `gmail.send` (+ Yol A ise `gmail.readonly`).
 - [ ] OAuth client (Web) oluştur; redirect URI = backend callback (`https://<host>/api/v1/mail/accounts/gmail/callback`). client_id/secret → **env/secret** (`getGoogleSettings` genişlet), koda gömme.
 - [ ] Publishing status: "Testing" + test kullanıcıları ekle (≤100). Prod için doğrulama sürecini not et.
-- [ ] `MAIL_ENCRYPTION_KEY` üret (32 byte hex), env'e ekle; `_shared/crypto.ts` ortak encrypt/decrypt.
+- [x] `MAIL_ENCRYPTION_KEY` üret (32 byte hex), env'e ekle; `_shared/crypto.ts` ortak encrypt/decrypt. (`MAIL_ENCRYPTION_KEY` env desteği eklendi; yoksa `DB_ENCRYPTION_KEY` fallback)
 - [ ] isletmeniyonet'te ifşa olan eski Google/SMTP credential'larını **iptal et**.
 
 ### FAZ 1 — Backend: Bağlantı + Token (Gmail OAuth)
-- [ ] `googleapis` paketini ekle.
-- [ ] `037_user_mail_accounts_schema.sql` (owner-scoped, şifreli) — seed'e ekle + fresh/migrate.
-- [ ] `mail-accounts` modülü: connect (consent URL) + callback (code→token, şifreli sakla) + list + delete.
-- [ ] `getValidAccessToken()` refresh mekanizması.
-- [ ] `registerMailAccountsUser` router'ı (`requireAuth + requireModule('email-marketing')`), `project.ts`'e bağla. Callback için `state` imza + CSRF.
-- [ ] Owner-scope: tüm sorgular `owner_user_id = req.user.sub` (owner-scope-guard'a uygun).
+- [x] `googleapis` paketini ekle.
+- [x] `037_user_mail_accounts_schema.sql` (owner-scoped, şifreli) — seed'e ekle + fresh/migrate.
+- [x] `mail-accounts` modülü: connect (consent URL) + callback (code→token, şifreli sakla) + list + delete.
+- [x] `getValidAccessToken()` refresh mekanizması.
+- [x] `registerMailAccountsUser` router'ı (`requireAuth + requireModule('email-marketing')`), `project.ts`'e bağla. Callback için `state` imza + CSRF.
+- [x] Owner-scope: tüm sorgular `owner_user_id = req.user.sub` (owner-scope-guard'a uygun).
 
 ### FAZ 2 — Backend: Gönderim + Gelen kutusu
-- [ ] `POST /mail/send` — Gmail API raw MIME (MailComposer ile ekler dahil, düzgün multipart).
-- [ ] `sendMailRaw` fallback zincirine "bağlı mail hesabı"nı ekle + `replyTo` plumbing.
-- [ ] `GET /mail/inbox` + `GET /mail/messages/:id` (Yol A) — Gmail API list/get, gövde parse.
-- [ ] (Yol B/C) IMAP okuma sağlayıcısı — `imapflow` paketi + `POST /mail/accounts/imap`.
-- [ ] Outreach/kampanya gönderimini bağlı hesap üzerinden çalışacak şekilde güncelle (mail-queue).
+- [x] `POST /mail/send` — Gmail API raw MIME (MailComposer ile ekler dahil, düzgün multipart).
+- [x] `sendMailRaw` fallback zincirine "bağlı mail hesabı"nı ekle + `replyTo` plumbing.
+- [x] `GET /mail/inbox` + `GET /mail/messages/:id` (Yol A) — Gmail API list/get, gövde parse.
+- [x] (Yol B/C) IMAP okuma sağlayıcısı — `imapflow` paketi + IMAP inbox okuma. (`POST /mail/accounts/imap` şifreli SMTP fallback hesabı olarak eklendi; inbox/message IMAP okuma eklendi)
+- [x] Outreach/kampanya gönderimini bağlı hesap üzerinden çalışacak şekilde güncelle (mail-queue).
 
 ### FAZ 3 — Frontend
-- [ ] `mail-accounts.endpoints.ts` + tipler.
-- [ ] "Hesap & Ayarlar" sekmesi + `GmailConnectCard` (OAuth redirect/popup, durum, kes) + IMAP/SMTP form.
-- [ ] "Gelen Kutusu" sekmesi: klasör + liste + detay + compose modal.
-- [ ] `me/settings`'teki SMTP bölümünü mail-accounts'a taşı (tek yerden yönetim).
-- [ ] Bağlantı durumu rozetleri, hata/expired durumları için yeniden-bağlan akışı.
+- [x] `mail-accounts.endpoints.ts` + tipler.
+- [x] "Hesap & Ayarlar" sekmesi + `GmailConnectCard` (OAuth redirect/popup, durum, kes) + IMAP/SMTP form.
+- [x] "Gelen Kutusu" sekmesi: klasör + liste + detay + compose modal.
+- [x] `me/settings`'teki SMTP bölümünü mail-accounts'a taşı (tek yerden yönetim).
+- [x] Bağlantı durumu rozetleri, hata/expired durumları için yeniden-bağlan akışı.
 
 ### FAZ 4 — Sertleştirme
-- [ ] Per-user Gmail günlük gönderim kotası farkındalığı + rate limit (mevcut kota altyapısına ekle).
-- [ ] Token şifreleme + owner-izolasyon E2E testi (iki kullanıcı birbirinin kutusunu göremez).
+- [x] Per-user Gmail günlük gönderim kotası farkındalığı + rate limit (mevcut kota altyapısına ekle).
+- [x] Token şifreleme + owner-izolasyon E2E testi (iki kullanıcı birbirinin kutusunu göremez). (`mail-accounts.service.test.ts` ile tenant/owner filtreleri ve şifreli secret saklama doğrulandı)
 - [ ] Prod için Google OAuth doğrulama + CASA süreci (readonly kullanılıyorsa), >100 kullanıcı öncesi.
 - [ ] Webhook/push (opsiyonel): Gmail `watch` + Pub/Sub ile gerçek-zamanlı gelen mail bildirimi (ileri seviye).
 
