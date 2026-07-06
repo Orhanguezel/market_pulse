@@ -47,17 +47,17 @@ CREATE TABLE IF NOT EXISTS `tenant_modules` (
 
 INSERT INTO `module_catalog`
   (`module_key`, `name`, `description`, `category`, `base_price`, `currency`, `billing_period`, `is_active`, `sort`)
+-- Baslangic TL fiyatlari (fresh install icin). Gercek fiyatlar admin panelden
+-- (/admin/modules -> Paket Fiyatlari) yonetilir; asagidaki ON DUPLICATE fiyat/
+-- para/donem alanlarini GUNCELLEMEZ, boylece re-seed panel duzenlemesini EZMEZ.
 VALUES
-  ('leads', 'Müşteri Bulma', 'Lead machine, gümrük verisi, enrichment ve outreach akışları.', 'sales', 0.00, 'USD', 'monthly', 1, 10),
-  ('crm', 'CRM', 'Hesap, kontak, pipeline, fırsat ve aktivite yönetimi.', 'sales', 0.00, 'USD', 'monthly', 1, 20),
-  ('email-marketing', 'E-posta Pazarlama', 'Kampanya ve toplu e-posta gönderim akışları.', 'marketing', 0.00, 'USD', 'monthly', 1, 30)
+  ('leads', 'Müşteri Bulma', 'Lead machine, gümrük verisi, enrichment ve outreach akışları.', 'sales', 2500.00, 'TRY', 'monthly', 1, 10),
+  ('crm', 'CRM', 'Hesap, kontak, pipeline, fırsat ve aktivite yönetimi.', 'sales', 1500.00, 'TRY', 'monthly', 1, 20),
+  ('email-marketing', 'E-posta Pazarlama', 'Kampanya ve toplu e-posta gönderim akışları.', 'marketing', 1000.00, 'TRY', 'monthly', 1, 30)
 ON DUPLICATE KEY UPDATE
   `name` = VALUES(`name`),
   `description` = VALUES(`description`),
   `category` = VALUES(`category`),
-  `base_price` = VALUES(`base_price`),
-  `currency` = VALUES(`currency`),
-  `billing_period` = VALUES(`billing_period`),
   `is_active` = VALUES(`is_active`),
   `sort` = VALUES(`sort`);
 

@@ -23,6 +23,7 @@ import { registerChurnJob } from '@/jobs/churn.job';
 import { registerReportJob } from '@/jobs/report.job';
 import { registerLeadMachineJobs } from '@/jobs/lead-machine.job';
 import { registerMarketplaceJob } from '@/jobs/marketplace.job';
+import { registerEntitlementsExpiryJob } from '@/jobs/entitlements-expiry.job';
 
 export async function createApp() {
   const { default: buildFastify } =
@@ -95,6 +96,7 @@ export async function createApp() {
   registerReportJob(app);
   registerLeadMachineJobs(app);
   registerMarketplaceJob(app);
+  registerEntitlementsExpiryJob(app);
 
   return app;
 }

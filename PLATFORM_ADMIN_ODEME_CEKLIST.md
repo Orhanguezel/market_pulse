@@ -59,11 +59,11 @@ Süper-admin tüm workspace'leri (tenant) ve üyelerini görüp yönetsin. **Not
 
 Gateway yok; sadece fiyat gösterimi + admin'in ödeme durumunu elle işaretlemesi.
 
-- [ ] **B1. Paket fiyatları:** `module_catalog.base_price`/`currency`/`billing_period` ZATEN VAR. Fiyatları doldur (leads/crm için gerçek TL fiyatları; mail/calendar = 0/ücretsiz). Admin `/admin/modules` fiyat düzenlemesi (opsiyonel; şu an catalog seed'de sabit).
-- [ ] **B2. Tenant ödeme/paket durumu (manuel):** `tenant_modules.status` (trial/active/suspended/cancelled) + `expires_at` ZATEN VAR. Admin panelde tenant detayında: paketi "aktif et / askıya al" + dönem bitişi (havale onaylanınca aktif, süre dolunca askı). Ek tablo gerekmez — mevcut `tenant_modules` yeterli.
-  - [ ] (Opsiyonel) `payments` tablosu: havale kaydı (tenant, tutar, tarih, not) — ödeme geçmişi için. Şart değil.
+- [x] **B1. Paket fiyatları** — TAMAM (2026-07-06, uncommitted). Backend: `PATCH /admin/entitlements/catalog/:moduleKey` (`updateCatalogModule`, süper-admin) — base_price/currency/billing_period/name/description/is_active düzenleme. Seed 032: başlangıç TL fiyatları (leads 2500, crm 1500, email-marketing 1000; mail/calendar 0). **Önemli:** seed `ON DUPLICATE KEY UPDATE`'ten base_price/currency/billing_period ÇIKARILDI → re-seed panel düzenlemesini EZMEZ (fresh install TL alır, mevcut DB panel-yönetimli kalır). Frontend `/admin/modules`: "Paket Fiyatları" kartı (fiyat/para/dönem inline düzenleme + Kaydet). `useUpdateModuleCatalogMutation`. **gzltek mevcut fiyatları 0 — panelden güncellenecek** (fiyatlar iş kararı, placeholder).
+- [x] **B2. Tenant ödeme/paket durumu (manuel)** — ZATEN VARDI (çalışıyor, 404 fix sonrası): `/admin/modules` her modül için tenant seçili durum select (trial/active/suspended/cancelled) + bitiş tarihi + aç/askıya al switch'i (`activate`/`suspend` uçları). Havale onaylanınca aktif et, süre dolunca askıya al — hepsi burada.
+  - [ ] (Opsiyonel) `payments` tablosu: havale kaydı — şart değil, atlandı.
 - [ ] **B3. Ödeme durumu → görünürlük:** `hasModule`/`listActiveTenantModules` zaten `status active/trial` + `expires_at` kontrol ediyor → tenant modülü askıya alınınca kullanıcılar otomatik göremez. **Bu zaten çalışıyor.** Sadece admin'in askıya alma UI'ı (B2) eksik.
-- [ ] **B4. Günlük süre-dolum job'u:** `expires_at` geçmiş `tenant_modules`'ı otomatik `suspended` yap. `backend/src/jobs/` deseni (churn.job/report.job gibi). Manuel modelde opsiyonel ama faydalı.
+- [x] **B4. Günlük süre-dolum job'u** — TAMAM (2026-07-06, uncommitted). `backend/src/jobs/entitlements-expiry.job.ts` (churn deseni, her gün 03:00) → `suspendExpiredModules()` = `expires_at <= NOW()` olan active/trial modülleri `suspended` yapar. app.ts `registerEntitlementsExpiryJob`. Görünürlük zaten `expires_at > NOW()` ile korunuyordu (B3), bu durum tutarlılığı için.
 - [ ] **B5. Kullanıcıya paket/fiyat gösterimi (frontend):** kullanıcı dashboard'unda kilitli/satın alınabilir paketleri fiyatıyla göster ("Firma Bulucu paketi — X TL/ay, havale ile satın al → admin açar"). `/pricing` sayfası VAR (frontend), oraya bağlanabilir. Şimdilik düşük öncelik.
 
 ---

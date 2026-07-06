@@ -128,6 +128,49 @@ export async function listCatalog(): Promise<ModuleCatalogItem[]> {
   return rows as ModuleCatalogItem[];
 }
 
+// B1: Katalog paket fiyatı/meta güncelleme (admin panel). Katalog geneldir (tenant-bağımsız).
+export async function updateCatalogModule(
+  moduleKey: string,
+  patch: {
+    base_price?: number;
+    currency?: string;
+    billing_period?: 'monthly' | 'yearly';
+    name?: string;
+    description?: string | null;
+    is_active?: boolean;
+  },
+): Promise<ModuleCatalogItem | null> {
+  const sets: string[] = [];
+  const vals: Array<string | number | null> = [];
+  if (patch.base_price !== undefined) { sets.push('base_price = ?'); vals.push(patch.base_price); }
+  if (patch.currency !== undefined) { sets.push('currency = ?'); vals.push(patch.currency); }
+  if (patch.billing_period !== undefined) { sets.push('billing_period = ?'); vals.push(patch.billing_period); }
+  if (patch.name !== undefined) { sets.push('name = ?'); vals.push(patch.name); }
+  if (patch.description !== undefined) { sets.push('description = ?'); vals.push(patch.description); }
+  if (patch.is_active !== undefined) { sets.push('is_active = ?'); vals.push(patch.is_active ? 1 : 0); }
+  if (!sets.length) return null;
+  vals.push(moduleKey);
+  await pool.execute(
+    `UPDATE module_catalog SET ${sets.join(', ')}, updated_at = CURRENT_TIMESTAMP WHERE module_key = ?`,
+    vals,
+  );
+  const [rows] = await pool.execute('SELECT * FROM module_catalog WHERE module_key = ? LIMIT 1', [moduleKey]);
+  return (rows as ModuleCatalogItem[])[0] ?? null;
+}
+
+// B4: süresi geçmiş aktif/trial tenant modüllerini otomatik askıya al (günlük job).
+// Görünürlük zaten expires_at > NOW() ile korunur; bu durum tutarlılığı içindir.
+export async function suspendExpiredModules(): Promise<number> {
+  const [result] = await pool.execute(
+    `UPDATE tenant_modules
+        SET status = 'suspended'
+      WHERE status IN ('active', 'trial')
+        AND expires_at IS NOT NULL
+        AND expires_at <= NOW()`,
+  );
+  return (result as { affectedRows?: number }).affectedRows ?? 0;
+}
+
 export async function listTenantModules(tenantKey: string): Promise<TenantModule[]> {
   const [rows] = await pool.execute(
     `SELECT tm.*, mc.name, mc.description, mc.category

@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { toast } from 'sonner';
-import { Boxes, CalendarClock, CheckCircle2, PauseCircle } from 'lucide-react';
+import { Boxes, CalendarClock, CheckCircle2, PauseCircle, Tag } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -23,6 +23,7 @@ import {
   useListTenantModulesQuery,
   useListTenantsQuery,
   useSuspendTenantModuleMutation,
+  useUpdateModuleCatalogMutation,
   type ModuleCatalogItem,
   type ModuleStatus,
   type TenantModule,
@@ -175,6 +176,59 @@ function ModuleRow({
   );
 }
 
+function CatalogPriceRow({ item }: { item: ModuleCatalogItem }) {
+  const [update, state] = useUpdateModuleCatalogMutation();
+  const [price, setPrice] = React.useState(String(item.base_price ?? 0));
+  const [currency, setCurrency] = React.useState(item.currency || 'TRY');
+  const [period, setPeriod] = React.useState<'monthly' | 'yearly'>(item.billing_period);
+
+  React.useEffect(() => {
+    setPrice(String(item.base_price ?? 0));
+    setCurrency(item.currency || 'TRY');
+    setPeriod(item.billing_period);
+  }, [item.base_price, item.currency, item.billing_period]);
+
+  const save = async () => {
+    try {
+      await update({
+        moduleKey: item.module_key,
+        base_price: Number(price) || 0,
+        currency,
+        billing_period: period,
+      }).unwrap();
+      toast.success('Fiyat güncellendi');
+    } catch {
+      toast.error('Fiyat güncellenemedi');
+    }
+  };
+
+  return (
+    <div className="grid items-center gap-2 border-t py-2 first:border-t-0 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,0.9fr)_minmax(0,1fr)_auto]">
+      <div className="min-w-0">
+        <div className="truncate text-sm font-medium">{item.name}</div>
+        <div className="text-[10px] uppercase tracking-wide text-muted-foreground">{item.module_key}</div>
+      </div>
+      <Input type="number" min="0" step="0.01" value={price} onChange={(e) => setPrice(e.target.value)} disabled={state.isLoading} />
+      <Select value={currency} onValueChange={setCurrency} disabled={state.isLoading}>
+        <SelectTrigger><SelectValue /></SelectTrigger>
+        <SelectContent>
+          <SelectItem value="TRY">TRY</SelectItem>
+          <SelectItem value="USD">USD</SelectItem>
+          <SelectItem value="EUR">EUR</SelectItem>
+        </SelectContent>
+      </Select>
+      <Select value={period} onValueChange={(v) => setPeriod(v as 'monthly' | 'yearly')} disabled={state.isLoading}>
+        <SelectTrigger><SelectValue /></SelectTrigger>
+        <SelectContent>
+          <SelectItem value="monthly">Aylık</SelectItem>
+          <SelectItem value="yearly">Yıllık</SelectItem>
+        </SelectContent>
+      </Select>
+      <Button onClick={save} disabled={state.isLoading} size="sm" variant="outline">Kaydet</Button>
+    </div>
+  );
+}
+
 export default function ModulesClient() {
   const { data: tenants = [], isLoading: tenantsLoading } = useListTenantsQuery();
   const { data: catalog = [], isLoading: catalogLoading } = useListModuleCatalogQuery();
@@ -247,6 +301,28 @@ export default function ModulesClient() {
           </div>
         </div>
       </div>
+
+      {!catalogLoading && catalog.length > 0 && (
+        <Card className="rounded-lg">
+          <CardHeader className="pb-3">
+            <CardTitle className="flex items-center gap-2 text-base">
+              <Tag className="size-4 text-gm-gold" />
+              Paket Fiyatları (katalog — tüm workspace'ler)
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-0">
+            <div className="hidden gap-2 pb-2 text-[10px] font-semibold uppercase tracking-wide text-muted-foreground md:grid md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)_minmax(0,0.9fr)_minmax(0,1fr)_auto]">
+              <span>Paket</span><span>Fiyat</span><span>Para</span><span>Dönem</span><span />
+            </div>
+            {catalog.map((item) => (
+              <CatalogPriceRow key={item.module_key} item={item} />
+            ))}
+            <p className="pt-3 text-xs text-muted-foreground">
+              Mail &amp; Takvim ücretsiz (0). Ödeme havale ile manuel — fiyatı buradan güncelle, erişimi aşağıdan/kullanıcı kartından aç.
+            </p>
+          </CardContent>
+        </Card>
+      )}
 
       {loading ? (
         <div className="text-sm text-muted-foreground">Yükleniyor...</div>

@@ -14,6 +14,7 @@ import {
   listUserTenants,
   setUserModule,
   suspendModule,
+  updateCatalogModule,
 } from './service';
 
 const tenantParamsSchema = z.object({
@@ -35,6 +36,19 @@ const moduleBodySchema = z.object({
   status: z.enum(['trial', 'active', 'suspended', 'cancelled']).optional(),
   expires_at: z.string().trim().min(1).nullable().optional(),
   config: z.unknown().optional(),
+});
+
+const catalogParamsSchema = z.object({
+  moduleKey: z.string().trim().min(1).max(64),
+});
+
+const catalogPatchSchema = z.object({
+  base_price: z.coerce.number().min(0).max(1_000_000).optional(),
+  currency: z.string().trim().length(3).optional(),
+  billing_period: z.enum(['monthly', 'yearly']).optional(),
+  name: z.string().trim().min(1).max(120).optional(),
+  description: z.string().trim().max(2000).nullable().optional(),
+  is_active: z.boolean().optional(),
 });
 
 function badRequest(reply: FastifyReply) {
@@ -62,6 +76,16 @@ export async function myEntitlementsHandler(req: FastifyRequest) {
 export async function registerEntitlementsAdmin(app: FastifyInstance) {
   app.get('/entitlements/catalog', async () => listCatalog());
   app.get('/entitlements/me', myEntitlementsHandler);
+
+  // B1: katalog paket fiyat/meta düzenleme (süper-admin scope)
+  app.patch('/entitlements/catalog/:moduleKey', async (req: FastifyRequest<{ Params: { moduleKey: string }; Body: unknown }>, reply) => {
+    const params = catalogParamsSchema.safeParse(req.params);
+    const body = catalogPatchSchema.safeParse(req.body);
+    if (!params.success || !body.success) return badRequest(reply);
+    const module = await updateCatalogModule(params.data.moduleKey, body.data);
+    if (!module) return reply.code(404).send({ error: { message: 'not_found' } });
+    return { module };
+  });
 
   app.get('/entitlements/tenant/:tenantKey', async (req: FastifyRequest<{ Params: { tenantKey: string } }>, reply) => {
     const parsed = tenantParamsSchema.safeParse(req.params);
