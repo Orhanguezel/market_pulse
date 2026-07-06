@@ -12,6 +12,23 @@ export type MyEntitlementsResponse = {
   modules: MyEntitlementModule[];
 };
 
+export type PackageItem = {
+  module_key: string;
+  name: string;
+  description: string | null;
+  category: string;
+  base_price: string | number;
+  currency: string;
+  billing_period: 'monthly' | 'yearly';
+  free: boolean;
+  owned: boolean;
+};
+
+export type MyPackagesResponse = {
+  tenant_key: string;
+  packages: PackageItem[];
+};
+
 export const entitlementsApi = baseApi.injectEndpoints({
   endpoints: (b) => ({
     myEntitlements: b.query<MyEntitlementsResponse, void>({
@@ -21,8 +38,15 @@ export const entitlementsApi = baseApi.injectEndpoints({
       }),
       providesTags: ['Entitlements'],
     }),
+    myPackages: b.query<MyPackagesResponse, void>({
+      query: () => ({
+        url: '/entitlements/packages',
+        method: 'GET',
+      }),
+      providesTags: ['Entitlements'],
+    }),
   }),
   overrideExisting: true,
 });
 
-export const { useMyEntitlementsQuery } = entitlementsApi;
+export const { useMyEntitlementsQuery, useMyPackagesQuery } = entitlementsApi;

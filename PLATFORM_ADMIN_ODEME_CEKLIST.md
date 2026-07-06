@@ -64,7 +64,7 @@ Gateway yok; sadece fiyat gösterimi + admin'in ödeme durumunu elle işaretleme
   - [ ] (Opsiyonel) `payments` tablosu: havale kaydı — şart değil, atlandı.
 - [ ] **B3. Ödeme durumu → görünürlük:** `hasModule`/`listActiveTenantModules` zaten `status active/trial` + `expires_at` kontrol ediyor → tenant modülü askıya alınınca kullanıcılar otomatik göremez. **Bu zaten çalışıyor.** Sadece admin'in askıya alma UI'ı (B2) eksik.
 - [x] **B4. Günlük süre-dolum job'u** — TAMAM (2026-07-06, uncommitted). `backend/src/jobs/entitlements-expiry.job.ts` (churn deseni, her gün 03:00) → `suspendExpiredModules()` = `expires_at <= NOW()` olan active/trial modülleri `suspended` yapar. app.ts `registerEntitlementsExpiryJob`. Görünürlük zaten `expires_at > NOW()` ile korunuyordu (B3), bu durum tutarlılığı için.
-- [ ] **B5. Kullanıcıya paket/fiyat gösterimi (frontend):** kullanıcı dashboard'unda kilitli/satın alınabilir paketleri fiyatıyla göster ("Firma Bulucu paketi — X TL/ay, havale ile satın al → admin açar"). `/pricing` sayfası VAR (frontend), oraya bağlanabilir. Şimdilik düşük öncelik.
+- [x] **B5. Kullanıcıya paket/fiyat gösterimi** — TAMAM (2026-07-06, uncommitted). Backend: authenticated `GET /entitlements/packages` (`myPackagesHandler`) — katalog + `owned` (kullanıcı sahibi mi) + `free` (mail/calendar). Frontend: iy app'te yeni **/paketler** sayfası (nav "Hesap" grubunda, gating'siz) — paket kartları: fiyat + Aktif/Ücretsiz/Kilitli rozeti; kilitli ücretli paketlerde "Havale ile satın al → iletişim". `useMyPackagesQuery`, ClientLayout isAppPath'e `paketler` eklendi, iy-data nav. Not: eski marketing `/pricing` sayfası (hardcoded Amazon planları) ayrı bırakıldı.
 
 ---
 
@@ -78,7 +78,7 @@ Gateway yok; sadece fiyat gösterimi + admin'in ödeme durumunu elle işaretleme
 ## FAZ SIRASI (yeni oturum yol haritası)
 
 1. **Faz 1 = Bölüm A (Tenant Yönetimi) — TAMAMLANDI:** A1✅ A2✅ A3✅ A4✅ A5✅ A6✅(temel). A2+A3 commit edilmedi (A1+404fix commit `aed5b9a` gzltek'te canlı). **SIRADAKİ: A2+A3'ü commit + gzltek deploy + doğrula, sonra Faz 2 (Bölüm B — paket fiyat + manuel ödeme).**
-2. **Faz 2 = Bölüm B (Paket fiyat + manuel ödeme):** B1 (fiyatlar) → B2 (tenant paket aktif/askı UI) → B4 (süre-dolum job) → B5 (kullanıcıya fiyat gösterimi).
+2. **Faz 2 = Bölüm B (Paket fiyat + manuel ödeme) — TAMAMLANDI:** B1✅ B2✅ B3✅ B4✅ B5✅.
 3. **Faz 3 = Bölüm C (otomatik ödeme):** ölçeklenince.
 
 ---

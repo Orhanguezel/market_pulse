@@ -73,6 +73,35 @@ export async function myEntitlementsHandler(req: FastifyRequest) {
   };
 }
 
+// B5: kullanıcı-tarafı paket/fiyat gösterimi — katalog + sahiplik (owned) + ücretsiz (free).
+export async function myPackagesHandler(req: FastifyRequest) {
+  const tenantKey = getActiveTenantKey();
+  const userId = getActiveUserId();
+  const isSuperAdmin = Boolean((req.user as { isSuperAdmin?: boolean } | undefined)?.isSuperAdmin);
+  const full = userId ? isSuperAdmin || (await isTenantAdmin(tenantKey, userId)) : false;
+  const [catalog, owned] = await Promise.all([
+    listCatalog(),
+    userId ? listUserActiveModules(tenantKey, userId, full) : listActiveTenantModules(tenantKey),
+  ]);
+  const ownedSet = new Set(owned.map((m) => m.module_key));
+  return {
+    tenant_key: tenantKey,
+    packages: catalog
+      .filter((c) => Number(c.is_active) === 1)
+      .map((c) => ({
+        module_key: c.module_key,
+        name: c.name,
+        description: c.description ?? null,
+        category: c.category,
+        base_price: c.base_price,
+        currency: c.currency,
+        billing_period: c.billing_period,
+        free: DEFAULT_USER_MODULES.has(c.module_key),
+        owned: ownedSet.has(c.module_key),
+      })),
+  };
+}
+
 export async function registerEntitlementsAdmin(app: FastifyInstance) {
   app.get('/entitlements/catalog', async () => listCatalog());
   app.get('/entitlements/me', myEntitlementsHandler);
@@ -161,4 +190,5 @@ export async function registerEntitlementsAdmin(app: FastifyInstance) {
 
 export async function registerEntitlementsPublic(app: FastifyInstance) {
   app.get('/entitlements/me', { preHandler: requireAuth }, myEntitlementsHandler);
+  app.get('/entitlements/packages', { preHandler: requireAuth }, myPackagesHandler);
 }

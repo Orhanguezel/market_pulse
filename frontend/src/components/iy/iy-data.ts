@@ -336,6 +336,7 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
       { key: 'business-signals', label: 'Sinyaller', icon: 'BellRing', path: '/isletme-yonetimi/sinyaller', module: 'crm' },
       { key: 'users', label: 'Kullanıcılar', icon: 'Users', path: '/kullanicilar', module: 'crm' },
       { key: 'reports', label: 'Raporlar', icon: 'PieChart', path: '/raporlar', module: 'crm' },
+      { key: 'packages', label: 'Paketler', icon: 'Package', path: '/paketler' },
       { key: 'profile', label: 'Profilim', icon: 'User', path: '/profile' },
     ],
   },
