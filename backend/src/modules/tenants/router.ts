@@ -7,6 +7,7 @@ import {
   listTenantSecrets,
   listTenantRoles,
   listTenants,
+  listTenantsAdmin,
   listWorkspaceUsers,
   inviteWorkspaceUser,
   onboardTenant,
@@ -19,6 +20,7 @@ import {
 export async function registerTenants(app: FastifyInstance) {
   app.get('/tenants', listTenants);
   app.get('/tenants/:key', getTenant);
+  app.get('/tenants/admin/list', { preHandler: [requireAuth, requireAdmin] }, listTenantsAdmin);
   app.get('/tenants/workspace/users', { preHandler: [requireAuth] }, listWorkspaceUsers);
   app.post<{ Body: unknown }>('/tenants/workspace/users/invite', { preHandler: [requireAuth] }, inviteWorkspaceUser);
   app.patch<{ Params: { userId: string }; Body: unknown }>('/tenants/workspace/users/:userId', { preHandler: [requireAuth] }, updateWorkspaceUserRole);

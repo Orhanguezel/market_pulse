@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { toast } from 'sonner';
-import { Building2, KeyRound, Plus, Save, UserPlus } from 'lucide-react';
+import { Building2, CalendarClock, KeyRound, Package, Plus, Save, UserPlus, Users } from 'lucide-react';
 
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
@@ -14,11 +14,11 @@ import {
   useCreateTenantRoleMutation,
   useListTenantSecretsQuery,
   useListTenantRolesQuery,
-  useListTenantsQuery,
+  useListTenantsAdminQuery,
   useOnboardTenantMutation,
   useUpsertTenantSecretMutation,
   useUpdateTenantProfileMutation,
-  type TenantSummary,
+  type TenantAdminSummary,
 } from '@/integrations/hooks';
 
 function safeJson(text: string) {
@@ -26,7 +26,35 @@ function safeJson(text: string) {
   return JSON.parse(text);
 }
 
-function TenantEditor({ tenant }: { tenant: TenantSummary }) {
+function formatExpiry(value: string | null): string {
+  if (!value) return 'Süresiz';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return 'Süresiz';
+  return d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function TenantSummaryStrip({ tenant }: { tenant: TenantAdminSummary }) {
+  const expired = tenant.next_expires_at ? new Date(tenant.next_expires_at).getTime() < Date.now() : false;
+  return (
+    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+      <span className="inline-flex items-center gap-1 rounded border px-2 py-1">
+        <Users className="size-3.5" />
+        {tenant.member_count} üye
+      </span>
+      <span className="inline-flex items-center gap-1 rounded border px-2 py-1">
+        <Package className="size-3.5" />
+        {tenant.active_module_count} aktif modül
+      </span>
+      <span className={`inline-flex items-center gap-1 rounded border px-2 py-1 ${expired ? 'border-red-400 text-red-500' : ''}`}>
+        <CalendarClock className="size-3.5" />
+        {formatExpiry(tenant.next_expires_at)}
+      </span>
+      <Badge variant={tenant.status === 'active' ? 'secondary' : 'outline'}>{tenant.status}</Badge>
+    </div>
+  );
+}
+
+function TenantEditor({ tenant }: { tenant: TenantAdminSummary }) {
   const [brandingText, setBrandingText] = React.useState(() => JSON.stringify(tenant.branding ?? {}, null, 2));
   const [userId, setUserId] = React.useState('');
   const [secretKey, setSecretKey] = React.useState('scraper_api_key');
@@ -78,6 +106,9 @@ function TenantEditor({ tenant }: { tenant: TenantSummary }) {
         <div className="flex items-center justify-between gap-3">
           <CardTitle className="text-base">{tenant.branding?.displayName || tenant.name}</CardTitle>
           <Badge variant="outline">{tenant.key}</Badge>
+        </div>
+        <div className="mt-2">
+          <TenantSummaryStrip tenant={tenant} />
         </div>
       </CardHeader>
       <CardContent className="space-y-4">
@@ -133,7 +164,7 @@ function TenantEditor({ tenant }: { tenant: TenantSummary }) {
 }
 
 export default function TenantsClient() {
-  const { data: tenants = [], isLoading } = useListTenantsQuery();
+  const { data: tenants = [], isLoading } = useListTenantsAdminQuery();
   const [tenantKey, setTenantKey] = React.useState('');
   const [name, setName] = React.useState('');
   const [onboard, onboardState] = useOnboardTenantMutation();

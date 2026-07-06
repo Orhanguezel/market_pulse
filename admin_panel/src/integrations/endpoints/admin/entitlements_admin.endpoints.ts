@@ -51,27 +51,27 @@ export interface UserModulesResponse {
 export const entitlementsAdminApi = baseApi.injectEndpoints({
   endpoints: (b) => ({
     listModuleCatalog: b.query<ModuleCatalogItem[], void>({
-      query: () => ({ url: '/entitlements/catalog' }),
+      query: () => ({ url: '/admin/entitlements/catalog' }),
       providesTags: ['ModuleEntitlements' as never],
     }),
     getUserTenants: b.query<{ user_id: string; tenants: Array<{ tenant_key: string; role: string }> }, string>({
-      query: (userId) => ({ url: `/entitlements/user/${userId}/tenants` }),
+      query: (userId) => ({ url: `/admin/entitlements/user/${userId}/tenants` }),
       providesTags: ['ModuleEntitlements' as never],
     }),
     getUserModules: b.query<UserModulesResponse, { tenantKey: string; userId: string }>({
-      query: ({ tenantKey, userId }) => ({ url: `/entitlements/tenant/${tenantKey}/user/${userId}` }),
+      query: ({ tenantKey, userId }) => ({ url: `/admin/entitlements/tenant/${tenantKey}/user/${userId}` }),
       providesTags: ['ModuleEntitlements' as never],
     }),
     setUserModule: b.mutation<{ ok: boolean }, { tenantKey: string; userId: string; module_key: string; status: 'active' | 'suspended' }>({
       query: ({ tenantKey, userId, module_key, status }) => ({
-        url: `/entitlements/tenant/${tenantKey}/user/${userId}/set`,
+        url: `/admin/entitlements/tenant/${tenantKey}/user/${userId}/set`,
         method: 'POST',
         body: { module_key, status },
       }),
       invalidatesTags: ['ModuleEntitlements' as never],
     }),
     listTenantModules: b.query<TenantModule[], string>({
-      query: (tenantKey) => ({ url: `/entitlements/tenant/${tenantKey}` }),
+      query: (tenantKey) => ({ url: `/admin/entitlements/tenant/${tenantKey}` }),
       providesTags: ['ModuleEntitlements' as never],
     }),
     activateTenantModule: b.mutation<{ module: TenantModule | null }, {
@@ -82,7 +82,7 @@ export const entitlementsAdminApi = baseApi.injectEndpoints({
       config?: unknown;
     }>({
       query: ({ tenantKey, ...body }) => ({
-        url: `/entitlements/tenant/${tenantKey}/activate`,
+        url: `/admin/entitlements/tenant/${tenantKey}/activate`,
         method: 'POST',
         body,
       }),
@@ -90,7 +90,7 @@ export const entitlementsAdminApi = baseApi.injectEndpoints({
     }),
     suspendTenantModule: b.mutation<{ module: TenantModule | null }, { tenantKey: string; module_key: string }>({
       query: ({ tenantKey, module_key }) => ({
-        url: `/entitlements/tenant/${tenantKey}/suspend`,
+        url: `/admin/entitlements/tenant/${tenantKey}/suspend`,
         method: 'POST',
         body: { module_key },
       }),

@@ -100,6 +100,53 @@ export const listTenants: RouteHandler = async () => {
   return rows.map(toTenantDto);
 };
 
+type TenantAdminRow = TenantRow & {
+  member_count: number | string;
+  active_module_count: number | string;
+  next_expires_at: Date | string | null;
+};
+
+function toTenantAdminDto(row: TenantAdminRow) {
+  return {
+    ...toTenantDto(row),
+    member_count: Number(row.member_count) || 0,
+    active_module_count: Number(row.active_module_count) || 0,
+    next_expires_at: row.next_expires_at ?? null,
+  };
+}
+
+// Süper-admin platform yönetimi: her tenant için özet (üye sayısı, aktif modül, en yakın süre bitişi).
+// Public /tenants (login seçici) minimal kalır; bu uç yalnız admin scope'unda (requireAuth+requireAdmin).
+export const listTenantsAdmin: RouteHandler = async () => {
+  const [rows] = await pool.execute<TenantAdminRow[]>(
+    `SELECT t.tenant_key, t.name, t.locale, t.status, t.plan,
+            ts.value_json AS branding,
+            COALESCE(mc.member_count, 0)        AS member_count,
+            COALESCE(am.active_module_count, 0) AS active_module_count,
+            am.next_expires_at                  AS next_expires_at
+       FROM tenants t
+       LEFT JOIN tenant_settings ts
+              ON ts.tenant_key = t.tenant_key AND ts.\`key\` = 'branding'
+       LEFT JOIN (
+              SELECT tenant_key, COUNT(*) AS member_count
+                FROM tenant_user_roles
+               GROUP BY tenant_key
+            ) mc ON mc.tenant_key = t.tenant_key
+       LEFT JOIN (
+              SELECT tenant_key,
+                     COUNT(*)        AS active_module_count,
+                     MIN(expires_at) AS next_expires_at
+                FROM tenant_modules
+               WHERE status IN ('active', 'trial')
+               GROUP BY tenant_key
+            ) am ON am.tenant_key = t.tenant_key
+      ORDER BY FIELD(t.status, 'active') DESC,
+               FIELD(t.tenant_key, 'vistaseeds', 'bereketfide', 'tarvista', 'default', 'avrasya'),
+               t.name ASC`,
+  );
+  return rows.map(toTenantAdminDto);
+};
+
 export const getTenant: RouteHandler<{ Params: { key: string } }> = async (req, reply) => {
   const key = tenantKeySchema.safeParse(req.params.key);
   if (!key.success) return reply.code(400).send({ error: { message: 'invalid_tenant_key' } });

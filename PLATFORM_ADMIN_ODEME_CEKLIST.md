@@ -41,14 +41,18 @@
 
 Süper-admin tüm workspace'leri (tenant) ve üyelerini görüp yönetsin. **Not:** gzltek şu an tek tenant; ikinci müşteri workspace'i açılınca asıl değeri görünür.
 
-- [x] **A4. Kullanıcı detay modül kartı çok-tenant** — TAMAM (commit `3c4e2aa`, canlıda).
-- [ ] **A1. Tenant genel liste ekranı** — mevcut `/admin/tenants` sayfasını genişlet (admin_panel'de `app/(main)/admin/(admin)/tenants/`). Her tenant: ad, üye sayısı, aktif modül/paket sayısı, ödeme durumu, `expires_at`, "yönet" linki.
-  - [ ] Backend: `GET /tenants` yanıtına özet ekle (üye sayısı = `COUNT tenant_user_roles`, aktif modül = `COUNT tenant_modules active`). `backend/src/modules/tenants/controller.ts` `listTenants`.
+### ⚠️ KRİTİK BUG (2026-07-06 keşif + düzeltme) — entitlements admin uçları 404'tü
+
+`admin_panel/.../entitlements_admin.endpoints.ts` tüm URL'leri `/entitlements/...` (prefix'siz) çağırıyordu; backend bunları YALNIZ `/api/v1/admin/entitlements/...` altında sunuyor (route tablosu ile doğrulandı). Yani **A4 kartı + Modül Erişimi kartı + `/admin/modules` tenant modül yönetimi prod'da 404 alıyordu** (RTK hatası → kart sessizce boş → "çalışıyor" sanılmış). Diğer tüm admin dosyaları (`users`=`/admin/users`, `site-settings`, `db`, `audit`) zaten `/admin/...` kullanıyor; entitlements tek aykırıydı. **Düzeltme:** 7 URL'e `/admin` prefix'i eklendi. Deploy sonrası Modül Erişimi kartlarının GERÇEKTEN veri çektiği UI'da doğrulanmalı.
+
+- [x] **A4. Kullanıcı detay modül kartı çok-tenant** — commit `3c4e2aa` (backend OK); ama frontend URL bug'ı nedeniyle 404'tü → **2026-07-06 düzeltildi** (yukarı).
+- [x] **A1. Tenant genel liste ekranı** — TAMAM (2026-07-06, henüz commit/deploy edilmedi). Her tenant kartında özet şeridi: üye sayısı + aktif modül sayısı + en yakın `expires_at` (süresi geçmişse kırmızı) + status badge.
+  - [x] Backend: `GET /tenants/admin/list` (yeni, süper-admin gated) — `listTenantsAdmin` tek sorguda `COUNT tenant_user_roles` + `COUNT tenant_modules(active/trial)` + `MIN(expires_at)`. Public `/tenants` (login pre-auth branding seçici) MİNİMAL bırakıldı — cross-tenant sızıntı olmasın diye zenginleştirme ayrı uca kondu. `backend/src/modules/tenants/{controller,router}.ts`. Frontend: `useListTenantsAdminQuery`.
 - [ ] **A2. Tenant detay ekranı** `/admin/tenants/:key`: o tenant'ın üyeleri (`tenant_user_roles JOIN users`) + her üyenin rolü + modül erişimi (mevcut Modül Erişimi kartını burada da göster); tenant modül/paket aç-kapa (mevcut `/admin/modules` mantığını buraya bağla).
   - [ ] Backend: `GET /tenants/:key/members` (users + tenant rol + user_modules özeti).
 - [ ] **A3. Kullanıcı listesinde tenant sütunu + filtre** `/admin/users`: her kullanıcının tenant(lar)ı (`GET /entitlements/user/:userId/tenants` VAR) + `?tenant=` filtresi.
   - [ ] Backend: admin users listesine `tenants[]` ekle (tenant_user_roles'tan) veya frontend'de per-user query.
-- [ ] **A5. Süper-admin guard:** cross-tenant uçlar (tenant listesi/detay, user tenants, user modules) yalnız `isSuperAdmin` erişebilsin; tenant_admin sadece kendi tenant'ı. `backend/src/middleware/roles.ts`'te `requireAdmin` var — cross-tenant admin uçlarına uygula; kendi-tenant uçlarında tenant_admin'e izin ver.
+- [x] **A5. Süper-admin guard** — YAPISAL OLARAK SAĞLANDI: cross-tenant uçlar `/api/v1/admin/*` scope'unda (`routes.ts`: `requireAuth`+`requireAdmin`; bu sistemde `requireAdmin` == global admin == `isSuperAdmin`, çünkü JWT `role:'admin'` → `isSuperAdmin`). Yeni `/tenants/admin/list` de `[requireAuth, requireAdmin]`. tenant_admin kendi workspace'ini `/tenants/workspace/*` (controller'da `requireTenantAdmin`, kendi tenant'ı) üzerinden yönetir — cross-tenant uçlara erişemez. Not: `GET /tenants` ve `GET /tenants/:key` bilinçli PUBLIC (login branding seçici) ama yalnız minimal branding döner.
 - [ ] **A6. Yeni tenant açma UI:** mevcut `POST /tenants/admin/onboard` uca bir admin formu (tenant adı/key + ilk admin kullanıcı + başlangıç paketleri). Yeni müşteri workspace'i açmak için.
 
 ---
@@ -75,7 +79,7 @@ Gateway yok; sadece fiyat gösterimi + admin'in ödeme durumunu elle işaretleme
 
 ## FAZ SIRASI (yeni oturum yol haritası)
 
-1. **Faz 1 = Bölüm A (Tenant Yönetimi):** A1→A6. **BURADAN BAŞLA.** A4 tamam. Sıra: A5 (guard) → A1 (tenant liste) → A2 (tenant detay + üyeler) → A3 (users tenant sütunu) → A6 (yeni tenant formu).
+1. **Faz 1 = Bölüm A (Tenant Yönetimi):** A1→A6. A4✅ A5✅ A1✅ (+ kritik entitlements 404 bug fix, 2026-07-06 — henüz deploy edilmedi). **SIRADAKİ: A2** (tenant detay + üyeler) → A3 (users tenant sütunu) → A6 (yeni tenant formu; onboard formu tenants sayfasında zaten var, genişletilecek).
 2. **Faz 2 = Bölüm B (Paket fiyat + manuel ödeme):** B1 (fiyatlar) → B2 (tenant paket aktif/askı UI) → B4 (süre-dolum job) → B5 (kullanıcıya fiyat gösterimi).
 3. **Faz 3 = Bölüm C (otomatik ödeme):** ölçeklenince.
 

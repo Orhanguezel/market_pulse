@@ -17,6 +17,12 @@ export interface TenantSummary {
   branding: TenantBranding;
 }
 
+export interface TenantAdminSummary extends TenantSummary {
+  member_count: number;
+  active_module_count: number;
+  next_expires_at: string | null;
+}
+
 export interface TenantRole {
   id: string;
   user_id: string;
@@ -51,6 +57,10 @@ export const tenantAdminApi = baseApi.injectEndpoints({
     }),
     getTenant: b.query<TenantSummary, string>({
       query: (key) => ({ url: `/tenants/${key}` }),
+      providesTags: ['Tenants' as never],
+    }),
+    listTenantsAdmin: b.query<TenantAdminSummary[], void>({
+      query: () => ({ url: '/tenants/admin/list' }),
       providesTags: ['Tenants' as never],
     }),
     onboardTenant: b.mutation<{ ok: boolean; key: string }, {
@@ -109,6 +119,7 @@ export const tenantAdminApi = baseApi.injectEndpoints({
 
 export const {
   useListTenantsQuery,
+  useListTenantsAdminQuery,
   useGetTenantQuery,
   useOnboardTenantMutation,
   useUpdateTenantProfileMutation,
