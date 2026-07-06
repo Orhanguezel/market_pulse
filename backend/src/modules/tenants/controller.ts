@@ -5,6 +5,7 @@ import { hash as argonHash } from 'argon2';
 import { pool } from '@/db/client';
 import { encryptTenantSecret, invalidateActiveTenantCache } from '@/core/tenant';
 import { getActiveTenantKey, getActiveUserId } from '@/modules/_shared';
+import { DEFAULT_USER_MODULES } from '@/modules/entitlements/service';
 import {
   tenantKeySchema,
   tenantOnboardSchema,
@@ -145,6 +146,59 @@ export const listTenantsAdmin: RouteHandler = async () => {
                t.name ASC`,
   );
   return rows.map(toTenantAdminDto);
+};
+
+// A2: Tenant detay — üyeler + rol + her üyenin aktif modülleri (default mail/calendar + user_modules grant).
+// Süper-admin scope (/tenants/admin/:key/members). 2 sorgu, N+1 yok.
+export const listTenantMembersAdmin: RouteHandler<{ Params: { key: string } }> = async (req, reply) => {
+  const key = tenantKeySchema.safeParse(req.params.key);
+  if (!key.success) return reply.code(400).send({ error: { message: 'invalid_tenant_key' } });
+
+  const [memberRows] = await pool.execute<RowDataPacket[]>(
+    `SELECT tur.user_id, tur.role, tur.created_at,
+            u.email, u.full_name, u.is_active, u.last_sign_in_at,
+            p.full_name AS profile_name
+       FROM tenant_user_roles tur
+       JOIN users u ON u.id = tur.user_id
+       LEFT JOIN profiles p ON p.id = u.id
+      WHERE tur.tenant_key = ?
+      ORDER BY FIELD(tur.role, 'tenant_admin', 'tenant_editor'),
+               COALESCE(p.full_name, u.full_name, u.email) ASC`,
+    [key.data],
+  );
+
+  const [grantRows] = await pool.execute<RowDataPacket[]>(
+    `SELECT um.user_id, um.module_key, COALESCE(mc.name, um.module_key) AS name
+       FROM user_modules um
+       LEFT JOIN module_catalog mc ON mc.module_key = um.module_key
+      WHERE um.tenant_key = ? AND um.status = 'active'`,
+    [key.data],
+  );
+
+  const grantsByUser = new Map<string, Array<{ module_key: string; name: string }>>();
+  for (const g of grantRows) {
+    const list = grantsByUser.get(g.user_id) ?? [];
+    list.push({ module_key: g.module_key, name: g.name });
+    grantsByUser.set(g.user_id, list);
+  }
+
+  const defaults = [...DEFAULT_USER_MODULES].map((m) => ({ module_key: m, name: m, default_on: true as const }));
+
+  return {
+    tenant_key: key.data,
+    members: memberRows.map((m) => ({
+      user_id: m.user_id,
+      email: m.email,
+      full_name: m.profile_name ?? m.full_name ?? null,
+      role: m.role,
+      is_active: Boolean(m.is_active),
+      last_sign_in_at: m.last_sign_in_at ?? null,
+      modules: [
+        ...defaults,
+        ...(grantsByUser.get(m.user_id) ?? []).map((g) => ({ ...g, default_on: false as const })),
+      ],
+    })),
+  };
 };
 
 export const getTenant: RouteHandler<{ Params: { key: string } }> = async (req, reply) => {

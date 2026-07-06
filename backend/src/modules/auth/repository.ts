@@ -1,4 +1,5 @@
 import { db, pool } from '../../db/client';
+import type { RowDataPacket } from 'mysql2/promise';
 import { randomUUID } from 'crypto';
 import { eq } from 'drizzle-orm';
 import { hash as argonHash } from 'argon2';
@@ -210,7 +211,24 @@ export async function repoAdminListUsers(params: {
     .offset(params.offset);
 
   const withRole = await Promise.all(rows.map(async (u) => ({ ...u, role: await getPrimaryRole(u.id) })));
-  return buildAdminUserRoleRows(withRole, params.role);
+  const filtered = buildAdminUserRoleRows(withRole, params.role);
+
+  // A3: her kullanıcının tenant üyelikleri (batch — N+1 yok)
+  const ids = filtered.map((r) => r.id);
+  const byUser = new Map<string, Array<{ tenant_key: string; role: string }>>();
+  if (ids.length) {
+    const placeholders = ids.map(() => '?').join(',');
+    const [trows] = await pool.execute<RowDataPacket[]>(
+      `SELECT user_id, tenant_key, role FROM tenant_user_roles WHERE user_id IN (${placeholders})`,
+      ids,
+    );
+    for (const t of trows) {
+      const list = byUser.get(t.user_id) ?? [];
+      list.push({ tenant_key: t.tenant_key, role: t.role });
+      byUser.set(t.user_id, list);
+    }
+  }
+  return filtered.map((r) => ({ ...r, tenants: byUser.get(r.id) ?? [] }));
 }
 
 export async function repoAdminUpdateUser(id: string, patch: Partial<UserRow>) {

@@ -53,4 +53,10 @@ export const normalizeAdminUser = (u: AdminUserRaw): AdminUserView => ({
   last_sign_in_at: pickLastSignIn(u),
 
   roles: coerceRoles(u),
+
+  tenants: Array.isArray((u as any).tenants)
+    ? ((u as any).tenants as Array<{ tenant_key?: unknown; role?: unknown }>)
+        .map((t) => ({ tenant_key: String(t?.tenant_key ?? ''), role: String(t?.role ?? '') }))
+        .filter((t) => t.tenant_key)
+    : [],
 });

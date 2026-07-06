@@ -48,12 +48,10 @@ Süper-admin tüm workspace'leri (tenant) ve üyelerini görüp yönetsin. **Not
 - [x] **A4. Kullanıcı detay modül kartı çok-tenant** — commit `3c4e2aa` (backend OK); ama frontend URL bug'ı nedeniyle 404'tü → **2026-07-06 düzeltildi** (yukarı).
 - [x] **A1. Tenant genel liste ekranı** — TAMAM (2026-07-06, henüz commit/deploy edilmedi). Her tenant kartında özet şeridi: üye sayısı + aktif modül sayısı + en yakın `expires_at` (süresi geçmişse kırmızı) + status badge.
   - [x] Backend: `GET /tenants/admin/list` (yeni, süper-admin gated) — `listTenantsAdmin` tek sorguda `COUNT tenant_user_roles` + `COUNT tenant_modules(active/trial)` + `MIN(expires_at)`. Public `/tenants` (login pre-auth branding seçici) MİNİMAL bırakıldı — cross-tenant sızıntı olmasın diye zenginleştirme ayrı uca kondu. `backend/src/modules/tenants/{controller,router}.ts`. Frontend: `useListTenantsAdminQuery`.
-- [ ] **A2. Tenant detay ekranı** `/admin/tenants/:key`: o tenant'ın üyeleri (`tenant_user_roles JOIN users`) + her üyenin rolü + modül erişimi (mevcut Modül Erişimi kartını burada da göster); tenant modül/paket aç-kapa (mevcut `/admin/modules` mantığını buraya bağla).
-  - [ ] Backend: `GET /tenants/:key/members` (users + tenant rol + user_modules özeti).
-- [ ] **A3. Kullanıcı listesinde tenant sütunu + filtre** `/admin/users`: her kullanıcının tenant(lar)ı (`GET /entitlements/user/:userId/tenants` VAR) + `?tenant=` filtresi.
-  - [ ] Backend: admin users listesine `tenants[]` ekle (tenant_user_roles'tan) veya frontend'de per-user query.
+- [x] **A2. Tenant detay/üyeler** — TAMAM (2026-07-06, uncommitted). Backend: `GET /tenants/admin/:key/members` (`listTenantMembersAdmin`, süper-admin gated) — üyeler + rol + her üyenin aktif modülleri (default mail/calendar + user_modules grant), 2 sorgu N+1 yok. Frontend: tenant kartında "Üyeler & Modüller" bölümü (rol badge + modül rozetleri, `•`=paket grant'ı, "yönet"→`/admin/users/:id`). RTK `useGetTenantMembersQuery`. Not: ayrı `/admin/tenants/:key` route yerine mevcut tenant kartına gömüldü (daha az yüzey, aynı değer). Tenant modül aç-kapa zaten `/admin/modules`'te.
+- [x] **A3. Users listesinde tenant sütunu + filtre** — TAMAM (2026-07-06, uncommitted). Backend: `repoAdminListUsers` yanıtına `tenants[]` (tenant_key+role) **batch** eklendi (tek IN sorgu, N+1 yok). Frontend: "Workspace" sütunu (tenant rozetleri, tenant_admin altın renk) + client-side "Workspace" filtre dropdown'u (yüklü liste üzerinde; distinct tenant'lar). Tipler: `AdminUserView.tenants` + normalizer. `useListUsersAdminQuery`.
 - [x] **A5. Süper-admin guard** — YAPISAL OLARAK SAĞLANDI: cross-tenant uçlar `/api/v1/admin/*` scope'unda (`routes.ts`: `requireAuth`+`requireAdmin`; bu sistemde `requireAdmin` == global admin == `isSuperAdmin`, çünkü JWT `role:'admin'` → `isSuperAdmin`). Yeni `/tenants/admin/list` de `[requireAuth, requireAdmin]`. tenant_admin kendi workspace'ini `/tenants/workspace/*` (controller'da `requireTenantAdmin`, kendi tenant'ı) üzerinden yönetir — cross-tenant uçlara erişemez. Not: `GET /tenants` ve `GET /tenants/:key` bilinçli PUBLIC (login branding seçici) ama yalnız minimal branding döner.
-- [ ] **A6. Yeni tenant açma UI:** mevcut `POST /tenants/admin/onboard` uca bir admin formu (tenant adı/key + ilk admin kullanıcı + başlangıç paketleri). Yeni müşteri workspace'i açmak için.
+- [x] **A6. Yeni tenant açma UI** — TEMEL TAMAM (zaten vardı): tenants sayfasında onboard formu (tenant_key + ad → `POST /tenants/admin/onboard`) + tenant kartında "tenant admin ata" (user_id) + modül aç-kapa `/admin/modules`. Opsiyonel genişletme (tek formda ilk-admin + başlangıç paketleri) düşük öncelik.
 
 ---
 
@@ -79,7 +77,7 @@ Gateway yok; sadece fiyat gösterimi + admin'in ödeme durumunu elle işaretleme
 
 ## FAZ SIRASI (yeni oturum yol haritası)
 
-1. **Faz 1 = Bölüm A (Tenant Yönetimi):** A1→A6. A4✅ A5✅ A1✅ (+ kritik entitlements 404 bug fix, 2026-07-06 — henüz deploy edilmedi). **SIRADAKİ: A2** (tenant detay + üyeler) → A3 (users tenant sütunu) → A6 (yeni tenant formu; onboard formu tenants sayfasında zaten var, genişletilecek).
+1. **Faz 1 = Bölüm A (Tenant Yönetimi) — TAMAMLANDI:** A1✅ A2✅ A3✅ A4✅ A5✅ A6✅(temel). A2+A3 commit edilmedi (A1+404fix commit `aed5b9a` gzltek'te canlı). **SIRADAKİ: A2+A3'ü commit + gzltek deploy + doğrula, sonra Faz 2 (Bölüm B — paket fiyat + manuel ödeme).**
 2. **Faz 2 = Bölüm B (Paket fiyat + manuel ödeme):** B1 (fiyatlar) → B2 (tenant paket aktif/askı UI) → B4 (süre-dolum job) → B5 (kullanıcıya fiyat gösterimi).
 3. **Faz 3 = Bölüm C (otomatik ödeme):** ölçeklenince.
 

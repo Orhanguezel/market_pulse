@@ -13,13 +13,15 @@ import { Textarea } from '@/components/ui/textarea';
 import {
   useCreateTenantRoleMutation,
   useListTenantSecretsQuery,
-  useListTenantRolesQuery,
+  useGetTenantMembersQuery,
   useListTenantsAdminQuery,
   useOnboardTenantMutation,
   useUpsertTenantSecretMutation,
   useUpdateTenantProfileMutation,
   type TenantAdminSummary,
+  type TenantMember,
 } from '@/integrations/hooks';
+import Link from 'next/link';
 
 function safeJson(text: string) {
   if (!text.trim()) return {};
@@ -62,7 +64,8 @@ function TenantEditor({ tenant }: { tenant: TenantAdminSummary }) {
   const [updateTenant, updateState] = useUpdateTenantProfileMutation();
   const [createRole, roleState] = useCreateTenantRoleMutation();
   const [upsertSecret, secretState] = useUpsertTenantSecretMutation();
-  const { data: roles = [] } = useListTenantRolesQuery(tenant.key);
+  const { data: membersData } = useGetTenantMembersQuery(tenant.key);
+  const members: TenantMember[] = membersData?.members ?? [];
   const { data: secrets = [] } = useListTenantSecretsQuery(tenant.key);
 
   React.useEffect(() => {
@@ -121,20 +124,38 @@ function TenantEditor({ tenant }: { tenant: TenantAdminSummary }) {
           Kaydet
         </Button>
         <div className="grid gap-2 border-t pt-4">
-          <Label>Tenant admin ata</Label>
+          <div className="flex items-center justify-between">
+            <Label>Üyeler &amp; Modüller ({members.length})</Label>
+          </div>
           <div className="flex gap-2">
-            <Input value={userId} onChange={(e) => setUserId(e.target.value)} placeholder="user_id" />
+            <Input value={userId} onChange={(e) => setUserId(e.target.value)} placeholder="user_id — tenant admin ata" />
             <Button onClick={addRole} disabled={roleState.isLoading || !userId.trim()} size="icon" aria-label="Rol ata">
               <UserPlus className="size-4" />
             </Button>
           </div>
-          <div className="space-y-1 text-xs text-muted-foreground">
-            {roles.map((role) => (
-              <div key={role.id} className="flex justify-between rounded border px-2 py-1">
-                <span>{role.email || role.user_id}</span>
-                <span>{role.role}</span>
+          <div className="space-y-2 text-xs">
+            {members.length ? members.map((m) => (
+              <div key={m.user_id} className="rounded border px-2 py-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="truncate font-medium text-gm-text">{m.full_name || m.email || m.user_id}</span>
+                  <div className="flex items-center gap-1">
+                    <Badge variant={m.role === 'tenant_admin' ? 'default' : 'outline'} className="text-[10px]">
+                      {m.role === 'tenant_admin' ? 'admin' : 'editor'}
+                    </Badge>
+                    <Link href={`/admin/users/${m.user_id}`} className="text-gm-gold underline underline-offset-2">
+                      yönet
+                    </Link>
+                  </div>
+                </div>
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {m.modules.map((mod) => (
+                    <Badge key={mod.module_key} variant="secondary" className="text-[10px]" title={mod.default_on ? 'Herkese açık (varsayılan)' : 'Paket erişimi'}>
+                      {mod.name}{mod.default_on ? '' : ' •'}
+                    </Badge>
+                  ))}
+                </div>
               </div>
-            ))}
+            )) : <span className="text-muted-foreground">Üye yok</span>}
           </div>
         </div>
         <div className="grid gap-2 border-t pt-4">

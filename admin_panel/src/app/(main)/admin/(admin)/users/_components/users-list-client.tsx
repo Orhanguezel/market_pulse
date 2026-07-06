@@ -102,6 +102,16 @@ export default function UsersListClient() {
   const usersQ = useListUsersAdminQuery(params);
 
   const [q, setQ] = React.useState(params.q ?? '');
+  const [tenantFilter, setTenantFilter] = React.useState('all');
+
+  const data = usersQ.data ?? [];
+  const tenantOptions = React.useMemo(
+    () => Array.from(new Set(data.flatMap((u) => u.tenants.map((tn) => tn.tenant_key)))).sort(),
+    [data],
+  );
+  const rows = tenantFilter === 'all'
+    ? data
+    : data.filter((u) => u.tenants.some((tn) => tn.tenant_key === tenantFilter));
 
   function apply(next: Partial<AdminUsersListParams>) {
     const merged: AdminUsersListParams = { ...params, ...next, offset: next.offset != null ? next.offset : 0 };
@@ -181,6 +191,23 @@ export default function UsersListClient() {
             </Select>
           </div>
 
+          {tenantOptions.length > 0 && (
+            <div className="space-y-3">
+              <Label className="text-[10px] font-bold text-gm-muted tracking-[0.2em] uppercase ml-1">Workspace</Label>
+              <Select value={tenantFilter} onValueChange={setTenantFilter}>
+                <SelectTrigger className="bg-gm-surface/40 border-gm-border-soft rounded-2xl h-12 focus:ring-gm-gold/50 text-sm">
+                  <SelectValue placeholder="Workspace" />
+                </SelectTrigger>
+                <SelectContent className="bg-gm-bg-deep border-gm-border-soft rounded-2xl">
+                  <SelectItem value="all">Tümü</SelectItem>
+                  {tenantOptions.map((tk) => (
+                    <SelectItem key={tk} value={tk}>{tk}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+          )}
+
           <div className="flex items-center justify-between h-12 px-6 bg-gm-surface/20 rounded-2xl border border-gm-border-soft">
             <Label htmlFor="active-toggle" className="text-[10px] font-bold text-gm-muted tracking-widest uppercase cursor-pointer">{t('list.filters.onlyActive')}</Label>
             <Switch
@@ -203,6 +230,7 @@ export default function UsersListClient() {
                 <TableHead className="py-6 text-[10px] font-bold uppercase tracking-widest text-gm-muted">{t('list.table.email')}</TableHead>
                 <TableHead className="py-6 text-[10px] font-bold uppercase tracking-widest text-center text-gm-muted">{t('list.table.status')}</TableHead>
                 <TableHead className="py-6 text-[10px] font-bold uppercase tracking-widest text-center text-gm-muted">{t('list.table.role')}</TableHead>
+                <TableHead className="py-6 text-[10px] font-bold uppercase tracking-widest text-center text-gm-muted">Workspace</TableHead>
                 <TableHead className="py-6 px-8 text-right text-[10px] font-bold uppercase tracking-widest text-gm-muted">{t('list.table.actions')}</TableHead>
               </TableRow>
             </TableHeader>
@@ -217,7 +245,7 @@ export default function UsersListClient() {
                     <TableCell className="py-6 px-8 text-right"><Skeleton className="h-8 w-8 ml-auto bg-gm-surface/20 rounded-full" /></TableCell>
                   </TableRow>
                 ))
-              ) : (usersQ.data ?? []).map((u) => (
+              ) : rows.map((u) => (
                 <TableRow key={u.id} className="border-gm-border-soft hover:bg-gm-primary/[0.03] transition-colors group">
                   <TableCell className="py-6 px-8">
                     <div className="flex items-center gap-4">
@@ -269,6 +297,23 @@ export default function UsersListClient() {
                       {u.roles[0] === 'admin' ? t('roles.admin') : u.roles[0] === 'consultant' ? t('roles.consultant') : t('roles.user')}
                     </Badge>
                   </TableCell>
+                  <TableCell className="py-6 text-center">
+                    <div className="flex flex-wrap items-center justify-center gap-1">
+                      {u.tenants.length ? u.tenants.map((tn) => (
+                        <Badge
+                          key={tn.tenant_key}
+                          variant="outline"
+                          className={cn(
+                            'text-[9px] font-bold tracking-wide uppercase px-2 py-0.5 rounded border',
+                            tn.role === 'tenant_admin' ? 'border-gm-gold/30 text-gm-gold bg-gm-gold/5' : 'border-gm-border-soft text-gm-muted',
+                          )}
+                          title={tn.role}
+                        >
+                          {tn.tenant_key}
+                        </Badge>
+                      )) : <span className="text-[10px] text-gm-muted/50">—</span>}
+                    </div>
+                  </TableCell>
                   <TableCell className="py-6 px-8 text-right">
                     <div className="flex justify-end opacity-20 group-hover:opacity-100 transition-all">
                       <Button asChild variant="ghost" size="icon" className="rounded-full hover:bg-gm-gold/10 hover:text-gm-gold transition-colors">
@@ -280,9 +325,9 @@ export default function UsersListClient() {
                   </TableCell>
                 </TableRow>
               ))}
-              {!usersQ.isLoading && !usersQ.data?.length && (
+              {!usersQ.isLoading && !rows.length && (
                 <TableRow>
-                  <TableCell colSpan={5} className="py-24 text-center">
+                  <TableCell colSpan={6} className="py-24 text-center">
                     <div className="flex flex-col items-center gap-4 opacity-30">
                       <Users className="w-16 h-16 text-gm-gold/50" />
                       <span className="font-serif italic text-lg text-gm-muted">{t('list.table.noRecords')}</span>
