@@ -1,89 +1,100 @@
-# Platform Admin — Çok-Kiracılı Yönetim + Ödeme-Bazlı Modül Yetkilendirme Çeklisti
+# Platform Admin — Tenant Yönetimi + Paket/Ödeme-Bazlı Modül Yetkilendirme
 
-> **Tarih:** 2026-07-05
-> **Amaç:** Platform süper-admini (Orhan) TÜM tenant'ları ve üyelerini görebilsin; her tenant'ın **ödeme/abonelik durumuna** göre modüllere otomatik yetki verilsin (ödeme yoksa modül askıya alınsın). Kişi-bazlı modül matrisi (mail/takvim default) üzerine kurulur.
-> **İlişkili:** `.claude/.../auth-onboarding-modul-matrisi` (Faz A/B), `docs/crm/ADMIN_TO_USER_DASHBOARD_PLAN.md`, `docs/crm/GMAIL_MAIL_ENTEGRASYONU_PLAN.md`.
-> **Not:** Bu çeklist yeni bir büyük iş kalemidir; ödeme sağlayıcı seçimi (Bölüm C kararı) netleşmeden Faz 2'ye geçilmez.
->
-> **KARARLAR (2026-07-05, kullanıcı):** Ödeme = **C1 Manuel** (admin işaretler; gateway sonra). **Faz 1 (cross-tenant) başlatıldı** — A4 tamamlandı ve deploy edildi.
+> **Tarih:** 2026-07-05 · **Deploy:** gzltek (vps-sultan `187.77.79.59`, root) · **Branch:** `feat/tenant-config-core`
+> **Deploy komutu:** `ssh vps-sultan 'bash /var/www/market_pulse/deploy/gzltek/deploy.sh'` (git reset origin + build backend/frontend/admin + seed --no-drop + migrate + tenant guard + pm2 reload). Deploy sonrası tarayıcıda **Ctrl+Shift+R** (chunk cache).
+> **Bu dosya YENİ OTURUM için tek kaynak** — aşağıdaki her şey context'i korur.
 
 ---
 
-## 0. Mevcut Durum (ne var / ne yok)
+## 0. BU OTURUMDA TAMAMLANANLAR (hepsi gzltek canlıda + doğrulandı)
 
-**Var:**
-- [x] Çok-kiracılı temel: `tenants`, `tenant_user_roles` (user↔tenant, rol tenant_admin/tenant_editor), `tenant_modules` (tenant×modül).
-- [x] `GET /tenants` (listTenants) + `POST /tenants/admin/onboard` (yeni tenant açma) — admin.
-- [x] Admin kullanıcı listesi (`/admin/users`) **global** (tenant-scoped değil) — süper-admin tüm kullanıcıları görüyor.
-- [x] Tenant-bazlı modül yönetimi: `/admin/modules` (tenant seçicili, activate/suspend, status, expires_at).
-- [x] Kişi-bazlı modül matrisi (Faz B): `user_modules` tablosu, `entitlements/me` kişi-bazlı, `/admin/users/:id` Modül Erişimi kartı, mail/takvim default-açık.
-- [x] `tenant_modules` billing alanları: `base_price`, `billing_period` (monthly/yearly), `price_snapshot`, `currency`, `status` (trial/active/suspended/cancelled), `expires_at`.
+**Kişi-bazlı veri izolasyonu (owner_user_id):** dashboard/market/ICP/outreach owner-scope; kullanıcılar birbirinin verisini görmez. (commit `1c6a666`)
 
-**Yok (bu çeklistin konusu):**
-- [ ] Admin kullanıcı listesinde **her kullanıcının hangi tenant(lar)a ait olduğu** görünmüyor; tenant'a göre filtre yok.
-- [ ] `/admin/users/:id` modül kartı **tek seçili tenant** varsayıyor — kullanıcının birden çok tenant'ı varsa yönetilemez.
-- [ ] **Tenant genel görünümü** (her tenant: kaç üye, hangi modüller, ödeme durumu, bitiş) yok.
-- [ ] **Gerçek ödeme/abonelik altyapısı YOK** — payment provider, subscription lifecycle, fatura, ödeme durumu → otomatik entitlement bağı yok.
-- [ ] Ödeme süresi dolunca modülleri **otomatik askıya alma** (job) yok (`expires_at` alanı var ama kullanan job yok).
+**KRİTİK userId-context fix:** `requireAuth` preHandler'da `enterUser` handler'a taşınmıyordu → `getRequiredUserId()` null → owner-scoped yazma/okuma 401 (owner izolasyonu da aslında bu yüzden çalışmıyormuş). Çözüm: `backend/src/plugins/tenantContext.ts` onRequest hook'unda JWT payload'u **SENKRON decode** (`decodeJwtSub`, imza doğrulamadan; imza requireAuth'ta) → `enterUser` await'siz. `await req.jwtVerify()` OLMAZ (await sonrası enterWith taşınmıyor). (commit `827603f`) E2e doğrulandı: görev POST 201.
+
+**Gmail entegrasyonu (uçtan uca çalışıyor):** kullanıcı kendi Gmail'ini bağlar/gelen kutusu/gönderir. `backend/src/modules/mail-accounts/` (service/router/controller), `user_mail_accounts` tablosu (037), AES-256-GCM şifreli token (`_shared/crypto.ts`), **ayrı Gmail OAuth client** (`GMAIL_OAUTH_CLIENT_ID/SECRET` env — login'i etkilemez), proje `assistan-501512` (Testing modu, calendar.readonly henüz eklenmedi → Faz 2b senkron için gerekli). Frontend: `mail-yonetimi` "Hesap & Ayarlar" + "Gelen Kutusu" sekmeleri. Yeni üye kaydında admin'e Gmail-test-user hatırlatma maili (`sendNewMemberAdminAlert`).
+
+**Takvim modülü:** `frontend/src/app/[locale]/takvim/page.tsx` — aylık/haftalık görünüm + sürükle-bırak tarih değiştirme + görev/hatırlatma ekle/tamamla/sil. Owner-scoped (mevcut `crm_tasks`/`crm_reminders`). Sidebar'da Takvim.
+
+**Açık kayıt + otomatik tenant (Faz A):** `rejectNonAdmin` artık `env.ADMIN_ONLY_LOGIN==='1'` ise devrede (varsayılan AÇIK). Yeni kullanıcı (signup/google/social) `assignDefaultTenant` ile `env.TENANT_KEY` (gzltek) tenant'ına otomatik atanır (`repoEnsureTenantMembership`, admin→tenant_admin, diğer→tenant_editor), issueTokens ÖNCESİ.
+
+**Kişi-bazlı modül matrisi (Faz B):** `user_modules` tablosu (038 seed: tenant_key×user_id×module_key×status). `module_catalog`'a `mail`+`calendar` eklendi (default-açık) + tenant'lara grant. `entitlements/me` KİŞİ-bazlı: super-admin/tenant_admin tümünü görür; normal kullanıcı sadece default-açık (mail/calendar) + `user_modules` grant'ları (`listUserActiveModules`, `DEFAULT_USER_MODULES=['mail','calendar']`). Frontend `AppShell` izinsiz modülleri GİZLER. iy-data.ts: takvim→'calendar', mail→'mail'. Admin: `/admin/users/:id` **Modül Erişimi kartı**.
+
+**Cross-tenant modül kartı (Faz 1 / A4):** `GET /entitlements/user/:userId/tenants` + admin kartı kullanıcının HER tenant'ı için ayrı modül bölümü gösterir (commit `3c4e2aa`).
+
+**İlgili planlar:** `docs/crm/ADMIN_TO_USER_DASHBOARD_PLAN.md`, `docs/crm/GMAIL_MAIL_ENTEGRASYONU_PLAN.md`. Hafıza: `auth-onboarding-modul-matrisi`, `gmail-mail-entegrasyonu`, `admin-dashboard-tasima-plani`.
 
 ---
 
-## Bölüm A — Çok-Kiracılı Admin Yönetimi (cross-tenant görünürlük)
+## 1. ÖDEME / PAKET MODELİ (kullanıcı netleştirdi — 2026-07-05)
 
-Süper-admin tüm tenant'ları ve üyelerini görüp yönetebilsin.
+- Modüller **paket** olarak satılır: örn. **Firma Bulucu** (leads), **CRM**, **Mail** paketleri. Her paketin **ücreti** var.
+- **Mail + Takvim herkese ÜCRETSİZ/default açık** (temel verimlilik).
+- Ödeme şimdilik **HAVALE ile manuel**: kullanıcı öder → **Orhan elle** o kullanıcıya/tenant'a paket erişimini açar. Otomatik gateway (Iyzico/Stripe) YOK, ileride eklenir.
+- Erişim açma mekanizması **zaten hazır**: admin panel `/admin/users/:id` Modül Erişimi kartındaki switch'ler (kişi-bazlı) + `/admin/modules` (tenant-bazlı). Manuel açma için ek koda gerek yok — sadece paket **fiyat gösterimi** + **ödeme takibi** eksik.
 
-- [ ] **A1. Tenant genel liste ekranı** (`/admin/tenants` genişlet): her tenant için ad, üye sayısı, aktif modül sayısı, ödeme/abonelik durumu, `expires_at`, hızlı "yönet" linki.
-  - [ ] Backend: `GET /tenants` yanıtına özet alanlar ekle (üye sayısı, aktif modül sayısı, plan/ödeme durumu).
-- [ ] **A2. Tenant detay ekranı** (`/admin/tenants/:key`): o tenant'ın üyeleri (tenant_user_roles JOIN users), her üyenin rolü + modül erişimi; tenant modül aç/kapa (mevcut `/admin/modules`'u bu ekrana taşı/bağla).
+**Karar:** Gateway YOK (manuel havale). Faz 2 = fiyat gösterimi + basit ödeme/paket durumu takibi (manuel işaretleme), otomatik değil.
+
+---
+
+## Bölüm A — TENANT YÖNETİMİ (SIRADAKİ İŞ — yeni oturumda başla)
+
+Süper-admin tüm workspace'leri (tenant) ve üyelerini görüp yönetsin. **Not:** gzltek şu an tek tenant; ikinci müşteri workspace'i açılınca asıl değeri görünür.
+
+- [x] **A4. Kullanıcı detay modül kartı çok-tenant** — TAMAM (commit `3c4e2aa`, canlıda).
+- [ ] **A1. Tenant genel liste ekranı** — mevcut `/admin/tenants` sayfasını genişlet (admin_panel'de `app/(main)/admin/(admin)/tenants/`). Her tenant: ad, üye sayısı, aktif modül/paket sayısı, ödeme durumu, `expires_at`, "yönet" linki.
+  - [ ] Backend: `GET /tenants` yanıtına özet ekle (üye sayısı = `COUNT tenant_user_roles`, aktif modül = `COUNT tenant_modules active`). `backend/src/modules/tenants/controller.ts` `listTenants`.
+- [ ] **A2. Tenant detay ekranı** `/admin/tenants/:key`: o tenant'ın üyeleri (`tenant_user_roles JOIN users`) + her üyenin rolü + modül erişimi (mevcut Modül Erişimi kartını burada da göster); tenant modül/paket aç-kapa (mevcut `/admin/modules` mantığını buraya bağla).
   - [ ] Backend: `GET /tenants/:key/members` (users + tenant rol + user_modules özeti).
-- [ ] **A3. Kullanıcı listesinde tenant sütunu + filtre** (`/admin/users`): her kullanıcının tenant(lar)ı gösterilsin; tenant'a göre filtre.
-  - [ ] Backend: admin users listesine `tenants[]` (tenant_user_roles'tan) ekle; `?tenant=` filtresi.
-- [x] **A4. Kullanıcı detay modül kartı çok-tenant** (`/admin/users/:id`): ✅ TAMAM — kart artık kullanıcının üye olduğu HER tenant için ayrı modül bölümü gösterir (`GET /entitlements/user/:userId/tenants` + tenant başına matris). `getSelectedTenantKey` bağımlılığı kaldırıldı.
-- [ ] **A5. Süper-admin guard netleştir:** cross-tenant uçlar yalnız global-admin (isSuperAdmin) erişebilsin; tenant_admin sadece kendi tenant'ını yönetsin.
-  - [ ] `requireSuperAdmin` middleware (varsa kullan, yoksa ekle) cross-tenant admin uçlarına.
+- [ ] **A3. Kullanıcı listesinde tenant sütunu + filtre** `/admin/users`: her kullanıcının tenant(lar)ı (`GET /entitlements/user/:userId/tenants` VAR) + `?tenant=` filtresi.
+  - [ ] Backend: admin users listesine `tenants[]` ekle (tenant_user_roles'tan) veya frontend'de per-user query.
+- [ ] **A5. Süper-admin guard:** cross-tenant uçlar (tenant listesi/detay, user tenants, user modules) yalnız `isSuperAdmin` erişebilsin; tenant_admin sadece kendi tenant'ı. `backend/src/middleware/roles.ts`'te `requireAdmin` var — cross-tenant admin uçlarına uygula; kendi-tenant uçlarında tenant_admin'e izin ver.
+- [ ] **A6. Yeni tenant açma UI:** mevcut `POST /tenants/admin/onboard` uca bir admin formu (tenant adı/key + ilk admin kullanıcı + başlangıç paketleri). Yeni müşteri workspace'i açmak için.
 
 ---
 
-## Bölüm B — Ödeme-Bazlı Modül Yetkilendirme
+## Bölüm B — PAKET FİYAT + MANUEL ÖDEME TAKİBİ (Faz 2, manuel)
 
-Modül erişimi tenant'ın ödeme/abonelik durumuna bağlansın; ödeme yoksa/süresi dolduysa modül askıya alınsın.
+Gateway yok; sadece fiyat gösterimi + admin'in ödeme durumunu elle işaretlemesi.
 
-- [ ] **B1. Abonelik/ödeme veri modeli** (yeni seed SQL, ALTER değil CREATE):
-  - [ ] `tenant_subscriptions` (id, tenant_key, plan_key, status[active/past_due/canceled/trialing], current_period_end, provider, provider_ref, created/updated) — VEYA mevcut `tenant_modules.status/expires_at`'i "ödeme durumu" kaynağı yap.
-  - [ ] (Opsiyonel) `payments` / `invoices` tablosu (ödeme geçmişi, tutar, tarih, provider_ref).
-  - [ ] (Opsiyonel) `plans` tablosu: plan → hangi modüller (paket). module_catalog ile ilişkilendir.
-- [ ] **B2. Ödeme durumu → entitlement bağı:**
-  - [ ] `hasModule`/`listActiveTenantModules`'a ödeme durumu kontrolü ekle: tenant modülü ancak abonelik `active/trialing` VE süresi geçmemişse aktif sayılsın.
-  - [ ] Ödeme `past_due/canceled` olunca ilgili modüller frontend'de gizlensin + backend guard 402 dönsün.
-- [ ] **B3. Otomatik süre dolumu job'u:** günlük cron — `current_period_end`/`expires_at` geçmiş tenant modüllerini `suspended` yap; ödeme gelince geri `active`. (Mevcut `src/jobs/` deseni.)
-- [ ] **B4. Admin ödeme yönetimi UI** (`/admin/tenants/:key`): plan seç, ödeme durumunu manuel işaretle (öde/askıya al), dönem bitişini ayarla; ödeme geçmişi.
-- [ ] **B5. Manuel-öncelik akışı (MVP):** gerçek payment gateway'den ÖNCE, admin ödeme durumunu **elle** işaretlesin (paid → modüller aktif; unpaid → askıya). Bu, gateway olmadan çalışan minimum çözüm.
+- [ ] **B1. Paket fiyatları:** `module_catalog.base_price`/`currency`/`billing_period` ZATEN VAR. Fiyatları doldur (leads/crm için gerçek TL fiyatları; mail/calendar = 0/ücretsiz). Admin `/admin/modules` fiyat düzenlemesi (opsiyonel; şu an catalog seed'de sabit).
+- [ ] **B2. Tenant ödeme/paket durumu (manuel):** `tenant_modules.status` (trial/active/suspended/cancelled) + `expires_at` ZATEN VAR. Admin panelde tenant detayında: paketi "aktif et / askıya al" + dönem bitişi (havale onaylanınca aktif, süre dolunca askı). Ek tablo gerekmez — mevcut `tenant_modules` yeterli.
+  - [ ] (Opsiyonel) `payments` tablosu: havale kaydı (tenant, tutar, tarih, not) — ödeme geçmişi için. Şart değil.
+- [ ] **B3. Ödeme durumu → görünürlük:** `hasModule`/`listActiveTenantModules` zaten `status active/trial` + `expires_at` kontrol ediyor → tenant modülü askıya alınınca kullanıcılar otomatik göremez. **Bu zaten çalışıyor.** Sadece admin'in askıya alma UI'ı (B2) eksik.
+- [ ] **B4. Günlük süre-dolum job'u:** `expires_at` geçmiş `tenant_modules`'ı otomatik `suspended` yap. `backend/src/jobs/` deseni (churn.job/report.job gibi). Manuel modelde opsiyonel ama faydalı.
+- [ ] **B5. Kullanıcıya paket/fiyat gösterimi (frontend):** kullanıcı dashboard'unda kilitli/satın alınabilir paketleri fiyatıyla göster ("Firma Bulucu paketi — X TL/ay, havale ile satın al → admin açar"). `/pricing` sayfası VAR (frontend), oraya bağlanabilir. Şimdilik düşük öncelik.
 
 ---
 
-## Bölüm C — KARAR: Ödeme Sağlayıcı (Faz 2 blokeri)
+## Bölüm C — OTOMATİK ÖDEME (İLERİDE, şimdilik KAPSAM DIŞI)
 
-Otomatik (elle olmayan) ödeme için sağlayıcı seçimi gerekir. Seçenekler:
-
-- **(C1) Sadece manuel (MVP):** Admin ödeme durumunu elle işaretler. Gateway yok. En hızlı; az sayıda müşteri için yeterli. **Önerilen başlangıç.**
-- **(C2) Iyzico:** TR pazarı, workspace'te başka projelerde kullanılıyor (CLAUDE.md). Abonelik/tekrarlayan ödeme + webhook ile otomatik entitlement.
-- **(C3) Stripe:** Uluslararası, güçlü subscription API + webhook; TR kart kabulü sınırlı olabilir.
-
-> **Öneri:** Faz 1'de **C1 (manuel)** ile başla — Bölüm A (cross-tenant) + B4/B5 (manuel ödeme durumu). Ölçeklenince C2/C3'ten biriyle otomatikleştir (webhook → tenant_subscriptions güncelle → job/guard devreye girer).
+- Kullanıcı kararı: **manuel havale yeterli**, gateway şimdilik gerekmiyor.
+- İleride ölçeklenince: Iyzico (TR, workspace'te var) veya Stripe + webhook → `tenant_modules` otomatik güncelle. Webhook imza doğrulama (scraper-callback deseni). O zaman B4 job'u + webhook birlikte çalışır.
 
 ---
 
-## Fazlı Uygulama Sırası
+## FAZ SIRASI (yeni oturum yol haritası)
 
-1. **Faz 1 — Cross-tenant görünürlük (Bölüm A):** A1→A5. Süper-admin tüm tenant/üyeleri görür, tenant başına modül yönetir. (Ödeme henüz manuel/statik.)
-2. **Faz 2 — Manuel ödeme durumu (Bölüm B, C1):** B1 (minimal model) + B2 (durum→entitlement) + B4/B5 (admin manuel işaretleme) + B3 (süre dolum job'u).
-3. **Faz 3 — Otomatik ödeme (C2 veya C3):** payment gateway + webhook + fatura; manuel işaretlemeyi otomatiğe çevir.
+1. **Faz 1 = Bölüm A (Tenant Yönetimi):** A1→A6. **BURADAN BAŞLA.** A4 tamam. Sıra: A5 (guard) → A1 (tenant liste) → A2 (tenant detay + üyeler) → A3 (users tenant sütunu) → A6 (yeni tenant formu).
+2. **Faz 2 = Bölüm B (Paket fiyat + manuel ödeme):** B1 (fiyatlar) → B2 (tenant paket aktif/askı UI) → B4 (süre-dolum job) → B5 (kullanıcıya fiyat gösterimi).
+3. **Faz 3 = Bölüm C (otomatik ödeme):** ölçeklenince.
 
 ---
 
-## Riskler / Notlar
-- DB değişiklikleri yalnız seed SQL (ALTER yasak — CLAUDE.md); yeni tablolar CREATE + fresh/migrate.
-- Cross-tenant uçlar **kesinlikle** yalnız isSuperAdmin erişimli olmalı (veri sızıntısı riski); tenant_admin kendi tenant'ıyla sınırlı.
-- Kişi-bazlı `user_modules` (Faz B) + tenant ödeme durumu birlikte değerlendirilecek: kullanıcı modülü görür ancak (tenant modülü ödemeli VE aktif) VE (kişiye grant VEYA default-açık) ise.
-- mail/takvim default-açık kuralı ödeme durumundan etkilenmemeli mi, yoksa ödeme yoksa onlar da mı kapansın? → Karar gerek (öneri: mail/takvim her zaman açık kalsın, temel verimlilik).
-- Iyzico/Stripe seçilirse: `.env` secret yönetimi + webhook imza doğrulama (scraper-callback deseni gibi).
+## TEKNİK REFERANSLAR (yeni oturum için)
+
+**Modül/entitlement:**
+- Backend: `backend/src/modules/entitlements/` — `service.ts` (`hasModule`, `listActiveTenantModules`, `listUserActiveModules`, `listUserModuleGrants`, `setUserModule`, `listUserTenants`, `isTenantAdmin`, `DEFAULT_USER_MODULES`), `router.ts` (`myEntitlementsHandler` kişi-bazlı; admin uçları: catalog, tenant/:key, tenant/:key/activate|suspend, tenant/:key/user/:userId[/set], user/:userId/tenants), `guard.ts` (`requireModule` — tenant bazlı, isSuperAdmin bypass).
+- DB: `module_catalog` (module_key PK, name, base_price, billing_period, is_active, sort — leads/crm/email-marketing/mail/calendar), `tenant_modules` (tenant×module, status, expires_at — 032), `user_modules` (tenant×user×module, status — 038). `tenant_user_roles` (user×tenant, role tenant_admin/tenant_editor — 027).
+- Admin panel: `admin_panel/.../users/_components/user-detail-client.tsx` (Modül Erişimi kartı → `UserModulesCard`/`TenantModuleSection`), `.../modules/` (tenant modül yönetimi), `.../tenants/` (tenant liste — genişletilecek). Endpoints: `integrations/endpoints/admin/entitlements_admin.endpoints.ts` (`useGetUserTenantsQuery`, `useGetUserModulesQuery`, `useSetUserModuleMutation`, `useListTenantModulesQuery`, `useActivate/SuspendTenantModuleMutation`).
+- Frontend gating: `frontend/src/components/iy/AppShell.tsx` (`useMyEntitlementsQuery` → izinsiz modül gizle), `iy-data.ts` (`IY_APP_NAV`, item.module).
+
+**Auth/tenant:**
+- `backend/src/modules/auth/controller.ts` (signup/token/google/social; `rejectNonAdmin` env-gated; `assignDefaultTenant`), `repository.ts` (`repoEnsureTenantMembership`).
+- `backend/src/plugins/tenantContext.ts` (onRequest: enterTenant + SENKRON enterUser). `_shared/tenant-scope.ts` (`getActiveUserId/TenantKey`, `andTenantOwner`, `ownerScopeForUrl`).
+- `backend/src/modules/tenants/` (`listTenants`, onboard).
+- JWT: `auth/helpers/core.ts` `buildAccessPayload` (sub, role, isSuperAdmin, tenants[], defaultTenant). Modül JWT'de YOK — `entitlements/me` runtime.
+
+**Deploy/env (gzltek):** `TENANT_KEY=gzltek`, `ADMIN_ONLY_LOGIN` (boş=açık kayıt), `GMAIL_OAUTH_CLIENT_ID/SECRET` (assistan-501512 Testing client), `DB_ENCRYPTION_KEY` (MAIL_ENCRYPTION_KEY fallback), `GOOGLE_CLIENT_ID/SECRET` (login — isletmeniyonetweb client), SMTP boş (mail admin-Gmail'inden gider). Kullanıcılar: orhanguzell (super-admin+tenant_admin), gzltek tenant modülleri: leads/crm/email-marketing/mail/calendar hepsi active.
+
+**Notlar:** e2e test bash'te `UID` readonly → `TID` kullan. Testler (owner-isolation, tenantContext) bu sandbox'ta DB/jwt yok → hang; build + canlı e2e ile doğrula. DB değişikliği yalnız seed SQL (ALTER yasak).
