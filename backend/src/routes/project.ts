@@ -7,6 +7,7 @@ import { registerCrmAdmin } from '@/modules/crm';
 import { registerCrmTenant } from '@/modules/crm/tenant.router';
 import { registerDecisionMakerAdmin, registerDecisionMakerPublic } from '@/modules/lead-machine/decision-maker/router';
 import { registerMailAccountsUser } from '@/modules/mail-accounts';
+import { registerProspectListsUser } from '@/modules/prospect-lists';
 
 export async function registerProjectPublic(api: FastifyInstance) {
   // Tenant müşteri CRM (giriş yapmış, admin değil) — kendi encapsulated scope'unda,
@@ -28,6 +29,9 @@ export async function registerProjectPublic(api: FastifyInstance) {
   });
   await api.register(async (marketApi) => {
     await registerMarketUser(marketApi);
+  });
+  await api.register(async (prospectApi) => {
+    await registerProspectListsUser(prospectApi);
   });
   await registerPublicApi(api);
   await registerLeadMachinePublic(api);

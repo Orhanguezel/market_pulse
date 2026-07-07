@@ -313,6 +313,7 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
       { key: 'firma-bulucu-jobs', label: 'Tarama İşleri', icon: 'ListChecks', path: '/firma-bulucu/jobs', module: 'leads' },
       { key: 'firma-bulucu-fair-day', label: 'Fuar Günü', icon: 'CalendarCheck', path: '/firma-bulucu/fuar-gunu', module: 'leads' },
       { key: 'firma-bulucu-icp', label: 'ICP Profilleri', icon: 'User', path: '/firma-bulucu/icp', module: 'leads' },
+      { key: 'prospect-lists', label: 'Firma Listelerim', icon: 'ListChecks', path: '/listelerim', module: 'leads' },
       { key: 'leads', label: 'Potansiyel Müşteriler', icon: 'Target', path: '/potansiyel-musteriler', module: 'leads' },
       { key: 'accounts', label: 'Müşteriler', icon: 'Building2', path: '/musteriler', module: 'crm' },
       { key: 'deals', label: 'Satış Fırsatları', icon: 'TrendingUp', path: '/satis-firsatlari', module: 'crm' },

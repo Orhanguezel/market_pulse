@@ -1,0 +1,216 @@
+import { randomUUID } from 'node:crypto';
+import type { RowDataPacket } from 'mysql2/promise';
+import { pool } from '@/db/client';
+import { env } from '@/core/env';
+import { deepScrapeContactInfo } from '@/modules/lead-machine/enrichment/enrichment.service';
+import { buildSearchHints, EXPORT_B2B_TITLES } from '@/modules/lead-machine/decision-maker/finder.service';
+import { searchDecisionMakers, domainFromWebsite } from '@/modules/lead-machine/decision-maker/apollo-people';
+import { findDecisionMakerEmail } from '@/modules/lead-machine/decision-maker/email-finder.service';
+
+export type ImportCompany = { company_name: string; website?: string | null };
+
+// Firma adının sonundaki ülke ismini tahmin et (ör. "ALFA GROCERIES LTDA COLOMBIA" -> "COLOMBIA").
+const COUNTRIES = [
+  'COLOMBIA', 'UKRAINE', 'RUSSIAN FEDERATION', 'RUSSIA', 'CHINA', 'CANADA', 'ALBANIA', 'THAILAND',
+  'GERMANY', 'FRANCE', 'ITALY', 'SPAIN', 'NETHERLANDS', 'BELGIUM', 'POLAND', 'TURKEY', 'TURKIYE',
+  'USA', 'UNITED STATES', 'UNITED KINGDOM', 'UK', 'INDIA', 'BRAZIL', 'MEXICO', 'JAPAN', 'KOREA',
+  'EGYPT', 'MOROCCO', 'GREECE', 'ROMANIA', 'BULGARIA', 'HUNGARY', 'AUSTRIA', 'SWITZERLAND',
+  'SWEDEN', 'NORWAY', 'DENMARK', 'FINLAND', 'PORTUGAL', 'IRELAND', 'CZECHIA', 'CZECH REPUBLIC',
+  'SAUDI ARABIA', 'UAE', 'UNITED ARAB EMIRATES', 'QATAR', 'KUWAIT', 'ISRAEL', 'AUSTRALIA',
+];
+function detectCountry(name: string): string | null {
+  const upper = name.toUpperCase();
+  for (const c of COUNTRIES) {
+    if (upper.endsWith(' ' + c) || upper === c) return c;
+  }
+  return null;
+}
+
+function pickBestEmail(emails: string[]): string | null {
+  const cleaned = [...new Set(emails.map((e) => e.trim().toLowerCase()).filter((e) => /@/.test(e)))];
+  if (!cleaned.length) return null;
+  const generic = /^(info|sales|office|contact|kontakt|hello|support|admin)@/;
+  const personal = cleaned.find((e) => !generic.test(e));
+  return personal ?? cleaned[0] ?? null;
+}
+
+/* -------------------- Import -------------------- */
+
+export async function importList(
+  tenantKey: string,
+  ownerId: string,
+  name: string,
+  sourceFile: string | null,
+  companies: ImportCompany[],
+): Promise<{ listId: string; total: number }> {
+  const listId = randomUUID();
+  const rows = companies
+    .map((c) => ({ company_name: String(c.company_name ?? '').trim(), website: (c.website ?? '').toString().trim() || null }))
+    .filter((c) => c.company_name);
+
+  await pool.execute(
+    `INSERT INTO prospect_lists (id, tenant_key, owner_user_id, name, source_file, total)
+     VALUES (?, ?, ?, ?, ?, ?)`,
+    [listId, tenantKey, ownerId, name, sourceFile, rows.length],
+  );
+
+  const CHUNK = 500;
+  for (let i = 0; i < rows.length; i += CHUNK) {
+    const slice = rows.slice(i, i + CHUNK);
+    const values: unknown[] = [];
+    const placeholders = slice
+      .map((c, j) => {
+        values.push(randomUUID(), tenantKey, ownerId, listId, i + j, c.company_name.slice(0, 500), detectCountry(c.company_name), c.website);
+        return '(?, ?, ?, ?, ?, ?, ?, ?)';
+      })
+      .join(', ');
+    await pool.query(
+      `INSERT INTO prospect_companies
+         (id, tenant_key, owner_user_id, list_id, row_index, company_name, country, website)
+       VALUES ${placeholders}`,
+      values,
+    );
+  }
+
+  return { listId, total: rows.length };
+}
+
+/* -------------------- Read -------------------- */
+
+export async function listLists(tenantKey: string, ownerId: string) {
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT id, name, source_file, total, free_done, apollo_done, created_at
+       FROM prospect_lists
+      WHERE tenant_key = ? AND owner_user_id = ?
+      ORDER BY created_at DESC`,
+    [tenantKey, ownerId],
+  );
+  return rows;
+}
+
+export async function listCompanies(tenantKey: string, ownerId: string, listId: string, limit = 200, offset = 0) {
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT id, row_index, company_name, country, website, generic_email, phone, linkedin_search_url,
+            decision_maker_name, decision_maker_title, decision_maker_linkedin, decision_maker_email,
+            decision_maker_email_source, enrich_status, error
+       FROM prospect_companies
+      WHERE tenant_key = ? AND owner_user_id = ? AND list_id = ?
+      ORDER BY row_index ASC
+      LIMIT ? OFFSET ?`,
+    [tenantKey, ownerId, listId, limit, offset],
+  );
+  return rows;
+}
+
+async function refreshStats(listId: string) {
+  await pool.execute(
+    `UPDATE prospect_lists pl
+        SET free_done = (SELECT COUNT(*) FROM prospect_companies WHERE list_id = pl.id AND enrich_status IN ('free_done','apollo_running','apollo_done')),
+            apollo_done = (SELECT COUNT(*) FROM prospect_companies WHERE list_id = pl.id AND enrich_status = 'apollo_done')
+      WHERE pl.id = ?`,
+    [listId],
+  );
+}
+
+/* -------------------- Enrichment (background) -------------------- */
+
+async function processPool<T>(items: T[], concurrency: number, fn: (item: T) => Promise<void>) {
+  let idx = 0;
+  const workers = Array.from({ length: Math.min(concurrency, items.length) }, async () => {
+    while (idx < items.length) {
+      const i = idx++;
+      await fn(items[i]!).catch(() => {});
+    }
+  });
+  await Promise.all(workers);
+}
+
+// ÜCRETSIZ: website scrape -> email/telefon + LinkedIn arama linki. Apollo kullanmaz.
+export async function runFreeEnrich(tenantKey: string, ownerId: string, listId: string): Promise<void> {
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT id, company_name, country, website FROM prospect_companies
+      WHERE tenant_key = ? AND owner_user_id = ? AND list_id = ? AND enrich_status = 'pending'`,
+    [tenantKey, ownerId, listId],
+  );
+  await processPool(rows, 3, async (row) => {
+    await pool.execute(`UPDATE prospect_companies SET enrich_status = 'free_running' WHERE id = ?`, [row.id]);
+    try {
+      let email: string | null = null;
+      let phone: string | null = null;
+      let dmName: string | null = null;
+      if (row.website) {
+        const deep = await deepScrapeContactInfo(row.website);
+        email = pickBestEmail(deep.emails);
+        phone = deep.phones?.[0] ?? null;
+        const dm = (deep.decisionMakers ?? [])[0] as { name?: string | null } | undefined;
+        dmName = dm?.name ?? null;
+      }
+      const hints = buildSearchHints(row.company_name, row.country, EXPORT_B2B_TITLES);
+      await pool.execute(
+        `UPDATE prospect_companies
+            SET generic_email = ?, phone = ?, linkedin_search_url = ?, decision_maker_name = COALESCE(?, decision_maker_name),
+                enrich_status = 'free_done', error = NULL
+          WHERE id = ?`,
+        [email, phone, hints.linkedin_people_search_url, dmName, row.id],
+      );
+    } catch (e) {
+      await pool.execute(
+        `UPDATE prospect_companies SET enrich_status = 'failed', error = ? WHERE id = ?`,
+        [String((e as Error)?.message ?? 'error').slice(0, 500), row.id],
+      );
+    }
+  });
+  await refreshStats(listId);
+}
+
+// APOLLO (seçili firmalar): domain -> karar verici + kişisel email. Kredi tüketir.
+export async function runApolloEnrich(tenantKey: string, ownerId: string, companyIds: string[]): Promise<{ listIds: string[] }> {
+  if (!companyIds.length) return { listIds: [] };
+  const placeholders = companyIds.map(() => '?').join(',');
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT id, list_id, company_name, website FROM prospect_companies
+      WHERE tenant_key = ? AND owner_user_id = ? AND id IN (${placeholders})`,
+    [tenantKey, ownerId, ...companyIds],
+  );
+  const listIds = [...new Set(rows.map((r) => r.list_id as string))];
+
+  await processPool(rows, 2, async (row) => {
+    await pool.execute(`UPDATE prospect_companies SET enrich_status = 'apollo_running' WHERE id = ?`, [row.id]);
+    try {
+      const domain = domainFromWebsite(row.website);
+      let name: string | null = null;
+      let title: string | null = null;
+      let linkedin: string | null = null;
+      if (domain) {
+        const dms = await searchDecisionMakers(domain, EXPORT_B2B_TITLES);
+        if (dms[0]) { name = dms[0].name; title = dms[0].title; linkedin = dms[0].linkedin_url; }
+      }
+      const emailRes = await findDecisionMakerEmail(
+        { id: row.id, company_name: row.company_name, company_website: row.website, decision_maker_name: name },
+        { allowApollo: true },
+      );
+      await pool.execute(
+        `UPDATE prospect_companies
+            SET decision_maker_name = COALESCE(?, decision_maker_name),
+                decision_maker_title = COALESCE(?, decision_maker_title),
+                decision_maker_linkedin = COALESCE(?, decision_maker_linkedin),
+                decision_maker_email = COALESCE(?, decision_maker_email),
+                decision_maker_email_source = COALESCE(?, decision_maker_email_source),
+                enrich_status = 'apollo_done', error = NULL
+          WHERE id = ?`,
+        [name, title, linkedin, emailRes.email, emailRes.email_source, row.id],
+      );
+    } catch (e) {
+      await pool.execute(
+        `UPDATE prospect_companies SET enrich_status = 'failed', error = ? WHERE id = ?`,
+        [String((e as Error)?.message ?? 'error').slice(0, 500), row.id],
+      );
+    }
+  });
+  for (const lid of listIds) await refreshStats(lid);
+  return { listIds };
+}
+
+export function apolloEnabled(): boolean {
+  return Boolean(env.APOLLO_API_KEY);
+}
