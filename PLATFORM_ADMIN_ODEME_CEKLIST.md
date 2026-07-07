@@ -79,7 +79,7 @@ Gateway yok; sadece fiyat gösterimi + admin'in ödeme durumunu elle işaretleme
 
 1. **Faz 1 = Bölüm A (Tenant Yönetimi) — TAMAMLANDI:** A1✅ A2✅ A3✅ A4✅ A5✅ A6✅(temel). A2+A3 commit edilmedi (A1+404fix commit `aed5b9a` gzltek'te canlı). **SIRADAKİ: A2+A3'ü commit + gzltek deploy + doğrula, sonra Faz 2 (Bölüm B — paket fiyat + manuel ödeme).**
 2. **Faz 2 = Bölüm B (Paket fiyat + manuel ödeme) — TAMAMLANDI:** B1✅ B2✅ B3✅ B4✅ B5✅.
-3. **Faz 3 = Bölüm C (otomatik ödeme):** ölçeklenince.
+3. **Faz 3 = Bölüm C (otomatik ödeme):** 2026-07-06 kullanıcı kararıyla **ERTELENDİ** — manuel havale yeterli çalışıyor, gateway gerçek ödeyen müşteri/hacim olunca açılacak. Başlarken karar: Iyzico (TR) vs Stripe + merchant API anahtarları (sandbox) gerekir.
 
 ---
 
