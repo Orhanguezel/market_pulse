@@ -135,7 +135,10 @@ export async function registerLeadMachineUser(app: FastifyInstance) {
 }
 
 export async function registerOutreachUser(app: FastifyInstance) {
-  const guard = { preHandler: [requireAuth, requireModule('email-marketing')] };
+  // leadMachineScope ZORUNLU: bu router controller.ts'teki listDrafts/generateOutreach/sendDraft
+  // handler'larini kaydediyor; onlar owner-scope'u bu bayraktan okuyor. Bayrak olmazsa owner
+  // filtresi duser (kullanici baskasinin taslaklarini gorur) ve gunluk mail kotasi tuketilmez.
+  const guard = { preHandler: [requireAuth, requireModule('email-marketing')], config: { leadMachineScope: 'user' as const } };
   const routeHandler = <T>(handler: T) => handler as never;
 
   app.get('/lead-machine/outreach/campaigns', guard, routeHandler(listOutreachCampaigns));

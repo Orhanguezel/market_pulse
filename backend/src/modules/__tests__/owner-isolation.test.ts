@@ -37,6 +37,19 @@ function reply() {
   };
 }
 
+/**
+ * Kullanici (owner-scope) request'i. lead-machine controller'i owner-scope'u
+ * `routeOptions.config.leadMachineScope` bayragindan okur; campaign/crm controller'lari
+ * hala `url` tabanlidir — ikisi de saglanir ki test gercek route kaydini temsil etsin.
+ */
+function userReq(url: string, extra: Record<string, unknown> = {}) {
+  return {
+    url,
+    routeOptions: { config: { leadMachineScope: 'user' as const } },
+    ...extra,
+  };
+}
+
 describe('same-tenant owner isolation', () => {
   test('lead candidates list is scoped to the active user inside the same tenant', async () => {
     dbMock.queuePoolExecute([]);
@@ -44,7 +57,7 @@ describe('same-tenant owner isolation', () => {
 
     await runWithTenantAndUser('tenant-a', 'user-1', () =>
       leadController.listLeadCandidates(
-        { url: '/lead-machine/candidates', query: { limit: 25 } } as never,
+        userReq('/lead-machine/candidates', { query: { limit: 25 } }) as never,
         reply() as never,
       ));
 
@@ -59,11 +72,26 @@ describe('same-tenant owner isolation', () => {
 
     await runWithTenantAndUser('tenant-a', 'user-2', () =>
       leadController.listLeadCandidates(
-        { url: '/lead-machine/candidates', query: { limit: 25 } } as never,
+        userReq('/lead-machine/candidates', { query: { limit: 25 } }) as never,
         reply() as never,
       ));
 
     expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-a', 'user-2']);
+  });
+
+  // registerOutreachUser guard'i leadMachineScope tasimazsa listDrafts owner filtresini
+  // dusuruyor ve kullanici ayni tenant'taki baskalarinin taslaklarini goruyordu.
+  test('outreach draft list is scoped to the active user inside the same tenant', async () => {
+    dbMock.queuePoolExecute([]);
+
+    await runWithTenantAndUser('tenant-a', 'user-1', () =>
+      leadController.listDrafts(
+        userReq('/lead-machine/outreach/drafts', { query: {} }) as never,
+        reply() as never,
+      ));
+
+    expect(dbMock.poolExecutions[0]?.sql).toContain('owner_user_id = ?');
+    expect(dbMock.poolExecutions[0]?.values).toContain('user-1');
   });
 
   test('outreach campaign list is scoped to the active user inside the same tenant', async () => {
@@ -117,7 +145,7 @@ describe('super-admin user-route owner isolation', () => {
     dbMock.queuePoolExecute([{ count: 0 }]);
     await runWithTenantAndUser('tenant-a', 'super-admin-1', () =>
       leadController.listLeadCandidates(
-        { ...superAdminReq, url: '/lead-machine/candidates', query: { limit: 25 } } as never,
+        userReq('/lead-machine/candidates', { ...superAdminReq, query: { limit: 25 } }) as never,
         reply() as never,
       ));
     expect(dbMock.poolExecutions[0]?.sql).toContain('tenant_key = ? AND owner_user_id = ?');
