@@ -39,13 +39,6 @@ function asStringArray(value: unknown) { return Array.isArray(value) ? value.fil
 function asNumber(value: unknown, fallback: number) { const parsed = Number(value); return Number.isFinite(parsed) ? parsed : fallback; }
 function csv(value: string) { return value.split(',').map((item) => item.trim()).filter(Boolean); }
 
-/** RTK Query hata nesnesinden backend'in 409 ICP_HAS_JOBS yanitini tanir. */
-function isIcpHasJobsError(error: unknown): boolean {
-  const status = (error as { status?: number } | null)?.status;
-  const message = (error as { data?: { error?: { message?: string } } } | null)?.data?.error?.message;
-  return status === 409 || message === 'ICP_HAS_JOBS';
-}
-
 function toForm(profile: IcpProfile): FormState {
   return {
     name: profile.name,
@@ -76,7 +69,6 @@ export default function FirmaBulucuIcpPage() {
   const [form, setForm] = React.useState<FormState>(EMPTY);
   const [advancedOpen, setAdvancedOpen] = React.useState(true);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
-  const [forceDeleteId, setForceDeleteId] = React.useState<string | null>(null);
   const selected = profiles.find((profile) => profile.id === selectedId) ?? null;
   const busy = createState.isLoading || updateState.isLoading || deleteState.isLoading;
 
@@ -110,23 +102,19 @@ export default function FirmaBulucuIcpPage() {
     }
   };
 
-  const remove = async (force = false) => {
+  const remove = async () => {
     if (!selectedId) return;
     try {
-      await deleteProfile({ id: selectedId, force }).unwrap();
+      // Temizlik ekranında bağlı işler ve adaylar korunur; yalnız ICP referansları
+      // kaldırılıp profil silinir. Tek modal kullanmak çakışan overlay/focus-lock'u önler.
+      await deleteProfile({ id: selectedId, force: true }).unwrap();
       setSelectedId(null);
       setForm(EMPTY);
-      setForceDeleteId(null);
       toast.success('ICP profili silindi');
       await refetch();
     } catch (error) {
-      // Backend, ICP'ye bagli tarama isi varsa 409 ICP_HAS_JOBS doner.
-      if (isIcpHasJobsError(error)) {
-        setForceDeleteId(selectedId);
-        toast.error('Bu ICP\'ye bağlı tarama işleri var. Yine de silmek için onaylayın.');
-        return;
-      }
       toast.error('ICP profili silinemedi.');
+      throw error;
     }
   };
 
@@ -214,17 +202,9 @@ export default function FirmaBulucuIcpPage() {
         onOpenChange={setDeleteOpen}
         isDeleting={deleteState.isLoading}
         title="ICP profilini sil"
-        description="Bu profil silinecek; mevcut aday kayıtları korunur."
-        onConfirm={() => remove(false)}
-      />
-
-      <ConfirmDeleteDialog
-        open={Boolean(forceDeleteId)}
-        onOpenChange={(open) => { if (!open) setForceDeleteId(null); }}
-        isDeleting={deleteState.isLoading}
-        title="Bağlı tarama işleri var — yine de silinsin mi?"
-        description="Bu ICP'ye bağlı tarama işleri bulunuyor. Devam ederseniz profil silinir; tarama işleri ve adaylar korunur ancak ICP bağlantıları kaldırılır. Bu profile ait dışlama kuralları silinir."
-        onConfirm={() => remove(true)}
+        notify={false}
+        description="Profil silinecek. Bağlı tarama işleri ve adaylar korunacak, yalnız ICP bağlantıları kaldırılacak. Bu profile ait dışlama kuralları silinecek."
+        onConfirm={remove}
       />
     </div>
   );
