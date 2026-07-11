@@ -10,9 +10,11 @@ import {
   listTenantsAdmin,
   listTenantMembersAdmin,
   listWorkspaceUsers,
+  listWorkspaceUserModules,
   inviteWorkspaceUser,
   onboardTenant,
   removeWorkspaceUser,
+  setWorkspaceUserModule,
   upsertTenantSecret,
   updateTenantProfile,
   updateWorkspaceUserRole,
@@ -27,6 +29,9 @@ export async function registerTenants(app: FastifyInstance) {
   app.post<{ Body: unknown }>('/tenants/workspace/users/invite', { preHandler: [requireAuth] }, inviteWorkspaceUser);
   app.patch<{ Params: { userId: string }; Body: unknown }>('/tenants/workspace/users/:userId', { preHandler: [requireAuth] }, updateWorkspaceUserRole);
   app.delete<{ Params: { userId: string } }>('/tenants/workspace/users/:userId', { preHandler: [requireAuth] }, removeWorkspaceUser);
+  // Kişi-bazlı modül matrisi (tenant yöneticisi kendi ekibi için)
+  app.get<{ Params: { userId: string } }>('/tenants/workspace/users/:userId/modules', { preHandler: [requireAuth] }, listWorkspaceUserModules);
+  app.post<{ Params: { userId: string }; Body: unknown }>('/tenants/workspace/users/:userId/modules', { preHandler: [requireAuth] }, setWorkspaceUserModule);
   app.post<{ Body: unknown }>('/tenants/admin/onboard', { preHandler: [requireAuth, requireAdmin] }, onboardTenant);
   app.patch<{ Params: { key: string }; Body: unknown }>('/tenants/admin/:key/profile', { preHandler: [requireAuth, requireAdmin] }, updateTenantProfile);
   app.get<{ Params: { key: string } }>('/tenants/admin/:key/roles', { preHandler: [requireAuth, requireAdmin] }, listTenantRoles);

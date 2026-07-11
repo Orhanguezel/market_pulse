@@ -36,6 +36,13 @@ export const workspaceRolePatchSchema = z.object({
   role: z.enum(['tenant_admin', 'tenant_editor']),
 });
 
+export const workspaceUserModuleSchema = z.object({
+  module_key: z.string().trim().min(1).max(64),
+  // 'active' = kullanıcıya aç, 'suspended' = kapat (listUserActiveModules yalnızca
+  // 'active' grant'ları görünür sayar; 'suspended' erişimi kaldırır).
+  status: z.enum(['active', 'suspended']),
+});
+
 export const tenantSecretUpsertSchema = z.object({
   key: z.string().trim().min(1).max(128).regex(/^[a-z0-9_.-]+$/i),
   value: z.string().min(1),

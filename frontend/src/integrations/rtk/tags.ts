@@ -80,6 +80,7 @@ export const metahubTags = [
   'CrmUsersSummary',
   'CrmBusinessSummary',
   'WorkspaceUsers',
+  'WorkspaceUserModules',
 ] as const;
 
 export type MetahubTag = (typeof metahubTags)[number];

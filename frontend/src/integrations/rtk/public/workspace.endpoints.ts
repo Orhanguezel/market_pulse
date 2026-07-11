@@ -22,6 +22,14 @@ export type InviteWorkspaceUserBody = {
   role: WorkspaceRole;
 };
 
+export type WorkspaceUserModule = {
+  module_key: string;
+  name: string;
+  category: string | null;
+  default_on: boolean;
+  user_status: 'active' | 'suspended' | 'none';
+};
+
 export const workspaceApi = baseApi.injectEndpoints({
   endpoints: (b) => ({
     listWorkspaceUsers: b.query<WorkspaceUser[], void>({
@@ -40,6 +48,14 @@ export const workspaceApi = baseApi.injectEndpoints({
       query: (userId) => ({ url: `/tenants/workspace/users/${userId}`, method: 'DELETE' }),
       invalidatesTags: ['WorkspaceUsers', 'CrmUsersSummary'],
     }),
+    listWorkspaceUserModules: b.query<{ user_id: string; modules: WorkspaceUserModule[] }, string>({
+      query: (userId) => ({ url: `/tenants/workspace/users/${userId}/modules`, method: 'GET' }),
+      providesTags: (_r, _e, userId) => [{ type: 'WorkspaceUserModules', id: userId }],
+    }),
+    setWorkspaceUserModule: b.mutation<{ ok: boolean }, { userId: string; module_key: string; status: 'active' | 'suspended' }>({
+      query: ({ userId, ...body }) => ({ url: `/tenants/workspace/users/${userId}/modules`, method: 'POST', body }),
+      invalidatesTags: (_r, _e, { userId }) => [{ type: 'WorkspaceUserModules', id: userId }],
+    }),
   }),
   overrideExisting: true,
 });
@@ -49,4 +65,6 @@ export const {
   useInviteWorkspaceUserMutation,
   useUpdateWorkspaceUserRoleMutation,
   useRemoveWorkspaceUserMutation,
+  useListWorkspaceUserModulesQuery,
+  useSetWorkspaceUserModuleMutation,
 } = workspaceApi;

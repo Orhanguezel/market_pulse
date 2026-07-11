@@ -1,14 +1,16 @@
 'use client';
 
 import * as React from 'react';
-import { Loader2, MailPlus, ShieldCheck, Trash2, Users } from 'lucide-react';
+import { Loader2, MailPlus, ShieldCheck, SlidersHorizontal, Trash2, Users } from 'lucide-react';
 import { toast } from 'sonner';
 import SummaryOverview from '@/components/iy/SummaryOverview';
 import { useGetCrmUsersSummaryQuery } from '@/integrations/rtk/public/crm.endpoints';
 import {
   useInviteWorkspaceUserMutation,
   useListWorkspaceUsersQuery,
+  useListWorkspaceUserModulesQuery,
   useRemoveWorkspaceUserMutation,
+  useSetWorkspaceUserModuleMutation,
   useUpdateWorkspaceUserRoleMutation,
   type WorkspaceRole,
 } from '@/integrations/rtk/public/workspace.endpoints';
@@ -23,6 +25,55 @@ function isForbidden(error: unknown) {
   return status === 403;
 }
 
+/**
+ * Kişi-bazlı modül erişim matrisi. Tenant admin, ekibindeki her kullanıcı için
+ * modülleri (dolayısıyla dashboard sayfalarını) tek tek açıp kapatır.
+ * mail/calendar default-açık ve düzenlenemez; tenant_admin tüm modülleri zaten görür.
+ */
+function UserModulesPanel({ userId, isTenantAdmin }: { userId: string; isTenantAdmin: boolean }) {
+  const { data, isLoading, isError } = useListWorkspaceUserModulesQuery(userId);
+  const [setModule, setState] = useSetWorkspaceUserModuleMutation();
+
+  const toggle = async (moduleKey: string, next: boolean) => {
+    try {
+      await setModule({ userId, module_key: moduleKey, status: next ? 'active' : 'suspended' }).unwrap();
+      toast.success(next ? 'Modül açıldı' : 'Modül kapatıldı');
+    } catch {
+      toast.error('Modül güncellenemedi');
+    }
+  };
+
+  if (isLoading) return <div className="px-4 py-4 text-[12px] text-[#64748b]">Modüller yükleniyor…</div>;
+  if (isError || !data) return <div className="px-4 py-4 text-[12px] text-[#64748b]">Modüller alınamadı.</div>;
+
+  return (
+    <div className="grid gap-2 bg-[#f8fafc] px-4 py-3 sm:grid-cols-2 lg:grid-cols-3">
+      {data.modules.map((m) => {
+        const on = m.default_on || isTenantAdmin || m.user_status === 'active';
+        const locked = m.default_on || isTenantAdmin; // her zaman açık, değiştirilemez
+        return (
+          <label key={m.module_key} className={`flex items-center justify-between gap-3 rounded-md border border-[#e2e8f0] bg-white px-3 py-2 ${locked ? 'opacity-70' : ''}`}>
+            <span className="min-w-0">
+              <span className="block truncate text-[13px] font-semibold text-[#0f172a]">{m.name}</span>
+              <span className="block text-[11px] text-[#94a3b8]">
+                {m.default_on ? 'Ücretsiz — herkese açık' : isTenantAdmin ? 'Yönetici (tümü açık)' : on ? 'Açık' : 'Kapalı'}
+              </span>
+            </span>
+            <input
+              type="checkbox"
+              checked={on}
+              disabled={locked || setState.isLoading}
+              onChange={(e) => toggle(m.module_key, e.target.checked)}
+              className="h-4 w-4 shrink-0 accent-[#1e40af] disabled:cursor-not-allowed"
+            />
+          </label>
+        );
+      })}
+      {data.modules.length === 0 && <p className="text-[12px] text-[#64748b]">Bu tenant için tanımlı modül yok.</p>}
+    </div>
+  );
+}
+
 export default function KullanicilarPage() {
   const { data: summary, isLoading: summaryLoading, isError: summaryError } = useGetCrmUsersSummaryQuery();
   const { data: members = [], isLoading, isError, error } = useListWorkspaceUsersQuery();
@@ -35,6 +86,7 @@ export default function KullanicilarPage() {
     role: 'tenant_editor',
   });
   const [temporaryPassword, setTemporaryPassword] = React.useState<string | null>(null);
+  const [expandedUserId, setExpandedUserId] = React.useState<string | null>(null);
   const busy = inviteState.isLoading || updateRoleState.isLoading || removeState.isLoading;
 
   const submitInvite = async () => {
@@ -134,27 +186,40 @@ export default function KullanicilarPage() {
               <div className="px-4 py-10 text-center text-[13px] text-[#64748b]">Workspace üyesi yok.</div>
             ) : (
               <div className="divide-y divide-[#e2e8f0]">
-                {members.map((member) => (
-                  <div key={member.user_id} className="grid gap-3 px-4 py-3 md:grid-cols-[1fr_180px_120px_44px] md:items-center">
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-2">
-                        <p className="truncate text-[14px] font-bold text-[#0f172a]">{member.profile_name || member.full_name || member.email}</p>
-                        {member.role === 'tenant_admin' && <ShieldCheck className="h-4 w-4 text-emerald-600" />}
+                {members.map((member) => {
+                  const expanded = expandedUserId === member.user_id;
+                  return (
+                    <div key={member.user_id}>
+                      <div className="grid gap-3 px-4 py-3 md:grid-cols-[1fr_180px_120px_auto_44px] md:items-center">
+                        <div className="min-w-0">
+                          <div className="flex items-center gap-2">
+                            <p className="truncate text-[14px] font-bold text-[#0f172a]">{member.profile_name || member.full_name || member.email}</p>
+                            {member.role === 'tenant_admin' && <ShieldCheck className="h-4 w-4 text-emerald-600" />}
+                          </div>
+                          <p className="truncate text-[12px] text-[#64748b]">{member.email}</p>
+                        </div>
+                        <select disabled={busy} value={member.role} onChange={(event) => roleChange(member.user_id, event.target.value as WorkspaceRole)} className="h-9 rounded-md border border-[#cbd5e1] px-2 text-[13px] disabled:opacity-50">
+                          <option value="tenant_editor">{ROLE_LABELS.tenant_editor}</option>
+                          <option value="tenant_admin">{ROLE_LABELS.tenant_admin}</option>
+                        </select>
+                        <span className={`w-fit rounded-md px-2 py-1 text-[12px] font-semibold ${member.is_active ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
+                          {member.is_active ? 'Aktif' : 'Pasif'}
+                        </span>
+                        <button
+                          onClick={() => setExpandedUserId(expanded ? null : member.user_id)}
+                          className={`inline-flex h-9 items-center gap-1.5 rounded-md border px-2.5 text-[12px] font-semibold ${expanded ? 'border-[#1e40af] bg-[#eff6ff] text-[#1e40af]' : 'border-[#cbd5e1] text-[#334155] hover:bg-[#f8fafc]'}`}
+                          title="Modül erişimi"
+                        >
+                          <SlidersHorizontal className="h-3.5 w-3.5" /> Modüller
+                        </button>
+                        <button disabled={busy} onClick={() => remove(member.user_id)} className="grid h-9 w-9 place-items-center rounded-md border border-rose-200 text-rose-700 disabled:opacity-50" title="Workspace’ten kaldır">
+                          <Trash2 className="h-4 w-4" />
+                        </button>
                       </div>
-                      <p className="truncate text-[12px] text-[#64748b]">{member.email}</p>
+                      {expanded && <UserModulesPanel userId={member.user_id} isTenantAdmin={member.role === 'tenant_admin'} />}
                     </div>
-                    <select disabled={busy} value={member.role} onChange={(event) => roleChange(member.user_id, event.target.value as WorkspaceRole)} className="h-9 rounded-md border border-[#cbd5e1] px-2 text-[13px] disabled:opacity-50">
-                      <option value="tenant_editor">{ROLE_LABELS.tenant_editor}</option>
-                      <option value="tenant_admin">{ROLE_LABELS.tenant_admin}</option>
-                    </select>
-                    <span className={`w-fit rounded-md px-2 py-1 text-[12px] font-semibold ${member.is_active ? 'bg-emerald-50 text-emerald-700' : 'bg-amber-50 text-amber-700'}`}>
-                      {member.is_active ? 'Aktif' : 'Pasif'}
-                    </span>
-                    <button disabled={busy} onClick={() => remove(member.user_id)} className="grid h-9 w-9 place-items-center rounded-md border border-rose-200 text-rose-700 disabled:opacity-50" title="Workspace’ten kaldır">
-                      <Trash2 className="h-4 w-4" />
-                    </button>
-                  </div>
-                ))}
+                  );
+                })}
               </div>
             )}
           </section>

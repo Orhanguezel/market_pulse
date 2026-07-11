@@ -47,9 +47,11 @@ CREATE TABLE IF NOT EXISTS `tenant_modules` (
 
 INSERT INTO `module_catalog`
   (`module_key`, `name`, `description`, `category`, `base_price`, `currency`, `billing_period`, `is_active`, `sort`)
--- Baslangic TL fiyatlari (fresh install icin). Gercek fiyatlar admin panelden
--- (/admin/modules -> Paket Fiyatlari) yonetilir; asagidaki ON DUPLICATE fiyat/
--- para/donem alanlarini GUNCELLEMEZ, boylece re-seed panel duzenlemesini EZMEZ.
+-- Baslangic TL fiyatlari. Gercek fiyatlar admin panelden (/admin/modules -> Paket
+-- Fiyatlari) yonetilir. ON DUPLICATE, fiyat/para/donem alanlarini YALNIZCA mevcut
+-- base_price = 0 ise (yani hic ozellestirilmemis) seed degerine ceker; panelden
+-- girilmis (>0) fiyati EZMEZ. Boylece re-seed hem eski 0'li kayitlari duzeltir hem
+-- de panel duzenlemesini korur.
 VALUES
   ('leads', 'Müşteri Bulma', 'Lead machine, gümrük verisi, enrichment ve outreach akışları.', 'sales', 2500.00, 'TRY', 'monthly', 1, 10),
   ('crm', 'CRM', 'Hesap, kontak, pipeline, fırsat ve aktivite yönetimi.', 'sales', 1500.00, 'TRY', 'monthly', 1, 20),
@@ -59,7 +61,10 @@ ON DUPLICATE KEY UPDATE
   `description` = VALUES(`description`),
   `category` = VALUES(`category`),
   `is_active` = VALUES(`is_active`),
-  `sort` = VALUES(`sort`);
+  `sort` = VALUES(`sort`),
+  `base_price` = IF(`base_price` = 0.00, VALUES(`base_price`), `base_price`),
+  `currency` = IF(`base_price` = 0.00, VALUES(`currency`), `currency`),
+  `billing_period` = IF(`base_price` = 0.00, VALUES(`billing_period`), `billing_period`);
 
 INSERT INTO `tenant_modules`
   (`id`, `tenant_key`, `module_key`, `status`, `price_snapshot`, `currency`, `activated_at`)

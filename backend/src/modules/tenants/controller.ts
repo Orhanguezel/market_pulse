@@ -5,7 +5,7 @@ import { hash as argonHash } from 'argon2';
 import { pool } from '@/db/client';
 import { encryptTenantSecret, invalidateActiveTenantCache } from '@/core/tenant';
 import { getActiveTenantKey, getActiveUserId } from '@/modules/_shared';
-import { DEFAULT_USER_MODULES } from '@/modules/entitlements/service';
+import { DEFAULT_USER_MODULES, listTenantModules, listUserModuleGrants, setUserModule } from '@/modules/entitlements/service';
 import {
   tenantKeySchema,
   tenantOnboardSchema,
@@ -14,6 +14,7 @@ import {
   tenantSecretUpsertSchema,
   workspaceInviteSchema,
   workspaceRolePatchSchema,
+  workspaceUserModuleSchema,
 } from './validation';
 
 type TenantRow = RowDataPacket & {
@@ -380,6 +381,55 @@ export const removeWorkspaceUser: RouteHandler<{ Params: { userId: string } }> =
   }
   await pool.execute('DELETE FROM tenant_user_roles WHERE tenant_key = ? AND user_id = ?', [tenantKey, req.params.userId]);
   return reply.code(204).send();
+};
+
+/**
+ * Kişi-bazlı modül matrisi — tenant yöneticisinin kendi ekibi için (dashboard).
+ * GET: workspace'teki her kullanıcı × tenant'ın aktif modülleri; her hücrede kullanıcı durumu.
+ * default-açık modüller (mail/calendar) daima 'active' ve düzenlenemez.
+ */
+export const listWorkspaceUserModules: RouteHandler<{ Params: { userId: string } }> = async (req, reply) => {
+  const tenantKey = getActiveTenantKey();
+  if (!await requireTenantAdmin(req, reply, tenantKey)) return;
+  const [tenantModules, grants] = await Promise.all([
+    listTenantModules(tenantKey),
+    listUserModuleGrants(tenantKey, req.params.userId),
+  ]);
+  const grantMap = new Map(grants.map((g) => [g.module_key, g.status]));
+  return {
+    user_id: req.params.userId,
+    modules: tenantModules
+      .filter((m) => m.status === 'active' || m.status === 'trial')
+      .map((m) => ({
+        module_key: m.module_key,
+        name: m.name ?? m.module_key,
+        category: m.category ?? null,
+        default_on: DEFAULT_USER_MODULES.has(m.module_key),
+        user_status: DEFAULT_USER_MODULES.has(m.module_key) ? 'active' : (grantMap.get(m.module_key) ?? 'none'),
+      })),
+  };
+};
+
+export const setWorkspaceUserModule: RouteHandler<{ Params: { userId: string }; Body: unknown }> = async (req, reply) => {
+  const tenantKey = getActiveTenantKey();
+  if (!await requireTenantAdmin(req, reply, tenantKey)) return;
+  const parsed = workspaceUserModuleSchema.safeParse(req.body);
+  if (!parsed.success) return reply.code(400).send({ error: { message: 'invalid_body', issues: parsed.error.flatten() } });
+  if (DEFAULT_USER_MODULES.has(parsed.data.module_key)) {
+    return reply.code(400).send({ error: { message: 'default_module_not_configurable' } });
+  }
+  // Hedef kullanıcı bu workspace'in üyesi olmalı (yabancı userId ile grant yazılamaz).
+  const [memberRows] = await pool.execute<RowDataPacket[]>(
+    'SELECT 1 FROM tenant_user_roles WHERE tenant_key = ? AND user_id = ? LIMIT 1',
+    [tenantKey, req.params.userId],
+  );
+  if (!memberRows[0]) return reply.code(404).send({ error: { message: 'user_not_in_workspace' } });
+  // Yalnızca tenant'ın SAHİP OLDUĞU aktif modüller kullanıcıya atanabilir.
+  const tenantModules = await listTenantModules(tenantKey);
+  const owned = tenantModules.find((m) => m.module_key === parsed.data.module_key && (m.status === 'active' || m.status === 'trial'));
+  if (!owned) return reply.code(400).send({ error: { message: 'module_not_owned_by_tenant' } });
+  await setUserModule(tenantKey, req.params.userId, parsed.data.module_key, parsed.data.status);
+  return { ok: true, module_key: parsed.data.module_key, status: parsed.data.status };
 };
 
 export const listTenantSecrets: RouteHandler<{ Params: { key: string } }> = async (req, reply) => {
