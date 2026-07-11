@@ -3,6 +3,7 @@ import type { RowDataPacket } from 'mysql2/promise';
 import { pool } from '@/db/client';
 import { env } from '@/core/env';
 import { deepScrapeContactInfo } from '@/modules/lead-machine/enrichment/enrichment.service';
+import { searchGoogleMaps } from '@/modules/lead-machine/_shared/scraper.client';
 import { buildSearchHints, EXPORT_B2B_TITLES } from '@/modules/lead-machine/decision-maker/finder.service';
 import { searchDecisionMakers, domainFromWebsite } from '@/modules/lead-machine/decision-maker/apollo-people';
 import { findDecisionMakerEmail } from '@/modules/lead-machine/decision-maker/email-finder.service';
@@ -32,6 +33,64 @@ function pickBestEmail(emails: string[]): string | null {
   const generic = /^(info|sales|office|contact|kontakt|hello|support|admin)@/;
   const personal = cleaned.find((e) => !generic.test(e));
   return personal ?? cleaned[0] ?? null;
+}
+
+/**
+ * Telefon doğrulama: scraper metinden IP adresi/tarih/rastgele sayı yakalayabiliyor
+ * (canlıda "187.77.79.59" telefon olarak kaydedilmişti). En az 7 rakam iste ve
+ * IP benzeri (a.b.c.d) değerleri reddet.
+ */
+function pickBestPhone(phones: string[]): string | null {
+  for (const raw of phones) {
+    const p = String(raw ?? '').trim();
+    if (!p) continue;
+    if (/^\d{1,3}(\.\d{1,3}){3}$/.test(p.replace(/\s/g, ''))) continue; // IP adresi
+    const digits = p.replace(/\D/g, '');
+    if (digits.length < 7 || digits.length > 15) continue;
+    return p;
+  }
+  return null;
+}
+
+/**
+ * Website "çöp" mü? Excel'den gelen website kolonu sıklıkla firma sitesi DEĞİL:
+ * haber makalesi, xlsx/pdf dosyası, B2B veri sağlayıcı/dizin sayfası olabiliyor.
+ * Böyle bir siteyi taramak yanlış veri üretir (ör. theprint.in -> feedback@theprint.in).
+ */
+const JUNK_HOSTS = [
+  'volza.com', 'dnb.com', 'importgenius.com', 'marketinsidedata.com', 'canadacompanyregistry.com',
+  'panjiva.com', 'zauba.com', 'exportgenius.in', 'seair.co.in', 'tradeindia.com', 'importkey.com',
+  'biz-gid.com', 'opencorporates.com', 'bloomberg.com', 'crunchbase.com', 'linkedin.com',
+  'facebook.com', 'wikipedia.org', 'youtube.com', 'google.com', 'gov.ly', 'theprint.in',
+];
+export function isJunkWebsite(url: string | null | undefined): boolean {
+  if (!url) return true;
+  const u = String(url).trim().toLowerCase();
+  if (!/^https?:\/\//.test(u)) return true;
+  if (/\.(xlsx?|pdf|docx?|csv|zip|pptx?)(\?|#|$)/.test(u)) return true; // dosya linki
+  let host = '';
+  try { host = new URL(u).hostname.replace(/^www\./, ''); } catch { return true; }
+  if (JUNK_HOSTS.some((h) => host === h || host.endsWith('.' + h))) return true;
+  // Haber/makale benzeri uzun path'ler (firma ana sayfası değil)
+  try {
+    const path = new URL(u).pathname;
+    if (/(press-release|news|article|company-profile|business-directory|importers?\/)/i.test(path)) return true;
+    if (path.split('/').filter(Boolean).length >= 4) return true;
+  } catch { /* yoksay */ }
+  return false;
+}
+
+/** Firma adından gerçek web sitesini bulur (Google Places). Bulamazsa null. */
+async function findCompanyWebsite(companyName: string, country: string | null): Promise<string | null> {
+  const query = [companyName, country].filter(Boolean).join(' ');
+  try {
+    const res = await searchGoogleMaps(query, { total: 3 });
+    for (const place of res.places ?? []) {
+      const site = place.website;
+      if (site && !isJunkWebsite(site)) return site;
+    }
+  } catch { /* arama başarısız — sessiz geç */ }
+  return null;
 }
 
 /* -------------------- Import -------------------- */
@@ -162,13 +221,26 @@ export async function runFreeEnrich(tenantKey: string, ownerId: string, listId: 
       let email: string | null = null;
       let phone: string | null = null;
       let dmName: string | null = null;
-      if (row.website) {
-        const deep = await deepScrapeContactInfo(row.website);
+
+      // 1) Kullanılabilir bir firma sitesi belirle. Excel'den gelen website çoğu zaman
+      //    firma sitesi değil (haber/dosya/dizin) → çöpse firma adından gerçek siteyi ara.
+      let website: string | null = isJunkWebsite(row.website as string | null) ? null : (row.website as string);
+      if (!website) {
+        website = await findCompanyWebsite(row.company_name as string, (row.country as string | null) ?? null);
+        if (website) {
+          await pool.execute(`UPDATE prospect_companies SET website = ? WHERE id = ?`, [website, row.id]);
+        }
+      }
+
+      // 2) Site bulunduysa iletişim bilgisi için tara.
+      if (website) {
+        const deep = await deepScrapeContactInfo(website);
         email = pickBestEmail(deep.emails);
-        phone = deep.phones?.[0] ?? null;
+        phone = pickBestPhone(deep.phones ?? []);
         const dm = (deep.decisionMakers ?? [])[0] as { name?: string | null } | undefined;
         dmName = dm?.name ?? null;
       }
+
       const hints = buildSearchHints(row.company_name, row.country, EXPORT_B2B_TITLES);
       await pool.execute(
         `UPDATE prospect_companies

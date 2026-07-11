@@ -16,8 +16,9 @@ async function main() {
     const lists = await q('SELECT id, name, tenant_key, owner_user_id FROM prospect_lists ORDER BY created_at DESC LIMIT 5');
     console.log('\n== Listeler ==');
     for (const l of lists) console.log(`  ${l.id}  ${l.name}  tenant=${l.tenant_key} owner=${l.owner_user_id}`);
-    listId = lists[0]?.id as string | undefined;
-    if (!listId) { console.log('liste yok'); await pool.end(); return; }
+    const first = lists[0]?.id as string | undefined;
+    if (!first) { console.log('liste yok'); await pool.end(); return; }
+    listId = first;
     console.log(`\n(ilk liste seçildi: ${listId})`);
   }
 

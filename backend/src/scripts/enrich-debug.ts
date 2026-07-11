@@ -4,11 +4,30 @@
  * Scraper-service'in ham yanıtını ve deepScrapeContactInfo çıktısını gösterir —
  * "Ücretsiz Zenginleştir sonuç bulmuyor" durumunun nerede koptuğunu teşhis eder.
  */
-import { scrape } from '@/modules/lead-machine/_shared/scraper.client';
+import { scrape, searchGoogleMaps } from '@/modules/lead-machine/_shared/scraper.client';
 import { deepScrapeContactInfo } from '@/modules/lead-machine/enrichment/enrichment.service';
+import { isJunkWebsite } from '@/modules/prospect-lists/service';
 
 async function main() {
-  const url = process.argv[2] ?? 'https://www.campora.com.co';
+  const arg = process.argv[2] ?? 'https://www.campora.com.co';
+
+  // Argüman URL değilse: firma adı kabul edilir → Google Places ile gerçek siteyi ara.
+  if (!/^https?:\/\//.test(arg)) {
+    console.log(`\n=== FIRMA ADINDAN SITE ARAMA: "${arg}" ===\n`);
+    try {
+      const res = await searchGoogleMaps(arg, { total: 3 });
+      const places = res.places ?? [];
+      console.log(`   bulunan yer sayisi: ${places.length}`);
+      for (const p of places) {
+        console.log(`   • ${String(p.name ?? '-').slice(0, 40).padEnd(42)} website=${p.website ?? '-'}  junk=${isJunkWebsite(p.website)}`);
+      }
+    } catch (e) {
+      console.log(`   ISTISNA (Places): ${(e as Error)?.message}`);
+    }
+    process.exit(0);
+  }
+
+  const url = arg;
   console.log(`\n=== HEDEF: ${url} ===\n`);
 
   console.log('-- 1) Ham scrape() cagrisi (profile: lead-page) --');
