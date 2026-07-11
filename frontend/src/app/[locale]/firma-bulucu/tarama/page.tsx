@@ -23,6 +23,9 @@ const SOURCES: Array<{ key: Source; label: string; text: string; icon: React.Com
 
 const B2B_SOURCES = ['google_maps', 'europages', 'tobb'];
 const COUNTRIES = ['TR', 'DE', 'NL', 'FR', 'IT', 'ES', 'PL', 'GB', 'US'];
+// Gümrük gölü buyer_country'yi TAM İSİM olarak tutar (ISO kodu değil). Filtre eşleşmesi
+// için gölde gerçekten veri olan alıcı ülkeleri kullanılır (US/RU/UA ağırlıklı; 16M kayıt).
+const CUSTOMS_COUNTRIES = ['United States', 'Russia', 'Ukraine'];
 const MARKETPLACES = ['com', 'de', 'co.uk', 'fr', 'it', 'es'];
 const COUNTRY_MARKETPLACE: Record<string, string> = { DE: 'de', GB: 'co.uk', FR: 'fr', IT: 'it', ES: 'es', US: 'com' };
 
@@ -293,7 +296,7 @@ export default function FirmaBulucuTaramaPage() {
             <>
               <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">HS/GTİP kodları (virgülle)</span><input className={inputClass} placeholder="0904 veya 0904, 0905" value={hsPrefix} onChange={(e) => setHsPrefix(e.target.value)} /></label>
               <label className="grid gap-1.5 lg:col-span-2"><span className="text-[12px] font-semibold text-[#64748b]">Ürün sorgusu</span><input className={inputClass} value={productQuery} onChange={(e) => setProductQuery(e.target.value)} /></label>
-              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Alıcı ülke</span><select className={inputClass} value={customsCountry} onChange={(e) => setCustomsCountry(e.target.value)}><option value="ALL">Tümü</option>{Array.from(new Set([customsCountry, ...COUNTRIES])).filter((c) => c !== 'ALL').map((c) => <option key={c} value={c}>{c}</option>)}</select></label>
+              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Alıcı ülke</span><select className={inputClass} value={customsCountry} onChange={(e) => setCustomsCountry(e.target.value)}><option value="ALL">Tümü (önerilen)</option>{Array.from(new Set([...CUSTOMS_COUNTRIES, customsCountry])).filter((c) => c !== 'ALL').map((c) => <option key={c} value={c}>{c}</option>)}</select></label>
               <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Min. değer (USD)</span><input type="number" className={inputClass} placeholder="1000" value={minValue} onChange={(e) => setMinValue(e.target.value)} /></label>
               <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Limit</span><input type="number" className={inputClass} value={limit} onChange={(e) => setLimit(Number(e.target.value))} /></label>
             </>
