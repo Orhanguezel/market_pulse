@@ -50,6 +50,8 @@ export default function FirmaBulucuTaramaPage() {
   const [marketplace, setMarketplace] = React.useState('de');
   const [hsPrefix, setHsPrefix] = React.useState('');
   const [productQuery, setProductQuery] = React.useState('');
+  const [customsCountry, setCustomsCountry] = React.useState('ALL');
+  const [minValue, setMinValue] = React.useState('');
   const busy = b2bState.isLoading || fairState.isLoading || runFairState.isLoading || customsState.isLoading || amazonState.isLoading;
 
   React.useEffect(() => {
@@ -86,8 +88,18 @@ export default function FirmaBulucuTaramaPage() {
         router.push(`/${l}/amazon?job_id=${job.id}`);
         return;
       }
-      if (!hsPrefix.trim() && !productQuery.trim()) return toast.error('HS/GTİP veya ürün sorgusu gerekli.');
-      const job = await startCustoms({ hs_prefix: hsPrefix || undefined, product_query: productQuery || undefined, buyer_country: country, limit }).unwrap();
+      const hsCodes = hsPrefix.split(',').map((s) => s.trim()).filter(Boolean);
+      if (!hsCodes.length && !productQuery.trim()) return toast.error('HS/GTİP veya ürün sorgusu gerekli.');
+      const customsBody: Record<string, unknown> = {
+        product_query: productQuery.trim() || undefined,
+        buyer_country: customsCountry === 'ALL' ? undefined : customsCountry,
+        min_value: minValue.trim() ? Number(minValue) : undefined,
+        limit,
+        icp_id: icpId || undefined,
+      };
+      if (hsCodes.length > 1) customsBody.hs_codes = hsCodes;
+      else if (hsCodes[0]) customsBody.hs_prefix = hsCodes[0];
+      const job = await startCustoms(customsBody).unwrap();
       toast.success('Gümrük taraması başladı');
       goCandidates('customs', job.id);
     } catch {
@@ -164,9 +176,11 @@ export default function FirmaBulucuTaramaPage() {
           )}
           {source === 'customs' && (
             <>
-              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">HS/GTİP prefix</span><input className={inputClass} value={hsPrefix} onChange={(e) => setHsPrefix(e.target.value)} /></label>
+              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">HS/GTİP kodları (virgülle)</span><input className={inputClass} placeholder="0904 veya 0904, 0905" value={hsPrefix} onChange={(e) => setHsPrefix(e.target.value)} /></label>
               <label className="grid gap-1.5 lg:col-span-2"><span className="text-[12px] font-semibold text-[#64748b]">Ürün sorgusu</span><input className={inputClass} value={productQuery} onChange={(e) => setProductQuery(e.target.value)} /></label>
-              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Alıcı ülke</span><select className={inputClass} value={country} onChange={(e) => setCountry(e.target.value)}>{COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}</select></label>
+              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Alıcı ülke</span><select className={inputClass} value={customsCountry} onChange={(e) => setCustomsCountry(e.target.value)}><option value="ALL">Tümü</option>{COUNTRIES.map((c) => <option key={c} value={c}>{c}</option>)}</select></label>
+              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Min. değer (USD)</span><input type="number" className={inputClass} placeholder="1000" value={minValue} onChange={(e) => setMinValue(e.target.value)} /></label>
+              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Limit</span><input type="number" className={inputClass} value={limit} onChange={(e) => setLimit(Number(e.target.value))} /></label>
             </>
           )}
         </div>

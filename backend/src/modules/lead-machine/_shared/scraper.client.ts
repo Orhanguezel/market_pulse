@@ -307,7 +307,8 @@ export function verifyScraperWebhook(
   signature: string | undefined,
   secret: string,
 ): boolean {
-  if (!secret) return true;
+  // Fail-closed: secret yapilandirilmamissa imza dogrulanamaz, callback reddedilir.
+  if (!secret) return false;
   if (!signature) return false;
   const expected = `sha256=${createHmac('sha256', secret).update(rawBodyBuffer).digest('hex')}`;
   try {

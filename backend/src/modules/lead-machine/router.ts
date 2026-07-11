@@ -113,6 +113,9 @@ export async function registerLeadMachineUser(app: FastifyInstance) {
   app.post('/lead-machine/fair/run', guard, routeHandler(startGenericFairRunner));
   app.get('/lead-machine/fair/jobs', guard, routeHandler(listFairJobs));
   app.get('/lead-machine/fair/jobs/:id', guard, routeHandler(getFairJob));
+  app.get('/lead-machine/fair/brifing/:candidateId.pdf', guard, routeHandler(fairBriefingCandidatePdf));
+  app.get('/lead-machine/fair/brifing/day/:date.pdf', guard, routeHandler(fairBriefingDayPdf));
+  app.post('/lead-machine/fair/brifing/bulk', guard, routeHandler(fairBriefingBulkPdf));
 
   app.post('/lead-machine/enrich/:candidateId', guard, routeHandler(enrichOne));
   app.get('/lead-machine/enrich/:candidateId', guard, routeHandler(listEnrichment));
