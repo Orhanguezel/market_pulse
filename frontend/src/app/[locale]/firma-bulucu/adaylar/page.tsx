@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Check, Loader2, Mail, RefreshCw, Search, Star, ThumbsDown, Wand2 } from 'lucide-react';
+import { Check, FileSpreadsheet, Loader2, Mail, RefreshCw, Search, Star, ThumbsDown, Wand2 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   useApproveLeadCandidateToLeadMutation,
@@ -12,6 +12,7 @@ import {
   useEnrichLeadCandidatesBatchMutation,
   useListLeadRulesQuery,
   useListLeadCandidatesPageQuery,
+  useLazyListLeadCandidatesPageQuery,
   useReviewLeadCandidateMutation,
   useReviewLeadCandidatesBulkMutation,
 } from '@/integrations/rtk/hooks';
@@ -40,6 +41,15 @@ function score(candidate: LeadCandidate) {
   return Number.isFinite(value) ? value : 0;
 }
 
+function rawRecord(candidate: LeadCandidate) {
+  if (candidate.raw_data && typeof candidate.raw_data === 'object' && !Array.isArray(candidate.raw_data)) return candidate.raw_data as Record<string, unknown>;
+  return {};
+}
+
+function nestedRecord(value: unknown) {
+  return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
+}
+
 export default function FirmaBulucuAdaylarPage() {
   const params = useSearchParams();
   const [channel, setChannel] = React.useState(params.get('channel') ?? '');
@@ -49,6 +59,7 @@ export default function FirmaBulucuAdaylarPage() {
   const [ruleValue, setRuleValue] = React.useState('');
   const [selected, setSelected] = React.useState<Set<string>>(() => new Set());
   const [page, setPage] = React.useState(1);
+  const [exporting, setExporting] = React.useState(false);
   const pageSize = 50;
   const { data: pageData, isLoading, isError, refetch } = useListLeadCandidatesPageQuery({
     channel: channel || undefined,
@@ -58,6 +69,7 @@ export default function FirmaBulucuAdaylarPage() {
     limit: pageSize,
   });
   const data = pageData?.rows ?? [];
+  const [loadExportPage] = useLazyListLeadCandidatesPageQuery();
   const total = pageData?.total ?? 0;
   const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const [reviewCandidate, reviewState] = useReviewLeadCandidateMutation();
@@ -125,6 +137,62 @@ export default function FirmaBulucuAdaylarPage() {
     toast.success('Tarama dışlama kuralı eklendi');
   };
 
+  const exportExcel = async () => {
+    setExporting(true);
+    try {
+      const all: LeadCandidate[] = [];
+      let exportPage = 1;
+      let expected = Number.POSITIVE_INFINITY;
+      while (all.length < expected) {
+        const result = await loadExportPage({
+          channel: channel || undefined,
+          status: status || undefined,
+          job_id: jobId || undefined,
+          page: exportPage,
+          limit: 100,
+        }, true).unwrap();
+        all.push(...result.rows);
+        expected = result.total;
+        if (!result.rows.length || exportPage >= Math.ceil(expected / 100)) break;
+        exportPage += 1;
+      }
+      const XLSX = await import('xlsx');
+      const exportRows = all.map((candidate) => {
+        const raw = rawRecord(candidate);
+        const fair = nestedRecord(raw.fair_info);
+        const exhibitor = nestedRecord(raw.exhibitor);
+        return {
+          'Firma Adı': candidate.name,
+          'Web Sitesi': candidate.website || '',
+          'E-posta': candidate.email || '',
+          'Telefon': candidate.phone || '',
+          'Ülke': candidate.country || '',
+          'Şehir': candidate.city || '',
+          'Salon': fair.hall || exhibitor.hall || '',
+          'Stand': fair.booth_number || exhibitor.booth_number || '',
+          'Lead Skoru': score(candidate),
+          'Durum': candidate.status,
+          'Kanal': candidate.channel,
+          'İletişim Kişisi': candidate.contact_name || '',
+          'AI Özeti': candidate.ai_summary || '',
+          'Kaynak Detay': exhibitor.detail_url || '',
+          'Job ID': candidate.job_id,
+          'Oluşturulma': candidate.created_at,
+        };
+      });
+      const workbook = XLSX.utils.book_new();
+      const sheet = XLSX.utils.json_to_sheet(exportRows);
+      sheet['!cols'] = [32, 34, 28, 18, 10, 18, 10, 14, 12, 12, 16, 24, 50, 55, 38, 22].map((wch) => ({ wch }));
+      XLSX.utils.book_append_sheet(workbook, sheet, 'Firma Adayları');
+      XLSX.writeFile(workbook, `firma-adaylari-${jobId || 'tum-kayitlar'}.xlsx`);
+      toast.success(`${all.length} aday Excel dosyasına aktarıldı`);
+    } catch {
+      toast.error('Excel dosyası oluşturulamadı');
+    } finally {
+      setExporting(false);
+    }
+  };
+
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
@@ -133,6 +201,9 @@ export default function FirmaBulucuAdaylarPage() {
           <p className="mt-0.5 text-[13px] text-[#64748b]">Tarama sonuçlarını inceleyin, onaylayın ve CRM’e aktarın.</p>
         </div>
         <div className="flex flex-wrap gap-2">
+          <button disabled={exporting || isLoading || total === 0} onClick={exportExcel} className="inline-flex h-9 items-center gap-2 rounded-md border border-emerald-300 bg-emerald-50 px-3 text-[13px] font-semibold text-emerald-700 disabled:opacity-50">
+            {exporting ? <Loader2 className="h-4 w-4 animate-spin" /> : <FileSpreadsheet className="h-4 w-4" />} Excel İndir
+          </button>
           <button onClick={() => refetch()} className="inline-flex h-9 items-center gap-2 rounded-md border border-[#cbd5e1] px-3 text-[13px] font-semibold text-[#334155]">
             <RefreshCw className="h-4 w-4" /> Yenile
           </button>
@@ -194,7 +265,7 @@ export default function FirmaBulucuAdaylarPage() {
               </div>
               <p className="mt-3 line-clamp-3 text-[13px] leading-5 text-[#475569]">{candidate.ai_summary || 'Özet henüz yok.'}</p>
               <div className="mt-3 flex flex-wrap gap-2 text-[12px]">
-                {candidate.website && <a className="font-semibold text-[#1e40af] hover:underline" href={candidate.website} target="_blank" rel="noreferrer">Web</a>}
+                {candidate.website && <a className="max-w-full truncate font-semibold text-[#1e40af] hover:underline" href={candidate.website} target="_blank" rel="noreferrer">{candidate.website}</a>}
                 {candidate.email && <a className="font-semibold text-[#1e40af] hover:underline" href={`mailto:${candidate.email}`}>{candidate.email}</a>}
                 {candidate.contact_name && <span className="text-[#64748b]">{candidate.contact_name}</span>}
               </div>

@@ -172,6 +172,7 @@ export const leadMachineApi = baseApi.injectEndpoints({
 export const {
   useListLeadCandidatesQuery,
   useListLeadCandidatesPageQuery,
+  useLazyListLeadCandidatesPageQuery,
   useCreateLeadCandidateMutation,
   useGetLeadCandidateQuery,
   useReviewLeadCandidateMutation,
