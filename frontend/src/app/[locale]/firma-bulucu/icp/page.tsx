@@ -11,7 +11,6 @@ import {
   useUpdateIcpProfileMutation,
 } from '@/integrations/rtk/hooks';
 import type { IcpProfile } from '@/integrations/shared/lead-machine.types';
-import { ICP_TEMPLATES, type IcpTemplate } from './icp-templates';
 
 type IcpDefinitionForm = {
   sectors: string[]; sub_sectors: string[]; firm_types: string[]; geographies: string[];
@@ -131,17 +130,6 @@ export default function FirmaBulucuIcpPage() {
     }
   };
 
-  const createFromTemplate = async (template: IcpTemplate) => {
-    try {
-      const created = await createProfile({ name: template.name, definition: template.definition, is_active: true }).unwrap();
-      setSelectedId(created.id);
-      toast.success(`${template.label} profili oluşturuldu`);
-      await refetch();
-    } catch {
-      toast.error('Şablondan profil oluşturulamadı.');
-    }
-  };
-
   return (
     <div className="space-y-5">
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
@@ -153,28 +141,6 @@ export default function FirmaBulucuIcpPage() {
           <Plus className="h-4 w-4" /> Yeni ICP
         </button>
       </div>
-
-      <section className="rounded-lg border border-[#e2e8f0] bg-white p-4">
-        <p className="mb-1 text-[12px] font-semibold uppercase text-[#64748b]">Hazır şablonlar</p>
-        <p className="mb-3 text-[12px] text-[#64748b]">Tek tıkla profil oluşturur; sonrasında alanları serbestçe düzenleyebilirsiniz.</p>
-        <div className="grid gap-3 md:grid-cols-3">
-          {ICP_TEMPLATES.map((template) => (
-            <div key={template.key} className="flex flex-col justify-between rounded-lg border border-[#e2e8f0] p-3 hover:bg-[#f8fafc]">
-              <div>
-                <p className="text-[13px] font-bold text-[#0f172a]">{template.label}</p>
-                <p className="mt-1 text-[12px] text-[#64748b]">{template.description}</p>
-              </div>
-              <button
-                disabled={busy}
-                onClick={() => createFromTemplate(template)}
-                className="mt-3 inline-flex h-8 w-fit items-center gap-1.5 rounded-md border border-[#1e40af] px-2.5 text-[12px] font-semibold text-[#1e40af] hover:bg-[#eff6ff] disabled:opacity-50"
-              >
-                <Plus className="h-3.5 w-3.5" /> Şablondan oluştur
-              </button>
-            </div>
-          ))}
-        </div>
-      </section>
 
       <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
         <aside className="rounded-lg border border-[#e2e8f0] bg-white">

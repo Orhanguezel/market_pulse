@@ -11,7 +11,7 @@ mock.module('@/db/client', () => ({
 mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'avrasya' } }));
 
 const icpRepo = await import('../icp/icp.repository');
-const { runWithTenant } = await import('@/core/tenant-context');
+const { runWithTenant, runWithTenantAndUser } = await import('@/core/tenant-context');
 const { matchesIcp } = await import('../b2b/icp.matcher');
 
 const now = '2026-05-08 10:00:00';
@@ -46,6 +46,15 @@ describe('lead machine icp repository', () => {
     ]);
   });
 
+  test('lists only the active owner profiles inside the active tenant', async () => {
+    dbMock.queuePoolExecute([]);
+
+    await runWithTenantAndUser('avrasya', 'user-a', () => icpRepo.listIcpProfiles('user-a'));
+
+    expect(dbMock.poolExecutions[0]?.sql).toContain('tenant_key = ? AND owner_user_id = ?');
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'user-a']);
+  });
+
   test('gets a profile by id', async () => {
     dbMock.queuePoolExecute([profile({ id: 'icp-2', definition: { sectors: ['retail'] } })]);
 
@@ -76,6 +85,25 @@ describe('lead machine icp repository', () => {
       '{}',
     ]);
     expect(result).toEqual(expect.objectContaining({ name: 'Created ICP', definition: {} }));
+  });
+
+  test('creates a profile with tenant and owner from request context', async () => {
+    dbMock.queuePoolExecute([profile({ name: 'Owned ICP', definition: '{}' })]);
+
+    await runWithTenantAndUser('avrasya', 'user-a', () => icpRepo.createIcpProfile({
+      name: 'Owned ICP',
+      definition: { sectors: ['floor mats'] },
+    }));
+
+    expect(dbMock.poolExecutions[0]?.values).toEqual([
+      expect.any(String),
+      'avrasya',
+      'user-a',
+      'Owned ICP',
+      1,
+      '{"sectors":["floor mats"]}',
+    ]);
+    expect(dbMock.poolExecutions[1]?.values).toEqual(['avrasya', expect.any(String), 'user-a']);
   });
 
   test('updates profile fields', async () => {

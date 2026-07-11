@@ -7,7 +7,7 @@
 > **Müşteri dosyası:** [docs/musteri/avrasya-paspas-automechanika.md](docs/musteri/avrasya-paspas-automechanika.md)
 > **Teknik detay çeklist:** [docs/teknik/FAIR_MODULU_CEKLISTI.md](docs/teknik/FAIR_MODULU_CEKLISTI.md)
 > **Üst plan:** [docs/strateji/MARKET_PULSE_SAAS_PLANI.md](docs/strateji/MARKET_PULSE_SAAS_PLANI.md)
-> **Son güncelleme:** 2026-05-21
+> **Son güncelleme:** 2026-07-11
 
 ---
 
@@ -21,6 +21,51 @@ Bu dosya **kök**te durur ve fuar projesinin tek-bakış halidir. Detay belgeler
 Görev satırında **`🧠 Claude`** veya **`⚙️ Codex`** etiketi sahipliği gösterir. Aynı satırda iki etiket varsa o iş çiftli akış: Claude tasarlar, Codex implement eder.
 
 > İlke (CLAUDE.md): aynı dosyaya aynı anda iki araç dokunmaz. İş bittikçe sahibi bir sonraki sahibe işaret eder.
+
+## 2026-07-11 — ICP SaaS ve Avrasya test hazırlığı
+
+Bu bölüm Automechanika ICP'sinin kullanıcı dashboard'una alınması için güncel kabul kaydıdır. ICP tanımı artık frontend'deki örnek/şablon sabitinden üretilmez; `icp_profiles` tablosundaki gerçek kayıt API üzerinden okunur.
+
+### Veri sahipliği
+
+| Kayıt | Tenant | Owner | Görünürlük |
+|---|---|---|---|
+| Gzltek genel oto aksesuar ICP | `gzltek` | seed admin (`{{ADMIN_ID}}`) | Yalnız aynı tenant + aynı kullanıcı |
+| Avrasya ProMats Automechanika v2 | `avrasya` | seed admin (`{{ADMIN_ID}}`) | Yalnız aynı tenant + aynı kullanıcı |
+| Kullanıcının panelden oluşturduğu ICP | aktif tenant | oturumdaki kullanıcı | Yalnız oluşturan kullanıcı; admin aynı tenant genelini yönetebilir |
+
+- [x] Kullanıcı ICP liste/get/update/delete sorguları `tenant_key + owner_user_id` ile sınırlandı.
+- [x] ICP oluşturma `tenant_key` ve `owner_user_id` değerlerini request context'ten alıyor; body'den kabul etmiyor.
+- [x] Tarama başlatılırken gönderilen `icp_id`, job oluşturulmadan önce aynı tenant ve kullanıcıya ait mi doğrulanıyor.
+- [x] B2B ve fuar background job'ları ICP'yi `tenant_key + owner_user_id` ile yeniden okuyor.
+- [x] Frontend'e gömülü “Hazır şablonlar” kaldırıldı; görünen profiller yalnız API/veritabanı kayıtlarıdır.
+- [x] Tarama ekranındaki ham JSON kaldırıldı; sektör, firma tipi, öncelikli ülkeler ve profil versiyonu okunabilir etiketlerle gösteriliyor.
+- [x] Seed kayıtları deterministik UUID ve `ON DUPLICATE KEY UPDATE` ile idempotent hale getirildi; her deploy'da kopya profil oluşmuyor.
+
+### Avrasya ICP v2 kapsamı
+
+- Profil: `Avrasya ProMats — Automechanika Frankfurt 2026 Alıcı ICP`
+- UUID: `9f4c8f04-64b8-4da5-9c7d-4a4b5cf4b1b0`
+- Fuar: Automechanika Frankfurt, 8–12 Eylül 2026
+- Ev sahibi: Avrasya Paspas / ProMats, Hall 3.1, D11
+- Öncelikli ülkeler: DE, AT, NL, PL, FR
+- Hedef hall'lar: 3.0, 3.1, 4.0
+- Hedef firma tipleri: distribütör, ithalatçı, toptancı, e-ticaret satıcısı, aftermarket perakendecisi ve tuning zinciri
+- Güçlü ürün eşleşmeleri: oto paspası, 3D/kauçuk/tekstil paspas, bagaj havuzu, araç içi koruma ve aftermarket aksesuar
+- Pozitif sinyaller: private label/ODM ilgisi, Avrupa üretimi tercihi, çok markalı katalog, stoklu distribütör, Amazon FBA
+- Dışlamalar: Türkiye ve Asya üretim merkezleri; kendi paspas üretimi olan rakipler; OEM tier-1, tek marka bayi, hammadde/kalıp tedarikçisi; yalnız yağ/akü/lastik/elektronik/mekanik parça satanlar
+- Skor kapıları: aday alt sınırı `5.5`, otomatik onay önerisi `7.0`, öncelikli ülke bonusu `1.0`, komşu stand bonusu `0.5`
+
+### Avrasya kabul testi
+
+- [ ] Canlı Avrasya ortamında migration/seed öncesi DB yedeği al.
+- [ ] `TENANT_KEY=avrasya bun run db:seed:nodrop` çalıştır.
+- [ ] Avrasya tenant'ına seed admin hesabıyla giriş yap; ICP listesinde yalnız kullanıcıya ait v2 profilini doğrula.
+- [ ] Başka bir kullanıcıyla aynı tenant'a gir; Avrasya admin ICP UUID'sinin listelenmediğini ve doğrudan GET'in 404 döndüğünü doğrula.
+- [ ] Başka tenant'ta aynı UUID ile GET/job başlatma denemelerinin 404 döndüğünü doğrula.
+- [ ] Fuar taramasında Automechanika ICP'yi seç; hall filtreleri `3.0,3.1,4.0`, anchor `3.1 D11` ve 5.5 skor kapısını doğrula.
+- [ ] İlk 25 aday için manuel precision kontrolü yap; kendi üretimi olan paspas firmalarının elendiğini, distribütör/ithalatçıların kaldığını doğrula.
+- [ ] Sonucu bu belgenin Sprint 1 ve Sprint 2 metriklerine işle.
 
 ---
 

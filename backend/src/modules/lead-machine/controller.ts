@@ -342,11 +342,17 @@ async function createAndRunJob(channel: LeadChannel, body: Record<string, unknow
   // (AsyncLocalStorage.run) yeni scope acip tum await zincirine dogru tenant'i tasir.
   const tenantKey = getRequiredTenantKey(); // switcher zorunlu: tenant secilmeden tarama baslamaz
   const icpId = typeof body.icp_id === 'string' ? body.icp_id : null;
-  const job = await createSearchJob(channel, body, icpId, getActiveUserId() ?? null);
+  const ownerUserId = getActiveUserId() ?? null;
+  if (icpId && ownerUserId && !await getIcpProfile(icpId, ownerUserId)) {
+    const error = new Error('ICP_NOT_FOUND') as Error & { statusCode: number };
+    error.statusCode = 404;
+    throw error;
+  }
+  const job = await createSearchJob(channel, body, icpId, ownerUserId);
   if (!job) throw new Error('JOB_CREATE_FAILED');
-  const ownerUserId = job.owner_user_id;
-  const runJob = (task: () => Promise<unknown>) => ownerUserId
-    ? runWithTenantAndUser(tenantKey, ownerUserId, task)
+  const jobOwnerUserId = job.owner_user_id;
+  const runJob = (task: () => Promise<unknown>) => jobOwnerUserId
+    ? runWithTenantAndUser(tenantKey, jobOwnerUserId, task)
     : runWithTenant(tenantKey, task);
   if (channel === 'amazon') runInBackground(runJob(() => runAmazonJob(job.id)));
   if (channel === 'b2b_directory') runInBackground(runJob(() => runB2bJob(job.id)));

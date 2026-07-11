@@ -39,6 +39,7 @@ const OWNER_TABLES: MigrationTable[] = [
   { name: 'market_leads', indexes: [{ name: 'idx_market_leads_owner', columns: ['tenant_key', 'owner_user_id'] }] },
   { name: 'market_signals', indexes: [{ name: 'idx_market_signals_owner', columns: ['tenant_key', 'owner_user_id'] }] },
   { name: 'icp_profiles', indexes: [{ name: 'idx_icp_profiles_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'lead_search_jobs', indexes: [{ name: 'idx_jobs_owner', columns: ['tenant_key', 'owner_user_id'] }] },
   { name: 'lead_candidates', indexes: [{ name: 'idx_lead_candidates_owner', columns: ['tenant_key', 'owner_user_id'] }] },
   { name: 'lead_enrichment', indexes: [{ name: 'idx_lead_enrichment_owner', columns: ['tenant_key', 'owner_user_id'] }] },
   { name: 'lead_outreach_drafts', indexes: [{ name: 'idx_lead_outreach_drafts_owner', columns: ['tenant_key', 'owner_user_id'] }] },

@@ -1,4 +1,5 @@
 import { getIcpProfile } from '../icp/icp.repository';
+import { getActiveUserId } from '@/modules/_shared';
 import { insertCandidate, updateSearchJob, getSearchJob } from '../_shared/db';
 import { matchesIcp } from '../b2b/icp.matcher';
 import { scrapeExhibitorDetail, scrapeOfficialExhibitorList, type RawExhibitor } from './fair.scraper';
@@ -78,12 +79,13 @@ async function mapWithConcurrency<T, R>(
 }
 
 export async function runFairJob(jobId: string) {
-  const job = await getSearchJob(jobId);
+  const ownerUserId = getActiveUserId() ?? null;
+  const job = await getSearchJob(jobId, { ownerUserId });
   if (!job) throw new Error('JOB_NOT_FOUND');
   const params = job.params as FairJobParams;
   await updateSearchJob(jobId, { status: 'running', started: true, errorMsg: null });
   try {
-    const icp = params.icp_id ? await getIcpProfile(params.icp_id) : null;
+    const icp = params.icp_id ? await getIcpProfile(params.icp_id, ownerUserId) : null;
     const hostKeywords = extractHostKeywords(icp?.definition);
     const exhibitors = await scrapeOfficialExhibitorList(params.fair_url ?? '', {
       halls: params.hall_filters,
