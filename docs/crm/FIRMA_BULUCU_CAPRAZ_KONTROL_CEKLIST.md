@@ -16,6 +16,32 @@ Amaç: Admin paneldeki firma bulucu sistemi (fuar / B2B: Google Maps–Europages
 | Aday inceleme/onay | ✅ candidates panel | ✅ `adaylar` + `fuar-gunu` | ✅ |
 | ICP profilleri | ✅ zengin form (v3 alanları) | ✅ yapılandırılmış form + hazır şablonlar | ✅ CRUD (+ zorla sil) |
 
+## 🚀 Canlı (gzltek.tech) — 2026-07-11, commit `7df021b`
+
+Deploy edildi: `deploy/gzltek/deploy.sh` (backend+frontend+admin build, idempotent seed, `db:migrate`, tenant scope guard, pm2 reload). 3 servis online.
+
+Deploy öncesi doğrulama ve canlı duman testi:
+
+| Kontrol | Sonuç |
+|---|---|
+| Backend build / Frontend TS / Admin TS | ✅ |
+| Backend test (tam paket) | 271 pass / 2 fail — **ikisi de önceden mevcut**, bu işle ilgisiz (`churn`: tam-pakette mock sızıntısı, izolede geçer; `entitlements/myEntitlementsHandler`: `582e67c`'de de kırık) |
+| `tenant:guard` (sunucu) | ✅ passed |
+| `/tr/dashboard`, `/tr/firma-bulucu/icp` | 200 |
+| Yeni user route'ları (bulk-review, amazon/jobs, fair/brifing, customs/jobs) | 401 (kayıtlı + auth korumalı; 404 değil) |
+| Backend log (reload sonrası) | Hata yok |
+
+### 🔴 Deploy öncesi yakalanan güvenlik regresyonu (düzeltildi — `7df021b`)
+
+Owner-scope refactor'ü (`config.leadMachineScope`) `registerOutreachUser` guard'ına **uygulanmamıştı**. O router `controller.ts`'teki `listDrafts` / `generateOutreach` / `sendDraft` handler'larını kaydediyor ve bu handler'lar scope'u artık yalnızca bu bayraktan okuyor. Sonuç:
+
+- `GET /lead-machine/outreach/drafts` owner filtresi olmadan çalışıyordu → tenant kullanıcısı **aynı tenant'taki diğer kullanıcıların mail taslaklarını görüyordu**.
+- `POST /lead-machine/outreach/drafts/:id/send` günlük mail kotasını tüketmiyordu (`consumeDailyUsageForRoute` user route saymıyordu) → **kota bypass**.
+
+Düzeltme: guard'a `config: { leadMachineScope: 'user' }`. Ayrıca **nöbetçi test** eklendi — `lead-machine/__tests__/route-scope.test.ts`: Fastify `onRoute` hook'uyla user router'larının **tüm** route'larının bayrağı taşıdığını, admin route'larının taşımadığını doğrular. Bayrak düşürülünce test kayıt anında patlıyor (doğrulandı: fix geri alınınca 17 outreach route'u korumasız listeleniyor). Mevcut `owner-isolation.test.ts` yeni kontrata taşındı; testler controller'ı doğrudan çağırdığı için router kaydındaki bu boşluğu **yakalayamıyordu** — asıl açık oradaydı.
+
+> Ders: `leadMachineScope` bayrağı yeni bir user router'a eklenmeyi unutulursa hata **sessizdir** (403 değil, fazla veri döner). Yeni user route grubu açan herkes `route-scope.test.ts`'i çalıştırmalı.
+
 ## ✅ ICP turu (2026-07-11, ikinci tur)
 
 - [x] **ICP silme sessizce başarısız oluyordu.** Backend, ICP'ye bağlı tarama işi varsa `409 ICP_HAS_JOBS` dönüyor; frontend `remove()` try/catch içermediği için kullanıcı hiçbir geri bildirim almıyordu (buton çalışmıyor gibi görünüyordu). Artık hata gösteriliyor ve **"yine de sil"** onayı sunuluyor: işler/adaylar ICP'den koparılır (`icp_id = NULL`, geçmiş korunur), profile ait dışlama kuralları silinir. — `icp.repository.ts`, `controller.ts` (`?force=true`), `icp/page.tsx`
