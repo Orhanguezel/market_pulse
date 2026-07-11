@@ -430,6 +430,25 @@ export async function googleTasksSyncHandler(req: FastifyRequest, reply: Fastify
   try {
     return await syncGoogleTasks(getAuthUserId(req));
   } catch (err) {
+    const message = err instanceof Error ? err.message : '';
+    const responseData = typeof err === 'object' && err !== null && 'response' in err
+      ? (err as { response?: { data?: { error?: { status?: string; details?: Array<{ reason?: string; metadata?: { activationUrl?: string } }> } } } }).response?.data
+      : undefined;
+    const serviceDisabled = message.includes('Google Tasks API has not been used')
+      || responseData?.error?.details?.some((detail) => detail.reason === 'SERVICE_DISABLED');
+    if (serviceDisabled) {
+      const activationUrl = responseData?.error?.details
+        ?.map((detail) => detail.metadata?.activationUrl)
+        .find((url): url is string => Boolean(url));
+      req.log.warn({ err }, 'google_tasks_api_disabled');
+      return reply.code(503).send({
+        error: {
+          code: 'GOOGLE_TASKS_API_DISABLED',
+          message: 'Google Cloud projesinde Google Tasks API etkin değil.',
+          activation_url: activationUrl ?? 'https://console.cloud.google.com/apis/library/tasks.googleapis.com',
+        },
+      });
+    }
     return handleRouteError(reply, req, err, 'google_tasks_sync_failed');
   }
 }

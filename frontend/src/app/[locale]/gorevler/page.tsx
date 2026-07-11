@@ -85,8 +85,19 @@ export default function GorevlerPage() {
     try {
       const result = await syncGoogle().unwrap();
       toast.success(`Google Tasks eşitlendi: ${result.imported} içe, ${result.exported} dışa, ${result.updated} güncelleme.`);
-    } catch {
-      toast.error('Google Tasks eşitlenemedi. Google Tasks API ayarını ve bağlantı iznini kontrol edin.');
+    } catch (error) {
+      const payload = error as { data?: { error?: { code?: string; activation_url?: string } } };
+      if (payload.data?.error?.code === 'GOOGLE_TASKS_API_DISABLED') {
+        toast.error('Google Tasks API kapalı. Google Cloud Console’dan etkinleştirin.', {
+          action: payload.data.error.activation_url ? {
+            label: 'API’yi Etkinleştir',
+            onClick: () => window.open(payload.data?.error?.activation_url, '_blank', 'noopener,noreferrer'),
+          } : undefined,
+          duration: 10000,
+        });
+        return;
+      }
+      toast.error('Google Tasks eşitlenemedi. Bağlantı iznini kontrol edin.');
     }
   };
 
