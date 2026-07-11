@@ -145,7 +145,7 @@ export interface LeadSearchJob {
   params: Record<string, unknown>;
   result_count: number;
   error_msg: string | null;
-  created_by: string | null;
+  owner_user_id: string | null;
   created_at: string;
   started_at: string | null;
   finished_at: string | null;
@@ -1135,10 +1135,6 @@ export const marketAdminApi = baseApi.injectEndpoints({
       query: (body) => ({ url: '/admin/lead-machine/fair/jobs', method: 'POST', body }),
       invalidatesTags: ['LeadMachineJobs'],
     }),
-    startGenericFairRunner: b.mutation<LeadSearchJob, { fair_url: string; icp_id: string; fair_name?: string; fair_date?: string; hall_filters?: string[]; max_exhibitors?: number }>({
-      query: (body) => ({ url: '/admin/lead-machine/fair/run', method: 'POST', body }),
-      invalidatesTags: ['LeadMachineJobs'],
-    }),
     listIcpProfiles: b.query<IcpProfile[], void>({
       query: () => ({ url: '/admin/lead-machine/icp' }),
       providesTags: ['IcpProfiles'],
@@ -1447,7 +1443,6 @@ export const {
   useStartCustomsJobMutation,
   useListFairJobsQuery,
   useStartFairJobMutation,
-  useStartGenericFairRunnerMutation,
   useListIcpProfilesQuery,
   useCreateIcpProfileMutation,
   useUpdateIcpProfileMutation,

@@ -78,7 +78,7 @@
 **Backend:**
 - [x] `getActiveUserId()` helper'ı ekle (`backend/src/modules/_shared/tenant-scope.ts` yanına; `req.user.sub` → AsyncLocalStorage).
 - [x] Seed SQL'e `owner_user_id char(36) NULL` + index ekle (idempotent koşullu blok deseniyle, **ALTER TABLE lokalde yasak — seed dosyasında CREATE TABLE'a ekle + fresh**):
-  - [x] `018`: `icp_profiles`, `lead_candidates`, `lead_enrichment`, `lead_outreach_drafts`, `lead_scan_rules` (`lead_search_jobs.created_by` zaten var — doldurulacak)
+  - [x] `018`: `icp_profiles`, `lead_search_jobs`, `lead_candidates`, `lead_enrichment`, `lead_outreach_drafts`, `lead_scan_rules` (`owner_user_id`)
   - [x] `036`: `lead_decision_makers`, `lead_company_pool`
   - [x] `025`: `outreach_campaigns` · `028`: `outreach_recipient_lists`, `outreach_recipients`
   - [x] `016`: `market_targets`, `market_leads`, `market_signals`
@@ -123,7 +123,7 @@ Desen: `registerDecisionMakerPublic` örnek alınır → `/api/v1/` altında `re
   - [x] `POST /crm/convert/lead-candidate` user muadili
   - [x] Tüm mevcut GET uçlarına `owner_user_id` filtresi ekle
 - [x] **Decision-maker mevcut public router'ına** owner-scope + `promote-candidates`/`promote-crm` user muadilleri.
-- [x] Job sistemi: `lead_search_jobs.created_by = req.user.sub` doldur; `runWithTenant` context'ine owner da taşınsın (`runWithTenantAndOwner` veya AsyncLocalStorage alanı); scraper-callback sonuçları job'un owner'ına yazsın.
+- [x] Job sistemi: `lead_search_jobs.owner_user_id = req.user.sub` doldur; AsyncLocalStorage owner context'i ve scraper-callback sonuç yazımı aynı owner'ı kullanır.
 - [x] Kişi bazlı kota/limit: `POST .../jobs` ve `POST .../send` uçlarına per-user günlük kota (basit sayaç tablosu; entitlement plan alanından okunabilir).
 
 ### FAZ 2 — Frontend: Ortak Altyapı

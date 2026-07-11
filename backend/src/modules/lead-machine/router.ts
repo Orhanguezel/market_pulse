@@ -20,6 +20,7 @@ import {
   createLinkedInSequenceHandler,
   createSavedSearchHandler,
   deleteIcp,
+  deleteLeadJob,
   deleteRule,
   deleteSavedSearchHandler,
   feedbackApprovedStats,
@@ -68,7 +69,6 @@ import {
   startB2bJob,
   startCustomsJob,
   startFairJob,
-  startGenericFairRunner,
   updateDraft,
   updateIcp,
   updateSavedSearchHandler,
@@ -93,6 +93,7 @@ export async function registerLeadMachineUser(app: FastifyInstance) {
   const routeHandler = <T>(handler: T) => handler as never;
 
   app.get('/lead-machine/candidates', guard, routeHandler(listLeadCandidates));
+  app.delete('/lead-machine/jobs/:id', guard, routeHandler(deleteLeadJob));
   app.post('/lead-machine/candidates', guard, routeHandler(createLeadCandidate));
   app.get('/lead-machine/candidates/:id', guard, routeHandler(getLeadCandidate));
   app.patch('/lead-machine/candidates/:id/review', guard, routeHandler(reviewCandidate));
@@ -112,7 +113,6 @@ export async function registerLeadMachineUser(app: FastifyInstance) {
   app.get('/lead-machine/customs/jobs', guard, routeHandler(listCustomsJobs));
   app.get('/lead-machine/customs/jobs/:id', guard, routeHandler(getCustomsJob));
   app.post('/lead-machine/fair/jobs', guard, routeHandler(startFairJob));
-  app.post('/lead-machine/fair/run', guard, routeHandler(startGenericFairRunner));
   app.get('/lead-machine/fair/jobs', guard, routeHandler(listFairJobs));
   app.get('/lead-machine/fair/jobs/:id', guard, routeHandler(getFairJob));
   app.get('/lead-machine/amazon/jobs', guard, routeHandler(listAmazonJobs));
@@ -169,6 +169,7 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   const emailHandler = <T>(handler: T) => handler as never;
 
   app.get('/lead-machine/candidates', listLeadCandidates);
+  app.delete('/lead-machine/jobs/:id', deleteLeadJob);
   app.get('/lead-machine/candidates/:id', getLeadCandidate);
   app.patch('/lead-machine/candidates/:id/review', reviewCandidate);
   app.patch('/lead-machine/candidates/bulk-review', reviewCandidatesBulk);
@@ -202,7 +203,6 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.get('/lead-machine/customs/jobs/:id', getCustomsJob);
 
   app.post('/lead-machine/fair/jobs', startFairJob);
-  app.post('/lead-machine/fair/run', startGenericFairRunner);
   app.get('/lead-machine/fair/jobs', listFairJobs);
   app.get('/lead-machine/fair/jobs/:id', getFairJob);
   app.get('/lead-machine/fair/suggestions', fairSuggestions);

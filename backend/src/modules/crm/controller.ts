@@ -1,5 +1,5 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { getActiveUserId } from '@/modules/_shared';
+import { ownerScopeForRequest } from '@/modules/_shared';
 import {
   accountBodySchema,
   accountPatchSchema,
@@ -45,8 +45,11 @@ function notFound(reply: FastifyReply) {
   return reply.code(404).send({ error: { message: 'not_found' } });
 }
 
+// Owner-scope route KAYDINDAKI bayraktan cozulur (req.url'e BAKMA — query string
+// `?x=/admin/` ile owner filtresi bypass ediliyordu). Tenant router config.ownerScope='user'
+// tasir → aktif kullanici; admin router bayrak tasimaz → null (tenant-geneli).
 function ownerForRequest(req: FastifyRequest): string | null {
-  return req.url.includes('/admin/') ? null : getActiveUserId() ?? null;
+  return ownerScopeForRequest(req);
 }
 
 async function deleteBusinessRecordHandler(

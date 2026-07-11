@@ -9,6 +9,7 @@ export * from './public/auth.endpoints';
 // Public content
 export * from './public/reviews.public.endpoints';
 export * from './public/storage_public.endpoints';
+export * from './public/storage_user.endpoints';
 export * from './public/kvkk.endpoints';
 export * from './public/custom_pages.endpoints';
 export * from './public/sliders.endpoints';

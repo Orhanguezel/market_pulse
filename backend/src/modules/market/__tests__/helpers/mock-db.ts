@@ -81,8 +81,8 @@ export function createDbMock() {
         return Promise.resolve({
           execute(sql: string, values?: unknown[]) {
             poolExecutions.push({ sql, values });
-            const rows = /^\s*select\b/i.test(sql) ? (poolExecuteQueue.shift() ?? []) : [];
-            return Promise.resolve([rows]);
+            const result = /^\s*select\b/i.test(sql) ? (poolExecuteQueue.shift() ?? []) : { affectedRows: 1 };
+            return Promise.resolve([result]);
           },
           beginTransaction() { return Promise.resolve(); },
           commit() { return Promise.resolve(); },

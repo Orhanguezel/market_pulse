@@ -113,7 +113,7 @@ function jobRow() {
     params: JSON.stringify({ keyword: 'thermal labels', marketplace: 'com' }),
     result_count: 0,
     error_msg: null,
-    created_by: null,
+    owner_user_id: null,
     created_at: '2026-05-08',
     started_at: null,
     finished_at: null,

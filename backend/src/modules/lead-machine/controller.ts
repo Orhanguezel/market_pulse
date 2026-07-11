@@ -6,6 +6,7 @@ import { checkAndConsumeDailyUsage, type DailyUsageType } from '@/modules/public
 import { approveCandidateToMarketLead } from './_shared/candidate.helpers';
 import {
   createSearchJob,
+  deleteSearchJob,
   getCandidate,
   getSearchJob,
   insertCandidate,
@@ -23,7 +24,6 @@ import { runB2bJob } from './b2b/b2b.job';
 import { runCustomsJob } from './customs/customs.job';
 import { runFairJob } from './fair/fair.job';
 import { generateFairBriefingPdf, listFairBriefingCandidateIdsForDay } from './fair/briefing.service';
-import { buildGenericFairRunnerParams } from './fair/fair.runner';
 import {
   createIcpProfile,
   deleteIcpProfile,
@@ -263,7 +263,7 @@ export const scraperCallback: RouteHandler<{ Body: unknown }> = async (req, repl
         rawData: candidate.raw_data ?? candidate,
         aiSummary: typeof candidate.ai_summary === 'string' ? candidate.ai_summary : null,
         leadScore: typeof candidate.lead_score === 'number' ? candidate.lead_score : 0,
-        ownerUserId: job.created_by,
+        ownerUserId: job.owner_user_id,
       });
       inserted += 1;
     }
@@ -344,7 +344,7 @@ async function createAndRunJob(channel: LeadChannel, body: Record<string, unknow
   const icpId = typeof body.icp_id === 'string' ? body.icp_id : null;
   const job = await createSearchJob(channel, body, icpId, getActiveUserId() ?? null);
   if (!job) throw new Error('JOB_CREATE_FAILED');
-  const ownerUserId = job.created_by;
+  const ownerUserId = job.owner_user_id;
   const runJob = (task: () => Promise<unknown>) => ownerUserId
     ? runWithTenantAndUser(tenantKey, ownerUserId, task)
     : runWithTenant(tenantKey, task);
@@ -445,21 +445,19 @@ export const getFairJob: RouteHandler<{ Params: { id: string } }> = async (req, 
   if (!job || job.channel !== 'trade_fair') return reply.code(404).send({ error: { message: 'not_found' } });
   return job;
 };
-export const fairSuggestions: RouteHandler = async () => [];
-export const startGenericFairRunner: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+export const deleteLeadJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   try {
-    const params = buildGenericFairRunnerParams(asRecord(req.body));
-    const quota = await consumeDailyUsageForRoute(req, 'lead_job');
-    if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
-    return reply.code(201).send(await createAndRunJob('trade_fair', { ...params }));
-  } catch (e) {
-    if (e instanceof Error && (e.message === 'FAIR_URL_REQUIRED' || e.message === 'ICP_ID_REQUIRED')) {
-      return reply.code(400).send({ error: { message: e.message.toLowerCase() } });
+    const deleted = await deleteSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
+    if (!deleted) return reply.code(404).send({ error: { message: 'not_found' } });
+    return reply.code(204).send();
+  } catch (error) {
+    if (error instanceof Error && error.message === 'JOB_ACTIVE') {
+      return reply.code(409).send({ error: { message: 'job_active' } });
     }
-    throw e;
+    throw error;
   }
 };
-
+export const fairSuggestions: RouteHandler = async () => [];
 function pdfReply(reply: FastifyReply, pdf: Buffer, filename: string) {
   return reply
     .header('Content-Type', 'application/pdf')

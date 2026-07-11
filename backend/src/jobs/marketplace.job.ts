@@ -26,16 +26,29 @@ function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-export async function scanAllMarketplaces(app?: FastifyInstance): Promise<{
+export async function scanAllMarketplaces(
+  app?: FastifyInstance,
+  scope?: { tenantKey?: string | null; ownerUserId?: string | null },
+): Promise<{
   scanned: number;
   failed: number;
   signals_created: number;
 }> {
+  // GUVENLIK: kullanici tarafindan tetiklenirse scope.tenantKey + scope.ownerUserId
+  // ZORUNLU verilir → yalnizca kendi target'lari taranir. Nightly cron scope'suz cagirir
+  // (sistem geneli, tum aktif target'lar).
+  const where: string[] = [
+    "status = 'active'",
+    '(hepsiburada_url IS NOT NULL OR trendyol_url IS NOT NULL OR amazon_url IS NOT NULL)',
+  ];
+  const params: string[] = [];
+  if (scope?.tenantKey) { where.push('tenant_key = ?'); params.push(scope.tenantKey); }
+  if (scope?.ownerUserId) { where.push('owner_user_id = ?'); params.push(scope.ownerUserId); }
   const [rows] = await pool.execute<RowDataPacket[]>(
     `SELECT id, hepsiburada_url, trendyol_url, amazon_url
        FROM market_targets
-      WHERE status = 'active'
-        AND (hepsiburada_url IS NOT NULL OR trendyol_url IS NOT NULL OR amazon_url IS NOT NULL)`,
+      WHERE ${where.join(' AND ')}`,
+    params,
   );
   const targets = rows as Array<{
     id: string;

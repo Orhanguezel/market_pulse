@@ -102,10 +102,6 @@ export const leadMachineApi = baseApi.injectEndpoints({
       query: (body) => ({ url: '/lead-machine/fair/jobs', method: 'POST', body }),
       invalidatesTags: ['LeadJobs', 'LeadCandidates'],
     }),
-    runFairLeadJob: b.mutation<LeadSearchJob, StartLeadJobBody>({
-      query: (body) => ({ url: '/lead-machine/fair/run', method: 'POST', body }),
-      invalidatesTags: ['LeadJobs', 'LeadCandidates'],
-    }),
     listFairLeadJobs: b.query<LeadSearchJob[], void>({
       query: () => ({ url: '/lead-machine/fair/jobs', method: 'GET' }),
       providesTags: ['LeadJobs'],
@@ -121,6 +117,10 @@ export const leadMachineApi = baseApi.injectEndpoints({
     getAmazonLeadJob: b.query<LeadSearchJob, string>({
       query: (id) => ({ url: `/lead-machine/amazon/jobs/${id}`, method: 'GET' }),
       providesTags: ['LeadJobs'],
+    }),
+    deleteLeadJob: b.mutation<void, string>({
+      query: (id) => ({ url: `/lead-machine/jobs/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['LeadJobs', 'LeadCandidates', 'AmazonHistory'],
     }),
     getFairBriefingCandidatePdf: b.query<Blob, string>({
       query: (candidateId) => ({
@@ -190,11 +190,11 @@ export const {
   useListCustomsLeadJobsQuery,
   useGetCustomsLeadJobQuery,
   useStartFairLeadJobMutation,
-  useRunFairLeadJobMutation,
   useListFairLeadJobsQuery,
   useGetFairLeadJobQuery,
   useListAmazonLeadJobsQuery,
   useGetAmazonLeadJobQuery,
+  useDeleteLeadJobMutation,
   useLazyGetFairBriefingCandidatePdfQuery,
   useLazyGetFairBriefingDayPdfQuery,
   useGenerateFairBriefingBulkPdfMutation,

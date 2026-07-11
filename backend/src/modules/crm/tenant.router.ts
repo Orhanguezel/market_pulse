@@ -68,7 +68,9 @@ import {
  * Hook sızıntısını önlemek için per-route preHandler kullanılır (addHook YOK).
  */
 export async function registerCrmTenant(app: FastifyInstance) {
-  const guard = { preHandler: [requireAuth, requireModule('crm')] };
+  // ownerScope: 'user' ZORUNLU — controller ownerForRequest→ownerScopeForRequest(req) owner'i
+  // bu bayraktan cozer. Bayrak olmazsa owner=null (tenant-geneli) → kullanicilar arasi sizinti.
+  const guard = { preHandler: [requireAuth, requireModule('crm')], config: { ownerScope: 'user' as const } };
 
   app.get('/crm/dashboard/summary', guard, dashboardSummaryHandler);
   app.get('/crm/mail/summary', guard, mailSummaryHandler);

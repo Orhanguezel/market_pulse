@@ -23,7 +23,7 @@ const tableByResource: Record<CrmResource, string> = {
 };
 
 const insertColumns: Record<CrmResource, string[]> = {
-  products: ['id', 'tenant_key', 'sku', 'name', 'description', 'unit_price', 'currency', 'status', 'raw_data'],
+  products: ['id', 'tenant_key', 'sku', 'name', 'description', 'unit_price', 'currency', 'status', 'owner_user_id', 'raw_data'],
   quotes: [
     'id',
     'tenant_key',
@@ -38,6 +38,7 @@ const insertColumns: Record<CrmResource, string[]> = {
     'valid_until',
     'sent_at',
     'accepted_at',
+    'owner_user_id',
     'raw_data',
   ],
   orders: [
@@ -53,9 +54,10 @@ const insertColumns: Record<CrmResource, string[]> = {
     'currency',
     'status',
     'ordered_at',
+    'owner_user_id',
     'raw_data',
   ],
-  documents: ['id', 'tenant_key', 'ref_type', 'ref_id', 'title', 'file_url', 'mime_type', 'status', 'raw_data'],
+  documents: ['id', 'tenant_key', 'ref_type', 'ref_id', 'title', 'file_url', 'mime_type', 'status', 'owner_user_id', 'raw_data'],
   tasks: [
     'id',
     'tenant_key',
@@ -122,21 +124,21 @@ function normalizeBody(resource: CrmResource, body: Partial<BodyByResource[CrmRe
   return applyDefaults ? { ...value, priority: value.priority ?? 'normal', status: value.status ?? 'open' } : value;
 }
 
-function withOwner(resource: CrmResource, body: Record<string, unknown>) {
-  if (resource !== 'tasks' && resource !== 'reminders') return body;
+// tasks/reminders ek olarak `created_by` de yazar; tum kaynaklar `owner_user_id` alir.
+function withOwner(resource: CrmResource, body: Record<string, unknown>): Record<string, unknown> {
   const ownerUserId = getRequiredUserId();
-  return { ...body, owner_user_id: ownerUserId, created_by: ownerUserId };
+  if (resource === 'tasks' || resource === 'reminders') {
+    return { ...body, owner_user_id: ownerUserId, created_by: ownerUserId };
+  }
+  return { ...body, owner_user_id: ownerUserId };
 }
 
 export async function listBusinessRecords(resource: CrmResource, query: ListQuery) {
   const tenantKey = getActiveTenantKey();
   const table = tableByResource[resource];
-  const where = ['tenant_key = ?'];
-  const values: unknown[] = [tenantKey];
-  if (resource === 'tasks' || resource === 'reminders') {
-    where.push('owner_user_id = ?');
-    values.push(getRequiredUserId());
-  }
+  // TUM is kayitlari owner-scoped: products/quotes/orders/documents dahil kullaniciya ozel.
+  const where = ['tenant_key = ?', 'owner_user_id = ?'];
+  const values: unknown[] = [tenantKey, getRequiredUserId()];
   if (query.status) {
     where.push('status = ?');
     values.push(query.status);
@@ -152,12 +154,8 @@ export async function listBusinessRecords(resource: CrmResource, query: ListQuer
 export async function getBusinessRecord(resource: CrmResource, id: string) {
   const tenantKey = getActiveTenantKey();
   const table = tableByResource[resource];
-  const where = ['tenant_key = ?', 'id = ?'];
-  const values: unknown[] = [tenantKey, id];
-  if (resource === 'tasks' || resource === 'reminders') {
-    where.push('owner_user_id = ?');
-    values.push(getRequiredUserId());
-  }
+  const where = ['tenant_key = ?', 'id = ?', 'owner_user_id = ?'];
+  const values: unknown[] = [tenantKey, id, getRequiredUserId()];
   const [rows] = await pool.execute(`SELECT * FROM ${table} WHERE ${where.join(' AND ')} LIMIT 1`, values as never[]);
   const row = (rows as Array<Record<string, unknown>>)[0];
   return row ? parseJsonField(row, 'raw_data') : null;
@@ -168,7 +166,7 @@ export async function createBusinessRecord<T extends CrmResource>(resource: T, b
   const id = newId();
   const table = tableByResource[resource];
   const columns = insertColumns[resource];
-  const normalized = withOwner(
+  const normalized: Record<string, unknown> = withOwner(
     resource,
     normalizeBody(resource, body as BodyByResource[CrmResource], true) as Record<string, unknown>,
   );
@@ -189,12 +187,9 @@ export async function createBusinessRecord<T extends CrmResource>(resource: T, b
 export async function deleteBusinessRecord<T extends CrmResource>(resource: T, id: string) {
   const tenantKey = getActiveTenantKey();
   const table = tableByResource[resource];
-  const where = ['tenant_key = ?', 'id = ?'];
-  const values: unknown[] = [tenantKey, id];
-  if (resource === 'tasks' || resource === 'reminders') {
-    where.push('owner_user_id = ?');
-    values.push(getRequiredUserId());
-  }
+  // owner_user_id filtresi ZORUNLU: baskasinin kaydini silmeyi engeller (UNSCOPED-WRITE fixi).
+  const where = ['tenant_key = ?', 'id = ?', 'owner_user_id = ?'];
+  const values: unknown[] = [tenantKey, id, getRequiredUserId()];
   await pool.execute(`DELETE FROM ${table} WHERE ${where.join(' AND ')}`, values as never[]);
 }
 
@@ -204,18 +199,18 @@ export async function updateBusinessRecord<T extends CrmResource>(
   body: Partial<BodyByResource[T]>,
 ) {
   const normalized = normalizeBody(resource, body as Partial<BodyByResource[CrmResource]>, false) as Record<string, unknown>;
-  const allowed = new Set(insertColumns[resource].filter((column) => column !== 'id' && column !== 'tenant_key'));
+  // owner_user_id ve created_by ASLA guncellenemez (sahiplik yeniden atama engeli).
+  const allowed = new Set(
+    insertColumns[resource].filter((column) => column !== 'id' && column !== 'tenant_key' && column !== 'owner_user_id' && column !== 'created_by'),
+  );
   const patch = Object.fromEntries(Object.entries(normalized).filter(([key]) => allowed.has(key)));
   const { sets, values } = buildPatchSql(patch);
   if (!sets.length) return getBusinessRecord(resource, id);
 
   const tenantKey = getActiveTenantKey();
-  const where = ['tenant_key = ?', 'id = ?'];
-  values.push(tenantKey, id);
-  if (resource === 'tasks' || resource === 'reminders') {
-    where.push('owner_user_id = ?');
-    values.push(getRequiredUserId());
-  }
+  // owner_user_id filtresi ZORUNLU: baskasinin kaydini guncellemeyi engeller.
+  const where = ['tenant_key = ?', 'id = ?', 'owner_user_id = ?'];
+  values.push(tenantKey, id, getRequiredUserId());
   const table = tableByResource[resource];
   await pool.execute(`UPDATE ${table} SET ${sets.join(', ')} WHERE ${where.join(' AND ')}`, values as never[]);
   return getBusinessRecord(resource, id);

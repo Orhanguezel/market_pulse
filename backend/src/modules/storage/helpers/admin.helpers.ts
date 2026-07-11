@@ -18,13 +18,13 @@ export const sanitizeName = (name: string) => name.replace(/[^\w.\-]+/g, "_");
 
 /** Per-request upload log base (user + ip + ua) */
 type UploadLogRequest = {
-  user?: { id?: string | null } | null;
+  user?: unknown;
   headers?: Record<string, unknown>;
   ip?: string;
 };
 
 export function makeUploadLogBase(req: UploadLogRequest) {
-  const user = req.user;
+  const user = req.user && typeof req.user === 'object' ? req.user as { id?: unknown; sub?: unknown } : null;
   const xff = req.headers?.["x-forwarded-for"];
   const ip =
     (typeof xff === "string" && xff.split(",")[0].trim()) ||
@@ -38,7 +38,8 @@ export function makeUploadLogBase(req: UploadLogRequest) {
       ? uaRaw.join(",")
       : undefined;
 
-  return { where: "storage_upload", user_id: user?.id ? String(user.id) : null, ip, ua };
+  const userId = user?.id ?? user?.sub;
+  return { where: "storage_upload", user_id: userId ? String(userId) : null, ip, ua };
 }
 
 type MultipartFields = Record<string, MultipartValue>;
@@ -63,11 +64,13 @@ export function parseMultipartMetadata(raw: string | undefined): Record<string, 
 }
 
 type StorageUserRequest = {
-  user?: { id?: string | null } | null;
+  user?: unknown;
 };
 
 export function getStorageRequestUserId(req: StorageUserRequest): string | null {
-  return req.user?.id ? String(req.user.id) : null;
+  const user = req.user && typeof req.user === 'object' ? req.user as { id?: unknown; sub?: unknown } : null;
+  const userId = user?.id ?? user?.sub;
+  return userId ? String(userId) : null;
 }
 
 export function buildStorageAssetRecord(input: {

@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `lead_search_jobs` (
   `params`       json         NOT NULL,
   `result_count` int          NOT NULL DEFAULT 0,
   `error_msg`    text         DEFAULT NULL,
-  `created_by`   char(36)     DEFAULT NULL,
+  `owner_user_id` char(36)    DEFAULT NULL,
   `created_at`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `started_at`   datetime     DEFAULT NULL,
   `finished_at`  datetime     DEFAULT NULL,
@@ -47,7 +47,8 @@ CREATE TABLE IF NOT EXISTS `lead_search_jobs` (
   KEY `idx_lead_search_jobs_tenant` (`tenant_key`),
   KEY `idx_jobs_channel`  (`channel`),
   KEY `idx_jobs_status`   (`status`),
-  KEY `idx_jobs_icp`      (`icp_id`)
+  KEY `idx_jobs_icp`      (`icp_id`),
+  KEY `idx_jobs_owner`    (`tenant_key`, `owner_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Ham lead adayları — kullanıcı onayından önce

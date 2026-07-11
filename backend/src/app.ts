@@ -74,9 +74,17 @@ export async function createApp() {
   let storageSettings: Awaited<ReturnType<typeof getStorageSettings>> | null = null;
   try { storageSettings = await getStorageSettings(); } catch { /* ignore */ }
 
+  const uploadsPrefix = pickUploadsPrefix(storageSettings?.localBaseUrl);
+  app.addHook('onRequest', async (req, reply) => {
+    const pathname = req.url.split('?', 1)[0] || '';
+    if (pathname.startsWith(`${uploadsPrefix}user-docs-`)) {
+      return reply.code(404).send({ message: 'not_found' });
+    }
+  });
+
   await app.register(fastifyStatic, {
     root: pickUploadsRoot(storageSettings?.localRoot),
-    prefix: pickUploadsPrefix(storageSettings?.localBaseUrl),
+    prefix: uploadsPrefix,
     decorateReply: false,
   });
 

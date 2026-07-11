@@ -178,13 +178,15 @@ describe('crm business records service', () => {
       raw_data: '{"category":"consulting"}',
     }]);
 
-    const result = await runWithTenant('tenant-b', () => businessRecords.createBusinessRecord('products', {
+    const result = await runWithTenantAndUser('tenant-b', 'user-2', () => businessRecords.createBusinessRecord('products', {
       name: 'Service Package',
       unit_price: 1200,
       raw_data: { category: 'consulting' },
     }));
 
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('INSERT INTO crm_products');
+    // owner_user_id INSERT'e yaziliyor (products artik owner-scoped).
+    expect(dbMock.poolExecutions[0]?.values).toContain('user-2');
     expect(dbMock.poolExecutions[0]?.values?.slice(0, 6)).toEqual([
       expect.any(String),
       'tenant-b',
@@ -196,18 +198,19 @@ describe('crm business records service', () => {
     expect(result).toEqual(expect.objectContaining({ id: 'product-1', raw_data: { category: 'consulting' } }));
   });
 
-  test('lists quotes without accepting a client tenant key', async () => {
+  test('lists quotes owner-scoped without accepting a client tenant key', async () => {
     dbMock.queuePoolExecute([{ id: 'quote-1', tenant_key: 'tenant-b', status: 'sent', raw_data: null }]);
 
-    const result = await runWithTenant('tenant-b', () => businessRecords.listBusinessRecords('quotes', {
+    const result = await runWithTenantAndUser('tenant-b', 'user-2', () => businessRecords.listBusinessRecords('quotes', {
       limit: 50,
       offset: 0,
       status: 'sent',
     }));
 
     expect(dbMock.poolExecutions[0]?.sql).toContain('FROM crm_quotes');
-    expect(dbMock.poolExecutions[0]?.sql).toContain('tenant_key = ?');
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-b', 'sent']);
+    // Kisi-bazli izolasyon: quotes artik owner_user_id ile filtreleniyor.
+    expect(dbMock.poolExecutions[0]?.sql).toContain('tenant_key = ? AND owner_user_id = ?');
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-b', 'user-2', 'sent']);
     expect(result).toEqual([expect.objectContaining({ id: 'quote-1' })]);
   });
 
@@ -224,23 +227,35 @@ describe('crm business records service', () => {
   test('updates a business record with tenant scope', async () => {
     dbMock.queuePoolExecute([{ id: 'quote-1', tenant_key: 'tenant-b', title: 'Yeni teklif', raw_data: '{"version":2}' }]);
 
-    const result = await runWithTenant('tenant-b', () => businessRecords.updateBusinessRecord('quotes', 'quote-1', {
+    const result = await runWithTenantAndUser('tenant-b', 'user-2', () => businessRecords.updateBusinessRecord('quotes', 'quote-1', {
       title: 'Yeni teklif',
       status: 'sent',
       raw_data: { version: 2 },
-    }));
+      // Sahiplik yeniden atama denemesi — SET'e ASLA girmemeli.
+      owner_user_id: 'user-9',
+    } as never));
 
     expect(dbMock.poolExecutions[0]?.sql).toContain('UPDATE crm_quotes SET');
-    expect(dbMock.poolExecutions[0]?.sql).toContain('WHERE tenant_key = ? AND id = ?');
+    // owner_user_id filtreli WHERE (baskasinin kaydini guncellemeyi engeller).
+    expect(dbMock.poolExecutions[0]?.sql).toContain('WHERE tenant_key = ? AND id = ? AND owner_user_id = ?');
+    // SET clause owner_user_id ICERMEZ (reassignment engellendi).
+    expect(dbMock.poolExecutions[0]?.sql).not.toContain('owner_user_id = ?,');
     expect(dbMock.poolExecutions[0]?.values).toEqual([
       'Yeni teklif',
       'sent',
       '{"version":2}',
       'tenant-b',
       'quote-1',
+      'user-2',
     ]);
-    expect(dbMock.poolExecutions[1]?.values).toEqual(['tenant-b', 'quote-1']);
+    expect(dbMock.poolExecutions[1]?.values).toEqual(['tenant-b', 'quote-1', 'user-2']);
     expect(result).toEqual(expect.objectContaining({ id: 'quote-1', raw_data: { version: 2 } }));
+  });
+
+  test('delete business record is owner-scoped (products)', async () => {
+    await runWithTenantAndUser('tenant-b', 'user-2', () => businessRecords.deleteBusinessRecord('products', 'product-9'));
+    expect(dbMock.poolExecutions[0]?.sql).toBe('DELETE FROM crm_products WHERE tenant_key = ? AND id = ? AND owner_user_id = ?');
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-b', 'product-9', 'user-2']);
   });
 });
 

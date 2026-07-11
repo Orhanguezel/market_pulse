@@ -10,7 +10,7 @@ export type LeadSearchJob = {
   params: Record<string, unknown>;
   result_count: number;
   error_msg: string | null;
-  created_by: string | null;
+  owner_user_id: string | null;
   created_at: string;
   started_at: string | null;
   finished_at: string | null;

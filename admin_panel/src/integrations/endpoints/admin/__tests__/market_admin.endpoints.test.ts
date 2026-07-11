@@ -427,10 +427,6 @@ describe('lead machine admin RTK endpoints', () => {
     expect(call.method).toBe('POST');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/fair/jobs');
 
-    call = await dispatchEndpoint('startGenericFairRunner', { fair_url: 'https://fair.example', icp_id: 'icp-1' });
-    expect(call.method).toBe('POST');
-    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/fair/run');
-
     call = await dispatchEndpoint('listIcpProfiles');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/icp');
 
@@ -508,7 +504,6 @@ describe('lead machine admin RTK endpoints', () => {
       'useStartCustomsJobMutation',
       'useListFairJobsQuery',
       'useStartFairJobMutation',
-      'useStartGenericFairRunnerMutation',
       'useListIcpProfilesQuery',
       'useCreateIcpProfileMutation',
       'useUpdateIcpProfileMutation',

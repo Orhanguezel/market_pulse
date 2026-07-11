@@ -334,7 +334,7 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
       { key: 'quotes', label: 'Teklifler', icon: 'FileText', path: '/teklifler', module: 'crm' },
       { key: 'orders', label: 'Siparişler', icon: 'ShoppingCart', path: '/siparisler', module: 'crm' },
       { key: 'products', label: 'Ürünler', icon: 'Package', path: '/urunler', module: 'crm' },
-      { key: 'documents', label: 'Belgeler', icon: 'Folder', path: '/belgeler', module: 'crm' },
+      { key: 'documents', label: 'Dosya Deposu', icon: 'HardDrive', path: '/belgeler', module: 'crm' },
       { key: 'activities', label: 'Aktiviteler', icon: 'CalendarCheck', path: '/aktiviteler', module: 'crm' },
       { key: 'tasks', label: 'Görevler', icon: 'ListChecks', path: '/gorevler', module: 'crm' },
       { key: 'calendar', label: 'Takvim', icon: 'CalendarDays', path: '/takvim', module: 'calendar' },

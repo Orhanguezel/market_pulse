@@ -54,6 +54,10 @@ const OWNER_TABLES: MigrationTable[] = [
   { name: 'crm_activities', indexes: [{ name: 'idx_crm_activities_owner_tenant', columns: ['tenant_key', 'owner_user_id'] }] },
   { name: 'crm_tasks', indexes: [{ name: 'idx_crm_tasks_owner', columns: ['tenant_key', 'owner_user_id'] }] },
   { name: 'crm_reminders', indexes: [{ name: 'idx_crm_reminders_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'crm_products', indexes: [{ name: 'idx_crm_products_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'crm_quotes', indexes: [{ name: 'idx_crm_quotes_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'crm_orders', indexes: [{ name: 'idx_crm_orders_owner', columns: ['tenant_key', 'owner_user_id'] }] },
+  { name: 'crm_documents', indexes: [{ name: 'idx_crm_documents_owner', columns: ['tenant_key', 'owner_user_id'] }] },
 ];
 
 function quoteIdent(value: string): string {

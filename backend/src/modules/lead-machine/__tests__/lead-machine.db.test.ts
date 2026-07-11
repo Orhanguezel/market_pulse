@@ -27,7 +27,7 @@ function job(overrides: Record<string, unknown> = {}) {
     params: '{"keyword":"oto aksesuar"}',
     result_count: 0,
     error_msg: null,
-    created_by: null,
+    owner_user_id: null,
     created_at: now,
     started_at: null,
     finished_at: null,
@@ -118,6 +118,22 @@ describe('lead machine db jobs', () => {
 
     expect(dbMock.poolExecutions[0]?.sql).toContain('UPDATE lead_search_jobs SET status = ?, result_count = ?, error_msg = ?, started_at = CURRENT_TIMESTAMP, finished_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_key = ?');
     expect(dbMock.poolExecutions[0]?.values).toEqual(['done', 5, null, 'job-1', 'avrasya']);
+  });
+
+  test('deletes a completed owned job and its dependent results transactionally', async () => {
+    dbMock.queuePoolExecute([job({ status: 'done', owner_user_id: 'user-1' })]);
+
+    const deleted = await leadDb.deleteSearchJob('job-1', { ownerUserId: 'user-1' });
+
+    expect(deleted).toBe(true);
+    expect(dbMock.poolExecutions.some((entry) => entry.sql.startsWith('DELETE FROM lead_candidates'))).toBe(true);
+    expect(dbMock.poolExecutions.at(-1)?.sql).toContain('DELETE FROM lead_search_jobs WHERE tenant_key = ? AND id = ? AND owner_user_id = ?');
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['avrasya', 'job-1', 'user-1']);
+  });
+
+  test('refuses to delete an active job', async () => {
+    dbMock.queuePoolExecute([job({ status: 'running', owner_user_id: 'user-1' })]);
+    expect(leadDb.deleteSearchJob('job-1', { ownerUserId: 'user-1' })).rejects.toThrow('JOB_ACTIVE');
   });
 });
 

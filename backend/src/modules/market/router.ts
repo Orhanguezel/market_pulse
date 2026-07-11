@@ -17,7 +17,9 @@ import {
 } from './controller';
 
 export async function registerMarketUser(app: FastifyInstance) {
-  const guard = { preHandler: [requireAuth, requireModule('crm')] };
+  // ownerScope: 'user' ZORUNLU — controller ownerScopeForRequest(req) ile owner'i bu
+  // bayraktan cozer. Bayrak olmazsa owner=null (tenant-geneli) → kullanicilar arasi sizinti.
+  const guard = { preHandler: [requireAuth, requireModule('crm')], config: { ownerScope: 'user' as const } };
   const routeHandler = <T>(handler: T) => handler as never;
 
   app.get('/market/stats', guard, routeHandler(getMarketStats));

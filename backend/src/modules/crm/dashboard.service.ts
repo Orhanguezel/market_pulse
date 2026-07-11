@@ -29,9 +29,9 @@ async function readCount(sql: string, values: SqlValue[]): Promise<number> {
 
 export async function getDashboardSummary(ownerUserId?: string | null) {
   const tenantKey = getActiveTenantKey();
-  // Kisi-bazli izolasyon: owner_user_id kolonu olan tablolarda kullanici yolunda
-  // owner filtresi uygulanir. crm_quotes/crm_orders'ta owner kolonu YOK (035 semasi),
-  // bu iki sayac tenant-geneli kalir (owner kolonlari ayri sema degisikligiyle gelecek).
+  // Kisi-bazli izolasyon: tum is-kaydi tablolari (accounts/contacts/deals/activities/
+  // quotes/orders/reminders/lead_candidates) owner_user_id tasir; kullanici yolunda
+  // owner filtresi uygulanir. quotes/orders'a owner kolonu 035 semasi + migrate ile eklendi.
   const ownerAnd = ownerUserId ? ' AND owner_user_id = ?' : '';
   const ownerVal: SqlValue[] = ownerUserId ? [ownerUserId] : [];
   const scoped = (base: string, ...extra: SqlValue[]): [string, SqlValue[]] => [
@@ -56,9 +56,8 @@ export async function getDashboardSummary(ownerUserId?: string | null) {
     readCount(...scoped("SELECT COUNT(*) AS cnt FROM crm_deals WHERE tenant_key = ? AND status = 'won'")),
     readCount(...scoped('SELECT COUNT(*) AS cnt FROM crm_activities WHERE tenant_key = ? AND done = 0')),
     readCount(...scoped('SELECT COUNT(*) AS cnt FROM lead_candidates WHERE tenant_key = ?')),
-    // crm_quotes/crm_orders: owner kolonu yok → tenant-geneli
-    readCount("SELECT COUNT(*) AS cnt FROM crm_quotes WHERE tenant_key = ? AND status IN ('draft', 'sent')", [tenantKey]),
-    readCount("SELECT COUNT(*) AS cnt FROM crm_orders WHERE tenant_key = ? AND status <> 'cancelled'", [tenantKey]),
+    readCount(...scoped("SELECT COUNT(*) AS cnt FROM crm_quotes WHERE tenant_key = ? AND status IN ('draft', 'sent')")),
+    readCount(...scoped("SELECT COUNT(*) AS cnt FROM crm_orders WHERE tenant_key = ? AND status <> 'cancelled'")),
     readCount(...scoped("SELECT COUNT(*) AS cnt FROM crm_reminders WHERE tenant_key = ? AND status = 'scheduled'")),
   ]);
 

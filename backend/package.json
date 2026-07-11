@@ -14,7 +14,8 @@
     "owner:guard": "bun src/scripts/owner-scope-guard.ts",
     "owner:guard:strict": "bun src/scripts/owner-scope-guard.ts --strict",
     "owner:backfill": "bun src/scripts/backfill-owner-user.ts",
-    "fair:import-cards": "bun src/scripts/import-fair-in-person-leads.ts"
+    "fair:import-cards": "bun src/scripts/import-fair-in-person-leads.ts",
+    "customs:lake:check": "bun src/scripts/check-customs-lake.ts"
   },
   "dependencies": {
     "@fastify/cookie": "^11",

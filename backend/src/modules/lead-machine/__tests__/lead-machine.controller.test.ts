@@ -40,7 +40,7 @@ function job(overrides: Record<string, unknown> = {}) {
     params: '{"keyword":"oto aksesuar"}',
     result_count: 0,
     error_msg: null,
-    created_by: null,
+    owner_user_id: null,
     created_at: now,
     started_at: null,
     finished_at: null,

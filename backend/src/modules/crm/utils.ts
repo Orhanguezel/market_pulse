@@ -22,8 +22,13 @@ export function definedEntries<T extends Record<string, unknown>>(patch: T) {
   return Object.entries(patch).filter(([, value]) => value !== undefined);
 }
 
+// Sahiplik alanlari UPDATE ile ASLA degistirilemez — kullanici kendi kaydini baska
+// bir kullaniciya atayamaz/created_by'i ezemez. Tum CRM update'leri buradan gectigi
+// icin merkezi bir savunma.
+const IMMUTABLE_PATCH_FIELDS = new Set(['owner_user_id', 'created_by', 'tenant_key', 'id']);
+
 export function buildPatchSql(patch: Record<string, unknown>) {
-  const entries = definedEntries(patch);
+  const entries = definedEntries(patch).filter(([key]) => !IMMUTABLE_PATCH_FIELDS.has(key));
   return {
     entries,
     sets: entries.map(([key]) => `${key} = ?`),

@@ -11,6 +11,8 @@
 > - **Sıralama:** Önce owner-scope veri-izolasyon düzeltmeleri commit+deploy (gzltek), **sonra** bu Gmail entegrasyonu başlar.
 > - Provider soyutlaması (`gmail_oauth | imap_smtp`) yine de baştan kurulur (Gmail-dışı/kurumsal yedek), ama MVP'nin aktif yolu Gmail OAuth.
 
+> **Kod denetimi (2026-07-11):** Faz 1–4'teki yerel uygulama maddeleri tamamlandı ve testli. Açık kutular Google Cloud Console, credential iptali veya opsiyonel Google Pub/Sub işlemleridir; repository içinden Codex tarafından tamamlanamaz.
+
 ---
 
 ## 1. Mevcut Durum (iki taraf)
@@ -131,12 +133,12 @@ RTK: yeni `mail-accounts.endpoints.ts` (connect/list/delete/inbox/message/send) 
 ## 4. Fazlı Uygulama Planı ve Checklist
 
 ### FAZ 0 — Google Cloud + Güvenlik hazırlığı (bloker)
-- [ ] Yeni Google Cloud projesi / OAuth consent screen (marka, logo, gizlilik politikası URL'i, yetkili domain).
-- [ ] Gmail API'yi etkinleştir. Scope'lar: `gmail.send` (+ Yol A ise `gmail.readonly`).
-- [ ] OAuth client (Web) oluştur; redirect URI = backend callback (`https://<host>/api/v1/mail/accounts/gmail/callback`). client_id/secret → **env/secret** (`getGoogleSettings` genişlet), koda gömme.
-- [ ] Publishing status: "Testing" + test kullanıcıları ekle (≤100). Prod için doğrulama sürecini not et.
+- [ ] **[DIŞ OPERASYON]** Yeni Google Cloud projesi / OAuth consent screen (marka, logo, gizlilik politikası URL'i, yetkili domain).
+- [ ] **[DIŞ OPERASYON]** Gmail API'yi etkinleştir. Scope'lar: `gmail.send` (+ Yol A ise `gmail.readonly`).
+- [ ] **[DIŞ OPERASYON]** OAuth client (Web) oluştur; redirect URI = backend callback (`https://<host>/api/v1/mail/accounts/gmail/callback`). client_id/secret → env/secret, koda gömme.
+- [ ] **[DIŞ OPERASYON]** Publishing status: "Testing" + test kullanıcıları ekle (≤100). Prod için doğrulama sürecini not et.
 - [x] `MAIL_ENCRYPTION_KEY` üret (32 byte hex), env'e ekle; `_shared/crypto.ts` ortak encrypt/decrypt. (`MAIL_ENCRYPTION_KEY` env desteği eklendi; yoksa `DB_ENCRYPTION_KEY` fallback)
-- [ ] isletmeniyonet'te ifşa olan eski Google/SMTP credential'larını **iptal et**.
+- [ ] **[DIŞ OPERASYON]** isletmeniyonet'te ifşa olan eski Google/SMTP credential'larını **iptal et**.
 
 ### FAZ 1 — Backend: Bağlantı + Token (Gmail OAuth)
 - [x] `googleapis` paketini ekle.
@@ -163,8 +165,8 @@ RTK: yeni `mail-accounts.endpoints.ts` (connect/list/delete/inbox/message/send) 
 ### FAZ 4 — Sertleştirme
 - [x] Per-user Gmail günlük gönderim kotası farkındalığı + rate limit (mevcut kota altyapısına ekle).
 - [x] Token şifreleme + owner-izolasyon E2E testi (iki kullanıcı birbirinin kutusunu göremez). (`mail-accounts.service.test.ts` ile tenant/owner filtreleri ve şifreli secret saklama doğrulandı)
-- [ ] Prod için Google OAuth doğrulama + CASA süreci (readonly kullanılıyorsa), >100 kullanıcı öncesi.
-- [ ] Webhook/push (opsiyonel): Gmail `watch` + Pub/Sub ile gerçek-zamanlı gelen mail bildirimi (ileri seviye).
+- [ ] **[DIŞ OPERASYON]** Prod için Google OAuth doğrulama + CASA süreci (readonly kullanılıyorsa), >100 kullanıcı öncesi.
+- [ ] **[OPSİYONEL / MVP DIŞI]** Gmail `watch` + Pub/Sub ile gerçek-zamanlı gelen mail bildirimi.
 
 ---
 

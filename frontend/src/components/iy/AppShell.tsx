@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import {
   LayoutDashboard, Target, Building2, TrendingUp, FileText, ShoppingCart,
   Package, Folder, CalendarCheck, CalendarDays, ListChecks, BellRing, Mail, Radar, BarChart3,
-  Briefcase, Users, PieChart, User, Menu, X, Plus, Loader2, PanelLeftClose, PanelLeft, Bell, Lock,
+  Briefcase, Users, PieChart, User, Menu, X, Plus, Loader2, PanelLeftClose, PanelLeft, Bell, Lock, HardDrive,
 } from 'lucide-react';
 import { IY_APP_NAV, IY_SURFACE_STYLE } from './iy-data';
 import IyUserMenu from './IyUserMenu';
@@ -18,7 +18,7 @@ import { useGetUnreadNotificationsCountQuery } from '@/integrations/rtk/public/n
 const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
   LayoutDashboard, Target, Building2, TrendingUp, FileText, ShoppingCart,
   Package, Folder, CalendarCheck, CalendarDays, ListChecks, BellRing, Mail, Radar, BarChart3,
-  Briefcase, Users, PieChart, User,
+  Briefcase, Users, PieChart, User, HardDrive,
 };
 
 const COLLAPSE_KEY = 'iy_sidebar_collapsed';

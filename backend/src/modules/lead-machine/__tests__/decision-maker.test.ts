@@ -107,7 +107,7 @@ function decisionMakerJob(overrides: Record<string, unknown> = {}) {
     }),
     result_count: 0,
     error_msg: null,
-    created_by: null,
+    owner_user_id: null,
     created_at: '2026-06-30 10:00:00',
     started_at: null,
     finished_at: null,

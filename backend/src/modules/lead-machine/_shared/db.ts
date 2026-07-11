@@ -14,7 +14,7 @@ export interface LeadSearchJob {
   params: unknown;
   result_count: number;
   error_msg: string | null;
-  created_by: string | null;
+  owner_user_id: string | null;
   created_at: string;
   started_at: string | null;
   finished_at: string | null;
@@ -79,7 +79,7 @@ export async function createSearchJob(channel: LeadChannel, params: unknown, icp
   const tenantKey = await getActiveTenantKey();
   const ownerUserId = createdBy ?? getActiveUserId() ?? null;
   await pool.execute(
-    'INSERT INTO lead_search_jobs (id, tenant_key, channel, status, icp_id, params, created_by) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    'INSERT INTO lead_search_jobs (id, tenant_key, channel, status, icp_id, params, owner_user_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
     [id, tenantKey, channel, 'pending', icpId ?? null, JSON.stringify(params ?? {}), ownerUserId],
   );
   return getSearchJob(id);
@@ -90,7 +90,7 @@ export async function getSearchJob(id: string, filters: { ownerUserId?: string |
   const where = ['tenant_key = ?', 'id = ?'];
   const values: unknown[] = [tenantKey, id];
   if (filters.ownerUserId) {
-    where.push('created_by = ?');
+    where.push('owner_user_id = ?');
     values.push(filters.ownerUserId);
   }
   const [rows] = await pool.execute(`SELECT * FROM lead_search_jobs WHERE ${where.join(' AND ')} LIMIT 1`, values as never[]);
@@ -107,7 +107,7 @@ export async function listSearchJobs(channel?: LeadChannel, filters: { ownerUser
     values.push(channel);
   }
   if (filters.ownerUserId) {
-    where.push('created_by = ?');
+    where.push('owner_user_id = ?');
     values.push(filters.ownerUserId);
   }
   const [rows] = await pool.execute(
@@ -139,6 +139,45 @@ export async function updateSearchJob(id: string, patch: { status?: JobStatus; r
   values.push(id);
   values.push(tenantKey);
   await pool.execute(`UPDATE lead_search_jobs SET ${sets.join(', ')} WHERE id = ? AND tenant_key = ?`, values as never[]);
+}
+
+export async function deleteSearchJob(id: string, filters: { ownerUserId?: string | null } = {}) {
+  const tenantKey = await getActiveTenantKey();
+  const job = await getSearchJob(id, filters);
+  if (!job) return false;
+  if (job.status === 'pending' || job.status === 'running') {
+    const error = new Error('JOB_ACTIVE') as Error & { statusCode: number };
+    error.statusCode = 409;
+    throw error;
+  }
+
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+    const candidateScope = 'tenant_key = ? AND candidate_id IN (SELECT id FROM lead_candidates WHERE tenant_key = ? AND job_id = ?)';
+    await connection.execute(`DELETE FROM lead_enrichment WHERE ${candidateScope}`, [tenantKey, tenantKey, id]);
+    await connection.execute(`DELETE FROM lead_outreach_drafts WHERE ${candidateScope}`, [tenantKey, tenantKey, id]);
+    await connection.execute('DELETE FROM lead_candidates WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM lead_decision_makers WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM lead_company_pool WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM amazon_products WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM amazon_risk_scores WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM amazon_job_error_logs WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM amazon_keepa_queue WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM amazon_scan_jobs WHERE tenant_key = ? AND id = ?', [tenantKey, id]);
+    const where = ['tenant_key = ?', 'id = ?'];
+    const values: unknown[] = [tenantKey, id];
+    if (filters.ownerUserId) { where.push('owner_user_id = ?'); values.push(filters.ownerUserId); }
+    const [result] = await connection.execute(`DELETE FROM lead_search_jobs WHERE ${where.join(' AND ')}`, values as never[]);
+    if (Number((result as { affectedRows?: number }).affectedRows ?? 0) !== 1) throw new Error('JOB_DELETE_RACE');
+    await connection.commit();
+    return true;
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
 }
 
 export async function insertCandidate(input: CandidateInput) {

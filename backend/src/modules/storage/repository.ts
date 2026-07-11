@@ -120,3 +120,31 @@ export async function repoListFolders(): Promise<string[]> {
     .map((r) => r.folder as string)
     .filter(Boolean);
 }
+
+export async function repoListUserAssets(q: StorageListQuery, bucket: string, userId: string) {
+  const where = and(buildStorageWhere({ ...q, bucket: undefined }), eq(storageAssets.bucket, bucket), eq(storageAssets.user_id, userId));
+  const [{ total }] = await db.select({ total: dsql<number>`COUNT(*)` }).from(storageAssets).where(where);
+  const { limit, offset } = resolveStoragePagination(q);
+  const rows = await db.select().from(storageAssets).where(where).orderBy(buildStorageOrderBy(q)).limit(limit).offset(offset);
+  return { rows, total: Number(total ?? 0) };
+}
+
+export async function repoGetUserAsset(id: string, bucket: string, userId: string) {
+  const rows = await db.select().from(storageAssets).where(and(eq(storageAssets.id, id), eq(storageAssets.bucket, bucket), eq(storageAssets.user_id, userId))).limit(1);
+  return rows[0] ?? null;
+}
+
+export async function repoUpdateUserAsset(id: string, bucket: string, userId: string, sets: Record<string, unknown>) {
+  await db.update(storageAssets).set(sets).where(and(eq(storageAssets.id, id), eq(storageAssets.bucket, bucket), eq(storageAssets.user_id, userId)));
+}
+
+export async function repoDeleteUserAsset(id: string, bucket: string, userId: string) {
+  await db.delete(storageAssets).where(and(eq(storageAssets.id, id), eq(storageAssets.bucket, bucket), eq(storageAssets.user_id, userId)));
+}
+
+export async function repoListUserFolders(bucket: string, userId: string): Promise<string[]> {
+  const rows = await db.select({ folder: storageAssets.folder }).from(storageAssets)
+    .where(and(eq(storageAssets.bucket, bucket), eq(storageAssets.user_id, userId), dsql`${storageAssets.folder} IS NOT NULL`))
+    .groupBy(storageAssets.folder);
+  return rows.map((row) => row.folder as string).filter(Boolean);
+}

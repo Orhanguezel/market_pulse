@@ -38,14 +38,14 @@ function reply() {
 }
 
 /**
- * Kullanici (owner-scope) request'i. lead-machine controller'i owner-scope'u
- * `routeOptions.config.leadMachineScope` bayragindan okur; campaign/crm controller'lari
- * hala `url` tabanlidir — ikisi de saglanir ki test gercek route kaydini temsil etsin.
+ * Kullanici (owner-scope) request'i. lead-machine `leadMachineScope`, market/crm
+ * `ownerScope` bayragini okur; ikisi de saglanir ki test gercek route kaydini temsil etsin
+ * (route kaydi bu bayraklari guard.config'e koyar; req.url'e ASLA bakilmaz).
  */
 function userReq(url: string, extra: Record<string, unknown> = {}) {
   return {
     url,
-    routeOptions: { config: { leadMachineScope: 'user' as const } },
+    routeOptions: { config: { leadMachineScope: 'user' as const, ownerScope: 'user' as const } },
     ...extra,
   };
 }
@@ -98,7 +98,7 @@ describe('same-tenant owner isolation', () => {
     dbMock.queuePoolExecute([]);
 
     await runWithTenantAndUser('tenant-a', 'user-1', () =>
-      campaignController.listOutreachCampaigns({ url: '/lead-machine/outreach/campaigns' } as never, reply() as never));
+      campaignController.listOutreachCampaigns(userReq('/lead-machine/outreach/campaigns') as never, reply() as never));
 
     expect(dbMock.poolExecutions[0]?.sql).toContain('tenant_key = ? AND owner_user_id = ?');
     expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-a', 'user-1']);
@@ -107,7 +107,7 @@ describe('same-tenant owner isolation', () => {
     dbMock.queuePoolExecute([]);
 
     await runWithTenantAndUser('tenant-a', 'user-2', () =>
-      campaignController.listOutreachCampaigns({ url: '/lead-machine/outreach/campaigns' } as never, reply() as never));
+      campaignController.listOutreachCampaigns(userReq('/lead-machine/outreach/campaigns') as never, reply() as never));
 
     expect(dbMock.poolExecutions[0]?.values).toEqual(['tenant-a', 'user-2']);
   });
@@ -117,7 +117,7 @@ describe('same-tenant owner isolation', () => {
 
     await runWithTenantAndUser('tenant-a', 'user-1', () =>
       crmController.listAccountsHandler(
-        { url: '/crm/accounts', query: { limit: 50, offset: 0 } } as never,
+        userReq('/crm/accounts', { query: { limit: 50, offset: 0 } }) as never,
         reply() as never,
       ));
 
@@ -129,7 +129,7 @@ describe('same-tenant owner isolation', () => {
 
     await runWithTenantAndUser('tenant-a', 'user-2', () =>
       crmController.listAccountsHandler(
-        { url: '/crm/accounts', query: { limit: 50, offset: 0 } } as never,
+        userReq('/crm/accounts', { query: { limit: 50, offset: 0 } }) as never,
         reply() as never,
       ));
 
@@ -155,7 +155,7 @@ describe('super-admin user-route owner isolation', () => {
     dbMock.queuePoolExecute([]);
     await runWithTenantAndUser('tenant-a', 'super-admin-1', () =>
       campaignController.listOutreachCampaigns(
-        { ...superAdminReq, url: '/lead-machine/outreach/campaigns' } as never,
+        userReq('/lead-machine/outreach/campaigns', { ...superAdminReq }) as never,
         reply() as never,
       ));
     expect(dbMock.poolExecutions[0]?.sql).toContain('tenant_key = ? AND owner_user_id = ?');
@@ -165,7 +165,7 @@ describe('super-admin user-route owner isolation', () => {
     dbMock.queuePoolExecute([]);
     await runWithTenantAndUser('tenant-a', 'super-admin-1', () =>
       crmController.listAccountsHandler(
-        { ...superAdminReq, url: '/crm/accounts', query: { limit: 50, offset: 0 } } as never,
+        userReq('/crm/accounts', { ...superAdminReq, query: { limit: 50, offset: 0 } }) as never,
         reply() as never,
       ));
     expect(dbMock.poolExecutions[0]?.sql).toContain('tenant_key = ? AND owner_user_id = ?');

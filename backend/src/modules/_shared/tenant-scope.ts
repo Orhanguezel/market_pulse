@@ -84,12 +84,28 @@ export function andTenantOwner(
 }
 
 /**
- * Request URL'ine gore owner scope cozer: `/admin/` iceren yollar tenant-geneli gorur
- * (null), diger (kullanici) yollar aktif kullaniciyla sinirlanir.
+ * @deprecated GUVENLIK: req.url query string'i saldirgan kontrolunde — `?x=/admin/`
+ * ekleyerek owner filtresi bypass edilebiliyordu. `ownerScopeForRequest` kullan.
  */
 export function ownerScopeForUrl(url: string | undefined): string | null {
   if (url && url.includes('/admin/')) return null;
   return getActiveUserId() ?? null;
+}
+
+/**
+ * Owner scope'u route KAYDINDAKI bayraktan cozer (spoof edilemez).
+ * `config.ownerScope === 'user'` (veya lead-machine icin `leadMachineScope === 'user'`)
+ * => aktif kullaniciyla sinirla; aksi halde tenant-geneli (admin) => null.
+ * req.url'e ASLA bakma: query string saldirgan kontrolunde.
+ */
+export function ownerScopeForRequest(req: {
+  routeOptions?: { config?: { ownerScope?: 'user' | 'admin'; leadMachineScope?: 'user' | 'admin' | 'public' } };
+}): string | null {
+  const cfg = req.routeOptions?.config;
+  const isUser = cfg?.ownerScope === 'user' || cfg?.leadMachineScope === 'user';
+  // Fail-closed: user scope'ta owner ZORUNLU (getRequiredUserId ctx yoksa 401 firlatir).
+  // Boylece null owner ile filtre sessizce dusup tenant-geneli veri donmesi imkansiz.
+  return isUser ? getRequiredUserId() : null;
 }
 
 export function tenantWhereSql(alias?: string): string {

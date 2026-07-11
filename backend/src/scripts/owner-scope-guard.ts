@@ -25,6 +25,10 @@ const ownerScopedTables = [
   'crm_activities',
   'crm_tasks',
   'crm_reminders',
+  'crm_products',
+  'crm_quotes',
+  'crm_orders',
+  'crm_documents',
 ];
 
 function walk(dir: string): string[] {

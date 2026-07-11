@@ -33,7 +33,7 @@ function jobRow(id: string) {
     params: '{"keyword":"oto aksesuar"}',
     result_count: 0,
     error_msg: null,
-    created_by: null,
+    owner_user_id: null,
     created_at: '2026-06-02',
     started_at: null,
     finished_at: null,

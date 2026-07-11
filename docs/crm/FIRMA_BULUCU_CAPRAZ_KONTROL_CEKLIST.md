@@ -44,6 +44,8 @@ Düzeltme: guard'a `config: { leadMachineScope: 'user' }`. Ayrıca **nöbetçi t
 
 ## ✅ ICP turu (2026-07-11, ikinci tur)
 
+- [x] **Tarama İşleri silme akışı eklendi.** Kullanıcı yalnızca kendisine ait tamamlanmış/hatalı işleri silebilir; aktif işler `409 job_active` ile korunur. Transaction, işe bağlı aday/enrichment/outreach, Amazon analiz ve karar-verici sonuçlarını birlikte temizler. — `deleteSearchJob`, `DELETE /lead-machine/jobs/:id`, `firma-bulucu/jobs`
+
 - [x] **ICP silme sessizce başarısız oluyordu.** Backend, ICP'ye bağlı tarama işi varsa `409 ICP_HAS_JOBS` dönüyor; frontend `remove()` try/catch içermediği için kullanıcı hiçbir geri bildirim almıyordu (buton çalışmıyor gibi görünüyordu). Artık hata gösteriliyor ve **"yine de sil"** onayı sunuluyor: işler/adaylar ICP'den koparılır (`icp_id = NULL`, geçmiş korunur), profile ait dışlama kuralları silinir. — `icp.repository.ts`, `controller.ts` (`?force=true`), `icp/page.tsx`
 - [x] **Hazır ICP şablonları eklendi** — `frontend/.../firma-bulucu/icp/icp-templates.ts`. Tek tıkla profil oluşturur; yeni şablon eklemek için diziye satır yazmak yeterli.
   - **Avrasya Paspas Otomotiv San. ve Tic. Ltd. Şti. (marka: ProMats)** — Automechanika 2026 oto aksesuar alıcısı ICP'si (host firma + fuar/stand bilgisi 3.1 D11, öncelikli ülkeler, hariç ülkeler/kalıplar, sinyaller, skor eşikleri). Kaynak: [AUTOMECHANIKA_2026_CEKLIST.md](../AUTOMECHANIKA_2026_CEKLIST.md) + seed `018_lead_machine_schema.sql`.
@@ -86,10 +88,10 @@ Doğrulama: `frontend` typecheck temiz; `backend` build temiz; lead-machine test
 
 ## 🟡 Orta — tutarlılık / kalite
 
-- [ ] **F9. `adaylar` kanal filtresi** `amazon` ve `decision_maker` seçeneklerini listeliyor ama bu sayfaya o kanallardan aday akışı yok; admin filtresinde ise `trade_fair_in_person`/`decision_maker` hiç yok. Kanal listeleri tek kaynaktan türetilmeli.
+- [x] **F9. Kanal filtresi paritesi.** Amazon işleri aday üretiyor, karar-verici sonuçları promote akışıyla adaylara geliyor; admin filtresine `trade_fair_in_person` ve `decision_maker` eklendi ve kanal union'ları aynı yedi değere hizalandı.
 - [x] **F10. `LeadScanRule` şema belirsizliği:** UI `rule.value ?? rule.pattern` okuyor — tip iki alanı da içeriyor; backend kontratı netleştirilmeli. (`lead-machine.types.ts:50-60`)
 - [x] **F11. Tarama formu varsayılanları** ("automotive accessories distributor", "Automechanika Frankfurt") Avrasya'ya özgü — tenant-bağımsız SaaS'ta boş/tenant-config'ten gelmeli.
-- [ ] **A6. Ölü kod:** `startGenericFairRunner`/`POST /fair/run` admin UI'da kullanılmıyor; `onCreateRule` prop'u CandidateCard'da hiç çağrılmıyor; `/outreach` ve `/outreach/drafts` aynı paneli render ediyor.
+- [x] **A6. Ölü kod:** kullanılmayan generic fair mutation/handler/route kaldırıldı, kullanılmayan CandidateCard prop'u kaldırıldı ve `/outreach` canonical `/outreach/drafts` route'una yönlendirildi.
 - [x] **A7. `compositeOf` 0 skoru "yetersiz veri" sayıyor** (GUVENLI kararı hariç) — meşru 0 skor gizlenebilir. (`lead-candidates-panel.tsx:104`)
 - [x] **A8. Amazon rescore endpoint'i frontend'de admin path'ine işaret ediyor:** `amazon_scan.endpoints.ts:106` `/lead-machine/amazon/jobs/:id/rescore` çağırıyor; bu route user scope'ta yok (Amazon lead-machine admin-only). Kullanılıyorsa 404/401 alır — user-side eklenmeli ya da UI'dan kaldırılmalı.
 
@@ -98,8 +100,8 @@ Doğrulama: `frontend` typecheck temiz; `backend` build temiz; lead-machine test
 - [x] **D1. `scraper-callback` tenant'ı istek gövdesinden alıyor** (`body.tenant_key`, yalnızca regex ile doğrulanıyor). Gerçek tenant allowlist kontrolü eklenmeli. (`controller.ts:90-92,233-234`)
 - [x] **D2. İmza doğrulaması re-serialize edilmiş body üzerinde:** `JSON.stringify(req.body)` Python'un `sort_keys+compact` çıktısıyla bayt-bazında farklılaşabilir (ör. float gösterimi) → geçerli imzalar reddedilebilir. Fastify raw-body ile orijinal gövde doğrulanmalı. (`controller.ts:191-192`)
 - [x] **D3. URL-string tabanlı yetki ayrımı kırılgan:** `isUserRoute = !url.includes('/admin/')` ile owner-scope belirleniyor; mount/rewrite değişiminde sessizce tenant-geneli veri sızdırabilir. Route kaydında açık bayrak taşınmalı. (`controller.ts:94-100`, `decision-maker/router.ts:311,323`)
-- [ ] **D4. `lead_search_jobs` sahiplik kolonu `created_by`,** diğer tablolar `owner_user_id` — adlandırma tutarsızlığı; fresh-seed şemasında hizalanmalı (ALTER değil, seed SQL güncellemesi + `db:seed:*:fresh`).
-- [ ] **D5. Konşimento veri gölü deploy koşulu:** `customs_records` gzltek VPS'te dolu (≈16.15M kayıt); başka tenant deploy'unda tablo boşsa gümrük araması 0 sonuç döner. Tenant kurulumlarında veri senkron/erişim stratejisi (paylaşımlı lake) netleştirilmeli.
+- [x] **D4. `lead_search_jobs` sahiplik kolonu** fresh-seed şemasında ve uygulama kontratlarında `owner_user_id` olarak hizalandı; ALTER eklenmedi.
+- [x] **D5. Konşimento veri gölü deploy koşulu:** paylaşımlı global lake stratejisi deploy planına yazıldı; `customs:lake:check` preflight'ı minimum kayıt eşiğinin altında deploy'u başarısız yapar.
 - [x] **D6. Tam-paket testte mock sızıntısı (ön-mevcut):** `bun test src/modules/lead-machine` 3 fail / 2 error veriyor (`siteSettings.getGoogleSettings` export bulunamıyor); dosyalar tek tek çalıştırıldığında geçiyor. Test izolasyonu düzeltilmeli.
 
 ## Sonraki adım önerisi (Codex görev sırası)

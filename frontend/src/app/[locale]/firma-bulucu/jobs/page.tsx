@@ -3,19 +3,22 @@
 import * as React from 'react';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
-import { AlertTriangle, CheckCircle2, ExternalLink, Loader2, PlayCircle, RefreshCw, Search } from 'lucide-react';
+import { AlertTriangle, CheckCircle2, ExternalLink, Loader2, PlayCircle, RefreshCw, Search, Trash2 } from 'lucide-react';
 import { useJobPolling } from '@/hooks/useJobPolling';
 import {
   useGetB2bLeadJobQuery,
   useGetCustomsLeadJobQuery,
   useGetFairLeadJobQuery,
   useGetAmazonLeadJobQuery,
+  useDeleteLeadJobMutation,
   useListB2bLeadJobsQuery,
   useListCustomsLeadJobsQuery,
   useListFairLeadJobsQuery,
   useListAmazonLeadJobsQuery,
 } from '@/integrations/rtk/hooks';
 import type { LeadChannel, LeadSearchJob } from '@/integrations/shared/lead-machine.types';
+import { ConfirmDeleteDialog } from '@/components/iy/ConfirmDeleteDialog';
+import { toast } from 'sonner';
 
 const CHANNEL_LABELS: Record<string, string> = {
   b2b_directory: 'B2B',
@@ -100,6 +103,8 @@ export default function FirmaBulucuJobsPage() {
   const params = useParams<{ locale: string }>();
   const locale = params.locale || 'tr';
   const [channel, setChannel] = React.useState<LeadChannel | 'all'>('all');
+  const [deleteJob, deleteState] = useDeleteLeadJobMutation();
+  const [jobToDelete, setJobToDelete] = React.useState<LeadSearchJob | null>(null);
   const b2b = useListB2bLeadJobsQuery(undefined, { pollingInterval: 10000 });
   const fair = useListFairLeadJobsQuery(undefined, { pollingInterval: 10000 });
   const customs = useListCustomsLeadJobsQuery(undefined, { pollingInterval: 10000 });
@@ -123,6 +128,20 @@ export default function FirmaBulucuJobsPage() {
   const isError = b2b.isError || fair.isError || customs.isError || amazon.isError;
   const isFetching = b2b.isFetching || fair.isFetching || customs.isFetching || amazon.isFetching;
   const activeCount = jobs.filter((job) => isActive(job.status)).length;
+
+  const removeJob = async () => {
+    if (!jobToDelete) return;
+    try {
+      await deleteJob(jobToDelete.id).unwrap();
+      toast.success('Tarama işi ve bağlı sonuçları silindi');
+      setJobToDelete(null);
+      refetchAll();
+    } catch (error) {
+      const status = (error as { status?: number })?.status;
+      toast.error(status === 409 ? 'Çalışan tarama işi silinemez. Tamamlanmasını bekleyin.' : 'Tarama işi silinemedi');
+      throw error;
+    }
+  };
 
   return (
     <div className="space-y-5">
@@ -195,13 +214,27 @@ export default function FirmaBulucuJobsPage() {
                 <div>{formatDate(job.started_at ?? job.created_at)}</div>
                 {job.finished_at && <div className="mt-1">Bitiş: {formatDate(job.finished_at)}</div>}
               </div>
-              <Link href={`/${locale}/firma-bulucu/adaylar?channel=${job.channel}&job_id=${job.id}`} className="inline-flex h-8 items-center justify-center gap-1.5 rounded-md border border-[#1e40af] px-2.5 text-[12px] font-semibold text-[#1e40af]">
-                <ExternalLink className="h-3.5 w-3.5" /> Adaylar
-              </Link>
+              <div className="flex items-center gap-2">
+                <Link href={`/${locale}/firma-bulucu/adaylar?channel=${job.channel}&job_id=${job.id}`} className="inline-flex h-8 items-center justify-center gap-1.5 rounded-md border border-[#1e40af] px-2.5 text-[12px] font-semibold text-[#1e40af]">
+                  <ExternalLink className="h-3.5 w-3.5" /> Adaylar
+                </Link>
+                <button type="button" disabled={isActive(job.status) || deleteState.isLoading} onClick={() => setJobToDelete(job)} title={isActive(job.status) ? 'Aktif işler silinemez' : 'Tarama işini sil'} className="inline-flex h-8 w-8 items-center justify-center rounded-md border border-rose-200 text-rose-700 hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-35" aria-label={`${CHANNEL_LABELS[job.channel] ?? job.channel} taramasını sil`}>
+                  <Trash2 className="h-3.5 w-3.5" />
+                </button>
+              </div>
             </div>
           ))}
         </div>
       )}
+      <ConfirmDeleteDialog
+        open={Boolean(jobToDelete)}
+        onOpenChange={(open) => { if (!open) setJobToDelete(null); }}
+        isDeleting={deleteState.isLoading}
+        notify={false}
+        title="Tarama işini sil"
+        description="Tarama işi, bu işe bağlı adaylar ve analiz sonuçları kalıcı olarak silinecek. Bu işlem geri alınamaz."
+        onConfirm={removeJob}
+      />
     </div>
   );
 }
