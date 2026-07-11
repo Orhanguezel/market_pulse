@@ -326,7 +326,8 @@ export const updateIcp: RouteHandler<{ Params: { id: string }; Body: unknown }> 
 export const deleteIcp: RouteHandler<{ Params: { id: string }; Querystring: { force?: string } }> = async (req, reply) => {
   const force = req.query?.force === 'true' || req.query?.force === '1';
   try {
-    await deleteIcpProfile(req.params.id, ownerUserIdForRoute(req), force);
+    const deleted = await deleteIcpProfile(req.params.id, ownerUserIdForRoute(req), force);
+    if (!deleted) return reply.code(404).send({ error: { message: 'not_found' } });
     return reply.code(204).send();
   } catch (e) {
     if (e instanceof Error && 'statusCode' in e) return reply.code(Number((e as Error & { statusCode: number }).statusCode)).send({ error: { message: e.message } });

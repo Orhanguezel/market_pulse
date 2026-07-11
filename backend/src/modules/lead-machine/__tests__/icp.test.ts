@@ -144,16 +144,29 @@ describe('lead machine icp repository', () => {
   });
 
   test('deletes a profile when it has no jobs', async () => {
+    dbMock.queuePoolExecute([{ id: 'icp-1' }]);
     dbMock.queuePoolExecute([]);
 
-    await icpRepo.deleteIcpProfile('icp-1');
+    expect(await icpRepo.deleteIcpProfile('icp-1')).toBe(true);
 
-    expect(dbMock.poolExecutions[0]?.sql).toStartWith('SELECT id FROM lead_search_jobs');
-    expect(dbMock.poolExecutions[1]?.sql).toBe('DELETE FROM icp_profiles WHERE tenant_key = ? AND id = ?');
-    expect(dbMock.poolExecutions[1]?.values).toEqual(['avrasya', 'icp-1']);
+    expect(dbMock.poolExecutions[0]?.sql).toStartWith('SELECT id FROM icp_profiles');
+    expect(dbMock.poolExecutions[1]?.sql).toStartWith('SELECT id FROM lead_search_jobs');
+    expect(dbMock.poolExecutions[2]?.sql).toBe('DELETE FROM icp_profiles WHERE tenant_key = ? AND id = ?');
+    expect(dbMock.poolExecutions[2]?.values).toEqual(['avrasya', 'icp-1']);
+  });
+
+  test('does not delete a profile owned by another user', async () => {
+    dbMock.queuePoolExecute([]);
+
+    const deleted = await runWithTenantAndUser('avrasya', 'user-a', () => icpRepo.deleteIcpProfile('icp-1', 'user-a', true));
+
+    expect(deleted).toBe(false);
+    expect(dbMock.poolExecutions).toHaveLength(1);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'icp-1', 'user-a']);
   });
 
   test('rejects deleting a profile that has jobs', async () => {
+    dbMock.queuePoolExecute([{ id: 'icp-1' }]);
     dbMock.queuePoolExecute([{ id: 'job-1' }]);
 
     await expect(icpRepo.deleteIcpProfile('icp-1')).rejects.toMatchObject({

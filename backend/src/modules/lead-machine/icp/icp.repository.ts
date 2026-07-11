@@ -80,26 +80,31 @@ export async function updateIcpProfile(id: string, data: { name?: string; defini
  * force=true ise isler/adaylar/kurallar ICP'den koparilir (icp_id = NULL) ve
  * profil silinir — gecmis job kayitlari korunur, sadece ICP referansi dusar.
  */
-export async function deleteIcpProfile(id: string, ownerUserId?: string | null, force = false) {
+export async function deleteIcpProfile(id: string, ownerUserId?: string | null, force = false): Promise<boolean> {
   const tenantKey = await getActiveTenantKey();
-  const [jobs] = await pool.execute('SELECT id FROM lead_search_jobs WHERE tenant_key = ? AND icp_id = ? LIMIT 1', [tenantKey, id]);
+  const ownerAnd = ownerUserId ? ' AND owner_user_id = ?' : '';
+  const scopeValues = ownerUserId ? [tenantKey, id, ownerUserId] : [tenantKey, id];
+  const [profiles] = await pool.execute(`SELECT id FROM icp_profiles WHERE tenant_key = ? AND id = ?${ownerAnd} LIMIT 1`, scopeValues);
+  if (!(profiles as unknown[]).length) return false;
+
+  const [jobs] = await pool.execute(`SELECT id FROM lead_search_jobs WHERE tenant_key = ? AND icp_id = ?${ownerAnd} LIMIT 1`, scopeValues);
   if ((jobs as unknown[]).length && !force) {
     const err = new Error('ICP_HAS_JOBS');
     (err as Error & { statusCode: number }).statusCode = 409;
     throw err;
   }
-  const ownerAnd = ownerUserId ? ' AND owner_user_id = ?' : '';
-  const values = ownerUserId ? [tenantKey, id, ownerUserId] : [tenantKey, id];
   const connection = await pool.getConnection();
   try {
     await connection.beginTransaction();
     if (force) {
-      await connection.execute('UPDATE lead_search_jobs SET icp_id = NULL WHERE tenant_key = ? AND icp_id = ?', [tenantKey, id]);
-      await connection.execute('UPDATE lead_candidates SET icp_id = NULL WHERE tenant_key = ? AND icp_id = ?', [tenantKey, id]);
-      await connection.execute('DELETE FROM lead_scan_rules WHERE tenant_key = ? AND icp_id = ?', [tenantKey, id]);
+      await connection.execute(`UPDATE lead_search_jobs SET icp_id = NULL WHERE tenant_key = ? AND icp_id = ?${ownerAnd}`, scopeValues);
+      await connection.execute(`UPDATE lead_candidates SET icp_id = NULL WHERE tenant_key = ? AND icp_id = ?${ownerAnd}`, scopeValues);
+      await connection.execute(`DELETE FROM lead_scan_rules WHERE tenant_key = ? AND icp_id = ?${ownerAnd}`, scopeValues);
     }
-    await connection.execute(`DELETE FROM icp_profiles WHERE tenant_key = ? AND id = ?${ownerAnd}`, values);
+    const [result] = await connection.execute(`DELETE FROM icp_profiles WHERE tenant_key = ? AND id = ?${ownerAnd}`, scopeValues);
+    if (Number((result as { affectedRows?: number }).affectedRows ?? 0) !== 1) throw new Error('ICP_DELETE_FAILED');
     await connection.commit();
+    return true;
   } catch (error) {
     await connection.rollback();
     throw error;

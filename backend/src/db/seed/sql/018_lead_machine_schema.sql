@@ -284,32 +284,6 @@ CREATE TABLE IF NOT EXISTS `lead_scan_rules` (
   UNIQUE KEY `uq_scan_rule` (`tenant_key`, `icp_id`, `channel`, `value`(100))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Gzltek başlangıç profili: frontend'e gömülü örnek değildir; tenant + owner bağlı DB kaydıdır.
-INSERT INTO `icp_profiles` (`id`, `tenant_key`, `owner_user_id`, `name`, `is_active`, `definition`) VALUES (
-  '62f529e4-708c-43f1-bf2e-97e506339d31',
-  'gzltek',
-  '{{ADMIN_ID}}',
-  'Oto Aksesuar Distribütörü — Avrupa',
-  1,
-  JSON_OBJECT(
-    'sectors',          JSON_ARRAY('automotive accessories', 'car care', 'floor mats'),
-    'firm_types',       JSON_ARRAY('distributor', 'importer', 'wholesaler', 'e-commerce seller'),
-    'geographies',      JSON_ARRAY('DE', 'AT', 'NL', 'PL', 'CZ', 'FR', 'IT', 'ES'),
-    'sales_types',      JSON_ARRAY('B2B', 'B2C'),
-    'sales_channels',   JSON_ARRAY('own website', 'amazon', 'ebay', 'wholesale'),
-    'price_segment',    'mid',
-    'exclude_patterns', JSON_ARRAY(),
-    'min_lead_score_for_candidate', 5.0,
-    'auto_approve_threshold', 7.0
-  )
-)
-ON DUPLICATE KEY UPDATE
-  `tenant_key` = VALUES(`tenant_key`),
-  `owner_user_id` = VALUES(`owner_user_id`),
-  `name` = VALUES(`name`),
-  `is_active` = VALUES(`is_active`),
-  `definition` = VALUES(`definition`);
-
 -- Automechanika 2026 — Avrasya/ProMats kalibre ICP v2.
 -- Bu profil yalnızca avrasya tenant'ında ve seed admin hesabında görünür.
 INSERT INTO `icp_profiles` (`id`, `tenant_key`, `owner_user_id`, `name`, `is_active`, `definition`) VALUES (
