@@ -3,7 +3,7 @@ import { getActiveTenantKey, getActiveUserId } from '@/modules/_shared';
 import { pool } from '@/db/client';
 import { insertCandidate, updateSearchJob, getSearchJob } from '../_shared/db';
 import { matchesIcp } from '../b2b/icp.matcher';
-import { scrapeExhibitorDetail, scrapeOfficialExhibitorList, type RawExhibitor } from './fair.scraper';
+import { isMesseFrankfurtUrl, scrapeExhibitorDetail, scrapeOfficialExhibitorList, type RawExhibitor } from './fair.scraper';
 import { isNeighborBooth, parseBooth } from './booth';
 import { buildSummary, classifyMail, computeKeywordOverlap, computeScore, recommend } from './enrichment';
 
@@ -104,6 +104,10 @@ export async function runFairJob(jobId: string) {
       maxExhibitors: params.max_exhibitors,
     });
     const detailConcurrency = Math.min(2, Math.max(1, Math.floor(params.detail_concurrency ?? 2)));
+    // Messe public search API zaten e-posta, telefon, website, salon/stand,
+    // aciklama ve urun etiketlerini dondurur. Her katilimcinin HTML detayini
+    // tekrar scrape etmek hem gereksiz hem de scraper rate limitini tetikler.
+    const listDataIsComplete = isMesseFrankfurtUrl(params.fair_url ?? '');
     const detailErrors: Array<{ url: string; name: string; error: string }> = [];
     let count = existing.length;
 
@@ -198,7 +202,7 @@ export async function runFairJob(jobId: string) {
       const normalizedName = listedExhibitor.name.trim().toLocaleLowerCase('en');
       if ((detailUrl && existingDetailUrls.has(detailUrl)) || existingNames.has(normalizedName)) return;
       let enriched: RawExhibitor = listedExhibitor;
-      if (detailUrl) {
+      if (detailUrl && !listDataIsComplete) {
         try {
           const detail = await scrapeExhibitorDetail(detailUrl);
           enriched = {
