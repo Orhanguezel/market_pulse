@@ -14,9 +14,20 @@ Amaç: Admin paneldeki firma bulucu sistemi (fuar / B2B: Google Maps–Europages
 | Amazon | ✅ (developerOnly sayfa) | ✅ tarama → `/amazon` sayfası | ✅ public-api `authed /amazon/scan` |
 | Karar verici | ✅ `decision-makers` | ✅ `karar-vericiler` | ✅ tam parite + günlük kota |
 | Aday inceleme/onay | ✅ candidates panel | ✅ `adaylar` + `fuar-gunu` | ✅ |
-| ICP profilleri | ✅ zengin form (v3 alanları) | ⚠️ ham JSON textarea | ✅ CRUD |
+| ICP profilleri | ✅ zengin form (v3 alanları) | ✅ yapılandırılmış form + hazır şablonlar | ✅ CRUD (+ zorla sil) |
 
-## ✅ Bu turda yapılan düzeltmeler
+## ✅ ICP turu (2026-07-11, ikinci tur)
+
+- [x] **ICP silme sessizce başarısız oluyordu.** Backend, ICP'ye bağlı tarama işi varsa `409 ICP_HAS_JOBS` dönüyor; frontend `remove()` try/catch içermediği için kullanıcı hiçbir geri bildirim almıyordu (buton çalışmıyor gibi görünüyordu). Artık hata gösteriliyor ve **"yine de sil"** onayı sunuluyor: işler/adaylar ICP'den koparılır (`icp_id = NULL`, geçmiş korunur), profile ait dışlama kuralları silinir. — `icp.repository.ts`, `controller.ts` (`?force=true`), `icp/page.tsx`
+- [x] **Hazır ICP şablonları eklendi** — `frontend/.../firma-bulucu/icp/icp-templates.ts`. Tek tıkla profil oluşturur; yeni şablon eklemek için diziye satır yazmak yeterli.
+  - **Avrasya Paspas Otomotiv San. ve Tic. Ltd. Şti. (marka: ProMats)** — Automechanika 2026 oto aksesuar alıcısı ICP'si (host firma + fuar/stand bilgisi 3.1 D11, öncelikli ülkeler, hariç ülkeler/kalıplar, sinyaller, skor eşikleri). Kaynak: [AUTOMECHANIKA_2026_CEKLIST.md](../AUTOMECHANIKA_2026_CEKLIST.md) + seed `018_lead_machine_schema.sql`.
+  - "Oto Aksesuar Distribütörü — Avrupa" ve "Genel B2B İthalatçı (boş taslak)".
+- [x] **Formda eksik olan ama eşleştiricinin okuduğu 3 alan eklendi:** `priority_geographies`, `exclude_geographies`, `sales_channels` — `b2b/icp.matcher.ts` bu alanları skorlamada kullanıyor, formda bulunmadığı için elle ayarlanamıyordu.
+- [x] **Codex'in yarım kalan owner-scope refactor'ü tamamlandı** (D3 maddesi): `ownerUserIdForRoute` artık `req.routeOptions.config.leadMachineScope` bayrağını okuyor; 21 çağrı hâlâ `req.url` geçirdiği için backend derlenmiyordu. Bayrak yoksa admin/tenant-geneli kabul edilir.
+
+> ⚠️ **Canlıda profil listesi neden boş görünüyor:** Seed'lenen ICP'ler (`018_lead_machine_schema.sql`) `owner_user_id = NULL` ve `tenant_key = 'avrasya'` ile yazılıyor. User route'u `owner_user_id = <giriş yapan kullanıcı>` filtresi uyguladığı için bu kayıtlar dashboard'da **görünmez**. Kullanıcının kendi profilini oluşturması gerekir — hazır şablonlar tam da bunu tek tıkla çözer. Kalıcı çözüm için D4 (sahiplik kolonu hizalama) ve seed'lerin tenant/owner ile yazılması ele alınmalı.
+
+## ✅ Birinci turda yapılan düzeltmeler
 
 - [x] **Konşimento (gümrük) araması frontend'de aktifleştirildi** — `frontend/src/app/[locale]/firma-bulucu/tarama/page.tsx`
   - Kök neden: form `buyer_country` için zorunlu ülke gönderiyordu (varsayılan `DE`, "Tümü" yoktu). Gümrük gölü ağırlıklı TR/USA/RU/UA alıcı içerdiğinden aramalar hep 0 sonuç dönüyor, özellik "çalışmıyor" görünüyordu.
