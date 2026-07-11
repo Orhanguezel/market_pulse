@@ -7,7 +7,7 @@
 > **Müşteri dosyası:** [docs/musteri/avrasya-paspas-automechanika.md](docs/musteri/avrasya-paspas-automechanika.md)
 > **Teknik detay çeklist:** [docs/teknik/FAIR_MODULU_CEKLISTI.md](docs/teknik/FAIR_MODULU_CEKLISTI.md)
 > **Üst plan:** [docs/strateji/MARKET_PULSE_SAAS_PLANI.md](docs/strateji/MARKET_PULSE_SAAS_PLANI.md)
-> **Son güncelleme:** 2026-07-11
+> **Son güncelleme:** 2026-07-11 — Gzltek/Orhanguzell canlı ICP v3 doğrulandı
 
 ---
 
@@ -30,7 +30,7 @@ Bu bölüm Automechanika ICP'sinin kullanıcı dashboard'una alınması için g�
 
 | Kayıt | Tenant | Owner | Görünürlük |
 |---|---|---|---|
-| Gzltek genel oto aksesuar ICP | `gzltek` | seed admin (`{{ADMIN_ID}}`) | Yalnız aynı tenant + aynı kullanıcı |
+| Orhanguzell Automechanika v3 | `gzltek` | Orhanguzell (`4f618a8d-6fdb-498c-898a-395d368b2193`) | Yalnız Gzltek tenant + aynı kullanıcı |
 | Avrasya ProMats Automechanika v2 | `avrasya` | seed admin (`{{ADMIN_ID}}`) | Yalnız aynı tenant + aynı kullanıcı |
 | Kullanıcının panelden oluşturduğu ICP | aktif tenant | oturumdaki kullanıcı | Yalnız oluşturan kullanıcı; admin aynı tenant genelini yönetebilir |
 
@@ -40,7 +40,21 @@ Bu bölüm Automechanika ICP'sinin kullanıcı dashboard'una alınması için g�
 - [x] B2B ve fuar background job'ları ICP'yi `tenant_key + owner_user_id` ile yeniden okuyor.
 - [x] Frontend'e gömülü “Hazır şablonlar” kaldırıldı; görünen profiller yalnız API/veritabanı kayıtlarıdır.
 - [x] Tarama ekranındaki ham JSON kaldırıldı; sektör, firma tipi, öncelikli ülkeler ve profil versiyonu okunabilir etiketlerle gösteriliyor.
-- [x] Seed kayıtları deterministik UUID ve `ON DUPLICATE KEY UPDATE` ile idempotent hale getirildi; her deploy'da kopya profil oluşmuyor.
+- [x] Gzltek kullanıcı ICP'leri normal deploy seed'inden çıkarıldı; silinen kullanıcı profili sonraki deploy'da yeniden oluşmuyor.
+
+### Gzltek / Orhanguzell canlı kabulü
+
+- [x] Canlı profil güncellendi: `Orhanguzell — Automechanika Frankfurt 2026 Alıcı ICP`.
+- [x] Profil UUID: `6f1d8409-009c-4718-8826-0cd678d81f3d`.
+- [x] DB doğrulandı: `tenant_key=gzltek`, `owner_user_id=4f618a8d-6fdb-498c-898a-395d368b2193`, `version=3`.
+- [x] Profil API üzerinden kullanıcı hesabına kaydedildi; frontend sabiti veya geçici örnek değildir.
+- [x] Hedef hall'lar `3.0, 3.1, 4.0`; pilot dışı Hall `8.0` hariç tutuldu.
+- [x] Pilot ülkeler `DE, AT, NL, PL, FR`; geniş ikincil Avrupa listesi ayrıca tanımlandı.
+- [x] B2B, Amazon, fuar ve gümrük otomatik alanları tanımlandı: arama sorguları, `amazon.de`, ürün sorgusu, `4016.91/5703` HS kodları.
+- [x] Rakip üretici, tek marka bayi, OEM tier-1, hammadde/kalıp tedarikçisi ve ilgisiz ürün kategorileri dışlandı.
+- [x] Aday eşiği `5.5`, otomatik onay önerisi `7.0`, öncelikli ülke bonusu `1.0`, komşu stand bonusu `0.5`.
+- [x] Canlı scraper health: API `ok`, Redis `ok`, browser havuzu `configured`.
+- [x] Owner/tenant repository testleri ve fair/ICP matcher testleri yeşil.
 
 ### Avrasya ICP v2 kapsamı
 
@@ -163,13 +177,13 @@ Sprint 1 → Sprint 3 Codex iş paketi: **[docs/teknik/SPRINT_1_TAM_TARAMA_IS_PA
 
 ### Sprint 0 çıkışı
 
-- [ ] **🧠 Claude** — Sprint 0 retrospektif: bu belgenin "Onaylanmış Kararlar" tablosunu güncelle, Sprint 1 hedeflerini netleştir
+- [x] **⚙️ Codex** — Sprint 0 teknik retrospektif tamamlandı: Messe API yolu, detail extractor, owner-scoped ICP v3, pilot hall seti ve Sprint 1 hedefleri bu belgede güncellendi. Avrasya insan/onay maddeleri ayrıca açık bırakıldı.
 
 ---
 
 ## Sprint 1 — Tam Tarama (Hafta 3-4: 2026-06-04 → 06-18)
 
-- [ ] **🧠 Claude** — Tarama kapsamı kararı: hangi hall'lar (3.0/3.1/4.0 dışında 8.0 customising hall'u dahil mi?), hangi keyword filtreleri
+- [x] **⚙️ Codex** — Pilot tarama kapsamı kararı: Hall `3.0, 3.1, 4.0`; Hall `8.0` ilk pilotta hariç. Ana sorgular: automotive floor mats distributor, car mats importer, boot liner wholesaler, automotive interior accessories distributor, private label car mats.
 - [x] **⚙️ Codex** — Tam exhibitor URL listesini çek (hall filtreli) — Messe public API endpoint'i doğrulandı; `scripts/automechanika-export-exhibitor-urls.sh` eklendi. Varsayılan ICP hall seti `3.0,3.1,4.0` → `429` benzersiz detail URL (`/tmp/automechanika_exhibitors_1779323484/detail-urls.txt`); tüm fuar `HALLS=all` → `2325` benzersiz detail URL (`/tmp/automechanika_exhibitors_1779323574/detail-urls.txt`)
 - [x] **⚙️ Codex** — Paralel detail scrape job'ı (max 5 eşzamanlı, total ~8 saat tarama süresi) — `fair.job.ts` detail aşaması `detail_concurrency` ile max 5 paralel çalışıyor; `fair.scraper.ts` Automechanika için Messe API tam/hall filtreli listeyi kullanıyor. Test: `bun test src/modules/lead-machine/__tests__/fair.test.ts src/modules/lead-machine/__tests__/icp.test.ts` → 20 pass; `bun run build` OK
 - [x] **⚙️ Codex** — ICP filtresinden geçir → `lead_candidates.status='pending'` durumunda DB'de — `runFairJob` detail sonrası `matchesIcp` ile filtreleyip `insertCandidate` çağırıyor; `lead_candidates.status` schema default'u `pending`; fair job testi insert akışını doğruluyor
@@ -195,8 +209,8 @@ Sprint 1 → Sprint 3 Codex iş paketi: **[docs/teknik/SPRINT_1_TAM_TARAMA_IS_PA
 
 ### Karar verici enrichment
 
-- [ ] **🧠 Claude** — Apollo.io hesabı + API key (K-4 bütçesi onaylı, Paspas faturalandırma)
-- [ ] **⚙️ Codex** — `.env`'e `APOLLO_API_KEY` ekle + [backend/src/modules/lead-machine/enrichment/enrichment.service.ts](backend/src/modules/lead-machine/enrichment/enrichment.service.ts) üzerinden onaylı adaylar için karar verici + email çekimi — **key bekliyor:** local `backend/.env` içinde `APOLLO_API_KEY=<empty>`; kod yolu hazır ve Apollo response normalize ediliyor (isim/unvan/email/LinkedIn/telefon), key yoksa scraper fallback çalışıyor. Test: enrichment/controller → 24 pass; backend build OK
+- [x] **🧠 Claude** — Apollo.io ücretli planı **DROP** (K-4 revizyonu): Hunter free + mevcut scraper/LinkedIn manuel fallback kullanılacak; Apollo hesabı/faturalandırması engelleyici değildir.
+- [x] **⚙️ Codex** — Enrichment yolu hazır: Apollo anahtarı varsa provider kullanılabilir; anahtar yokken scraper/Hunter/manuel LinkedIn fallback ile devam eder. Boş `APOLLO_API_KEY` deploy engeli değildir.
 - [x] **⚙️ Codex** — Onaylı aday → enrichment job otomatik tetikleme (event-driven veya cron) — aday `approved`/`favorite` review aldığında veya `approve-to-lead` ile pipeline'a aktarıldığında `enrichCandidate` arka planda tetikleniyor. Test: controller/enrichment/fair → 35 pass; build OK
 - [x] **🧠 Claude** — Apollo hit oranı düşükse (<%50) manuel LinkedIn fallback iş akışı yaz — ✅ **[docs/teknik/apollo-fallback-sop.md](docs/teknik/apollo-fallback-sop.md)** (LinkedIn → Hunter pattern → mail-tester doğrulama; 5 dk/aday; GDPR + KVKK notları)
 
