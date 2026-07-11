@@ -255,6 +255,35 @@ describe('fair lead machine scraper', () => {
     })]);
   });
 
+  test('discovers the official Messe browser public key when env key is absent', async () => {
+    const previousKey = process.env.MESSE_FRANKFURT_API_KEY;
+    delete process.env.MESSE_FRANKFURT_API_KEY;
+    fetchMock
+      .mockImplementationOnce(() => Promise.resolve(new Response(
+        'Object.defineProperty(this,"APIKEY_PUBLIC_PRD",{value:"OfficialBrowserPublicKey12345=="})',
+        { status: 200, headers: { 'content-type': 'application/javascript' } },
+      )))
+      .mockImplementationOnce(() => Promise.resolve(Response.json({
+        success: true,
+        result: { metaData: { hitsTotal: 0 }, hits: [] },
+      })));
+
+    try {
+      const result = await scrapeOfficialExhibitorList(
+        'https://automechanika.messefrankfurt.com/frankfurt/en/exhibitor-search.html',
+        { halls: ['3.1'] },
+      );
+
+      expect(result).toEqual([]);
+      expect(String(fetchMock.mock.calls[0]?.[0])).toBe('https://exhibitorsearch.messefrankfurt.com/assets/main.js');
+      expect(fetchMock.mock.calls[1]?.[1]).toEqual(expect.objectContaining({
+        headers: { apikey: 'OfficialBrowserPublicKey12345==' },
+      }));
+    } finally {
+      if (previousKey) process.env.MESSE_FRANKFURT_API_KEY = previousKey;
+    }
+  });
+
   test('extracts Growtech Swapcard widget exhibitors from embedded Apollo state', async () => {
     const widgetUrl = 'https://visit.growtech.com.tr/widget/event/growtech-antalya-2025/exhibitors/RXZlbnRWaWV3XzEyMDk1Mjk=?paginationMode=infinite&lng=tr-TR';
     const nextData = {

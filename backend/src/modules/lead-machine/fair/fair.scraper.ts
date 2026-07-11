@@ -4,6 +4,9 @@ const MESSE_API_BASE = 'https://api.messefrankfurt.com/service/esb_api';
 const MESSE_EVENT_ID = 'AUTOMECHANIKA';
 const MESSE_DEFAULT_HALLS = ['3.0', '3.1', '4.0'];
 const MESSE_DETAIL_BASE = 'https://automechanika.messefrankfurt.com/frankfurt/en/exhibitor-search.detail.html';
+const MESSE_PUBLIC_APP_BUNDLE = 'https://exhibitorsearch.messefrankfurt.com/assets/main.js';
+const MESSE_PUBLIC_KEY_TTL_MS = 6 * 60 * 60 * 1000;
+let cachedMessePublicKey: { value: string; expiresAt: number } | null = null;
 
 export interface RawExhibitor {
   name:         string;
@@ -164,9 +167,28 @@ function hitToRawExhibitor(hit: MesseHit): RawExhibitor | null {
   };
 }
 
+async function resolveMesseApiKey(): Promise<string> {
+  const configured = process.env.MESSE_FRANKFURT_API_KEY?.trim();
+  if (configured) return configured;
+  if (cachedMessePublicKey && cachedMessePublicKey.expiresAt > Date.now()) return cachedMessePublicKey.value;
+
+  // Messe'nin resmi exhibitor-search uygulamasi browser istemcisi icin production
+  // public key'i kendi JS bundle'inda yayinliyor. Env anahtari olmayan SaaS
+  // tenant'lari da resmi sayfanin kullandigi ayni public erisim yolunu kullanir.
+  const response = await fetch(MESSE_PUBLIC_APP_BUNDLE, {
+    headers: { accept: 'application/javascript,text/javascript;q=0.9,*/*;q=0.1' },
+  });
+  if (!response.ok) throw new Error(`MESSE_PUBLIC_CONFIG_FAILED_${response.status}`);
+  const bundle = await response.text();
+  const match = bundle.match(/APIKEY_PUBLIC_PRD.{0,180}?value:"([A-Za-z0-9+/=]{20,200})"/);
+  const publicKey = match?.[1];
+  if (!publicKey) throw new Error('MESSE_PUBLIC_API_KEY_NOT_FOUND');
+  cachedMessePublicKey = { value: publicKey, expiresAt: Date.now() + MESSE_PUBLIC_KEY_TTL_MS };
+  return publicKey;
+}
+
 async function fetchMessePage(params: { page: number; pageSize: number; hall?: string }): Promise<MesseSearchResponse> {
-  const apiKey = process.env.MESSE_FRANKFURT_API_KEY;
-  if (!apiKey) throw new Error('MESSE_FRANKFURT_API_KEY_NOT_CONFIGURED');
+  const apiKey = await resolveMesseApiKey();
 
   const url = new URL(`${MESSE_API_BASE}/exhibitor-service/api/2.1/public/exhibitor/search`);
   url.searchParams.set('language', 'en-GB');
