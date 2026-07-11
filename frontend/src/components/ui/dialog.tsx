@@ -20,7 +20,7 @@ const DialogOverlay = React.forwardRef<
   <DialogPrimitive.Overlay
     ref={ref}
     className={cn(
-      "modal-backdrop fade show position-fixed top-0 start-0 w-100 h-100 bg-dark bg-opacity-50",
+      "fixed inset-0 z-[10000] bg-slate-950/60 backdrop-blur-[1px] data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0",
       className
     )}
     {...props}
@@ -37,18 +37,18 @@ const DialogContent = React.forwardRef<
     <DialogPrimitive.Content
       ref={ref}
       className={cn(
-        "position-fixed top-50 start-50 translate-middle bg-bg-card border rounded shadow-medium p-4",
-        "z-50",
+        "fixed left-1/2 top-1/2 z-[10001] max-h-[90vh] w-[calc(100%-2rem)] max-w-lg -translate-x-1/2 -translate-y-1/2 overflow-y-auto rounded-xl border border-slate-200 bg-white p-6 text-slate-900 shadow-2xl outline-none",
+        "data-[state=open]:animate-in data-[state=closed]:animate-out data-[state=closed]:fade-out-0 data-[state=open]:fade-in-0 data-[state=closed]:zoom-out-95 data-[state=open]:zoom-in-95",
         className
       )}
       {...props}
     >
       {children}
       <DialogPrimitive.Close
-        className="btn-close position-absolute top-0 end-0 m-3"
-        aria-label="Close"
+        className="absolute right-4 top-4 rounded-md p-1 text-slate-400 transition hover:bg-slate-100 hover:text-slate-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+        aria-label="Kapat"
       >
-        <X className="d-none" />
+        <X className="h-4 w-4" />
       </DialogPrimitive.Close>
     </DialogPrimitive.Content>
   </DialogPortal>
@@ -59,7 +59,7 @@ const DialogHeader = ({
   className,
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
-  <div className={cn("mb-3", className)} {...props} />
+  <div className={cn("mb-4 space-y-1.5", className)} {...props} />
 );
 DialogHeader.displayName = "DialogHeader";
 
@@ -68,7 +68,7 @@ const DialogFooter = ({
   ...props
 }: React.HTMLAttributes<HTMLDivElement>) => (
   <div
-    className={cn("mt-3 d-flex justify-content-end gap-2", className)}
+    className={cn("mt-5 flex flex-col-reverse gap-2 sm:flex-row sm:justify-end", className)}
     {...props}
   />
 );
@@ -80,7 +80,7 @@ const DialogTitle = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Title
     ref={ref}
-    className={cn("h5 mb-2", className)}
+    className={cn("text-lg font-semibold text-slate-950", className)}
     {...props}
   />
 ));
@@ -92,7 +92,7 @@ const DialogDescription = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <DialogPrimitive.Description
     ref={ref}
-    className={cn("small text-muted", className)}
+    className={cn("text-sm text-slate-600", className)}
     {...props}
   />
 ));

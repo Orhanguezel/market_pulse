@@ -93,7 +93,7 @@ export function CrmEntityDialog<T extends FieldValues>({
                   ) : (
                     <Input id={field.name} type={field.type ?? 'text'} placeholder={field.placeholder} {...register} />
                   )}
-                  {typeof error === 'string' && <p className="mb-0 text-[12px] text-danger">{error}</p>}
+                  {typeof error === 'string' && <p className="mb-0 text-[12px] text-rose-600">{error}</p>}
                 </div>
               );
             })}
