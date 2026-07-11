@@ -126,20 +126,40 @@ export default function ProspectListsPage() {
         <span className="text-xs text-slate-400">1. kolon: Firma Adı · 2. kolon: Website (opsiyonel)</span>
       </AppCard>
 
-      <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
-        {/* Listeler */}
+      <div className="space-y-6">
+        {/* Listeler — tam genişlik yatay satırlar */}
         <div className="space-y-2">
           <div className="flex items-center justify-between">
             <h2 className="text-sm font-semibold text-slate-700">Listeler ({lists.length})</h2>
             <button onClick={() => refetchLists()} className="text-slate-400 hover:text-slate-600"><RefreshCcw className="size-3.5" /></button>
           </div>
-          {lists.map((l) => (
-            <button key={l.id} onClick={() => { setActiveId(l.id); setSelected(new Set()); }} className={`w-full rounded-lg border bg-white p-3 text-left transition-colors ${activeId === l.id ? 'border-[#1e40af] bg-[#eff6ff]' : 'border-[#e2e8f0] hover:border-[#93c5fd]'}`}>
-              <div className="truncate text-sm font-medium text-slate-900">{l.name}</div>
-              <div className="mt-1 text-[11px] text-slate-400">{l.total} firma · ücretsiz {l.free_done} · Apollo {l.apollo_done}</div>
-            </button>
-          ))}
-          {!lists.length && <p className="text-xs text-slate-400">Henüz liste yok. Yukarıdan yükle.</p>}
+          <div className="overflow-hidden rounded-lg border border-[#e2e8f0] bg-white">
+            {lists.map((l, i) => {
+              const active = activeId === l.id;
+              return (
+                <button
+                  key={l.id}
+                  onClick={() => { setActiveId(l.id); setSelected(new Set()); }}
+                  className={`flex w-full items-center gap-4 px-4 py-3 text-left transition-colors ${i > 0 ? 'border-t border-[#e2e8f0]' : ''} ${active ? 'bg-[#eff6ff]' : 'hover:bg-[#f8fafc]'}`}
+                >
+                  <span className={`grid size-9 shrink-0 place-items-center rounded-md ${active ? 'bg-[#1e40af] text-white' : 'bg-[#eff6ff] text-[#1e40af]'}`}>
+                    <ListChecks className="size-4" />
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block truncate text-sm font-semibold text-slate-900">{l.name}</span>
+                    <span className="block text-[11px] text-slate-400">Firma listesi</span>
+                  </span>
+                  <span className="hidden shrink-0 items-center gap-4 text-[12px] sm:flex">
+                    <span className="text-slate-600"><b className="text-slate-900">{l.total}</b> firma</span>
+                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 font-medium text-emerald-700">Ücretsiz {l.free_done}</span>
+                    <span className="rounded-full bg-violet-50 px-2 py-0.5 font-medium text-violet-700">Apollo {l.apollo_done}</span>
+                  </span>
+                  <span className={`shrink-0 text-[12px] font-semibold ${active ? 'text-[#1e40af]' : 'text-slate-400'}`}>{active ? 'Seçili' : 'Aç'}</span>
+                </button>
+              );
+            })}
+            {!lists.length && <p className="px-4 py-8 text-center text-xs text-slate-400">Henüz liste yok. Yukarıdan yükle.</p>}
+          </div>
         </div>
 
         {/* Firma tablosu */}
