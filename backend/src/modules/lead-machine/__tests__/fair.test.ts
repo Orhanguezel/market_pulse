@@ -169,6 +169,26 @@ describe('fair lead machine job runner', () => {
 
     expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'FAIR_DOWN', 'job-1', 'avrasya']);
   });
+
+  test('resumes an interrupted fair job without duplicating existing candidates', async () => {
+    dbMock.queuePoolExecute([{
+      id: 'job-resume', channel: 'trade_fair', status: 'running', icp_id: null,
+      params: '{"fair_url":"https://fair.example"}', result_count: 0, error_msg: null,
+      owner_user_id: null, created_at: '2026-05-08', started_at: '2026-05-08', finished_at: null,
+    }]);
+    dbMock.queuePoolExecute([{
+      name: 'Existing Fair Company',
+      detail_url: 'https://fair.example/existing',
+    }]);
+    scrape.mockImplementation(() => Promise.resolve({
+      data: { exhibitors: [{ name: 'Existing Fair Company', source_url: 'https://fair.example/existing' }] },
+    }));
+
+    await runFairJob('job-resume');
+
+    expect(dbMock.poolExecutions.some((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'))).toBe(false);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-resume', 'avrasya']);
+  });
 });
 
 describe('fair lead machine scraper', () => {
