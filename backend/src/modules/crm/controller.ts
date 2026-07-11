@@ -220,7 +220,8 @@ export async function deleteDealHandler(req: FastifyRequest, reply: FastifyReply
 
 export async function listActivitiesHandler(req: FastifyRequest, reply: FastifyReply) {
   const query = listQuerySchema.extend({
-    ref_type: activityBodySchema.shape.ref_type.optional(),
+    // Liste filtresi: enum optional (nullable değil — filtre için null anlamsız).
+    ref_type: z.enum(['deal', 'contact', 'account']).optional(),
     ref_id: idParamsSchema.shape.id.optional(),
   }).safeParse(req.query);
   if (!query.success) return badRequest(reply);

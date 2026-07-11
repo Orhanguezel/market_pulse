@@ -64,8 +64,9 @@ export const dealStageBodySchema = z.object({
 });
 
 export const activityBodySchema = z.object({
-  ref_type: z.enum(['deal', 'contact', 'account']),
-  ref_id: z.string().trim().min(1).max(36),
+  // NULL/boş: müşteriye bağlı olmayan bağımsız (genel) aktivite.
+  ref_type: z.enum(['deal', 'contact', 'account']).nullable().optional(),
+  ref_id: z.string().trim().max(36).nullable().optional(),
   type: z.enum(['call', 'email', 'meeting', 'task', 'note']).default('task'),
   subject: z.string().trim().min(1).max(255),
   body: z.string().trim().nullable().optional(),

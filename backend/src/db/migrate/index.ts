@@ -150,6 +150,28 @@ async function ensureOwnerColumn(conn: mysql.Connection, tableName: string): Pro
   );
 }
 
+/**
+ * crm_activities.ref_type / ref_id NOT NULL kısıtını gevşetir (idempotent):
+ * müşteri/kişi/fırsata bağlı OLMAYAN bağımsız aktivite eklenebilsin diye.
+ */
+async function ensureActivityRefNullable(conn: mysql.Connection): Promise<void> {
+  if (!(await tableExists(conn, 'crm_activities'))) return;
+  const [rows] = await conn.query<mysql.RowDataPacket[]>(
+    `SELECT COLUMN_NAME, IS_NULLABLE FROM information_schema.COLUMNS
+      WHERE TABLE_SCHEMA = DATABASE() AND TABLE_NAME = 'crm_activities'
+        AND COLUMN_NAME IN ('ref_type','ref_id')`,
+  );
+  const notNullable = new Set(
+    rows.filter((r) => String(r.IS_NULLABLE).toUpperCase() === 'NO').map((r) => String(r.COLUMN_NAME)),
+  );
+  if (notNullable.has('ref_type')) {
+    await query(conn, "ALTER TABLE `crm_activities` MODIFY COLUMN `ref_type` ENUM('deal','contact','account') DEFAULT NULL");
+  }
+  if (notNullable.has('ref_id')) {
+    await query(conn, 'ALTER TABLE `crm_activities` MODIFY COLUMN `ref_id` CHAR(36) DEFAULT NULL');
+  }
+}
+
 async function ensureIndex(
   conn: mysql.Connection,
   tableName: string,
@@ -337,6 +359,7 @@ async function main(): Promise<void> {
     await ensureSaasMultitenantTables(conn);
     await ensureProfileSenderColumns(conn);
     await ensureUserMailAccountsTable(conn);
+    await ensureActivityRefNullable(conn);
     await ensureCrmActivityPlanningColumns(conn);
     console.log('[migrate] completed');
   } finally {

@@ -41,6 +41,9 @@ export async function createActivity(body: ActivityBody) {
   const tenantKey = getActiveTenantKey();
   const ownerUserId = getRequiredUserId();
   const id = newId();
+  // Bağımsız aktivite: ref_id yoksa ref_type da null (ikisi birlikte).
+  const refId = body.ref_id && body.ref_id.trim() ? body.ref_id.trim() : null;
+  const refType = refId ? (body.ref_type ?? null) : null;
   await pool.execute(
     `INSERT INTO crm_activities
       (id, tenant_key, ref_type, ref_id, type, subject, body, planned_start_at, due_at, owner_user_id, created_by)
@@ -48,8 +51,8 @@ export async function createActivity(body: ActivityBody) {
     [
       id,
       tenantKey,
-      body.ref_type,
-      body.ref_id,
+      refType,
+      refId,
       body.type,
       body.subject,
       body.body ?? null,

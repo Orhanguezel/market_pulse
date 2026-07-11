@@ -130,8 +130,9 @@ CREATE TABLE IF NOT EXISTS `crm_deals` (
 CREATE TABLE IF NOT EXISTS `crm_activities` (
   `id`            char(36)     NOT NULL,
   `tenant_key`    varchar(64)  NOT NULL,
-  `ref_type`      enum('deal','contact','account') NOT NULL,
-  `ref_id`        char(36)     NOT NULL,
+  -- NULL: müşteri/kişi/fırsata bağlı olmayan bağımsız (genel) aktivite/görev.
+  `ref_type`      enum('deal','contact','account') DEFAULT NULL,
+  `ref_id`        char(36)     DEFAULT NULL,
   `type`          enum('call','email','meeting','task','note') NOT NULL DEFAULT 'task',
   `subject`       varchar(255) NOT NULL,
   `body`          text         DEFAULT NULL,

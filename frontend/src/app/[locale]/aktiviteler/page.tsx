@@ -18,14 +18,22 @@ import {
 const TYPE_TR: Record<string, string> = { call: 'Arama', email: 'E-posta', meeting: 'Toplantı', task: 'Görev', note: 'Not' };
 
 const activitySchema = z.object({
-  ref_type: z.enum(['account', 'contact', 'deal']),
-  ref_id: z.string().trim().min(1, 'İlişkili kayıt ID gerekli'),
+  // Müşteri opsiyonel: bağımsız (genel) aktivite/görev eklenebilir.
+  ref_type: z.enum(['account', 'contact', 'deal']).optional(),
+  ref_id: z.string().trim().optional(),
   type: z.enum(['call', 'email', 'meeting', 'task', 'note']).optional(),
   subject: z.string().trim().min(1, 'Konu gerekli'),
   body: z.string().trim().optional(),
   planned_start_at: z.string().trim().optional(),
   due_at: z.string().trim().optional(),
 });
+
+// datetime-local "2026-07-11T14:30" -> MySQL uyumlu "2026-07-11 14:30:00"; boşsa null.
+function normalizeDateTime(value?: string | null): string | null {
+  if (!value) return null;
+  const v = value.replace('T', ' ').trim();
+  return v.length === 16 ? `${v}:00` : v;
+}
 
 type ActivityForm = z.infer<typeof activitySchema>;
 
@@ -57,9 +65,9 @@ export default function AktivitelerPage() {
   const busy = createState.isLoading || updateState.isLoading;
   const fields = React.useMemo<CrmFormField<ActivityForm>[]>(() => [
     {
-      name: 'ref_id', label: 'Müşteri', type: 'select', required: true,
+      name: 'ref_id', label: 'Müşteri (opsiyonel)', type: 'select',
       options: [
-        { value: '', label: 'Müşteri seçin' },
+        { value: '', label: 'Müşteriye bağlama (genel aktivite)' },
         ...accounts.map((account) => ({ value: account.id, label: account.name })),
         ...(editing && editing.ref_type !== 'account' && editing.ref_id
           ? [{ value: editing.ref_id, label: editing.related_name || 'Mevcut ilişkili kayıt' }]
@@ -89,7 +97,16 @@ export default function AktivitelerPage() {
   ];
 
   const submit = async (values: ActivityForm) => {
-    const patch = { ...values, planned_start_at: values.planned_start_at || null, due_at: values.due_at || null, body: values.body || null };
+    const refId = values.ref_id?.trim() || null;
+    const patch = {
+      ...values,
+      ref_id: refId,
+      ref_type: refId ? (values.ref_type ?? 'account') : null,
+      type: values.type ?? 'task',
+      planned_start_at: normalizeDateTime(values.planned_start_at),
+      due_at: normalizeDateTime(values.due_at),
+      body: values.body || null,
+    };
     if (editing) {
       await updateActivity({ id: editing.id, patch }).unwrap();
       return;
