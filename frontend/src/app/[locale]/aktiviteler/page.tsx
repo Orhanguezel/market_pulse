@@ -9,6 +9,7 @@ import { CrmEntityDialog, type CrmFormField } from '@/components/iy/CrmEntityDia
 import {
   useCreateCrmActivityMutation,
   useDeleteCrmActivityMutation,
+  useGetCrmAccountsQuery,
   useGetCrmActivitiesQuery,
   useUpdateCrmActivityMutation,
   type CrmActivity,
@@ -22,21 +23,13 @@ const activitySchema = z.object({
   type: z.enum(['call', 'email', 'meeting', 'task', 'note']).optional(),
   subject: z.string().trim().min(1, 'Konu gerekli'),
   body: z.string().trim().optional(),
+  planned_start_at: z.string().trim().optional(),
   due_at: z.string().trim().optional(),
 });
 
 type ActivityForm = z.infer<typeof activitySchema>;
 
-const emptyActivity: ActivityForm = { ref_type: 'account', ref_id: '', type: 'task', subject: '', body: '', due_at: '' };
-
-const fields: CrmFormField<ActivityForm>[] = [
-  { name: 'ref_type', label: 'İlişki tipi', type: 'select', options: [{ value: 'account', label: 'Müşteri' }, { value: 'contact', label: 'Kontak' }, { value: 'deal', label: 'Fırsat' }] },
-  { name: 'ref_id', label: 'İlişkili kayıt ID', required: true },
-  { name: 'type', label: 'Tip', type: 'select', options: [{ value: 'call', label: 'Arama' }, { value: 'email', label: 'E-posta' }, { value: 'meeting', label: 'Toplantı' }, { value: 'task', label: 'Görev' }, { value: 'note', label: 'Not' }] },
-  { name: 'subject', label: 'Konu', required: true },
-  { name: 'body', label: 'Not', type: 'textarea' },
-  { name: 'due_at', label: 'Vade', type: 'datetime-local' },
-];
+const emptyActivity: ActivityForm = { ref_type: 'account', ref_id: '', type: 'task', subject: '', body: '', planned_start_at: '', due_at: '' };
 
 function formFromActivity(activity: CrmActivity | null): ActivityForm {
   if (!activity) return emptyActivity;
@@ -46,12 +39,14 @@ function formFromActivity(activity: CrmActivity | null): ActivityForm {
     type: (activity.type as ActivityForm['type']) ?? 'task',
     subject: activity.subject ?? '',
     body: activity.body ?? '',
-    due_at: activity.due_at ?? '',
+    planned_start_at: activity.planned_start_at ? activity.planned_start_at.slice(0, 16) : '',
+    due_at: activity.due_at ? activity.due_at.slice(0, 16) : '',
   };
 }
 
 export default function AktivitelerPage() {
   const { data, isLoading, isError } = useGetCrmActivitiesQuery();
+  const { data: accounts = [] } = useGetCrmAccountsQuery();
   const [createActivity, createState] = useCreateCrmActivityMutation();
   const [updateActivity, updateState] = useUpdateCrmActivityMutation();
   const [deleteActivity, deleteState] = useDeleteCrmActivityMutation();
@@ -60,11 +55,30 @@ export default function AktivitelerPage() {
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const defaultValues = React.useMemo(() => formFromActivity(editing), [editing]);
   const busy = createState.isLoading || updateState.isLoading;
+  const fields = React.useMemo<CrmFormField<ActivityForm>[]>(() => [
+    {
+      name: 'ref_id', label: 'Müşteri', type: 'select', required: true,
+      options: [
+        { value: '', label: 'Müşteri seçin' },
+        ...accounts.map((account) => ({ value: account.id, label: account.name })),
+        ...(editing && editing.ref_type !== 'account' && editing.ref_id
+          ? [{ value: editing.ref_id, label: editing.related_name || 'Mevcut ilişkili kayıt' }]
+          : []),
+      ],
+    },
+    { name: 'type', label: 'Aktivite tipi', type: 'select', options: [{ value: 'call', label: 'Arama' }, { value: 'email', label: 'E-posta' }, { value: 'meeting', label: 'Toplantı' }, { value: 'task', label: 'Görev' }, { value: 'note', label: 'Not' }] },
+    { name: 'subject', label: 'Yapılacak aktivite', required: true, placeholder: 'Örn. Teklif sonrası müşteriyi ara' },
+    { name: 'planned_start_at', label: 'Planlanan başlangıç', type: 'datetime-local' },
+    { name: 'due_at', label: 'Planlanan bitiş', type: 'datetime-local' },
+    { name: 'body', label: 'Açıklama / not', type: 'textarea' },
+  ], [accounts, editing]);
 
   const cols: CrmColumn<CrmActivity>[] = [
-    { key: 'type', label: 'Tip', render: (r) => TYPE_TR[r.type || ''] || r.type || '-' },
-    { key: 'subject', label: 'Konu', render: (r) => <span className="font-medium text-[#0f172a]">{r.subject || '-'}</span> },
-    { key: 'due_at', label: 'Vade', render: (r) => (r.due_at ? new Date(r.due_at).toLocaleString('tr-TR') : '-') },
+    { key: 'subject', label: 'Yapılacak Aktivite', render: (r) => <div><span className="font-medium text-[#0f172a]">{r.subject || '-'}</span><span className="mt-0.5 block text-[12px] text-[#64748b]">{TYPE_TR[r.type || ''] || r.type || '-'}</span></div> },
+    { key: 'owner_name', label: 'Görevli', render: (r) => r.owner_name || '-' },
+    { key: 'planned_start_at', label: 'Planlanan Başlama', render: (r) => (r.planned_start_at ? new Date(r.planned_start_at).toLocaleString('tr-TR') : '-') },
+    { key: 'due_at', label: 'Planlanan Bitiş', render: (r) => (r.due_at ? new Date(r.due_at).toLocaleString('tr-TR') : '-') },
+    { key: 'related_name', label: 'Müşteri', render: (r) => r.related_name || '-' },
     {
       key: 'done', label: 'Durum',
       render: (r) => {
@@ -75,7 +89,7 @@ export default function AktivitelerPage() {
   ];
 
   const submit = async (values: ActivityForm) => {
-    const patch = { ...values, due_at: values.due_at || null, body: values.body || null };
+    const patch = { ...values, planned_start_at: values.planned_start_at || null, due_at: values.due_at || null, body: values.body || null };
     if (editing) {
       await updateActivity({ id: editing.id, patch }).unwrap();
       return;
@@ -87,7 +101,7 @@ export default function AktivitelerPage() {
     <>
       <CrmListView
         title="Aktiviteler"
-        subtitle="Görüşme, görev ve not kayıtları"
+        subtitle="Müşteri görüşmelerini, görevleri ve planlanan çalışmaları takip edin."
         columns={cols}
         rows={data}
         isLoading={isLoading}

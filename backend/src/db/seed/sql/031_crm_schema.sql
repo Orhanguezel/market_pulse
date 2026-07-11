@@ -135,6 +135,7 @@ CREATE TABLE IF NOT EXISTS `crm_activities` (
   `type`          enum('call','email','meeting','task','note') NOT NULL DEFAULT 'task',
   `subject`       varchar(255) NOT NULL,
   `body`          text         DEFAULT NULL,
+  `planned_start_at` datetime   DEFAULT NULL,
   `due_at`        datetime     DEFAULT NULL,
   `done`          tinyint(1)   NOT NULL DEFAULT 0,
   `done_at`       datetime     DEFAULT NULL,

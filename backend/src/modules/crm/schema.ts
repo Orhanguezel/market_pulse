@@ -69,6 +69,7 @@ export const activityBodySchema = z.object({
   type: z.enum(['call', 'email', 'meeting', 'task', 'note']).default('task'),
   subject: z.string().trim().min(1).max(255),
   body: z.string().trim().nullable().optional(),
+  planned_start_at: z.string().trim().nullable().optional(),
   due_at: z.string().trim().nullable().optional(),
   owner_user_id: z.string().trim().max(36).nullable().optional(),
   created_by: z.string().trim().max(36).nullable().optional(),

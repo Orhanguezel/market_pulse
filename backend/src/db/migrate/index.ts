@@ -280,6 +280,22 @@ async function ensureUserMailAccountsTable(conn: mysql.Connection): Promise<void
   );
 }
 
+async function ensureCrmActivityPlanningColumns(conn: mysql.Connection): Promise<void> {
+  if (!(await tableExists(conn, 'crm_activities'))) return;
+  if (!(await columnExists(conn, 'crm_activities', 'planned_start_at'))) {
+    await query(
+      conn,
+      'ALTER TABLE `crm_activities` ADD COLUMN `planned_start_at` DATETIME DEFAULT NULL AFTER `body`',
+    );
+  }
+  if (!(await indexExists(conn, 'crm_activities', 'idx_crm_activities_planned_start'))) {
+    await query(
+      conn,
+      'ALTER TABLE `crm_activities` ADD INDEX `idx_crm_activities_planned_start` (`tenant_key`, `planned_start_at`)',
+    );
+  }
+}
+
 async function migrateTenantColumns(conn: mysql.Connection): Promise<void> {
   for (const table of TENANT_TABLES) {
     if (!(await tableExists(conn, table.name))) {
@@ -321,6 +337,7 @@ async function main(): Promise<void> {
     await ensureSaasMultitenantTables(conn);
     await ensureProfileSenderColumns(conn);
     await ensureUserMailAccountsTable(conn);
+    await ensureCrmActivityPlanningColumns(conn);
     console.log('[migrate] completed');
   } finally {
     await conn.end();
