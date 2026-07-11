@@ -363,7 +363,9 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
   {
     title: '5 · Satış Hunisi',
     items: [
-      { key: 'prospects', label: 'Potansiyel Müşteriler', icon: 'Target', path: '/potansiyel-musteriler', module: 'crm' },
+      // "Potansiyel Müşteriler" kaldırıldı: sadece /firma-bulucu/adaylar?status=approved'a
+      // yönlendiren tekrar bir öğeydi. Onaylı adaylar "Bulunan Adaylar" (2·Firma Bulma)
+      // sayfasında status filtresiyle görülür.
       { key: 'deals', label: 'Satış Fırsatları', icon: 'TrendingUp', path: '/satis-firsatlari', module: 'crm' },
       { key: 'quotes', label: 'Teklifler', icon: 'FileText', path: '/teklifler', module: 'crm' },
       { key: 'orders', label: 'Siparişler', icon: 'ShoppingCart', path: '/siparisler', module: 'crm' },

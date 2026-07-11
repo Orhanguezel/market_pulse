@@ -117,7 +117,7 @@ export default function DashboardPage() {
 
   const soon = `/${l}/dashboard`;
   const cards = [
-    { icon: Target, label: 'Potansiyel Müşteriler', value: d.counts.leads, href: `/${l}/potansiyel-musteriler` },
+    { icon: Target, label: 'Potansiyel Müşteriler', value: d.counts.leads, href: `/${l}/firma-bulucu/adaylar?status=approved` },
     { icon: TrendingUp, label: 'Satış Fırsatları', value: d.counts.deals_open, href: `/${l}/satis-firsatlari` },
     { icon: ShoppingCart, label: 'Siparişler', value: d.counts.orders ?? d.counts.deals_won, href: `/${l}/siparisler`, accent: true },
     { icon: Building2, label: 'Müşteriler', value: d.counts.accounts, href: `/${l}/musteriler` },
@@ -126,7 +126,7 @@ export default function DashboardPage() {
   ];
   const leadMachineStats = [
     { label: 'Hedef Firma', value: numberFrom((marketStats as Record<string, unknown> | undefined)?.totalTargets), href: `/${l}/isletme-yonetimi` },
-    { label: 'Market Lead', value: numberFrom((marketStats as Record<string, unknown> | undefined)?.totalLeads), href: `/${l}/potansiyel-musteriler` },
+    { label: 'Market Lead', value: numberFrom((marketStats as Record<string, unknown> | undefined)?.totalLeads), href: `/${l}/firma-bulucu/adaylar?status=approved` },
     { label: 'Bekleyen Sinyal', value: numberFrom((marketStats as Record<string, unknown> | undefined)?.pendingSignals), href: `/${l}/raporlar` },
     { label: 'Onaylı Profil', value: numberFrom((approvedStats as Record<string, unknown> | undefined)?.total ?? (approvedStats as Record<string, unknown> | undefined)?.approved), href: `/${l}/firma-bulucu/adaylar?status=approved` },
     { label: 'Red Sinyali', value: numberFrom((rejectionStats as Record<string, unknown> | undefined)?.total ?? (rejectionStats as Record<string, unknown> | undefined)?.rejected), href: `/${l}/firma-bulucu/adaylar?status=rejected` },
