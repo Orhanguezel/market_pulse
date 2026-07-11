@@ -55,7 +55,17 @@ export async function getUserPlan(userId: string): Promise<PlanCode> {
     [tenantKey, userId],
   );
   const row = (rows as { plan_code: PlanCode }[])[0];
-  return row?.plan_code ?? 'free';
+  if (row?.plan_code) return row.plan_code;
+
+  // Kullanıcıya özel override yoksa tenant paketini kullan. Önceki `free`
+  // fallback'i agency tenant'larındaki iç kullanıcıları yanlışlıkla 5 iş/gün
+  // sınırına sokuyordu.
+  const [tenantRows] = await pool.execute(
+    'SELECT plan FROM tenants WHERE tenant_key = ? AND status = ? LIMIT 1',
+    [tenantKey, 'active'],
+  );
+  const tenantPlan = String((tenantRows as Array<{ plan?: string }>)[0]?.plan ?? 'free');
+  return tenantPlan === 'starter' || tenantPlan === 'pro' || tenantPlan === 'agency' ? tenantPlan : 'free';
 }
 
 export async function ensureUserPlan(userId: string): Promise<PlanCode> {

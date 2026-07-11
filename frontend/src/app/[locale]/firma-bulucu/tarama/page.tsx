@@ -167,7 +167,20 @@ export default function FirmaBulucuTaramaPage() {
       }
       if (source === 'fair') {
         if (!fairUrl.trim()) return toast.error('Fuar URL gerekli.');
-        const body = { fair_name: fairName, fair_url: fairUrl, fair_date: fairDate || undefined, icp_id: icpId || undefined, max_exhibitors: limit };
+        if (!icpId) return toast.error('ICP seçimi gerekli.');
+        const selectedIcp = icps.find((icp) => icp.id === icpId);
+        const definition = selectedIcp?.definition ?? {};
+        const configuredMax = Number(definition.fair_max_exhibitors ?? 2500);
+        const body = {
+          fair_name: fairName,
+          fair_url: fairUrl,
+          fair_date: fairDate || undefined,
+          icp_id: icpId,
+          hall_filters: definitionItems(definition, 'target_halls'),
+          max_pages: Number(definition.fair_max_pages ?? 120),
+          max_exhibitors: Number.isFinite(configuredMax) ? configuredMax : 2500,
+          detail_concurrency: Number(definition.detail_concurrency ?? 2),
+        };
         const job = await startFair(body).unwrap();
         toast.success('Fuar taraması başladı');
         goCandidates('trade_fair', job.id);
@@ -194,8 +207,15 @@ export default function FirmaBulucuTaramaPage() {
       const job = await startCustoms(customsBody).unwrap();
       toast.success('Gümrük taraması başladı');
       goCandidates('customs', job.id);
-    } catch {
-      toast.error('Tarama başlatılamadı.');
+    } catch (error) {
+      const apiError = error as { status?: number; data?: { error?: { message?: string; plan?: string; daily_limit?: number } } };
+      if (apiError.status === 429 && apiError.data?.error?.message === 'daily_limit_reached') {
+        toast.error(`Günlük tarama kotası doldu (${apiError.data.error.plan ?? 'plan'}: ${apiError.data.error.daily_limit ?? 0}).`);
+      } else if (apiError.status === 401) {
+        toast.error('Oturum süresi doldu. Yeniden giriş yapın.');
+      } else {
+        toast.error('Tarama başlatılamadı.');
+      }
     }
   };
 
