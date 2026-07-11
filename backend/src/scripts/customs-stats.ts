@@ -8,7 +8,7 @@ import { pool } from '@/db/client';
 import type { RowDataPacket } from 'mysql2/promise';
 
 async function q(sql: string, params: unknown[] = []): Promise<RowDataPacket[]> {
-  const [rows] = await pool.execute<RowDataPacket[]>(sql, params);
+  const [rows] = await pool.execute<RowDataPacket[]>(sql, params as never[]);
   return rows;
 }
 
