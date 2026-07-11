@@ -239,6 +239,17 @@ export const crmApi = baseApi.injectEndpoints({
       query: (id) => ({ url: `/crm/tasks/${id}`, method: 'DELETE' }),
       invalidatesTags: ['CrmTasks', 'CrmDashboard'],
     }),
+    getGoogleTasksStatus: b.query<{ connected: boolean; reconnect_required: boolean; email: string | null; last_synced_at: string | null }, void>({
+      query: () => ({ url: '/crm/tasks-google/status', method: 'GET' }),
+      providesTags: ['CrmTasks'],
+    }),
+    getGoogleTasksConnectUrl: b.mutation<{ url: string }, void>({
+      query: () => ({ url: '/crm/tasks-google/connect', method: 'GET' }),
+    }),
+    syncGoogleTasks: b.mutation<{ ok: boolean; imported: number; exported: number; updated: number; total_remote: number }, void>({
+      query: () => ({ url: '/crm/tasks-google/sync', method: 'POST' }),
+      invalidatesTags: ['CrmTasks', 'CrmDashboard'],
+    }),
     getCrmReminders: b.query<CrmReminder[], void>({
       query: () => ({ url: '/crm/reminders?limit=100', method: 'GET' }),
       providesTags: ['CrmReminders'],
@@ -313,6 +324,9 @@ export const {
   useCreateCrmTaskMutation,
   useUpdateCrmTaskMutation,
   useDeleteCrmTaskMutation,
+  useGetGoogleTasksStatusQuery,
+  useGetGoogleTasksConnectUrlMutation,
+  useSyncGoogleTasksMutation,
   useGetCrmRemindersQuery,
   useCreateCrmReminderMutation,
   useUpdateCrmReminderMutation,

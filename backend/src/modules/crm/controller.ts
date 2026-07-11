@@ -1,5 +1,6 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { ownerScopeForRequest } from '@/modules/_shared';
+import { getAuthUserId, handleRouteError, ownerScopeForRequest } from '@/modules/_shared';
+import { createGoogleTasksConnectUrl, getGoogleTasksStatus, syncGoogleTasks } from '@/modules/mail-accounts/service';
 import {
   accountBodySchema,
   accountPatchSchema,
@@ -407,6 +408,30 @@ export async function updateTaskHandler(req: FastifyRequest, reply: FastifyReply
 
 export async function deleteTaskHandler(req: FastifyRequest, reply: FastifyReply) {
   return deleteBusinessRecordHandler('tasks', req, reply);
+}
+
+export async function googleTasksStatusHandler(req: FastifyRequest, reply: FastifyReply) {
+  try {
+    return await getGoogleTasksStatus(getAuthUserId(req));
+  } catch (err) {
+    return handleRouteError(reply, req, err, 'google_tasks_status_failed');
+  }
+}
+
+export async function googleTasksConnectHandler(req: FastifyRequest, reply: FastifyReply) {
+  try {
+    return await createGoogleTasksConnectUrl(getAuthUserId(req));
+  } catch (err) {
+    return handleRouteError(reply, req, err, 'google_tasks_connect_failed');
+  }
+}
+
+export async function googleTasksSyncHandler(req: FastifyRequest, reply: FastifyReply) {
+  try {
+    return await syncGoogleTasks(getAuthUserId(req));
+  } catch (err) {
+    return handleRouteError(reply, req, err, 'google_tasks_sync_failed');
+  }
 }
 
 export async function listRemindersHandler(req: FastifyRequest, reply: FastifyReply) {

@@ -2,6 +2,7 @@ import crypto from 'node:crypto';
 import { createRequire } from 'node:module';
 import { google } from 'googleapis';
 import type { gmail_v1 } from 'googleapis';
+import type { tasks_v1 } from 'googleapis';
 import { ImapFlow } from 'imapflow';
 import { simpleParser } from 'mailparser';
 import { env } from '@/core/env';
@@ -18,6 +19,7 @@ const GMAIL_SCOPES = [
   'https://www.googleapis.com/auth/gmail.readonly',
   'https://www.googleapis.com/auth/userinfo.email',
   'https://www.googleapis.com/auth/userinfo.profile',
+  'https://www.googleapis.com/auth/tasks',
 ];
 
 type MailAccountStatus = 'connected' | 'expired' | 'error' | 'disconnected';
@@ -93,7 +95,7 @@ function signState(payload: Record<string, unknown>) {
   return `${body}.${sig}`;
 }
 
-function verifyState(state: string): { tenantKey: string; userId: string; exp: number } {
+function verifyState(state: string): { tenantKey: string; userId: string; exp: number; returnTo: string } {
   const [body, sig] = state.split('.');
   if (!body || !sig) throw new Error('invalid_state');
   const expected = crypto.createHmac('sha256', hmacSecret()).update(body).digest('base64url');
@@ -104,7 +106,11 @@ function verifyState(state: string): { tenantKey: string; userId: string; exp: n
   const tenantKey = typeof payload.tenantKey === 'string' ? payload.tenantKey : '';
   const userId = typeof payload.userId === 'string' ? payload.userId : '';
   if (!tenantKey || !userId) throw new Error('invalid_state');
-  return { tenantKey, userId, exp };
+  const requestedReturnTo = typeof payload.returnTo === 'string' ? payload.returnTo : '';
+  const returnTo = requestedReturnTo.startsWith('/tr/') && !requestedReturnTo.startsWith('//')
+    ? requestedReturnTo
+    : '/tr/mail-yonetimi?mail=connected';
+  return { tenantKey, userId, exp, returnTo };
 }
 
 async function oauthClient() {
@@ -171,7 +177,10 @@ export async function listMailAccounts(userId: string): Promise<SafeMailAccount[
   return (rows as MailAccountRow[]).map(safeAccount);
 }
 
-export async function createGmailConnectUrl(userId: string): Promise<{ url: string }> {
+export async function createGmailConnectUrl(
+  userId: string,
+  returnTo = '/tr/mail-yonetimi?mail=connected',
+): Promise<{ url: string }> {
   const tenantKey = await getActiveTenantKey();
   const client = await oauthClient();
   const state = signState({
@@ -179,6 +188,7 @@ export async function createGmailConnectUrl(userId: string): Promise<{ url: stri
     userId,
     nonce: crypto.randomUUID(),
     exp: Date.now() + 10 * 60_000,
+    returnTo,
   });
   const url = client.generateAuthUrl({
     access_type: 'offline',
@@ -191,7 +201,7 @@ export async function createGmailConnectUrl(userId: string): Promise<{ url: stri
 }
 
 export async function handleGmailCallback(code: string, state: string): Promise<{ redirect: string }> {
-  const { tenantKey, userId } = verifyState(state);
+  const { tenantKey, userId, returnTo } = verifyState(state);
   const client = await oauthClient();
   const { tokens } = await client.getToken(code);
   client.setCredentials(tokens);
@@ -223,7 +233,11 @@ export async function handleGmailCallback(code: string, state: string): Promise<
     [tenantKey, userId, email, profile.data.name ?? null, accessToken, refreshToken, expiry, scopes],
   );
 
-  return { redirect: `${publicBaseUrl()}/tr/mail-yonetimi?mail=connected` };
+  return { redirect: `${publicBaseUrl()}${returnTo}` };
+}
+
+export async function createGoogleTasksConnectUrl(userId: string) {
+  return createGmailConnectUrl(userId, '/tr/gorevler?google=connected');
 }
 
 async function getPrimaryAccount(userId: string): Promise<MailAccountRow | null> {
@@ -293,6 +307,153 @@ async function getGmailClient(account: MailAccountRow): Promise<gmail_v1.Gmail> 
     client.setCredentials({ ...client.credentials, ...credentials });
   }
   return google.gmail({ version: 'v1', auth: client });
+}
+
+async function getGoogleAuthClient(account: MailAccountRow) {
+  const client = await oauthClient();
+  const refreshToken = account.enc_refresh_token ? decrypt(account.enc_refresh_token) : null;
+  if (!refreshToken) throw new Error('google_refresh_token_missing');
+  client.setCredentials({
+    refresh_token: refreshToken,
+    access_token: account.enc_access_token ? decrypt(account.enc_access_token) : undefined,
+    expiry_date: account.token_expiry ? new Date(account.token_expiry).getTime() : undefined,
+  });
+  return client;
+}
+
+function hasTasksScope(account: MailAccountRow) {
+  return String(account.scopes || '').split(/\s+/).includes('https://www.googleapis.com/auth/tasks');
+}
+
+export async function getGoogleTasksStatus(userId: string) {
+  const account = await getPrimaryAccount(userId);
+  const googleAccount = account?.provider === 'gmail_oauth' ? account : null;
+  return {
+    connected: Boolean(googleAccount && hasTasksScope(googleAccount)),
+    reconnect_required: Boolean(googleAccount && !hasTasksScope(googleAccount)),
+    email: googleAccount?.email ?? null,
+    last_synced_at: googleAccount?.last_synced_at ?? null,
+  };
+}
+
+type LocalGoogleTaskRow = {
+  id: string;
+  subject: string;
+  body: string | null;
+  due_at: string | Date | null;
+  status: 'open' | 'done' | 'cancelled';
+  completed_at: string | Date | null;
+  raw_data: string | Record<string, unknown> | null;
+  updated_at: string | Date;
+};
+
+function taskMetadata(value: LocalGoogleTaskRow['raw_data']): Record<string, unknown> {
+  if (!value) return {};
+  if (typeof value === 'object') return value;
+  try { return JSON.parse(value) as Record<string, unknown>; } catch { return {}; }
+}
+
+function googleDue(value: LocalGoogleTaskRow['due_at']) {
+  if (!value) return undefined;
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? undefined : date.toISOString();
+}
+
+export async function syncGoogleTasks(userId: string) {
+  const tenantKey = await getActiveTenantKey();
+  const account = await getPrimaryAccount(userId);
+  if (!account || account.provider !== 'gmail_oauth') throw new Error('google_tasks_not_connected');
+  if (!hasTasksScope(account)) throw new Error('google_tasks_scope_required');
+
+  const auth = await getGoogleAuthClient(account);
+  const tasksApi = google.tasks({ version: 'v1', auth });
+  const taskListId = '@default';
+  const remoteById = new Map<string, tasks_v1.Schema$Task>();
+  let pageToken: string | undefined;
+  do {
+    const response = await tasksApi.tasks.list({
+      tasklist: taskListId,
+      maxResults: 100,
+      pageToken,
+      showCompleted: true,
+      showHidden: true,
+    });
+    for (const item of response.data.items ?? []) if (item.id) remoteById.set(item.id, item);
+    pageToken = response.data.nextPageToken ?? undefined;
+  } while (pageToken);
+
+  const [rows] = await pool.execute(
+    'SELECT id, subject, body, due_at, status, completed_at, raw_data, updated_at FROM crm_tasks WHERE tenant_key = ? AND owner_user_id = ?',
+    [tenantKey, userId],
+  );
+  const locals = rows as LocalGoogleTaskRow[];
+  const localByRemoteId = new Map<string, LocalGoogleTaskRow>();
+  for (const local of locals) {
+    const remoteId = taskMetadata(local.raw_data).google_task_id;
+    if (typeof remoteId === 'string') localByRemoteId.set(remoteId, local);
+  }
+
+  let imported = 0;
+  let exported = 0;
+  let updated = 0;
+  for (const remote of remoteById.values()) {
+    if (!remote.id || remote.deleted || remote.hidden) continue;
+    const local = localByRemoteId.get(remote.id);
+    const remoteStatus = remote.status === 'completed' ? 'done' : 'open';
+    const remoteUpdated = remote.updated ? new Date(remote.updated).getTime() : 0;
+    if (!local) {
+      await pool.execute(
+        `INSERT INTO crm_tasks
+          (id, tenant_key, subject, body, due_at, priority, status, owner_user_id, created_by, completed_at, raw_data)
+         VALUES (UUID(), ?, ?, ?, ?, 'normal', ?, ?, ?, ?, ?)`,
+        [tenantKey, remote.title || '(Adsız Google görevi)', remote.notes ?? null, remote.due ? new Date(remote.due) : null,
+          remoteStatus, userId, userId, remote.completed ? new Date(remote.completed) : null,
+          JSON.stringify({ google_task_id: remote.id, google_tasklist_id: taskListId, google_updated_at: remote.updated ?? null })],
+      );
+      imported += 1;
+      continue;
+    }
+    const localUpdated = new Date(local.updated_at).getTime();
+    if (localUpdated > remoteUpdated + 1000) {
+      await tasksApi.tasks.patch({ tasklist: taskListId, task: remote.id, requestBody: {
+        title: local.subject,
+        notes: local.body ?? undefined,
+        due: googleDue(local.due_at),
+        status: local.status === 'done' ? 'completed' : 'needsAction',
+        completed: local.status === 'done' ? googleDue(local.completed_at) : undefined,
+      } });
+      exported += 1;
+    } else {
+      const metadata = { ...taskMetadata(local.raw_data), google_task_id: remote.id, google_tasklist_id: taskListId, google_updated_at: remote.updated ?? null };
+      await pool.execute(
+        `UPDATE crm_tasks SET subject = ?, body = ?, due_at = ?, status = ?, completed_at = ?, raw_data = ?
+          WHERE id = ? AND tenant_key = ? AND owner_user_id = ?`,
+        [remote.title || '(Adsız Google görevi)', remote.notes ?? null, remote.due ? new Date(remote.due) : null,
+          remoteStatus, remote.completed ? new Date(remote.completed) : null, JSON.stringify(metadata), local.id, tenantKey, userId],
+      );
+      updated += 1;
+    }
+  }
+
+  for (const local of locals) {
+    const metadata = taskMetadata(local.raw_data);
+    if (typeof metadata.google_task_id === 'string') continue;
+    const response = await tasksApi.tasks.insert({ tasklist: taskListId, requestBody: {
+      title: local.subject,
+      notes: local.body ?? undefined,
+      due: googleDue(local.due_at),
+      status: local.status === 'done' ? 'completed' : 'needsAction',
+      completed: local.status === 'done' ? googleDue(local.completed_at) : undefined,
+    } });
+    if (!response.data.id) continue;
+    await pool.execute(
+      'UPDATE crm_tasks SET raw_data = ? WHERE id = ? AND tenant_key = ? AND owner_user_id = ?',
+      [JSON.stringify({ ...metadata, google_task_id: response.data.id, google_tasklist_id: taskListId, google_updated_at: response.data.updated ?? null }), local.id, tenantKey, userId],
+    );
+    exported += 1;
+  }
+  await pool.execute('UPDATE user_mail_accounts SET last_synced_at = CURRENT_TIMESTAMP(3), last_error = NULL WHERE id = ?', [account.id]);
+  return { ok: true, imported, exported, updated, total_remote: remoteById.size };
 }
 
 async function consumeGmailSendQuota(userId: string): Promise<void> {

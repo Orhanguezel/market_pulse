@@ -1,7 +1,8 @@
 'use client';
 
 import * as React from 'react';
-import { CheckCircle2, Pencil, Plus, Trash2 } from 'lucide-react';
+import { CheckCircle2, Cloud, Loader2, Pencil, Plus, RefreshCw, Trash2 } from 'lucide-react';
+import { toast } from 'sonner';
 import { z } from 'zod';
 import CrmListView, { type CrmColumn } from '@/components/iy/CrmListView';
 import { ConfirmDeleteDialog } from '@/components/iy/ConfirmDeleteDialog';
@@ -10,6 +11,9 @@ import {
   useCreateCrmTaskMutation,
   useDeleteCrmTaskMutation,
   useGetCrmTasksQuery,
+  useGetGoogleTasksConnectUrlMutation,
+  useGetGoogleTasksStatusQuery,
+  useSyncGoogleTasksMutation,
   useUpdateCrmTaskMutation,
   type CrmTask,
 } from '@/integrations/rtk/public/crm.endpoints';
@@ -59,11 +63,32 @@ export default function GorevlerPage() {
   const [createTask, createState] = useCreateCrmTaskMutation();
   const [updateTask, updateState] = useUpdateCrmTaskMutation();
   const [deleteTask, deleteState] = useDeleteCrmTaskMutation();
+  const { data: googleStatus, isLoading: googleStatusLoading } = useGetGoogleTasksStatusQuery();
+  const [getGoogleConnectUrl, googleConnectState] = useGetGoogleTasksConnectUrlMutation();
+  const [syncGoogle, googleSyncState] = useSyncGoogleTasksMutation();
   const [editing, setEditing] = React.useState<CrmTask | null>(null);
   const [deleting, setDeleting] = React.useState<CrmTask | null>(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
   const defaultValues = React.useMemo(() => formFromTask(editing), [editing]);
   const busy = createState.isLoading || updateState.isLoading;
+
+  const connectGoogle = async () => {
+    try {
+      const { url } = await getGoogleConnectUrl().unwrap();
+      window.location.href = url;
+    } catch {
+      toast.error('Google bağlantısı başlatılamadı.');
+    }
+  };
+
+  const syncWithGoogle = async () => {
+    try {
+      const result = await syncGoogle().unwrap();
+      toast.success(`Google Tasks eşitlendi: ${result.imported} içe, ${result.exported} dışa, ${result.updated} güncelleme.`);
+    } catch {
+      toast.error('Google Tasks eşitlenemedi. Google Tasks API ayarını ve bağlantı iznini kontrol edin.');
+    }
+  };
 
   const cols: CrmColumn<CrmTask>[] = [
     { key: 'subject', label: 'Görev', render: (r) => <span className="font-semibold text-[#0f172a]">{r.subject}</span> },
@@ -90,6 +115,28 @@ export default function GorevlerPage() {
 
   return (
     <>
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3 rounded-lg border border-[#dbeafe] bg-white px-4 py-3 shadow-sm">
+        <div className="flex min-w-0 items-center gap-3">
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-lg bg-[#eff6ff] text-[#1e40af]"><Cloud className="h-5 w-5" /></span>
+          <div className="min-w-0">
+            <div className="text-[14px] font-semibold text-[#0f172a]">Google Tasks</div>
+            <div className="truncate text-[12px] text-[#64748b]">
+              {googleStatusLoading ? 'Bağlantı kontrol ediliyor…' : googleStatus?.connected
+                ? `${googleStatus.email ?? 'Google hesabı'} bağlı${googleStatus.last_synced_at ? ` · Son eşitleme ${new Date(googleStatus.last_synced_at).toLocaleString('tr-TR')}` : ''}`
+                : googleStatus?.reconnect_required ? 'Google Tasks izni için hesabınızı yeniden bağlayın.' : 'Görevlerinizi Google Tasks ile iki yönlü eşitleyin.'}
+            </div>
+          </div>
+        </div>
+        {googleStatus?.connected ? (
+          <button disabled={googleSyncState.isLoading} onClick={syncWithGoogle} className="inline-flex h-9 items-center gap-2 rounded-md bg-[#1e40af] px-3 text-[13px] font-semibold text-white disabled:opacity-60">
+            {googleSyncState.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <RefreshCw className="h-4 w-4" />} Senkronize Et
+          </button>
+        ) : (
+          <button disabled={googleConnectState.isLoading} onClick={connectGoogle} className="inline-flex h-9 items-center gap-2 rounded-md bg-[#1e40af] px-3 text-[13px] font-semibold text-white disabled:opacity-60">
+            {googleConnectState.isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Cloud className="h-4 w-4" />} {googleStatus?.reconnect_required ? 'Yeniden Bağla' : 'Google’a Bağlan'}
+          </button>
+        )}
+      </div>
       <CrmListView
         title="Görevler"
         subtitle="Yapılacaklar ve takip"

@@ -40,6 +40,9 @@ import {
   getQuoteHandler,
   getReminderHandler,
   getTaskHandler,
+  googleTasksConnectHandler,
+  googleTasksStatusHandler,
+  googleTasksSyncHandler,
   listPipelinesHandler,
   listActivitiesHandler,
   listProductsHandler,
@@ -125,6 +128,9 @@ export async function registerCrmTenant(app: FastifyInstance) {
   app.get('/crm/tasks/:id', guard, getTaskHandler);
   app.patch('/crm/tasks/:id', guard, updateTaskHandler);
   app.delete('/crm/tasks/:id', guard, deleteTaskHandler);
+  app.get('/crm/tasks-google/status', guard, googleTasksStatusHandler);
+  app.get('/crm/tasks-google/connect', guard, googleTasksConnectHandler);
+  app.post('/crm/tasks-google/sync', guard, googleTasksSyncHandler);
   app.get('/crm/reminders', guard, listRemindersHandler);
   app.post('/crm/reminders', guard, createReminderHandler);
   app.get('/crm/reminders/:id', guard, getReminderHandler);
