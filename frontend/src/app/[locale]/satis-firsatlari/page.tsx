@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useOpenCreateFromQuery } from '@/hooks/useOpenCreateFromQuery';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Eye, GripVertical, LayoutGrid, List, Pencil, Plus, Trash2 } from 'lucide-react';
@@ -88,6 +89,7 @@ export default function SatisFirsatlariPage() {
   const [editing, setEditing] = React.useState<CrmDeal | null>(null);
   const [deleting, setDeleting] = React.useState<CrmDeal | null>(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  useOpenCreateFromQuery(() => { setEditing(null); setDialogOpen(true); });
   const [draggingId, setDraggingId] = React.useState<string | null>(null);
   const stages = React.useMemo(() => pipelineData?.stages ?? [], [pipelineData]);
   const accountNames = React.useMemo(() => new Map(accounts.map((account) => [account.id, account.name])), [accounts]);

@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useOpenCreateFromQuery } from '@/hooks/useOpenCreateFromQuery';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Pencil, Plus, Trash2 } from 'lucide-react';
@@ -66,6 +67,7 @@ export default function KontaklarPage() {
   const [editing, setEditing] = React.useState<CrmContact | null>(null);
   const [deleting, setDeleting] = React.useState<CrmContact | null>(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  useOpenCreateFromQuery(() => { setEditing(null); setDialogOpen(true); });
   const accountNames = React.useMemo(() => new Map(accounts.map((account) => [account.id, account.name])), [accounts]);
   const defaultValues = React.useMemo(() => formFromContact(editing), [editing]);
   const fields = React.useMemo<CrmFormField<ContactForm>[]>(() => [

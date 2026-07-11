@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useOpenCreateFromQuery } from '@/hooks/useOpenCreateFromQuery';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Eye, Pencil, Plus, Trash2 } from 'lucide-react';
@@ -53,6 +54,7 @@ export default function TekliflerPage() {
   const [editing, setEditing] = React.useState<CrmQuote | null>(null);
   const [deleting, setDeleting] = React.useState<CrmQuote | null>(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  useOpenCreateFromQuery(() => { setEditing(null); setDialogOpen(true); });
   const defaultValues = React.useMemo(() => formFromQuote(editing), [editing]);
   const cols: CrmColumn<CrmQuote>[] = [
     { key: 'quote_no', label: 'No', render: (r) => r.quote_no || '-' },

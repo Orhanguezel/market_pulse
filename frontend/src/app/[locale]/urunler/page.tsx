@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useOpenCreateFromQuery } from '@/hooks/useOpenCreateFromQuery';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Eye, Pencil, Plus, Trash2 } from 'lucide-react';
@@ -47,6 +48,7 @@ export default function UrunlerPage() {
   const [editing, setEditing] = React.useState<CrmProduct | null>(null);
   const [deleting, setDeleting] = React.useState<CrmProduct | null>(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  useOpenCreateFromQuery(() => { setEditing(null); setDialogOpen(true); });
   const defaultValues = React.useMemo(() => formFromProduct(editing), [editing]);
   const cols: CrmColumn<CrmProduct>[] = [
     { key: 'sku', label: 'SKU', render: (r) => r.sku || '-' },

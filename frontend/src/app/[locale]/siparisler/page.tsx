@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useOpenCreateFromQuery } from '@/hooks/useOpenCreateFromQuery';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Eye, Pencil, Plus, Trash2 } from 'lucide-react';
@@ -55,6 +56,7 @@ export default function SiparislerPage() {
   const [editing, setEditing] = React.useState<CrmOrder | null>(null);
   const [deleting, setDeleting] = React.useState<CrmOrder | null>(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  useOpenCreateFromQuery(() => { setEditing(null); setDialogOpen(true); });
   const defaultValues = React.useMemo(() => formFromOrder(editing), [editing]);
   const cols: CrmColumn<CrmOrder>[] = [
     { key: 'order_no', label: 'No', render: (r) => r.order_no || '-' },

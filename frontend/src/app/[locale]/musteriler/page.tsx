@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useOpenCreateFromQuery } from '@/hooks/useOpenCreateFromQuery';
 import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Eye, Pencil, Plus, Trash2 } from 'lucide-react';
@@ -91,6 +92,7 @@ export default function MusterilerPage() {
   const [editing, setEditing] = React.useState<CrmAccount | null>(null);
   const [deleting, setDeleting] = React.useState<CrmAccount | null>(null);
   const [dialogOpen, setDialogOpen] = React.useState(false);
+  useOpenCreateFromQuery(() => { setEditing(null); setDialogOpen(true); });
 
   const defaultValues = React.useMemo(() => formFromAccount(editing), [editing]);
   const busy = createState.isLoading || updateState.isLoading;

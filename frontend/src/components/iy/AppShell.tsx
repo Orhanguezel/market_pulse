@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { usePathname, useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import {
   LayoutDashboard, Target, Building2, TrendingUp, FileText, ShoppingCart,
   Package, Folder, CalendarCheck, CalendarDays, ListChecks, BellRing, Mail, Radar, BarChart3,
@@ -22,6 +22,67 @@ const ICONS: Record<string, React.ComponentType<{ className?: string }>> = {
 };
 
 const COLLAPSE_KEY = 'iy_sidebar_collapsed';
+
+// Topbar "Hızlı Ekle" menüsü — her öğe ilgili sayfaya ?new=1 ile gider; sayfa
+// useOpenCreateFromQuery ile ekleme formunu otomatik açar. module: erişim anahtarı.
+const QUICK_ADD_ITEMS: Array<{ label: string; path: string; icon: React.ComponentType<{ className?: string }>; module: string }> = [
+  { label: 'Yeni Satış Fırsatı', path: '/satis-firsatlari', icon: TrendingUp, module: 'crm' },
+  { label: 'Yeni Potansiyel Müşteri', path: '/kontaklar', icon: Target, module: 'crm' },
+  { label: 'Yeni Şirket', path: '/musteriler', icon: Building2, module: 'crm' },
+  { label: 'Yeni Ürün', path: '/urunler', icon: Package, module: 'crm' },
+  { label: 'Yeni Sipariş', path: '/siparisler', icon: ShoppingCart, module: 'crm' },
+  { label: 'Yeni Teklif', path: '/teklifler', icon: FileText, module: 'crm' },
+];
+
+function QuickAddMenu({ locale, activeModules }: { locale: string; activeModules: Set<string> | null }) {
+  const [open, setOpen] = useState(false);
+  const ref = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    const onDown = (e: MouseEvent) => {
+      if (ref.current && !ref.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, [open]);
+
+  // Entitlements yüklenene kadar (null) tümünü göster; yüklendiyse yalnızca erişilen modüller.
+  const items = QUICK_ADD_ITEMS.filter((it) => activeModules === null || activeModules.has(it.module));
+  if (!items.length) return null;
+
+  return (
+    <div ref={ref} className="relative">
+      <button
+        type="button"
+        onClick={() => setOpen((v) => !v)}
+        className="hidden items-center gap-1.5 rounded-lg bg-[#1e40af] px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-[#15317f] sm:flex"
+        aria-haspopup="menu"
+        aria-expanded={open}
+      >
+        <Plus className="h-4 w-4" /> Hızlı Ekle
+      </button>
+      {open && (
+        <div role="menu" className="absolute right-0 top-full z-50 mt-2 w-60 overflow-hidden rounded-xl border border-[#e2e8f0] bg-white py-1.5 shadow-xl">
+          {items.map((it) => {
+            const Icon = it.icon;
+            return (
+              <Link
+                key={it.path}
+                href={`/${locale}${it.path}?new=1`}
+                onClick={() => setOpen(false)}
+                role="menuitem"
+                className="flex items-center gap-3 px-4 py-2.5 text-[13px] font-medium text-[#334155] hover:bg-[#eff6ff] hover:text-[#1e40af]"
+              >
+                <Icon className="h-4 w-4 text-[#1e40af]" /> {it.label}
+              </Link>
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+}
 
 export default function AppShell({ children, locale }: { children: React.ReactNode; locale?: string }) {
   const l = locale || 'tr';
@@ -141,10 +202,7 @@ export default function AppShell({ children, locale }: { children: React.ReactNo
           </Link>
         </div>
         <div className="flex items-center gap-3">
-          <Link href={`/${l}/teklif-al`}
-            className="hidden items-center gap-1.5 rounded-lg bg-[#1e40af] px-3.5 py-2 text-[13px] font-semibold text-white hover:bg-[#15317f] sm:flex">
-            <Plus className="h-4 w-4" /> Hızlı Ekle
-          </Link>
+          <QuickAddMenu locale={l} activeModules={entitlements ? activeModules : null} />
           <Link href={`/${l}/bildirimler`} className="relative grid h-9 w-9 place-items-center rounded-lg border border-[#edf0f4] text-[#475569] hover:text-[#1e40af]" title="Bildirimler" aria-label="Bildirimler">
             <Bell className="h-5 w-5" />
             {unread?.count ? <span className="absolute -right-1 -top-1 grid min-w-5 place-items-center rounded-full bg-rose-600 px-1 text-[10px] font-bold text-white">{unread.count > 99 ? '99+' : unread.count}</span> : null}
