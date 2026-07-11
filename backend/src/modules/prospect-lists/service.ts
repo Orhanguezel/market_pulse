@@ -125,14 +125,38 @@ async function processPool<T>(items: T[], concurrency: number, fn: (item: T) => 
   await Promise.all(workers);
 }
 
+/**
+ * Ücretsiz enrichment hedefleri: henüz denenmemiş (pending) VEYA denenip hiç sonuç
+ * bulunamamış (e-posta/telefon boş) kayıtlar. Böylece "Ücretsiz Zenginleştir" tekrar
+ * basıldığında boş kalanlar YENİDEN taranır (scraper geçici erişilemezse eskiden
+ * hepsi boş 'free_done' kalıyor ve bir daha asla denenmiyordu).
+ * Apollo sonuçlarına ve o an çalışanlara dokunulmaz; sonuç bulunmuş kayıtlar tekrar taranmaz.
+ */
+const FREE_ENRICH_TARGET_SQL = `
+  FROM prospect_companies
+  WHERE tenant_key = ? AND owner_user_id = ? AND list_id = ?
+    AND enrich_status NOT IN ('free_running', 'apollo_running', 'apollo_done')
+    AND (enrich_status = 'pending' OR (generic_email IS NULL AND phone IS NULL))
+`;
+
+/** Ücretsiz taramada işlenecek firma sayısı (UI'da bildirmek için). */
+export async function countFreeEnrichTargets(tenantKey: string, ownerId: string, listId: string): Promise<number> {
+  const [rows] = await pool.execute<RowDataPacket[]>(
+    `SELECT COUNT(*) AS n ${FREE_ENRICH_TARGET_SQL}`,
+    [tenantKey, ownerId, listId],
+  );
+  return Number(rows[0]?.n ?? 0);
+}
+
 // ÜCRETSIZ: website scrape -> email/telefon + LinkedIn arama linki. Apollo kullanmaz.
 export async function runFreeEnrich(tenantKey: string, ownerId: string, listId: string): Promise<void> {
   const [rows] = await pool.execute<RowDataPacket[]>(
-    `SELECT id, company_name, country, website FROM prospect_companies
-      WHERE tenant_key = ? AND owner_user_id = ? AND list_id = ? AND enrich_status = 'pending'`,
+    `SELECT id, company_name, country, website ${FREE_ENRICH_TARGET_SQL}`,
     [tenantKey, ownerId, listId],
   );
-  await processPool(rows, 3, async (row) => {
+  // 6 firma paralel (her firma birkaç sayfa gezer). Scraper-service'i boğmadan
+  // büyük listelerin (2000+) makul sürede tamamlanması için.
+  await processPool(rows, 6, async (row) => {
     await pool.execute(`UPDATE prospect_companies SET enrich_status = 'free_running' WHERE id = ?`, [row.id]);
     try {
       let email: string | null = null;

@@ -82,8 +82,15 @@ export default function ProspectListsPage() {
 
   const startFree = async () => {
     if (!activeId) return;
-    try { await enrichFree({ id: activeId }).unwrap(); toast.success('Ücretsiz zenginleştirme başladı'); void companiesQ.refetch(); }
-    catch { toast.error('Başlatılamadı'); }
+    try {
+      const res = await enrichFree({ id: activeId }).unwrap();
+      if (!res.queued) {
+        toast.info('Taranacak firma yok — hepsinde ya sonuç var ya da Apollo ile zenginleştirilmiş.');
+        return;
+      }
+      toast.success(`${res.queued} firma taranıyor (sonuç bulunamayanlar yeniden denenir)`);
+      void companiesQ.refetch();
+    } catch { toast.error('Başlatılamadı'); }
   };
 
   const startApollo = async () => {

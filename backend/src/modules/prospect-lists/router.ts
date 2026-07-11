@@ -7,6 +7,7 @@ import {
   importList,
   listLists,
   listCompanies,
+  countFreeEnrichTargets,
   runFreeEnrich,
   runApolloEnrich,
   apolloEnabled,
@@ -64,8 +65,12 @@ export async function registerProspectListsUser(app: FastifyInstance) {
     const tenantKey = getRequiredTenantKey();
     const ownerId = getRequiredUserId();
     const listId = req.params.id;
-    void runFreeEnrich(tenantKey, ownerId, listId).catch((err) => app.log.error({ err }, 'prospect_free_enrich_failed'));
-    return { started: true };
+    // Kaç firma taranacak (pending + sonuç bulunamamış) — UI'da bildirilir.
+    const queued = await countFreeEnrichTargets(tenantKey, ownerId, listId);
+    if (queued > 0) {
+      void runFreeEnrich(tenantKey, ownerId, listId).catch((err) => app.log.error({ err }, 'prospect_free_enrich_failed'));
+    }
+    return { started: queued > 0, queued };
   });
 
   // Apollo enrichment (seçili firmalar) — arka planda.
