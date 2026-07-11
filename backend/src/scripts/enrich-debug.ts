@@ -43,6 +43,11 @@ async function main() {
       console.log(`   contact_phones: ${JSON.stringify((data as { contact_phones?: unknown }).contact_phones ?? null)}`);
       const text = (data as { text_content?: string }).text_content;
       console.log(`   text_content  : ${text ? `${text.length} karakter` : '(yok)'}`);
+      if (text) {
+        console.log(`   --- ilk 700 karakter ---\n${text.slice(0, 700)}\n   --- son ---`);
+        const domains = [...new Set((text.match(/\b[a-z0-9][a-z0-9-]*\.(?:com|net|org|co|io|biz|ae|tr|de|es|co\.uk|com\.tr|com\.co)\b/gi) ?? []).map((d) => d.toLowerCase()))];
+        console.log(`   bulunan domainler: ${JSON.stringify(domains.slice(0, 12))}`);
+      }
     } else {
       console.log('   data         : (yok)');
     }
