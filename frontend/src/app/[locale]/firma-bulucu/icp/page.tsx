@@ -130,22 +130,22 @@ export default function FirmaBulucuIcpPage() {
         </button>
       </div>
 
-      <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
+      <div className="grid gap-5">
         <aside className="rounded-lg border border-[#e2e8f0] bg-white">
           <div className="border-b border-[#e2e8f0] px-4 py-3 text-[13px] font-semibold text-[#475569]">Profiller</div>
-          <div className="max-h-[680px] overflow-auto p-2">
+          <div className="p-3">
             {isLoading ? (
               <div className="flex items-center justify-center py-12"><Loader2 className="h-5 w-5 animate-spin text-[#1e40af]" /></div>
             ) : isError ? (
               <p className="px-3 py-8 text-center text-[13px] text-[#64748b]">ICP profilleri alınamadı.</p>
             ) : profiles.length === 0 ? (
               <p className="px-3 py-8 text-center text-[13px] text-[#64748b]">Henüz ICP profili yok.</p>
-            ) : profiles.map((profile) => (
-              <button key={profile.id} onClick={() => setSelectedId(profile.id)} className={`mb-2 w-full rounded-md border p-3 text-left ${selectedId === profile.id ? 'border-[#2563eb] bg-[#eff6ff]' : 'border-[#e2e8f0] hover:bg-[#f8fafc]'}`}>
+            ) : <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-4">{profiles.map((profile) => (
+              <button key={profile.id} onClick={() => setSelectedId(profile.id)} className={`min-h-20 w-full rounded-md border p-3 text-left ${selectedId === profile.id ? 'border-[#2563eb] bg-[#eff6ff]' : 'border-[#e2e8f0] hover:bg-[#f8fafc]'}`}>
                 <p className="truncate text-[13px] font-bold text-[#0f172a]">{profile.name}</p>
                 <p className="mt-1 text-[12px] text-[#64748b]">{profile.is_active ? 'Aktif' : 'Pasif'}</p>
               </button>
-            ))}
+            ))}</div>}
           </div>
         </aside>
 
