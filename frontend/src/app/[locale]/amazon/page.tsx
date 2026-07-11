@@ -12,11 +12,9 @@ import {
   FileText,
   Info,
   Loader2,
-  LogOut,
   Printer,
   RefreshCw,
   Search,
-  Zap,
 } from 'lucide-react';
 import { useAuthStore } from '@/features/auth/auth.store';
 import { localizePath } from '@/integrations/shared';
@@ -38,6 +36,7 @@ import PublicSavedSearches from '@/components/amazon/public-saved-searches';
 import KeepaBudgetWidget from '@/components/amazon/keepa-budget-widget';
 import { useJobPolling } from '@/hooks/useJobPolling';
 import { cn } from '@/lib/utils';
+import { AppCard, AppPage, AppPageHeader } from '@/components/iy/AppPage';
 
 // ─── Constants ───────────────────────────────────────────────────────────────
 
@@ -254,29 +253,26 @@ export default function DashboardPage() {
     && (quota?.unlimited || (quota?.remaining ?? 1) > 0);
 
   return (
-    <div className="mx-auto max-w-4xl space-y-8">
-        {quota && (
-          <div className="flex justify-end">
+    <AppPage>
+        <AppPageHeader
+          icon={BarChart3}
+          title="Amazon Kategori Analizi"
+          description="Anahtar kelime bazında rekabeti, operasyon riskini ve kategori fırsatını ölçün."
+          actions={quota && (
             <span className="text-[11px] font-medium text-[#64748b]">
               {quota.unlimited ? '∞' : `${quota.used_today} / ${quota.daily_limit}`} analiz
               <span className="ml-1.5 rounded-full border border-[#e2e8f0] px-2 py-0.5 text-[10px] uppercase tracking-widest">
                 {PLAN_LABELS[quota.plan] ?? quota.plan}
               </span>
             </span>
-          </div>
-        )}
+          )}
+        />
         {/* Keepa budget widget (only if BYOK key) */}
         <KeepaBudgetWidget locale={locale} />
 
         {/* Scan form */}
-        <div className="space-y-4">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-(--gm-primary)">Amazon Kategori Analizi</p>
-            <h1 className="font-display text-2xl font-bold text-(--gm-text) mt-1">
-              Keyword gir, riski ölç
-            </h1>
-          </div>
-
+        <AppCard className="space-y-4 p-4">
+          <h2 className="text-[15px] font-bold text-[#0f172a]">Yeni analiz</h2>
           <div className="flex flex-col gap-3 sm:flex-row">
             <input
               type="text"
@@ -284,12 +280,12 @@ export default function DashboardPage() {
               onChange={(e) => setKeyword(e.target.value)}
               onKeyDown={(e) => { if (e.key === 'Enter') handleScan(); }}
               placeholder="floor mats, phone holder, yoga mat…"
-              className="h-12 flex-1 rounded-2xl border border-(--gm-border-soft) bg-(--gm-surface)/20 px-4 text-sm text-(--gm-text) placeholder:text-(--gm-muted)/60 focus:border-(--gm-primary) focus:outline-none"
+              className="h-10 flex-1 rounded-md border border-[#cbd5e1] bg-white px-3 text-[13px] text-[#0f172a] placeholder:text-[#94a3b8] focus:border-[#1e40af] focus:outline-none"
             />
             <select
               value={marketplace}
               onChange={(e) => setMarketplace(e.target.value)}
-              className="h-12 rounded-2xl border border-(--gm-border-soft) bg-(--gm-surface)/20 px-4 text-sm text-(--gm-text) focus:border-(--gm-primary) focus:outline-none"
+              className="h-10 rounded-md border border-[#cbd5e1] bg-white px-3 text-[13px] text-[#0f172a] focus:border-[#1e40af] focus:outline-none"
             >
               {MARKETPLACES.map((m) => (
                 <option key={m.code} value={m.code}>{m.label}</option>
@@ -300,10 +296,10 @@ export default function DashboardPage() {
               onClick={handleScan}
               disabled={!canScan}
               className={cn(
-                'flex h-12 items-center gap-2 rounded-2xl px-6 text-[11px] font-bold uppercase tracking-widest transition-all',
+                'flex h-10 items-center justify-center gap-2 rounded-md px-5 text-[13px] font-semibold transition-colors',
                 canScan
-                  ? 'bg-(--gm-primary) text-white hover:opacity-90'
-                  : 'cursor-not-allowed bg-(--gm-surface) text-(--gm-muted)',
+                  ? 'bg-[#1e40af] text-white hover:bg-[#15317f]'
+                  : 'cursor-not-allowed bg-[#e2e8f0] text-[#94a3b8]',
               )}
             >
               {isScanning
@@ -321,7 +317,7 @@ export default function DashboardPage() {
               <Link href={localizePath(locale, '/pricing')} className="font-bold underline">Planı yükselt</Link>
             </div>
           )}
-        </div>
+        </AppCard>
 
         {/* Active job poller */}
         {activeJobId && (
@@ -439,6 +435,6 @@ export default function DashboardPage() {
             </p>
           </div>
         )}
-    </div>
+    </AppPage>
   );
 }

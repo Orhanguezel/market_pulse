@@ -52,9 +52,7 @@ export type LeadScanRule = {
   channel: LeadChannel | string;
   icp_id?: string | null;
   rule_type?: string | null;
-  value?: string;
-  pattern?: string;
-  action?: string | null;
+  value: string;
   label?: string | null;
   created_at?: string;
 };
@@ -65,6 +63,11 @@ export type LeadCandidateListParams = {
   job_id?: string;
   page?: number;
   limit?: number;
+};
+
+export type LeadCandidatePage = {
+  rows: LeadCandidate[];
+  total: number;
 };
 
 export type StartLeadJobBody = Record<string, unknown> & { icp_id?: string | null };

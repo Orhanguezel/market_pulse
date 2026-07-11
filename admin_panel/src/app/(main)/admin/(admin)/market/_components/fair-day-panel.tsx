@@ -17,6 +17,8 @@ import {
   type LeadCandidate,
 } from '@/integrations/hooks';
 import { cn } from '@/lib/utils';
+import { tokenStore } from '@/integrations/core/token';
+import { getSelectedTenantKey } from '@/integrations/core/tenant';
 
 function asRecord(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' ? value as Record<string, unknown> : {};
@@ -81,6 +83,22 @@ function FairDayCard({ candidate }: { candidate: LeadCandidate }) {
     }
   };
 
+  const handleBriefingDownload = async () => {
+    try {
+      const token = tokenStore.get();
+      const tenantKey = getSelectedTenantKey();
+      const response = await fetch(briefingUrl(candidate.id), { credentials: 'include', headers: {
+        ...(token ? { Authorization: `Bearer ${token}` } : {}),
+        ...(tenantKey ? { 'X-Tenant': tenantKey } : {}),
+      } });
+      if (!response.ok) throw new Error('briefing_failed');
+      const blobUrl = URL.createObjectURL(await response.blob());
+      const link = document.createElement('a');
+      link.href = blobUrl; link.download = `fuar-brifing-${candidate.id}.pdf`; link.click();
+      URL.revokeObjectURL(blobUrl);
+    } catch { toast.error('Brifing PDF indirilemedi'); }
+  };
+
   return (
     <Card className="overflow-hidden rounded-lg border-gm-border-soft bg-gm-bg-deep/70 shadow-lg">
       <CardContent className="space-y-4 p-4 sm:p-5">
@@ -108,10 +126,8 @@ function FairDayCard({ candidate }: { candidate: LeadCandidate }) {
               <span>{[candidate.country, candidate.city].filter(Boolean).join(' / ') || '-'}</span>
             </div>
           </div>
-          <Button asChild size="icon" variant="outline" className="h-10 w-10 shrink-0 rounded-full border-gm-border-soft bg-gm-surface/20 text-gm-text">
-            <a href={briefingUrl(candidate.id)} target="_blank" rel="noreferrer" aria-label="Brifing PDF indir">
+          <Button onClick={handleBriefingDownload} size="icon" variant="outline" className="h-10 w-10 shrink-0 rounded-full border-gm-border-soft bg-gm-surface/20 text-gm-text" aria-label="Brifing PDF indir">
               <Download className="size-4" />
-            </a>
           </Button>
         </div>
 

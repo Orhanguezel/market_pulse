@@ -1,4 +1,4 @@
-import type { FastifyReply, RouteHandler } from 'fastify';
+import type { FastifyReply, FastifyRequest, RouteHandler } from 'fastify';
 import { pool } from '@/db/client';
 import { runWithTenant, runWithTenantAndUser, getRequestTenantKey } from '@/core/tenant-context';
 import { getActiveTenantKey, getActiveUserId, getRequiredTenantKey, getRequiredUserId } from '@/modules/_shared';
@@ -91,16 +91,21 @@ function callbackTenantKey(body: Record<string, unknown>): string | null {
   return typeof body.tenant_key === 'string' && /^[a-z0-9_-]{1,64}$/i.test(body.tenant_key) ? body.tenant_key : null;
 }
 
-function isUserRoute(url?: string): boolean {
-  return Boolean(url && !url.includes('/admin/'));
+/**
+ * Owner-scope, route kaydindaki `config.leadMachineScope` bayragindan okunur.
+ * (URL string'ine bakmak — !url.includes('/admin/') — mount prefix degisirse
+ * sessizce tenant-geneli veriye dusuyordu.) Bayrak yoksa admin/tenant-geneli kabul edilir.
+ */
+function isUserRoute(req: FastifyRequest): boolean {
+  return req.routeOptions?.config?.leadMachineScope === 'user';
 }
 
-function ownerUserIdForRoute(url?: string): string | null {
-  return isUserRoute(url) ? getRequiredUserId() : null;
+function ownerUserIdForRoute(req: FastifyRequest): string | null {
+  return isUserRoute(req) ? getRequiredUserId() : null;
 }
 
-async function consumeDailyUsageForRoute(url: string | undefined, usageType: DailyUsageType, amount = 1) {
-  if (!isUserRoute(url)) return null;
+async function consumeDailyUsageForRoute(req: FastifyRequest, usageType: DailyUsageType, amount = 1) {
+  if (!isUserRoute(req)) return null;
   const result = await checkAndConsumeDailyUsage(getRequiredUserId(), usageType, amount);
   return result.allowed ? null : result;
 }
@@ -109,7 +114,7 @@ export const listLeadCandidates: RouteHandler<{ Querystring: unknown }> = async 
   const q = asRecord(req.query);
   const limit = Math.min(100, Math.max(1, Number(q.limit ?? 25)));
   const page = Math.max(1, Number(q.page ?? 1));
-  const ownerUserId = ownerUserIdForRoute(req.url);
+  const ownerUserId = ownerUserIdForRoute(req);
   const result = await listCandidates({
     channel: typeof q.channel === 'string' ? q.channel : undefined,
     status: typeof q.status === 'string' ? q.status : undefined,
@@ -137,18 +142,59 @@ export const reviewCandidate: RouteHandler<{ Params: { id: string }; Body: unkno
     typeof body.reject_reason === 'string' ? body.reject_reason : null,
     null,
     rejectTags?.length ? rejectTags : null,
-    ownerUserIdForRoute(req.url),
+    ownerUserIdForRoute(req),
   );
   if (!candidate) return reply.code(404).send({ error: { message: 'not_found' } });
   if (status === 'approved' || status === 'favorite') queueCandidateEnrichment(req.params.id);
   return candidate;
 };
 
+export const reviewCandidatesBulk: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  const ids = Array.isArray(body.candidate_ids)
+    ? [...new Set(body.candidate_ids.filter((id): id is string => typeof id === 'string' && id.length > 0))].slice(0, 500)
+    : [];
+  const action = body.action;
+  const status: CandidateStatus | null = action === 'approve' ? 'approved'
+    : action === 'reject' ? 'rejected'
+    : action === 'favorite' ? 'favorite'
+    : null;
+  if (!ids.length || !status) return reply.code(400).send({ error: { message: 'invalid_bulk_review' } });
+
+  const tenantKey = await getActiveTenantKey();
+  const ownerUserId = ownerUserIdForRoute(req);
+  const placeholders = ids.map(() => '?').join(',');
+  const where = [`tenant_key = ?`, `id IN (${placeholders})`];
+  const values: unknown[] = [
+    status,
+    typeof body.reject_reason === 'string' ? body.reject_reason : null,
+    getActiveUserId() ?? null,
+    tenantKey,
+    ...ids,
+  ];
+  if (ownerUserId) { where.push('owner_user_id = ?'); values.push(ownerUserId); }
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+    const [result] = await connection.execute(
+      `UPDATE lead_candidates SET status = ?, reject_reason = ?, reviewed_by = ?, reviewed_at = CURRENT_TIMESTAMP WHERE ${where.join(' AND ')}`,
+      values as never[],
+    );
+    await connection.commit();
+    return { updated: Number((result as { affectedRows?: number }).affectedRows ?? 0) };
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+};
+
 export const approveToLead: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const candidate = await getCandidate(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
+  const candidate = await getCandidate(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
   if (!candidate) return reply.code(404).send({ error: { message: 'not_found' } });
   const lead = await approveCandidateToMarketLead(candidate);
-  await updateCandidateReview(req.params.id, 'approved', null, null, null, ownerUserIdForRoute(req.url));
+  await updateCandidateReview(req.params.id, 'approved', null, null, null, ownerUserIdForRoute(req));
   queueCandidateEnrichment(req.params.id);
   return reply.code(201).send(lead);
 };
@@ -188,8 +234,7 @@ export const createLeadCandidate: RouteHandler<{ Body: unknown }> = async (req, 
 export const scraperCallback: RouteHandler<{ Body: unknown }> = async (req, reply) => {
   const raw = req.headers['x-scraper-signature'] ?? req.headers['x-signature'];
   const signature = Array.isArray(raw) ? raw[0] : raw;
-  const rawBody = JSON.stringify(req.body ?? {});
-  if (!verifyScraperWebhook(Buffer.from(rawBody), signature, process.env.SCRAPER_CALLBACK_SECRET ?? '')) {
+  if (!req.rawBody || !verifyScraperWebhook(req.rawBody, signature, process.env.SCRAPER_CALLBACK_SECRET ?? '')) {
     return reply.code(401).send({ error: { message: 'invalid_signature' } });
   }
   const body = asRecord(req.body);
@@ -231,7 +276,10 @@ export const scraperCallback: RouteHandler<{ Body: unknown }> = async (req, repl
     return { ok: true, inserted };
   };
   const tenantKey = callbackTenantKey(body);
-  return tenantKey ? runWithTenant(tenantKey, handle) : handle();
+  if (!tenantKey) return reply.code(400).send({ error: { message: 'invalid_tenant' } });
+  const [tenantRows] = await pool.execute('SELECT tenant_key FROM tenants WHERE tenant_key = ? AND status = ? LIMIT 1', [tenantKey, 'active']);
+  if (!(tenantRows as Array<{ tenant_key: string }>).length) return reply.code(403).send({ error: { message: 'tenant_not_allowed' } });
+  return runWithTenant(tenantKey, handle);
 };
 
 export const rejectionPatterns: RouteHandler = async () => {
@@ -250,10 +298,10 @@ export const rejectionPatterns: RouteHandler = async () => {
 
 export const aggregateRejectionPatternsHandler: RouteHandler = async () => aggregateRejectionPatterns();
 
-export const listIcp: RouteHandler = async (req) => listIcpProfiles(ownerUserIdForRoute(req.url));
+export const listIcp: RouteHandler = async (req) => listIcpProfiles(ownerUserIdForRoute(req));
 
 export const getIcp: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const profile = await getIcpProfile(req.params.id, ownerUserIdForRoute(req.url));
+  const profile = await getIcpProfile(req.params.id, ownerUserIdForRoute(req));
   if (!profile) return reply.code(404).send({ error: { message: 'not_found' } });
   return profile;
 };
@@ -270,14 +318,15 @@ export const updateIcp: RouteHandler<{ Params: { id: string }; Body: unknown }> 
     name: typeof body.name === 'string' ? body.name : undefined,
     definition: body.definition,
     is_active: typeof body.is_active === 'boolean' ? body.is_active : undefined,
-  }, ownerUserIdForRoute(req.url));
+  }, ownerUserIdForRoute(req));
   if (!profile) return reply.code(404).send({ error: { message: 'not_found' } });
   return profile;
 };
 
-export const deleteIcp: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+export const deleteIcp: RouteHandler<{ Params: { id: string }; Querystring: { force?: string } }> = async (req, reply) => {
+  const force = req.query?.force === 'true' || req.query?.force === '1';
   try {
-    await deleteIcpProfile(req.params.id, ownerUserIdForRoute(req.url));
+    await deleteIcpProfile(req.params.id, ownerUserIdForRoute(req), force);
     return reply.code(204).send();
   } catch (e) {
     if (e instanceof Error && 'statusCode' in e) return reply.code(Number((e as Error & { statusCode: number }).statusCode)).send({ error: { message: e.message } });
@@ -307,7 +356,7 @@ async function createAndRunJob(channel: LeadChannel, body: Record<string, unknow
 }
 
 export const startAmazonJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
-  const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+  const quota = await consumeDailyUsageForRoute(req, 'lead_job');
   if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
   return reply.code(201).send(await createAndRunJob('amazon', asRecord(req.body)));
 };
@@ -316,7 +365,7 @@ export const startAmazonScan: RouteHandler<{ Body: unknown }> = async (req, repl
   if (typeof body.keyword !== 'string' || !body.keyword.trim()) {
     return reply.code(400).send({ error: { message: 'keyword_required' } });
   }
-  const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+  const quota = await consumeDailyUsageForRoute(req, 'lead_job');
   if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
   return reply.code(201).send(await createAndRunJob('amazon', {
     ...body,
@@ -362,37 +411,37 @@ export const getAmazonScan: RouteHandler<{ Params: { jobId: string } }> = async 
 };
 
 export const startB2bJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
-  const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+  const quota = await consumeDailyUsageForRoute(req, 'lead_job');
   if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
   return reply.code(201).send(await createAndRunJob('b2b_directory', asRecord(req.body)));
 };
-export const listB2bJobs: RouteHandler = async (req) => listSearchJobs('b2b_directory', { ownerUserId: ownerUserIdForRoute(req.url) });
+export const listB2bJobs: RouteHandler = async (req) => listSearchJobs('b2b_directory', { ownerUserId: ownerUserIdForRoute(req) });
 export const getB2bJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
+  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
   if (!job || job.channel !== 'b2b_directory') return reply.code(404).send({ error: { message: 'not_found' } });
   return job;
 };
 
 export const startCustomsJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
-  const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+  const quota = await consumeDailyUsageForRoute(req, 'lead_job');
   if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
   return reply.code(201).send(await createAndRunJob('customs', asRecord(req.body)));
 };
-export const listCustomsJobs: RouteHandler = async (req) => listSearchJobs('customs', { ownerUserId: ownerUserIdForRoute(req.url) });
+export const listCustomsJobs: RouteHandler = async (req) => listSearchJobs('customs', { ownerUserId: ownerUserIdForRoute(req) });
 export const getCustomsJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
+  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
   if (!job || job.channel !== 'customs') return reply.code(404).send({ error: { message: 'not_found' } });
   return job;
 };
 
 export const startFairJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
-  const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+  const quota = await consumeDailyUsageForRoute(req, 'lead_job');
   if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
   return reply.code(201).send(await createAndRunJob('trade_fair', asRecord(req.body)));
 };
-export const listFairJobs: RouteHandler = async (req) => listSearchJobs('trade_fair', { ownerUserId: ownerUserIdForRoute(req.url) });
+export const listFairJobs: RouteHandler = async (req) => listSearchJobs('trade_fair', { ownerUserId: ownerUserIdForRoute(req) });
 export const getFairJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
+  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
   if (!job || job.channel !== 'trade_fair') return reply.code(404).send({ error: { message: 'not_found' } });
   return job;
 };
@@ -400,7 +449,7 @@ export const fairSuggestions: RouteHandler = async () => [];
 export const startGenericFairRunner: RouteHandler<{ Body: unknown }> = async (req, reply) => {
   try {
     const params = buildGenericFairRunnerParams(asRecord(req.body));
-    const quota = await consumeDailyUsageForRoute(req.url, 'lead_job');
+    const quota = await consumeDailyUsageForRoute(req, 'lead_job');
     if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
     return reply.code(201).send(await createAndRunJob('trade_fair', { ...params }));
   } catch (e) {
@@ -474,7 +523,7 @@ export const enrichDecisionMakersBatch: RouteHandler<{ Body: unknown }> = async 
 };
 
 export const generateOutreach: RouteHandler<{ Params: { candidateId: string } }> = async (req, reply) => reply.code(201).send(await generateOutreachEmail(req.params.candidateId, {
-  ownerUserId: ownerUserIdForRoute(req.url),
+  ownerUserId: ownerUserIdForRoute(req),
 }));
 export const generateLinkedInTemplatesHandler: RouteHandler<{ Body: unknown }> = async (req, reply) => {
   const body = asRecord(req.body);
@@ -513,7 +562,7 @@ export const listDrafts: RouteHandler<{ Querystring: unknown }> = async (req) =>
   return listOutreachDrafts(
     typeof q.candidate_id === 'string' ? q.candidate_id : undefined,
     typeof q.market_lead_id === 'string' ? q.market_lead_id : undefined,
-    ownerUserIdForRoute(req.url),
+    ownerUserIdForRoute(req),
   );
 };
 export const updateDraft: RouteHandler<{ Params: { id: string }; Body: unknown }> = async (req, reply) => {
@@ -531,7 +580,7 @@ export const updateDraft: RouteHandler<{ Params: { id: string }; Body: unknown }
 export const sendDraft: RouteHandler<{ Params: { id: string }; Body: unknown }> = async (req, reply) => {
   const body = asRecord(req.body);
   try {
-    const quota = await consumeDailyUsageForRoute(req.url, 'email_send');
+    const quota = await consumeDailyUsageForRoute(req, 'email_send');
     if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
     return await sendOutreachDraft(req.params.id, typeof body.to === 'string' ? body.to : null);
   } catch (e) {
@@ -556,7 +605,7 @@ export const openTrackingPixel: RouteHandler<{ Params: { id: string } }> = async
 };
 
 export const getLeadCandidate: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const candidate = await getCandidate(req.params.id, { ownerUserId: ownerUserIdForRoute(req.url) });
+  const candidate = await getCandidate(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
   if (!candidate) return reply.code(404).send({ error: { message: 'not_found' } });
   return candidate;
 };
@@ -650,7 +699,7 @@ export const feedbackApprovedStats: RouteHandler = async () => getApprovedStats(
 export const listRules: RouteHandler<{ Querystring: unknown }> = async (req) => {
   const q = asRecord(req.query);
   const icpId = typeof q.icp_id === 'string' ? q.icp_id : undefined;
-  return listScanRules(icpId, ownerUserIdForRoute(req.url));
+  return listScanRules(icpId, ownerUserIdForRoute(req));
 };
 
 export const createRule: RouteHandler<{ Body: unknown }> = async (req, reply) => {
@@ -664,13 +713,13 @@ export const createRule: RouteHandler<{ Body: unknown }> = async (req, reply) =>
     rule_type: typeof body.rule_type === 'string' ? body.rule_type : 'exclude_reject_tag',
     value: body.value.trim(),
     label: typeof body.label === 'string' ? body.label : null,
-    owner_user_id: ownerUserIdForRoute(req.url),
+    owner_user_id: ownerUserIdForRoute(req),
   });
   return reply.code(201).send(rule);
 };
 
 export const deleteRule: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  await deleteScanRule(req.params.id, ownerUserIdForRoute(req.url));
+  await deleteScanRule(req.params.id, ownerUserIdForRoute(req));
   return reply.code(204).send();
 };
 

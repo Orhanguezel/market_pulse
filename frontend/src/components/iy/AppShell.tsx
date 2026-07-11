@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 import {
   LayoutDashboard, Target, Building2, TrendingUp, FileText, ShoppingCart,
   Package, Folder, CalendarCheck, CalendarDays, ListChecks, BellRing, Mail, Radar, BarChart3,
-  Briefcase, Users, PieChart, User, Menu, X, Plus, Loader2, PanelLeftClose, PanelLeft, Bell,
+  Briefcase, Users, PieChart, User, Menu, X, Plus, Loader2, PanelLeftClose, PanelLeft, Bell, Lock,
 } from 'lucide-react';
 import { IY_APP_NAV, IY_SURFACE_STYLE } from './iy-data';
 import IyUserMenu from './IyUserMenu';
@@ -42,6 +42,8 @@ export default function AppShell({ children, locale }: { children: React.ReactNo
       ?.filter((module) => module.status === 'active' || module.status === 'trial')
       .map((module) => module.module_key) ?? [],
   );
+  const requiredModule = pathname?.match(/^\/[a-z-]+\/(firma-bulucu|amazon|listelerim)(?:\/|$)/) ? 'leads' : null;
+  const accessDenied = Boolean(entitlements && requiredModule && !activeModules.has(requiredModule));
 
   useEffect(() => {
     try { setCollapsed(localStorage.getItem(COLLAPSE_KEY) === '1'); } catch { /* */ }
@@ -168,7 +170,16 @@ export default function AppShell({ children, locale }: { children: React.ReactNo
         )}
 
         {/* Content — full width */}
-        <main className="min-w-0 flex-1 px-4 py-6 lg:px-7">{children}</main>
+        <main className="min-w-0 flex-1 px-4 py-6 lg:px-7">
+          {accessDenied ? (
+            <div className="mx-auto max-w-xl rounded-lg border border-[#dbeafe] bg-white p-8 text-center">
+              <span className="mx-auto grid h-12 w-12 place-items-center rounded-xl bg-[#eff6ff] text-[#1e40af]"><Lock className="h-5 w-5" /></span>
+              <h1 className="mt-4 text-xl font-bold text-[#0f172a]">Firma Bulucu modülü gerekli</h1>
+              <p className="mt-2 text-[13px] text-[#64748b]">Bu sayfayı kullanmak için Leads / Firma Bulucu paketini hesabınıza tanımlayın.</p>
+              <Link href={`/${l}/paketler`} className="mt-5 inline-flex h-10 items-center rounded-md bg-[#1e40af] px-4 text-[13px] font-semibold text-white">Paketleri incele</Link>
+            </div>
+          ) : children}
+        </main>
       </div>
     </div>
   );

@@ -19,6 +19,8 @@ type ConfirmDeleteDialogProps = {
   title?: string;
   description?: string;
   isDeleting?: boolean;
+  /** false ise toast'lari cagiran yonetir (orn. 409 gibi ozel hata akislari). */
+  notify?: boolean;
   onOpenChange: (open: boolean) => void;
   onConfirm: () => Promise<unknown> | unknown;
 };
@@ -28,6 +30,7 @@ export function ConfirmDeleteDialog({
   title = 'Kaydı sil',
   description = 'Bu işlem geri alınamaz.',
   isDeleting,
+  notify = true,
   onOpenChange,
   onConfirm,
 }: ConfirmDeleteDialogProps) {
@@ -38,10 +41,10 @@ export function ConfirmDeleteDialog({
     setPending(true);
     try {
       await onConfirm();
-      toast.success('Kayıt silindi');
+      if (notify) toast.success('Kayıt silindi');
       onOpenChange(false);
     } catch {
-      toast.error('Kayıt silinemedi');
+      if (notify) toast.error('Kayıt silinemedi');
     } finally {
       setPending(false);
     }

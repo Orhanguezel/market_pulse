@@ -11,35 +11,61 @@ import {
   useUpdateIcpProfileMutation,
 } from '@/integrations/rtk/hooks';
 import type { IcpProfile } from '@/integrations/shared/lead-machine.types';
+import { ICP_TEMPLATES, type IcpTemplate } from './icp-templates';
 
-type FormState = { name: string; is_active: boolean; definition_json: string };
+type IcpDefinitionForm = {
+  sectors: string[]; sub_sectors: string[]; firm_types: string[]; geographies: string[];
+  priority_geographies: string[]; exclude_geographies: string[]; sales_channels: string[];
+  keywords: string[]; exclude_patterns: string[]; min_employees: number | null; max_employees: number | null;
+  strong_match_sectors: string[]; weak_match_sectors: string[]; positive_signals: string[]; negative_signals: string[];
+  min_lead_score_for_candidate: number; auto_approve_threshold: number;
+};
+type FormState = { name: string; is_active: boolean; definition: IcpDefinitionForm };
+
+const EMPTY_DEFINITION: IcpDefinitionForm = {
+  sectors: [], sub_sectors: [], firm_types: [], geographies: [],
+  priority_geographies: [], exclude_geographies: [], sales_channels: [],
+  keywords: [], exclude_patterns: [],
+  min_employees: null, max_employees: null, strong_match_sectors: [], weak_match_sectors: [],
+  positive_signals: [], negative_signals: [], min_lead_score_for_candidate: 5.5, auto_approve_threshold: 7,
+};
 
 const EMPTY: FormState = {
   name: '',
   is_active: true,
-  definition_json: JSON.stringify({
-    sectors: [],
-    target_countries: [],
-    company_types: [],
-    keywords: [],
-    exclude_keywords: [],
-  }, null, 2),
+  definition: EMPTY_DEFINITION,
 };
+
+function asStringArray(value: unknown) { return Array.isArray(value) ? value.filter((item): item is string => typeof item === 'string') : []; }
+function asNumber(value: unknown, fallback: number) { const parsed = Number(value); return Number.isFinite(parsed) ? parsed : fallback; }
+function csv(value: string) { return value.split(',').map((item) => item.trim()).filter(Boolean); }
+
+/** RTK Query hata nesnesinden backend'in 409 ICP_HAS_JOBS yanitini tanir. */
+function isIcpHasJobsError(error: unknown): boolean {
+  const status = (error as { status?: number } | null)?.status;
+  const message = (error as { data?: { error?: { message?: string } } } | null)?.data?.error?.message;
+  return status === 409 || message === 'ICP_HAS_JOBS';
+}
 
 function toForm(profile: IcpProfile): FormState {
   return {
     name: profile.name,
     is_active: Boolean(profile.is_active),
-    definition_json: JSON.stringify(profile.definition ?? {}, null, 2),
+    definition: {
+      ...EMPTY_DEFINITION,
+      ...profile.definition,
+      sectors: asStringArray(profile.definition?.sectors), sub_sectors: asStringArray(profile.definition?.sub_sectors),
+      firm_types: asStringArray(profile.definition?.firm_types), geographies: asStringArray(profile.definition?.geographies ?? profile.definition?.target_countries),
+      priority_geographies: asStringArray(profile.definition?.priority_geographies),
+      exclude_geographies: asStringArray(profile.definition?.exclude_geographies),
+      sales_channels: asStringArray(profile.definition?.sales_channels),
+      keywords: asStringArray(profile.definition?.keywords), exclude_patterns: asStringArray(profile.definition?.exclude_patterns ?? profile.definition?.exclude_keywords),
+      strong_match_sectors: asStringArray(profile.definition?.strong_match_sectors), weak_match_sectors: asStringArray(profile.definition?.weak_match_sectors),
+      positive_signals: asStringArray(profile.definition?.positive_signals), negative_signals: asStringArray(profile.definition?.negative_signals),
+      min_lead_score_for_candidate: asNumber(profile.definition?.min_lead_score_for_candidate, 5.5),
+      auto_approve_threshold: asNumber(profile.definition?.auto_approve_threshold, 7),
+    },
   };
-}
-
-function parseDefinition(value: string) {
-  try {
-    return JSON.parse(value || '{}') as Record<string, unknown>;
-  } catch {
-    throw new Error('Definition JSON geçerli değil.');
-  }
 }
 
 export default function FirmaBulucuIcpPage() {
@@ -51,6 +77,7 @@ export default function FirmaBulucuIcpPage() {
   const [form, setForm] = React.useState<FormState>(EMPTY);
   const [advancedOpen, setAdvancedOpen] = React.useState(true);
   const [deleteOpen, setDeleteOpen] = React.useState(false);
+  const [forceDeleteId, setForceDeleteId] = React.useState<string | null>(null);
   const selected = profiles.find((profile) => profile.id === selectedId) ?? null;
   const busy = createState.isLoading || updateState.isLoading || deleteState.isLoading;
 
@@ -65,7 +92,7 @@ export default function FirmaBulucuIcpPage() {
 
   const save = async () => {
     try {
-      const definition = parseDefinition(form.definition_json);
+      const definition = form.definition;
       if (!form.name.trim()) {
         toast.error('Profil adı gerekli.');
         return;
@@ -84,12 +111,35 @@ export default function FirmaBulucuIcpPage() {
     }
   };
 
-  const remove = async () => {
+  const remove = async (force = false) => {
     if (!selectedId) return;
-    await deleteProfile(selectedId).unwrap();
-    setSelectedId(null);
-    setForm(EMPTY);
-    await refetch();
+    try {
+      await deleteProfile({ id: selectedId, force }).unwrap();
+      setSelectedId(null);
+      setForm(EMPTY);
+      setForceDeleteId(null);
+      toast.success('ICP profili silindi');
+      await refetch();
+    } catch (error) {
+      // Backend, ICP'ye bagli tarama isi varsa 409 ICP_HAS_JOBS doner.
+      if (isIcpHasJobsError(error)) {
+        setForceDeleteId(selectedId);
+        toast.error('Bu ICP\'ye bağlı tarama işleri var. Yine de silmek için onaylayın.');
+        return;
+      }
+      toast.error('ICP profili silinemedi.');
+    }
+  };
+
+  const createFromTemplate = async (template: IcpTemplate) => {
+    try {
+      const created = await createProfile({ name: template.name, definition: template.definition, is_active: true }).unwrap();
+      setSelectedId(created.id);
+      toast.success(`${template.label} profili oluşturuldu`);
+      await refetch();
+    } catch {
+      toast.error('Şablondan profil oluşturulamadı.');
+    }
   };
 
   return (
@@ -103,6 +153,28 @@ export default function FirmaBulucuIcpPage() {
           <Plus className="h-4 w-4" /> Yeni ICP
         </button>
       </div>
+
+      <section className="rounded-lg border border-[#e2e8f0] bg-white p-4">
+        <p className="mb-1 text-[12px] font-semibold uppercase text-[#64748b]">Hazır şablonlar</p>
+        <p className="mb-3 text-[12px] text-[#64748b]">Tek tıkla profil oluşturur; sonrasında alanları serbestçe düzenleyebilirsiniz.</p>
+        <div className="grid gap-3 md:grid-cols-3">
+          {ICP_TEMPLATES.map((template) => (
+            <div key={template.key} className="flex flex-col justify-between rounded-lg border border-[#e2e8f0] p-3 hover:bg-[#f8fafc]">
+              <div>
+                <p className="text-[13px] font-bold text-[#0f172a]">{template.label}</p>
+                <p className="mt-1 text-[12px] text-[#64748b]">{template.description}</p>
+              </div>
+              <button
+                disabled={busy}
+                onClick={() => createFromTemplate(template)}
+                className="mt-3 inline-flex h-8 w-fit items-center gap-1.5 rounded-md border border-[#1e40af] px-2.5 text-[12px] font-semibold text-[#1e40af] hover:bg-[#eff6ff] disabled:opacity-50"
+              >
+                <Plus className="h-3.5 w-3.5" /> Şablondan oluştur
+              </button>
+            </div>
+          ))}
+        </div>
+      </section>
 
       <div className="grid gap-5 lg:grid-cols-[320px_1fr]">
         <aside className="rounded-lg border border-[#e2e8f0] bg-white">
@@ -148,11 +220,24 @@ export default function FirmaBulucuIcpPage() {
             <button onClick={() => setAdvancedOpen((value) => !value)} className="w-fit rounded-md border border-[#cbd5e1] px-3 py-2 text-[13px] font-semibold text-[#334155]">
               Gelişmiş alanlar {advancedOpen ? '−' : '+'}
             </button>
+            <div className="grid gap-4 md:grid-cols-2">
+              {([
+                ['sectors', 'Sektörler', 'automotive, textiles'], ['sub_sectors', 'Alt sektörler', 'car mats, accessories'],
+                ['firm_types', 'Firma tipleri', 'distributor, importer'], ['geographies', 'Hedef ülkeler', 'DE, NL, FR'],
+                ['keywords', 'Anahtar kelimeler', 'floor mats, private label'], ['exclude_patterns', 'Hariç kelimeler', 'rental, used parts'],
+                ['priority_geographies', 'Öncelikli ülkeler', 'DE, AT'], ['exclude_geographies', 'Hariç ülkeler', 'CN, HK'],
+                ['sales_channels', 'Satış kanalları', 'amazon, own website'],
+              ] as const).map(([key, label, placeholder]) => (
+                <label key={key} className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">{label}</span><input value={form.definition[key].join(', ')} placeholder={placeholder} onChange={(event) => setForm((current) => ({ ...current, definition: { ...current.definition, [key]: csv(event.target.value) } }))} className="h-10 rounded-md border border-[#cbd5e1] px-3 text-[13px]" /></label>
+              ))}
+              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Minimum çalışan</span><input type="number" value={form.definition.min_employees ?? ''} onChange={(event) => setForm((current) => ({ ...current, definition: { ...current.definition, min_employees: event.target.value ? Number(event.target.value) : null } }))} className="h-10 rounded-md border border-[#cbd5e1] px-3 text-[13px]" /></label>
+              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Maksimum çalışan</span><input type="number" value={form.definition.max_employees ?? ''} onChange={(event) => setForm((current) => ({ ...current, definition: { ...current.definition, max_employees: event.target.value ? Number(event.target.value) : null } }))} className="h-10 rounded-md border border-[#cbd5e1] px-3 text-[13px]" /></label>
+            </div>
             {advancedOpen && (
-              <label className="grid gap-1.5">
-                <span className="text-[12px] font-semibold uppercase text-[#64748b]">Definition JSON</span>
-                <textarea value={form.definition_json} onChange={(event) => setForm((current) => ({ ...current, definition_json: event.target.value }))} rows={18} className="rounded-md border border-[#cbd5e1] px-3 py-2 font-mono text-[12px] text-[#0f172a]" />
-              </label>
+              <div className="grid gap-4 rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-4 md:grid-cols-2">
+                {(['strong_match_sectors', 'weak_match_sectors', 'positive_signals', 'negative_signals'] as const).map((key) => <label key={key} className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">{key.replaceAll('_', ' ')}</span><textarea rows={2} value={form.definition[key].join(', ')} onChange={(event) => setForm((current) => ({ ...current, definition: { ...current.definition, [key]: csv(event.target.value) } }))} className="rounded-md border border-[#cbd5e1] px-3 py-2 text-[13px]" /></label>)}
+                {(['min_lead_score_for_candidate', 'auto_approve_threshold'] as const).map((key) => <label key={key} className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">{key.replaceAll('_', ' ')}</span><input type="number" step="0.1" value={form.definition[key]} onChange={(event) => setForm((current) => ({ ...current, definition: { ...current.definition, [key]: Number(event.target.value) } }))} className="h-10 rounded-md border border-[#cbd5e1] px-3 text-[13px]" /></label>)}
+              </div>
             )}
           </div>
         </main>
@@ -164,7 +249,16 @@ export default function FirmaBulucuIcpPage() {
         isDeleting={deleteState.isLoading}
         title="ICP profilini sil"
         description="Bu profil silinecek; mevcut aday kayıtları korunur."
-        onConfirm={remove}
+        onConfirm={() => remove(false)}
+      />
+
+      <ConfirmDeleteDialog
+        open={Boolean(forceDeleteId)}
+        onOpenChange={(open) => { if (!open) setForceDeleteId(null); }}
+        isDeleting={deleteState.isLoading}
+        title="Bağlı tarama işleri var — yine de silinsin mi?"
+        description="Bu ICP'ye bağlı tarama işleri bulunuyor. Devam ederseniz profil silinir; tarama işleri ve adaylar korunur ancak ICP bağlantıları kaldırılır. Bu profile ait dışlama kuralları silinir."
+        onConfirm={() => remove(true)}
       />
     </div>
   );

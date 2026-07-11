@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import { Check, Lock, Sparkles, Package as PackageIcon } from 'lucide-react';
 import { useMyPackagesQuery, type PackageItem } from '@/integrations/rtk/public/entitlements.endpoints';
+import { AppCard, AppPage, AppPageHeader } from '@/components/iy/AppPage';
 
 function money(value: string | number, currency: string) {
   const n = Number(value);
@@ -26,8 +27,8 @@ function PackageCard({ pkg, locale }: { pkg: PackageItem; locale: string }) {
 
   return (
     <div
-      className={`flex flex-col rounded-2xl border p-5 transition-shadow hover:shadow-md ${
-        state === 'owned' ? 'border-emerald-300 bg-emerald-50/40' : state === 'free' ? 'border-slate-200 bg-white' : 'border-slate-200 bg-white'
+      className={`flex flex-col rounded-lg border bg-white p-5 transition-shadow hover:shadow-sm ${
+        state === 'owned' ? 'border-emerald-300' : 'border-[#e2e8f0]'
       }`}
     >
       <div className="flex items-start justify-between gap-3">
@@ -73,7 +74,7 @@ function PackageCard({ pkg, locale }: { pkg: PackageItem; locale: string }) {
         ) : (
           <Link
             href={`/${locale}/contact`}
-            className="block rounded-lg bg-slate-900 px-3 py-2 text-center text-sm font-semibold text-white transition-colors hover:bg-slate-800"
+            className="block rounded-md bg-[#1e40af] px-3 py-2 text-center text-[13px] font-semibold text-white transition-colors hover:bg-[#15317f]"
           >
             Havale ile satın al
           </Link>
@@ -90,25 +91,19 @@ export default function PackagesPage() {
   const packages = data?.packages ?? [];
 
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
-      <div className="mb-6 flex items-center gap-3">
-        <div className="flex size-10 items-center justify-center rounded-xl bg-slate-900 text-white">
-          <PackageIcon className="size-5" />
-        </div>
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Paketler</h1>
-          <p className="text-sm text-slate-500">
-            Mail &amp; Takvim ücretsiz. Diğer paketleri havale ile satın alın; ödemeyi bildirdiğinizde hesabınıza tanımlarız.
-          </p>
-        </div>
-      </div>
+    <AppPage>
+      <AppPageHeader
+        icon={PackageIcon}
+        title="Paketler"
+        description="Mail ve Takvim ücretsizdir. Diğer paketleri inceleyin ve hesabınıza tanımlanması için iletişime geçin."
+      />
 
       {isLoading ? (
         <div className="text-sm text-slate-400">Yükleniyor…</div>
       ) : packages.length === 0 ? (
-        <div className="rounded-xl border border-slate-200 bg-white p-8 text-center text-sm text-slate-500">
+        <AppCard className="p-8 text-center text-sm text-slate-500">
           Paket bulunamadı.
-        </div>
+        </AppCard>
       ) : (
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
           {packages.map((pkg) => (
@@ -117,10 +112,10 @@ export default function PackagesPage() {
         </div>
       )}
 
-      <p className="mt-8 rounded-xl border border-slate-200 bg-slate-50 px-4 py-3 text-xs text-slate-500">
+      <p className="rounded-lg border border-[#dbeafe] bg-[#eff6ff] px-4 py-3 text-xs text-[#475569]">
         Ödeme şu an <strong>havale ile manuel</strong> yapılmaktadır. Satın almak istediğiniz paket için bizimle iletişime geçin;
         ödemeniz onaylandığında ilgili paket hesabınıza açılır.
       </p>
-    </div>
+    </AppPage>
   );
 }

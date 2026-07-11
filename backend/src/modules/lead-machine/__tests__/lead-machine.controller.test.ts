@@ -148,12 +148,13 @@ describe('lead machine controller scraper callback and jobs', () => {
   });
 
   test('imports candidates from scraper callback', async () => {
+    dbMock.queuePoolExecute([{ tenant_key: 'avrasya' }]);
     dbMock.queuePoolExecute([job()]);
 
     const { result } = await callHandler(controller.scraperCallback, {
       headers: { 'x-scraper-signature': 'ok' },
       body: {
-        job_id: 'job-1',
+        job_id: 'job-1', tenant_key: 'avrasya',
         status: 'completed',
         result: {
           candidates: [
@@ -171,6 +172,7 @@ describe('lead machine controller scraper callback and jobs', () => {
   });
 
   test('uses scraper callback tenant key for job lookup and writes', async () => {
+    dbMock.queuePoolExecute([{ tenant_key: 'vistaseeds' }]);
     dbMock.queuePoolExecute([job()]);
 
     const { result } = await callHandler(controller.scraperCallback, {
@@ -188,7 +190,7 @@ describe('lead machine controller scraper callback and jobs', () => {
     });
 
     expect(result).toEqual({ ok: true, inserted: 1 });
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['vistaseeds', 'job-1']);
+    expect(dbMock.poolExecutions[1]?.values).toEqual(['vistaseeds', 'job-1']);
     const insert = dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'));
     expect(insert?.values).toEqual(expect.arrayContaining(['vistaseeds', 'job-1', 'amazon', 'Vista Buyer']));
     expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, null, 'job-1', 'vistaseeds']);
@@ -197,7 +199,7 @@ describe('lead machine controller scraper callback and jobs', () => {
   test('rejects scraper callback without job id', async () => {
     const { state } = await callHandler(controller.scraperCallback, {
       headers: { 'x-scraper-signature': 'ok' },
-      body: { result: {} },
+      body: { tenant_key: 'avrasya', result: {} },
     });
 
     expect(state.statusCode).toBe(400);
@@ -205,11 +207,12 @@ describe('lead machine controller scraper callback and jobs', () => {
   });
 
   test('returns 404 when scraper callback job is missing', async () => {
+    dbMock.queuePoolExecute([{ tenant_key: 'avrasya' }]);
     dbMock.queuePoolExecute([]);
 
     const { state } = await callHandler(controller.scraperCallback, {
       headers: { 'x-scraper-signature': 'ok' },
-      body: { job_id: 'missing', result: {} },
+      body: { job_id: 'missing', tenant_key: 'avrasya', result: {} },
     });
 
     expect(state.statusCode).toBe(404);
@@ -217,11 +220,12 @@ describe('lead machine controller scraper callback and jobs', () => {
   });
 
   test('marks scraper callback job failed', async () => {
+    dbMock.queuePoolExecute([{ tenant_key: 'avrasya' }]);
     dbMock.queuePoolExecute([job()]);
 
     const { result } = await callHandler(controller.scraperCallback, {
       headers: { 'x-scraper-signature': 'ok' },
-      body: { job_id: 'job-1', status: 'failed', error: 'SCRAPER_DOWN', result: { candidates: [] } },
+      body: { job_id: 'job-1', tenant_key: 'avrasya', status: 'failed', error: 'SCRAPER_DOWN', result: { candidates: [] } },
     });
 
     expect(result).toEqual({ ok: true, inserted: 0 });

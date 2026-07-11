@@ -148,6 +148,7 @@ describe('lead machine outreach service', () => {
       subject: 'Meeting',
       html: expect.stringContaining('<p>Hello</p>\n<p>Can we meet?</p>'),
       text: 'Hello\n\nCan we meet?',
+      replyTo: null,
     });
     expect((sendMailRaw.mock.calls[0]?.[0] as { html: string }).html).toContain('/api/v1/lead-machine/outreach/open/draft-1/pixel.gif');
     expect(dbMock.poolExecutions[2]?.sql).toBe("UPDATE lead_outreach_drafts SET status = 'sent', sent_at = CURRENT_TIMESTAMP WHERE tenant_key = ? AND id = ?");

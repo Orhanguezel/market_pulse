@@ -29,6 +29,20 @@ export const IY_SURFACE_STYLE = {
   '--color-text-primary': '#0f172a',
   '--color-text-secondary': '#334155',
   '--color-text-muted': '#64748b',
+  // Uygulama içindeki eski `--gm-*` kullanan modülleri de aynı mavi/beyaz
+  // tasarım sistemine bağlar. Yeni ekranlar AppPage bileşenlerini kullanmalı.
+  '--gm-bg': '#eaeaea',
+  '--gm-bg-deep': '#f1f5f9',
+  '--gm-surface': '#ffffff',
+  '--gm-surface-high': '#eff6ff',
+  '--gm-text': '#0f172a',
+  '--gm-text-dim': '#475569',
+  '--gm-muted': '#64748b',
+  '--gm-primary': '#1e40af',
+  '--gm-primary-hover': '#15317f',
+  '--gm-primary-dark': '#15317f',
+  '--gm-border-soft': '#e2e8f0',
+  '--gm-border': '#cbd5e1',
 } as CSSProperties;
 
 // Koyu zeminli IY yüzeyi (footer) — global h/p/a kurallarını AÇIK metne zorlar

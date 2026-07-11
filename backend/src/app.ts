@@ -89,6 +89,14 @@ export async function createApp() {
     },
   );
 
+  app.removeContentTypeParser('application/json');
+  app.addContentTypeParser('application/json', { parseAs: 'buffer' }, (req, body, done) => {
+    const rawBody = Buffer.isBuffer(body) ? body : Buffer.from(body);
+    req.rawBody = rawBody;
+    try { done(null, JSON.parse(rawBody.toString('utf8'))); }
+    catch (error) { done(error as Error, undefined); }
+  });
+
   await app.register(requestLoggerPlugin);
   await registerAllRoutes(app);
   registerErrorHandlers(app);

@@ -20,7 +20,7 @@ import { createList, addRecipients } from '../outreach/bulk-list.repository';
  * /api/v1/lead-machine/decision-makers/* — requireAuth + requireModule('leads').
  */
 export async function registerDecisionMakerPublic(app: FastifyInstance) {
-  const guard = { preHandler: [requireAuth, requireModule('leads')] };
+  const guard = { preHandler: [requireAuth, requireModule('leads')], config: { leadMachineScope: 'user' as const } };
   const emailMarketingGuard = { preHandler: [requireAuth, requireModule('leads'), requireModule('email-marketing')] };
 
   // Sektör/unvan presetleri (UI için)
@@ -308,7 +308,7 @@ function registerReviewRoutes(app: FastifyInstance, routeOpts: Record<string, un
     const id = (req.params as { id: string }).id;
     const status = parseReviewStatus((req.body as { status?: unknown } | undefined)?.status);
     if (!status) return reply.status(400).send({ error: { message: 'invalid_status' } });
-    const ownerUserId = req.url.includes('/admin/') ? null : getRequiredUserId();
+    const ownerUserId = req.routeOptions.config.leadMachineScope === 'user' ? getRequiredUserId() : null;
     const ok = await updateDecisionMakerReview(id, status, ownerUserId);
     if (!ok) return reply.status(404).send({ error: { message: 'not_found' } });
     return { id, review_status: status };
@@ -320,7 +320,7 @@ function registerReviewRoutes(app: FastifyInstance, routeOpts: Record<string, un
     const status = parseQualityStatus(body.status);
     if (!status) return reply.status(400).send({ error: { message: 'invalid_status' } });
     const reason = typeof body.exclude_reason === 'string' ? body.exclude_reason : null;
-    const ownerUserId = req.url.includes('/admin/') ? null : getRequiredUserId();
+    const ownerUserId = req.routeOptions.config.leadMachineScope === 'user' ? getRequiredUserId() : null;
     const ok = await updateCompanyPoolStatus(id, status, reason, ownerUserId);
     if (!ok) return reply.status(404).send({ error: { message: 'not_found' } });
     return { id, quality_status: status };

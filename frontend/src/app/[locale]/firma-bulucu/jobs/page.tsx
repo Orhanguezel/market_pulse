@@ -9,9 +9,11 @@ import {
   useGetB2bLeadJobQuery,
   useGetCustomsLeadJobQuery,
   useGetFairLeadJobQuery,
+  useGetAmazonLeadJobQuery,
   useListB2bLeadJobsQuery,
   useListCustomsLeadJobsQuery,
   useListFairLeadJobsQuery,
+  useListAmazonLeadJobsQuery,
 } from '@/integrations/rtk/hooks';
 import type { LeadChannel, LeadSearchJob } from '@/integrations/shared/lead-machine.types';
 
@@ -19,6 +21,7 @@ const CHANNEL_LABELS: Record<string, string> = {
   b2b_directory: 'B2B',
   trade_fair: 'Fuar',
   customs: 'Gümrük',
+  amazon: 'Amazon',
 };
 
 const STATUS_LABELS: Record<string, string> = {
@@ -79,11 +82,17 @@ function CustomsJobWatcher({ id, onSettled }: { id: string; onSettled: () => voi
   return null;
 }
 
+function AmazonJobWatcher({ id, onSettled }: { id: string; onSettled: () => void }) {
+  useJobPolling({ jobId: id, useJobQuery: useGetAmazonLeadJobQuery, onDone: onSettled, onFailed: onSettled });
+  return null;
+}
+
 function JobWatcher({ job, onSettled }: { job: LeadSearchJob; onSettled: () => void }) {
   if (!isActive(job.status)) return null;
   if (job.channel === 'b2b_directory') return <B2bJobWatcher id={job.id} onSettled={onSettled} />;
   if (job.channel === 'trade_fair') return <FairJobWatcher id={job.id} onSettled={onSettled} />;
   if (job.channel === 'customs') return <CustomsJobWatcher id={job.id} onSettled={onSettled} />;
+  if (job.channel === 'amazon') return <AmazonJobWatcher id={job.id} onSettled={onSettled} />;
   return null;
 }
 
@@ -94,23 +103,25 @@ export default function FirmaBulucuJobsPage() {
   const b2b = useListB2bLeadJobsQuery(undefined, { pollingInterval: 10000 });
   const fair = useListFairLeadJobsQuery(undefined, { pollingInterval: 10000 });
   const customs = useListCustomsLeadJobsQuery(undefined, { pollingInterval: 10000 });
+  const amazon = useListAmazonLeadJobsQuery(undefined, { pollingInterval: 10000 });
 
   const refetchAll = React.useCallback(() => {
     b2b.refetch();
     fair.refetch();
     customs.refetch();
-  }, [b2b, fair, customs]);
+    amazon.refetch();
+  }, [b2b, fair, customs, amazon]);
 
   const jobs = React.useMemo(() => {
-    const merged = [...(b2b.data ?? []), ...(fair.data ?? []), ...(customs.data ?? [])];
+    const merged = [...(b2b.data ?? []), ...(fair.data ?? []), ...(customs.data ?? []), ...(amazon.data ?? [])];
     return merged
       .filter((job) => channel === 'all' || job.channel === channel)
       .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime());
-  }, [b2b.data, fair.data, customs.data, channel]);
+  }, [b2b.data, fair.data, customs.data, amazon.data, channel]);
 
-  const isLoading = b2b.isLoading || fair.isLoading || customs.isLoading;
-  const isError = b2b.isError || fair.isError || customs.isError;
-  const isFetching = b2b.isFetching || fair.isFetching || customs.isFetching;
+  const isLoading = b2b.isLoading || fair.isLoading || customs.isLoading || amazon.isLoading;
+  const isError = b2b.isError || fair.isError || customs.isError || amazon.isError;
+  const isFetching = b2b.isFetching || fair.isFetching || customs.isFetching || amazon.isFetching;
   const activeCount = jobs.filter((job) => isActive(job.status)).length;
 
   return (
@@ -120,7 +131,7 @@ export default function FirmaBulucuJobsPage() {
       <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
         <div>
           <h1 className="text-xl font-bold text-[#0f172a]">Tarama İşleri</h1>
-          <p className="mt-0.5 text-[13px] text-[#64748b]">B2B, fuar ve gümrük taramalarının durumunu izleyin.</p>
+          <p className="mt-0.5 text-[13px] text-[#64748b]">B2B, fuar, gümrük ve Amazon taramalarının durumunu izleyin.</p>
         </div>
         <div className="flex flex-wrap gap-2">
           <Link href={`/${locale}/firma-bulucu/tarama`} className="inline-flex h-9 items-center gap-2 rounded-md bg-[#1e40af] px-3 text-[13px] font-semibold text-white">
@@ -140,6 +151,7 @@ export default function FirmaBulucuJobsPage() {
             <option value="b2b_directory">B2B</option>
             <option value="trade_fair">Fuar</option>
             <option value="customs">Gümrük</option>
+            <option value="amazon">Amazon</option>
           </select>
         </label>
         <div className="rounded-md bg-[#f8fafc] px-3 py-2 text-[12px] font-semibold text-[#475569]">

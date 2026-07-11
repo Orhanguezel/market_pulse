@@ -11,8 +11,9 @@ import {
   useEnrichLeadCandidateMutation,
   useEnrichLeadCandidatesBatchMutation,
   useListLeadRulesQuery,
-  useListLeadCandidatesQuery,
+  useListLeadCandidatesPageQuery,
   useReviewLeadCandidateMutation,
+  useReviewLeadCandidatesBulkMutation,
 } from '@/integrations/rtk/hooks';
 import { useGenerateCandidateOutreachDraftMutation } from '@/integrations/rtk/public/outreach.endpoints';
 import type { LeadCandidate } from '@/integrations/shared/lead-machine.types';
@@ -47,13 +48,20 @@ export default function FirmaBulucuAdaylarPage() {
   const [query, setQuery] = React.useState('');
   const [ruleValue, setRuleValue] = React.useState('');
   const [selected, setSelected] = React.useState<Set<string>>(() => new Set());
-  const { data = [], isLoading, isError, refetch } = useListLeadCandidatesQuery({
+  const [page, setPage] = React.useState(1);
+  const pageSize = 50;
+  const { data: pageData, isLoading, isError, refetch } = useListLeadCandidatesPageQuery({
     channel: channel || undefined,
     status: status || undefined,
     job_id: jobId || undefined,
-    limit: 100,
+    page,
+    limit: pageSize,
   });
+  const data = pageData?.rows ?? [];
+  const total = pageData?.total ?? 0;
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const [reviewCandidate, reviewState] = useReviewLeadCandidateMutation();
+  const [reviewCandidatesBulk, bulkReviewState] = useReviewLeadCandidatesBulkMutation();
   const [approveToLead, approveState] = useApproveLeadCandidateToLeadMutation();
   const [enrichOne, enrichOneState] = useEnrichLeadCandidateMutation();
   const [enrichBatch, enrichBatchState] = useEnrichLeadCandidatesBatchMutation();
@@ -61,7 +69,12 @@ export default function FirmaBulucuAdaylarPage() {
   const { data: rules = [] } = useListLeadRulesQuery();
   const [createRule, createRuleState] = useCreateLeadRuleMutation();
   const [deleteRule, deleteRuleState] = useDeleteLeadRuleMutation();
-  const busy = reviewState.isLoading || approveState.isLoading || enrichOneState.isLoading || enrichBatchState.isLoading || generateDraftState.isLoading || createRuleState.isLoading || deleteRuleState.isLoading;
+  const busy = reviewState.isLoading || bulkReviewState.isLoading || approveState.isLoading || enrichOneState.isLoading || enrichBatchState.isLoading || generateDraftState.isLoading || createRuleState.isLoading || deleteRuleState.isLoading;
+
+  React.useEffect(() => {
+    setPage(1);
+    setSelected(new Set());
+  }, [channel, status, jobId]);
 
   const rows = React.useMemo(() => {
     const needle = query.trim().toLocaleLowerCase('tr-TR');
@@ -99,7 +112,7 @@ export default function FirmaBulucuAdaylarPage() {
   const rejectSelected = async () => {
     const ids = [...selected];
     if (!ids.length) return;
-    await Promise.all(ids.map((id) => reviewCandidate({ id, action: 'reject', reject_reason: 'bulk_reject' }).unwrap()));
+    await reviewCandidatesBulk({ candidate_ids: ids, action: 'reject', reject_reason: 'bulk_reject' }).unwrap();
     setSelected(new Set());
     toast.success(`${ids.length} aday reddedildi`);
   };
@@ -151,7 +164,7 @@ export default function FirmaBulucuAdaylarPage() {
           <div className="mt-3 flex flex-wrap gap-2">
             {rules.map((rule) => (
               <button key={rule.id} disabled={busy} onClick={() => deleteRule(rule.id).unwrap().then(() => toast.success('Kural silindi'))} className="rounded-md bg-[#f1f5f9] px-2.5 py-1.5 text-[12px] font-semibold text-[#475569] disabled:opacity-50">
-                {rule.value ?? rule.pattern} ×
+                {rule.value} ×
               </button>
             ))}
           </div>
@@ -165,6 +178,7 @@ export default function FirmaBulucuAdaylarPage() {
       ) : rows.length === 0 ? (
         <div className="rounded-lg border border-[#e2e8f0] bg-white px-4 py-12 text-center text-[13px] text-[#64748b]">Aday bulunamadı.</div>
       ) : (
+        <>
         <div className="grid gap-3 lg:grid-cols-2">
           {rows.map((candidate) => (
             <article key={candidate.id} className="rounded-lg border border-[#e2e8f0] bg-white p-4">
@@ -195,6 +209,14 @@ export default function FirmaBulucuAdaylarPage() {
             </article>
           ))}
         </div>
+        <div className="flex items-center justify-between rounded-lg border border-[#e2e8f0] bg-white px-4 py-3 text-[13px]">
+          <span className="text-[#64748b]">Toplam {total} aday · Sayfa {page}/{pageCount}</span>
+          <div className="flex gap-2">
+            <button disabled={page <= 1} onClick={() => setPage((value) => value - 1)} className="h-8 rounded-md border border-[#cbd5e1] px-3 font-semibold text-[#334155] disabled:opacity-40">Önceki</button>
+            <button disabled={page >= pageCount} onClick={() => setPage((value) => value + 1)} className="h-8 rounded-md border border-[#cbd5e1] px-3 font-semibold text-[#334155] disabled:opacity-40">Sonraki</button>
+          </div>
+        </div>
+        </>
       )}
     </div>
   );

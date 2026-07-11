@@ -30,40 +30,40 @@ Doğrulama: `frontend` typecheck temiz; `backend` build temiz; lead-machine test
 
 ## 🔴 Kritik — frontend'i admin'le eşitlemek için gerekli
 
-- [ ] **F1. Aday listesinde sayfalama yok.** `adaylar` sabit `limit:100`, `fuar-gunu` `limit:150`; backend `page/limit` destekliyor. Büyük taramalarda sonuçlar sessizce kırpılıyor. (`frontend .../adaylar/page.tsx:50-55`)
-- [ ] **F2. ICP formu ham JSON.** Admin'deki yapılandırılmış ICP formunun (sektör/ülke/çalışan sayısı seçicileri, v3 skor eşikleri, keyword sync) frontend karşılığı yok; kullanıcıdan JSON yazması bekleniyor. (`frontend .../firma-bulucu/icp/page.tsx:151-156`)
-- [ ] **F3. Modül guard'ı yalnızca nav gizleme.** `leads` modülü olmayan kullanıcı URL ile `/firma-bulucu/*`e girebiliyor; backend 402 dönünce sayfa ham hata gösteriyor. Route-level yönlendirme/paket-teklif ekranı gerekli. (`AppShell.tsx:40-44`)
-- [ ] **A1. Admin candidates paneli URL paramlarını yok sayıyor.** B2B/fuar/gümrük panellerindeki "İncele → `candidates?channel=X&job_id=Y`" linkleri işlevsiz: panelde `useSearchParams` yok, `job_id` hiç gönderilmiyor; hep varsayılan filtre açılıyor. (Frontend bunu doğru yapıyor — admin'e taşınmalı.) (`admin_panel .../lead-candidates-panel.tsx:682-687`, `candidates/page.tsx`)
+- [x] **F1. Aday listesinde sayfalama yok.** `adaylar` sabit `limit:100`, `fuar-gunu` `limit:150`; backend `page/limit` destekliyor. Büyük taramalarda sonuçlar sessizce kırpılıyor. (`frontend .../adaylar/page.tsx:50-55`)
+- [x] **F2. ICP formu ham JSON.** Admin'deki yapılandırılmış ICP formunun (sektör/ülke/çalışan sayısı seçicileri, v3 skor eşikleri, keyword sync) frontend karşılığı yok; kullanıcıdan JSON yazması bekleniyor. (`frontend .../firma-bulucu/icp/page.tsx:151-156`)
+- [x] **F3. Modül guard'ı yalnızca nav gizleme.** `leads` modülü olmayan kullanıcı URL ile `/firma-bulucu/*`e girebiliyor; backend 402 dönünce sayfa ham hata gösteriyor. Route-level yönlendirme/paket-teklif ekranı gerekli. (`AppShell.tsx:40-44`)
+- [x] **A1. Admin candidates paneli URL paramlarını yok sayıyor.** B2B/fuar/gümrük panellerindeki "İncele → `candidates?channel=X&job_id=Y`" linkleri işlevsiz: panelde `useSearchParams` yok, `job_id` hiç gönderilmiyor; hep varsayılan filtre açılıyor. (Frontend bunu doğru yapıyor — admin'e taşınmalı.) (`admin_panel .../lead-candidates-panel.tsx:682-687`, `candidates/page.tsx`)
 
 ## 🟠 Önemli — işlevsel eksik/hata
 
-- [ ] **F4. Toplu red atomik değil.** `adaylar` toplu reddi N ayrı PATCH ile yapıyor (`reject_reason:'bulk_reject'`); backend'e bulk review endpoint'i eklenmeli. (`adaylar/page.tsx:99-105`)
-- [ ] **F5. Amazon işleri "Tarama İşleri"nde görünmüyor.** `jobs` sayfası yalnızca b2b/fuar/gümrük listelerini birleştiriyor; Amazon taraması başlatılınca izleme yalnızca `/amazon` sayfasında. Kanal filtresinde de `amazon` yok. (`jobs/page.tsx:94-109`)
-- [ ] **F6. Fuar tarihi düz metin input** (`tarama`), `fuar-gunu` ise `type="date"` kullanıyor — format uyuşmazlığı gün filtresini boşa düşürebilir. (`tarama/page.tsx:156`)
-- [ ] **F7. 10times heuristiği kırılgan.** `fairUrl.includes('10times')` ile `fair/run` / `fair/jobs` ayrımı yapılıyor; admin'de `/fair/run` hiç kullanılmıyor (ölü endpoint). Tek bir akışta birleştirilmeli. (`tarama/page.tsx:77`)
+- [x] **F4. Toplu red atomik değil.** `adaylar` toplu reddi N ayrı PATCH ile yapıyor (`reject_reason:'bulk_reject'`); backend'e bulk review endpoint'i eklenmeli. (`adaylar/page.tsx:99-105`)
+- [x] **F5. Amazon işleri "Tarama İşleri"nde görünmüyor.** `jobs` sayfası yalnızca b2b/fuar/gümrük listelerini birleştiriyor; Amazon taraması başlatılınca izleme yalnızca `/amazon` sayfasında. Kanal filtresinde de `amazon` yok. (`jobs/page.tsx:94-109`)
+- [x] **F6. Fuar tarihi düz metin input** (`tarama`), `fuar-gunu` ise `type="date"` kullanıyor — format uyuşmazlığı gün filtresini boşa düşürebilir. (`tarama/page.tsx:156`)
+- [x] **F7. 10times heuristiği kırılgan.** `fairUrl.includes('10times')` ile `fair/run` / `fair/jobs` ayrımı yapılıyor; admin'de `/fair/run` hiç kullanılmıyor (ölü endpoint). Tek bir akışta birleştirilmeli. (`tarama/page.tsx:77`)
 - [ ] **F8. i18n yok.** `[locale]` routing'e rağmen 5 sayfada tüm metinler sabit Türkçe; tarihler `tr-TR`'a sabitlenmiş.
-- [ ] **A2. Admin b2b/fuar/gümrük job listelerinde polling yok** — durum yalnızca elle "Yenile" ile güncelleniyor. Frontend'deki 10 sn liste + 3 sn aktif-iş polling'i admin'e de uygulanmalı.
-- [ ] **A3. Admin birleşik "Lead Tarama" sihirbazında gümrük ve karar verici kaynakları yok** (yalnızca b2b/fuar/amazon); gümrük ayrı sayfada. Frontend tarama sihirbazıyla eşitlenmeli.
-- [ ] **A4. Sessiz JSON hataları:** ICP ham JSON editörü ve kampanya `country_to_lang` alanı parse hatasını yutuyor — kullanıcı geri bildirimi yok. (`icp-profiles-panel.tsx:822-830`, `outreach-campaigns-panel.tsx:51-57`)
-- [ ] **A5. Fuar-günü brifing PDF linki auth header'sız ham `<a>`** — cookie yoksa 401. Karar verici export'taki `Bearer + X-Tenant` fetch kalıbı kullanılmalı. (`fair-day-panel.tsx:50-52`)
+- [x] **A2. Admin b2b/fuar/gümrük job listelerinde polling yok** — durum yalnızca elle "Yenile" ile güncelleniyor. Frontend'deki 10 sn liste + 3 sn aktif-iş polling'i admin'e de uygulanmalı.
+- [x] **A3. Admin birleşik "Lead Tarama" sihirbazında gümrük ve karar verici kaynakları yok** (yalnızca b2b/fuar/amazon); gümrük ayrı sayfada. Frontend tarama sihirbazıyla eşitlenmeli.
+- [x] **A4. Sessiz JSON hataları:** ICP ham JSON editörü ve kampanya `country_to_lang` alanı parse hatasını yutuyor — kullanıcı geri bildirimi yok. (`icp-profiles-panel.tsx:822-830`, `outreach-campaigns-panel.tsx:51-57`)
+- [x] **A5. Fuar-günü brifing PDF linki auth header'sız ham `<a>`** — cookie yoksa 401. Karar verici export'taki `Bearer + X-Tenant` fetch kalıbı kullanılmalı. (`fair-day-panel.tsx:50-52`)
 
 ## 🟡 Orta — tutarlılık / kalite
 
 - [ ] **F9. `adaylar` kanal filtresi** `amazon` ve `decision_maker` seçeneklerini listeliyor ama bu sayfaya o kanallardan aday akışı yok; admin filtresinde ise `trade_fair_in_person`/`decision_maker` hiç yok. Kanal listeleri tek kaynaktan türetilmeli.
-- [ ] **F10. `LeadScanRule` şema belirsizliği:** UI `rule.value ?? rule.pattern` okuyor — tip iki alanı da içeriyor; backend kontratı netleştirilmeli. (`lead-machine.types.ts:50-60`)
-- [ ] **F11. Tarama formu varsayılanları** ("automotive accessories distributor", "Automechanika Frankfurt") Avrasya'ya özgü — tenant-bağımsız SaaS'ta boş/tenant-config'ten gelmeli.
+- [x] **F10. `LeadScanRule` şema belirsizliği:** UI `rule.value ?? rule.pattern` okuyor — tip iki alanı da içeriyor; backend kontratı netleştirilmeli. (`lead-machine.types.ts:50-60`)
+- [x] **F11. Tarama formu varsayılanları** ("automotive accessories distributor", "Automechanika Frankfurt") Avrasya'ya özgü — tenant-bağımsız SaaS'ta boş/tenant-config'ten gelmeli.
 - [ ] **A6. Ölü kod:** `startGenericFairRunner`/`POST /fair/run` admin UI'da kullanılmıyor; `onCreateRule` prop'u CandidateCard'da hiç çağrılmıyor; `/outreach` ve `/outreach/drafts` aynı paneli render ediyor.
-- [ ] **A7. `compositeOf` 0 skoru "yetersiz veri" sayıyor** (GUVENLI kararı hariç) — meşru 0 skor gizlenebilir. (`lead-candidates-panel.tsx:104`)
-- [ ] **A8. Amazon rescore endpoint'i frontend'de admin path'ine işaret ediyor:** `amazon_scan.endpoints.ts:106` `/lead-machine/amazon/jobs/:id/rescore` çağırıyor; bu route user scope'ta yok (Amazon lead-machine admin-only). Kullanılıyorsa 404/401 alır — user-side eklenmeli ya da UI'dan kaldırılmalı.
+- [x] **A7. `compositeOf` 0 skoru "yetersiz veri" sayıyor** (GUVENLI kararı hariç) — meşru 0 skor gizlenebilir. (`lead-candidates-panel.tsx:104`)
+- [x] **A8. Amazon rescore endpoint'i frontend'de admin path'ine işaret ediyor:** `amazon_scan.endpoints.ts:106` `/lead-machine/amazon/jobs/:id/rescore` çağırıyor; bu route user scope'ta yok (Amazon lead-machine admin-only). Kullanılıyorsa 404/401 alır — user-side eklenmeli ya da UI'dan kaldırılmalı.
 
 ## 🔵 Backend mimari / güvenlik notları
 
-- [ ] **D1. `scraper-callback` tenant'ı istek gövdesinden alıyor** (`body.tenant_key`, yalnızca regex ile doğrulanıyor). Gerçek tenant allowlist kontrolü eklenmeli. (`controller.ts:90-92,233-234`)
-- [ ] **D2. İmza doğrulaması re-serialize edilmiş body üzerinde:** `JSON.stringify(req.body)` Python'un `sort_keys+compact` çıktısıyla bayt-bazında farklılaşabilir (ör. float gösterimi) → geçerli imzalar reddedilebilir. Fastify raw-body ile orijinal gövde doğrulanmalı. (`controller.ts:191-192`)
-- [ ] **D3. URL-string tabanlı yetki ayrımı kırılgan:** `isUserRoute = !url.includes('/admin/')` ile owner-scope belirleniyor; mount/rewrite değişiminde sessizce tenant-geneli veri sızdırabilir. Route kaydında açık bayrak taşınmalı. (`controller.ts:94-100`, `decision-maker/router.ts:311,323`)
+- [x] **D1. `scraper-callback` tenant'ı istek gövdesinden alıyor** (`body.tenant_key`, yalnızca regex ile doğrulanıyor). Gerçek tenant allowlist kontrolü eklenmeli. (`controller.ts:90-92,233-234`)
+- [x] **D2. İmza doğrulaması re-serialize edilmiş body üzerinde:** `JSON.stringify(req.body)` Python'un `sort_keys+compact` çıktısıyla bayt-bazında farklılaşabilir (ör. float gösterimi) → geçerli imzalar reddedilebilir. Fastify raw-body ile orijinal gövde doğrulanmalı. (`controller.ts:191-192`)
+- [x] **D3. URL-string tabanlı yetki ayrımı kırılgan:** `isUserRoute = !url.includes('/admin/')` ile owner-scope belirleniyor; mount/rewrite değişiminde sessizce tenant-geneli veri sızdırabilir. Route kaydında açık bayrak taşınmalı. (`controller.ts:94-100`, `decision-maker/router.ts:311,323`)
 - [ ] **D4. `lead_search_jobs` sahiplik kolonu `created_by`,** diğer tablolar `owner_user_id` — adlandırma tutarsızlığı; fresh-seed şemasında hizalanmalı (ALTER değil, seed SQL güncellemesi + `db:seed:*:fresh`).
 - [ ] **D5. Konşimento veri gölü deploy koşulu:** `customs_records` gzltek VPS'te dolu (≈16.15M kayıt); başka tenant deploy'unda tablo boşsa gümrük araması 0 sonuç döner. Tenant kurulumlarında veri senkron/erişim stratejisi (paylaşımlı lake) netleştirilmeli.
-- [ ] **D6. Tam-paket testte mock sızıntısı (ön-mevcut):** `bun test src/modules/lead-machine` 3 fail / 2 error veriyor (`siteSettings.getGoogleSettings` export bulunamıyor); dosyalar tek tek çalıştırıldığında geçiyor. Test izolasyonu düzeltilmeli.
+- [x] **D6. Tam-paket testte mock sızıntısı (ön-mevcut):** `bun test src/modules/lead-machine` 3 fail / 2 error veriyor (`siteSettings.getGoogleSettings` export bulunamıyor); dosyalar tek tek çalıştırıldığında geçiyor. Test izolasyonu düzeltilmeli.
 
 ## Sonraki adım önerisi (Codex görev sırası)
 

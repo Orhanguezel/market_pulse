@@ -75,15 +75,35 @@ export async function updateIcpProfile(id: string, data: { name?: string; defini
   return getIcpProfile(id, ownerUserId);
 }
 
-export async function deleteIcpProfile(id: string, ownerUserId?: string | null) {
+/**
+ * ICP siler. Bagli tarama isi varsa varsayilan olarak 409 ICP_HAS_JOBS doner.
+ * force=true ise isler/adaylar/kurallar ICP'den koparilir (icp_id = NULL) ve
+ * profil silinir — gecmis job kayitlari korunur, sadece ICP referansi dusar.
+ */
+export async function deleteIcpProfile(id: string, ownerUserId?: string | null, force = false) {
   const tenantKey = await getActiveTenantKey();
   const [jobs] = await pool.execute('SELECT id FROM lead_search_jobs WHERE tenant_key = ? AND icp_id = ? LIMIT 1', [tenantKey, id]);
-  if ((jobs as unknown[]).length) {
+  if ((jobs as unknown[]).length && !force) {
     const err = new Error('ICP_HAS_JOBS');
     (err as Error & { statusCode: number }).statusCode = 409;
     throw err;
   }
   const ownerAnd = ownerUserId ? ' AND owner_user_id = ?' : '';
   const values = ownerUserId ? [tenantKey, id, ownerUserId] : [tenantKey, id];
-  await pool.execute(`DELETE FROM icp_profiles WHERE tenant_key = ? AND id = ?${ownerAnd}`, values);
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+    if (force) {
+      await connection.execute('UPDATE lead_search_jobs SET icp_id = NULL WHERE tenant_key = ? AND icp_id = ?', [tenantKey, id]);
+      await connection.execute('UPDATE lead_candidates SET icp_id = NULL WHERE tenant_key = ? AND icp_id = ?', [tenantKey, id]);
+      await connection.execute('DELETE FROM lead_scan_rules WHERE tenant_key = ? AND icp_id = ?', [tenantKey, id]);
+    }
+    await connection.execute(`DELETE FROM icp_profiles WHERE tenant_key = ? AND id = ?${ownerAnd}`, values);
+    await connection.commit();
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
 }

@@ -30,7 +30,9 @@ export async function callHandler<T>(
   req: unknown,
 ) {
   const { reply, state } = createReply();
-  const result = await handler(req, reply);
+  const request = req && typeof req === 'object'
+    ? { routeOptions: { config: {} }, ...req as Record<string, unknown>, rawBody: Buffer.from(JSON.stringify((req as { body?: unknown }).body ?? {})) }
+    : req;
+  const result = await handler(request, reply);
   return { result, state };
 }
-

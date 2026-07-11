@@ -6,7 +6,6 @@ import { Building2, CalendarDays, Database, Loader2, Radar, Search, ShoppingCart
 import { toast } from 'sonner';
 import {
   useListIcpProfilesQuery,
-  useRunFairLeadJobMutation,
   useStartB2bLeadJobMutation,
   useStartCustomsLeadJobMutation,
   useStartFairLeadJobMutation,
@@ -33,17 +32,16 @@ export default function FirmaBulucuTaramaPage() {
   const { data: icps = [] } = useListIcpProfilesQuery();
   const [startB2b, b2bState] = useStartB2bLeadJobMutation();
   const [startFair, fairState] = useStartFairLeadJobMutation();
-  const [runFair, runFairState] = useRunFairLeadJobMutation();
   const [startCustoms, customsState] = useStartCustomsLeadJobMutation();
   const [startAmazon, amazonState] = useStartPublicScanMutation();
 
   const [source, setSource] = React.useState<Source>('b2b');
   const [icpId, setIcpId] = React.useState('');
   const [b2bSource, setB2bSource] = React.useState('google_maps');
-  const [query, setQuery] = React.useState('automotive accessories distributor');
+  const [query, setQuery] = React.useState('');
   const [country, setCountry] = React.useState('DE');
   const [limit, setLimit] = React.useState(25);
-  const [fairName, setFairName] = React.useState('Automechanika Frankfurt');
+  const [fairName, setFairName] = React.useState('');
   const [fairUrl, setFairUrl] = React.useState('');
   const [fairDate, setFairDate] = React.useState('');
   const [keyword, setKeyword] = React.useState('');
@@ -52,7 +50,7 @@ export default function FirmaBulucuTaramaPage() {
   const [productQuery, setProductQuery] = React.useState('');
   const [customsCountry, setCustomsCountry] = React.useState('ALL');
   const [minValue, setMinValue] = React.useState('');
-  const busy = b2bState.isLoading || fairState.isLoading || runFairState.isLoading || customsState.isLoading || amazonState.isLoading;
+  const busy = b2bState.isLoading || fairState.isLoading || customsState.isLoading || amazonState.isLoading;
 
   React.useEffect(() => {
     if (!icpId && icps[0]?.id) setIcpId(icps[0].id);
@@ -76,7 +74,7 @@ export default function FirmaBulucuTaramaPage() {
       if (source === 'fair') {
         if (!fairUrl.trim()) return toast.error('Fuar URL gerekli.');
         const body = { fair_name: fairName, fair_url: fairUrl, fair_date: fairDate || undefined, icp_id: icpId || undefined, max_exhibitors: limit };
-        const job = fairUrl.includes('10times') ? await runFair(body).unwrap() : await startFair(body).unwrap();
+        const job = await startFair(body).unwrap();
         toast.success('Fuar taraması başladı');
         goCandidates('trade_fair', job.id);
         return;
@@ -165,7 +163,7 @@ export default function FirmaBulucuTaramaPage() {
             <>
               <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Fuar adı</span><input className={inputClass} value={fairName} onChange={(e) => setFairName(e.target.value)} /></label>
               <label className="grid gap-1.5 lg:col-span-2"><span className="text-[12px] font-semibold text-[#64748b]">Fuar URL</span><input className={inputClass} value={fairUrl} onChange={(e) => setFairUrl(e.target.value)} /></label>
-              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Tarih</span><input className={inputClass} value={fairDate} onChange={(e) => setFairDate(e.target.value)} /></label>
+              <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Tarih</span><input type="date" className={inputClass} value={fairDate} onChange={(e) => setFairDate(e.target.value)} /></label>
             </>
           )}
           {source === 'amazon' && (

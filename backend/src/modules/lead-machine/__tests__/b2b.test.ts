@@ -27,6 +27,7 @@ mock.module('@/modules/lead-machine/_shared/ai.client', () => ({
 
 mock.module('../../siteSettings', () => ({
   getGoogleMapsKey,
+  getGoogleSettings: mock(() => Promise.resolve({ mapsApiKey: 'maps-test-key' })),
 }));
 
 const { searchDirectory } = await import('../b2b/directory.scraper');

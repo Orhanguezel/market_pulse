@@ -6,6 +6,7 @@ const dbMock = createDbMock();
 const scrape = mock(() => Promise.resolve({ text: '', html: '', data: {}, final_url: null }));
 const askBestAvailable = mock(() => Promise.resolve('not-json'));
 const getGoogleMapsKey = mock(() => Promise.resolve('maps-test-key'));
+const getGoogleSettings = mock(() => Promise.resolve({ mapsApiKey: 'maps-test-key' }));
 const env = {
   TENANT_KEY: 'tenant-a',
   APOLLO_API_KEY: '',
@@ -34,6 +35,7 @@ mock.module('@/modules/lead-machine/_shared/ai.client', () => ({
 
 mock.module('@/modules/siteSettings', () => ({
   getGoogleMapsKey,
+  getGoogleSettings,
 }));
 
 const osint = await import('../decision-maker/osint.service');

@@ -365,6 +365,7 @@ function IcpDialog({
 }) {
   const [form, setForm] = React.useState<IcpFormState>(() => formFromProfile(profile));
   const [advancedOpen, setAdvancedOpen] = React.useState(false);
+  const [jsonError, setJsonError] = React.useState<string | null>(null);
   const [createProfile, createState] = useCreateIcpProfileMutation();
   const [updateProfile, updateState] = useUpdateIcpProfileMutation();
 
@@ -372,6 +373,7 @@ function IcpDialog({
     if (open) {
       setForm(formFromProfile(profile));
       setAdvancedOpen(false);
+      setJsonError(null);
     }
   }, [open, profile]);
 
@@ -824,9 +826,10 @@ function IcpDialog({
                         const parsed = JSON.parse(e.target.value);
                         if (parsed && typeof parsed === 'object') {
                           setForm((cur) => ({ ...cur, definition: parsed }));
+                          setJsonError(null);
                         }
                       } catch {
-                        // sessizce devam — kullanıcı henüz yazıyor
+                        setJsonError('JSON geçerli değil; değişiklik uygulanmadı.');
                       }
                     }}
                     className="rounded-xl border-gm-border-soft bg-gm-bg/40 text-xs font-mono text-gm-text"
@@ -834,6 +837,7 @@ function IcpDialog({
                   <p className="mt-1 text-[10px] text-gm-muted/80">
                     ⚠️ Geçersiz JSON yazılırsa form alanlarına yansımaz. Form alanlarındaki değişiklikler buraya yansır.
                   </p>
+                  {jsonError && <p className="mt-1 text-xs font-semibold text-red-500">{jsonError}</p>}
                 </CollapsibleContent>
               </Collapsible>
             </CollapsibleContent>

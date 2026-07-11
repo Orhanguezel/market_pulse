@@ -3,6 +3,7 @@ import type {
   IcpProfile,
   LeadCandidate,
   LeadCandidateListParams,
+  LeadCandidatePage,
   LeadScanRule,
   LeadSearchJob,
   StartLeadJobBody,
@@ -16,6 +17,14 @@ export const leadMachineApi = baseApi.injectEndpoints({
       query: (params) => ({ url: '/lead-machine/candidates', method: 'GET', params: params ?? undefined }),
       providesTags: ['LeadCandidates'],
     }),
+    listLeadCandidatesPage: b.query<LeadCandidatePage, LeadCandidateListParams>({
+      query: (params) => ({ url: '/lead-machine/candidates', method: 'GET', params }),
+      transformResponse: (rows: LeadCandidate[], meta) => ({
+        rows,
+        total: Number(meta?.response?.headers.get('x-total-count') ?? rows.length),
+      }),
+      providesTags: ['LeadCandidates'],
+    }),
     createLeadCandidate: b.mutation<LeadCandidate, Partial<LeadCandidate> & { name: string }>({
       query: (body) => ({ url: '/lead-machine/candidates', method: 'POST', body }),
       invalidatesTags: ['LeadCandidates'],
@@ -26,6 +35,10 @@ export const leadMachineApi = baseApi.injectEndpoints({
     }),
     reviewLeadCandidate: b.mutation<LeadCandidate, ReviewBody>({
       query: ({ id, ...body }) => ({ url: `/lead-machine/candidates/${id}/review`, method: 'PATCH', body }),
+      invalidatesTags: ['LeadCandidates', 'LeadFeedback'],
+    }),
+    reviewLeadCandidatesBulk: b.mutation<{ updated: number }, { candidate_ids: string[]; action: 'approve' | 'reject' | 'favorite'; reject_reason?: string }>({
+      query: (body) => ({ url: '/lead-machine/candidates/bulk-review', method: 'PATCH', body }),
       invalidatesTags: ['LeadCandidates', 'LeadFeedback'],
     }),
     approveLeadCandidateToLead: b.mutation<unknown, string>({
@@ -53,9 +66,12 @@ export const leadMachineApi = baseApi.injectEndpoints({
       query: ({ id, patch }) => ({ url: `/lead-machine/icp/${id}`, method: 'PATCH', body: patch }),
       invalidatesTags: ['IcpProfiles'],
     }),
-    deleteIcpProfile: b.mutation<void, string>({
-      query: (id) => ({ url: `/lead-machine/icp/${id}`, method: 'DELETE' }),
-      invalidatesTags: ['IcpProfiles'],
+    deleteIcpProfile: b.mutation<void, string | { id: string; force?: boolean }>({
+      query: (arg) => {
+        const { id, force } = typeof arg === 'string' ? { id: arg, force: false } : arg;
+        return { url: `/lead-machine/icp/${id}${force ? '?force=true' : ''}`, method: 'DELETE' };
+      },
+      invalidatesTags: ['IcpProfiles', 'LeadJobs', 'LeadCandidates'],
     }),
 
     startB2bLeadJob: b.mutation<LeadSearchJob, StartLeadJobBody>({
@@ -96,6 +112,14 @@ export const leadMachineApi = baseApi.injectEndpoints({
     }),
     getFairLeadJob: b.query<LeadSearchJob, string>({
       query: (id) => ({ url: `/lead-machine/fair/jobs/${id}`, method: 'GET' }),
+      providesTags: ['LeadJobs'],
+    }),
+    listAmazonLeadJobs: b.query<LeadSearchJob[], void>({
+      query: () => ({ url: '/lead-machine/amazon/jobs', method: 'GET' }),
+      providesTags: ['LeadJobs'],
+    }),
+    getAmazonLeadJob: b.query<LeadSearchJob, string>({
+      query: (id) => ({ url: `/lead-machine/amazon/jobs/${id}`, method: 'GET' }),
       providesTags: ['LeadJobs'],
     }),
     getFairBriefingCandidatePdf: b.query<Blob, string>({
@@ -147,9 +171,11 @@ export const leadMachineApi = baseApi.injectEndpoints({
 
 export const {
   useListLeadCandidatesQuery,
+  useListLeadCandidatesPageQuery,
   useCreateLeadCandidateMutation,
   useGetLeadCandidateQuery,
   useReviewLeadCandidateMutation,
+  useReviewLeadCandidatesBulkMutation,
   useApproveLeadCandidateToLeadMutation,
   useEnrichLeadCandidateMutation,
   useEnrichLeadCandidatesBatchMutation,
@@ -167,6 +193,8 @@ export const {
   useRunFairLeadJobMutation,
   useListFairLeadJobsQuery,
   useGetFairLeadJobQuery,
+  useListAmazonLeadJobsQuery,
+  useGetAmazonLeadJobQuery,
   useLazyGetFairBriefingCandidatePdfQuery,
   useLazyGetFairBriefingDayPdfQuery,
   useGenerateFairBriefingBulkPdfMutation,

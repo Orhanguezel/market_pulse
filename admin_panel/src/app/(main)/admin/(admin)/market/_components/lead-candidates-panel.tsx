@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useSearchParams } from 'next/navigation';
 import { AlertTriangle, Ban, Check, ChevronDown, ChevronUp, ExternalLink, Filter, Globe, Mail, RefreshCw, Search, Sparkles, Star, Trash2, X, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -101,7 +102,6 @@ function compositeOf(candidate: LeadCandidate): number | null {
   const value = raw.composite_score ?? candidate.lead_score;
   if (value === null || value === undefined || value === '') return null;
   const number = Number(value);
-  if (number === 0 && decision !== 'GUVENLI') return null; // 0 usually means insufficient data unless it's a very low risk score which is unlikely to be exactly 0
   return Number.isFinite(number) ? number : null;
 }
 
@@ -268,7 +268,6 @@ function CandidateCard({
   onApprove,
   onReject,
   onFavorite,
-  onCreateRule,
   selected,
   onSelectedChange,
   isBusy,
@@ -278,7 +277,6 @@ function CandidateCard({
   onApprove: (candidate: LeadCandidate) => void;
   onReject: (candidate: LeadCandidate, tags: string[], saveAsRule: boolean) => void;
   onFavorite: (candidate: LeadCandidate) => void;
-  onCreateRule: (candidate: LeadCandidate, tags: string[]) => void;
   selected: boolean;
   onSelectedChange: (checked: boolean) => void;
   isBusy: boolean;
@@ -669,9 +667,13 @@ export default function LeadCandidatesPanel({
   title = 'Lead Adayları',
   description = "Otomatik kanallardan gelen firmaları inceleyin, uygun olanları satış pipeline'ına aktarın.",
 }: LeadCandidatesPanelProps = {}) {
+  const searchParams = useSearchParams();
+  const urlChannel = searchParams.get('channel') as LeadCandidateChannel | null;
+  const urlStatus = searchParams.get('status') as LeadCandidateStatus | null;
   const [q, setQ] = React.useState('');
-  const [channel, setChannel] = React.useState<LeadCandidateChannel | 'all'>(initialChannel);
-  const [status, setStatus] = React.useState<LeadCandidateStatus | 'all'>(initialStatus);
+  const [channel, setChannel] = React.useState<LeadCandidateChannel | 'all'>(urlChannel ?? initialChannel);
+  const [status, setStatus] = React.useState<LeadCandidateStatus | 'all'>(urlStatus ?? initialStatus);
+  const [jobId, setJobId] = React.useState(searchParams.get('job_id') ?? '');
   const [recommendation, setRecommendation] = React.useState<string>('all');
   const [sortBy, setSortBy] = React.useState<string>('priority');
   const [selectedIds, setSelectedIds] = React.useState<Set<string>>(() => new Set());
@@ -682,6 +684,7 @@ export default function LeadCandidatesPanel({
   const { data, isLoading, isFetching, refetch } = useListLeadCandidatesQuery({
     channel,
     status,
+    job_id: jobId || undefined,
     limit: 500,
     page: 1,
   });
@@ -839,27 +842,6 @@ export default function LeadCandidatesPanel({
     }
   };
 
-  const handleCreateRule = async (candidate: LeadCandidate, tags: string[]) => {
-    if (!tags.length) return;
-    const icpName = candidate.icp_id ? (icpProfiles.find((p) => p.id === candidate.icp_id)?.name ?? null) : null;
-    try {
-      await Promise.allSettled(
-        tags.map((tag) =>
-          createScanRule({
-            icp_id: candidate.icp_id,
-            channel: candidate.channel,
-            rule_type: 'exclude_reject_tag',
-            value: tag,
-            label: icpName ? `${icpName} — ${candidate.channel}` : null,
-          }).unwrap(),
-        ),
-      );
-      toast.success('Kural kaydedildi');
-    } catch {
-      toast.error('Kural kaydedilemedi');
-    }
-  };
-
   const handleFavorite = async (candidate: LeadCandidate) => {
     try {
       await reviewCandidate({ id: candidate.id, action: 'favorite' }).unwrap();
@@ -938,7 +920,7 @@ export default function LeadCandidatesPanel({
 
       <Card className="rounded-[28px] border-gm-border-soft bg-gm-bg-deep/50 shadow-2xl">
         <CardContent className="space-y-4 p-6">
-          <div className="grid gap-5 md:grid-cols-[1fr_200px_200px]">
+          <div className="grid gap-5 md:grid-cols-[1fr_200px_200px_220px]">
             <div className="space-y-2">
               <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Arama</label>
               <div className="relative">
@@ -973,8 +955,10 @@ export default function LeadCandidatesPanel({
                     <SelectItem value="amazon">Amazon</SelectItem>
                     <SelectItem value="b2b_directory">B2B Dizin</SelectItem>
                     <SelectItem value="trade_fair">Fuar</SelectItem>
+                    <SelectItem value="trade_fair_in_person">Fuar Günü</SelectItem>
                     <SelectItem value="customs">Gümrük</SelectItem>
                     <SelectItem value="icp_match">ICP</SelectItem>
+                    <SelectItem value="decision_maker">Karar Verici</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -994,6 +978,10 @@ export default function LeadCandidatesPanel({
                   <SelectItem value="rejected">Reddedildi</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Job ID</label>
+              <Input value={jobId} onChange={(event) => setJobId(event.target.value)} placeholder="Tüm işler" className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text" />
             </div>
           </div>
 
@@ -1128,7 +1116,6 @@ export default function LeadCandidatesPanel({
               onApprove={handleApprove}
               onReject={handleReject}
               onFavorite={handleFavorite}
-              onCreateRule={handleCreateRule}
               selected={selectedIds.has(candidate.id)}
               onSelectedChange={(checked) => {
                 setSelectedIds((current) => {

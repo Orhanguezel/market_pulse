@@ -13,6 +13,7 @@ import {
   useProspectStatusQuery,
   type ProspectCompany,
 } from '@/integrations/rtk/public/prospect-lists.endpoints';
+import { AppCard, AppPage, AppPageHeader } from '@/components/iy/AppPage';
 
 const STATUS: Record<ProspectCompany['enrich_status'], { label: string; cls: string }> = {
   pending: { label: 'Bekliyor', cls: 'bg-slate-100 text-slate-500' },
@@ -109,23 +110,21 @@ export default function ProspectListsPage() {
   const toggle = (id: string) => setSelected((s) => { const n = new Set(s); n.has(id) ? n.delete(id) : n.add(id); return n; });
 
   return (
-    <div className="mx-auto max-w-6xl px-4 py-8">
-      <div className="mb-6 flex items-center gap-3">
-        <div className="flex size-10 items-center justify-center rounded-xl bg-slate-900 text-white"><ListChecks className="size-5" /></div>
-        <div>
-          <h1 className="text-2xl font-bold text-slate-900">Firma Listelerim</h1>
-          <p className="text-sm text-slate-500">Excel/CSV firma listesi yükle → ücretsiz e-posta &amp; LinkedIn bul; seçili firmalarda Apollo ile karar verici + kişisel e-posta.</p>
-        </div>
-      </div>
+    <AppPage>
+      <AppPageHeader
+        icon={ListChecks}
+        title="Firma Listelerim"
+        description="Excel/CSV firma listesi yükleyin; e-posta, LinkedIn ve karar verici bilgilerini zenginleştirin."
+      />
 
       {/* Upload */}
-      <div className="mb-6 flex flex-wrap items-center gap-3 rounded-xl border border-dashed border-slate-300 bg-white p-4">
+      <AppCard className="flex flex-wrap items-center gap-3 border-dashed p-4">
         <input ref={fileRef} type="file" accept=".xlsx,.xls,.csv" className="hidden" onChange={(e) => e.target.files?.[0] && onFile(e.target.files[0])} />
-        <button onClick={() => fileRef.current?.click()} disabled={importing} className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800 disabled:opacity-50">
+        <button onClick={() => fileRef.current?.click()} disabled={importing} className="inline-flex h-10 items-center gap-2 rounded-md bg-[#1e40af] px-4 text-[13px] font-semibold text-white hover:bg-[#15317f] disabled:opacity-50">
           {importing ? <Loader2 className="size-4 animate-spin" /> : <Upload className="size-4" />} Excel/CSV Yükle
         </button>
         <span className="text-xs text-slate-400">1. kolon: Firma Adı · 2. kolon: Website (opsiyonel)</span>
-      </div>
+      </AppCard>
 
       <div className="grid gap-6 lg:grid-cols-[280px_1fr]">
         {/* Listeler */}
@@ -135,7 +134,7 @@ export default function ProspectListsPage() {
             <button onClick={() => refetchLists()} className="text-slate-400 hover:text-slate-600"><RefreshCcw className="size-3.5" /></button>
           </div>
           {lists.map((l) => (
-            <button key={l.id} onClick={() => { setActiveId(l.id); setSelected(new Set()); }} className={`w-full rounded-lg border p-3 text-left transition-colors ${activeId === l.id ? 'border-slate-900 bg-slate-50' : 'border-slate-200 hover:border-slate-300'}`}>
+            <button key={l.id} onClick={() => { setActiveId(l.id); setSelected(new Set()); }} className={`w-full rounded-lg border bg-white p-3 text-left transition-colors ${activeId === l.id ? 'border-[#1e40af] bg-[#eff6ff]' : 'border-[#e2e8f0] hover:border-[#93c5fd]'}`}>
               <div className="truncate text-sm font-medium text-slate-900">{l.name}</div>
               <div className="mt-1 text-[11px] text-slate-400">{l.total} firma · ücretsiz {l.free_done} · Apollo {l.apollo_done}</div>
             </button>
@@ -150,7 +149,7 @@ export default function ProspectListsPage() {
           ) : (
             <>
               <div className="mb-3 flex flex-wrap items-center gap-2">
-                <button onClick={startFree} className="inline-flex items-center gap-2 rounded-lg bg-emerald-600 px-3 py-2 text-sm font-semibold text-white hover:bg-emerald-700">
+                <button onClick={startFree} className="inline-flex h-9 items-center gap-2 rounded-md bg-[#1e40af] px-3 text-[13px] font-semibold text-white hover:bg-[#15317f]">
                   <Sparkles className="size-4" /> Ücretsiz Zenginleştir
                 </button>
                 <button onClick={startApollo} disabled={!selected.size} className="inline-flex items-center gap-2 rounded-lg bg-violet-600 px-3 py-2 text-sm font-semibold text-white hover:bg-violet-700 disabled:opacity-40">
@@ -200,6 +199,6 @@ export default function ProspectListsPage() {
           )}
         </div>
       </div>
-    </div>
+    </AppPage>
   );
 }

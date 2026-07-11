@@ -57,7 +57,7 @@ function paramsOf(job: LeadSearchJob) {
 
 export default function CustomsLeadSearchPanel() {
   const { data: icps, isLoading: isIcpLoading } = useListIcpProfilesQuery();
-  const { data: jobs, isLoading, isFetching, refetch } = useListCustomsJobsQuery();
+  const { data: jobs, isLoading, isFetching, refetch } = useListCustomsJobsQuery(undefined, { pollingInterval: 10_000 });
   const [startCustomsJob, startState] = useStartCustomsJobMutation();
 
   const [icpId, setIcpId] = React.useState('none');

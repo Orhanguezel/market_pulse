@@ -59,6 +59,7 @@ import {
   openTrackingPixel,
   rejectionPatterns,
   reviewCandidate,
+  reviewCandidatesBulk,
   runSavedSearchHandler,
   scraperCallback,
   sendDraft,
@@ -88,13 +89,14 @@ export async function registerLeadMachinePublic(app: FastifyInstance) {
 }
 
 export async function registerLeadMachineUser(app: FastifyInstance) {
-  const guard = { preHandler: [requireAuth, requireModule('leads')] };
+  const guard = { preHandler: [requireAuth, requireModule('leads')], config: { leadMachineScope: 'user' as const } };
   const routeHandler = <T>(handler: T) => handler as never;
 
   app.get('/lead-machine/candidates', guard, routeHandler(listLeadCandidates));
   app.post('/lead-machine/candidates', guard, routeHandler(createLeadCandidate));
   app.get('/lead-machine/candidates/:id', guard, routeHandler(getLeadCandidate));
   app.patch('/lead-machine/candidates/:id/review', guard, routeHandler(reviewCandidate));
+  app.patch('/lead-machine/candidates/bulk-review', guard, routeHandler(reviewCandidatesBulk));
   app.post('/lead-machine/candidates/:id/approve-to-lead', guard, routeHandler(approveToLead));
 
   app.get('/lead-machine/icp', guard, routeHandler(listIcp));
@@ -113,6 +115,9 @@ export async function registerLeadMachineUser(app: FastifyInstance) {
   app.post('/lead-machine/fair/run', guard, routeHandler(startGenericFairRunner));
   app.get('/lead-machine/fair/jobs', guard, routeHandler(listFairJobs));
   app.get('/lead-machine/fair/jobs/:id', guard, routeHandler(getFairJob));
+  app.get('/lead-machine/amazon/jobs', guard, routeHandler(listAmazonJobs));
+  app.get('/lead-machine/amazon/jobs/:id', guard, routeHandler(getAmazonJob));
+  app.post('/lead-machine/amazon/jobs/:jobId/rescore', guard, routeHandler(rescoreAmazonJob));
   app.get('/lead-machine/fair/brifing/:candidateId.pdf', guard, routeHandler(fairBriefingCandidatePdf));
   app.get('/lead-machine/fair/brifing/day/:date.pdf', guard, routeHandler(fairBriefingDayPdf));
   app.post('/lead-machine/fair/brifing/bulk', guard, routeHandler(fairBriefingBulkPdf));
@@ -163,6 +168,7 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.get('/lead-machine/candidates', listLeadCandidates);
   app.get('/lead-machine/candidates/:id', getLeadCandidate);
   app.patch('/lead-machine/candidates/:id/review', reviewCandidate);
+  app.patch('/lead-machine/candidates/bulk-review', reviewCandidatesBulk);
   app.post('/lead-machine/candidates/:id/approve-to-lead', approveToLead);
   app.get('/lead-machine/rejection-patterns', rejectionPatterns);
   app.post('/lead-machine/rejection-patterns/aggregate', aggregateRejectionPatternsHandler);

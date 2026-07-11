@@ -52,7 +52,7 @@ function toApiBody(form: FormState): Partial<OutreachCampaign> {
     try {
       body.country_to_lang = JSON.parse(form.country_to_lang_json);
     } catch {
-      // korusun, sunucu reddederse hata gelir
+      throw new Error('Ülke → dil eşlemesi geçerli JSON değil.');
     }
   }
   return body;

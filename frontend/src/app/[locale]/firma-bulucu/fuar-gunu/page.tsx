@@ -25,7 +25,7 @@ import {
   useLazyGetFairBriefingCandidatePdfQuery,
   useLazyGetFairBriefingDayPdfQuery,
   useListFairLeadJobsQuery,
-  useListLeadCandidatesQuery,
+  useListLeadCandidatesPageQuery,
   useReviewLeadCandidateMutation,
 } from '@/integrations/rtk/hooks';
 import type { LeadCandidate, LeadCandidateStatus } from '@/integrations/shared/lead-machine.types';
@@ -96,13 +96,19 @@ export default function FairDayPage() {
   const [jobId, setJobId] = React.useState('');
   const [date, setDate] = React.useState(today);
   const [selected, setSelected] = React.useState<Set<string>>(() => new Set());
+  const [page, setPage] = React.useState(1);
+  const pageSize = 50;
 
-  const { data = [], isLoading, isError, refetch } = useListLeadCandidatesQuery({
+  const { data: pageData, isLoading, isError, refetch } = useListLeadCandidatesPageQuery({
     channel: 'trade_fair',
     status: status || undefined,
     job_id: jobId || undefined,
-    limit: 150,
+    page,
+    limit: pageSize,
   });
+  const data = pageData?.rows ?? [];
+  const total = pageData?.total ?? 0;
+  const pageCount = Math.max(1, Math.ceil(total / pageSize));
   const { data: fairJobs = [] } = useListFairLeadJobsQuery();
   const [reviewCandidate, reviewState] = useReviewLeadCandidateMutation();
   const [approveToLead, approveState] = useApproveLeadCandidateToLeadMutation();
@@ -112,6 +118,11 @@ export default function FairDayPage() {
   const [generateBulkPdf, bulkPdfState] = useGenerateFairBriefingBulkPdfMutation();
 
   const busy = reviewState.isLoading || approveState.isLoading || enrichState.isLoading || candidatePdfState.isFetching || dayPdfState.isFetching || bulkPdfState.isLoading;
+
+  React.useEffect(() => {
+    setPage(1);
+    setSelected(new Set());
+  }, [status, jobId]);
 
   const rows = React.useMemo(() => {
     const needle = query.trim().toLocaleLowerCase('tr-TR');
@@ -306,6 +317,15 @@ export default function FairDayPage() {
               </div>
             </article>
           ))}
+        </div>
+      )}
+      {!isLoading && !isError && total > 0 && (
+        <div className="flex items-center justify-between rounded-lg border border-[#e2e8f0] bg-white px-4 py-3 text-[13px]">
+          <span className="text-[#64748b]">Toplam {total} aday · Sayfa {page}/{pageCount}</span>
+          <div className="flex gap-2">
+            <button disabled={page <= 1} onClick={() => setPage((value) => value - 1)} className="h-8 rounded-md border border-[#cbd5e1] px-3 font-semibold text-[#334155] disabled:opacity-40">Önceki</button>
+            <button disabled={page >= pageCount} onClick={() => setPage((value) => value + 1)} className="h-8 rounded-md border border-[#cbd5e1] px-3 font-semibold text-[#334155] disabled:opacity-40">Sonraki</button>
+          </div>
         </div>
       )}
     </div>

@@ -77,6 +77,19 @@ export function createDbMock() {
         const rows = /^\s*select\b/i.test(sql) ? (poolQueryQueue.shift() ?? []) : [];
         return Promise.resolve([rows]);
       },
+      getConnection() {
+        return Promise.resolve({
+          execute(sql: string, values?: unknown[]) {
+            poolExecutions.push({ sql, values });
+            const rows = /^\s*select\b/i.test(sql) ? (poolExecuteQueue.shift() ?? []) : [];
+            return Promise.resolve([rows]);
+          },
+          beginTransaction() { return Promise.resolve(); },
+          commit() { return Promise.resolve(); },
+          rollback() { return Promise.resolve(); },
+          release() {},
+        });
+      },
     },
     queueSelect(rows: QueuedSelect) {
       selectQueue.push(rows);
