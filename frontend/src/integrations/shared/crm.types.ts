@@ -27,6 +27,13 @@ export type CrmReminder = { id: string; title: string; body?: string | null; rem
 export type CrmLead = { id: string; name?: string | null; country?: string | null; website?: string | null; email?: string | null; lead_score?: number | null; status?: string | null; channel?: string | null };
 
 export type CrmMailSummary = { campaigns_active: number; drafts_total: number; drafts_ready: number; sent: number; opened: number; replied: number; recipient_lists: number; recipients_pending: number };
-export type CrmReportsSummary = { weekly_report: { preview_url: string; send_url: string; available: boolean }; counts: { targets_total: number; active_leads: number; pending_signals: number; high_risk_targets: number; weekly_high_signals: number; market_test_runs: number } };
+export type CrmReportsSummary = {
+  weekly_report: { preview_url: string; send_url: string; available: boolean };
+  counts: { targets_total: number; active_leads: number; pending_signals: number; high_risk_targets: number; weekly_high_signals: number; market_test_runs: number };
+  range: { start: string; end: string };
+  operational_counts: { customers: number; employees: number; active_deals: number; total_revenue: number };
+  performance: Array<{ owner_user_id: string; responsible: string; todo: number; quote_sent: number; hot: number; customer_added: number; waiting: number; revision: number; cancelled: number }>;
+  sales: Array<{ id: string; sale_date: string; title: string; status: string; amount: number | string | null; currency: string }>;
+};
 export type CrmUsersSummary = { tenant_key: string; users_total: number; active_users: number; inactive_users: number; tenant_admins: number; tenant_editors: number; verified_users: number };
 export type CrmBusinessSummary = { tenant: { tenant_key: string; name: string | null; locale: string | null; status: string | null; plan: string | null }; counts: { tenant_settings: number; active_modules: number; suspended_modules: number } };

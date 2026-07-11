@@ -65,9 +65,21 @@ export async function getMailSummary(ownerUserId?: string | null) {
   };
 }
 
-export async function getReportsSummary(ownerUserId?: string | null) {
+type GroupCountRow = { owner_user_id: string | null; status?: string | null; cnt: number | string | null };
+type ReportUserRow = { id: string; responsible: string };
+
+function isoDate(value: string | undefined, fallback: Date) {
+  if (value && /^\d{4}-\d{2}-\d{2}$/.test(value)) return value;
+  return fallback.toISOString().slice(0, 10);
+}
+
+export async function getReportsSummary(ownerUserId?: string | null, range?: { start?: string; end?: string }) {
   const tenantKey = getActiveTenantKey();
   const o = ownerUserId ?? null;
+  const now = new Date();
+  const monthStart = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+  const start = isoDate(range?.start, monthStart);
+  const end = isoDate(range?.end, now);
   const [
     targetsTotal,
     activeLeads,
@@ -93,6 +105,74 @@ export async function getReportsSummary(ownerUserId?: string | null) {
     readCount('SELECT COUNT(*) AS cnt FROM market_test_runs WHERE tenant_key = ?', tenantKey),
   ]);
 
+  const ownerSql = o ? ' AND owner_user_id = ?' : '';
+  const scopedValues = [tenantKey, start, end, ...(o ? [o] : [])];
+  const [usersRows, taskRows, quoteRows, dealRows, accountRows, salesRows, employeeRows] = await Promise.all([
+    pool.execute(
+      `SELECT u.id, COALESCE(NULLIF(u.full_name, ''), u.email) AS responsible
+         FROM tenant_user_roles tur JOIN users u ON u.id = tur.user_id
+        WHERE tur.tenant_key = ?${o ? ' AND u.id = ?' : ''}
+        ORDER BY responsible`,
+      [tenantKey, ...(o ? [o] : [])],
+    ),
+    pool.execute(
+      `SELECT owner_user_id, status, COUNT(*) AS cnt FROM crm_tasks
+        WHERE tenant_key = ? AND DATE(created_at) BETWEEN ? AND ?${ownerSql}
+        GROUP BY owner_user_id, status`, scopedValues,
+    ),
+    pool.execute(
+      `SELECT owner_user_id, status, COUNT(*) AS cnt FROM crm_quotes
+        WHERE tenant_key = ? AND DATE(created_at) BETWEEN ? AND ?${ownerSql}
+        GROUP BY owner_user_id, status`, scopedValues,
+    ),
+    pool.execute(
+      `SELECT owner_user_id, status, COUNT(*) AS cnt FROM crm_deals
+        WHERE tenant_key = ? AND DATE(created_at) BETWEEN ? AND ?${ownerSql}
+        GROUP BY owner_user_id, status`, scopedValues,
+    ),
+    pool.execute(
+      `SELECT owner_user_id, status, COUNT(*) AS cnt FROM crm_accounts
+        WHERE tenant_key = ? AND DATE(created_at) BETWEEN ? AND ?${ownerSql}
+        GROUP BY owner_user_id, status`, scopedValues,
+    ),
+    pool.execute(
+      `SELECT id, COALESCE(ordered_at, created_at) AS sale_date, title, status, amount, currency
+         FROM crm_orders
+        WHERE tenant_key = ? AND DATE(COALESCE(ordered_at, created_at)) BETWEEN ? AND ?${ownerSql}
+        ORDER BY COALESCE(ordered_at, created_at) DESC LIMIT 500`, scopedValues,
+    ),
+    pool.execute(
+      `SELECT COUNT(DISTINCT tur.user_id) AS cnt
+         FROM tenant_user_roles tur JOIN users u ON u.id = tur.user_id
+        WHERE tur.tenant_key = ? AND u.is_active = 1`, [tenantKey],
+    ),
+  ]);
+
+  const users = usersRows[0] as ReportUserRow[];
+  const grouped = (rows: unknown) => rows as GroupCountRow[];
+  const countFor = (rows: GroupCountRow[], userId: string, statuses?: string[]) => rows
+    .filter((row) => row.owner_user_id === userId && (!statuses || statuses.includes(String(row.status))))
+    .reduce((sum, row) => sum + toNumber(row.cnt), 0);
+  const tasks = grouped(taskRows[0]);
+  const quotesByOwner = grouped(quoteRows[0]);
+  const dealsByOwner = grouped(dealRows[0]);
+  const accountsByOwner = grouped(accountRows[0]);
+  const performance = users.map((user) => ({
+    owner_user_id: user.id,
+    responsible: user.responsible,
+    todo: countFor(tasks, user.id, ['open']),
+    quote_sent: countFor(quotesByOwner, user.id, ['sent', 'accepted']),
+    hot: countFor(dealsByOwner, user.id, ['open']),
+    customer_added: countFor(accountsByOwner, user.id),
+    waiting: countFor(tasks, user.id, ['open']),
+    revision: countFor(quotesByOwner, user.id, ['draft']),
+    cancelled: countFor(quotesByOwner, user.id, ['cancelled', 'rejected', 'expired']) + countFor(dealsByOwner, user.id, ['lost']),
+  }));
+  const sales = salesRows[0] as Array<Record<string, unknown>>;
+  const totalRevenue = sales
+    .filter((row) => row.status !== 'cancelled')
+    .reduce((sum, row) => sum + toNumber(row.amount), 0);
+
   return {
     weekly_report: {
       preview_url: '/market/reports/weekly/preview',
@@ -107,6 +187,15 @@ export async function getReportsSummary(ownerUserId?: string | null) {
       weekly_high_signals: weeklyHighSignals,
       market_test_runs: marketTestRuns,
     },
+    range: { start, end },
+    operational_counts: {
+      customers: accountsByOwner.reduce((sum, row) => sum + toNumber(row.cnt), 0),
+      employees: toNumber((employeeRows[0] as CountRow[])[0]?.cnt),
+      active_deals: dealsByOwner.filter((row) => row.status === 'open').reduce((sum, row) => sum + toNumber(row.cnt), 0),
+      total_revenue: totalRevenue,
+    },
+    performance,
+    sales,
   };
 }
 

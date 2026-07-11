@@ -1,4 +1,5 @@
 import type { FastifyReply, FastifyRequest } from 'fastify';
+import { z } from 'zod';
 import { getAuthUserId, handleRouteError, ownerScopeForRequest } from '@/modules/_shared';
 import { createGoogleTasksConnectUrl, getGoogleTasksStatus, syncGoogleTasks } from '@/modules/mail-accounts/service';
 import {
@@ -78,8 +79,13 @@ export async function mailSummaryHandler(req: FastifyRequest) {
   return getMailSummary(ownerForRequest(req));
 }
 
-export async function reportsSummaryHandler(req: FastifyRequest) {
-  return getReportsSummary(ownerForRequest(req));
+export async function reportsSummaryHandler(req: FastifyRequest, reply: FastifyReply) {
+  const query = z.object({
+    start: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+    end: z.string().regex(/^\d{4}-\d{2}-\d{2}$/).optional(),
+  }).safeParse(req.query);
+  if (!query.success) return badRequest(reply);
+  return getReportsSummary(ownerForRequest(req), query.data);
 }
 
 export async function usersSummaryHandler() {

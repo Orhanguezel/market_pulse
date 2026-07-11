@@ -307,8 +307,15 @@ describe('crm insights service', () => {
     dbMock.queuePoolExecute([{ cnt: '2' }]);
     dbMock.queuePoolExecute([{ cnt: '4' }]);
     dbMock.queuePoolExecute([{ cnt: '9' }]);
+    dbMock.queuePoolExecute([{ id: 'user-1', responsible: 'User One' }]);
+    dbMock.queuePoolExecute([{ owner_user_id: 'user-1', status: 'open', cnt: '2' }]);
+    dbMock.queuePoolExecute([{ owner_user_id: 'user-1', status: 'sent', cnt: '3' }]);
+    dbMock.queuePoolExecute([{ owner_user_id: 'user-1', status: 'open', cnt: '4' }]);
+    dbMock.queuePoolExecute([{ owner_user_id: 'user-1', status: 'active', cnt: '5' }]);
+    dbMock.queuePoolExecute([{ id: 'order-1', title: 'Sale', status: 'confirmed', amount: '1200', currency: 'TRY' }]);
+    dbMock.queuePoolExecute([{ cnt: '2' }]);
 
-    const result = await runWithTenant('tenant-b', () => insights.getReportsSummary());
+    const result = await runWithTenant('tenant-b', () => insights.getReportsSummary(null, { start: '2026-07-01', end: '2026-07-31' }));
 
     expect(result).toEqual({
       weekly_report: {
@@ -324,8 +331,12 @@ describe('crm insights service', () => {
         weekly_high_signals: 4,
         market_test_runs: 9,
       },
+      range: { start: '2026-07-01', end: '2026-07-31' },
+      operational_counts: { customers: 5, employees: 2, active_deals: 4, total_revenue: 1200 },
+      performance: [{ owner_user_id: 'user-1', responsible: 'User One', todo: 2, quote_sent: 3, hot: 4, customer_added: 5, waiting: 2, revision: 0, cancelled: 0 }],
+      sales: [{ id: 'order-1', title: 'Sale', status: 'confirmed', amount: '1200', currency: 'TRY' }],
     });
-    expect(dbMock.poolExecutions).toHaveLength(6);
+    expect(dbMock.poolExecutions).toHaveLength(13);
     expect(dbMock.poolExecutions.every((entry) => entry.values?.[0] === 'tenant-b')).toBe(true);
     expect(dbMock.poolExecutions.every((entry) => entry.sql.includes('tenant_key = ?'))).toBe(true);
   });

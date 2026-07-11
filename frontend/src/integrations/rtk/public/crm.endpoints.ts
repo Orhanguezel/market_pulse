@@ -51,8 +51,8 @@ export const crmApi = baseApi.injectEndpoints({
       query: () => ({ url: '/crm/mail/summary', method: 'GET' }),
       providesTags: ['CrmMailSummary'],
     }),
-    getCrmReportsSummary: b.query<CrmReportsSummary, void>({
-      query: () => ({ url: '/crm/reports/summary', method: 'GET' }),
+    getCrmReportsSummary: b.query<CrmReportsSummary, { start?: string; end?: string } | void>({
+      query: (params) => ({ url: '/crm/reports/summary', method: 'GET', params: params ?? undefined }),
       providesTags: ['CrmReportsSummary'],
     }),
     getCrmUsersSummary: b.query<CrmUsersSummary, void>({
