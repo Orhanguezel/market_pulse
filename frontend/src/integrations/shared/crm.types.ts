@@ -5,6 +5,10 @@ export type CrmDashboardSummary = {
   status_breakdown: { label: string; count: number }[];
   team_breakdown?: { label: string; count: number }[];
   totals: { records: number };
+  upcoming_activities?: Array<{ id: string; subject: string; type?: string | null; ref_type?: string | null; ref_id?: string | null; due_at?: string | null; related_name?: string | null }>;
+  recent_quotes?: Array<{ id: string; quote_no?: string | null; title: string; amount?: number | string | null; currency?: string | null; status?: string | null; account_name?: string | null; created_at?: string | null }>;
+  recent_deals?: Array<{ id: string; title: string; amount?: number | string | null; currency?: string | null; status?: string | null; stage_name?: string | null; account_name?: string | null; created_at?: string | null }>;
+  recent_accounts?: Array<{ id: string; name: string; country?: string | null; city?: string | null; status?: string | null; created_at?: string | null }>;
 };
 
 export type CrmAccount = { id: string; name: string; website?: string | null; country?: string | null; city?: string | null; phone?: string | null; email?: string | null; industry?: string | null; status?: string | null; created_at?: string };

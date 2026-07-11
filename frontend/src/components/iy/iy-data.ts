@@ -323,6 +323,7 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
     title: 'Genel Bakış',
     items: [
       { key: 'dashboard', label: 'Haber Akışı', icon: 'LayoutDashboard', path: '/dashboard' },
+      { key: 'notifications', label: 'Bildirimler', icon: 'Bell', path: '/bildirimler' },
     ],
   },
   {
@@ -338,7 +339,7 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
       { key: 'firma-bulucu', label: 'Firma Bulucu', icon: 'Radar', path: '/firma-bulucu/tarama', module: 'leads' },
       { key: 'firma-bulucu-jobs', label: 'Tarama İşleri', icon: 'ListChecks', path: '/firma-bulucu/jobs', module: 'leads' },
       { key: 'firma-bulucu-fair-day', label: 'Fuar Günü', icon: 'CalendarCheck', path: '/firma-bulucu/fuar-gunu', module: 'leads' },
-      { key: 'leads', label: 'Bulunan Adaylar', icon: 'Target', path: '/potansiyel-musteriler', module: 'leads' },
+      { key: 'leads', label: 'Bulunan Adaylar', icon: 'Target', path: '/firma-bulucu/adaylar', module: 'leads' },
     ],
   },
   {
@@ -362,6 +363,7 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
   {
     title: '5 · Satış Hunisi',
     items: [
+      { key: 'prospects', label: 'Potansiyel Müşteriler', icon: 'Target', path: '/potansiyel-musteriler', module: 'crm' },
       { key: 'deals', label: 'Satış Fırsatları', icon: 'TrendingUp', path: '/satis-firsatlari', module: 'crm' },
       { key: 'quotes', label: 'Teklifler', icon: 'FileText', path: '/teklifler', module: 'crm' },
       { key: 'orders', label: 'Siparişler', icon: 'ShoppingCart', path: '/siparisler', module: 'crm' },
@@ -384,6 +386,7 @@ export const IY_APP_NAV: IyAppNavGroup[] = [
     items: [
       { key: 'packages', label: 'Paketler', icon: 'Package', path: '/paketler' },
       { key: 'profile', label: 'Profilim', icon: 'User', path: '/profile' },
+      { key: 'settings', label: 'Hesap Ayarları', icon: 'Settings', path: '/me/settings' },
     ],
   },
 ];

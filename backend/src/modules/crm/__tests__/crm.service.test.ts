@@ -105,6 +105,10 @@ describe('crm dashboard summary service', () => {
       { done: 0, count: '5' },
       { done: 1, count: '7' },
     ]);
+    dbMock.queuePoolExecute([{ id: 'activity-1', subject: 'Müşteriyi ara', related_name: 'Acme', due_at: '2026-07-12' }]);
+    dbMock.queuePoolExecute([{ id: 'quote-1', title: 'İhracat teklifi', amount: '1200', currency: 'EUR' }]);
+    dbMock.queuePoolExecute([{ id: 'deal-1', title: 'Dağıtıcı anlaşması', amount: '5000', currency: 'EUR' }]);
+    dbMock.queuePoolExecute([{ id: 'account-1', name: 'Acme GmbH', country: 'DE' }]);
 
     const result = await runWithTenant('tenant-b', () => dashboard.getDashboardSummary());
 
@@ -127,7 +131,11 @@ describe('crm dashboard summary service', () => {
     ]);
     expect(result.status_breakdown).toContainEqual({ label: 'Planlı Hatırlatma', count: 3 });
     expect(result.totals.records).toBe(27);
-    expect(dbMock.poolExecutions).toHaveLength(11);
+    expect(result.upcoming_activities).toEqual([expect.objectContaining({ id: 'activity-1' })]);
+    expect(result.recent_quotes).toEqual([expect.objectContaining({ id: 'quote-1' })]);
+    expect(result.recent_deals).toEqual([expect.objectContaining({ id: 'deal-1' })]);
+    expect(result.recent_accounts).toEqual([expect.objectContaining({ id: 'account-1' })]);
+    expect(dbMock.poolExecutions).toHaveLength(15);
     expect(dbMock.poolExecutions.every((entry) => entry.values?.[0] === 'tenant-b')).toBe(true);
     expect(dbMock.poolExecutions.every((entry) => entry.sql.includes('tenant_key = ?'))).toBe(true);
   });

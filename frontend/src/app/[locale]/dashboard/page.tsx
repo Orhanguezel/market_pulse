@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { useParams } from 'next/navigation';
 import {
   Target, TrendingUp, ShoppingCart, Building2, FileText, CalendarCheck,
-  CalendarPlus, Plus, ArrowRight,
+  CalendarPlus, Plus, ArrowRight, Clock3, Activity, CircleDollarSign, Users,
 } from 'lucide-react';
 import {
   AreaChart, Area, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis,
@@ -30,6 +30,10 @@ const EMPTY_SUMMARY = {
   status_breakdown: [],
   team_breakdown: [],
   totals: { records: 0 },
+  upcoming_activities: [],
+  recent_quotes: [],
+  recent_deals: [],
+  recent_accounts: [],
 };
 
 const PIE_COLORS = ['#1e40af', '#2563eb', '#60a5fa', '#93c5fd', '#bfdbfe'];
@@ -52,6 +56,26 @@ const reminderSchema = z.object({
 function numberFrom(value: unknown) {
   const parsed = typeof value === 'number' ? value : Number(value ?? 0);
   return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function formatDate(value?: string | null) {
+  if (!value) return 'Tarih yok';
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? 'Tarih yok' : date.toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+function formatMoney(value?: number | string | null, currency?: string | null) {
+  const amount = Number(value ?? 0);
+  if (!Number.isFinite(amount)) return '-';
+  try {
+    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: currency || 'USD', maximumFractionDigits: 0 }).format(amount);
+  } catch {
+    return `${amount.toLocaleString('tr-TR')} ${currency || ''}`.trim();
+  }
+}
+
+function EmptyRow({ text }: { text: string }) {
+  return <div className="px-4 py-8 text-center text-[13px] text-[#94a3b8]">{text}</div>;
 }
 
 function StatCard({ icon: Icon, label, value, href, accent }: {
@@ -233,6 +257,54 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      {/* Operasyon akışı */}
+      <section className="overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e2e8f0] px-5 py-4">
+          <div>
+            <h2 className="text-[15px] font-bold text-[#0f172a]">Yaklaşan Aktiviteler</h2>
+            <p className="mt-0.5 text-[12px] text-[#64748b]">Arama, toplantı, e-posta ve takip planınız</p>
+          </div>
+          <div className="flex gap-2">
+            <button onClick={() => setActivityOpen(true)} className="inline-flex h-9 items-center gap-1.5 rounded-md bg-[#1e40af] px-3 text-[12.5px] font-semibold text-white"><Plus className="h-4 w-4" /> Yeni Aktivite</button>
+            <Link href={`/${l}/aktiviteler`} className="inline-flex h-9 items-center rounded-md border border-[#cbd5e1] px-3 text-[12.5px] font-semibold text-[#334155]">Tümünü Gör</Link>
+          </div>
+        </div>
+        {(d.upcoming_activities?.length ?? 0) > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[760px] text-left text-[12.5px]">
+              <thead className="bg-[#f8fafc] text-[11px] uppercase tracking-wide text-[#64748b]"><tr><th className="px-5 py-3">Aktivite</th><th className="px-5 py-3">Tip</th><th className="px-5 py-3">İlişkili Kayıt</th><th className="px-5 py-3">Planlanan Tarih</th><th className="px-5 py-3 text-right">Aksiyon</th></tr></thead>
+              <tbody className="divide-y divide-[#eef2f7]">
+                {d.upcoming_activities?.map((item) => <tr key={item.id} className="hover:bg-[#f8fafc]"><td className="px-5 py-3.5 font-semibold text-[#0f172a]">{item.subject}</td><td className="px-5 py-3.5 capitalize text-[#475569]">{item.type || 'aktivite'}</td><td className="px-5 py-3.5 text-[#475569]">{item.related_name || '-'}</td><td className="px-5 py-3.5 text-[#475569]">{formatDate(item.due_at)}</td><td className="px-5 py-3.5 text-right"><Link href={`/${l}/aktiviteler`} className="font-semibold text-[#1e40af]">Görüntüle</Link></td></tr>)}
+              </tbody>
+            </table>
+          </div>
+        ) : <EmptyRow text="Planlanmış açık aktivite bulunmuyor." />}
+      </section>
+
+      {/* Son kayıtlar */}
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
+        <RecentPanel title="Son Teklifler" href={`/${l}/teklifler`} icon={FileText} empty="Henüz teklif yok.">
+          {d.recent_quotes?.map((item) => <Link key={item.id} href={`/${l}/teklifler/${item.id}`} className="flex items-center gap-3 border-t border-[#eef2f7] px-4 py-3 hover:bg-[#f8fafc]"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#eff6ff] text-[12px] font-bold text-[#1e40af]">{(item.title || 'T')[0]}</span><span className="min-w-0 flex-1"><span className="block truncate text-[13px] font-semibold text-[#0f172a]">{item.title}</span><span className="block truncate text-[11.5px] text-[#64748b]">{item.quote_no || item.account_name || item.status}</span></span><span className="shrink-0 text-[12px] font-semibold text-[#334155]">{formatMoney(item.amount, item.currency)}</span></Link>)}
+        </RecentPanel>
+        <RecentPanel title="Son Satış Fırsatları" href={`/${l}/satis-firsatlari`} icon={CircleDollarSign} empty="Henüz satış fırsatı yok.">
+          {d.recent_deals?.map((item) => <Link key={item.id} href={`/${l}/satis-firsatlari/${item.id}`} className="flex items-center gap-3 border-t border-[#eef2f7] px-4 py-3 hover:bg-[#f8fafc]"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#eff6ff] text-[12px] font-bold text-[#1e40af]">{(item.title || 'F')[0]}</span><span className="min-w-0 flex-1"><span className="block truncate text-[13px] font-semibold text-[#0f172a]">{item.title}</span><span className="block truncate text-[11.5px] text-[#64748b]">{item.stage_name || item.account_name || item.status}</span></span><span className="shrink-0 text-[12px] font-semibold text-[#334155]">{formatMoney(item.amount, item.currency)}</span></Link>)}
+        </RecentPanel>
+        <RecentPanel title="Son Eklenen Müşteriler" href={`/${l}/musteriler`} icon={Users} empty="Henüz müşteri yok.">
+          {d.recent_accounts?.map((item) => <Link key={item.id} href={`/${l}/musteriler/${item.id}`} className="flex items-center gap-3 border-t border-[#eef2f7] px-4 py-3 hover:bg-[#f8fafc]"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#eff6ff] text-[12px] font-bold text-[#1e40af]">{(item.name || 'M')[0]}</span><span className="min-w-0 flex-1"><span className="block truncate text-[13px] font-semibold text-[#0f172a]">{item.name}</span><span className="block truncate text-[11.5px] text-[#64748b]">{[item.city, item.country].filter(Boolean).join(', ') || 'Konum yok'} · {item.status || 'aktif'}</span></span><span className="shrink-0 text-[11.5px] text-[#64748b]">{item.created_at ? new Date(item.created_at).toLocaleDateString('tr-TR') : ''}</span></Link>)}
+        </RecentPanel>
+      </div>
+
+      <section className="rounded-2xl border border-[#e2e8f0] bg-white p-5">
+        <div className="mb-4 flex items-center justify-between"><div><h2 className="text-[15px] font-bold text-[#0f172a]">İşletmenin Son Hareketleri</h2><p className="mt-0.5 text-[12px] text-[#64748b]">Size ait son CRM kayıtları</p></div><Activity className="h-5 w-5 text-[#1e40af]" /></div>
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {[
+            ...(d.recent_deals ?? []).slice(0, 2).map((x) => ({ key: `d-${x.id}`, label: 'Yeni satış fırsatı', title: x.title, date: x.created_at, href: `/${l}/satis-firsatlari/${x.id}`, color: 'bg-cyan-50 text-cyan-700' })),
+            ...(d.recent_accounts ?? []).slice(0, 2).map((x) => ({ key: `a-${x.id}`, label: 'Yeni müşteri', title: x.name, date: x.created_at, href: `/${l}/musteriler/${x.id}`, color: 'bg-emerald-50 text-emerald-700' })),
+            ...(d.recent_quotes ?? []).slice(0, 2).map((x) => ({ key: `q-${x.id}`, label: 'Yeni teklif', title: x.title, date: x.created_at, href: `/${l}/teklifler/${x.id}`, color: 'bg-blue-50 text-blue-700' })),
+          ].sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()).slice(0, 4).map((item) => <Link key={item.key} href={item.href} className="rounded-xl border border-[#e2e8f0] p-4 hover:border-[#93c5fd]"><span className={`inline-flex rounded-full px-2 py-1 text-[10px] font-bold uppercase ${item.color}`}>{item.label}</span><p className="mt-2 truncate text-[13px] font-semibold text-[#0f172a]">{item.title}</p><p className="mt-1 flex items-center gap-1 text-[11.5px] text-[#64748b]"><Clock3 className="h-3.5 w-3.5" />{formatDate(item.date)}</p></Link>)}
+        </div>
+      </section>
       <CrmEntityDialog
         open={activityOpen}
         onOpenChange={setActivityOpen}
@@ -266,4 +338,9 @@ export default function DashboardPage() {
       />
     </div>
   );
+}
+
+function RecentPanel({ title, href, icon: Icon, empty, children }: { title: string; href: string; icon: React.ComponentType<{ className?: string }>; empty: string; children: React.ReactNode }) {
+  const hasChildren = Array.isArray(children) ? children.length > 0 : Boolean(children);
+  return <section className="overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white"><div className="flex items-center justify-between px-4 py-4"><h2 className="flex items-center gap-2 text-[14px] font-bold text-[#0f172a]"><Icon className="h-4 w-4 text-[#1e40af]" />{title}</h2><Link href={href} className="text-[12px] font-semibold text-[#1e40af]">Tümünü Gör</Link></div>{hasChildren ? children : <EmptyRow text={empty} />}</section>;
 }

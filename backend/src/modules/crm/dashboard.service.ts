@@ -34,6 +34,7 @@ export async function getDashboardSummary(ownerUserId?: string | null) {
   // owner filtresi uygulanir. quotes/orders'a owner kolonu 035 semasi + migrate ile eklendi.
   const ownerAnd = ownerUserId ? ' AND owner_user_id = ?' : '';
   const ownerVal: SqlValue[] = ownerUserId ? [ownerUserId] : [];
+  const ownerFor = (alias: string) => ownerUserId ? ` AND ${alias}.owner_user_id = ?` : '';
   const scoped = (base: string, ...extra: SqlValue[]): [string, SqlValue[]] => [
     base + ownerAnd,
     [tenantKey, ...extra, ...ownerVal],
@@ -81,6 +82,52 @@ export async function getDashboardSummary(ownerUserId?: string | null) {
     [tenantKey, ...ownerVal],
   );
 
+  const [upcomingActivities] = await pool.execute(
+    `SELECT a.id, a.subject, a.type, a.ref_type, a.ref_id, a.due_at,
+            CASE a.ref_type
+              WHEN 'account' THEN acc.name
+              WHEN 'deal' THEN deal.title
+              WHEN 'contact' THEN TRIM(CONCAT(COALESCE(contact.first_name, ''), ' ', COALESCE(contact.last_name, '')))
+            END AS related_name
+       FROM crm_activities a
+       LEFT JOIN crm_accounts acc ON a.ref_type = 'account' AND acc.id = a.ref_id AND acc.tenant_key = a.tenant_key
+       LEFT JOIN crm_deals deal ON a.ref_type = 'deal' AND deal.id = a.ref_id AND deal.tenant_key = a.tenant_key
+       LEFT JOIN crm_contacts contact ON a.ref_type = 'contact' AND contact.id = a.ref_id AND contact.tenant_key = a.tenant_key
+      WHERE a.tenant_key = ? AND a.done = 0${ownerFor('a')}
+      ORDER BY a.due_at IS NULL, a.due_at ASC, a.created_at DESC
+      LIMIT 8`,
+    [tenantKey, ...ownerVal],
+  );
+
+  const [recentQuotes] = await pool.execute(
+    `SELECT q.id, q.quote_no, q.title, q.amount, q.currency, q.status, q.created_at,
+            a.name AS account_name
+       FROM crm_quotes q
+       LEFT JOIN crm_accounts a ON a.id = q.account_id AND a.tenant_key = q.tenant_key
+      WHERE q.tenant_key = ?${ownerFor('q')}
+      ORDER BY q.created_at DESC LIMIT 5`,
+    [tenantKey, ...ownerVal],
+  );
+
+  const [recentDeals] = await pool.execute(
+    `SELECT d.id, d.title, d.amount, d.currency, d.status, d.created_at,
+            a.name AS account_name, s.name AS stage_name
+       FROM crm_deals d
+       LEFT JOIN crm_accounts a ON a.id = d.account_id AND a.tenant_key = d.tenant_key
+       LEFT JOIN crm_stages s ON s.id = d.stage_id AND s.tenant_key = d.tenant_key
+      WHERE d.tenant_key = ?${ownerFor('d')}
+      ORDER BY d.created_at DESC LIMIT 5`,
+    [tenantKey, ...ownerVal],
+  );
+
+  const [recentAccounts] = await pool.execute(
+    `SELECT a.id, a.name, a.country, a.city, a.status, a.created_at
+       FROM crm_accounts a
+      WHERE a.tenant_key = ?${ownerFor('a')}
+      ORDER BY a.created_at DESC LIMIT 5`,
+    [tenantKey, ...ownerVal],
+  );
+
   const teamCounts = (activityRows as ActivityDoneRow[]).reduce(
     (acc, row) => {
       const key = toNumber(row.done) === 1 ? 'done' : 'pending';
@@ -125,5 +172,9 @@ export async function getDashboardSummary(ownerUserId?: string | null) {
     totals: {
       records: accounts + contacts + dealsOpen + dealsWon + activitiesPending + leads + quotes + orders + remindersScheduled,
     },
+    upcoming_activities: upcomingActivities,
+    recent_quotes: recentQuotes,
+    recent_deals: recentDeals,
+    recent_accounts: recentAccounts,
   };
 }
