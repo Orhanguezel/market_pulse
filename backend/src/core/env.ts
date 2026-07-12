@@ -86,6 +86,9 @@ export const env = {
   // Google Places API (New) — firma adından resmi web sitesini bulmak için.
   // Boşsa özellik sessizce devre dışı kalır (site bulma denenmez).
   GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY || '',
+  // Oxylabs Realtime API (google_search + universal). Boşsa istemci devre dışı.
+  OXYLABS_USER: process.env.OXYLABS_USER || '',
+  OXYLABS_PASS: process.env.OXYLABS_PASS || '',
   // Gmail hesabi baglama icin ayri OAuth client (login'den bagimsiz). Set edilmezse
   // GOOGLE_CLIENT_ID/SECRET'a duser. Boylece Testing-modu Gmail client'i login'i etkilemez.
   GMAIL_OAUTH_CLIENT_ID: process.env.GMAIL_OAUTH_CLIENT_ID || process.env.GOOGLE_CLIENT_ID || '',
