@@ -3,11 +3,12 @@
 import React from 'react';
 import { toast } from 'sonner';
 import * as XLSX from 'xlsx';
-import { Upload, Sparkles, Zap, Download, Loader2, RefreshCcw, ListChecks } from 'lucide-react';
+import { Upload, Sparkles, Zap, Download, Loader2, RefreshCcw, ListChecks, Trash2 } from 'lucide-react';
 import {
   useListProspectListsQuery,
   useImportProspectListMutation,
   useListProspectCompaniesQuery,
+  useDeleteProspectListMutation,
   useEnrichFreeMutation,
   useEnrichApolloMutation,
   useProspectStatusQuery,
@@ -45,6 +46,17 @@ export default function ProspectListsPage() {
   const [importList] = useImportProspectListMutation();
   const [enrichFree] = useEnrichFreeMutation();
   const [enrichApollo] = useEnrichApolloMutation();
+  const [deleteList, deleteState] = useDeleteProspectListMutation();
+
+  const removeList = async (id: string, name: string) => {
+    if (!window.confirm(`"${name}" listesi ve içindeki tüm firmalar silinecek. Emin misiniz?`)) return;
+    try {
+      await deleteList({ id }).unwrap();
+      if (activeId === id) setActiveId(null);
+      toast.success('Liste silindi');
+      await refetchLists();
+    } catch { toast.error('Liste silinemedi'); }
+  };
 
   const companiesQ = useListProspectCompaniesQuery(activeId ? { id: activeId } : ({} as never), { skip: !activeId });
   const companies = companiesQ.data?.companies ?? [];
@@ -144,25 +156,37 @@ export default function ProspectListsPage() {
             {lists.map((l, i) => {
               const active = activeId === l.id;
               return (
-                <button
+                <div
                   key={l.id}
-                  onClick={() => { setActiveId(l.id); setSelected(new Set()); }}
-                  className={`flex w-full items-center gap-4 px-4 py-3 text-left transition-colors ${i > 0 ? 'border-t border-[#e2e8f0]' : ''} ${active ? 'bg-[#eff6ff]' : 'hover:bg-[#f8fafc]'}`}
+                  className={`flex w-full items-center gap-4 px-4 py-3 transition-colors ${i > 0 ? 'border-t border-[#e2e8f0]' : ''} ${active ? 'bg-[#eff6ff]' : 'hover:bg-[#f8fafc]'}`}
                 >
-                  <span className={`grid size-9 shrink-0 place-items-center rounded-md ${active ? 'bg-[#1e40af] text-white' : 'bg-[#eff6ff] text-[#1e40af]'}`}>
-                    <ListChecks className="size-4" />
-                  </span>
-                  <span className="min-w-0 flex-1">
-                    <span className="block truncate text-sm font-semibold text-slate-900">{l.name}</span>
-                    <span className="block text-[11px] text-slate-400">Firma listesi</span>
-                  </span>
-                  <span className="hidden shrink-0 items-center gap-4 text-[12px] sm:flex">
-                    <span className="text-slate-600"><b className="text-slate-900">{l.total}</b> firma</span>
-                    <span className="rounded-full bg-emerald-50 px-2 py-0.5 font-medium text-emerald-700">Ücretsiz {l.free_done}</span>
-                    <span className="rounded-full bg-violet-50 px-2 py-0.5 font-medium text-violet-700">Apollo {l.apollo_done}</span>
-                  </span>
-                  <span className={`shrink-0 text-[12px] font-semibold ${active ? 'text-[#1e40af]' : 'text-slate-400'}`}>{active ? 'Seçili' : 'Aç'}</span>
-                </button>
+                  <button
+                    onClick={() => { setActiveId(l.id); setSelected(new Set()); }}
+                    className="flex min-w-0 flex-1 items-center gap-4 text-left"
+                  >
+                    <span className={`grid size-9 shrink-0 place-items-center rounded-md ${active ? 'bg-[#1e40af] text-white' : 'bg-[#eff6ff] text-[#1e40af]'}`}>
+                      <ListChecks className="size-4" />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block truncate text-sm font-semibold text-slate-900">{l.name}</span>
+                      <span className="block text-[11px] text-slate-400">Firma listesi</span>
+                    </span>
+                    <span className="hidden shrink-0 items-center gap-4 text-[12px] sm:flex">
+                      <span className="text-slate-600"><b className="text-slate-900">{l.total}</b> firma</span>
+                      <span className="rounded-full bg-emerald-50 px-2 py-0.5 font-medium text-emerald-700">Ücretsiz {l.free_done}</span>
+                      <span className="rounded-full bg-violet-50 px-2 py-0.5 font-medium text-violet-700">Apollo {l.apollo_done}</span>
+                    </span>
+                    <span className={`shrink-0 text-[12px] font-semibold ${active ? 'text-[#1e40af]' : 'text-slate-400'}`}>{active ? 'Seçili' : 'Aç'}</span>
+                  </button>
+                  <button
+                    onClick={() => removeList(l.id, l.name)}
+                    disabled={deleteState.isLoading}
+                    title="Listeyi sil"
+                    className="grid size-8 shrink-0 place-items-center rounded-md border border-rose-200 text-rose-600 transition hover:bg-rose-50 disabled:opacity-50"
+                  >
+                    <Trash2 className="size-4" />
+                  </button>
+                </div>
               );
             })}
             {!lists.length && <p className="px-4 py-8 text-center text-xs text-slate-400">Henüz liste yok. Yukarıdan yükle.</p>}
@@ -214,7 +238,13 @@ export default function ProspectListsPage() {
                         <td className="px-3 py-2 text-slate-600">{c.decision_maker_name ? <span>{c.decision_maker_name}{c.decision_maker_title ? <span className="block text-[11px] text-slate-400">{c.decision_maker_title}</span> : null}</span> : <span className="text-slate-300">—</span>}</td>
                         <td className="px-3 py-2 text-slate-600">{c.decision_maker_email || <span className="text-slate-300">—</span>}</td>
                         <td className="px-3 py-2">{c.linkedin_search_url ? <a href={c.decision_maker_linkedin || c.linkedin_search_url} target="_blank" rel="noreferrer" className="text-[11px] text-blue-600 hover:underline">ara/aç</a> : <span className="text-slate-300">—</span>}</td>
-                        <td className="px-3 py-2"><span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold ${STATUS[c.enrich_status].cls}`}>{STATUS[c.enrich_status].label}</span></td>
+                        <td className="px-3 py-2">
+                          <span className={`inline-block rounded-full px-2 py-0.5 text-[10px] font-semibold ${STATUS[c.enrich_status].cls}`}>{STATUS[c.enrich_status].label}</span>
+                          {/* Sonuç bulunamadıysa sebebini göster (eskiden sessizce boş kalıyordu). */}
+                          {c.error && !c.generic_email && !c.phone && (
+                            <span className="mt-1 block max-w-[200px] text-[10px] leading-tight text-slate-400" title={c.error}>{c.error}</span>
+                          )}
+                        </td>
                       </tr>
                     ))}
                     {!companies.length && <tr><td colSpan={7} className="px-3 py-10 text-center text-slate-400">Firma yok</td></tr>}

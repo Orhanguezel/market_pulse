@@ -7,6 +7,7 @@ import {
   importList,
   listLists,
   listCompanies,
+  deleteList,
   countFreeEnrichTargets,
   runFreeEnrich,
   runApolloEnrich,
@@ -61,6 +62,13 @@ export async function registerProspectListsUser(app: FastifyInstance) {
   });
 
   // Ücretsiz enrichment — arka planda başlar, hemen döner (UI poll eder).
+  // Liste sil (firmalarıyla birlikte) — yalnızca kendi listesi.
+  app.delete<{ Params: { id: string } }>('/prospect-lists/:id', guard, async (req, reply) => {
+    const ok = await deleteList(getRequiredTenantKey(), getRequiredUserId(), req.params.id);
+    if (!ok) return reply.code(404).send({ error: { message: 'not_found' } });
+    return reply.code(204).send();
+  });
+
   app.post<{ Params: { id: string } }>('/prospect-lists/:id/enrich-free', guard, async (req) => {
     const tenantKey = getRequiredTenantKey();
     const ownerId = getRequiredUserId();

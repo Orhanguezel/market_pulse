@@ -3,7 +3,7 @@ import type { RowDataPacket } from 'mysql2/promise';
 import { pool } from '@/db/client';
 import { env } from '@/core/env';
 import { deepScrapeContactInfo } from '@/modules/lead-machine/enrichment/enrichment.service';
-import { searchGoogleMaps } from '@/modules/lead-machine/_shared/scraper.client';
+import { scrape, searchGoogleMaps } from '@/modules/lead-machine/_shared/scraper.client';
 import { buildSearchHints, EXPORT_B2B_TITLES } from '@/modules/lead-machine/decision-maker/finder.service';
 import { searchDecisionMakers, domainFromWebsite } from '@/modules/lead-machine/decision-maker/apollo-people';
 import { findDecisionMakerEmail } from '@/modules/lead-machine/decision-maker/email-finder.service';
@@ -210,6 +210,49 @@ const FREE_ENRICH_TARGET_SQL = `
     AND (enrich_status = 'pending' OR (generic_email IS NULL AND phone IS NULL))
 `;
 
+/**
+ * Hafif iletişim taraması (prospect listeleri için).
+ *
+ * deepScrapeContactInfo her firma için 6 sayfa deniyordu → 2332 firma = ~14.000 istek;
+ * bu yükte scraper-service 500 dönmeye başlıyor, hatalar yutuluyor ve firmalar BOŞ
+ * 'free_done' kalıyordu. Burada: e-posta bulunur bulunmaz DURULUR (çoğu sitede ana sayfa
+ * yeter) ve geçici 5xx için kısa bir retry yapılır. İstek sayısı ~3-6x azalır.
+ * Hiçbir sayfa okunamazsa hata döner → çağıran 'failed' + error yazar (sessiz boş kalmaz).
+ */
+const CONTACT_PATHS_LITE = ['/contact', '/contact-us', '/iletisim', '/kontakt', '/about-us'];
+
+async function scrapeContactLite(website: string): Promise<{ emails: string[]; phones: string[]; anyPageOk: boolean; lastError: string | null }> {
+  const base = website.replace(/\/+$/, '');
+  const urls = [base, ...CONTACT_PATHS_LITE.map((p) => base + p)];
+  const emails: string[] = [];
+  const phones: string[] = [];
+  let anyPageOk = false;
+  let lastError: string | null = null;
+
+  for (const url of urls) {
+    let ok = false;
+    for (let attempt = 0; attempt < 2 && !ok; attempt++) {
+      try {
+        const res = await scrape(url, { profile: 'lead-page', return_text: false });
+        if (res.success && res.data) {
+          ok = true;
+          anyPageOk = true;
+          const data = res.data as unknown as { contact_emails?: string[]; contact_phones?: string[] };
+          if (Array.isArray(data.contact_emails)) emails.push(...data.contact_emails);
+          if (Array.isArray(data.contact_phones)) phones.push(...data.contact_phones);
+        }
+      } catch (e) {
+        lastError = String((e as Error)?.message ?? 'scrape_error').slice(0, 200);
+        // Geçici 5xx/ağ hatası: kısa bekleyip bir kez daha dene.
+        if (attempt === 0) await new Promise((r) => setTimeout(r, 800));
+      }
+    }
+    // E-posta bulunduysa kalan sayfaları deneme (yükü ve süreyi ciddi azaltır).
+    if (emails.length) break;
+  }
+  return { emails, phones, anyPageOk, lastError };
+}
+
 /** Ücretsiz taramada işlenecek firma sayısı (UI'da bildirmek için). */
 export async function countFreeEnrichTargets(tenantKey: string, ownerId: string, listId: string): Promise<number> {
   const [rows] = await pool.execute<RowDataPacket[]>(
@@ -219,20 +262,38 @@ export async function countFreeEnrichTargets(tenantKey: string, ownerId: string,
   return Number(rows[0]?.n ?? 0);
 }
 
+/** Listeyi ve içindeki firmaları siler (yalnızca sahibinin listesi). */
+export async function deleteList(tenantKey: string, ownerId: string, listId: string): Promise<boolean> {
+  const [own] = await pool.execute<RowDataPacket[]>(
+    'SELECT id FROM prospect_lists WHERE id = ? AND tenant_key = ? AND owner_user_id = ? LIMIT 1',
+    [listId, tenantKey, ownerId],
+  );
+  if (!own.length) return false;
+  await pool.execute(
+    'DELETE FROM prospect_companies WHERE list_id = ? AND tenant_key = ? AND owner_user_id = ?',
+    [listId, tenantKey, ownerId],
+  );
+  await pool.execute(
+    'DELETE FROM prospect_lists WHERE id = ? AND tenant_key = ? AND owner_user_id = ?',
+    [listId, tenantKey, ownerId],
+  );
+  return true;
+}
+
 // ÜCRETSIZ: website scrape -> email/telefon + LinkedIn arama linki. Apollo kullanmaz.
 export async function runFreeEnrich(tenantKey: string, ownerId: string, listId: string): Promise<void> {
   const [rows] = await pool.execute<RowDataPacket[]>(
     `SELECT id, company_name, country, website ${FREE_ENRICH_TARGET_SQL}`,
     [tenantKey, ownerId, listId],
   );
-  // 6 firma paralel (her firma birkaç sayfa gezer). Scraper-service'i boğmadan
-  // büyük listelerin (2000+) makul sürede tamamlanması için.
-  await processPool(rows, 6, async (row) => {
+  // 4 firma paralel. Her firma artık e-posta bulunca duruyor (scrapeContactLite),
+  // yani toplam istek sayısı eskiye göre çok daha düşük → scraper 500 vermiyor.
+  await processPool(rows, 4, async (row) => {
     await pool.execute(`UPDATE prospect_companies SET enrich_status = 'free_running' WHERE id = ?`, [row.id]);
     try {
       let email: string | null = null;
       let phone: string | null = null;
-      let dmName: string | null = null;
+      let note: string | null = null;
 
       // 1) Kullanılabilir bir firma sitesi belirle. Excel'den gelen website çoğu zaman
       //    firma sitesi değil (haber/dosya/dizin) → çöpse firma adından gerçek siteyi ara.
@@ -241,25 +302,28 @@ export async function runFreeEnrich(tenantKey: string, ownerId: string, listId: 
         website = await findCompanyWebsite(row.company_name as string, (row.country as string | null) ?? null);
         if (website) {
           await pool.execute(`UPDATE prospect_companies SET website = ? WHERE id = ?`, [website, row.id]);
+        } else {
+          note = 'firma sitesi yok (liste linki dizin/haber/dosya)';
         }
       }
 
-      // 2) Site bulunduysa iletişim bilgisi için tara.
+      // 2) Site bulunduysa iletişim bilgisi için tara (e-posta bulununca durur).
       if (website) {
-        const deep = await deepScrapeContactInfo(website);
-        email = pickBestEmail(deep.emails);
-        phone = pickBestPhone(deep.phones ?? []);
-        const dm = (deep.decisionMakers ?? [])[0] as { name?: string | null } | undefined;
-        dmName = dm?.name ?? null;
+        const r = await scrapeContactLite(website);
+        email = pickBestEmail(r.emails);
+        phone = pickBestPhone(r.phones);
+        // Hiçbir sayfa okunamadıysa bunu GÖRÜNÜR yap — eskiden sessizce boş kalıyordu.
+        if (!r.anyPageOk) note = `site taranamadi: ${r.lastError ?? 'scraper hatasi'}`;
+        else if (!email && !phone) note = 'sitede iletisim bilgisi bulunamadi';
       }
 
       const hints = buildSearchHints(row.company_name, row.country, EXPORT_B2B_TITLES);
       await pool.execute(
         `UPDATE prospect_companies
-            SET generic_email = ?, phone = ?, linkedin_search_url = ?, decision_maker_name = COALESCE(?, decision_maker_name),
-                enrich_status = 'free_done', error = NULL
+            SET generic_email = ?, phone = ?, linkedin_search_url = ?,
+                enrich_status = 'free_done', error = ?
           WHERE id = ?`,
-        [email, phone, hints.linkedin_people_search_url, dmName, row.id],
+        [email, phone, hints.linkedin_people_search_url, note, row.id],
       );
     } catch (e) {
       await pool.execute(

@@ -41,6 +41,9 @@ export const prospectListsApi = baseApi.injectEndpoints({
     listProspectCompanies: b.query<{ companies: ProspectCompany[] }, { id: string; limit?: number; offset?: number }>({
       query: ({ id, limit = 500, offset = 0 }) => ({ url: `/prospect-lists/${id}/companies?limit=${limit}&offset=${offset}`, method: 'GET' }),
     }),
+    deleteProspectList: b.mutation<void, { id: string }>({
+      query: ({ id }) => ({ url: `/prospect-lists/${id}`, method: 'DELETE' }),
+    }),
     enrichFree: b.mutation<{ started: boolean; queued: number }, { id: string }>({
       query: ({ id }) => ({ url: `/prospect-lists/${id}/enrich-free`, method: 'POST' }),
     }),
@@ -58,6 +61,7 @@ export const {
   useListProspectListsQuery,
   useImportProspectListMutation,
   useListProspectCompaniesQuery,
+  useDeleteProspectListMutation,
   useEnrichFreeMutation,
   useEnrichApolloMutation,
   useProspectStatusQuery,
