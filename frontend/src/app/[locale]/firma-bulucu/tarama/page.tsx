@@ -40,6 +40,13 @@ function definitionRecord(definition: Record<string, unknown>, key: string): Rec
   return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
 }
 
+/** Profilde fuar bilgisi (ad/URL) var mı — fuar taramasını hazır kuran profiller bunlar. */
+function hasFairBlock(icp?: { definition?: Record<string, unknown> } | null): boolean {
+  if (!icp?.definition) return false;
+  const fair = definitionRecord(icp.definition, 'fair');
+  return Boolean(firstText(fair.name, fair.url, fair.exhibitor_list_url));
+}
+
 function firstText(...values: unknown[]): string {
   for (const value of values) {
     if (typeof value === 'string' && value.trim()) return value.trim();
@@ -151,6 +158,17 @@ export default function FirmaBulucuTaramaPage() {
   const selectSource = (nextSource: Source) => {
     setSource(nextSource);
     const selectedIcp = icps.find((icp) => icp.id === icpId);
+
+    // Fuara geçildiğinde seçili profilde fuar bilgisi yoksa, fuar bilgisi olan bir profile geç.
+    // (Aksi halde fuar adı/URL alanları boş kalıyor ve profil "fuara uygun değil" gibi görünüyordu.)
+    if (nextSource === 'fair' && !hasFairBlock(selectedIcp)) {
+      const fairIcp = icps.find(hasFairBlock);
+      if (fairIcp) {
+        setIcpId(fairIcp.id);
+        applyIcpDefaults(fairIcp, nextSource);
+        return;
+      }
+    }
     if (selectedIcp) applyIcpDefaults(selectedIcp, nextSource);
   };
 
@@ -253,7 +271,12 @@ export default function FirmaBulucuTaramaPage() {
       </section>
 
       <section className="rounded-lg border border-[#e2e8f0] bg-white p-4">
-        <p className="mb-3 text-[12px] font-semibold uppercase text-[#64748b]">2. ICP profili</p>
+        <p className="mb-1 text-[12px] font-semibold uppercase text-[#64748b]">2. ICP profili</p>
+        {source === 'fair' && (
+          <p className="mb-3 text-[12px] text-[#64748b]">
+            ICP profili katılımcıları filtrelemek için kullanılır. Fuar bilgisi profilde kayıtlı değilse aşağıdaki takvimden seçebilirsiniz.
+          </p>
+        )}
         <div className="grid gap-3 md:grid-cols-3">
           {icps.length === 0 ? (
             <div className="rounded-md border border-dashed border-[#cbd5e1] px-4 py-8 text-center text-[13px] text-[#64748b]">Henüz ICP profili yok.</div>
@@ -261,7 +284,12 @@ export default function FirmaBulucuTaramaPage() {
             <button key={icp.id} onClick={() => selectIcp(icp)} className={`rounded-md border p-3 text-left ${icpId === icp.id ? 'border-[#2563eb] bg-[#eff6ff]' : 'border-[#e2e8f0] hover:bg-[#f8fafc]'}`}>
               <div className="flex items-start justify-between gap-2">
                 <p className="text-[13px] font-bold text-[#0f172a]">{icp.name}</p>
-                {typeof icp.definition.version === 'number' && <span className="shrink-0 text-[10px] font-semibold text-[#64748b]">v{icp.definition.version}</span>}
+                <span className="flex shrink-0 items-center gap-1.5">
+                  {source === 'fair' && hasFairBlock(icp) && (
+                    <span className="rounded-full bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">fuar hazır</span>
+                  )}
+                  {typeof icp.definition.version === 'number' && <span className="text-[10px] font-semibold text-[#64748b]">v{icp.definition.version}</span>}
+                </span>
               </div>
               <IcpSummary definition={icp.definition} />
             </button>

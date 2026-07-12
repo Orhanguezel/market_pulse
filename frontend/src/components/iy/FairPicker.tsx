@@ -1,7 +1,7 @@
 'use client';
 
 import * as React from 'react';
-import { CalendarDays, Loader2, MapPin, Search, Link2, CheckCircle2 } from 'lucide-react';
+import { CalendarDays, Loader2, MapPin, Search, Link2, CheckCircle2, ChevronDown, X } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   useLazySearchFairCatalogQuery,
@@ -16,10 +16,14 @@ function fmtDate(d: string | null): string {
   return Number.isNaN(dt.getTime()) ? d : dt.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' });
 }
 
+const isPast = (d: string | null) => !!d && d.slice(0, 10) < new Date().toISOString().slice(0, 10);
+
 /**
- * Fuar takvimi seçici — Türkiye + Dünya fuar kataloğunda arama yapar, fuar seçilince
- * katılımcı (exhibitor) sayfasını fuarın kendi sitesinden ÜCRETSİZ olarak keşfeder.
- * Bulunamazsa kullanıcı sayfayı elle girip kataloğa kaydedebilir.
+ * Fuar takvimi seçici (dropdown).
+ *
+ * Katalog 3400+ fuar içerir. Dünya takvimi kayıtlarının tarihi 2024'te kalmıştır ve
+ * web sitesi yoktur; fuar seçilince ÜCRETSİZ keşif çalışır ve fuarın resmî sitesi,
+ * güncel tarihi ve katılımcı (exhibitor) sayfası bulunup kataloğa yazılır.
  */
 export default function FairPicker({
   onPick,
@@ -27,24 +31,53 @@ export default function FairPicker({
   onPick: (fair: FairCatalogItem, exhibitorUrl: string | null, startDate?: string | null) => void;
 }) {
   const [q, setQ] = React.useState('');
-  const [upcoming, setUpcoming] = React.useState(true);
+  const [upcoming, setUpcoming] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<FairCatalogItem | null>(null);
   const [manualUrl, setManualUrl] = React.useState('');
+  const boxRef = React.useRef<HTMLDivElement>(null);
 
   const [search, searchState] = useLazySearchFairCatalogQuery();
   const [discover, discoverState] = useDiscoverFairExhibitorMutation();
   const [saveUrl, saveState] = useSetFairExhibitorUrlMutation();
-  const fairs = searchState.data ?? [];
+  const fairs = React.useMemo(() => searchState.data ?? [], [searchState.data]);
 
-  const runSearch = () => { void search({ q: q.trim() || undefined, upcoming, limit: 25 }); };
+  const runSearch = React.useCallback(
+    (term: string, onlyUpcoming: boolean) => {
+      void search({ q: term.trim() || undefined, upcoming: onlyUpcoming, limit: 40 });
+    },
+    [search],
+  );
+
+  // Odaklanınca/açılınca liste hazır olsun — kullanıcı yazmadan da fuarları görsün
+  React.useEffect(() => {
+    if (open && !searchState.data && !searchState.isFetching) runSearch('', upcoming);
+  }, [open, searchState.data, searchState.isFetching, runSearch, upcoming]);
+
+  // Yazdıkça ara (debounce)
+  React.useEffect(() => {
+    if (!open) return;
+    const t = setTimeout(() => runSearch(q, upcoming), 350);
+    return () => clearTimeout(t);
+  }, [q, upcoming, open, runSearch]);
+
+  // Dışarı tıklayınca kapan
+  React.useEffect(() => {
+    const onDown = (e: MouseEvent) => {
+      if (boxRef.current && !boxRef.current.contains(e.target as Node)) setOpen(false);
+    };
+    document.addEventListener('mousedown', onDown);
+    return () => document.removeEventListener('mousedown', onDown);
+  }, []);
 
   const pick = async (fair: FairCatalogItem) => {
     setSelected(fair);
     setManualUrl(fair.exhibitor_url ?? '');
+    setOpen(false);
+    setQ('');
     onPick(fair, fair.exhibitor_url, fair.start_date);
 
-    // Katılımcı sayfası kayıtlı değilse fuarın sitesinden keşfetmeyi dene (ücretsiz).
-    // Dünya takvimi kayıtlarında site de yok — keşif önce siteyi, sonra güncel tarihi bulur.
+    // Katılımcı sayfası yoksa fuarın sitesinden ücretsiz keşfet (site de yoksa önce siteyi bul).
     if (!fair.exhibitor_url) {
       try {
         const res = await discover(fair.id).unwrap();
@@ -55,81 +88,111 @@ export default function FairPicker({
           toast.info(res.note || 'Katılımcı sayfası bulunamadı — elle girebilirsiniz.');
         }
         onPick(fair, res.exhibitor_url, res.start_date ?? fair.start_date);
-      } catch { toast.error('Katılımcı sayfası aranamadı'); }
+      } catch {
+        toast.error('Katılımcı sayfası aranamadı');
+      }
     }
   };
 
   const saveManual = async () => {
     if (!selected) return;
     const url = manualUrl.trim();
-    if (!/^https?:\/\//i.test(url)) { toast.error('Geçerli bir URL girin (https://...)'); return; }
+    if (!/^https?:\/\//i.test(url)) return toast.error('Geçerli bir URL girin (https://...)');
     try {
       await saveUrl({ id: selected.id, exhibitor_url: url }).unwrap();
       onPick(selected, url, selected.start_date);
       toast.success('Katılımcı sayfası kaydedildi');
-    } catch { toast.error('Kaydedilemedi'); }
+    } catch {
+      toast.error('Kaydedilemedi');
+    }
   };
 
   return (
     <div className="rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-3">
-      <p className="mb-2 text-[12px] font-semibold text-[#64748b]">Fuar takviminden seç (Türkiye + Dünya)</p>
+      <p className="mb-2 text-[12px] font-semibold text-[#64748b]">Fuar takviminden seç (Türkiye + Dünya · 3.400+ fuar)</p>
 
-      <div className="flex flex-wrap items-center gap-2">
-        <div className="relative min-w-[220px] flex-1">
-          <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
-          <input
-            value={q}
-            onChange={(e) => setQ(e.target.value)}
-            onKeyDown={(e) => e.key === 'Enter' && runSearch()}
-            placeholder="Fuar adı, sektör veya şehir ara…"
-            className="h-9 w-full rounded-md border border-[#cbd5e1] bg-white pl-8 pr-3 text-[13px] outline-none focus:border-[#2563eb]"
-          />
+      <div ref={boxRef} className="relative">
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="relative min-w-[240px] flex-1">
+            <Search className="absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-slate-400" />
+            <input
+              value={q}
+              onChange={(e) => { setQ(e.target.value); setOpen(true); }}
+              onFocus={() => setOpen(true)}
+              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); setOpen(true); runSearch(q, upcoming); } }}
+              placeholder="Fuar adı, sektör veya şehir ara — ya da listeden seç"
+              className="h-9 w-full rounded-md border border-[#cbd5e1] bg-white pl-8 pr-8 text-[13px] outline-none focus:border-[#2563eb]"
+            />
+            <button
+              type="button"
+              onClick={() => setOpen((v) => !v)}
+              className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              aria-label="Fuar listesini aç"
+            >
+              {searchState.isFetching ? <Loader2 className="h-4 w-4 animate-spin" /> : <ChevronDown className="h-4 w-4" />}
+            </button>
+          </div>
+          <label className="flex items-center gap-1.5 text-[12px] text-[#475569]">
+            <input
+              type="checkbox"
+              checked={upcoming}
+              onChange={(e) => { setUpcoming(e.target.checked); setOpen(true); }}
+              className="h-3.5 w-3.5"
+            />
+            Sadece tarihi güncel fuarlar
+          </label>
         </div>
-        <label className="flex items-center gap-1.5 text-[12px] text-[#475569]">
-          <input type="checkbox" checked={upcoming} onChange={(e) => setUpcoming(e.target.checked)} className="h-3.5 w-3.5" />
-          Sadece gelecek fuarlar
-        </label>
-        <button
-          onClick={runSearch}
-          disabled={searchState.isFetching}
-          className="inline-flex h-9 items-center gap-1.5 rounded-md bg-[#1e40af] px-3 text-[12px] font-semibold text-white disabled:opacity-50"
-        >
-          {searchState.isFetching ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : <Search className="h-3.5 w-3.5" />} Ara
-        </button>
-      </div>
 
-      {searchState.isSuccess && !fairs.length && (
-        <p className="mt-2 text-[12px] text-slate-400">Sonuç yok. Farklı bir kelime deneyin.</p>
-      )}
-
-      {fairs.length > 0 && (
-        <div className="mt-2 max-h-56 overflow-y-auto rounded-md border border-[#e2e8f0] bg-white">
-          {fairs.map((f) => {
-            const active = selected?.id === f.id;
-            return (
+        {open && (
+          <div className="absolute left-0 right-0 top-11 z-50 max-h-72 overflow-y-auto rounded-md border border-[#cbd5e1] bg-white shadow-lg">
+            {searchState.isFetching && !fairs.length && (
+              <p className="px-3 py-3 text-[12px] text-slate-400">Yükleniyor…</p>
+            )}
+            {!searchState.isFetching && !fairs.length && (
+              <p className="px-3 py-3 text-[12px] text-slate-400">
+                Sonuç yok. {upcoming ? '"Sadece tarihi güncel fuarlar" filtresini kaldırmayı deneyin.' : 'Farklı bir kelime deneyin.'}
+              </p>
+            )}
+            {fairs.map((f) => (
               <button
                 key={f.id}
+                type="button"
                 onClick={() => pick(f)}
-                className={`flex w-full items-start gap-3 border-b border-[#f1f5f9] px-3 py-2 text-left last:border-b-0 ${active ? 'bg-[#eff6ff]' : 'hover:bg-[#f8fafc]'}`}
+                className="flex w-full items-start gap-3 border-b border-[#f1f5f9] px-3 py-2 text-left last:border-b-0 hover:bg-[#eff6ff]"
               >
                 <span className="min-w-0 flex-1">
                   <span className="block truncate text-[13px] font-semibold text-[#0f172a]">{f.name}</span>
                   <span className="mt-0.5 flex flex-wrap items-center gap-x-3 gap-y-0.5 text-[11px] text-slate-500">
-                    <span className="inline-flex items-center gap-1"><CalendarDays className="h-3 w-3" />{fmtDate(f.start_date)}</span>
-                    {(f.city || f.country) && <span className="inline-flex items-center gap-1"><MapPin className="h-3 w-3" />{[f.city, f.country].filter(Boolean).join(', ')}</span>}
-                    {f.sector && <span className="truncate">{f.sector.slice(0, 40)}</span>}
+                    <span className={`inline-flex items-center gap-1 ${isPast(f.start_date) ? 'text-amber-600' : ''}`}>
+                      <CalendarDays className="h-3 w-3" />
+                      {fmtDate(f.start_date)}
+                      {isPast(f.start_date) && ' · seçince güncellenir'}
+                    </span>
+                    {(f.city || f.country) && (
+                      <span className="inline-flex items-center gap-1">
+                        <MapPin className="h-3 w-3" />
+                        {[f.city, f.country].filter(Boolean).join(', ')}
+                      </span>
+                    )}
+                    {f.sector && <span className="truncate">{f.sector.slice(0, 36)}</span>}
                   </span>
                 </span>
                 {f.exhibitor_url && <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />}
               </button>
-            );
-          })}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
 
       {selected && (
         <div className="mt-3 rounded-md border border-[#dbeafe] bg-[#eff6ff] p-3">
-          <p className="text-[12px] font-semibold text-[#1e40af]">{selected.name}</p>
+          <div className="flex items-start justify-between gap-2">
+            <p className="text-[12px] font-semibold text-[#1e40af]">{selected.name}</p>
+            <button type="button" onClick={() => setSelected(null)} className="text-slate-400 hover:text-slate-600" aria-label="Seçimi kaldır">
+              <X className="h-3.5 w-3.5" />
+            </button>
+          </div>
+
           <div className="mt-2 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1 text-[11px] text-[#475569]"><Link2 className="h-3 w-3" /> Katılımcı sayfası:</span>
             <input
@@ -139,21 +202,31 @@ export default function FairPicker({
               className="h-8 min-w-[240px] flex-1 rounded-md border border-[#cbd5e1] bg-white px-2 text-[12px] outline-none focus:border-[#2563eb]"
             />
             <button
+              type="button"
               onClick={saveManual}
               disabled={saveState.isLoading || discoverState.isLoading}
               className="inline-flex h-8 items-center gap-1.5 rounded-md border border-[#1e40af] px-2.5 text-[12px] font-semibold text-[#1e40af] hover:bg-white disabled:opacity-50"
             >
-              {saveState.isLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" /> : null} Kaydet
+              {saveState.isLoading && <Loader2 className="h-3.5 w-3.5 animate-spin" />} Kaydet
             </button>
           </div>
+
           {discoverState.isLoading && (
             <p className="mt-1.5 inline-flex items-center gap-1 text-[11px] text-[#1e40af]">
-              <Loader2 className="h-3 w-3 animate-spin" /> Fuarın sitesinden katılımcı sayfası aranıyor…
+              <Loader2 className="h-3 w-3 animate-spin" /> Fuarın sitesi, güncel tarihi ve katılımcı sayfası aranıyor…
             </p>
           )}
           {selected.website && (
             <p className="mt-1.5 text-[11px] text-slate-500">
-              Fuar sitesi: <a href={selected.website.startsWith('http') ? selected.website : `https://${selected.website}`} target="_blank" rel="noreferrer" className="text-[#1e40af] hover:underline">{selected.website}</a>
+              Fuar sitesi:{' '}
+              <a
+                href={selected.website.startsWith('http') ? selected.website : `https://${selected.website}`}
+                target="_blank"
+                rel="noreferrer"
+                className="text-[#1e40af] hover:underline"
+              >
+                {selected.website}
+              </a>
             </p>
           )}
         </div>

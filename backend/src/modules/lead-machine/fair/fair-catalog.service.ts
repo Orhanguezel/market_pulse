@@ -63,11 +63,15 @@ export async function searchFairs(p: FairSearchParams): Promise<{ rows: FairRow[
     `SELECT COUNT(*) AS n FROM fairs ${clause}`,
     values as never[],
   );
+  // Yaklaşan fuarlar başa (tarihi en yakın olan önce); tarihi geçmiş/bilinmeyenler sona.
+  // Dünya takvimi kayıtlarının tarihi 2024'te kalmış olabilir — bunlar seçilince keşifle güncellenir.
   const [rows] = await pool.execute<FairRow[]>(
     `SELECT id, name, name_en, sector, country, city, venue, organizer,
             start_date, end_date, date_status, website, exhibitor_url, source
        FROM fairs ${clause}
-      ORDER BY (start_date IS NULL), start_date ASC, name ASC
+      ORDER BY (start_date IS NOT NULL AND start_date >= CURDATE()) DESC,
+               CASE WHEN start_date >= CURDATE() THEN start_date END ASC,
+               name ASC
       LIMIT ${limit} OFFSET ${offset}`,
     values as never[],
   );
