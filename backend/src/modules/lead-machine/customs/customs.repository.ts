@@ -33,6 +33,36 @@ export interface AggregateBuyersOptions {
 }
 
 /**
+ * Konsimento aciklamalari INGILIZCE'dir; kullanici ise Turkce arar ("paspas").
+ * Duz LIKE bu yuzden hicbir sey bulamiyordu. Urun sorgusunu esanlamlarina genisletiyoruz.
+ */
+const PRODUCT_SYNONYMS: Record<string, string[]> = {
+  paspas: ['car mat', 'floor mat', 'floor mats', 'car mats', 'auto mat', 'rubber mat', 'mat'],
+  hali: ['carpet', 'rug'],
+  halı: ['carpet', 'rug'],
+  kilim: ['rug', 'kilim'],
+  tekstil: ['textile'],
+  deri: ['leather'],
+  aksesuar: ['accessor'],           // accessory / accessories
+  'yedek parca': ['spare part', 'auto part'],
+  'yedek parça': ['spare part', 'auto part'],
+  lastik: ['tyre', 'tire', 'rubber'],
+  ambalaj: ['packaging', 'package'],
+  mobilya: ['furniture'],
+  gida: ['food'],
+  gıda: ['food'],
+  biber: ['pepper'],
+};
+
+/** Urun sorgusunu, varsa Turkce esanlamlariyla birlikte arama terimlerine cevirir. */
+export function productSearchTerms(query: string): string[] {
+  const q = query.trim();
+  if (!q) return [];
+  const synonyms = PRODUCT_SYNONYMS[q.toLowerCase()] ?? [];
+  return [...new Set([q, ...synonyms])];
+}
+
+/**
  * Buyer (ithalatci firma = LEAD) bazinda gumruk kayitlarini gruplar ve toplar.
  * customs_records paylasimli reference lake'tir; tenant filtresi kullanilmaz.
  * GROUP_CONCAT ile distinct HS kodu ve ihracatci listesi (uzunlugu sinirli) doner.
@@ -52,9 +82,10 @@ export async function aggregateBuyers(
   }
 
   if (opts.productQuery?.trim()) {
-    const like = `%${opts.productQuery.trim()}%`;
-    where.push('(hs_description LIKE ? OR exporter_name LIKE ?)');
-    values.push(like, like);
+    const terms = productSearchTerms(opts.productQuery);
+    const clauses = terms.map(() => '(hs_description LIKE ? OR exporter_name LIKE ?)');
+    where.push(`(${clauses.join(' OR ')})`);
+    for (const term of terms) values.push(`%${term}%`, `%${term}%`);
   }
 
   if (opts.buyerCountry?.trim()) {
