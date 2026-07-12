@@ -439,6 +439,14 @@ export async function saveFairDiscovery(
   );
 }
 
+/** Hatalı keşfedilmiş kaydı sıfırlar (yeniden keşfedilebilsin diye). */
+export async function resetFairDiscovery(id: string): Promise<void> {
+  await pool.execute(
+    'UPDATE fairs SET website = NULL, exhibitor_url = NULL, verified_at = NULL WHERE id = ?',
+    [id],
+  );
+}
+
 /** Kullanıcının elle girdiği katılımcı sayfasını kaydeder. */
 export async function setExhibitorUrl(id: string, url: string): Promise<void> {
   await pool.execute(
