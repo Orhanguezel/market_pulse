@@ -284,9 +284,9 @@ export default function FirmaBulucuTaramaPage() {
             <>
               <div className="lg:col-span-4">
                 <FairPicker
-                  onPick={(fair, exhibitorUrl) => {
+                  onPick={(fair, exhibitorUrl, startDate) => {
                     setFairName(fair.name);
-                    setFairDate(fair.start_date ?? '');
+                    setFairDate((startDate ?? fair.start_date ?? '').slice(0, 10));
                     if (exhibitorUrl) setFairUrl(exhibitorUrl);
                   }}
                 />

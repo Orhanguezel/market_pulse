@@ -21,7 +21,11 @@ function fmtDate(d: string | null): string {
  * katılımcı (exhibitor) sayfasını fuarın kendi sitesinden ÜCRETSİZ olarak keşfeder.
  * Bulunamazsa kullanıcı sayfayı elle girip kataloğa kaydedebilir.
  */
-export default function FairPicker({ onPick }: { onPick: (fair: FairCatalogItem, exhibitorUrl: string | null) => void }) {
+export default function FairPicker({
+  onPick,
+}: {
+  onPick: (fair: FairCatalogItem, exhibitorUrl: string | null, startDate?: string | null) => void;
+}) {
   const [q, setQ] = React.useState('');
   const [upcoming, setUpcoming] = React.useState(true);
   const [selected, setSelected] = React.useState<FairCatalogItem | null>(null);
@@ -37,19 +41,20 @@ export default function FairPicker({ onPick }: { onPick: (fair: FairCatalogItem,
   const pick = async (fair: FairCatalogItem) => {
     setSelected(fair);
     setManualUrl(fair.exhibitor_url ?? '');
-    onPick(fair, fair.exhibitor_url);
+    onPick(fair, fair.exhibitor_url, fair.start_date);
 
     // Katılımcı sayfası kayıtlı değilse fuarın sitesinden keşfetmeyi dene (ücretsiz).
+    // Dünya takvimi kayıtlarında site de yok — keşif önce siteyi, sonra güncel tarihi bulur.
     if (!fair.exhibitor_url) {
       try {
         const res = await discover(fair.id).unwrap();
         if (res.exhibitor_url) {
           setManualUrl(res.exhibitor_url);
-          onPick(fair, res.exhibitor_url);
-          toast.success('Katılımcı sayfası bulundu');
+          toast.success(res.start_date ? 'Katılımcı sayfası ve güncel tarih bulundu' : 'Katılımcı sayfası bulundu');
         } else {
           toast.info(res.note || 'Katılımcı sayfası bulunamadı — elle girebilirsiniz.');
         }
+        onPick(fair, res.exhibitor_url, res.start_date ?? fair.start_date);
       } catch { toast.error('Katılımcı sayfası aranamadı'); }
     }
   };
@@ -60,7 +65,7 @@ export default function FairPicker({ onPick }: { onPick: (fair: FairCatalogItem,
     if (!/^https?:\/\//i.test(url)) { toast.error('Geçerli bir URL girin (https://...)'); return; }
     try {
       await saveUrl({ id: selected.id, exhibitor_url: url }).unwrap();
-      onPick(selected, url);
+      onPick(selected, url, selected.start_date);
       toast.success('Katılımcı sayfası kaydedildi');
     } catch { toast.error('Kaydedilemedi'); }
   };

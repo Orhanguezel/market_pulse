@@ -37,15 +37,18 @@ export const getFairCatalogItem: RouteHandler<{ Params: { id: string } }> = asyn
 
 /**
  * POST /lead-machine/fair/catalog/:id/discover
- * Fuarın katılımcı (exhibitor) sayfasını ÜCRETSİZ olarak keşfeder ve kataloğa yazar.
+ * Fuarın sitesini, güncel tarihini ve katılımcı sayfasını ÜCRETSİZ keşfeder, kataloğa yazar.
  */
 export const discoverFairExhibitor: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
   const fair = await getFair(req.params.id);
   if (!fair) return reply.code(404).send({ error: { message: 'not_found' } });
 
   const result = await discoverExhibitorUrl(fair);
-  if (result.exhibitor_url || result.website) {
-    await saveFairDiscovery(fair.id, result.exhibitor_url, result.website);
+  if (result.exhibitor_url || result.website || result.start_date) {
+    await saveFairDiscovery(fair.id, result.exhibitor_url, result.website, {
+      start: result.start_date,
+      end: result.end_date,
+    });
   }
   return result;
 };

@@ -108,7 +108,7 @@ export const leadMachineApi = baseApi.injectEndpoints({
       }),
       providesTags: ['FairCatalog'],
     }),
-    discoverFairExhibitor: b.mutation<{ exhibitor_url: string | null; website: string | null; candidates: string[]; note: string }, string>({
+    discoverFairExhibitor: b.mutation<{ exhibitor_url: string | null; website: string | null; start_date: string | null; end_date: string | null; candidates: string[]; note: string }, string>({
       query: (id) => ({ url: `/lead-machine/fair/catalog/${id}/discover`, method: 'POST' }),
       invalidatesTags: ['FairCatalog'],
     }),
