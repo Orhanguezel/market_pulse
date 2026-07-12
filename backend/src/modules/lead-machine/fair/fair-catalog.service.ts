@@ -40,15 +40,31 @@ export interface FairSearchParams {
   offset?: number;
 }
 
+/**
+ * Fuar adları kaynaktan kaynağa farklı yazılıyor: "Automechanika" / "Automechanica",
+ * "Automechanıka" (Türkçe ı). Düz LIKE bunları kaçırıyordu — aramada iki tarafı da
+ * aynı kurallarla sadeleştiriyoruz: küçük harf, Türkçe karakterler sadeleşir, k → c.
+ */
+const SQL_NORM = (col: string) =>
+  `REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(REPLACE(LOWER(${col}),'ı','i'),'ş','s'),'ğ','g'),'ü','u'),'ö','o'),'ç','c'),'k','c')`;
+
+function normalizeSearchTerm(q: string): string {
+  return q.toLowerCase()
+    .replace(/ı/g, 'i').replace(/ş/g, 's').replace(/ğ/g, 'g')
+    .replace(/ü/g, 'u').replace(/ö/g, 'o').replace(/ç/g, 'c')
+    .replace(/k/g, 'c');
+}
+
 /** Katalog araması: ad/sektör/şehir üzerinde serbest metin + ülke/tarih filtreleri. */
 export async function searchFairs(p: FairSearchParams): Promise<{ rows: FairRow[]; total: number }> {
   const where: string[] = [];
   const values: unknown[] = [];
 
   if (p.q?.trim()) {
-    const like = `%${p.q.trim()}%`;
-    where.push('(name LIKE ? OR name_en LIKE ? OR sector LIKE ? OR city LIKE ? OR organizer LIKE ?)');
-    values.push(like, like, like, like, like);
+    const like = `%${normalizeSearchTerm(p.q.trim())}%`;
+    const cols = ['name', 'name_en', 'sector', 'city', 'organizer'];
+    where.push(`(${cols.map((c) => `${SQL_NORM(c)} LIKE ?`).join(' OR ')})`);
+    values.push(...cols.map(() => like));
   }
   if (p.country?.trim()) { where.push('country = ?'); values.push(p.country.trim()); }
   if (p.sector?.trim()) { where.push('sector LIKE ?'); values.push(`%${p.sector.trim()}%`); }
