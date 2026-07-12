@@ -65,6 +65,7 @@ export const metahubTags = [
   'CrmReminders',
   'LeadCandidates',
   'LeadJobs',
+  'FairCatalog',
   'IcpProfiles',
   'LeadRules',
   'LeadFeedback',

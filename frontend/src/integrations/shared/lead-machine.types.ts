@@ -71,3 +71,22 @@ export type LeadCandidatePage = {
 };
 
 export type StartLeadJobBody = Record<string, unknown> & { icp_id?: string | null };
+
+/** Fuar kataloğu kaydı (Türkiye + Dünya fuar takvimi — paylaşımlı katalog). */
+export type FairCatalogItem = {
+  id: string;
+  name: string;
+  name_en: string | null;
+  sector: string | null;
+  country: string | null;
+  city: string | null;
+  venue: string | null;
+  organizer: string | null;
+  start_date: string | null;
+  end_date: string | null;
+  date_status: string | null;
+  website: string | null;
+  /** Katılımcı listesi sayfası — fuar taraması bunun üzerinden çalışır. */
+  exhibitor_url: string | null;
+  source: string;
+};

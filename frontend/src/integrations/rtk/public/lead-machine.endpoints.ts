@@ -1,5 +1,6 @@
 import { baseApi } from '@/integrations/rtk/baseApi';
 import type {
+  FairCatalogItem,
   IcpProfile,
   LeadCandidate,
   LeadCandidateListParams,
@@ -98,6 +99,27 @@ export const leadMachineApi = baseApi.injectEndpoints({
       query: (id) => ({ url: `/lead-machine/customs/jobs/${id}`, method: 'GET' }),
       providesTags: ['LeadJobs'],
     }),
+    // Fuar kataloğu (Türkiye + Dünya fuar takvimi)
+    searchFairCatalog: b.query<FairCatalogItem[], { q?: string; country?: string; upcoming?: boolean; limit?: number }>({
+      query: ({ q, country, upcoming, limit = 30 }) => ({
+        url: '/lead-machine/fair/catalog',
+        method: 'GET',
+        params: { ...(q ? { q } : {}), ...(country ? { country } : {}), ...(upcoming ? { upcoming: '1' } : {}), limit },
+      }),
+      providesTags: ['FairCatalog'],
+    }),
+    discoverFairExhibitor: b.mutation<{ exhibitor_url: string | null; website: string | null; candidates: string[]; note: string }, string>({
+      query: (id) => ({ url: `/lead-machine/fair/catalog/${id}/discover`, method: 'POST' }),
+      invalidatesTags: ['FairCatalog'],
+    }),
+    setFairExhibitorUrl: b.mutation<{ ok: boolean; exhibitor_url: string }, { id: string; exhibitor_url: string }>({
+      query: ({ id, exhibitor_url }) => ({
+        url: `/lead-machine/fair/catalog/${id}/exhibitor-url`,
+        method: 'PATCH',
+        body: { exhibitor_url },
+      }),
+      invalidatesTags: ['FairCatalog'],
+    }),
     startFairLeadJob: b.mutation<LeadSearchJob, StartLeadJobBody>({
       query: (body) => ({ url: '/lead-machine/fair/jobs', method: 'POST', body }),
       invalidatesTags: ['LeadJobs', 'LeadCandidates'],
@@ -170,6 +192,10 @@ export const leadMachineApi = baseApi.injectEndpoints({
 });
 
 export const {
+  useSearchFairCatalogQuery,
+  useLazySearchFairCatalogQuery,
+  useDiscoverFairExhibitorMutation,
+  useSetFairExhibitorUrlMutation,
   useListLeadCandidatesQuery,
   useListLeadCandidatesPageQuery,
   useLazyListLeadCandidatesPageQuery,

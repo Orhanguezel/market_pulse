@@ -11,6 +11,7 @@ import {
   useStartFairLeadJobMutation,
   useStartPublicScanMutation,
 } from '@/integrations/rtk/hooks';
+import FairPicker from '@/components/iy/FairPicker';
 
 type Source = 'b2b' | 'fair' | 'amazon' | 'customs';
 
@@ -281,8 +282,17 @@ export default function FirmaBulucuTaramaPage() {
           )}
           {source === 'fair' && (
             <>
+              <div className="lg:col-span-4">
+                <FairPicker
+                  onPick={(fair, exhibitorUrl) => {
+                    setFairName(fair.name);
+                    setFairDate(fair.start_date ?? '');
+                    if (exhibitorUrl) setFairUrl(exhibitorUrl);
+                  }}
+                />
+              </div>
               <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Fuar adı</span><input className={inputClass} value={fairName} onChange={(e) => setFairName(e.target.value)} /></label>
-              <label className="grid gap-1.5 lg:col-span-2"><span className="text-[12px] font-semibold text-[#64748b]">Fuar URL</span><input className={inputClass} value={fairUrl} onChange={(e) => setFairUrl(e.target.value)} /></label>
+              <label className="grid gap-1.5 lg:col-span-2"><span className="text-[12px] font-semibold text-[#64748b]">Katılımcı listesi URL</span><input className={inputClass} placeholder="Fuarın exhibitor/katılımcı sayfası" value={fairUrl} onChange={(e) => setFairUrl(e.target.value)} /></label>
               <label className="grid gap-1.5"><span className="text-[12px] font-semibold text-[#64748b]">Tarih</span><input type="date" className={inputClass} value={fairDate} onChange={(e) => setFairDate(e.target.value)} /></label>
             </>
           )}

@@ -74,6 +74,12 @@ import {
   updateSavedSearchHandler,
 } from './controller';
 import {
+  listFairCatalog,
+  getFairCatalogItem,
+  discoverFairExhibitor,
+  patchFairExhibitorUrl,
+} from './fair/fair-catalog.controller';
+import {
   deleteBulkList,
   generateBulkDrafts,
   getBulkList,
@@ -112,6 +118,12 @@ export async function registerLeadMachineUser(app: FastifyInstance) {
   app.post('/lead-machine/customs/jobs', guard, routeHandler(startCustomsJob));
   app.get('/lead-machine/customs/jobs', guard, routeHandler(listCustomsJobs));
   app.get('/lead-machine/customs/jobs/:id', guard, routeHandler(getCustomsJob));
+  // Fuar kataloğu (paylaşımlı): arama + katılımcı sayfası keşfi/kaydı
+  app.get('/lead-machine/fair/catalog', guard, routeHandler(listFairCatalog));
+  app.get('/lead-machine/fair/catalog/:id', guard, routeHandler(getFairCatalogItem));
+  app.post('/lead-machine/fair/catalog/:id/discover', guard, routeHandler(discoverFairExhibitor));
+  app.patch('/lead-machine/fair/catalog/:id/exhibitor-url', guard, routeHandler(patchFairExhibitorUrl));
+
   app.post('/lead-machine/fair/jobs', guard, routeHandler(startFairJob));
   app.get('/lead-machine/fair/jobs', guard, routeHandler(listFairJobs));
   app.get('/lead-machine/fair/jobs/:id', guard, routeHandler(getFairJob));
