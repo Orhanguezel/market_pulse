@@ -19,6 +19,10 @@ beforeEach(() => {
 
 describe('customs reference lake', () => {
   test('aggregates buyers from the shared lake without tenant filter', async () => {
+    // Ürün araması önce küçük sözlüklerde eşleşenleri bulur (açıklama + ihracatçı),
+    // sonra ana tabloyu indeksli IN(...) ile süzer — 16.3M satırda LIKE taraması yapmaz.
+    dbMock.queuePoolExecute([{ hs_description: 'BLACK PEPPER' }]);
+    dbMock.queuePoolExecute([]);
     dbMock.queuePoolExecute([{
       buyer_name: 'Buyer GmbH',
       buyer_country: 'DE',
@@ -39,12 +43,28 @@ describe('customs reference lake', () => {
     });
 
     expect(rows).toHaveLength(1);
-    const call = dbMock.poolExecutions[0];
+
+    // 'pepper' Türkçe eşanlamıyla ('biber') birlikte sözlükte aranır
+    const descLookup = dbMock.poolExecutions[0];
+    expect(descLookup?.sql).toContain('FROM customs_descriptions');
+    expect(descLookup?.values).toEqual(['%pepper%']);
+
+    const call = dbMock.poolExecutions[2];
     expect(call?.sql).toContain('FROM customs_records');
     expect(call?.sql).not.toContain('tenant_key = ?');
-    expect(call?.sql).toContain('(hs_description LIKE ? OR exporter_name LIKE ?)');
+    expect(call?.sql).toContain('hs_description IN (?)');
     expect(call?.sql).toContain('buyer_country = ?');
-    expect(call?.values).toEqual(['0904%', '%pepper%', '%pepper%', 'DE', 1000]);
+    expect(call?.values).toEqual(['0904%', 'BLACK PEPPER', 'DE', 1000]);
+  });
+
+  test('returns nothing when no description or exporter matches the product query', async () => {
+    dbMock.queuePoolExecute([]); // açıklama sözlüğü
+    dbMock.queuePoolExecute([]); // ihracatçı sözlüğü
+
+    const rows = await customsRepo.aggregateBuyers({ productQuery: 'paspas' });
+
+    expect(rows).toEqual([]);
+    expect(dbMock.poolExecutions).toHaveLength(2); // ana tabloya hiç gidilmez
   });
 
   test('aggregates exact HS code lists before prefix fallback', async () => {

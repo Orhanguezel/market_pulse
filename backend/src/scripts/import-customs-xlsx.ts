@@ -20,7 +20,7 @@
 import { basename } from 'node:path';
 import xlsx from 'xlsx';
 import { pool } from '@/db/client';
-import { bulkInsertRecords, type CustomsRecordInput } from '@/modules/lead-machine/customs/customs.repository';
+import { bulkInsertRecords, rebuildCustomsLookups, type CustomsRecordInput } from '@/modules/lead-machine/customs/customs.repository';
 
 const BATCH = 5000;
 
@@ -117,8 +117,12 @@ async function main() {
     }
   }
   if (batch.length) inserted += await bulkInsertRecords(batch, sourceFile);
-
   console.log(`[customs] TAMAMLANDI — eklenen: ${inserted}, alicisi bos atlanan: ${noBuyer}`);
+
+  // Arama sözlükleri tazelenmezse yeni kayıtlar ürün aramasında görünmez.
+  console.log('[customs] arama sozlukleri tazeleniyor…');
+  const lookup = await rebuildCustomsLookups();
+  console.log(`[customs] sozluk hazir — aciklama: ${lookup.descriptions}, ihracatci: ${lookup.exporters}`);
   process.exit(0);
 }
 

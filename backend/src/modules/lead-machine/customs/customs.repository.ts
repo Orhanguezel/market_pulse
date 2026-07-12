@@ -1,4 +1,5 @@
 import { pool } from '@/db/client';
+import type { RowDataPacket } from 'mysql2/promise';
 
 export interface CustomsRecordInput {
   hsCode: string | null;
@@ -65,6 +66,61 @@ export function productSearchTerms(query: string): string[] {
   return [...new Set([q, ...synonyms])];
 }
 
+// ─── Arama sozlukleri ────────────────────────────────────────────────────────
+// customs_records'ta 16.3M satir ama sadece ~20k farkli aciklama var. Urun aramasini
+// once bu kucuk sozlukte yapip ana tabloyu `IN (...)` ile suzuyoruz: 10 dakika → saniyeler.
+
+const MAX_DESC_MATCHES = 5000;
+const MAX_EXPORTER_MATCHES = 2000;
+
+/** Sozlukleri customs_records'tan yeniden uretir (import sonrasi calistirilir). */
+export async function rebuildCustomsLookups(): Promise<{ descriptions: number; exporters: number }> {
+  await pool.query('TRUNCATE TABLE customs_descriptions');
+  await pool.query(
+    `INSERT INTO customs_descriptions (hs_description, record_count)
+     SELECT hs_description, COUNT(*) FROM customs_records
+      WHERE hs_description IS NOT NULL AND hs_description <> ''
+      GROUP BY hs_description
+     ON DUPLICATE KEY UPDATE record_count = VALUES(record_count)`,
+  );
+  await pool.query('TRUNCATE TABLE customs_exporters');
+  await pool.query(
+    `INSERT INTO customs_exporters (exporter_name, record_count)
+     SELECT exporter_name, COUNT(*) FROM customs_records
+      WHERE exporter_name IS NOT NULL AND exporter_name <> ''
+      GROUP BY exporter_name
+     ON DUPLICATE KEY UPDATE record_count = VALUES(record_count)`,
+  );
+  const [d] = await pool.query<RowDataPacket[]>('SELECT COUNT(*) AS n FROM customs_descriptions');
+  const [e] = await pool.query<RowDataPacket[]>('SELECT COUNT(*) AS n FROM customs_exporters');
+  return { descriptions: Number(d[0]?.n ?? 0), exporters: Number(e[0]?.n ?? 0) };
+}
+
+/** Urun sorgusunu, ana tabloda indeksle kullanilabilir IN listelerine cevirir. */
+async function resolveProductFilters(query: string): Promise<{ descriptions: string[]; exporters: string[] }> {
+  const terms = productSearchTerms(query);
+  if (!terms.length) return { descriptions: [], exporters: [] };
+  const likes = terms.map(() => '?');
+
+  const [descRows] = await pool.execute<RowDataPacket[]>(
+    `SELECT hs_description FROM customs_descriptions
+      WHERE ${likes.map(() => 'hs_description LIKE ?').join(' OR ')}
+      ORDER BY record_count DESC LIMIT ${MAX_DESC_MATCHES}`,
+    terms.map((t) => `%${t}%`),
+  );
+  const [expRows] = await pool.execute<RowDataPacket[]>(
+    `SELECT exporter_name FROM customs_exporters
+      WHERE ${likes.map(() => 'exporter_name LIKE ?').join(' OR ')}
+      ORDER BY record_count DESC LIMIT ${MAX_EXPORTER_MATCHES}`,
+    terms.map((t) => `%${t}%`),
+  );
+
+  return {
+    descriptions: descRows.map((r) => String(r.hs_description)),
+    exporters: expRows.map((r) => String(r.exporter_name)),
+  };
+}
+
 /**
  * Buyer (ithalatci firma = LEAD) bazinda gumruk kayitlarini gruplar ve toplar.
  * customs_records paylasimli reference lake'tir; tenant filtresi kullanilmaz.
@@ -85,10 +141,19 @@ export async function aggregateBuyers(
   }
 
   if (opts.productQuery?.trim()) {
-    const terms = productSearchTerms(opts.productQuery);
-    const clauses = terms.map(() => '(hs_description LIKE ? OR exporter_name LIKE ?)');
-    where.push(`(${clauses.join(' OR ')})`);
-    for (const term of terms) values.push(`%${term}%`, `%${term}%`);
+    const { descriptions, exporters } = await resolveProductFilters(opts.productQuery);
+    if (!descriptions.length && !exporters.length) return []; // hicbir aciklama/ihracatci eslesmedi
+
+    const parts: string[] = [];
+    if (descriptions.length) {
+      parts.push(`hs_description IN (${descriptions.map(() => '?').join(', ')})`);
+      values.push(...descriptions);
+    }
+    if (exporters.length) {
+      parts.push(`exporter_name IN (${exporters.map(() => '?').join(', ')})`);
+      values.push(...exporters);
+    }
+    where.push(`(${parts.join(' OR ')})`);
   }
 
   if (opts.buyerCountry?.trim()) {
