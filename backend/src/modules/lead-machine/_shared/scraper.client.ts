@@ -177,11 +177,21 @@ async function authHeaders(): Promise<Record<string, string>> {
   return h;
 }
 
+/**
+ * Scraper isteklerinde ZORUNLU timeout.
+ *
+ * Timeout yokken yanıt vermeyen bir hedef site fetch'i süresiz askıda bırakıyordu:
+ * prospect enrichment'ta 4 worker'ın hepsi ilk firmalarda kilitlendi, liste hiç
+ * ilerlemedi ve firmalar boş 'free_done' kaldı. SCRAPER_TIMEOUT_MS ile ayarlanabilir.
+ */
+const SCRAPER_TIMEOUT_MS = Number(process.env.SCRAPER_TIMEOUT_MS ?? 25_000);
+
 async function post<T>(path: string, body: unknown): Promise<T> {
   const res = await fetch(`${baseUrl()}${path}`, {
     method: 'POST',
     headers: await authHeaders(),
     body: JSON.stringify(body),
+    signal: AbortSignal.timeout(SCRAPER_TIMEOUT_MS),
   });
   if (!res.ok) {
     const text = await res.text().catch(() => '');
@@ -191,7 +201,10 @@ async function post<T>(path: string, body: unknown): Promise<T> {
 }
 
 async function get<T>(path: string): Promise<T> {
-  const res = await fetch(`${baseUrl()}${path}`, { headers: await authHeaders() });
+  const res = await fetch(`${baseUrl()}${path}`, {
+    headers: await authHeaders(),
+    signal: AbortSignal.timeout(SCRAPER_TIMEOUT_MS),
+  });
   if (!res.ok) throw new Error(`SCRAPER_SERVICE_ERROR_${res.status}`);
   return res.json() as Promise<T>;
 }
