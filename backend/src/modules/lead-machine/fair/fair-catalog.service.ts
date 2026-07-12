@@ -213,13 +213,17 @@ function hostOf(url: string): string {
   try { return new URL(url).hostname.replace(/^www\./i, '').toLowerCase(); } catch { return ''; }
 }
 
-/** Fuarın resmî sitesi olma ihtimali: host, fuar adından bir parça içermeli. */
-function looksLikeFairSite(url: string, tokens: string[]): boolean {
+/**
+ * Adayın fuar sitesi olma puanı: host'ta eşleşen anlamlı kelime sayısı.
+ * 0 → aday değil. Tek kelime eşleşmesi yanıltabildiği için ("bauma CONEXPO INDIA"
+ * → bauma.de) en çok kelimeyi tutturan aday seçilir.
+ */
+function fairSiteScore(url: string, tokens: string[]): number {
   const host = hostOf(url);
-  if (!host) return false;
-  if (NON_FAIR_HOSTS.some((bad) => host === bad || host.endsWith(`.${bad}`))) return false;
+  if (!host) return 0;
+  if (NON_FAIR_HOSTS.some((bad) => host === bad || host.endsWith(`.${bad}`))) return 0;
   const flat = host.replace(/[^a-z0-9]/g, '');
-  return tokens.some((t) => flat.includes(t));
+  return tokens.filter((t) => flat.includes(t)).length;
 }
 
 /** Fuarın resmî sitesini ücretsiz web aramasıyla bulur (kök adres döner). */
@@ -235,9 +239,15 @@ export async function findFairWebsite(fair: FairRow): Promise<string | null> {
 
   for (const q of queries) {
     const hits = await webSearch(q);
-    const match = hits.find((u) => looksLikeFairSite(u, tokens));
-    if (match) {
-      try { return new URL(match).origin; } catch { return match; }
+    // En çok kelime tutturan aday kazanır; eşitlikte arama sırası (alaka) belirler.
+    let bestUrl = '';
+    let bestScore = 0;
+    for (const url of hits) {
+      const score = fairSiteScore(url, tokens);
+      if (score > bestScore) { bestUrl = url; bestScore = score; }
+    }
+    if (bestUrl) {
+      try { return new URL(bestUrl).origin; } catch { return bestUrl; }
     }
   }
   return null;
