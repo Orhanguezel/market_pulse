@@ -75,6 +75,12 @@ const STOP_TOKENS = new Set([
   'exports', 'general', 'food', 'foods', 'the', 'and', 'for', 'de', 'del', 'oao', 'ooo', 'jsc', 'ao',
   'usa', 'canada', 'colombia', 'ukraine', 'russia', 'russian', 'federation', 'india', 'united', 'states',
   'kingdom', 'arab', 'emirates', 'germany', 'france', 'spain', 'italy', 'turkey', 'egypt', 'brazil',
+  // Genel iş kelimeleri: bunlar üzerinden eşleşme YANLIŞ firmaya götürüyor
+  // (ör. "113712 CANADA INC DISTRIBUTION" → bunzldistribution.com — bambaşka bir şirket).
+  'distribution', 'distributors', 'distributor', 'industries', 'industrial', 'international',
+  'solutions', 'services', 'service', 'holding', 'holdings', 'enterprise', 'enterprises',
+  'products', 'product', 'global', 'worldwide', 'supply', 'supplies', 'commerce', 'commercial',
+  'agro', 'agri', 'market', 'markets', 'wholesale', 'retail', 'store', 'shop', 'online',
 ]);
 function companyTokens(name: string): string[] {
   return name
