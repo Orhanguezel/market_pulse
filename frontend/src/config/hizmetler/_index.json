@@ -1,5 +1,5 @@
 {
-  "count": 67,
+  "count": 68,
   "items": [
     {
       "slug": "crm-yazilimi",
@@ -670,6 +670,16 @@
       "title": "Teklif ve Satış Yönetimi",
       "eyebrow": "Ürün Modülü",
       "summary": "Müşteri siparişlerini yönetin, tekliflerin satışa dönüşme takibini kolaylaştırın ve müşteri memnuniyetini artırın. Müşterilerinize hazırladığınız teklifleri ve "
+    },
+    {
+      "slug": "osgb-isletme-yonetim-sistemi",
+      "category": "urun-modulleri",
+      "module": "service",
+      "order": 80,
+      "icon": "ShieldCheck",
+      "title": "OSGB İşletme Yönetim Sistemi",
+      "eyebrow": "Ürün Modülü",
+      "summary": "İBYS Bakanlığa veri gönderir; işinizi yönetmez. Hangi firmaya kim gitti, hangi ziyaret eksik kaldı, uzmanınızın kapasitesi doldu mu, bu ay ne kadar ci"
     }
   ]
 }

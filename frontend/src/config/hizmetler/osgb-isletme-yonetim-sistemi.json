@@ -1,0 +1,282 @@
+{
+  "slug": "osgb-isletme-yonetim-sistemi",
+  "category": "urun-modulleri",
+  "module": "service",
+  "order": 80,
+  "icon": "ShieldCheck",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "OSGB İşletme Yönetim Sistemi | Firma, Ziyaret, Ciro ve Tahsilat Takibi",
+        "description": "OSGB'nizin firmalarını, İSG ziyaretlerini, uzman kapasitesini, aylık cirosunu ve tahsilatını tek panelden yönetin. Excel'e son verin. İBYS'nin çözmediği operasyon katmanı.",
+        "ogTitle": "OSGB İşletme Yönetim Sistemi | {{appName}}",
+        "ogDescription": "OSGB operasyonunuzu Excel'den kurtarın: firma kartları, İSG ziyaret takibi, sağlık raporu, arşiv, görev yönetimi, kişi başı fiyattan otomatik ciro hesabı ve tahsilat takibi."
+      },
+      "hero": {
+        "eyebrow": "Ürün Modülü",
+        "title": "OSGB İşletme Yönetim Sistemi",
+        "lead": "İBYS Bakanlığa veri gönderir; işinizi yönetmez. Hangi firmaya kim gitti, hangi ziyaret eksik kaldı, uzmanınızın kapasitesi doldu mu, bu ay ne kadar ciro edeceksiniz, kim ödemedi — bunların hepsi hâlâ Excel'de. Bu sistem tam olarak o boşluğu kapatır.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Nasıl çalışır?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Öne Çıkan Özellikler",
+          "items": [
+            {
+              "title": "Firma ve Sözleşme Yönetimi",
+              "body": "Firma kartları, tehlike sınıfı, bölge, çalışan sayısı, kişi başı fiyat ve sözleşme durumu tek ekranda. Çıkan firmalar ayrı izlenir."
+            },
+            {
+              "title": "İSG Ziyaret Takibi",
+              "body": "12 aylık ziyaret takvimi, eksik ziyaret uyarısı, delil/evrak yükleme, ziyaret notlarının firmaya iletilmesi ve planlama."
+            },
+            {
+              "title": "Otomatik Ciro Hesabı",
+              "body": "Kişi başı fiyat ve çalışan sayısından aylık ciro otomatik hesaplanır. Eksik faturalanan firma gözden kaçmaz."
+            },
+            {
+              "title": "Uzman ve Hekim Kapasitesi",
+              "body": "Atama süreleri ve periyotlardan uzman/hekim doluluk oranı hesaplanır; kapasite aşımı ve boş kapasite anında görünür."
+            },
+            {
+              "title": "Görev Takibi ve Arşiv",
+              "body": "Kişiye veya ekibe görev atama, geciken görevler, evrak checklist'i ve tamamlanma yüzdesi ile arşiv yönetimi."
+            },
+            {
+              "title": "Sağlık Raporu ve Tarama",
+              "body": "Çalışan bazlı rapor durumları, fiyat listesi, indirim ve sağlık hizmeti cirosu; hekim ekranı ile ayrı erişim."
+            },
+            {
+              "title": "İSG-KATİP Veri Aktarımı",
+              "body": "Mevcut Excel ve İSG-KATİP verileriniz sisteme aktarılır. Sıfırdan veri girişi yapmazsınız."
+            },
+            {
+              "title": "Rol ve Yetki Yönetimi",
+              "body": "Yönetici, İSG uzmanı, işyeri hekimi, muhasebe ve saha personeli için ayrı yetki seviyeleri."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Nasıl Çalışır?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Mevcut Verinizi Aktarıyoruz",
+              "body": "Excel dosyanız ve İSG-KATİP kayıtlarınız analiz edilir; firmalar, personel, atamalar ve ziyaret geçmişi sisteme aktarılır."
+            },
+            {
+              "n": 2,
+              "title": "Operasyonunuza Göre Yapılandırıyoruz",
+              "body": "Bölgeleriniz, tehlike sınıfı fiyatlandırmanız, ziyaret periyotlarınız ve yetki matrisiniz tanımlanır."
+            },
+            {
+              "n": 3,
+              "title": "Ekibinizi Eğitiyoruz",
+              "body": "Uzman, hekim ve ofis ekibi kendi ekranlarında eğitilir. Geçiş dönemi boyunca Excel ile paralel çalışabilirsiniz."
+            },
+            {
+              "n": 4,
+              "title": "Canlıya Alıyor ve Destek Veriyoruz",
+              "body": "Sistem canlıya alınır; aylık bakım, güncelleme ve destek devam eder."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Sıkça Sorulan Sorular",
+          "items": [
+            {
+              "q": "Bu sistem İBYS yazılımımın yerine mi geçiyor?",
+              "a": "Hayır. İBYS, İSG profesyonellerinin Bakanlığa veri göndermesi için kullandığınız yasal uyum yazılımıdır ve kullanmaya devam edersiniz. Bizim sistemimiz, İBYS'nin kapsamadığı işletme yönetimi katmanıdır: firma takibi, ziyaret planlama, ciro hesabı, tahsilat ve kapasite yönetimi. İkisi birlikte çalışır."
+            },
+            {
+              "q": "Excel'deki verilerimi kaybeder miyim?",
+              "a": "Hayır. Kurulumun ilk adımı mevcut Excel'inizin aktarılmasıdır. Firmalar, personel, atamalar, aylık ziyaret kayıtları ve fiyat bilgileri sisteme taşınır; hiçbir veri sıfırdan girilmez."
+            },
+            {
+              "q": "Verilerim bana mı ait?",
+              "a": "Evet. Firma, personel, ziyaret ve rapor kayıtlarınız size aittir ve dilediğiniz zaman dışa aktarabilirsiniz."
+            },
+            {
+              "q": "Kaç kullanıcı ekleyebilirim?",
+              "a": "Kullanıcı başına ücretlendirme yapmıyoruz. Uzman, hekim ve ofis personelinizin tamamını sisteme ekleyebilirsiniz; fiyat OSGB'nizin ölçeğine göre belirlenir."
+            },
+            {
+              "q": "Kurulum ne kadar sürer?",
+              "a": "Veri aktarımı ve yapılandırma dahil tipik kurulum süresi 2-4 haftadır. Operasyon çekirdeği (firmalar, görevler, ziyaretler) ilk aşamada devreye alınır."
+            },
+            {
+              "q": "Teknik bilgi gerekiyor mu?",
+              "a": "Hayır. Sistem web tarayıcısı ve mobil üzerinden çalışır; kurulum, güncelleme ve yedekleme tarafımızdan yapılır."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "OSGB'nizi Excel'den Kurtarın",
+        "body": "Kaçan ziyaretleri, eksik faturalanan firmaları ve boş kalan uzman kapasitesini görünür kılın. Rekabetin sertleştiği bir sektörde marjınızı operasyonda kazanın.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": {
+      "seo": {
+        "title": "OHS Provider Management System | Client, Visit, Revenue and Collection Tracking",
+        "description": "Manage your occupational health and safety company's clients, site visits, expert capacity, monthly revenue and collections from a single panel. Leave Excel behind.",
+        "ogTitle": "OHS Provider Management System | {{appName}}",
+        "ogDescription": "Move your OHS operation out of Excel: client records, site visit tracking, health reports, archive, task management, automatic revenue calculation and collection tracking."
+      },
+      "hero": {
+        "eyebrow": "Product Module",
+        "title": "OHS Provider Management System",
+        "lead": "Compliance software reports to the ministry; it does not run your business. Who visited which client, which visit was missed, whether your expert's capacity is full, how much you will invoice this month, who has not paid — all of that still lives in Excel. This system closes exactly that gap.",
+        "primaryCTA": { "label": "Request a Quote", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "How it works", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Key Features",
+          "items": [
+            {
+              "title": "Client and Contract Management",
+              "body": "Client records, hazard class, region, employee count, per-capita pricing and contract status on one screen."
+            },
+            {
+              "title": "Site Visit Tracking",
+              "body": "12-month visit calendar, missed-visit alerts, evidence upload, visit notes shared with the client, and planning."
+            },
+            {
+              "title": "Automatic Revenue Calculation",
+              "body": "Monthly revenue is calculated from per-capita pricing and employee counts. No client goes under-invoiced."
+            },
+            {
+              "title": "Expert and Physician Capacity",
+              "body": "Assignment durations and periods produce a utilisation rate; over-capacity and idle capacity become visible instantly."
+            },
+            {
+              "title": "Task Tracking and Archive",
+              "body": "Assign tasks to individuals or teams, track overdue items, manage document checklists and completion rates."
+            },
+            {
+              "title": "Health Reports and Screening",
+              "body": "Employee-level report status, price list, discounts and health service revenue; a dedicated physician screen."
+            },
+            {
+              "title": "Data Migration",
+              "body": "Your existing Excel and registry data is imported. You never start from a blank system."
+            },
+            {
+              "title": "Roles and Permissions",
+              "body": "Separate permission levels for management, safety experts, physicians, accounting and field staff."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "How It Works",
+          "steps": [
+            { "n": 1, "title": "We Migrate Your Data", "body": "Your Excel file and registry records are analysed; clients, staff, assignments and visit history are imported." },
+            { "n": 2, "title": "We Configure It Around Your Operation", "body": "Your regions, hazard-class pricing, visit periods and permission matrix are defined." },
+            { "n": 3, "title": "We Train Your Team", "body": "Experts, physicians and office staff are trained on their own screens. You can run in parallel with Excel during the transition." },
+            { "n": 4, "title": "We Go Live and Support You", "body": "The system goes live; monthly maintenance, updates and support continue." }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Frequently Asked Questions",
+          "items": [
+            {
+              "q": "Does this replace my statutory compliance software?",
+              "a": "No. Compliance software is what you use to report to the ministry, and you keep using it. Our system is the business-management layer it does not cover: client tracking, visit planning, revenue calculation, collections and capacity management. The two work side by side."
+            },
+            {
+              "q": "Will I lose my Excel data?",
+              "a": "No. The first step of onboarding is importing your existing Excel. Clients, staff, assignments, monthly visit records and pricing are migrated; nothing is re-entered from scratch."
+            },
+            {
+              "q": "Does the data belong to me?",
+              "a": "Yes. Your client, staff, visit and report records are yours and can be exported at any time."
+            },
+            {
+              "q": "How many users can I add?",
+              "a": "We do not charge per user. You can add all of your experts, physicians and office staff; pricing is based on the scale of your organisation."
+            },
+            {
+              "q": "How long does setup take?",
+              "a": "Typical setup, including data migration and configuration, takes 2-4 weeks. The operational core goes live first."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Get Your OHS Operation Out of Excel",
+        "body": "Make missed visits, under-invoiced clients and idle expert capacity visible. In a hardening market, margin is won in operations.",
+        "button": { "label": "Request a Quote", "href": "/teklif-al" }
+      }
+    },
+    "de": {
+      "seo": {
+        "title": "Betriebsführungssystem für Arbeitsschutzdienste | Kunden, Besuche, Umsatz",
+        "description": "Verwalten Sie Kunden, Arbeitsschutzbesuche, Fachkraft-Kapazität, Monatsumsatz und Forderungen Ihres Arbeitsschutzdienstes in einem Panel. Schluss mit Excel.",
+        "ogTitle": "Betriebsführungssystem für Arbeitsschutzdienste | {{appName}}",
+        "ogDescription": "Holen Sie Ihren Arbeitsschutzbetrieb aus Excel: Kundenakten, Besuchsplanung, Gesundheitsberichte, Archiv, Aufgabenverwaltung, automatische Umsatzberechnung und Forderungsverfolgung."
+      },
+      "hero": {
+        "eyebrow": "Produktmodul",
+        "title": "Betriebsführungssystem für Arbeitsschutzdienste",
+        "lead": "Compliance-Software meldet an die Behörde; sie führt nicht Ihren Betrieb. Wer hat welchen Kunden besucht, welcher Besuch fehlt, ist die Kapazität Ihrer Fachkraft ausgelastet, wie viel rechnen Sie diesen Monat ab, wer hat nicht bezahlt — all das steckt weiterhin in Excel. Genau diese Lücke schließt dieses System.",
+        "primaryCTA": { "label": "Angebot anfordern", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "So funktioniert es", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Wichtigste Funktionen",
+          "items": [
+            { "title": "Kunden- und Vertragsverwaltung", "body": "Kundenakten, Gefahrenklasse, Region, Mitarbeiterzahl, Preis pro Kopf und Vertragsstatus auf einem Bildschirm." },
+            { "title": "Besuchsverfolgung", "body": "12-Monats-Besuchskalender, Warnung bei fehlenden Besuchen, Nachweis-Upload, Besuchsnotizen und Planung." },
+            { "title": "Automatische Umsatzberechnung", "body": "Der Monatsumsatz wird aus Preis pro Kopf und Mitarbeiterzahl berechnet. Kein Kunde wird zu niedrig abgerechnet." },
+            { "title": "Kapazität von Fachkräften und Ärzten", "body": "Aus Einsatzzeiten und Perioden entsteht eine Auslastungsquote; Überlastung und freie Kapazität werden sofort sichtbar." },
+            { "title": "Aufgabenverfolgung und Archiv", "body": "Aufgaben an Personen oder Teams zuweisen, überfällige Aufgaben verfolgen, Dokumenten-Checklisten verwalten." },
+            { "title": "Gesundheitsberichte und Vorsorge", "body": "Berichtsstatus je Mitarbeiter, Preisliste, Rabatte und Umsatz aus Gesundheitsleistungen; eigener Arztbildschirm." },
+            { "title": "Datenübernahme", "body": "Ihre vorhandenen Excel- und Registerdaten werden importiert. Sie starten nie mit einem leeren System." },
+            { "title": "Rollen und Berechtigungen", "body": "Getrennte Berechtigungsstufen für Leitung, Fachkräfte, Betriebsärzte, Buchhaltung und Außendienst." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "So funktioniert es",
+          "steps": [
+            { "n": 1, "title": "Wir übernehmen Ihre Daten", "body": "Ihre Excel-Datei und Registerdaten werden analysiert; Kunden, Personal, Einsätze und Besuchshistorie werden importiert." },
+            { "n": 2, "title": "Wir konfigurieren nach Ihrem Betrieb", "body": "Ihre Regionen, Preise nach Gefahrenklasse, Besuchsperioden und Berechtigungsmatrix werden definiert." },
+            { "n": 3, "title": "Wir schulen Ihr Team", "body": "Fachkräfte, Ärzte und Büropersonal werden auf ihren eigenen Bildschirmen geschult. Der Parallelbetrieb mit Excel ist möglich." },
+            { "n": 4, "title": "Go-live und Support", "body": "Das System geht live; monatliche Wartung, Updates und Support laufen weiter." }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Häufige Fragen",
+          "items": [
+            { "q": "Ersetzt das meine gesetzliche Compliance-Software?", "a": "Nein. Die Compliance-Software nutzen Sie weiterhin für Meldungen an die Behörde. Unser System ist die Betriebsführungsebene, die sie nicht abdeckt: Kundenverfolgung, Besuchsplanung, Umsatzberechnung, Forderungen und Kapazitätssteuerung. Beide arbeiten nebeneinander." },
+            { "q": "Verliere ich meine Excel-Daten?", "a": "Nein. Der erste Schritt ist der Import Ihrer vorhandenen Excel-Datei. Nichts wird neu eingegeben." },
+            { "q": "Gehören mir meine Daten?", "a": "Ja. Ihre Kunden-, Personal-, Besuchs- und Berichtsdaten gehören Ihnen und können jederzeit exportiert werden." },
+            { "q": "Wie viele Benutzer kann ich anlegen?", "a": "Wir rechnen nicht pro Benutzer ab. Sie können Ihr gesamtes Team anlegen; der Preis richtet sich nach der Größe Ihrer Organisation." },
+            { "q": "Wie lange dauert die Einführung?", "a": "Typischerweise 2-4 Wochen inklusive Datenübernahme und Konfiguration. Der operative Kern geht zuerst live." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Holen Sie Ihren Arbeitsschutzbetrieb aus Excel",
+        "body": "Machen Sie fehlende Besuche, zu niedrig abgerechnete Kunden und ungenutzte Kapazität sichtbar. In einem härter werdenden Markt entsteht Marge im Betrieb.",
+        "button": { "label": "Angebot anfordern", "href": "/teklif-al" }
+      }
+    }
+  }
+}
