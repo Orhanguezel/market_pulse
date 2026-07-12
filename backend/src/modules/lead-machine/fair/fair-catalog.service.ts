@@ -446,17 +446,32 @@ export async function saveFairDiscovery(
   website: string | null,
   dates?: { start: string | null; end: string | null },
 ): Promise<void> {
-  await pool.execute(
-    `UPDATE fairs
-        SET exhibitor_url = COALESCE(?, exhibitor_url),
-            website       = COALESCE(?, website),
-            start_date    = COALESCE(?, start_date),
-            end_date      = COALESCE(?, end_date),
-            date_status   = CASE WHEN ? IS NOT NULL THEN 'discovered' ELSE date_status END,
-            verified_at   = CURRENT_TIMESTAMP
-      WHERE id = ?`,
-    [exhibitorUrl, website, dates?.start ?? null, dates?.end ?? null, dates?.start ?? null, id],
-  );
+  try {
+    await pool.execute(
+      `UPDATE fairs
+          SET exhibitor_url = COALESCE(?, exhibitor_url),
+              website       = COALESCE(?, website),
+              start_date    = COALESCE(?, start_date),
+              end_date      = COALESCE(?, end_date),
+              date_status   = CASE WHEN ? IS NOT NULL THEN 'discovered' ELSE date_status END,
+              verified_at   = CURRENT_TIMESTAMP
+        WHERE id = ?`,
+      [exhibitorUrl, website, dates?.start ?? null, dates?.end ?? null, dates?.start ?? null, id],
+    );
+  } catch (err) {
+    // Aynı isimli fuarın birden fazla edisyonu var (ör. IEFT'in şehir turu): keşfedilen
+    // tarih kardeş satırla çakışıp UNIQUE(name, start_date)'i ihlal ediyor. Tarihi
+    // atlayıp site/katılımcı bilgisini yine de kaydediyoruz — yoksa tüm keşif çöpe gidiyordu.
+    if ((err as { code?: string }).code !== 'ER_DUP_ENTRY') throw err;
+    await pool.execute(
+      `UPDATE fairs
+          SET exhibitor_url = COALESCE(?, exhibitor_url),
+              website       = COALESCE(?, website),
+              verified_at   = CURRENT_TIMESTAMP
+        WHERE id = ?`,
+      [exhibitorUrl, website, id],
+    );
+  }
 }
 
 /** Hatalı keşfedilmiş kaydı sıfırlar (yeniden keşfedilebilsin diye). */
