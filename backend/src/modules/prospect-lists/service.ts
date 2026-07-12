@@ -58,10 +58,18 @@ function pickBestPhone(phones: string[]): string | null {
  * Böyle bir siteyi taramak yanlış veri üretir (ör. theprint.in -> feedback@theprint.in).
  */
 const JUNK_HOSTS = [
+  // B2B veri sağlayıcı / gümrük dizinleri
   'volza.com', 'dnb.com', 'importgenius.com', 'marketinsidedata.com', 'canadacompanyregistry.com',
   'panjiva.com', 'zauba.com', 'exportgenius.in', 'seair.co.in', 'tradeindia.com', 'importkey.com',
-  'biz-gid.com', 'opencorporates.com', 'bloomberg.com', 'crunchbase.com', 'linkedin.com',
-  'facebook.com', 'wikipedia.org', 'youtube.com', 'google.com', 'gov.ly', 'theprint.in',
+  'trademo.com', 'tracxn.com', 'exportersindia.com', 'indiamart.com', 'alibaba.com',
+  'made-in-china.com', 'europages.co.uk', 'europages.com', 'kompass.com', 'b2bhint.com',
+  // Firma rehberi / sicil / sarı sayfalar
+  'biz-gid.com', 'opencorporates.com', 'atninfo.com', 'organic-bio.com', 'hidubai.com',
+  'uaeresults.com', 'company-listing.org', '2gis.ae', 'easyuae.com', 'yellowpages.com',
+  'data.gouv.fr', 'annuaire-entreprises.data.gouv.fr', 'fts.unocha.org',
+  // Sosyal / ansiklopedi / haber / arama
+  'bloomberg.com', 'crunchbase.com', 'linkedin.com', 'facebook.com', 'instagram.com', 'x.com',
+  'twitter.com', 'wikipedia.org', 'youtube.com', 'google.com', 'theprint.in', 'bm.ge',
 ];
 export function isJunkWebsite(url: string | null | undefined): boolean {
   if (!url) return true;
@@ -119,7 +127,11 @@ export async function importList(
     const values: unknown[] = [];
     const placeholders = slice
       .map((c, j) => {
-        values.push(randomUUID(), tenantKey, ownerId, listId, i + j, c.company_name.slice(0, 500), detectCountry(c.company_name), c.website);
+        // website de 500'e kırpılmalı: şema varchar(500). Kırpılmadığı için uzun bir URL
+        // (ör. 792 karakterlik facebook linki) tüm CHUNK'ı "Data too long" ile düşürüyor
+        // ve o chunk'taki firmalar hiç kaydedilmiyordu (2332 satırdan yalnızca 2000'i geldi).
+        const site = c.website ? String(c.website).trim().slice(0, 500) : null;
+        values.push(randomUUID(), tenantKey, ownerId, listId, i + j, c.company_name.slice(0, 500), detectCountry(c.company_name), site || null);
         return '(?, ?, ?, ?, ?, ?, ?, ?)';
       })
       .join(', ');
