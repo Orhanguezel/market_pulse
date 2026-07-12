@@ -13,6 +13,8 @@ import {
   googleSearchUrls,
   universalScrape,
   extractEmailsFromHtml,
+  siteMatchesCompany,
+  emailBelongsToSite,
 } from '@/modules/_shared/oxylabs.client';
 import { isJunkWebsite } from '@/modules/prospect-lists/service';
 
@@ -44,13 +46,17 @@ async function main() {
     console.log(`• ${name.slice(0, 46)}`);
     console.log(`    listedeki link : ${listed ?? '-'}  ${isJunkWebsite(listed) ? '(COP)' : '(gercek)'}`);
 
-    // 1) Gerçek siteyi bul (listedeki link çöpse Google araması)
+    // 1) Gerçek siteyi bul (listedeki link çöpse Google araması).
+    //    DOĞRULAMA: bulunan domain firma adıyla eşleşmeli — aksi halde yaptırım
+    //    sayfası/rehber gibi alakasız sonuçlardan yanlış e-posta yazarız.
     let site: string | null = isJunkWebsite(listed) ? null : listed;
     if (!site) {
       try {
         const urls = await googleSearchUrls(`${name} ${country} official site`.trim());
-        site = urls.find((u) => !isJunkWebsite(u)) ?? null;
-        console.log(`    google_search  : ${site ?? 'gercek site bulunamadi'}`);
+        const candidates = urls.filter((u) => !isJunkWebsite(u));
+        site = candidates.find((u) => siteMatchesCompany(u, name)) ?? null;
+        if (site) console.log(`    google_search  : ${site}  (firma adiyla ESLESIYOR)`);
+        else console.log(`    google_search  : ${candidates[0] ?? 'sonuc yok'} -> REDDEDILDI (firma adiyla eslesmiyor)`);
       } catch (e) {
         console.log(`    google_search  : HATA ${(e as Error).message.slice(0, 70)}`);
       }
@@ -58,11 +64,13 @@ async function main() {
     if (!site) { console.log(''); continue; }
     siteFound++;
 
-    // 2) Siteyi tara ve e-posta çıkar
+    // 2) Siteyi tara; SADECE sitenin kendi alan adına ait e-postaları kabul et.
     try {
       const html = await universalScrape(site);
-      const emails = html ? extractEmailsFromHtml(html) : [];
-      if (emails.length) { emailFound++; console.log(`    E-POSTA        : ${emails.slice(0, 3).join(', ')}`); }
+      const all = html ? extractEmailsFromHtml(html) : [];
+      const own = all.filter((e) => emailBelongsToSite(e, site!));
+      if (own.length) { emailFound++; console.log(`    E-POSTA (dogrulanmis): ${own.slice(0, 3).join(', ')}`); }
+      else if (all.length) console.log(`    universal      : e-posta var ama SITE DOMAININE AIT DEGIL -> reddedildi (${all.slice(0, 2).join(', ')})`);
       else console.log(`    universal      : sayfa alindi (${html?.length ?? 0} kar.) ama e-posta yok`);
     } catch (e) {
       console.log(`    universal      : HATA ${(e as Error).message.slice(0, 70)}`);
