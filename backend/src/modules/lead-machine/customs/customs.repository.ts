@@ -36,8 +36,11 @@ export interface AggregateBuyersOptions {
  * Konsimento aciklamalari INGILIZCE'dir; kullanici ise Turkce arar ("paspas").
  * Duz LIKE bu yuzden hicbir sey bulamiyordu. Urun sorgusunu esanlamlarina genisletiyoruz.
  */
+// DIKKAT: tek basina 'mat' gibi kisa terim KOYMAYIN — LIKE '%mat%' "MATERIAL",
+// "AUTOMATIC" gibi kelimeleri de yakalayip alakasiz devleri (Norilsk Nickel, Bosch)
+// sonuca tasiyor. Terimler ayirt edici olmali.
 const PRODUCT_SYNONYMS: Record<string, string[]> = {
-  paspas: ['car mat', 'floor mat', 'floor mats', 'car mats', 'auto mat', 'rubber mat', 'mat'],
+  paspas: ['car mat', 'floor mat', 'floor mats', 'car mats', 'auto mat', 'rubber mat', 'carpet mat'],
   hali: ['carpet', 'rug'],
   halı: ['carpet', 'rug'],
   kilim: ['rug', 'kilim'],
