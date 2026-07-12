@@ -83,6 +83,9 @@ export const env = {
 
   GOOGLE_CLIENT_ID: process.env.GOOGLE_CLIENT_ID || '',
   GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET || '',
+  // Google Places API (New) — firma adından resmi web sitesini bulmak için.
+  // Boşsa özellik sessizce devre dışı kalır (site bulma denenmez).
+  GOOGLE_PLACES_API_KEY: process.env.GOOGLE_PLACES_API_KEY || '',
   // Gmail hesabi baglama icin ayri OAuth client (login'den bagimsiz). Set edilmezse
   // GOOGLE_CLIENT_ID/SECRET'a duser. Boylece Testing-modu Gmail client'i login'i etkilemez.
   GMAIL_OAUTH_CLIENT_ID: process.env.GMAIL_OAUTH_CLIENT_ID || process.env.GOOGLE_CLIENT_ID || '',

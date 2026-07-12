@@ -88,9 +88,41 @@ export function isJunkWebsite(url: string | null | undefined): boolean {
   return false;
 }
 
-/** Firma adından gerçek web sitesini bulur (Google Places). Bulamazsa null. */
+/**
+ * Firma adından gerçek web sitesini bulur.
+ *
+ * 1) Google Places API (New) — resmi API, tek istekte websiteUri döner. Anahtar
+ *    (GOOGLE_PLACES_API_KEY) yoksa bu adım atlanır.
+ * 2) Fallback: scraper-service'in google-maps araması (proxy'ye bağlı, çoğu zaman boş).
+ * Bulamazsa null → firma taranmaz, sebebi 'error' alanına yazılır.
+ */
 async function findCompanyWebsite(companyName: string, country: string | null): Promise<string | null> {
-  const query = [companyName, country].filter(Boolean).join(' ');
+  const query = [companyName, country].filter(Boolean).join(' ').trim();
+  if (!query) return null;
+
+  const apiKey = env.GOOGLE_PLACES_API_KEY;
+  if (apiKey) {
+    try {
+      const res = await fetch('https://places.googleapis.com/v1/places:searchText', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+          'x-goog-api-key': apiKey,
+          'x-goog-fieldmask': 'places.websiteUri,places.displayName',
+        },
+        body: JSON.stringify({ textQuery: query, maxResultCount: 3 }),
+        signal: AbortSignal.timeout(15_000),
+      });
+      if (res.ok) {
+        const data = (await res.json()) as { places?: Array<{ websiteUri?: string }> };
+        for (const p of data.places ?? []) {
+          const site = p.websiteUri;
+          if (site && !isJunkWebsite(site)) return site;
+        }
+      }
+    } catch { /* Places başarısız → fallback'e düş */ }
+  }
+
   try {
     const res = await searchGoogleMaps(query, { total: 3 });
     for (const place of res.places ?? []) {
