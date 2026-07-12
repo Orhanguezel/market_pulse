@@ -38,9 +38,13 @@ async function main() {
   const values: unknown[] = [];
   if (source) { where.push('source = ?'); values.push(source); }
   if (name) { where.push('name LIKE ?'); values.push(`%${name}%`); }
-  if (onlyStale) where.push('(start_date IS NULL OR start_date < CURDATE())');
-  else where.push('(website IS NULL OR exhibitor_url IS NULL OR start_date IS NULL OR start_date < CURDATE())');
-  if (!force) where.push('verified_at IS NULL'); // aynı fuarı ikinci kez deneme
+  // --force: eksiklik/işlenmişlik filtrelerini atla, seçilen kayıtları sıfırdan keşfet
+  if (!force) {
+    if (onlyStale) where.push('(start_date IS NULL OR start_date < CURDATE())');
+    else where.push('(website IS NULL OR exhibitor_url IS NULL OR start_date IS NULL OR start_date < CURDATE())');
+    where.push('verified_at IS NULL'); // aynı fuarı ikinci kez deneme
+  }
+  if (!where.length) where.push('1 = 1');
 
   const [fairs] = await pool.execute<FairRow[]>(
     `SELECT * FROM fairs WHERE ${where.join(' AND ')} ORDER BY (start_date IS NULL), start_date DESC LIMIT ${limit}`,
