@@ -6,10 +6,14 @@ export interface CustomsRecordInput {
   hsDescription: string | null;
   buyerName: string | null;
   exporterName: string | null;
+  originCountry?: string | null;
   buyerCountry: string | null;
   totalValue: number | null;
   totalQuantity: number | null;
+  netWeight?: number | null;
+  shipmentDate?: string | null;
   monthYear: string | null;
+  sourceProvider?: string | null;
   sourceRowNumber?: number | null;
 }
 
@@ -217,7 +221,7 @@ export async function bulkInsertRecords(
   for (let i = 0; i < rows.length; i += CHUNK) {
     const batch = rows.slice(i, i + CHUNK);
     if (!batch.length) continue;
-    const placeholders = batch.map(() => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').join(', ');
+    const placeholders = batch.map(() => '(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)').join(', ');
     const values: unknown[] = [];
     for (const r of batch) {
       values.push(
@@ -226,17 +230,21 @@ export async function bulkInsertRecords(
         r.hsDescription,
         r.buyerName,
         r.exporterName,
+        r.originCountry ?? null,
         r.buyerCountry,
         r.totalValue,
         r.totalQuantity,
+        r.netWeight ?? null,
+        r.shipmentDate ?? null,
         r.monthYear,
+        r.sourceProvider ?? null,
         sourceFile,
         r.sourceRowNumber ?? null,
       );
     }
     await pool.query(
       `INSERT IGNORE INTO customs_records
-        (tenant_key, hs_code, hs_description, buyer_name, exporter_name, buyer_country, total_value, total_quantity, month_year, source_file, source_row_number)
+        (tenant_key, hs_code, hs_description, buyer_name, exporter_name, origin_country, buyer_country, total_value, total_quantity, net_weight, shipment_date, month_year, source_provider, source_file, source_row_number)
        VALUES ${placeholders}`,
       values as never[],
     );

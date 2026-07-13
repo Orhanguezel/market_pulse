@@ -15,11 +15,13 @@ import {
   aggregateRejectionPatternsHandler,
   competitorScan,
   createIcp,
+  createCustomsTrackedEntity,
   createLeadCandidate,
   createRule,
   createLinkedInSequenceHandler,
   createSavedSearchHandler,
   deleteIcp,
+  deleteCustomsTrackedEntity,
   deleteLeadJob,
   deleteRule,
   deleteSavedSearchHandler,
@@ -42,6 +44,8 @@ import {
   getAmazonScanProductsList,
   getB2bJob,
   getCustomsJob,
+  customsIntelligenceEvidence,
+  customsIntelligenceSummary,
   getFairJob,
   getKeepaUsage,
   rescoreAmazonJob,
@@ -49,6 +53,7 @@ import {
   listAmazonJobs,
   listB2bJobs,
   listCustomsJobs,
+  listCustomsTrackedEntities,
   listDrafts,
   listEnrichment,
   listFairJobs,
@@ -118,6 +123,9 @@ export async function registerLeadMachineUser(app: FastifyInstance) {
   app.post('/lead-machine/customs/jobs', guard, routeHandler(startCustomsJob));
   app.get('/lead-machine/customs/jobs', guard, routeHandler(listCustomsJobs));
   app.get('/lead-machine/customs/jobs/:id', guard, routeHandler(getCustomsJob));
+  app.get('/lead-machine/customs/intelligence/entities', guard, routeHandler(listCustomsTrackedEntities));
+  app.get('/lead-machine/customs/intelligence/summary', guard, routeHandler(customsIntelligenceSummary));
+  app.get('/lead-machine/customs/intelligence/entities/:entityId/evidence', guard, routeHandler(customsIntelligenceEvidence));
   // Fuar kataloğu (paylaşımlı): arama + katılımcı sayfası keşfi/kaydı
   app.get('/lead-machine/fair/catalog', guard, routeHandler(listFairCatalog));
   app.get('/lead-machine/fair/catalog/:id', guard, routeHandler(getFairCatalogItem));
@@ -213,6 +221,11 @@ export async function registerLeadMachineAdmin(app: FastifyInstance) {
   app.post('/lead-machine/customs/jobs', startCustomsJob);
   app.get('/lead-machine/customs/jobs', listCustomsJobs);
   app.get('/lead-machine/customs/jobs/:id', getCustomsJob);
+  app.get('/lead-machine/customs/intelligence/entities', listCustomsTrackedEntities);
+  app.post('/lead-machine/customs/intelligence/entities', createCustomsTrackedEntity);
+  app.delete('/lead-machine/customs/intelligence/entities/:id', deleteCustomsTrackedEntity);
+  app.get('/lead-machine/customs/intelligence/summary', customsIntelligenceSummary);
+  app.get('/lead-machine/customs/intelligence/entities/:entityId/evidence', customsIntelligenceEvidence);
 
   app.post('/lead-machine/fair/jobs', startFairJob);
   app.get('/lead-machine/fair/jobs', listFairJobs);

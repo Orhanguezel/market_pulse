@@ -68,6 +68,13 @@ function nz(value: string | undefined): string | null {
   return v.length ? v : null;
 }
 
+function dateOnly(value: string | undefined): string | null {
+  const raw = nz(value);
+  if (!raw) return null;
+  const parsed = new Date(raw);
+  return Number.isNaN(parsed.getTime()) ? null : parsed.toISOString().slice(0, 10);
+}
+
 function headerIndex(header: string[]) {
   const normalized = header.map((h) => h.trim().toLowerCase());
   const idx = (...names: string[]) => {
@@ -82,9 +89,12 @@ function headerIndex(header: string[]) {
     buyer: idx('buyer_name', 'buyer', 'importer_name', 'importer'),
     exporter: idx('exporter_name', 'exporter', 'shipper_name', 'shipper'),
     desc: idx('hs_code_description', 'hs_description', 'description', 'product_description'),
+    origin: idx('origin_country', 'exporter_country', 'shipper_country'),
     country: idx('buyer_country', 'country', 'importer_country'),
     value: idx('total_value', 'value', 'usd_value'),
     qty: idx('total_quantity', 'quantity', 'qty'),
+    weight: idx('net_weight', 'weight'),
+    date: idx('shipment_date', 'date'),
     month: idx('month_year', 'date', 'period'),
   };
 }
@@ -117,10 +127,14 @@ async function importCsv(csvPath: string, opts: { reload: boolean }): Promise<nu
       hsDescription: nz(cell(cols, indexes.desc)),
       buyerName: nz(cell(cols, indexes.buyer)),
       exporterName: nz(cell(cols, indexes.exporter)),
+      originCountry: nz(cell(cols, indexes.origin)),
       buyerCountry: nz(cell(cols, indexes.country)),
       totalValue: toDecimal(cell(cols, indexes.value)),
       totalQuantity: toDecimal(cell(cols, indexes.qty)),
+      netWeight: toDecimal(cell(cols, indexes.weight)),
+      shipmentDate: dateOnly(cell(cols, indexes.date)),
       monthYear: nz(cell(cols, indexes.month)),
+      sourceProvider: process.env.CUSTOMS_SOURCE_PROVIDER ?? null,
       sourceRowNumber,
     });
 

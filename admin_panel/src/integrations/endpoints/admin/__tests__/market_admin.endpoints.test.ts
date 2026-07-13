@@ -420,6 +420,22 @@ describe('lead machine admin RTK endpoints', () => {
     expect(call.method).toBe('POST');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/jobs');
 
+    call = await dispatchEndpoint('getCustomsIntelligenceSummary', { hs_prefix: '401691', date_from: '2024-01-01' });
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/intelligence/summary');
+    expect(call.url.searchParams.get('hs_prefix')).toBe('401691');
+
+    call = await dispatchEndpoint('createCustomsTrackedEntity', {
+      entity_type: 'own',
+      name: 'Avrasya Paspas',
+      aliases: [{ alias: 'AVRASYA PASPAS', match_type: 'prefix' }],
+    });
+    expect(call.method).toBe('POST');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/intelligence/entities');
+
+    call = await dispatchEndpoint('getCustomsIntelligenceEvidence', { entityId: 'entity-1', limit: 50 });
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/intelligence/entities/entity-1/evidence');
+    expect(call.url.searchParams.get('limit')).toBe('50');
+
     call = await dispatchEndpoint('listFairJobs');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/fair/jobs');
 
@@ -502,6 +518,11 @@ describe('lead machine admin RTK endpoints', () => {
       'usePromoteDecisionMakersToCrmMutation',
       'useListCustomsJobsQuery',
       'useStartCustomsJobMutation',
+      'useListCustomsTrackedEntitiesQuery',
+      'useCreateCustomsTrackedEntityMutation',
+      'useDeleteCustomsTrackedEntityMutation',
+      'useGetCustomsIntelligenceSummaryQuery',
+      'useGetCustomsIntelligenceEvidenceQuery',
       'useListFairJobsQuery',
       'useStartFairJobMutation',
       'useListIcpProfilesQuery',

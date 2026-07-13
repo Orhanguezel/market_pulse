@@ -33,6 +33,14 @@ Canlı 10M yükte önerilen yol staging table + `--reload`. Büyük mediumtext/s
 
 ## Komutlar
 
+İhracat istihbaratı şeması ve ürün/ihracatçı arama sözlükleri (mevcut gölü silmez):
+
+```bash
+cd backend
+bun run db:migrate
+bun src/db/seed/index.ts --no-drop --only=042,043
+```
+
 CSV:
 
 ```bash
@@ -53,6 +61,20 @@ Sadece benchmark:
 cd backend
 bun src/scripts/import-customs.ts --benchmark
 ```
+
+EXIMPEDIA XLSX ve Avrasya pilot eşleştirmeleri:
+
+```bash
+cd backend
+bun src/scripts/import-customs-xlsx.ts "../Car Mat World.xlsx" --product "CAR MAT" --provider EXIMPEDIA
+bun src/scripts/import-customs-xlsx.ts "../Car Mat World 2nd Part.xlsx" --product "CAR MAT" --provider EXIMPEDIA
+bun src/scripts/import-customs-xlsx.ts "../Avrasya Paspas.xlsx" --product "CAR MAT" --provider EXIMPEDIA
+bun src/scripts/seed-customs-intelligence-avrasya.ts
+```
+
+`customs_tracked_entities` ve `customs_entity_aliases` tenant bazlıdır. Ham
+`customs_records` global kalır. Panelde gösterilen "gözlemlenen pay", yalnızca
+tanımlı kendi firma/rakiplerin bu veri setindeki toplamıdır; resmî pazar payı değildir.
 
 Benchmark override:
 

@@ -28,6 +28,7 @@ export const tags = [
   'MarketStats',
   'LeadCandidates',
   'LeadMachineJobs',
+  'CustomsIntelligence',
   'DecisionMakerJobs',
   'DecisionMakerResults',
   'AmazonRiskScores',

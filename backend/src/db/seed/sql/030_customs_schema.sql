@@ -20,10 +20,14 @@ CREATE TABLE IF NOT EXISTS `customs_records` (
   `hs_description` varchar(500)    DEFAULT NULL,         -- urun aciklamasi (EN)
   `buyer_name`     varchar(500)    DEFAULT NULL,         -- ithalatci firma = LEAD
   `exporter_name`  varchar(500)    DEFAULT NULL,         -- Turk ihracatci
+  `origin_country` varchar(100)    DEFAULT NULL,         -- cikis / mense ulkesi
   `buyer_country`  varchar(100)    DEFAULT NULL,         -- alici ulkesi (turetildiyse)
   `total_value`    decimal(20,2)   DEFAULT NULL,         -- ithalat degeri (USD)
   `total_quantity` decimal(20,2)   DEFAULT NULL,
+  `net_weight`     decimal(20,3)   DEFAULT NULL,
+  `shipment_date` date            DEFAULT NULL,
   `month_year`     varchar(50)     DEFAULT NULL,         -- 'Aug 2024' vb.
+  `source_provider` varchar(100)   DEFAULT NULL,         -- EXIMPEDIA vb. veri saglayici
   `source_file`    varchar(255)    DEFAULT NULL,         -- yuklenen dosya adi
   `source_row_number` int unsigned DEFAULT NULL,          -- idempotent import icin CSV satiri
   `created_at`     datetime        NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -32,6 +36,8 @@ CREATE TABLE IF NOT EXISTS `customs_records` (
   KEY `idx_customs_hs`       (`hs_code`, `total_value`),
   KEY `idx_customs_buyer`    (`buyer_name`(100)),
   KEY `idx_customs_exporter` (`exporter_name`(100)),
+  KEY `idx_customs_exporter_date` (`exporter_name`(100), `shipment_date`),
+  KEY `idx_customs_origin`   (`origin_country`),
   KEY `idx_customs_country`  (`buyer_country`),
   KEY `idx_customs_product`  (`hs_description`(120), `exporter_name`(120))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;

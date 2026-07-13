@@ -67,6 +67,15 @@ function monthYear(v: unknown): string | null {
   return text(v, 50);
 }
 
+/** Excel seri tarihi veya tarih metni -> MySQL DATE. */
+function shipmentDate(v: unknown): string | null {
+  if (v === null || v === undefined || v === '') return null;
+  const d = typeof v === 'number' && v > 20000 && v < 60000
+    ? new Date(Date.UTC(1899, 11, 30) + v * 864e5)
+    : new Date(String(v));
+  return Number.isNaN(d.getTime()) ? null : d.toISOString().slice(0, 10);
+}
+
 /** "CN, CHINA" / "USA" → "USA" (ülke adı kısmı). */
 function country(v: unknown): string | null {
   const s = text(v, 100);
@@ -82,6 +91,7 @@ async function main() {
     process.exit(1);
   }
   const productLabel = arg('product', 'CAR MAT');
+  const sourceProvider = arg('provider', 'EXIMPEDIA');
   const sourceFile = basename(file);
 
   console.log(`[customs] okunuyor: ${sourceFile}`);
@@ -103,10 +113,14 @@ async function main() {
       hsDescription: text(pick(r, 'HS_CODE_DESCRIPTION', 'HS_DESCRIPTION', 'DESCRIPTION')) ?? productLabel,
       buyerName: buyer,
       exporterName: text(pick(r, 'SHIPPER_NAME_EN', 'SHIPPER_NAME', 'EXPORTER_NAME', 'EXPORTER')),
+      originCountry: country(pick(r, 'ORIGIN_COUNTRY', 'EXPORTER_COUNTRY', 'SHIPPER_COUNTRY')),
       buyerCountry: country(pick(r, 'DESTINATION_COUNTRY', 'BUYER_COUNTRY', 'IMPORTER_COUNTRY')),
       totalValue: num(pick(r, 'Total Value USD', 'TOTAL_VALUE', 'VALUE')),
       totalQuantity: num(pick(r, 'Total Quantity', 'TOTAL_QUANTITY', 'QUANTITY')),
+      netWeight: num(pick(r, 'NET_WEIGHT', 'NET WEIGHT', 'WEIGHT')),
+      shipmentDate: shipmentDate(pick(r, 'DATE', 'SHIPMENT_DATE', 'PERIOD')),
       monthYear: monthYear(pick(r, 'DATE', 'MONTH_YEAR', 'PERIOD')),
+      sourceProvider,
       sourceRowNumber: i + 2, // 1 = başlık satırı
     });
 

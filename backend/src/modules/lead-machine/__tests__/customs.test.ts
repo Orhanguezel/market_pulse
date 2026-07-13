@@ -11,6 +11,7 @@ mock.module('@/db/client', () => ({
 mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'avrasya' } }));
 
 const customsRepo = await import('../customs/customs.repository');
+const customsIntelligence = await import('../customs/customs-intelligence.repository');
 const { scoreBuyer } = await import('../customs/customs.job');
 
 beforeEach(() => {
@@ -93,10 +94,14 @@ describe('customs reference lake', () => {
         hsDescription: 'Dried pepper',
         buyerName: 'Buyer GmbH',
         exporterName: 'Exporter A',
+        originCountry: 'TR',
         buyerCountry: 'DE',
         totalValue: 12500,
         totalQuantity: 30,
+        netWeight: 25,
+        shipmentDate: '2025-05-10',
         monthYear: 'May 2025',
+        sourceProvider: 'EXIMPEDIA',
         sourceRowNumber: 2,
       },
     ], 'excel_data.csv');
@@ -109,10 +114,14 @@ describe('customs reference lake', () => {
       'Dried pepper',
       'Buyer GmbH',
       'Exporter A',
+      'TR',
       'DE',
       12500,
       30,
+      25,
+      '2025-05-10',
       'May 2025',
+      'EXIMPEDIA',
       'excel_data.csv',
       2,
     ]);
@@ -140,5 +149,53 @@ describe('customs reference lake', () => {
       record_count: 1,
       latest_month: 'Jan 2020',
     })).toBe(1);
+  });
+});
+
+describe('customs export intelligence', () => {
+  test('matches tracked exporter aliases and calculates observed share', async () => {
+    dbMock.queuePoolExecute([{
+      id: 'entity-1',
+      entity_type: 'own',
+      name: 'Avrasya Paspas',
+      country: 'TR',
+      is_active: 1,
+    }]);
+    dbMock.queuePoolExecute([{
+      id: 'alias-1',
+      entity_id: 'entity-1',
+      alias: 'AVRASYA PASPAS AUTOMOTIVE',
+      match_type: 'prefix',
+    }]);
+    dbMock.queuePoolExecute([{
+      shipment_count: 18,
+      total_value_usd: 250000,
+      total_quantity: 1200,
+      net_weight: 900,
+      buyer_count: 8,
+      first_shipment_date: '2022-01-01',
+      latest_shipment_date: '2026-05-01',
+    }]);
+    dbMock.queuePoolExecute([{ period: '2026-05', shipment_count: 2, total_value_usd: 45000 }]);
+    dbMock.queuePoolExecute([{ country: 'DE', shipment_count: 5, total_value_usd: 80000 }]);
+
+    const result = await customsIntelligence.getCustomsIntelligenceSummary('avrasya', {
+      hsPrefix: '401691',
+      dateFrom: '2022-01-01',
+      dateTo: '2026-12-31',
+    });
+
+    expect(result.entities).toHaveLength(1);
+    expect(result.entities[0]?.observed_share_pct).toBe(100);
+    expect(result.entities[0]?.destinations[0]?.country).toBe('DE');
+    const totalsCall = dbMock.poolExecutions[2];
+    expect(totalsCall?.sql).toContain('exporter_name LIKE ?');
+    expect(totalsCall?.sql).toContain("COALESCE(shipment_date, STR_TO_DATE(CONCAT(month_year, ' 01'), '%b %Y %d')) >= ?");
+    expect(totalsCall?.values).toEqual([
+      'AVRASYA PASPAS AUTOMOTIVE%',
+      '401691%',
+      '2022-01-01',
+      '2026-12-31',
+    ]);
   });
 });

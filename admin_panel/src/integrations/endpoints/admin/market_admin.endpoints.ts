@@ -1,5 +1,12 @@
 import { baseApi } from '@/integrations/baseApi';
 import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type {
+  CustomsEvidenceResponse,
+  CustomsEntityType,
+  CustomsIntelligenceFilters,
+  CustomsIntelligenceSummary,
+  CustomsTrackedEntity,
+} from '@/integrations/shared/customs-intelligence.types';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -1127,6 +1134,38 @@ export const marketAdminApi = baseApi.injectEndpoints({
       query: (body) => ({ url: '/admin/lead-machine/customs/jobs', method: 'POST', body }),
       invalidatesTags: ['LeadMachineJobs'],
     }),
+    listCustomsTrackedEntities: b.query<CustomsTrackedEntity[], void>({
+      query: () => ({ url: '/admin/lead-machine/customs/intelligence/entities' }),
+      providesTags: ['CustomsIntelligence'],
+    }),
+    createCustomsTrackedEntity: b.mutation<CustomsTrackedEntity, {
+      entity_type: CustomsEntityType;
+      name: string;
+      country?: string;
+      aliases: Array<{ alias: string; match_type: 'exact' | 'prefix' }>;
+    }>({
+      query: (body) => ({ url: '/admin/lead-machine/customs/intelligence/entities', method: 'POST', body }),
+      invalidatesTags: ['CustomsIntelligence'],
+    }),
+    deleteCustomsTrackedEntity: b.mutation<void, string>({
+      query: (id) => ({ url: `/admin/lead-machine/customs/intelligence/entities/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['CustomsIntelligence'],
+    }),
+    getCustomsIntelligenceSummary: b.query<CustomsIntelligenceSummary, CustomsIntelligenceFilters>({
+      query: (params) => ({ url: '/admin/lead-machine/customs/intelligence/summary', params }),
+      providesTags: ['CustomsIntelligence'],
+    }),
+    getCustomsIntelligenceEvidence: b.query<CustomsEvidenceResponse, CustomsIntelligenceFilters & {
+      entityId: string;
+      page?: number;
+      limit?: number;
+    }>({
+      query: ({ entityId, ...params }) => ({
+        url: `/admin/lead-machine/customs/intelligence/entities/${entityId}/evidence`,
+        params,
+      }),
+      providesTags: ['CustomsIntelligence'],
+    }),
     listFairJobs: b.query<LeadSearchJob[], void>({
       query: () => ({ url: '/admin/lead-machine/fair/jobs' }),
       providesTags: ['LeadMachineJobs'],
@@ -1441,6 +1480,11 @@ export const {
   useUpdateCompanyPoolStatusMutation,
   useListCustomsJobsQuery,
   useStartCustomsJobMutation,
+  useListCustomsTrackedEntitiesQuery,
+  useCreateCustomsTrackedEntityMutation,
+  useDeleteCustomsTrackedEntityMutation,
+  useGetCustomsIntelligenceSummaryQuery,
+  useGetCustomsIntelligenceEvidenceQuery,
   useListFairJobsQuery,
   useStartFairJobMutation,
   useListIcpProfilesQuery,

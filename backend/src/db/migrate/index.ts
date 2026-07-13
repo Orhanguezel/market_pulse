@@ -318,6 +318,59 @@ async function ensureCrmActivityPlanningColumns(conn: mysql.Connection): Promise
   }
 }
 
+async function ensureCustomsIntelligenceSchema(conn: mysql.Connection): Promise<void> {
+  if (await tableExists(conn, 'customs_records')) {
+    const columns: Array<{ name: string; ddl: string }> = [
+      { name: 'origin_country', ddl: '`origin_country` VARCHAR(100) DEFAULT NULL' },
+      { name: 'net_weight', ddl: '`net_weight` DECIMAL(20,3) DEFAULT NULL' },
+      { name: 'shipment_date', ddl: '`shipment_date` DATE DEFAULT NULL' },
+      { name: 'source_provider', ddl: '`source_provider` VARCHAR(100) DEFAULT NULL' },
+    ];
+    for (const column of columns) {
+      if (await columnExists(conn, 'customs_records', column.name)) continue;
+      await query(conn, `ALTER TABLE \`customs_records\` ADD COLUMN ${column.ddl}`);
+    }
+  }
+
+  if (!(await tableExists(conn, 'customs_tracked_entities'))) {
+    await query(
+      conn,
+      `CREATE TABLE ${quoteIdent('customs_tracked_entities')} (
+        ${quoteIdent('id')} CHAR(36) NOT NULL,
+        ${quoteIdent('tenant_key')} VARCHAR(64) NOT NULL,
+        ${quoteIdent('entity_type')} ENUM('own','competitor') NOT NULL,
+        ${quoteIdent('name')} VARCHAR(255) NOT NULL,
+        ${quoteIdent('country')} VARCHAR(100) DEFAULT NULL,
+        ${quoteIdent('is_active')} TINYINT(1) NOT NULL DEFAULT 1,
+        ${quoteIdent('created_at')} DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        ${quoteIdent('updated_at')} DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+        PRIMARY KEY (${quoteIdent('id')}),
+        KEY ${quoteIdent('idx_customs_entity_tenant')} (${quoteIdent('tenant_key')}, ${quoteIdent('entity_type')}, ${quoteIdent('is_active')}),
+        UNIQUE KEY ${quoteIdent('uq_customs_entity_name')} (${quoteIdent('tenant_key')}, ${quoteIdent('entity_type')}, ${quoteIdent('name')})
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+    );
+  }
+
+  if (!(await tableExists(conn, 'customs_entity_aliases'))) {
+    await query(
+      conn,
+      `CREATE TABLE ${quoteIdent('customs_entity_aliases')} (
+        ${quoteIdent('id')} CHAR(36) NOT NULL,
+        ${quoteIdent('tenant_key')} VARCHAR(64) NOT NULL,
+        ${quoteIdent('entity_id')} CHAR(36) NOT NULL,
+        ${quoteIdent('alias')} VARCHAR(500) NOT NULL,
+        ${quoteIdent('match_type')} ENUM('exact','prefix') NOT NULL DEFAULT 'exact',
+        ${quoteIdent('created_at')} DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+        PRIMARY KEY (${quoteIdent('id')}),
+        UNIQUE KEY ${quoteIdent('uq_customs_tenant_alias')} (${quoteIdent('tenant_key')}, ${quoteIdent('alias')}(191)),
+        KEY ${quoteIdent('idx_customs_alias_entity')} (${quoteIdent('entity_id')}),
+        CONSTRAINT ${quoteIdent('fk_customs_alias_entity')} FOREIGN KEY (${quoteIdent('entity_id')})
+          REFERENCES ${quoteIdent('customs_tracked_entities')} (${quoteIdent('id')}) ON DELETE CASCADE
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci`,
+    );
+  }
+}
+
 async function migrateTenantColumns(conn: mysql.Connection): Promise<void> {
   for (const table of TENANT_TABLES) {
     if (!(await tableExists(conn, table.name))) {
@@ -361,6 +414,7 @@ async function main(): Promise<void> {
     await ensureUserMailAccountsTable(conn);
     await ensureActivityRefNullable(conn);
     await ensureCrmActivityPlanningColumns(conn);
+    await ensureCustomsIntelligenceSchema(conn);
     console.log('[migrate] completed');
   } finally {
     await conn.end();

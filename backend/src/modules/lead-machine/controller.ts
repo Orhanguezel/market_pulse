@@ -22,6 +22,15 @@ import { getLatestAmazonRiskReport, getAmazonScanProducts } from './amazon/risk-
 import { rescoreForJob } from './amazon/rescore.service';
 import { runB2bJob } from './b2b/b2b.job';
 import { runCustomsJob } from './customs/customs.job';
+import {
+  createCustomsEntity,
+  deleteCustomsEntity,
+  getCustomsIntelligenceSummary,
+  listCustomsEntities,
+  listCustomsEvidence,
+  type CustomsAliasMatchType,
+  type CustomsEntityType,
+} from './customs/customs-intelligence.repository';
 import { runFairJob } from './fair/fair.job';
 import { generateFairBriefingPdf, listFairBriefingCandidateIdsForDay } from './fair/briefing.service';
 import {
@@ -458,6 +467,70 @@ export const getCustomsJob: RouteHandler<{ Params: { id: string } }> = async (re
   const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
   if (!job || job.channel !== 'customs') return reply.code(404).send({ error: { message: 'not_found' } });
   return job;
+};
+
+function customsFilters(value: unknown) {
+  const query = asRecord(value);
+  const date = (key: string) => typeof query[key] === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(query[key] as string)
+    ? String(query[key])
+    : undefined;
+  return {
+    hsPrefix: typeof query.hs_prefix === 'string' ? query.hs_prefix.trim().slice(0, 20) : undefined,
+    dateFrom: date('date_from'),
+    dateTo: date('date_to'),
+  };
+}
+
+export const listCustomsTrackedEntities: RouteHandler = async () => {
+  return listCustomsEntities(await getActiveTenantKey());
+};
+
+export const createCustomsTrackedEntity: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  const entityType: CustomsEntityType | null = body.entity_type === 'own' || body.entity_type === 'competitor'
+    ? body.entity_type
+    : null;
+  const name = typeof body.name === 'string' ? body.name.trim() : '';
+  if (!entityType || !name) return reply.code(400).send({ error: { message: 'name_and_entity_type_required' } });
+  const aliases = Array.isArray(body.aliases)
+    ? body.aliases.flatMap((value) => {
+      if (typeof value === 'string' && value.trim()) return [{ alias: value.trim(), matchType: 'exact' as const }];
+      const item = asRecord(value);
+      const alias = typeof item.alias === 'string' ? item.alias.trim() : '';
+      const matchType: CustomsAliasMatchType = item.match_type === 'prefix' ? 'prefix' : 'exact';
+      return alias ? [{ alias, matchType }] : [];
+    })
+    : [];
+  const entity = await createCustomsEntity(await getActiveTenantKey(), {
+    entityType,
+    name,
+    country: typeof body.country === 'string' ? body.country : null,
+    aliases,
+  });
+  return reply.code(201).send(entity);
+};
+
+export const deleteCustomsTrackedEntity: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const deleted = await deleteCustomsEntity(await getActiveTenantKey(), req.params.id);
+  return deleted ? reply.code(204).send() : reply.code(404).send({ error: { message: 'not_found' } });
+};
+
+export const customsIntelligenceSummary: RouteHandler<{ Querystring: unknown }> = async (req) => {
+  return getCustomsIntelligenceSummary(await getActiveTenantKey(), customsFilters(req.query));
+};
+
+export const customsIntelligenceEvidence: RouteHandler<{ Params: { entityId: string }; Querystring: unknown }> = async (req, reply) => {
+  const query = asRecord(req.query);
+  const page = Math.max(1, Number(query.page ?? 1));
+  const limit = Math.min(100, Math.max(1, Number(query.limit ?? 25)));
+  const result = await listCustomsEvidence(await getActiveTenantKey(), req.params.entityId, {
+    ...customsFilters(query),
+    limit,
+    offset: (page - 1) * limit,
+  });
+  if (!result) return reply.code(404).send({ error: { message: 'not_found' } });
+  reply.header('x-total-count', String(result.count));
+  return result;
 };
 
 export const startFairJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {

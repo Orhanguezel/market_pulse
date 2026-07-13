@@ -1,5 +1,5 @@
-import CustomsLeadSearchPanel from '../../_components/customs-lead-search-panel';
+import CustomsModulePanel from '../../_components/customs-module-panel';
 
 export default function CustomsLeadSearchPage() {
-  return <CustomsLeadSearchPanel />;
+  return <CustomsModulePanel />;
 }
