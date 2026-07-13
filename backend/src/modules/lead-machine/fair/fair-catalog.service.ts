@@ -172,6 +172,8 @@ function nameTokens(name: string): string[] {
     .filter((t) => t.length >= 4 && !NAME_STOPWORDS.has(t) && !/^\d+$/.test(t));
 }
 
+const SEARCH_UA = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36';
+
 /** DDG sonuç sayfasındaki hedef linkleri (uddg=) çözer. */
 function ddgLinks(html: string): string[] {
   const out: string[] = [];
@@ -184,46 +186,70 @@ function ddgLinks(html: string): string[] {
   return [...new Set(out)];
 }
 
-/**
- * DDG art arda sorguda 202 + "anomaly" sayfasi doner. Sorgular arasinda en az
- * DDG_MIN_GAP_MS birakiyoruz; paralel worker'lar bu kapiya sirayla girer.
- */
-const DDG_MIN_GAP_MS = 2500;
-let ddgGate: Promise<void> = Promise.resolve();
+/** Motorun kendi/altyapı linkleri sonuç değildir. */
+const ENGINE_NOISE = /(brave\.com|duckduckgo|mojeek|bing\.com|google\.com|microsoft|mozilla\.org|torproject|w3\.org|schema\.org|gstatic|cloudflare)/i;
 
-function paceDdg(): Promise<void> {
-  const wait = ddgGate.then(() => new Promise<void>((r) => setTimeout(r, DDG_MIN_GAP_MS)));
-  ddgGate = wait;
+/** Brave/Mojeek gibi düz HTML motorlarından organik linkleri toplar. */
+function plainLinks(html: string): string[] {
+  const out: string[] = [];
+  for (const m of html.matchAll(/href="(https?:\/\/[^"]+)"/g)) {
+    const url = m[1] ?? '';
+    if (!ENGINE_NOISE.test(url)) out.push(url);
+  }
+  return [...new Set(out)];
+}
+
+/**
+ * Arama motorları art arda sorguda bot-kontrol sayfası döndürüyor (DDG 202 "anomaly",
+ * Brave anti-bot). Sorgular arasında en az MIN_GAP_MS bırakıyoruz; paralel worker'lar
+ * bu kapıya sırayla girer.
+ */
+const MIN_GAP_MS = 2500;
+let searchGate: Promise<void> = Promise.resolve();
+
+function paceSearch(): Promise<void> {
+  const wait = searchGate.then(() => new Promise<void>((r) => setTimeout(r, MIN_GAP_MS)));
+  searchGate = wait;
   return wait;
 }
 
 /**
- * Ücretsiz web araması. API anahtarı yok, ücretli servis yok.
- *   1) DuckDuckGo HTML doğrudan (hız sınırlı),
- *   2) 202/boş dönerse kendi scraper-service'imiz üzerinden (yine ücretsiz).
+ * Ücretsiz arama motorları — hepsi anahtarsız. Sırayla denenir, ilk sonuç veren kazanır.
+ *
+ * NEDEN ÇOKLU: DuckDuckGo, toplu koşumuzdan sonra VPS'in IP'sini tamamen engelledi
+ * (bağlantı bile kurulmuyor, 000). Tek motora bağlı kalınca keşif sessizce sıfırlandı —
+ * 390 fuarın hepsi "bulunamadı" döndü. Brave VPS'ten çalışıyor; biri düşerse diğeri devralır.
  */
-async function webSearch(query: string): Promise<string[]> {
-  const url = `https://html.duckduckgo.com/html/?q=${encodeURIComponent(query)}`;
+const SEARCH_ENGINES: Array<{ name: string; url: (q: string) => string; parse: (html: string) => string[] }> = [
+  { name: 'brave', url: (q) => `https://search.brave.com/search?q=${encodeURIComponent(q)}`, parse: plainLinks },
+  { name: 'ddg',   url: (q) => `https://html.duckduckgo.com/html/?q=${encodeURIComponent(q)}`, parse: ddgLinks },
+  { name: 'mojeek', url: (q) => `https://www.mojeek.com/search?q=${encodeURIComponent(q)}`, parse: plainLinks },
+];
 
-  await paceDdg();
+async function fetchSearch(url: string): Promise<string | null> {
   try {
     const res = await fetch(url, {
-      headers: {
-        'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0 Safari/537.36',
-        'accept-language': 'en-US,en;q=0.8,tr;q=0.6',
-      },
+      headers: { 'user-agent': SEARCH_UA, 'accept-language': 'en-US,en;q=0.8,tr;q=0.6' },
       signal: AbortSignal.timeout(15_000),
     });
-    if (res.ok) {
-      const links = ddgLinks(await res.text());
-      if (links.length) return links;
-    }
-  } catch { /* aşağıdaki yedek kanala düş */ }
+    return res.ok ? await res.text() : null;
+  } catch { return null; }
+}
 
-  // Yedek: kendi scraper'ımız (stealth) — DDG bizi hız sınırına takarsa
+/** Ücretsiz web araması: motorlar sırayla denenir, olmazsa kendi scraper'ımız devreye girer. */
+async function webSearch(query: string): Promise<string[]> {
+  for (const engine of SEARCH_ENGINES) {
+    await paceSearch();
+    const html = await fetchSearch(engine.url(query));
+    if (!html) continue;
+    const links = engine.parse(html);
+    if (links.length) return links;
+  }
+
+  // Son çare: kendi scraper-service'imiz (stealth, yine ücretsiz)
   try {
-    const res = await scrape(url, { mode: 'stealthy', return_html: true, return_text: false });
-    if (res.html) return ddgLinks(res.html);
+    const res = await scrape(SEARCH_ENGINES[0]!.url(query), { mode: 'stealthy', return_html: true, return_text: false });
+    if (res.html) return plainLinks(res.html);
   } catch { /* sessiz geç */ }
 
   return [];

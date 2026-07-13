@@ -20,6 +20,9 @@ import {
   type FairRow,
 } from '@/modules/lead-machine/fair/fair-catalog.service';
 
+/** Bu kadar fuar işlenip hiç site bulunamazsa arama motoru bizi engelliyordur — koşuyu durdur. */
+const DEAD_SEARCH_THRESHOLD = 25;
+
 function arg(name: string, fallback?: string): string | undefined {
   const i = process.argv.indexOf(`--${name}`);
   return i >= 0 ? (process.argv[i + 1] ?? fallback) : fallback;
@@ -78,6 +81,17 @@ async function main() {
         done++;
         if (done % 10 === 0) {
           console.log(`[fairs] ${done} islendi | site=${site} tarih=${dated} katilimci=${exh} bulunamadi=${miss}`);
+        }
+
+        // Arama motoru bizi engellerse kesif SESSIZCE sifirlaniyor (DDG bir kere VPS'in
+        // IP'sini komple engelledi, 390 fuarin hepsi bos dondu). Bunu erken yakala.
+        if (done >= DEAD_SEARCH_THRESHOLD && site === 0) {
+          console.error(
+            `[fairs] DURDURULDU: ${done} fuarda TEK BIR site bile bulunamadi — arama motoru bizi engelliyor olmali.\n` +
+            '[fairs] Kontrol: curl -s -o /dev/null -w "%{http_code}" https://search.brave.com/search?q=test  (000 = engelli)',
+          );
+          fairs.length = 0; // diger worker'lar da dursun
+          return;
         }
       } catch (e) {
         miss++; done++;
