@@ -336,13 +336,20 @@ async function guessFairWebsite(fair: FairRow, tokens: string[]): Promise<string
 }
 
 /** Fuarın resmî sitesini ücretsiz web aramasıyla bulur (kök adres döner). */
-export async function findFairWebsite(fair: FairRow): Promise<string | null> {
+export async function findFairWebsite(
+  fair: FairRow,
+  opts: { skipSearchEngines?: boolean } = {},
+): Promise<string | null> {
   const tokens = nameTokens(fair.name_en?.trim() || fair.name);
   if (!tokens.length) return null;
 
   // 1) Önce alan adı tahmini — arama motoru kotası harcamaz, engellenmez.
   const guessed = await guessFairWebsite(fair, tokens);
   if (guessed) return guessed;
+
+  // Motorlar bizi engellediyse (DDG IP'yi kapatti, Brave 429) onlari denemek sadece
+  // vakit kaybi — toplu kosuda --no-search ile atlanabilir.
+  if (opts.skipSearchEngines) return null;
 
   // 2) Tutmazsa ücretsiz arama motorları (hız sınırlı; motorlar bizi kesebiliyor).
   const place = [fair.city, fair.country].filter(Boolean).join(' ');
@@ -471,13 +478,16 @@ export interface DiscoverResult {
  * Sırayla: site yoksa web araması → ana sayfa HTML'i → exhibitor linkleri + tarih →
  * bulunamazsa scraper-service ile bir deneme daha.
  */
-export async function discoverExhibitorUrl(fair: FairRow): Promise<DiscoverResult> {
+export async function discoverExhibitorUrl(
+  fair: FairRow,
+  opts: { skipSearchEngines?: boolean } = {},
+): Promise<DiscoverResult> {
   let site = fair.website ? normalizeSite(fair.website) : null;
   const notes: string[] = [];
 
   // 0) Site kayıtlı değilse ücretsiz web aramasıyla bul (Dünya takvimi kayıtlarında site yok)
   if (!site) {
-    site = await findFairWebsite(fair);
+    site = await findFairWebsite(fair, opts);
     if (!site) {
       return {
         exhibitor_url: null, website: null, start_date: null, end_date: null, candidates: [],

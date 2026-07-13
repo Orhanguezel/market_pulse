@@ -36,6 +36,9 @@ async function main() {
   const name = arg('name');
   const onlyStale = flag('stale');
   const force = flag('force'); // daha önce işlenmiş kayıtları da yeniden dene
+  // Arama motorları IP'mizi kestiğinde (DDG bağlantıyı kapattı, Brave 429) onları
+  // denemek fuar başına ~10 sn boşa gider. --no-search sadece alan adı tahminini kullanır.
+  const skipSearchEngines = flag('no-search');
 
   const where: string[] = [];
   const values: unknown[] = [];
@@ -69,7 +72,7 @@ async function main() {
           fair.website = null;
           fair.exhibitor_url = null;
         }
-        const r = await discoverExhibitorUrl(fair);
+        const r = await discoverExhibitorUrl(fair, { skipSearchEngines });
         if (r.website || r.exhibitor_url || r.start_date) {
           await saveFairDiscovery(fair.id, r.exhibitor_url, r.website, { start: r.start_date, end: r.end_date });
           if (r.website) site++;
@@ -85,7 +88,8 @@ async function main() {
 
         // Arama motoru bizi engellerse kesif SESSIZCE sifirlaniyor (DDG bir kere VPS'in
         // IP'sini komple engelledi, 390 fuarin hepsi bos dondu). Bunu erken yakala.
-        if (done >= DEAD_SEARCH_THRESHOLD && site === 0) {
+        // (--no-search modunda sadece alan adı tahmini var; isabetsiz seri normaldir, durdurma.)
+        if (!skipSearchEngines && done >= DEAD_SEARCH_THRESHOLD && site === 0) {
           console.error(
             `[fairs] DURDURULDU: ${done} fuarda TEK BIR site bile bulunamadi — arama motoru bizi engelliyor olmali.\n` +
             '[fairs] Kontrol: curl -s -o /dev/null -w "%{http_code}" https://search.brave.com/search?q=test  (000 = engelli)',
