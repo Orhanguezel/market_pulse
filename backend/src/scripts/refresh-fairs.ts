@@ -8,6 +8,14 @@
  *   bun src/scripts/refresh-fairs.ts --source dunya_takvim --limit 200 --concurrency 3
  *   bun src/scripts/refresh-fairs.ts --stale                     # tarihi geçmiş olanlar
  *   bun src/scripts/refresh-fairs.ts --name "bauma" --force      # daha önce işlenmiş kaydı yeniden keşfet
+ *
+ * YILLIK TAZELEME (cron):
+ *   Fuarlar her yıl yenilenir; edisyon bitince site yeni tarihi yayınlar. Tarih çıkarıcı
+ *   yalnızca GELECEK tarihleri kabul ettiği için, sitesi bilinen bir fuarı yeniden ziyaret
+ *   etmek yeni edisyonu otomatik yakalar — arama motoru gerekmez, maliyet yoktur.
+ *
+ *   bun src/scripts/refresh-fairs.ts --recheck --with-website --no-search --limit 1500 --concurrency 4
+ *     → tarihi geçmiş/bilinmeyen ve son N gündür kontrol edilmemiş fuarları yeniden ziyaret eder
  */
 import { pool } from '@/db/client';
 import type { RowDataPacket } from 'mysql2/promise';
@@ -40,12 +48,23 @@ async function main() {
   // denemek fuar başına ~10 sn boşa gider. --no-search sadece alan adı tahminini kullanır.
   const skipSearchEngines = flag('no-search');
 
+  // Yillik tazeleme modu: daha once islenmis olsa bile, tarihi gecmis/bilinmeyen ve
+  // `--recheck-days` gundur bakilmamis fuarlari yeniden ziyaret et (yeni edisyon tarihi icin).
+  const recheck = flag('recheck');
+  const recheckDays = Math.max(1, Number(arg('recheck-days', '7')));
+  const withWebsite = flag('with-website'); // sadece sitesi bilinenler → arama motoru gerekmez
+
   const where: string[] = [];
   const values: unknown[] = [];
   if (source) { where.push('source = ?'); values.push(source); }
   if (name) { where.push('name LIKE ?'); values.push(`%${name}%`); }
-  // --force: eksiklik/işlenmişlik filtrelerini atla, seçilen kayıtları sıfırdan keşfet
-  if (!force) {
+  if (withWebsite) where.push('website IS NOT NULL');
+
+  if (recheck) {
+    where.push('(start_date IS NULL OR start_date < CURDATE())');
+    where.push(`(verified_at IS NULL OR verified_at < NOW() - INTERVAL ${recheckDays} DAY)`);
+  } else if (!force) {
+    // --force: eksiklik/işlenmişlik filtrelerini atla, seçilen kayıtları sıfırdan keşfet
     if (onlyStale) where.push('(start_date IS NULL OR start_date < CURDATE())');
     else where.push('(website IS NULL OR exhibitor_url IS NULL OR start_date IS NULL OR start_date < CURDATE())');
     where.push('verified_at IS NULL'); // aynı fuarı ikinci kez deneme
