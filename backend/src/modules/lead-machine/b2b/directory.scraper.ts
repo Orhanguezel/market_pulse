@@ -1,6 +1,46 @@
+import { request as httpsRequest } from 'node:https';
 import type { IcpProfile } from '../icp/icp.repository';
 import { scrape, searchGoogleMaps, type DirectoryListingData, type Place } from '../_shared/scraper.client';
 import { getGoogleMapsKey } from '../../siteSettings';
+
+/**
+ * Places isteğini IPv4 üzerinden yapar.
+ *
+ * NEDEN: Google Maps anahtarı IP kısıtlı (VPS'in IPv4'ü izinli). Ama VPS Google'a
+ * IPv6 ile çıkıyordu → "API_KEY_IP_ADDRESS_BLOCKED" (403) ve B2B Google Maps taramaları
+ * sonuç döndürmüyordu. family: 4 ile çıkış IP'si izinli IPv4 oluyor.
+ */
+function postJsonIpv4(
+  url: string,
+  headers: Record<string, string>,
+  body: unknown,
+): Promise<{ status: number; text: string }> {
+  const target = new URL(url);
+  const payload = JSON.stringify(body);
+
+  return new Promise((resolve, reject) => {
+    const req = httpsRequest(
+      {
+        protocol: target.protocol,
+        hostname: target.hostname,
+        path: `${target.pathname}${target.search}`,
+        method: 'POST',
+        family: 4, // ← IPv6 kullanma; anahtar IPv4'e kısıtlı
+        headers: { ...headers, 'Content-Length': Buffer.byteLength(payload) },
+        timeout: 20_000,
+      },
+      (res) => {
+        let text = '';
+        res.on('data', (chunk) => { text += chunk; });
+        res.on('end', () => resolve({ status: res.statusCode ?? 0, text }));
+      },
+    );
+    req.on('timeout', () => req.destroy(new Error('PLACES_API_TIMEOUT')));
+    req.on('error', reject);
+    req.write(payload);
+    req.end();
+  });
+}
 
 /**
  * Resmi Google Places API (New) — Text Search. Server-to-server; API anahtarı
@@ -16,27 +56,27 @@ async function searchPlacesApi(
   const regionCode =
     opts.country && /^[A-Za-z]{2}$/.test(opts.country) ? opts.country.toUpperCase() : undefined;
 
-  const res = await fetch('https://places.googleapis.com/v1/places:searchText', {
-    method: 'POST',
-    headers: {
+  const res = await postJsonIpv4(
+    'https://places.googleapis.com/v1/places:searchText',
+    {
       'Content-Type': 'application/json',
       'X-Goog-Api-Key': apiKey,
       'X-Goog-FieldMask':
         'places.displayName,places.websiteUri,places.nationalPhoneNumber,places.internationalPhoneNumber,places.formattedAddress,places.googleMapsUri',
     },
-    body: JSON.stringify({
+    {
       textQuery: query,
       languageCode: 'en',
       maxResultCount: Math.min(Math.max(opts.limit ?? 10, 1), 20),
       ...(regionCode ? { regionCode } : {}),
-    }),
-  });
+    },
+  );
 
-  if (!res.ok) {
+  if (res.status < 200 || res.status >= 300) {
     throw new Error(`PLACES_API_${res.status}`);
   }
 
-  const data = (await res.json()) as {
+  const data = JSON.parse(res.text) as {
     places?: Array<{
       displayName?: { text?: string };
       websiteUri?: string;

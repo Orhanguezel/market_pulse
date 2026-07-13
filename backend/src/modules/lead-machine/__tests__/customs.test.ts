@@ -67,20 +67,23 @@ describe('customs reference lake', () => {
     expect(dbMock.poolExecutions).toHaveLength(2); // ana tabloya hiç gidilmez
   });
 
-  test('aggregates exact HS code lists before prefix fallback', async () => {
+  test('HS kod listesi ON EK olarak eslesir (tam esitlik degil)', async () => {
     dbMock.queuePoolExecute([]);
 
+    // ICP'ler HS kodunu 4-6 haneli ön ek tutar (8482 = rulman); gölde kodlar tam
+    // uzunluktadır (848210, 8482100000). Tam eşitlik arandığı için tarama 0 sonuç
+    // dönüyordu — Aurora'nın gümrük profili bu yüzden boş geldi.
     await customsRepo.aggregateBuyers({
-      hsCodes: ['090421', '090422'],
+      hsCodes: ['8482', '090421'],
       hsPrefix: '0904',
       minValue: 500,
       limit: 20,
     });
 
     const call = dbMock.poolExecutions[0];
-    expect(call?.sql).toContain('hs_code IN (?, ?)');
-    expect(call?.sql).not.toContain('hs_code LIKE ?');
-    expect(call?.values).toEqual(['090421', '090422', 500]);
+    expect(call?.sql).toContain('(hs_code LIKE ? OR hs_code LIKE ?)');
+    expect(call?.sql).not.toContain('hs_code IN (');
+    expect(call?.values).toEqual(['8482%', '090421%', 500]);
   });
 
   test('bulk import writes global provenance and source row numbers idempotently', async () => {

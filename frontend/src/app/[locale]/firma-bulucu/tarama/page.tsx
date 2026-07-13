@@ -47,6 +47,23 @@ function hasFairBlock(icp?: { definition?: Record<string, unknown> } | null): bo
   return Boolean(firstText(fair.name, fair.url, fair.exhibitor_list_url));
 }
 
+/**
+ * Fuar takvimini ICP'ye göre ön-filtrelemek için arama terimleri.
+ * Öncelik: profilin fair.search_terms alanı → yoksa alt sektör/sektör/anahtar kelimeler.
+ * (Fuar seçici bunlar olmadan 3.400 fuarı ilgisiz sırayla gösteriyordu.)
+ */
+function fairSearchTerms(icp?: { definition?: Record<string, unknown> } | null): string[] {
+  if (!icp?.definition) return [];
+  const fair = definitionRecord(icp.definition, 'fair');
+  const explicit = definitionItems(fair, 'search_terms');
+  if (explicit.length) return explicit;
+  return [
+    ...definitionItems(icp.definition, 'sub_sectors'),
+    ...definitionItems(icp.definition, 'sectors'),
+    ...definitionItems(icp.definition, 'keywords'),
+  ].slice(0, 6);
+}
+
 function firstText(...values: unknown[]): string {
   for (const value of values) {
     if (typeof value === 'string' && value.trim()) return value.trim();
@@ -312,6 +329,7 @@ export default function FirmaBulucuTaramaPage() {
             <>
               <div className="lg:col-span-4">
                 <FairPicker
+                  suggestedTerms={fairSearchTerms(icps.find((icp) => icp.id === icpId))}
                   onPick={(fair, exhibitorUrl, startDate) => {
                     setFairName(fair.name);
                     setFairDate((startDate ?? fair.start_date ?? '').slice(0, 10));

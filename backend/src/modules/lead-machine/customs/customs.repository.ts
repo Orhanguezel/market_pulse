@@ -142,8 +142,11 @@ export async function aggregateBuyers(
   const values: unknown[] = [];
 
   if (opts.hsCodes && opts.hsCodes.length) {
-    where.push(`hs_code IN (${opts.hsCodes.map(() => '?').join(', ')})`);
-    values.push(...opts.hsCodes);
+    // ICP'ler HS kodunu 4-6 haneli ON EK olarak tutar (8482 = rulman), gumruk golunde ise
+    // kodlar tam uzunluktadir (848210, 8482100000). `IN (...)` tam esitlik aradigi icin
+    // hicbiri tutmuyor ve tarama 0 sonuc donuyordu. Her kodu ON EK olarak esliyoruz.
+    where.push(`(${opts.hsCodes.map(() => 'hs_code LIKE ?').join(' OR ')})`);
+    values.push(...opts.hsCodes.map((code) => `${code}%`));
   } else if (opts.hsPrefix) {
     where.push('hs_code LIKE ?');
     values.push(`${opts.hsPrefix}%`);

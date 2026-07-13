@@ -27,8 +27,11 @@ const isPast = (d: string | null) => !!d && d.slice(0, 10) < new Date().toISOStr
  */
 export default function FairPicker({
   onPick,
+  suggestedTerms = [],
 }: {
   onPick: (fair: FairCatalogItem, exhibitorUrl: string | null, startDate?: string | null) => void;
+  /** Seçili ICP profilinden gelen sektör/anahtar kelimeler — katalog bunlarla ön-filtrelenir. */
+  suggestedTerms?: string[];
 }) {
   const [q, setQ] = React.useState('');
   const [upcoming, setUpcoming] = React.useState(false);
@@ -49,10 +52,14 @@ export default function FairPicker({
     [search],
   );
 
-  // Odaklanınca/açılınca liste hazır olsun — kullanıcı yazmadan da fuarları görsün
+  // Açılınca liste hazır olsun. ICP profilinde sektör/anahtar kelime varsa katalog ONUNLA
+  // ön-filtrelenir — aksi halde 3.400 fuar arasından ilgisiz sonuçlar geliyordu.
   React.useEffect(() => {
-    if (open && !searchState.data && !searchState.isFetching) runSearch('', upcoming);
-  }, [open, searchState.data, searchState.isFetching, runSearch, upcoming]);
+    if (open && !searchState.data && !searchState.isFetching) {
+      runSearch(suggestedTerms[0] ?? '', upcoming);
+      if (suggestedTerms[0]) setQ(suggestedTerms[0]);
+    }
+  }, [open, searchState.data, searchState.isFetching, runSearch, upcoming, suggestedTerms]);
 
   // Yazdıkça ara (debounce)
   React.useEffect(() => {
@@ -110,6 +117,24 @@ export default function FairPicker({
   return (
     <div className="rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-3">
       <p className="mb-2 text-[12px] font-semibold text-[#64748b]">Fuar takviminden seç (Türkiye + Dünya · 3.400+ fuar)</p>
+
+      {suggestedTerms.length > 0 && (
+        <div className="mb-2 flex flex-wrap items-center gap-1.5">
+          <span className="text-[11px] text-[#64748b]">ICP profiline göre:</span>
+          {suggestedTerms.slice(0, 6).map((term) => (
+            <button
+              key={term}
+              type="button"
+              onClick={() => { setQ(term); setOpen(true); runSearch(term, upcoming); }}
+              className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+                q === term ? 'bg-[#1e40af] text-white' : 'bg-white text-[#1e40af] ring-1 ring-[#dbeafe] hover:bg-[#eff6ff]'
+              }`}
+            >
+              {term}
+            </button>
+          ))}
+        </div>
+      )}
 
       <div ref={boxRef} className="relative">
         <div className="flex flex-wrap items-center gap-2">
