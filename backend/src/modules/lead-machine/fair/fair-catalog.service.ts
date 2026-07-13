@@ -204,7 +204,10 @@ function plainLinks(html: string): string[] {
  * Brave anti-bot). Sorgular arasında en az MIN_GAP_MS bırakıyoruz; paralel worker'lar
  * bu kapıya sırayla girer.
  */
-const MIN_GAP_MS = 2500;
+// 2.5 sn ile Brave bizi 429'a soktu ve DDG IP'yi komple kapatti. Toplu kosularda
+// SEARCH_MIN_GAP_MS ile tempoyu dusuruyoruz (ornek: 7000). Tek seferlik UI kesfinde
+// varsayilan yeterli.
+const MIN_GAP_MS = Number(process.env.SEARCH_MIN_GAP_MS ?? 2500);
 let searchGate: Promise<void> = Promise.resolve();
 
 function paceSearch(): Promise<void> {
