@@ -272,11 +272,79 @@ function fairSiteScore(url: string, tokens: string[]): number {
   return tokens.filter((t) => flat.includes(t)).length;
 }
 
+// ─── Alan adı tahmini (arama motoruna hiç gitmeden) ──────────────────────────
+//
+// Ücretsiz arama motorları veri merkezi IP'sini hızla kesiyor (DDG bağlantıyı komple
+// kapattı, Brave 429). Ama fuarların resmî sitesi genelde adının kendisi:
+// Anuga → anuga.de, Automaticon → automaticon.pl, bauma → bauma.de.
+// Adaydan alan adı üretip DOĞRUDAN fuarın sitesine gidiyoruz — her istek farklı hosta
+// gittiği için rate-limit yok, maliyet yok. Arama motoru sadece bu tutmazsa devreye girer.
+
+/** Ülke adı (TR) → ülke kodu TLD'si. */
+const COUNTRY_TLD: Record<string, string> = {
+  'almanya': 'de', 'türkiye': 'com.tr', 'turkiye': 'com.tr', 'çin': 'cn', 'cin': 'cn',
+  'rusya': 'ru', 'polonya': 'pl', 'fransa': 'fr', 'italya': 'it', 'ispanya': 'es',
+  'hindistan': 'in', 'japonya': 'jp', 'ingiltere': 'co.uk', 'hollanda': 'nl',
+  'belçika': 'be', 'belcika': 'be', 'avusturya': 'at', 'isviçre': 'ch', 'isvicre': 'ch',
+  'brezilya': 'com.br', 'meksika': 'mx', 'kanada': 'ca', 'avustralya': 'com.au',
+  'güney kore': 'kr', 'guney kore': 'kr', 'endonezya': 'co.id', 'vietnam': 'vn',
+  'tayland': 'co.th', 'malezya': 'com.my', 'ukrayna': 'ua', 'çekya': 'cz', 'cekya': 'cz',
+  'macaristan': 'hu', 'romanya': 'ro', 'yunanistan': 'gr', 'portekiz': 'pt',
+  'isveç': 'se', 'isvec': 'se', 'norveç': 'no', 'norvec': 'no', 'danimarka': 'dk',
+  'finlandiya': 'fi', 'güney afrika': 'co.za', 'guney afrika': 'co.za', 'mısır': 'com.eg',
+  'birleşik arap emirlikleri': 'ae', 'suudi arabistan': 'com.sa', 'iran': 'ir',
+  'pakistan': 'com.pk', 'tayvan': 'com.tw', 'singapur': 'com.sg', 'kazakistan': 'kz',
+};
+
+/** Sayfanın gerçekten bu fuara ait olup olmadığını başlık/metinden doğrular. */
+function pageMatchesFair(html: string, tokens: string[]): boolean {
+  const head = deaccent(html.slice(0, 40_000).replace(/<[^>]+>/g, ' '));
+  const hits = tokens.filter((t) => head.includes(t)).length;
+  if (!hits) return false;
+  // Fuar sitesi olduğuna dair sinyal (aksi halde aynı isimli bir sirket sitesi olabilir)
+  return /(exhibit|fair|expo|messe|trade show|katilimci|fuar|aussteller|salon)/i.test(head);
+}
+
+/** Fuar adından olası alan adları üretir (en olasıdan başlayarak). */
+function candidateDomains(fair: FairRow, tokens: string[]): string[] {
+  const slugs = [...new Set([
+    tokens.join(''),                              // baumaconexpoindia
+    tokens[0]!,                                   // bauma
+    tokens.slice(0, 2).join(''),                  // baumaconexpo
+    tokens.slice(0, 2).join('-'),                 // bauma-conexpo
+  ])].filter((s) => s && s.length >= 4 && s.length <= 30);
+
+  const countryTld = COUNTRY_TLD[deaccent(fair.country ?? '')] ?? null;
+  const tlds = [...new Set([countryTld, 'com', 'de', 'net', 'org'].filter(Boolean))] as string[];
+
+  const out: string[] = [];
+  for (const slug of slugs) {
+    for (const tld of tlds) out.push(`https://www.${slug}.${tld}`);
+  }
+  return out.slice(0, 12); // makul bir üst sınır
+}
+
+/** Alan adı tahminiyle fuar sitesini bulur — arama motoru kullanmaz, ücretsizdir. */
+async function guessFairWebsite(fair: FairRow, tokens: string[]): Promise<string | null> {
+  for (const url of candidateDomains(fair, tokens)) {
+    const html = await fetchHtml(url);
+    if (html && pageMatchesFair(html, tokens)) {
+      try { return new URL(url).origin; } catch { return url; }
+    }
+  }
+  return null;
+}
+
 /** Fuarın resmî sitesini ücretsiz web aramasıyla bulur (kök adres döner). */
 export async function findFairWebsite(fair: FairRow): Promise<string | null> {
   const tokens = nameTokens(fair.name_en?.trim() || fair.name);
   if (!tokens.length) return null;
 
+  // 1) Önce alan adı tahmini — arama motoru kotası harcamaz, engellenmez.
+  const guessed = await guessFairWebsite(fair, tokens);
+  if (guessed) return guessed;
+
+  // 2) Tutmazsa ücretsiz arama motorları (hız sınırlı; motorlar bizi kesebiliyor).
   const place = [fair.city, fair.country].filter(Boolean).join(' ');
   const queries = [
     `${fair.name_en?.trim() || fair.name} ${place} official website`,
