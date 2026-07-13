@@ -46,7 +46,11 @@ function isPlaceOnlyMatch(row: Row): boolean {
 
   const place = [row.city, row.country].filter(Boolean).map((p) => deaccent(String(p)).replace(/[^a-z0-9]/g, ''));
   const nameWords = deaccent(row.name).split(/[^a-z0-9]+/).filter((w) => w.length >= 4);
-  const distinctive = nameWords.filter((w) => !place.some((p) => p && (p.includes(w) || w.includes(p))));
+
+  // Kelime, şehir/ülke adının TA KENDİSİ ise ayırt edici değildir. Ama sadece onu İÇEREN
+  // kelime ayırt edicidir: "paintistanbul" (→ paintistanbul.net) ve "iranconmin"
+  // (→ iranconmine.com) doğru sitelerdir; substring elemesi bunları yanlışlıkla siliyordu.
+  const distinctive = nameWords.filter((w) => !place.includes(w));
 
   const hostHasPlace = place.some((p) => p.length >= 4 && host.includes(p));
   const hostHasDistinctive = distinctive.some((w) => host.includes(w));
