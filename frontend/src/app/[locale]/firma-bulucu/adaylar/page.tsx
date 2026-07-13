@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useSearchParams } from 'next/navigation';
-import { Check, FileSpreadsheet, Loader2, Mail, RefreshCw, Search, Star, ThumbsDown, Wand2 } from 'lucide-react';
+import { Check, FileSpreadsheet, Loader2, Mail, Radar, RefreshCw, Search, Star, ThumbsDown, Wand2 } from 'lucide-react';
 import { toast } from 'sonner';
 import {
   useApproveLeadCandidateToLeadMutation,
@@ -48,6 +48,30 @@ function rawRecord(candidate: LeadCandidate) {
 
 function nestedRecord(value: unknown) {
   return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
+}
+
+const CHANNEL_LABELS: Record<string, string> = {
+  b2b_directory: 'B2B Dizin',
+  trade_fair: 'Fuar',
+  customs: 'Gümrük',
+  amazon: 'Amazon',
+  decision_maker: 'Karar Verici',
+};
+
+/**
+ * "Nereden bulundu": adayı üreten taramanın kanalı + parametreleri.
+ * Ör: "Gümrük · automotive accessories · United States" / "Fuar · Automechanika Frankfurt".
+ */
+function sourceLabel(candidate: LeadCandidate): string {
+  const channel = CHANNEL_LABELS[candidate.channel] ?? candidate.channel;
+  const p = nestedRecord(candidate.job_params);
+  const bits = [
+    p.search_query, p.keyword, p.product_query, p.fair_name,
+    p.hs_prefix, p.source, p.country, p.customs_country, p.marketplace,
+  ]
+    .filter((v): v is string => typeof v === 'string' && v.trim().length > 0)
+    .slice(0, 3);
+  return [channel, ...bits].join(' · ');
 }
 
 export default function FirmaBulucuAdaylarPage() {
@@ -258,7 +282,16 @@ export default function FirmaBulucuAdaylarPage() {
                   <input type="checkbox" checked={selected.has(candidate.id)} onChange={() => toggle(candidate.id)} className="mt-1 h-4 w-4" />
                   <span className="min-w-0">
                     <span className="block truncate text-[15px] font-bold text-[#0f172a]">{candidate.name}</span>
-                    <span className="mt-1 block text-[12px] text-[#64748b]">{candidate.city || '-'} · {candidate.country || '-'} · {candidate.channel}</span>
+                    <span className="mt-1 block text-[12px] text-[#64748b]">{candidate.city || '-'} · {candidate.country || '-'}</span>
+                    <button
+                      type="button"
+                      onClick={(e) => { e.preventDefault(); setJobId(candidate.job_id); }}
+                      title="Bu taramadan gelen adayları göster"
+                      className="mt-1.5 inline-flex max-w-full items-center gap-1 truncate rounded-full bg-[#f1f5f9] px-2 py-0.5 text-[11px] font-semibold text-[#475569] hover:bg-[#e2e8f0]"
+                    >
+                      <Radar className="h-3 w-3 shrink-0" />
+                      <span className="truncate">{sourceLabel(candidate)}</span>
+                    </button>
                   </span>
                 </label>
                 <span className="rounded-md bg-[#eff6ff] px-2 py-1 text-[12px] font-bold text-[#1d4ed8]">{score(candidate).toFixed(1)}</span>

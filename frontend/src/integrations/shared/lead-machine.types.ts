@@ -36,6 +36,9 @@ export type LeadCandidate = {
   reject_reason: string | null;
   reject_tags: string[] | null;
   created_at: string;
+  /** Adayı üreten taramanın parametreleri (keyword, ülke, fuar adı…) — "nereden bulundu" için. */
+  job_params?: Record<string, unknown> | null;
+  job_created_at?: string | null;
 };
 
 export type IcpProfile = {

@@ -380,16 +380,21 @@ export const startAmazonScan: RouteHandler<{ Body: unknown }> = async (req, repl
     marketplace: typeof body.marketplace === 'string' ? body.marketplace : 'com',
   }));
 };
-export const listAmazonJobs: RouteHandler = async () => {
+export const listAmazonJobs: RouteHandler = async (req) => {
   const tenantKey = await getActiveTenantKey();
+  // SIZINTIYDI: owner filtresi yoktu — kullanici baska kullanicinin Amazon islerini
+  // goruyordu (ve silemiyordu, cunku DELETE owner-scope'lu → 404).
+  const ownerUserId = ownerUserIdForRoute(req);
+  const ownerClause = ownerUserId ? ' AND lsj.owner_user_id = ?' : '';
+  const values: unknown[] = ownerUserId ? [tenantKey, ownerUserId] : [tenantKey];
   const [rows] = await pool.execute(
     `SELECT lsj.*, ars.decision, ars.composite_score, ars.data_points
      FROM lead_search_jobs lsj
      LEFT JOIN amazon_risk_scores ars ON ars.tenant_key = lsj.tenant_key AND ars.job_id = lsj.id
-     WHERE lsj.tenant_key = ? AND lsj.channel = 'amazon'
+     WHERE lsj.tenant_key = ? AND lsj.channel = 'amazon'${ownerClause}
      ORDER BY lsj.created_at DESC
      LIMIT 100`,
-    [tenantKey],
+    values as never[],
   );
   return (rows as any[]).map(row => {
     const job = parseJsonField(row, 'params');
@@ -404,14 +409,28 @@ export const listAmazonJobs: RouteHandler = async () => {
   });
 };
 export const getAmazonJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const job = await getSearchJob(req.params.id);
+  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
   if (!job || job.channel !== 'amazon') return reply.code(404).send({ error: { message: 'not_found' } });
   return job;
 };
 
 export const getAmazonScan: RouteHandler<{ Params: { jobId: string } }> = async (req, reply) => {
   const tenantKey = await getActiveTenantKey();
-  const [rows] = await pool.execute('SELECT * FROM amazon_scan_jobs WHERE tenant_key = ? AND id = ? LIMIT 1', [tenantKey, req.params.jobId]);
+  const ownerUserId = ownerUserIdForRoute(req);
+
+  // amazon_scan_jobs'ta owner_user_id kolonu yok; satir ana is kaydiyla AYNI id'yi
+  // tasiyor, o yuzden sahiplik lead_search_jobs uzerinden dogrulanir (IDOR kapandi).
+  const [rows] = ownerUserId
+    ? await pool.execute(
+        `SELECT asj.* FROM amazon_scan_jobs asj
+           JOIN lead_search_jobs lsj ON lsj.tenant_key = asj.tenant_key AND lsj.id = asj.id
+          WHERE asj.tenant_key = ? AND asj.id = ? AND lsj.owner_user_id = ? LIMIT 1`,
+        [tenantKey, req.params.jobId, ownerUserId],
+      )
+    : await pool.execute(
+        'SELECT * FROM amazon_scan_jobs WHERE tenant_key = ? AND id = ? LIMIT 1',
+        [tenantKey, req.params.jobId],
+      );
   const row = (rows as Record<string, unknown>[])[0];
   if (!row) return reply.code(404).send({ error: { message: 'not_found' } });
   return row;

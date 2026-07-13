@@ -42,6 +42,9 @@ export interface LeadCandidate {
   reviewed_by: string | null;
   reviewed_at: string | null;
   created_at: string;
+  /** Adayi ureten taramanin parametreleri — listede "nereden bulundu" gostermek icin. */
+  job_params?: unknown;
+  job_created_at?: string | null;
 }
 
 export interface CandidateInput {
@@ -233,13 +236,38 @@ export async function listCandidates(filters: { channel?: string; status?: strin
   const whereSql = `WHERE ${where.join(' AND ')}`;
   const limitInt = Math.floor(filters.limit);
   const offsetInt = Math.floor(filters.offset);
+
   const [rows] = await pool.execute(
     `SELECT * FROM lead_candidates ${whereSql} ORDER BY created_at DESC LIMIT ${limitInt} OFFSET ${offsetInt}`,
     values as never[],
   );
   const [countRows] = await pool.execute(`SELECT COUNT(*) AS count FROM lead_candidates ${whereSql}`, values as never[]);
+
+  // Adayin HANGI taramadan geldigi listede gorunmuyordu ("nerden bulundugu belli degil").
+  // Isin parametrelerini AYRI sorguyla ekliyoruz — ana sorguya JOIN atarsak owner/tenant
+  // filtresi alias'lanmak zorunda kalir ve izolasyon nobetci testleri bu SQL sekline bakiyor.
+  const candidates = (rows as LeadCandidate[]).map(row => parseJsonField(parseJsonField(row, 'raw_data'), 'reject_tags'));
+  const jobIds = [...new Set(candidates.map(c => c.job_id).filter(Boolean))];
+  if (jobIds.length) {
+    const [jobRows] = await pool.execute(
+      `SELECT id, params, created_at FROM lead_search_jobs
+        WHERE tenant_key = ? AND id IN (${jobIds.map(() => '?').join(', ')})`,
+      [tenantKey, ...jobIds] as never[],
+    );
+    const byId = new Map<string, { params: unknown; created_at: string }>();
+    for (const job of jobRows as Array<{ id: string; params: unknown; created_at: string }>) {
+      const parsed = parseJsonField(job as never, 'params') as unknown as { params: unknown; created_at: string };
+      byId.set(job.id, { params: parsed.params, created_at: job.created_at });
+    }
+    for (const c of candidates) {
+      const job = byId.get(c.job_id);
+      c.job_params = job?.params ?? null;
+      c.job_created_at = job?.created_at ?? null;
+    }
+  }
+
   return {
-    rows: (rows as LeadCandidate[]).map(row => parseJsonField(parseJsonField(row, 'raw_data'), 'reject_tags')),
+    rows: candidates,
     count: Number((countRows as Array<{ count: number }>)[0]?.count ?? 0),
   };
 }

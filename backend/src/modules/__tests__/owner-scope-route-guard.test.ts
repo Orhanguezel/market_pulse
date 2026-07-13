@@ -46,6 +46,31 @@ describe('owner-scope route guard flags (static)', () => {
     expect(guardLine).toContain("leadMachineScope: 'user'");
   });
 
+  test('lead-machine kullanici handlerlari owner filtresini gercekten uyguluyor', () => {
+    // Rota bayragi dogru olsa bile HANDLER bayragi okumayi unutabilir: listAmazonJobs
+    // `req` bile almiyordu → kullanici baskasinin Amazon islerini goruyor, silemiyordu
+    // (DELETE owner-scope'lu → 404). Bayrak testi bunu yakalayamaz, bu test yakalar.
+    const src = read('../lead-machine/controller.ts');
+
+    // Owner'a ait tablolara dokunan her handler owner filtresini cozmeli.
+    const OWNED_TABLES = /lead_search_jobs|lead_candidates|amazon_scan_jobs|amazon_products|amazon_risk_scores/;
+    // Tenant geneli (kullaniciya ozel olmayan) kaynaklar:
+    const TENANT_WIDE = new Set(['rejectionPatterns', 'getKeepaUsage', 'scraperCallback', 'runSavedSearchHandler']);
+
+    const offenders: string[] = [];
+    const blocks = src.split(/\nexport const /).slice(1);
+    for (const block of blocks) {
+      const name = block.slice(0, block.indexOf(':')).trim();
+      if (!/RouteHandler/.test(block.slice(0, 200)) || TENANT_WIDE.has(name)) continue;
+      const body = block.slice(0, block.indexOf('\n};'));
+      const touchesOwnedData = OWNED_TABLES.test(body) || /getSearchJob|listSearchJobs|listCandidates/.test(body);
+      const resolvesOwner = /ownerUserIdForRoute|ownerScopeForRequest/.test(body);
+      if (touchesOwnedData && !resolvesOwner) offenders.push(name);
+    }
+
+    expect(offenders, `owner filtresi uygulamayan handler: ${offenders.join(', ')}`).toEqual([]);
+  });
+
   test('owner resolvers never inspect req.url (query-string spoof engeli)', () => {
     // ownerScopeForRequest req.url'e bakmamali; controller'lar da url tabanli owner
     // cozumune donmemeli. Eski `req.url.includes('/admin/')` deseni owner kararinda YASAK.
