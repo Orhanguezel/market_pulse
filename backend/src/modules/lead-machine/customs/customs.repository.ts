@@ -174,7 +174,11 @@ export async function aggregateBuyers(
   }
 
   if (opts.minValue !== undefined) {
-    where.push('total_value >= ?');
+    // ABD konşimento verisinde DEĞER YOK: 5.1M kaydın yalnızca 308'inde total_value dolu
+    // (Rusya/Ukrayna'da %100). Düz `total_value >= ?` filtresi bu yüzden ABD'yi komple
+    // eliyordu ve "min. değer" giren her tarama 0 sonuç dönüyordu. Değeri BİLİNMEYEN
+    // kaydı elemiyoruz; filtre yalnızca değeri bilinen kayıtlara uygulanır.
+    where.push('(total_value >= ? OR total_value IS NULL OR total_value = 0)');
     values.push(opts.minValue);
   }
 

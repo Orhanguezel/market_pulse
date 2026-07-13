@@ -1,4 +1,5 @@
 import { request as httpsRequest } from 'node:https';
+import { resolve4 } from 'node:dns/promises';
 import type { IcpProfile } from '../icp/icp.repository';
 import { scrape, searchGoogleMaps, type DirectoryListingData, type Place } from '../_shared/scraper.client';
 import { getGoogleMapsKey } from '../../siteSettings';
@@ -10,7 +11,7 @@ import { getGoogleMapsKey } from '../../siteSettings';
  * IPv6 ile çıkıyordu → "API_KEY_IP_ADDRESS_BLOCKED" (403) ve B2B Google Maps taramaları
  * sonuç döndürmüyordu. family: 4 ile çıkış IP'si izinli IPv4 oluyor.
  */
-function postJsonIpv4(
+async function postJsonIpv4(
   url: string,
   headers: Record<string, string>,
   body: unknown,
@@ -18,15 +19,24 @@ function postJsonIpv4(
   const target = new URL(url);
   const payload = JSON.stringify(body);
 
+  // `family: 4` runtime tarafından yok sayılabiliyor (Bun'da tutmadı). Bu yüzden A kaydını
+  // KENDİMİZ çözüp doğrudan IPv4 adresine bağlanıyoruz; TLS için servername, HTTP için Host
+  // başlığı asıl alan adını taşır.
+  const [ipv4] = await resolve4(target.hostname);
+  if (!ipv4) throw new Error('PLACES_API_DNS_A_KAYDI_YOK');
+
   return new Promise((resolve, reject) => {
     const req = httpsRequest(
       {
-        protocol: target.protocol,
-        hostname: target.hostname,
+        host: ipv4,
+        servername: target.hostname, // TLS SNI
         path: `${target.pathname}${target.search}`,
         method: 'POST',
-        family: 4, // ← IPv6 kullanma; anahtar IPv4'e kısıtlı
-        headers: { ...headers, 'Content-Length': Buffer.byteLength(payload) },
+        headers: {
+          ...headers,
+          host: target.hostname,
+          'Content-Length': Buffer.byteLength(payload),
+        },
         timeout: 20_000,
       },
       (res) => {
