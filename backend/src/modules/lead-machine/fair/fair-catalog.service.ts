@@ -327,11 +327,26 @@ function candidateDomains(fair: FairRow, tokens: string[]): string[] {
   return out.slice(0, 12); // makul bir üst sınır
 }
 
+/**
+ * Fuarı gerçekten ayırt eden kelimeler: şehir/ülke adları sayılmaz.
+ * "Warsaw Industry Week" → warsaw.net (Varşova şehir sitesi) yanlış eşleşmesi bu yüzden oldu.
+ */
+function distinctiveTokens(fair: FairRow, tokens: string[]): string[] {
+  const place = new Set([
+    ...nameTokens(fair.city ?? ''),
+    ...nameTokens(fair.country ?? ''),
+  ]);
+  const distinctive = tokens.filter((t) => !place.has(t));
+  return distinctive.length ? distinctive : tokens;
+}
+
 /** Alan adı tahminiyle fuar sitesini bulur — arama motoru kullanmaz, ücretsizdir. */
 async function guessFairWebsite(fair: FairRow, tokens: string[]): Promise<string | null> {
+  const distinctive = distinctiveTokens(fair, tokens);
   for (const url of candidateDomains(fair, tokens)) {
+    // Sayfa, fuarı AYIRT EDEN bir kelimeyi içermeli — sadece şehir adı yetmez.
     const html = await fetchHtml(url);
-    if (html && pageMatchesFair(html, tokens)) {
+    if (html && pageMatchesFair(html, distinctive)) {
       try { return new URL(url).origin; } catch { return url; }
     }
   }
@@ -423,12 +438,16 @@ export interface FairDates { start: string; end: string | null }
  */
 export function extractFairDates(html: string): FairDates | null {
   const text = deaccent(html.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ');
-  const today = new Date().toISOString().slice(0, 10);
+  // Siteler sayfaya BUGUNUN tarihini basiyor (haber akisi, "son guncelleme", tarih widget'i).
+  // Bunlari fuar tarihi sanip 83 fuara bugunun tarihini yazdik. Yakin tarihleri eliyoruz:
+  // yeni bir edisyon tarihi hep haftalar/aylar sonrasidir.
+  const MIN_LEAD_DAYS = 7;
+  const earliest = new Date(Date.now() + MIN_LEAD_DAYS * 864e5).toISOString().slice(0, 10);
   const horizon = new Date(Date.now() + 730 * 864e5).toISOString().slice(0, 10); // ~2 yıl
   const found: FairDates[] = [];
 
   const push = (start: string | null, end: string | null) => {
-    if (!start || start < today || start > horizon) return;
+    if (!start || start < earliest || start > horizon) return;
     found.push({ start, end: end && end >= start && end <= horizon ? end : null });
   };
 

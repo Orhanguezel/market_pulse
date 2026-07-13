@@ -44,6 +44,7 @@ async function main() {
   const name = arg('name');
   const onlyStale = flag('stale');
   const force = flag('force'); // daha önce işlenmiş kayıtları da yeniden dene
+  const reset = flag('reset'); // kayıtlı site/katılımcıyı DB'den de sil (yalnızca --force ile)
   // Arama motorları IP'mizi kestiğinde (DDG bağlantıyı kapattı, Brave 429) onları
   // denemek fuar başına ~10 sn boşa gider. --no-search sadece alan adı tahminini kullanır.
   const skipSearchEngines = flag('no-search');
@@ -85,9 +86,12 @@ async function main() {
       const fair = fairs.shift();
       if (!fair) return;
       try {
-        // --force: eski (muhtemelen hatalı) site/katılımcı değerlerini temizle, sıfırdan keşfet
+        // --force: kayıtlı siteyi yok sayıp sıfırdan keşfet. DB'yi ÖNCEDEN temizleme —
+        // keşif başarısız olursa iyi veriyi kaybediyorduk (Caravaning Brno'nun sitesi böyle
+        // silindi). Yeni sonuç bulunursa saveFairDiscovery zaten üzerine yazıyor.
+        // Kaydı gerçekten sıfırlamak için ayrıca --reset gerekir.
         if (force) {
-          await resetFairDiscovery(fair.id);
+          if (reset) await resetFairDiscovery(fair.id);
           fair.website = null;
           fair.exhibitor_url = null;
         }
