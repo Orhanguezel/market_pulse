@@ -19,6 +19,7 @@ export const listFairCatalog: RouteHandler<{ Querystring: unknown }> = async (re
     q: str(q.q),
     country: str(q.country),
     sector: str(q.sector),
+    source: str(q.source),
     from: str(q.from),
     onlyUpcoming: q.upcoming === '1' || q.upcoming === 'true',
     limit: Number(q.limit ?? 30),

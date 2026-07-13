@@ -34,6 +34,7 @@ export interface FairSearchParams {
   q?: string;
   country?: string;
   sector?: string;
+  source?: string;        // 'tr_takvim' | 'dunya_takvim' — kaynak takvimi
   from?: string;          // bu tarihten sonra başlayanlar (YYYY-MM-DD)
   onlyUpcoming?: boolean; // bugünden sonrakiler
   limit?: number;
@@ -67,6 +68,7 @@ export async function searchFairs(p: FairSearchParams): Promise<{ rows: FairRow[
     values.push(...cols.map(() => like));
   }
   if (p.country?.trim()) { where.push('country = ?'); values.push(p.country.trim()); }
+  if (p.source?.trim()) { where.push('source = ?'); values.push(p.source.trim()); }
   if (p.sector?.trim()) { where.push('sector LIKE ?'); values.push(`%${p.sector.trim()}%`); }
   if (p.from?.trim()) { where.push('start_date >= ?'); values.push(p.from.trim()); }
   if (p.onlyUpcoming) { where.push('start_date >= CURDATE()'); }

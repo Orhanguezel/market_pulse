@@ -100,11 +100,17 @@ export const leadMachineApi = baseApi.injectEndpoints({
       providesTags: ['LeadJobs'],
     }),
     // Fuar kataloğu (Türkiye + Dünya fuar takvimi)
-    searchFairCatalog: b.query<FairCatalogItem[], { q?: string; country?: string; upcoming?: boolean; limit?: number }>({
-      query: ({ q, country, upcoming, limit = 30 }) => ({
+    searchFairCatalog: b.query<FairCatalogItem[], { q?: string; country?: string; source?: string; upcoming?: boolean; limit?: number }>({
+      query: ({ q, country, source, upcoming, limit = 30 }) => ({
         url: '/lead-machine/fair/catalog',
         method: 'GET',
-        params: { ...(q ? { q } : {}), ...(country ? { country } : {}), ...(upcoming ? { upcoming: '1' } : {}), limit },
+        params: {
+          ...(q ? { q } : {}),
+          ...(country ? { country } : {}),
+          ...(source ? { source } : {}),
+          ...(upcoming ? { upcoming: '1' } : {}),
+          limit,
+        },
       }),
       providesTags: ['FairCatalog'],
     }),

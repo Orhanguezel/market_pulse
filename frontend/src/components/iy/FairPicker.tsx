@@ -35,6 +35,7 @@ export default function FairPicker({
 }) {
   const [q, setQ] = React.useState('');
   const [upcoming, setUpcoming] = React.useState(false);
+  const [source, setSource] = React.useState<'' | 'tr_takvim' | 'dunya_takvim'>('');
   const [open, setOpen] = React.useState(false);
   const [selected, setSelected] = React.useState<FairCatalogItem | null>(null);
   const [manualUrl, setManualUrl] = React.useState('');
@@ -46,8 +47,8 @@ export default function FairPicker({
   const fairs = React.useMemo(() => searchState.data ?? [], [searchState.data]);
 
   const runSearch = React.useCallback(
-    (term: string, onlyUpcoming: boolean) => {
-      void search({ q: term.trim() || undefined, upcoming: onlyUpcoming, limit: 40 });
+    (term: string, onlyUpcoming: boolean, src: string) => {
+      void search({ q: term.trim() || undefined, upcoming: onlyUpcoming, source: src || undefined, limit: 40 });
     },
     [search],
   );
@@ -56,17 +57,17 @@ export default function FairPicker({
   // ön-filtrelenir — aksi halde 3.400 fuar arasından ilgisiz sonuçlar geliyordu.
   React.useEffect(() => {
     if (open && !searchState.data && !searchState.isFetching) {
-      runSearch(suggestedTerms[0] ?? '', upcoming);
+      runSearch(suggestedTerms[0] ?? '', upcoming, source);
       if (suggestedTerms[0]) setQ(suggestedTerms[0]);
     }
-  }, [open, searchState.data, searchState.isFetching, runSearch, upcoming, suggestedTerms]);
+  }, [open, searchState.data, searchState.isFetching, runSearch, upcoming, source, suggestedTerms]);
 
-  // Yazdıkça ara (debounce)
+  // Yazdıkça / filtre değişince ara (debounce)
   React.useEffect(() => {
     if (!open) return;
-    const t = setTimeout(() => runSearch(q, upcoming), 350);
+    const t = setTimeout(() => runSearch(q, upcoming, source), 350);
     return () => clearTimeout(t);
-  }, [q, upcoming, open, runSearch]);
+  }, [q, upcoming, source, open, runSearch]);
 
   // Dışarı tıklayınca kapan
   React.useEffect(() => {
@@ -125,7 +126,7 @@ export default function FairPicker({
             <button
               key={term}
               type="button"
-              onClick={() => { setQ(term); setOpen(true); runSearch(term, upcoming); }}
+              onClick={() => { setQ(term); setOpen(true); runSearch(term, upcoming, source); }}
               className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
                 q === term ? 'bg-[#1e40af] text-white' : 'bg-white text-[#1e40af] ring-1 ring-[#dbeafe] hover:bg-[#eff6ff]'
               }`}
@@ -133,8 +134,35 @@ export default function FairPicker({
               {term}
             </button>
           ))}
+          {/* Terim tüm katalogda karşılık bulmayabilir (ör. "rulman" fuar adlarında geçmez) —
+              filtreyi tek tıkla kaldırabilmek gerekiyor. */}
+          <button
+            type="button"
+            onClick={() => { setQ(''); setOpen(true); runSearch('', upcoming, source); }}
+            className={`rounded-full px-2 py-0.5 text-[11px] font-semibold ${
+              q === '' ? 'bg-[#1e40af] text-white' : 'bg-white text-[#64748b] ring-1 ring-[#e2e8f0] hover:bg-white'
+            }`}
+          >
+            filtresiz
+          </button>
         </div>
       )}
+
+      {/* Katalog iki takvimden gelir; hangisine baktığın belli olsun. */}
+      <div className="mb-2 flex items-center gap-1">
+        {([['', 'Tümü'], ['tr_takvim', 'Türkiye'], ['dunya_takvim', 'Dünya']] as const).map(([value, label]) => (
+          <button
+            key={value || 'all'}
+            type="button"
+            onClick={() => { setSource(value); setOpen(true); }}
+            className={`rounded-md px-2.5 py-1 text-[11px] font-semibold ${
+              source === value ? 'bg-white text-[#0f172a] shadow-sm ring-1 ring-[#cbd5e1]' : 'text-[#64748b] hover:text-[#0f172a]'
+            }`}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
 
       <div ref={boxRef} className="relative">
         <div className="flex flex-wrap items-center gap-2">
@@ -144,7 +172,7 @@ export default function FairPicker({
               value={q}
               onChange={(e) => { setQ(e.target.value); setOpen(true); }}
               onFocus={() => setOpen(true)}
-              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); setOpen(true); runSearch(q, upcoming); } }}
+              onKeyDown={(e) => { if (e.key === 'Enter') { e.preventDefault(); setOpen(true); runSearch(q, upcoming, source); } }}
               placeholder="Fuar adı, sektör veya şehir ara — ya da listeden seç"
               className="h-9 w-full rounded-md border border-[#cbd5e1] bg-white pl-8 pr-8 text-[13px] outline-none focus:border-[#2563eb]"
             />

@@ -40,11 +40,16 @@ function definitionRecord(definition: Record<string, unknown>, key: string): Rec
   return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {};
 }
 
-/** Profilde fuar bilgisi (ad/URL) var mı — fuar taramasını hazır kuran profiller bunlar. */
+/**
+ * Profil fuar taraması için hazır mı: ya belirli bir fuar kayıtlı, ya da takvimi
+ * ön-filtreleyecek arama terimleri var. (Profili tek bir fuara kilitlemek zorunlu değil —
+ * fuar takvimden seçilir.)
+ */
 function hasFairBlock(icp?: { definition?: Record<string, unknown> } | null): boolean {
   if (!icp?.definition) return false;
   const fair = definitionRecord(icp.definition, 'fair');
-  return Boolean(firstText(fair.name, fair.url, fair.exhibitor_list_url));
+  return Boolean(firstText(fair.name, fair.url, fair.exhibitor_list_url))
+    || definitionItems(fair, 'search_terms').length > 0;
 }
 
 /**
