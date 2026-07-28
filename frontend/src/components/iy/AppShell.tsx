@@ -198,7 +198,7 @@ export default function AppShell({ children, locale }: { children: React.ReactNo
             {collapsed ? <PanelLeft className="h-5 w-5" /> : <PanelLeftClose className="h-5 w-5" />}
           </button>
           <Link href={`/${l}/dashboard`} className="flex items-center">
-            <Image src="/iy/logo.png" alt="İşletmeni Yönet" width={260} height={79} priority className="h-8 w-auto" />
+            <Image src="/ihracat-radari-logo.svg" alt="İhracat Radarı" width={420} height={88} priority className="h-9 w-auto" />
           </Link>
         </div>
         <div className="flex items-center gap-3">
@@ -207,7 +207,7 @@ export default function AppShell({ children, locale }: { children: React.ReactNo
             <Bell className="h-5 w-5" />
             {unread?.count ? <span className="absolute -right-1 -top-1 grid min-w-5 place-items-center rounded-full bg-rose-600 px-1 text-[10px] font-bold text-white">{unread.count > 99 ? '99+' : unread.count}</span> : null}
           </Link>
-          <IyUserMenu locale={l} layout="desktop" />
+          <IyUserMenu locale={l} layout="desktop" authEnabled />
         </div>
       </header>
 

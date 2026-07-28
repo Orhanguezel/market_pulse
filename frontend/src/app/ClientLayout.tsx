@@ -1,7 +1,6 @@
 'use client';
 
 import React, { Fragment, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
 import { usePathname, useSearchParams } from 'next/navigation';
 import type { PublicMenuItemDto } from '@/integrations/shared';
 import IyHeader from '../components/iy/IyHeader';
@@ -16,10 +15,6 @@ import PwaRegistration from '../components/system/PwaRegistration';
 import DevPaymentCardBanner from '../components/dev/DevPaymentCardBanner';
 import { resetLayoutSeo } from '../seo';
 
-const SitePopups = dynamic(() => import('../layout/banner/SitePopups'), {
-  ssr: false,
-  loading: () => null,
-});
 const SupportBotWidget = () => null;
 
 
@@ -156,7 +151,6 @@ export default function ClientLayout({
       <CookieConsentBanner />
       {deferWidgets && (
         <>
-          <SitePopups />
           <SupportBotWidget />
         </>
       )}

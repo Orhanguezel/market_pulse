@@ -1,10 +1,10 @@
-// İşletmeniyönet pazarlama yüzeyi — statik içerik verisi (birebir tasarım).
+// İhracat Radarı pazarlama yüzeyi — statik içerik verisi.
 // Kaynak: isletmeniyonet.com PHP sitesi. Renkler/metinler spec ile birebir.
 // NOT: Hizmet detay sayfaları aşamalı eklenecek; menü slug'ları /{locale}/hizmetler/{slug}'a işaret eder.
 
 export const IY_BRAND = {
-  name: 'İşletmeniYönet',
-  tagline: 'İş Geliştirme Platformu',
+  name: 'İhracat Radarı',
+  tagline: 'İhracat ve İş Geliştirme Platformu',
   description:
     'İhracat, CRM, B2B müşteri bulma, e-ticaret, pazaryeri yönetimi, eğitim ve dijital dönüşüm süreçleri için tek platform.',
   email: 'sultan@isletmeniyonet.com',

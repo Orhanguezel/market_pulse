@@ -97,12 +97,12 @@ export default function IyHome({ locale }: { locale?: string }) {
       <section className="py-16">
         <div className="mx-auto max-w-[1100px] px-5 lg:px-9">
           <div className="rounded-3xl bg-white p-8 shadow-[0_8px_40px_rgba(15,23,42,0.06)] sm:p-12">
-            <Badge>İşletmeni Yönet</Badge>
+            <Badge>İhracat Radarı</Badge>
             <h2 className="mt-4 max-w-3xl text-2xl font-bold leading-snug sm:text-[32px]">
               Şirketiniz İçin İhracat, CRM, B2B Müşteri Bulma ve Dijital Büyüme Çözümleri
             </h2>
             <p className="mt-5 text-[15px] leading-relaxed text-[#475569]">
-              İşletmeni Yönet; şirketlerin ihracata hazırlanması, yurt dışı müşteri bulması, CRM ile satış süreçlerini takip etmesi, e-ticaret ve pazaryeri kanallarını düzenlemesi, yapay zeka araçlarını kullanması ve ekiplerini kurumsal eğitimlerle geliştirmesi için hizmet sunar.
+              İhracat Radarı; şirketlerin ihracata hazırlanması, yurt dışı müşteri bulması, CRM ile satış süreçlerini takip etmesi, e-ticaret ve pazaryeri kanallarını düzenlemesi, yapay zeka araçlarını kullanması ve ekiplerini kurumsal eğitimlerle geliştirmesi için hizmet sunar.
             </p>
             <p className="mt-4 text-[15px] leading-relaxed text-[#475569]">
               Amacımız, işletmelerin dağınık ilerleyen satış, müşteri takibi, ihracat, teklif, operasyon, eğitim ve dijital dönüşüm süreçlerini daha planlı, ölçülebilir ve yönetilebilir hale getirmektir.
@@ -232,7 +232,7 @@ export default function IyHome({ locale }: { locale?: string }) {
               Satış, İhracat ve Dijital Süreçleri Birlikte Ele Alıyoruz
             </h2>
             <p className="mx-auto mt-3 max-w-3xl text-[15px] text-[#64748b]">
-              İşletmeni Yönet, hizmetleri birbirinden kopuk şekilde değil; şirketinizin satış, müşteri takibi, ihracat, CRM, e-ticaret ve eğitim süreçlerini birlikte değerlendirerek planlar.
+              İhracat Radarı, hizmetleri birbirinden kopuk şekilde değil; şirketinizin satış, müşteri takibi, ihracat, CRM, e-ticaret ve eğitim süreçlerini birlikte değerlendirerek planlar.
             </p>
           </div>
           <div className="mt-10 grid grid-cols-1 gap-4 sm:grid-cols-2">

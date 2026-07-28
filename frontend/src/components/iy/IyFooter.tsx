@@ -1,12 +1,10 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, Phone, MessageCircle } from 'lucide-react';
-import { IY_BRAND, IY_FOOTER_COLUMNS, iyLinkHref, iyTeklifHref, iyLoginHref, IY_DARK_SURFACE_STYLE } from './iy-data';
+import { IY_BRAND, IY_FOOTER_COLUMNS, iyLinkHref, iyTeklifHref, IY_DARK_SURFACE_STYLE } from './iy-data';
 
 export default function IyFooter({ locale }: { locale?: string }) {
   const l = locale || 'tr';
-  const signInUrl = iyLoginHref(l);
-
   return (
     <footer
       style={IY_DARK_SURFACE_STYLE}
@@ -19,19 +17,13 @@ export default function IyFooter({ locale }: { locale?: string }) {
             <h3 className="max-w-2xl text-xl font-bold leading-snug text-white sm:text-2xl">
               İhracat, CRM ve B2B müşteri bulma sürecinizi birlikte planlayalım
             </h3>
-            <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
+            <div className="flex shrink-0">
               <Link
                 href={iyTeklifHref(l)}
                 className="rounded-xl bg-white px-6 py-3 text-center text-sm font-semibold text-[#1e40af] hover:bg-[#eff6ff]"
               >
                 Teklif Al
               </Link>
-              <a
-                href={signInUrl}
-                className="rounded-xl border border-white/60 px-6 py-3 text-center text-sm font-semibold text-white hover:bg-white/10"
-              >
-                Giriş Yap
-              </a>
             </div>
           </div>
         </div>
@@ -41,9 +33,9 @@ export default function IyFooter({ locale }: { locale?: string }) {
           {/* Brand */}
           <div className="lg:col-span-1">
             <div className="mb-3 flex items-center gap-2.5">
-              <Image src="/iy/mark.png" alt="" width={40} height={40} className="h-9 w-9" />
+              <Image src="/ihracat-radari-mark.svg" alt="" width={44} height={44} className="h-10 w-10" />
               <span className="text-[18px] font-extrabold text-white">
-                İşletmeni<span className="text-[#60a5fa]">Yönet</span>
+                İhracat <span className="text-[#60a5fa]">Radarı</span>
               </span>
             </div>
             <p className="mb-3 text-sm font-medium text-[#60a5fa]">{IY_BRAND.tagline}</p>
@@ -101,11 +93,9 @@ export default function IyFooter({ locale }: { locale?: string }) {
 
         {/* Bottom */}
         <div className="flex flex-col items-center justify-between gap-3 border-t border-white/10 py-6 text-[13px] text-[#94a3b8] md:flex-row">
-          <p>© 2019 - 2026 İşletmeniYönet. Tüm hakları saklıdır.</p>
+          <p>© 2019 - 2026 İhracat Radarı. Tüm hakları saklıdır.</p>
           <div className="flex items-center gap-4">
             <Link href={`/${l}`} className="hover:text-white">TR</Link>
-            <span className="opacity-30">|</span>
-            <a href={signInUrl} className="hover:text-white">Giriş Yap</a>
           </div>
         </div>
       </div>

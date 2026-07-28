@@ -21,10 +21,10 @@ export default function IyHeader({ locale }: { locale?: string }) {
         {/* Logo */}
         <Link href={`/${l}`} className="flex shrink-0 items-center">
           <Image
-            src="/iy/logo.png"
-            alt="İşletmeni Yönet"
-            width={300}
-            height={91}
+            src="/ihracat-radari-logo.svg"
+            alt="İhracat Radarı"
+            width={420}
+            height={88}
             priority
             className="h-10 w-auto"
           />

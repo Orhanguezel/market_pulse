@@ -7,7 +7,7 @@ import { LayoutDashboard, User as UserIcon, LogOut, ChevronDown } from 'lucide-r
 import { useMeQuery, useLogoutMutation } from '@/integrations/rtk/public/auth.endpoints';
 import { useGetMyProfileQuery } from '@/integrations/rtk/public/profiles.endpoints';
 import { tokenStore } from '@/integrations/rtk/token';
-import { iyLoginHref, iyTeklifHref } from './iy-data';
+import { iyTeklifHref } from './iy-data';
 
 function initials(name?: string | null, email?: string | null): string {
   const src = (name || email || '?').trim();
@@ -20,15 +20,17 @@ export default function IyUserMenu({
   locale,
   layout = 'desktop',
   onNavigate,
+  authEnabled = false,
 }: {
   locale?: string;
   layout?: 'desktop' | 'mobile';
   onNavigate?: () => void;
+  authEnabled?: boolean;
 }) {
   const l = locale || 'tr';
   const router = useRouter();
   const [open, setOpen] = useState(false);
-  const { data: me, isLoading } = useMeQuery();
+  const { data: me, isLoading } = useMeQuery(undefined, { skip: !authEnabled });
   const user = me?.user;
   const { data: profile } = useGetMyProfileQuery(undefined, { skip: !user });
   const [logout] = useLogoutMutation();
@@ -46,29 +48,21 @@ export default function IyUserMenu({
     window.location.href = `/${l}`;
   }
 
-  // Giriş yapılmamış → Giriş Yap + Teklif Al
+  // Pazarlama yüzeyinde oturum sorgusu ve giriş bağlantısı gösterilmez.
   if (!user) {
-    if (isLoading) return <div className="h-10 w-24" aria-hidden />;
+    if (authEnabled && isLoading) return <div className="h-10 w-24" aria-hidden />;
     if (layout === 'mobile') {
       return (
-        <div className="flex flex-col gap-2">
-          <Link href={iyLoginHref(l)} onClick={onNavigate}
-            className="rounded-lg border border-[#111827]/15 px-4 py-2.5 text-center text-[14px] font-semibold text-[#111827]">
-            Giriş Yap
-          </Link>
+        <div>
           <Link href={iyTeklifHref(l)} onClick={onNavigate}
-            className="rounded-lg bg-[#1e40af] px-4 py-2.5 text-center text-[14px] font-semibold text-white">
+            className="block rounded-lg bg-[#1e40af] px-4 py-2.5 text-center text-[14px] font-semibold text-white">
             Teklif Al
           </Link>
         </div>
       );
     }
     return (
-      <div className="flex items-center gap-2">
-        <Link href={iyLoginHref(l)}
-          className="rounded-lg border border-[#111827]/15 px-4 py-2 text-[14px] font-semibold text-[#111827] hover:border-[#1e40af] hover:text-[#1e40af]">
-          Giriş Yap
-        </Link>
+      <div>
         <Link href={iyTeklifHref(l)}
           className="rounded-lg bg-[#1e40af] px-4 py-2 text-[14px] font-semibold text-white hover:bg-[#15317f]">
           Teklif Al
