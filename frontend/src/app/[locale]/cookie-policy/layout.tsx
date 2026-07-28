@@ -20,7 +20,11 @@ export async function generateMetadata({
 
   const pageTitle =
     readUiText(ui, 'ui_cookie_policy_meta_title') ||
-    readUiText(ui, 'ui_cookie_policy_page_title', 'Cookie Policy');
+    readUiText(
+      ui,
+      'ui_cookie_policy_page_title',
+      locale === 'tr' ? 'Çerez Politikası' : 'Cookie Policy',
+    );
   const pageDescription =
     readUiText(ui, 'ui_cookie_policy_meta_description') ||
     readUiText(ui, 'ui_cookie_policy_page_description', '');
@@ -40,4 +44,3 @@ export async function generateMetadata({
 export default function CookiePolicyLayout({ children }: { children: React.ReactNode }) {
   return children;
 }
-

@@ -1,5 +1,5 @@
 -- =============================================================
--- 034 — IsletmeniYonet menu_items seed
+-- 034 — İhracat Radarı menu_items seed
 -- IY pazarlama yuzeyi DB'ye baglanirken header/footer icin
 -- idempotent baslangic menusu. Sabit UUID'ler sayesinde live seed
 -- tekrar calistirilabilir.
@@ -63,7 +63,7 @@ INSERT INTO site_settings (id, `key`, locale, value) VALUES
     '03420000-0000-4000-8000-000000000001',
     'homepage_hero',
     'tr',
-    '{"eyebrow":"İşletmeniYönet","title":"Firmanız için ihtiyaç duyduğunuz tüm çözümler tek platformda","description":"İhracat, CRM, B2B müşteri bulma, e-ticaret, pazaryeri yönetimi, eğitim ve dijital dönüşüm süreçleri için uygulanabilir iş geliştirme sistemi.","primaryCta":{"label":"Ücretsiz hesap oluştur","href":"https://isletmeniyonet.com/salecrm/sign-up.php"},"secondaryCta":{"label":"Teklif al","href":"/tr/teklif-al"},"image":"/iy/homeBg.png"}'
+    '{"eyebrow":"İhracat Radarı","title":"Firmanız için ihtiyaç duyduğunuz tüm çözümler tek platformda","description":"İhracat, CRM, B2B müşteri bulma, e-ticaret, pazaryeri yönetimi, eğitim ve dijital dönüşüm süreçleri için uygulanabilir iş geliştirme sistemi.","primaryCta":{"label":"Teklif al","href":"/tr/teklif-al"},"secondaryCta":{"label":"Hizmetleri incele","href":"/tr#iy-hizmetler"},"image":"/iy/homeBg.png"}'
   ),
   (
     '03420000-0000-4000-8000-000000000002',

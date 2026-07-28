@@ -15,8 +15,8 @@ export default function CookiePolicyPage() {
   const bannerTitle = useMemo(() => {
     const key = 'ui_cookie_policy_page_title';
     const v = safeStr(ui(key, ''));
-    return isValidUiText(v, key) ? v : 'Cookie Policy';
-  }, [ui]);
+    return isValidUiText(v, key) ? v : locale === 'tr' ? 'Çerez Politikası' : 'Cookie Policy';
+  }, [locale, ui]);
 
   return (
     <>

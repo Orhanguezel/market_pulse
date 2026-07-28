@@ -72,11 +72,11 @@
           "heading": "Sıkça Sorulan Sorular",
           "items": [
             {
-              "q": "İşletmeniYönet nedir ve kimler için uygundur?",
-              "a": "İşletmeniYönet, ihracat yapan firmalar için geliştirilmiş bir işletme yönetim ve CRM platformudur. Müşteri yönetimi, teklif ve sipariş takibi, WhatsApp entegrasyonu, ihracat verileri ve toplu e-posta gönderimi gibi araçları tek panelde sunar. Özellikle dış ticaret firmaları, üreticiler, toptancılar ve B2B satış yapan işletmeler için uygundur."
+              "q": "İhracat Radarı nedir ve kimler için uygundur?",
+              "a": "İhracat Radarı, ihracat yapan firmalar için geliştirilmiş bir işletme yönetim ve CRM platformudur. Müşteri yönetimi, teklif ve sipariş takibi, WhatsApp entegrasyonu, ihracat verileri ve toplu e-posta gönderimi gibi araçları tek panelde sunar. Özellikle dış ticaret firmaları, üreticiler, toptancılar ve B2B satış yapan işletmeler için uygundur."
             },
             {
-              "q": "İşletmeniYönet hangi modülleri içerir?",
+              "q": "İhracat Radarı hangi modülleri içerir?",
               "a": "Platform; müşteri yönetimi (CRM), teklif ve sipariş yönetimi, envanter yönetimi, hatırlatıcı sistemi, toplu e-posta gönderimi, WhatsApp yazılımı, WhatsApp AI araçları, Google Maps veri çekme aracı ve ihracat verileri gibi birçok modül içerir. Bu modüller entegre çalışarak satış ve operasyon süreçlerini dijitalleştirir."
             },
             {
@@ -85,14 +85,14 @@
             },
             {
               "q": "İhracat yapan firmalara nasıl katkı sağlar?",
-              "a": "İşletmeniYönet, ihracat yapan firmaların potansiyel müşteri bulmasını, teklif süreçlerini yönetmesini ve sipariş takibini düzenli şekilde yapmasını sağlar. Dünyadan gelen talepler ve ihracat verileri gibi araçlar sayesinde yeni pazar fırsatları analiz edilebilir. Bu da satış hacmini artırmaya yardımcı olur."
+              "a": "İhracat Radarı, ihracat yapan firmaların potansiyel müşteri bulmasını, teklif süreçlerini yönetmesini ve sipariş takibini düzenli şekilde yapmasını sağlar. Dünyadan gelen talepler ve ihracat verileri gibi araçlar sayesinde yeni pazar fırsatları analiz edilebilir. Bu da satış hacmini artırmaya yardımcı olur."
             },
             {
               "q": "Verilerim güvende mi?",
               "a": "Platformda yer alan tüm müşteri ve işletme verileri güvenli sunucularda saklanır. Yetkilendirme sistemi sayesinde kullanıcı bazlı erişim kontrolü sağlanır. Böylece firma içi veri güvenliği korunur ve dış erişimlere karşı önlem alınır."
             },
             {
-              "q": "İşletmeniYönet’i kullanmak için teknik bilgi gerekir mi?",
+              "q": "İhracat Radarı’nı kullanmak için teknik bilgi gerekir mi?",
               "a": "Hayır. Platform kullanıcı dostu arayüze sahiptir ve teknik bilgi gerektirmez. Satış ekipleri, ihracat departmanları ve işletme sahipleri kolayca kullanabilir. Kurulum ve kullanım süreci hızlıdır ve işletmeler kısa sürede aktif olarak sistemi kullanmaya başlayabilir."
             }
           ]

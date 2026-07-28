@@ -1,7 +1,7 @@
 import type { DesignTokens } from './types';
 import { getDefaultTokenBranding } from '@/lib/site-config';
 
-// İşletmeniYönet mavi paleti — API erişilemezse bu palet (033 seed ile aynı).
+// İhracat Radarı mavi paleti — API erişilemezse bu palet (033 seed ile aynı).
 export const DEFAULT_TOKENS: DesignTokens = {
   version: '2',
   colors: {

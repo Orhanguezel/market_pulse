@@ -11,6 +11,7 @@ const Banner: React.FC<Props> = ({ title }) => {
   const locale = useResolvedLocale();
   const { ui } = useUiSection('ui_banner', locale);
   const homeHref = localizePath(locale, '/');
+  const homeLabel = locale === 'tr' ? 'Ana Sayfa' : ui('ui_breadcrumb_home', 'Home');
 
   return (
     <section
@@ -36,7 +37,7 @@ const Banner: React.FC<Props> = ({ title }) => {
               href={homeHref}
               className="text-muted-foreground hover:text-brand-primary transition-colors no-underline"
             >
-              {ui('ui_breadcrumb_home', 'Home')}
+              {homeLabel}
             </Link>
             <span className="text-muted-foreground/50">/</span>
             <span className="text-brand-primary">{title}</span>

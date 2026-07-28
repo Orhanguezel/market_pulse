@@ -69,6 +69,7 @@ export default function CookieSettingsModal({
   ariaClose,
 }: Props) {
   const locale = useLocaleShort();
+  const isTr = locale === 'tr';
   const { ui } = useUiSection('ui_cookie', locale as any);
 
   const titleId = useId();
@@ -93,27 +94,33 @@ export default function CookieSettingsModal({
 
   const nextState: ConsentState = useMemo(() => ({ necessary: true, analytics }), [analytics]);
 
-  const uiTitle = ui('cc_title', 'Cookie Settings');
+  const uiTitle = ui('cc_title', isTr ? 'Çerez Ayarları' : 'Cookie Settings');
   const uiDesc = ui(
     'cc_description',
-    'You can choose which cookie categories you allow. Necessary cookies are always enabled.',
+    isTr
+      ? 'İzin verdiğiniz çerez kategorilerini seçebilirsiniz. Zorunlu çerezler her zaman etkindir.'
+      : 'You can choose which cookie categories you allow. Necessary cookies are always enabled.',
   );
 
-  const uiLabelNecessary = ui('cc_label_necessary', 'Necessary');
+  const uiLabelNecessary = ui('cc_label_necessary', isTr ? 'Zorunlu' : 'Necessary');
   const uiDescNecessary = ui(
     'cc_desc_necessary',
-    'Required for core functions (session, security, language preference, etc.).',
+    isTr
+      ? 'Oturum, güvenlik ve dil tercihi gibi temel işlevler için gereklidir.'
+      : 'Required for core functions (session, security, language preference, etc.).',
   );
 
-  const uiLabelAnalytics = ui('cc_label_analytics', 'Analytics');
+  const uiLabelAnalytics = ui('cc_label_analytics', isTr ? 'Analitik' : 'Analytics');
   const uiDescAnalytics = ui(
     'cc_desc_analytics',
-    'Helps us understand traffic and performance (e.g., page views).',
+    isTr
+      ? 'Sayfa görüntülemeleri gibi trafik ve performans verilerini anlamamıza yardımcı olur.'
+      : 'Helps us understand traffic and performance (e.g., page views).',
   );
 
-  const uiBtnSave = ui('cc_btn_save', 'Save');
-  const uiBtnCancel = ui('cc_btn_cancel', 'Cancel');
-  const uiAriaClose = ui('cc_aria_close', 'Close');
+  const uiBtnSave = ui('cc_btn_save', isTr ? 'Tercihleri Kaydet' : 'Save');
+  const uiBtnCancel = ui('cc_btn_cancel', isTr ? 'İptal' : 'Cancel');
+  const uiAriaClose = ui('cc_aria_close', isTr ? 'Kapat' : 'Close');
 
   const finalTitle = pickText(title, uiTitle, 'Cookie Settings');
   const finalDesc = pickText(description, uiDesc, '');
@@ -173,7 +180,7 @@ export default function CookieSettingsModal({
               <p className="mt-1 text-sm text-text-secondary leading-relaxed">{finalDescNecessary}</p>
             </div>
             <span className="shrink-0 inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold bg-brand-primary/10 text-text-primary border border-brand-primary/15">
-              {ui('cc_pill_on', 'On')}
+              {ui('cc_pill_on', isTr ? 'Açık' : 'On')}
             </span>
           </div>
 
