@@ -15,13 +15,16 @@ const CookiePolicyPageContent: React.FC = () => {
   const { ui } = useUiSection('ui_cookie_policy', locale as any);
   const isTr = locale === 'tr';
 
-  const { data, isLoading, isError } = useListCustomPagesPublicQuery({
-    module_key: 'cookies',
-    locale,
-    limit: 10,
-    sort: 'created_at',
-    orderDir: 'asc',
-  });
+  const { data, isLoading, isError } = useListCustomPagesPublicQuery(
+    {
+      module_key: 'cookies',
+      locale,
+      limit: 10,
+      sort: 'created_at',
+      orderDir: 'asc',
+    },
+    { skip: isTr },
+  );
 
   const page = useMemo(() => pickFirstPublished((data as any)?.items), [data]);
 
