@@ -7,7 +7,7 @@ import { LayoutDashboard, User as UserIcon, LogOut, ChevronDown } from 'lucide-r
 import { useMeQuery, useLogoutMutation } from '@/integrations/rtk/public/auth.endpoints';
 import { useGetMyProfileQuery } from '@/integrations/rtk/public/profiles.endpoints';
 import { tokenStore } from '@/integrations/rtk/token';
-import { iyTeklifHref } from './iy-data';
+import { iyLoginHref, iyTeklifHref } from './iy-data';
 
 function initials(name?: string | null, email?: string | null): string {
   const src = (name || email || '?').trim();
@@ -48,12 +48,16 @@ export default function IyUserMenu({
     window.location.href = `/${l}`;
   }
 
-  // Pazarlama yüzeyinde oturum sorgusu ve giriş bağlantısı gösterilmez.
+  // Pazarlama yüzeyinde oturum sorgusu yapılmaz; giriş yalnızca login sayfasına bağlantıdır.
   if (!user) {
     if (authEnabled && isLoading) return <div className="h-10 w-24" aria-hidden />;
     if (layout === 'mobile') {
       return (
-        <div>
+        <div className="flex flex-col gap-2">
+          <Link href={iyLoginHref(l)} onClick={onNavigate}
+            className="rounded-lg border border-[#111827]/15 px-4 py-2.5 text-center text-[14px] font-semibold text-[#111827]">
+            Giriş Yap
+          </Link>
           <Link href={iyTeklifHref(l)} onClick={onNavigate}
             className="block rounded-lg bg-[#1e40af] px-4 py-2.5 text-center text-[14px] font-semibold text-white">
             Teklif Al
@@ -62,7 +66,11 @@ export default function IyUserMenu({
       );
     }
     return (
-      <div>
+      <div className="flex items-center gap-2">
+        <Link href={iyLoginHref(l)}
+          className="rounded-lg border border-[#111827]/15 px-4 py-2 text-[14px] font-semibold text-[#111827] hover:border-[#1e40af] hover:text-[#1e40af]">
+          Giriş Yap
+        </Link>
         <Link href={iyTeklifHref(l)}
           className="rounded-lg bg-[#1e40af] px-4 py-2 text-[14px] font-semibold text-white hover:bg-[#15317f]">
           Teklif Al

@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { Mail, Phone, MessageCircle } from 'lucide-react';
-import { IY_BRAND, IY_FOOTER_COLUMNS, iyLinkHref, iyTeklifHref, IY_DARK_SURFACE_STYLE } from './iy-data';
+import { IY_BRAND, IY_FOOTER_COLUMNS, iyLinkHref, iyTeklifHref, iyLoginHref, IY_DARK_SURFACE_STYLE } from './iy-data';
 
 export default function IyFooter({ locale }: { locale?: string }) {
   const l = locale || 'tr';
+  const signInUrl = iyLoginHref(l);
   return (
     <footer
       style={IY_DARK_SURFACE_STYLE}
@@ -17,12 +18,18 @@ export default function IyFooter({ locale }: { locale?: string }) {
             <h3 className="max-w-2xl text-xl font-bold leading-snug text-white sm:text-2xl">
               İhracat, CRM ve B2B müşteri bulma sürecinizi birlikte planlayalım
             </h3>
-            <div className="flex shrink-0">
+            <div className="flex shrink-0 flex-col gap-3 sm:flex-row">
               <Link
                 href={iyTeklifHref(l)}
                 className="rounded-xl bg-white px-6 py-3 text-center text-sm font-semibold text-[#1e40af] hover:bg-[#eff6ff]"
               >
                 Teklif Al
+              </Link>
+              <Link
+                href={signInUrl}
+                className="rounded-xl border border-white/60 px-6 py-3 text-center text-sm font-semibold text-white hover:bg-white/10"
+              >
+                Giriş Yap
               </Link>
             </div>
           </div>
@@ -96,6 +103,8 @@ export default function IyFooter({ locale }: { locale?: string }) {
           <p>© 2019 - 2026 İhracat Radarı. Tüm hakları saklıdır.</p>
           <div className="flex items-center gap-4">
             <Link href={`/${l}`} className="hover:text-white">TR</Link>
+            <span className="opacity-30">|</span>
+            <Link href={signInUrl} className="hover:text-white">Giriş Yap</Link>
           </div>
         </div>
       </div>
