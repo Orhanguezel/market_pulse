@@ -31,7 +31,7 @@ Bu rehber `scraper-service`'in `places/google-maps` endpoint'ini diger projelerd
 
 ```bash
 # VPS'te scraper-service container'ina exec ol
-ssh orhan@72.61.93.212
+ssh orhan@72.61.23.36
 docker exec -it scraper-service python -c "
 import secrets, hashlib
 project = 'kamanilan'  # proje adi

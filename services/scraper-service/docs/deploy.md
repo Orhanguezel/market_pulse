@@ -2,7 +2,7 @@
 
 ## Manual Prerequisites
 
-1. DNS: `scraper.guezelwebdesign.com` A record points to `72.61.93.212`.
+1. DNS: `scraper.guezelwebdesign.com` A record points to `72.61.23.36`.
 2. Docker and Docker Compose v2 are installed on the VPS.
 3. Initial Let's Encrypt certificate exists at `/etc/letsencrypt/live/scraper.guezelwebdesign.com/` or is mounted into the `letsencrypt-certs` volume.
 
