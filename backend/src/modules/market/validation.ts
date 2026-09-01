@@ -82,7 +82,7 @@ export const signalReviewSchema = z.object({
   id: z.string(),
 });
 
-export const paspasExternalListQuerySchema = z.object({
+export const erpExternalListQuerySchema = z.object({
   q: z.string().trim().optional(),
   limit: z.coerce.number().int().min(1).max(200).default(50),
 });
@@ -115,7 +115,7 @@ export const bulkImportSchema = z.object({
   on_conflict: z.enum(['skip', 'update']).default('skip'),
 });
 
-export const paspasSyncSchema = z.object({
+export const erpSyncSchema = z.object({
   mode: z.enum(['all', 'customers', 'dealers']).default('all'),
 });
 

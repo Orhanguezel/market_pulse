@@ -1,444 +1,346 @@
 'use client';
 
-import React from 'react';
+import { useState } from 'react';
 import Link from 'next/link';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import {
-  BarChart3,
-  ChevronRight,
-  CircleAlert,
-  Clock,
-  Download,
-  FileText,
-  Info,
-  Loader2,
-  LogOut,
-  Printer,
-  RefreshCw,
-  Search,
-  Zap,
+  Target, TrendingUp, ShoppingCart, Building2, FileText, CalendarCheck,
+  CalendarPlus, Plus, ArrowRight, Clock3, Activity, CircleDollarSign, Users,
 } from 'lucide-react';
-import { useAuthStore } from '@/features/auth/auth.store';
-import { localizePath } from '@/integrations/shared';
 import {
-  useGetMyQuotaQuery,
-  useStartPublicScanMutation,
-  useGetPublicScanQuery,
-  useGetAmazonHistoryQuery,
-  type RiskReport,
-  type ScanHistoryItem,
-} from '@/integrations/rtk/hooks';
-import { PublicRiskCard } from '@/components/amazon/public-risk-card';
-import PublicProfitCalculator from '@/components/amazon/public-profit-calculator';
-import PublicEvidenceTable from '@/components/amazon/public-evidence-table';
-import PublicMultiKeyword from '@/components/amazon/public-multi-keyword';
-import PublicSavedSearches from '@/components/amazon/public-saved-searches';
-import KeepaBudgetWidget from '@/components/amazon/keepa-budget-widget';
-import { cn } from '@/lib/utils';
+  AreaChart, Area, PieChart, Pie, Cell, ResponsiveContainer, XAxis, YAxis,
+  Tooltip, CartesianGrid,
+} from 'recharts';
+import { z } from 'zod';
+import { CrmEntityDialog } from '@/components/iy/CrmEntityDialog';
+import { useMeQuery } from '@/integrations/rtk/public/auth.endpoints';
+import { useGetMyProfileQuery } from '@/integrations/rtk/public/profiles.endpoints';
+import {
+  useCreateCrmActivityMutation,
+  useCreateCrmReminderMutation,
+  useGetCrmDashboardSummaryQuery,
+} from '@/integrations/rtk/public/crm.endpoints';
+import { useGetMarketStatsQuery } from '@/integrations/rtk/public/market.endpoints';
+import { useGetLeadApprovedStatsQuery, useGetLeadRejectionStatsQuery } from '@/integrations/rtk/public/lead-machine.endpoints';
 
-// ─── Constants ───────────────────────────────────────────────────────────────
-
-const MARKETPLACES = [
-  { code: 'com', label: 'Amazon.com (US)' },
-  { code: 'de', label: 'Amazon.de (DE)' },
-  { code: 'co.uk', label: 'Amazon.co.uk (UK)' },
-  { code: 'fr', label: 'Amazon.fr (FR)' },
-  { code: 'it', label: 'Amazon.it (IT)' },
-  { code: 'es', label: 'Amazon.es (ES)' },
-  { code: 'nl', label: 'Amazon.nl (NL)' },
-  { code: 'pl', label: 'Amazon.pl (PL)' },
-];
-
-const PLAN_LABELS: Record<string, string> = {
-  free: 'Ücretsiz',
-  starter: 'Starter',
-  pro: 'Pro',
-  agency: 'Ajans',
+const EMPTY_SUMMARY = {
+  counts: { accounts: 0, contacts: 0, leads: 0, deals_open: 0, deals_won: 0, activities_pending: 0, quotes: 0, orders: 0 },
+  pending: { quotes: 0, open_deals: 0 },
+  sales_summary: [],
+  status_breakdown: [],
+  team_breakdown: [],
+  totals: { records: 0 },
+  upcoming_activities: [],
+  recent_quotes: [],
+  recent_deals: [],
+  recent_accounts: [],
 };
 
-// ─── JobPoller ────────────────────────────────────────────────────────────────
+const PIE_COLORS = ['#1e40af', '#2563eb', '#60a5fa', '#93c5fd', '#bfdbfe'];
 
-function JobPoller({
-  jobId,
-  onDone,
-}: {
-  jobId: string;
-  onDone: (report: RiskReport, keyword: string, marketplace: string, completedJobId: string) => void;
-}) {
-  const { data, isError } = useGetPublicScanQuery(jobId, {
-    pollingInterval: 3000,
-  });
+const activitySchema = z.object({
+  subject: z.string().min(2, 'Konu gerekli'),
+  ref_type: z.enum(['account', 'contact', 'deal']),
+  ref_id: z.string().min(1, 'İlişkili kayıt ID gerekli'),
+  type: z.enum(['call', 'email', 'meeting', 'task', 'note']).optional(),
+  due_at: z.string().optional(),
+  body: z.string().optional(),
+});
 
-  React.useEffect(() => {
-    if (data?.status === 'done' && data.risk_report) {
-      const p = data.params ?? {};
-      onDone(data.risk_report, p.keyword ?? '', p.marketplace ?? 'com', jobId);
-    }
-  }, [data, jobId, onDone]);
+const reminderSchema = z.object({
+  title: z.string().min(2, 'Başlık gerekli'),
+  remind_at: z.string().min(1, 'Hatırlatma zamanı gerekli'),
+  channel: z.enum(['in_app', 'email', 'sms', 'whatsapp']).optional(),
+});
 
-  if (isError) {
-    return (
-      <div className="rounded-2xl border border-red-500/20 bg-red-500/5 px-5 py-4 text-sm text-red-500">
-        Analiz alınamadı. Lütfen tekrar deneyin.
-      </div>
-    );
+function numberFrom(value: unknown) {
+  const parsed = typeof value === 'number' ? value : Number(value ?? 0);
+  return Number.isFinite(parsed) ? parsed : 0;
+}
+
+function formatDate(value?: string | null) {
+  if (!value) return 'Tarih yok';
+  const date = new Date(value);
+  return Number.isNaN(date.getTime()) ? 'Tarih yok' : date.toLocaleString('tr-TR', { dateStyle: 'short', timeStyle: 'short' });
+}
+
+function formatMoney(value?: number | string | null, currency?: string | null) {
+  const amount = Number(value ?? 0);
+  if (!Number.isFinite(amount)) return '-';
+  try {
+    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: currency || 'USD', maximumFractionDigits: 0 }).format(amount);
+  } catch {
+    return `${amount.toLocaleString('tr-TR')} ${currency || ''}`.trim();
   }
+}
 
-  const statusLabel =
-    data?.status === 'running' ? 'Analiz ediliyor…'
-    : data?.status === 'failed' ? 'Analiz başarısız'
-    : 'Başlatılıyor…';
+function EmptyRow({ text }: { text: string }) {
+  return <div className="px-4 py-8 text-center text-[13px] text-[#94a3b8]">{text}</div>;
+}
 
+function StatCard({ icon: Icon, label, value, href, accent }: {
+  icon: React.ComponentType<{ className?: string }>; label: string; value: number; href: string; accent?: boolean;
+}) {
   return (
-    <div className="flex items-center gap-3 rounded-2xl border border-(--gm-border-soft) bg-(--gm-surface)/10 px-5 py-4">
-      {data?.status === 'failed'
-        ? <CircleAlert className="size-4 shrink-0 text-red-500" />
-        : <Loader2 className="size-4 shrink-0 animate-spin text-(--gm-primary)" />}
-      <div>
-        <p className="text-sm font-medium text-(--gm-text)">{statusLabel}</p>
-        <p className="text-[11px] text-(--gm-muted)">Scraping + puanlama yapılıyor, ~30-60 saniye sürebilir</p>
-      </div>
+    <div className="rounded-2xl border border-[#e2e8f0] bg-white p-6">
+      <span className={`mb-4 grid h-12 w-12 place-items-center rounded-xl ${accent ? 'bg-[#1e40af]' : 'bg-[#eff6ff]'}`}>
+        <Icon className={`h-6 w-6 ${accent ? 'text-white' : 'text-[#1e40af]'}`} />
+      </span>
+      <p className="text-[13px] text-[#64748b]">{label}</p>
+      <p className="mt-1 text-3xl font-bold text-[#0f172a]">{value}</p>
+      <Link href={href} className="mt-3 inline-flex items-center gap-1 text-[12.5px] font-semibold text-[#1e40af] hover:underline">
+        Detaylar <ArrowRight className="h-3.5 w-3.5" />
+      </Link>
     </div>
   );
 }
-
-// ─── History ──────────────────────────────────────────────────────────────────
-
-function HistoryItem({ item, onClick }: { item: ScanHistoryItem; onClick: () => void }) {
-  const done = item.status === 'done';
-  const decision = item.decision ?? '';
-  return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="flex w-full items-center justify-between gap-3 rounded-2xl border border-(--gm-border-soft) bg-(--gm-surface)/10 px-4 py-3 text-left hover:bg-(--gm-surface)/20 transition-colors"
-    >
-      <div className="min-w-0 flex-1">
-        <p className="truncate text-sm font-medium text-(--gm-text)">{item.keyword}</p>
-        <p className="text-[11px] text-(--gm-muted)">
-          {item.marketplace ? `amazon.${item.marketplace}` : '—'}
-          {' · '}
-          {new Date(item.created_at).toLocaleDateString('tr-TR')}
-        </p>
-      </div>
-      {done && decision ? (
-        <span className={cn(
-          'text-[10px] font-bold uppercase tracking-widest shrink-0',
-          decision === 'GUVENLI' ? 'text-emerald-500'
-            : decision === 'GIRME' ? 'text-red-500'
-            : 'text-yellow-500'
-        )}>
-          {decision === 'GUVENLI' ? 'Güvenli' : decision === 'GIRME' ? 'Girme' : decision === 'DIKKATLI_OL' ? 'Dikkat' : decision}
-        </span>
-      ) : (
-        <span className="text-[10px] text-(--gm-muted) uppercase tracking-widest shrink-0">{item.status}</span>
-      )}
-      <ChevronRight className="size-4 shrink-0 text-(--gm-muted)" />
-    </button>
-  );
-}
-
-// ─── CSV export ──────────────────────────────────────────────────────────────
-
-function exportCsv(report: RiskReport, keyword: string, marketplace: string) {
-  const dims = ['category_risk', 'sku_chaos', 'price_war_risk', 'brand_reliability', 'operational_risk'] as const;
-  const header = [
-    'keyword', 'marketplace', 'composite_score', 'decision',
-    ...dims.flatMap((d) => [`${d}_score`, `${d}_confidence`]),
-    'data_points', 'summary',
-  ].join(',');
-
-  const row = [
-    `"${keyword}"`,
-    marketplace,
-    report.composite_score ?? '',
-    report.decision ?? '',
-    ...dims.flatMap((d) => {
-      const s = report.dimensions?.[d];
-      return [s?.score ?? '', `"${s?.confidence ?? ''}"`];
-    }),
-    report.data_points ?? '',
-    `"${(report.summary ?? '').replace(/"/g, '""')}"`,
-  ].join(',');
-
-  const bom = '﻿';
-  const blob = new Blob([bom + header + '\n' + row], { type: 'text/csv;charset=utf-8;' });
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `marketpulse-${keyword.replace(/\s+/g, '-')}-${marketplace}.csv`;
-  a.click();
-  URL.revokeObjectURL(url);
-}
-
-// ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function DashboardPage() {
   const { locale } = useParams<{ locale: string }>();
-  const router = useRouter();
-  const { user, isLoading: authLoading, isReady } = useAuthStore();
+  const l = locale || 'tr';
+  const { data: me } = useMeQuery();
+  const { data: profile } = useGetMyProfileQuery();
+  const { data: summary, isError } = useGetCrmDashboardSummaryQuery();
+  const { data: marketStats } = useGetMarketStatsQuery();
+  const { data: approvedStats } = useGetLeadApprovedStatsQuery();
+  const { data: rejectionStats } = useGetLeadRejectionStatsQuery();
+  const [activityOpen, setActivityOpen] = useState(false);
+  const [reminderOpen, setReminderOpen] = useState(false);
+  const [createActivity, activityState] = useCreateCrmActivityMutation();
+  const [createReminder, reminderState] = useCreateCrmReminderMutation();
+  const d = summary ?? EMPTY_SUMMARY;
+  const team = d.team_breakdown ?? [];
 
-  const [keyword, setKeyword] = React.useState('');
-  const [marketplace, setMarketplace] = React.useState('com');
-  const [activeJobId, setActiveJobId] = React.useState<string | null>(null);
-  const [result, setResult] = React.useState<{ report: RiskReport; keyword: string; marketplace: string; jobId: string } | null>(null);
+  const name = profile?.full_name || me?.user?.full_name || me?.user?.email?.split('@')[0] || '';
+  const avatar = profile?.avatar_url;
+  const today = new Date().toLocaleDateString('tr-TR', { day: 'numeric', month: 'long', year: 'numeric', weekday: 'long' });
 
-  const { data: quota, refetch: refetchQuota } = useGetMyQuotaQuery(undefined, { skip: !user });
-  const { data: history, refetch: refetchHistory } = useGetAmazonHistoryQuery(undefined, { skip: !user });
-  const [startScan, { isLoading: isScanning }] = useStartPublicScanMutation();
-
-  React.useEffect(() => {
-    if (isReady && !user) {
-      router.replace(localizePath(locale, '/login'));
-    }
-  }, [user, isReady, locale, router]);
-
-  const handleScan = async () => {
-    if (!keyword.trim() || isScanning) return;
-    setResult(null);
-    setActiveJobId(null);
-    try {
-      const job = await startScan({ keyword: keyword.trim(), marketplace }).unwrap();
-      setActiveJobId(job.id);
-    } catch (err: unknown) {
-      const msg = (err as { data?: { error?: { message?: string } } })?.data?.error?.message;
-      if (msg === 'daily_limit_reached') {
-        alert('Günlük analiz limitinize ulaştınız. Planınızı yükseltin.');
-      }
-    }
-  };
-
-  const handleDone = React.useCallback((report: RiskReport, kw: string, mp: string, completedJobId: string) => {
-    setActiveJobId(null);
-    setResult({ report, keyword: kw, marketplace: mp, jobId: completedJobId });
-    refetchQuota();
-    refetchHistory();
-  }, [refetchQuota, refetchHistory]);
-
-  const handleHistoryClick = (item: ScanHistoryItem) => {
-    setKeyword(item.keyword);
-    setMarketplace(item.marketplace ?? 'com');
-    if (item.status === 'done' && item.decision) {
-      // Trigger a fresh lookup via refetch or just re-scan
-    }
-  };
-
-  if (authLoading || !isReady) {
-    return (
-      <div className="flex min-h-screen items-center justify-center">
-        <Loader2 className="size-8 animate-spin text-(--gm-primary)" />
-      </div>
-    );
-  }
-  if (!user) return null;
-
-  const canScan = !isScanning && !activeJobId && keyword.trim().length > 0
-    && (quota?.unlimited || (quota?.remaining ?? 1) > 0);
+  const soon = `/${l}/dashboard`;
+  const cards = [
+    { icon: Target, label: 'Potansiyel Müşteriler', value: d.counts.leads, href: `/${l}/firma-bulucu/adaylar?status=approved` },
+    { icon: TrendingUp, label: 'Satış Fırsatları', value: d.counts.deals_open, href: `/${l}/satis-firsatlari` },
+    { icon: ShoppingCart, label: 'Siparişler', value: d.counts.orders ?? d.counts.deals_won, href: `/${l}/siparisler`, accent: true },
+    { icon: Building2, label: 'Müşteriler', value: d.counts.accounts, href: `/${l}/musteriler` },
+    { icon: FileText, label: 'Teklifler', value: d.counts.quotes, href: `/${l}/teklifler` },
+    { icon: CalendarCheck, label: 'Aktiviteler', value: d.counts.activities_pending, href: `/${l}/aktiviteler`, accent: true },
+  ];
+  const leadMachineStats = [
+    { label: 'Hedef Firma', value: numberFrom((marketStats as Record<string, unknown> | undefined)?.totalTargets), href: `/${l}/isletme-yonetimi` },
+    { label: 'Market Lead', value: numberFrom((marketStats as Record<string, unknown> | undefined)?.totalLeads), href: `/${l}/firma-bulucu/adaylar?status=approved` },
+    { label: 'Bekleyen Sinyal', value: numberFrom((marketStats as Record<string, unknown> | undefined)?.pendingSignals), href: `/${l}/raporlar` },
+    { label: 'Onaylı Profil', value: numberFrom((approvedStats as Record<string, unknown> | undefined)?.total ?? (approvedStats as Record<string, unknown> | undefined)?.approved), href: `/${l}/firma-bulucu/adaylar?status=approved` },
+    { label: 'Red Sinyali', value: numberFrom((rejectionStats as Record<string, unknown> | undefined)?.total ?? (rejectionStats as Record<string, unknown> | undefined)?.rejected), href: `/${l}/firma-bulucu/adaylar?status=rejected` },
+  ];
 
   return (
-    <div className="min-h-screen bg-(--gm-bg)">
-      {/* Header */}
-      <header className="sticky top-0 z-10 border-b border-(--gm-border-soft) bg-(--gm-bg)/90 backdrop-blur-xl">
-        <div className="mx-auto flex max-w-4xl items-center justify-between px-4 py-4">
-          <div className="flex items-center gap-3">
-            <BarChart3 className="size-5 text-(--gm-primary)" />
-            <span className="font-display font-bold text-(--gm-text)">MarketPulse</span>
-          </div>
-          <div className="flex items-center gap-3">
-            {quota && (
-              <span className="text-[11px] font-medium text-(--gm-muted)">
-                {quota.unlimited ? '∞' : `${quota.used_today} / ${quota.daily_limit}`} analiz
-                <span className="ml-1.5 rounded-full border border-(--gm-border-soft) px-2 py-0.5 text-[10px] uppercase tracking-widest">
-                  {PLAN_LABELS[quota.plan] ?? quota.plan}
-                </span>
-              </span>
-            )}
-            <Link
-              href={localizePath(locale, '/pricing')}
-              className="hidden text-[11px] font-bold uppercase tracking-widest text-(--gm-primary) hover:opacity-80 sm:block"
-            >
-              <Zap className="mr-1 inline size-3" />
-              Yükselt
-            </Link>
-            <button
-              type="button"
-              onClick={() => router.push(localizePath(locale, '/'))}
-              className="text-(--gm-muted) hover:text-(--gm-text) transition-colors"
-              title="Çıkış"
-            >
-              <LogOut className="size-4" />
-            </button>
-          </div>
-        </div>
-      </header>
-
-      <main className="mx-auto max-w-4xl px-4 py-10 space-y-8">
-        {/* Keepa budget widget (only if BYOK key) */}
-        <KeepaBudgetWidget locale={locale} />
-
-        {/* Scan form */}
-        <div className="space-y-4">
-          <div>
-            <p className="text-[10px] font-bold uppercase tracking-[0.4em] text-(--gm-primary)">Amazon Kategori Analizi</p>
-            <h1 className="font-display text-2xl font-bold text-(--gm-text) mt-1">
-              Keyword gir, riski ölç
-            </h1>
-          </div>
-
-          <div className="flex flex-col gap-3 sm:flex-row">
-            <input
-              type="text"
-              value={keyword}
-              onChange={(e) => setKeyword(e.target.value)}
-              onKeyDown={(e) => { if (e.key === 'Enter') handleScan(); }}
-              placeholder="floor mats, phone holder, yoga mat…"
-              className="h-12 flex-1 rounded-2xl border border-(--gm-border-soft) bg-(--gm-surface)/20 px-4 text-sm text-(--gm-text) placeholder:text-(--gm-muted)/60 focus:border-(--gm-primary) focus:outline-none"
-            />
-            <select
-              value={marketplace}
-              onChange={(e) => setMarketplace(e.target.value)}
-              className="h-12 rounded-2xl border border-(--gm-border-soft) bg-(--gm-surface)/20 px-4 text-sm text-(--gm-text) focus:border-(--gm-primary) focus:outline-none"
-            >
-              {MARKETPLACES.map((m) => (
-                <option key={m.code} value={m.code}>{m.label}</option>
-              ))}
-            </select>
-            <button
-              type="button"
-              onClick={handleScan}
-              disabled={!canScan}
-              className={cn(
-                'flex h-12 items-center gap-2 rounded-2xl px-6 text-[11px] font-bold uppercase tracking-widest transition-all',
-                canScan
-                  ? 'bg-(--gm-primary) text-white hover:opacity-90'
-                  : 'cursor-not-allowed bg-(--gm-surface) text-(--gm-muted)',
-              )}
-            >
-              {isScanning
-                ? <Loader2 className="size-4 animate-spin" />
-                : <Search className="size-4" />}
-              Analiz Et
-            </button>
-          </div>
-
-          {/* Quota warning */}
-          {quota && !quota.unlimited && quota.remaining === 0 && (
-            <div className="flex items-center gap-2 rounded-xl border border-yellow-500/20 bg-yellow-500/5 px-4 py-3 text-sm text-yellow-600">
-              <Info className="size-4 shrink-0" />
-              <span>Günlük limitiniz doldu.</span>
-              <Link href={localizePath(locale, '/pricing')} className="font-bold underline">Planı yükselt</Link>
-            </div>
+    <div className="space-y-6">
+      {/* Welcome */}
+      <div className="flex flex-col gap-4 rounded-2xl border border-[#e2e8f0] bg-white p-6 md:flex-row md:items-center md:justify-between">
+        <div className="flex items-center gap-4">
+          {avatar ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={avatar} alt={name} referrerPolicy="no-referrer" className="h-16 w-16 rounded-full object-cover" />
+          ) : (
+            <span className="grid h-16 w-16 place-items-center rounded-full bg-[#1e40af] text-xl font-bold text-white">
+              {(name || '?').slice(0, 2).toUpperCase()}
+            </span>
           )}
-        </div>
-
-        {/* Active job poller */}
-        {activeJobId && (
-          <JobPoller jobId={activeJobId} onDone={handleDone} />
-        )}
-
-        {/* Result */}
-        {result && (
-          <div className="space-y-4 print:space-y-6">
-            {/* Export actions */}
-            <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-(--gm-muted)">
-                <FileText className="mr-1.5 inline size-3" />
-                Analiz Sonucu — <span className="text-(--gm-text)">{result.keyword}</span>
-              </p>
-              <div className="flex gap-2">
-                <button
-                  type="button"
-                  onClick={() => exportCsv(result.report, result.keyword, result.marketplace)}
-                  className="flex h-8 items-center gap-1.5 rounded-full border border-(--gm-border-soft) bg-(--gm-surface)/20 px-4 text-[10px] font-bold uppercase tracking-widest text-(--gm-text) hover:bg-(--gm-surface)/40 transition-colors"
-                >
-                  <Download className="size-3" />
-                  CSV
-                </button>
-                <button
-                  type="button"
-                  onClick={() => window.print()}
-                  className="flex h-8 items-center gap-1.5 rounded-full border border-(--gm-border-soft) bg-(--gm-surface)/20 px-4 text-[10px] font-bold uppercase tracking-widest text-(--gm-text) hover:bg-(--gm-surface)/40 transition-colors"
-                >
-                  <Printer className="size-3" />
-                  PDF
-                </button>
-              </div>
-            </div>
-
-            {/* Risk + Profit yan yana */}
-            <div className="grid gap-4 lg:grid-cols-[3fr_2fr]">
-              <PublicRiskCard
-                report={result.report}
-                keyword={result.keyword}
-                marketplace={result.marketplace}
-              />
-              <PublicProfitCalculator compact />
-            </div>
-
-            {/* Ürün kanıt tablosu */}
-            <PublicEvidenceTable
-              jobId={result.jobId}
-              keyword={result.keyword}
-              marketplace={result.marketplace}
-            />
-          </div>
-        )}
-
-        {/* Kayıtlı aramalar + çoklu keyword */}
-        {!activeJobId && (
-          <div className="space-y-3">
-            <PublicSavedSearches
-              currentKeyword={result?.keyword}
-              currentMarketplace={result?.marketplace}
-              onSearch={(kw, mp) => {
-                setKeyword(kw);
-                setMarketplace(mp);
-              }}
-            />
-            <PublicMultiKeyword
-              onScanRequested={(kw, mp) => {
-                setKeyword(kw);
-                setMarketplace(mp);
-              }}
-            />
-          </div>
-        )}
-
-        {/* History */}
-        {history && history.length > 0 && !result && !activeJobId && (
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <p className="text-[10px] font-bold uppercase tracking-[0.3em] text-(--gm-muted)">
-                <Clock className="mr-1.5 inline size-3" />
-                Son Aramalar
-              </p>
-              <button
-                type="button"
-                onClick={() => refetchHistory()}
-                className="text-(--gm-muted) hover:text-(--gm-text) transition-colors"
-              >
-                <RefreshCw className="size-3.5" />
-              </button>
-            </div>
-            <div className="space-y-2">
-              {history.slice(0, 8).map((item) => (
-                <HistoryItem key={item.id} item={item} onClick={() => handleHistoryClick(item)} />
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* Empty state */}
-        {!result && !activeJobId && (!history || history.length === 0) && (
-          <div className="rounded-3xl border border-(--gm-border-soft) bg-(--gm-surface)/5 px-6 py-12 text-center space-y-3">
-            <BarChart3 className="mx-auto size-10 text-(--gm-primary)/30" />
-            <p className="font-display font-medium text-(--gm-text)">İlk analizinizi yapın</p>
-            <p className="text-sm text-(--gm-muted) max-w-xs mx-auto">
-              Bir keyword girerek Amazon pazarındaki rekabeti ve riski ölçün.
+          <div>
+            <h1 className="text-xl font-bold text-[#0f172a]">Hoş Geldin {name}</h1>
+            <p className="text-[13px] text-[#64748b]">{me?.user?.email} · {today}</p>
+            <p className="mt-1 text-[13px] font-medium text-[#1e40af]">
+              {d.pending.quotes} Bekleyen Teklif & {d.pending.open_deals} Açık Satış Fırsatı
             </p>
           </div>
-        )}
-      </main>
+        </div>
+        <div className="flex shrink-0 gap-2">
+          <button onClick={() => setActivityOpen(true)} className="inline-flex items-center gap-1.5 rounded-xl bg-[#1e40af] px-4 py-2.5 text-[13px] font-semibold text-white hover:bg-[#15317f]">
+            <Plus className="h-4 w-4" /> Aktivite Ekle
+          </button>
+          <button onClick={() => setReminderOpen(true)} className="inline-flex items-center gap-1.5 rounded-xl border border-[#1e40af]/30 px-4 py-2.5 text-[13px] font-semibold text-[#1e40af] hover:bg-[#eff6ff]">
+            <CalendarPlus className="h-4 w-4" /> Takvim Ekle
+          </button>
+        </div>
+      </div>
+
+      {isError && (
+        <div className="rounded-lg border border-amber-200 bg-amber-50 px-4 py-3 text-[13px] text-amber-800">
+          Dashboard özeti alınamadı. Kartlar gerçek veri gelene kadar boş gösteriliyor.
+        </div>
+      )}
+
+      {/* Stat cards */}
+      <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
+        {cards.map((c) => <StatCard key={c.label} {...c} />)}
+      </div>
+
+      <div className="rounded-2xl border border-[#e2e8f0] bg-white p-6">
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-[15px] font-bold text-[#0f172a]">Lead Machine ve Market Özeti</h2>
+          <Link href={`/${l}/firma-bulucu/tarama`} className="text-[12.5px] font-semibold text-[#1e40af] hover:underline">Tarama başlat</Link>
+        </div>
+        <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-5">
+          {leadMachineStats.map((item) => (
+            <Link key={item.label} href={item.href} className="rounded-lg border border-[#e2e8f0] bg-[#f8fafc] p-4 hover:border-[#93c5fd]">
+              <p className="text-[12px] font-semibold text-[#64748b]">{item.label}</p>
+              <p className="mt-1 text-2xl font-bold text-[#0f172a]">{item.value}</p>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* Charts */}
+      <div className="grid grid-cols-1 gap-5 lg:grid-cols-3">
+        {/* Satış Özeti */}
+        <div className="rounded-2xl border border-[#e2e8f0] bg-white p-6 lg:col-span-1">
+          <h2 className="mb-4 text-[15px] font-bold text-[#0f172a]">Satış Özeti</h2>
+          <div className="h-56">
+            <ResponsiveContainer width="100%" height="100%">
+              <AreaChart data={d.sales_summary} margin={{ top: 5, right: 5, left: -20, bottom: 0 }}>
+                <defs>
+                  <linearGradient id="iyArea" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stopColor="#1e40af" stopOpacity={0.3} />
+                    <stop offset="100%" stopColor="#1e40af" stopOpacity={0} />
+                  </linearGradient>
+                </defs>
+                <CartesianGrid strokeDasharray="3 3" stroke="#f1f5f9" />
+                <XAxis dataKey="month" tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                <YAxis tick={{ fontSize: 12, fill: '#64748b' }} axisLine={false} tickLine={false} />
+                <Tooltip />
+                <Area type="monotone" dataKey="amount" stroke="#1e40af" strokeWidth={2} fill="url(#iyArea)" />
+              </AreaChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* Ekip Durumu */}
+        <div className="rounded-2xl border border-[#e2e8f0] bg-white p-6">
+          <h2 className="mb-4 text-[15px] font-bold text-[#0f172a]">Ekip Durumu</h2>
+          <div className="h-56">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={team.length ? team : [{ label: 'Veri yok', count: 1 }]} dataKey="count" nameKey="label" innerRadius={50} outerRadius={80} paddingAngle={2}>
+                  {(team.length ? team : [{ label: 'Veri yok', count: 1 }]).map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+        </div>
+
+        {/* İş Durumu Özeti */}
+        <div className="rounded-2xl border border-[#e2e8f0] bg-white p-6">
+          <div className="mb-4 flex items-center justify-between">
+            <h2 className="text-[15px] font-bold text-[#0f172a]">İş Durumu Özeti</h2>
+            <span className="text-[13px] text-[#64748b]">Toplam <b className="text-[#0f172a]">{d.totals.records}</b></span>
+          </div>
+          <div className="h-56">
+            <ResponsiveContainer width="100%" height="100%">
+              <PieChart>
+                <Pie data={d.status_breakdown.length ? d.status_breakdown : [{ label: 'Veri yok', count: 1 }]} dataKey="count" nameKey="label" innerRadius={50} outerRadius={80} paddingAngle={2}>
+                  {(d.status_breakdown.length ? d.status_breakdown : [{ label: 'Veri yok', count: 1 }]).map((_, i) => <Cell key={i} fill={PIE_COLORS[i % PIE_COLORS.length]} />)}
+                </Pie>
+                <Tooltip />
+              </PieChart>
+            </ResponsiveContainer>
+          </div>
+          <div className="mt-2 space-y-1">
+            {d.status_breakdown.map((s, i) => (
+              <div key={s.label} className="flex items-center justify-between text-[12.5px]">
+                <span className="flex items-center gap-2 text-[#64748b]">
+                  <span className="h-2.5 w-2.5 rounded-full" style={{ background: PIE_COLORS[i % PIE_COLORS.length] }} />
+                  {s.label}
+                </span>
+                <b className="text-[#0f172a]">{s.count}</b>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Operasyon akışı */}
+      <section className="overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white">
+        <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#e2e8f0] px-5 py-4">
+          <div>
+            <h2 className="text-[15px] font-bold text-[#0f172a]">Yaklaşan Aktiviteler</h2>
+            <p className="mt-0.5 text-[12px] text-[#64748b]">Arama, toplantı, e-posta ve takip planınız</p>
+          </div>
+          <div className="flex gap-2">
+            <button onClick={() => setActivityOpen(true)} className="inline-flex h-9 items-center gap-1.5 rounded-md bg-[#1e40af] px-3 text-[12.5px] font-semibold text-white"><Plus className="h-4 w-4" /> Yeni Aktivite</button>
+            <Link href={`/${l}/aktiviteler`} className="inline-flex h-9 items-center rounded-md border border-[#cbd5e1] px-3 text-[12.5px] font-semibold text-[#334155]">Tümünü Gör</Link>
+          </div>
+        </div>
+        {(d.upcoming_activities?.length ?? 0) > 0 ? (
+          <div className="overflow-x-auto">
+            <table className="w-full min-w-[760px] text-left text-[12.5px]">
+              <thead className="bg-[#f8fafc] text-[11px] uppercase tracking-wide text-[#64748b]"><tr><th className="px-5 py-3">Aktivite</th><th className="px-5 py-3">Tip</th><th className="px-5 py-3">İlişkili Kayıt</th><th className="px-5 py-3">Planlanan Tarih</th><th className="px-5 py-3 text-right">Aksiyon</th></tr></thead>
+              <tbody className="divide-y divide-[#eef2f7]">
+                {d.upcoming_activities?.map((item) => <tr key={item.id} className="hover:bg-[#f8fafc]"><td className="px-5 py-3.5 font-semibold text-[#0f172a]">{item.subject}</td><td className="px-5 py-3.5 capitalize text-[#475569]">{item.type || 'aktivite'}</td><td className="px-5 py-3.5 text-[#475569]">{item.related_name || '-'}</td><td className="px-5 py-3.5 text-[#475569]">{formatDate(item.due_at)}</td><td className="px-5 py-3.5 text-right"><Link href={`/${l}/aktiviteler`} className="font-semibold text-[#1e40af]">Görüntüle</Link></td></tr>)}
+              </tbody>
+            </table>
+          </div>
+        ) : <EmptyRow text="Planlanmış açık aktivite bulunmuyor." />}
+      </section>
+
+      {/* Son kayıtlar */}
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-3">
+        <RecentPanel title="Son Teklifler" href={`/${l}/teklifler`} icon={FileText} empty="Henüz teklif yok.">
+          {d.recent_quotes?.map((item) => <Link key={item.id} href={`/${l}/teklifler/${item.id}`} className="flex items-center gap-3 border-t border-[#eef2f7] px-4 py-3 hover:bg-[#f8fafc]"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#eff6ff] text-[12px] font-bold text-[#1e40af]">{(item.title || 'T')[0]}</span><span className="min-w-0 flex-1"><span className="block truncate text-[13px] font-semibold text-[#0f172a]">{item.title}</span><span className="block truncate text-[11.5px] text-[#64748b]">{item.quote_no || item.account_name || item.status}</span></span><span className="shrink-0 text-[12px] font-semibold text-[#334155]">{formatMoney(item.amount, item.currency)}</span></Link>)}
+        </RecentPanel>
+        <RecentPanel title="Son Satış Fırsatları" href={`/${l}/satis-firsatlari`} icon={CircleDollarSign} empty="Henüz satış fırsatı yok.">
+          {d.recent_deals?.map((item) => <Link key={item.id} href={`/${l}/satis-firsatlari/${item.id}`} className="flex items-center gap-3 border-t border-[#eef2f7] px-4 py-3 hover:bg-[#f8fafc]"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#eff6ff] text-[12px] font-bold text-[#1e40af]">{(item.title || 'F')[0]}</span><span className="min-w-0 flex-1"><span className="block truncate text-[13px] font-semibold text-[#0f172a]">{item.title}</span><span className="block truncate text-[11.5px] text-[#64748b]">{item.stage_name || item.account_name || item.status}</span></span><span className="shrink-0 text-[12px] font-semibold text-[#334155]">{formatMoney(item.amount, item.currency)}</span></Link>)}
+        </RecentPanel>
+        <RecentPanel title="Son Eklenen Müşteriler" href={`/${l}/musteriler`} icon={Users} empty="Henüz müşteri yok.">
+          {d.recent_accounts?.map((item) => <Link key={item.id} href={`/${l}/musteriler/${item.id}`} className="flex items-center gap-3 border-t border-[#eef2f7] px-4 py-3 hover:bg-[#f8fafc]"><span className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-[#eff6ff] text-[12px] font-bold text-[#1e40af]">{(item.name || 'M')[0]}</span><span className="min-w-0 flex-1"><span className="block truncate text-[13px] font-semibold text-[#0f172a]">{item.name}</span><span className="block truncate text-[11.5px] text-[#64748b]">{[item.city, item.country].filter(Boolean).join(', ') || 'Konum yok'} · {item.status || 'aktif'}</span></span><span className="shrink-0 text-[11.5px] text-[#64748b]">{item.created_at ? new Date(item.created_at).toLocaleDateString('tr-TR') : ''}</span></Link>)}
+        </RecentPanel>
+      </div>
+
+      <section className="rounded-2xl border border-[#e2e8f0] bg-white p-5">
+        <div className="mb-4 flex items-center justify-between"><div><h2 className="text-[15px] font-bold text-[#0f172a]">İşletmenin Son Hareketleri</h2><p className="mt-0.5 text-[12px] text-[#64748b]">Size ait son CRM kayıtları</p></div><Activity className="h-5 w-5 text-[#1e40af]" /></div>
+        <div className="grid gap-3 md:grid-cols-2 xl:grid-cols-4">
+          {[
+            ...(d.recent_deals ?? []).slice(0, 2).map((x) => ({ key: `d-${x.id}`, label: 'Yeni satış fırsatı', title: x.title, date: x.created_at, href: `/${l}/satis-firsatlari/${x.id}`, color: 'bg-cyan-50 text-cyan-700' })),
+            ...(d.recent_accounts ?? []).slice(0, 2).map((x) => ({ key: `a-${x.id}`, label: 'Yeni müşteri', title: x.name, date: x.created_at, href: `/${l}/musteriler/${x.id}`, color: 'bg-emerald-50 text-emerald-700' })),
+            ...(d.recent_quotes ?? []).slice(0, 2).map((x) => ({ key: `q-${x.id}`, label: 'Yeni teklif', title: x.title, date: x.created_at, href: `/${l}/teklifler/${x.id}`, color: 'bg-blue-50 text-blue-700' })),
+          ].sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime()).slice(0, 4).map((item) => <Link key={item.key} href={item.href} className="rounded-xl border border-[#e2e8f0] p-4 hover:border-[#93c5fd]"><span className={`inline-flex rounded-full px-2 py-1 text-[10px] font-bold uppercase ${item.color}`}>{item.label}</span><p className="mt-2 truncate text-[13px] font-semibold text-[#0f172a]">{item.title}</p><p className="mt-1 flex items-center gap-1 text-[11.5px] text-[#64748b]"><Clock3 className="h-3.5 w-3.5" />{formatDate(item.date)}</p></Link>)}
+        </div>
+      </section>
+      <CrmEntityDialog
+        open={activityOpen}
+        onOpenChange={setActivityOpen}
+        title="Aktivite Ekle"
+        defaultValues={{ subject: '', ref_type: 'account', ref_id: '', type: 'note', due_at: '', body: '' }}
+        schema={activitySchema}
+        fields={[
+          { name: 'ref_type', label: 'İlişki tipi', type: 'select', options: [{ value: 'account', label: 'Müşteri' }, { value: 'contact', label: 'Kontak' }, { value: 'deal', label: 'Fırsat' }] },
+          { name: 'ref_id', label: 'İlişkili kayıt ID', required: true },
+          { name: 'subject', label: 'Konu', required: true },
+          { name: 'type', label: 'Tip', type: 'select', options: [{ value: 'call', label: 'Arama' }, { value: 'email', label: 'E-posta' }, { value: 'meeting', label: 'Toplantı' }, { value: 'task', label: 'Görev' }, { value: 'note', label: 'Not' }] },
+          { name: 'due_at', label: 'Tarih', type: 'datetime-local' },
+          { name: 'body', label: 'Not', type: 'textarea' },
+        ]}
+        isSubmitting={activityState.isLoading}
+        onSubmit={(values) => createActivity(values).unwrap()}
+      />
+      <CrmEntityDialog
+        open={reminderOpen}
+        onOpenChange={setReminderOpen}
+        title="Takvim Ekle"
+        defaultValues={{ title: '', remind_at: '', channel: 'in_app' }}
+        schema={reminderSchema}
+        fields={[
+          { name: 'title', label: 'Başlık', required: true },
+          { name: 'remind_at', label: 'Hatırlatma zamanı', type: 'datetime-local', required: true },
+          { name: 'channel', label: 'Kanal', type: 'select', options: [{ value: 'in_app', label: 'Uygulama' }, { value: 'email', label: 'E-posta' }, { value: 'sms', label: 'SMS' }, { value: 'whatsapp', label: 'WhatsApp' }] },
+        ]}
+        isSubmitting={reminderState.isLoading}
+        onSubmit={(values) => createReminder(values).unwrap()}
+      />
     </div>
   );
+}
+
+function RecentPanel({ title, href, icon: Icon, empty, children }: { title: string; href: string; icon: React.ComponentType<{ className?: string }>; empty: string; children: React.ReactNode }) {
+  const hasChildren = Array.isArray(children) ? children.length > 0 : Boolean(children);
+  return <section className="overflow-hidden rounded-2xl border border-[#e2e8f0] bg-white"><div className="flex items-center justify-between px-4 py-4"><h2 className="flex items-center gap-2 text-[14px] font-bold text-[#0f172a]"><Icon className="h-4 w-4 text-[#1e40af]" />{title}</h2><Link href={href} className="text-[12px] font-semibold text-[#1e40af]">Tümünü Gör</Link></div>{hasChildren ? children : <EmptyRow text={empty} />}</section>;
 }

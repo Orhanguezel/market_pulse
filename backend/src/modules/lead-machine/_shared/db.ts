@@ -1,7 +1,8 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey, getActiveUserId } from '@/modules/_shared';
 
-export type LeadChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match';
+export type LeadChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match' | 'customs' | 'decision_maker';
 export type JobStatus = 'pending' | 'running' | 'done' | 'failed';
 export type CandidateStatus = 'pending' | 'approved' | 'rejected' | 'favorite';
 
@@ -13,7 +14,7 @@ export interface LeadSearchJob {
   params: unknown;
   result_count: number;
   error_msg: string | null;
-  created_by: string | null;
+  owner_user_id: string | null;
   created_at: string;
   started_at: string | null;
   finished_at: string | null;
@@ -41,6 +42,9 @@ export interface LeadCandidate {
   reviewed_by: string | null;
   reviewed_at: string | null;
   created_at: string;
+  /** Adayi ureten taramanin parametreleri — listede "nereden bulundu" gostermek icin. */
+  job_params?: unknown;
+  job_created_at?: string | null;
 }
 
 export interface CandidateInput {
@@ -58,6 +62,7 @@ export interface CandidateInput {
   aiSummary?: string | null;
   leadScore?: number | null;
   decision?: string | null;
+  ownerUserId?: string | null;
 }
 
 function parseJsonField<T>(row: T, key: keyof T): T {
@@ -74,23 +79,44 @@ function parseJsonField<T>(row: T, key: keyof T): T {
 
 export async function createSearchJob(channel: LeadChannel, params: unknown, icpId?: string | null, createdBy?: string | null) {
   const id = randomUUID();
+  const tenantKey = await getActiveTenantKey();
+  const ownerUserId = createdBy ?? getActiveUserId() ?? null;
   await pool.execute(
-    'INSERT INTO lead_search_jobs (id, channel, status, icp_id, params, created_by) VALUES (?, ?, ?, ?, ?, ?)',
-    [id, channel, 'pending', icpId ?? null, JSON.stringify(params ?? {}), createdBy ?? null],
+    'INSERT INTO lead_search_jobs (id, tenant_key, channel, status, icp_id, params, owner_user_id) VALUES (?, ?, ?, ?, ?, ?, ?)',
+    [id, tenantKey, channel, 'pending', icpId ?? null, JSON.stringify(params ?? {}), ownerUserId],
   );
   return getSearchJob(id);
 }
 
-export async function getSearchJob(id: string) {
-  const [rows] = await pool.execute('SELECT * FROM lead_search_jobs WHERE id = ? LIMIT 1', [id]);
+export async function getSearchJob(id: string, filters: { ownerUserId?: string | null } = {}) {
+  const tenantKey = await getActiveTenantKey();
+  const where = ['tenant_key = ?', 'id = ?'];
+  const values: unknown[] = [tenantKey, id];
+  if (filters.ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(filters.ownerUserId);
+  }
+  const [rows] = await pool.execute(`SELECT * FROM lead_search_jobs WHERE ${where.join(' AND ')} LIMIT 1`, values as never[]);
   const row = (rows as LeadSearchJob[])[0];
   return row ? parseJsonField(row, 'params') : null;
 }
 
-export async function listSearchJobs(channel?: LeadChannel) {
-  const [rows] = channel
-    ? await pool.execute('SELECT * FROM lead_search_jobs WHERE channel = ? ORDER BY created_at DESC LIMIT 100', [channel])
-    : await pool.execute('SELECT * FROM lead_search_jobs ORDER BY created_at DESC LIMIT 100');
+export async function listSearchJobs(channel?: LeadChannel, filters: { ownerUserId?: string | null } = {}) {
+  const tenantKey = await getActiveTenantKey();
+  const where: string[] = ['tenant_key = ?'];
+  const values: unknown[] = [tenantKey];
+  if (channel) {
+    where.push('channel = ?');
+    values.push(channel);
+  }
+  if (filters.ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(filters.ownerUserId);
+  }
+  const [rows] = await pool.execute(
+    `SELECT * FROM lead_search_jobs WHERE ${where.join(' AND ')} ORDER BY created_at DESC LIMIT 100`,
+    values as never[],
+  );
   return (rows as LeadSearchJob[]).map(row => parseJsonField(row, 'params'));
 }
 
@@ -112,18 +138,62 @@ export async function updateSearchJob(id: string, patch: { status?: JobStatus; r
   if (patch.started) sets.push('started_at = CURRENT_TIMESTAMP');
   if (patch.finished) sets.push('finished_at = CURRENT_TIMESTAMP');
   if (!sets.length) return;
+  const tenantKey = await getActiveTenantKey();
   values.push(id);
-  await pool.execute(`UPDATE lead_search_jobs SET ${sets.join(', ')} WHERE id = ?`, values as never[]);
+  values.push(tenantKey);
+  await pool.execute(`UPDATE lead_search_jobs SET ${sets.join(', ')} WHERE id = ? AND tenant_key = ?`, values as never[]);
+}
+
+export async function deleteSearchJob(id: string, filters: { ownerUserId?: string | null } = {}) {
+  const tenantKey = await getActiveTenantKey();
+  const job = await getSearchJob(id, filters);
+  if (!job) return false;
+  if (job.status === 'pending' || job.status === 'running') {
+    const error = new Error('JOB_ACTIVE') as Error & { statusCode: number };
+    error.statusCode = 409;
+    throw error;
+  }
+
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+    const candidateScope = 'tenant_key = ? AND candidate_id IN (SELECT id FROM lead_candidates WHERE tenant_key = ? AND job_id = ?)';
+    await connection.execute(`DELETE FROM lead_enrichment WHERE ${candidateScope}`, [tenantKey, tenantKey, id]);
+    await connection.execute(`DELETE FROM lead_outreach_drafts WHERE ${candidateScope}`, [tenantKey, tenantKey, id]);
+    await connection.execute('DELETE FROM lead_candidates WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM lead_decision_makers WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM lead_company_pool WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM amazon_products WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM amazon_risk_scores WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM amazon_job_error_logs WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM amazon_keepa_queue WHERE tenant_key = ? AND job_id = ?', [tenantKey, id]);
+    await connection.execute('DELETE FROM amazon_scan_jobs WHERE tenant_key = ? AND id = ?', [tenantKey, id]);
+    const where = ['tenant_key = ?', 'id = ?'];
+    const values: unknown[] = [tenantKey, id];
+    if (filters.ownerUserId) { where.push('owner_user_id = ?'); values.push(filters.ownerUserId); }
+    const [result] = await connection.execute(`DELETE FROM lead_search_jobs WHERE ${where.join(' AND ')}`, values as never[]);
+    if (Number((result as { affectedRows?: number }).affectedRows ?? 0) !== 1) throw new Error('JOB_DELETE_RACE');
+    await connection.commit();
+    return true;
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
 }
 
 export async function insertCandidate(input: CandidateInput) {
   const id = randomUUID();
+  const tenantKey = await getActiveTenantKey();
   await pool.execute(
     `INSERT INTO lead_candidates
-      (id, job_id, channel, icp_id, name, website, country, city, phone, email, contact_name, raw_data, ai_summary, lead_score, decision)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      (id, tenant_key, owner_user_id, job_id, channel, icp_id, name, website, country, city, phone, email, contact_name, raw_data, ai_summary, lead_score, decision)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       id,
+      tenantKey,
+      input.ownerUserId ?? getActiveUserId() ?? null,
       input.jobId,
       input.channel,
       input.icpId ?? null,
@@ -143,9 +213,14 @@ export async function insertCandidate(input: CandidateInput) {
   return id;
 }
 
-export async function listCandidates(filters: { channel?: string; status?: string; jobId?: string; limit: number; offset: number }) {
-  const where: string[] = [];
-  const values: unknown[] = [];
+export async function listCandidates(filters: { channel?: string; status?: string; jobId?: string; ownerUserId?: string | null; limit: number; offset: number }) {
+  const tenantKey = await getActiveTenantKey();
+  const where: string[] = ['tenant_key = ?'];
+  const values: unknown[] = [tenantKey];
+  if (filters.ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(filters.ownerUserId);
+  }
   if (filters.channel) {
     where.push('channel = ?');
     values.push(filters.channel);
@@ -158,22 +233,54 @@ export async function listCandidates(filters: { channel?: string; status?: strin
     where.push('job_id = ?');
     values.push(filters.jobId);
   }
-  const whereSql = where.length ? `WHERE ${where.join(' AND ')}` : '';
+  const whereSql = `WHERE ${where.join(' AND ')}`;
   const limitInt = Math.floor(filters.limit);
   const offsetInt = Math.floor(filters.offset);
+
   const [rows] = await pool.execute(
     `SELECT * FROM lead_candidates ${whereSql} ORDER BY created_at DESC LIMIT ${limitInt} OFFSET ${offsetInt}`,
     values as never[],
   );
   const [countRows] = await pool.execute(`SELECT COUNT(*) AS count FROM lead_candidates ${whereSql}`, values as never[]);
+
+  // Adayin HANGI taramadan geldigi listede gorunmuyordu ("nerden bulundugu belli degil").
+  // Isin parametrelerini AYRI sorguyla ekliyoruz — ana sorguya JOIN atarsak owner/tenant
+  // filtresi alias'lanmak zorunda kalir ve izolasyon nobetci testleri bu SQL sekline bakiyor.
+  const candidates = (rows as LeadCandidate[]).map(row => parseJsonField(parseJsonField(row, 'raw_data'), 'reject_tags'));
+  const jobIds = [...new Set(candidates.map(c => c.job_id).filter(Boolean))];
+  if (jobIds.length) {
+    const [jobRows] = await pool.execute(
+      `SELECT id, params, created_at FROM lead_search_jobs
+        WHERE tenant_key = ? AND id IN (${jobIds.map(() => '?').join(', ')})`,
+      [tenantKey, ...jobIds] as never[],
+    );
+    const byId = new Map<string, { params: unknown; created_at: string }>();
+    for (const job of jobRows as Array<{ id: string; params: unknown; created_at: string }>) {
+      const parsed = parseJsonField(job as never, 'params') as unknown as { params: unknown; created_at: string };
+      byId.set(job.id, { params: parsed.params, created_at: job.created_at });
+    }
+    for (const c of candidates) {
+      const job = byId.get(c.job_id);
+      c.job_params = job?.params ?? null;
+      c.job_created_at = job?.created_at ?? null;
+    }
+  }
+
   return {
-    rows: (rows as LeadCandidate[]).map(row => parseJsonField(parseJsonField(row, 'raw_data'), 'reject_tags')),
+    rows: candidates,
     count: Number((countRows as Array<{ count: number }>)[0]?.count ?? 0),
   };
 }
 
-export async function getCandidate(id: string) {
-  const [rows] = await pool.execute('SELECT * FROM lead_candidates WHERE id = ? LIMIT 1', [id]);
+export async function getCandidate(id: string, filters: { ownerUserId?: string | null } = {}) {
+  const tenantKey = await getActiveTenantKey();
+  const where = ['tenant_key = ?', 'id = ?'];
+  const values: unknown[] = [tenantKey, id];
+  if (filters.ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(filters.ownerUserId);
+  }
+  const [rows] = await pool.execute(`SELECT * FROM lead_candidates WHERE ${where.join(' AND ')} LIMIT 1`, values as never[]);
   let row = (rows as LeadCandidate[])[0];
   if (!row) return null;
   row = parseJsonField(row, 'raw_data');
@@ -187,12 +294,20 @@ export async function updateCandidateReview(
   rejectReason?: string | null,
   reviewedBy?: string | null,
   rejectTags?: string[] | null,
+  ownerUserId?: string | null,
 ) {
   const tagsJson = rejectTags?.length ? JSON.stringify(rejectTags) : null;
   const reason = rejectReason ?? (rejectTags?.length ? rejectTags.join(', ') : null);
+  const tenantKey = await getActiveTenantKey();
+  const where = ['tenant_key = ?', 'id = ?'];
+  const values: unknown[] = [status, reason, tagsJson, reviewedBy ?? null, tenantKey, id];
+  if (ownerUserId) {
+    where.push('owner_user_id = ?');
+    values.push(ownerUserId);
+  }
   await pool.execute(
-    'UPDATE lead_candidates SET status = ?, reject_reason = ?, reject_tags = ?, reviewed_by = ?, reviewed_at = CURRENT_TIMESTAMP WHERE id = ?',
-    [status, reason, tagsJson, reviewedBy ?? null, id],
+    `UPDATE lead_candidates SET status = ?, reject_reason = ?, reject_tags = ?, reviewed_by = ?, reviewed_at = CURRENT_TIMESTAMP WHERE ${where.join(' AND ')}`,
+    values as never[],
   );
-  return getCandidate(id);
+  return getCandidate(id, { ownerUserId });
 }

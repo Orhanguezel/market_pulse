@@ -1,0 +1,191 @@
+{
+  "slug": "europages-firma-profili-yonetimi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 100,
+  "icon": "Globe",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Europages Firma Profili Yönetimi | B2B Firma Tanıtımı, Ürün Yayınlama ve Alıcı Takibi",
+        "description": "Europages üzerinde firma profili oluşturmak veya mevcut profilini geliştirmek isteyen firmalar için İngilizce şirket tanıtımı, ürün açıklaması, kategori düzeni, B2B görünürlük ve alıcı takibi desteği sunuyoruz.",
+        "ogTitle": "Europages Firma Profili Yönetimi | {{appName}}",
+        "ogDescription": "Europages firma profilinizi İngilizce şirket tanıtımı, ürün grupları, kategori düzeni, ürün açıklamaları, görseller, teklif yönlendirmesi ve CRM müşteri takibiyle profesyonel hale getirin."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "Europages Firma Profili Yönetimi",
+        "lead": "Europages üzerinde firma profiliniz var ama şirket tanıtımınız, ürün açıklamalarınız, kategori yapınız, görselleriniz ve iletişim bilgileriniz yabancı alıcıya yeterince profesyonel görünmüyor mu? B2B platformlarda firma profili yalnızca şirket adı ve iletişim bilgisinden oluşmamalıdır. Yurt dışı alıcılar firmanızı incelerken ne ürettiğinizi, hangi ürün gruplarını sunduğunuzu, hangi sektörlere hitap ettiğinizi, nasıl teklif alınabileceğini ve firmanızın güvenilir olup olmadığını anlamak ister. {{appName}} olarak Europages üzerinde firma profili olan veya Europages platformunda daha profesyonel görünmek isteyen firmalara profil yönetimi desteği sunuyoruz. Şirket tanıtımı, İngilizce içerik, ürün grupları, ürün açıklamaları, kategori düzeni, görsel kontrolü, teklif yönlendirmesi ve müşteri takip sürecinizi daha düzenli hale getirmenize yardımcı oluyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Europages Firma Profili Yönetimi Nedir?",
+          "body": [
+            "Europages firma profili yönetimi, Europages üzerinde şirket profilinin, İngilizce firma tanıtımının, ürün gruplarının, ürün açıklamalarının, kategori yapısının, görsellerin, iletişim bilgilerinin ve alıcı yönlendirme sürecinin düzenli şekilde hazırlanması ve takip edilmesidir.",
+            "Europages gibi B2B platformlarda firmanızın nasıl göründüğü önemlidir. Çünkü yabancı alıcılar çoğu zaman ilk değerlendirmeyi dijital profiliniz üzerinden yapar. Profiliniz eksik, zayıf veya dağınık görünüyorsa alıcı firmanızla iletişime geçmeden önce tereddüt edebilir.",
+            "{{appName}}, Europages profilinizi yalnızca firma kaydı olarak değil, dijital B2B tanıtım ve müşteri yönlendirme alanı olarak ele alır.",
+            "Europages profilinizi ihracat müşteri bulma ve B2B satış sürecinizi destekleyen profesyonel bir dijital tanıtım alanına dönüştürmenize yardımcı oluyoruz."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Europages Firma Profili Yönetimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Europages profiliniz doğru hazırlandığında yabancı alıcı firmanızı, ürünlerinizi, teklif sürecinizi ve iletişim kanallarınızı daha net değerlendirebilir.",
+            "Bu çalışma, Europages profilinizi yalnızca bir firma kaydı olmaktan çıkarıp ihracat satış sürecinizi destekleyen düzenli bir B2B görünürlük alanına dönüştürmeyi hedefler."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Europages Neden B2B Görünürlük İçin Önemlidir?",
+          "body": [
+            "Yurt dışı alıcılar, tedarikçi araştırması yaparken yalnızca şirket web sitesine bakmaz. B2B platformlar, firma profilleri, ürün listeleri, kataloglar ve dijital kurumsal izlenim de karar sürecinde etkili olabilir.",
+            "Europages gibi platformlarda yer almak, firmanızın yabancı alıcılar tarafından daha profesyonel incelenmesine yardımcı olabilir. Ancak burada önemli olan yalnızca profil açmak değil, profilin doğru içerikle hazırlanmasıdır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Europages profiliniz var ama içerikleriniz zayıf, ürünleriniz eksik veya profiliniz güncel değilse bu hizmet profilinizi daha güçlü hale getirmeye yardımcı olur.",
+          "items": [
+            { "title": "Europages Profili Olan Şirketler", "body": "Profili olan ancak aktif yönetemeyen firmalar için uygundur." },
+            { "title": "Üretici Firmalar", "body": "Europages profilini daha profesyonel hale getirmek isteyen üretici firmalar için planlanabilir." },
+            { "title": "Yurt Dışı Alıcıya Güven Vermek İsteyen KOBİ’ler", "body": "Daha profesyonel bir B2B profil sunmak isteyen KOBİ’ler için uygundur." },
+            { "title": "İngilizce Firma Tanıtımı Hazırlamakta Zorlananlar", "body": "Şirket tanıtımını yabancı alıcılara uygun hale getirmek isteyen işletmelere destek verilebilir." },
+            { "title": "Ürün Gruplarını Düzenli Sunmak İsteyen İhracatçılar", "body": "Ürün gruplarını, açıklamaları ve kategorileri daha anlaşılır hale getirmek isteyen firmalara uygundur." },
+            { "title": "B2B Görünürlüğünü Güçlendirmek İsteyenler", "body": "B2B platformlarda dijital görünürlüğünü güçlendirmek isteyen firmalar için planlanabilir." },
+            { "title": "Mail Marketing Sonrası Güven Profili İsteyenler", "body": "Alıcıların inceleyebileceği güven veren bir profil oluşturmak isteyen işletmelere uygundur." },
+            { "title": "B2B Platformları Birlikte Kullanan İhracatçılar", "body": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi platformları birlikte kullanmak isteyen firmalara uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Europages Firma Profili Yönetimi Kapsamında Neler Yapıyoruz?",
+          "body": [
+            "Europages firma profili yönetimi, firmanızın ürün yapısına, hedef pazarına ve mevcut profil durumuna göre planlanabilir. Amaç, profilinizin daha profesyonel, anlaşılır ve B2B alıcıya uygun hale gelmesini sağlamaktır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Europages Firma Profili Yönetiminde Hangi Alanlar İncelenir?",
+          "intro": "Europages profil yönetimi; firma profili, İngilizce şirket tanıtımı, ürün grupları, kategori düzeni, ürün açıklamaları, görseller, güven unsurları, iletişim yönlendirmesi, web sitesi bağlantısı, mail marketing, LinkedIn ve CRM takibiyle birlikte planlanır.",
+          "items": [
+            { "title": "Firma Profilinin İncelenmesi", "body": "Europages profil yönetiminin ilk adımı mevcut profilin incelenmesidir. Profilin hangi alanlarının eksik olduğu, hangi metinlerin güncellenmesi gerektiği ve yabancı alıcıya nasıl göründüğü değerlendirilmelidir." },
+            { "title": "İngilizce Şirket Tanıtımı Hazırlama", "body": "Europages üzerinde şirket tanıtımı yabancı alıcıya net şekilde hitap etmelidir. Firma açıklaması uzun, karmaşık veya zayıf çeviri gibi görünmemelidir." },
+            { "title": "Ürün Gruplarının Planlanması", "body": "Europages profilinde ürünlerin dağınık şekilde sunulması yerine ürün grupları net olarak belirlenmelidir. Alıcı firmanızın hangi ürünleri sunduğunu hızlıca anlayabilmelidir." },
+            { "title": "Kategori Yapısının Düzenlenmesi", "body": "B2B platformlarda doğru kategori seçimi, alıcının firmanızı ve ürünlerinizi daha kolay anlamasına yardımcı olur. Yanlış kategori veya eksik ürün grubu, profilin etkisini azaltabilir." },
+            { "title": "Ürün Açıklaması Hazırlama", "body": "Europages profilinde ürün açıklamaları, alıcının ürünlerinizi doğru anlamasını sağlamalıdır. Ürün açıklaması yalnızca kısa bir tanım olmamalı; ürünün kullanım alanını, teknik bilgisini ve ticari değerini anlatmalıdır." },
+            { "title": "Ürün Görsellerinin Kontrolü", "body": "Europages profilinde kullanılan görseller firmanızın dijital algısını etkiler. Zayıf, eksik veya düşük kaliteli görseller ürünlerinizi yeterince iyi anlatmayabilir." },
+            { "title": "Kurumsal Güven Unsurlarının Eklenmesi", "body": "Yabancı alıcılar bir firmayla iletişime geçmeden önce güven duymak ister. Bu nedenle Europages profilinde kurumsal güven unsurları dikkatli şekilde kullanılmalıdır." },
+            { "title": "İletişim ve Teklif Yönlendirmesi", "body": "Europages profilinde alıcı firmanın size nasıl ulaşacağı açık olmalıdır. İletişim bilgileri eksik veya belirsizse potansiyel müşteriler kaybedilebilir." },
+            { "title": "Web Sitesi ile Europages Profilini Birlikte Kullanma", "body": "Europages profiliniz, ihracata yönelik web sitenizle birlikte çalışmalıdır. Alıcı profilinizi inceledikten sonra web sitenize geçerek şirketinizi daha detaylı değerlendirmek isteyebilir." },
+            { "title": "Mail Marketing ve Europages Profil İlişkisi", "body": "Mail marketing kampanyalarında yabancı alıcılar firmanızı araştırmak isteyebilir. Bu aşamada Europages profiliniz, web sitenizle birlikte güven destekleyici bir dijital kaynak olabilir." },
+            { "title": "LinkedIn ve B2B Satış Süreciyle Entegrasyon", "body": "Europages profiliniz, LinkedIn ve B2B satış çalışmalarınızı destekleyebilir. LinkedIn üzerinden ulaştığınız alıcılar firmanızı araştırdığında farklı dijital kaynaklarda tutarlı görünmek önemlidir." },
+            { "title": "CRM ile Europages Müşteri Takibi", "body": "Europages üzerinden gelen müşteri adayları CRM’e aktarılmadığında takip süreci dağınık kalabilir. Hangi alıcı profil üzerinden geldi, hangi ürünle ilgilendi, teklif istedi mi, tekrar aranacak mı gibi bilgiler kayıt altına alınmalıdır." },
+            { "title": "Profil Güncelliği ve Düzenli Kontrol", "body": "Europages profilinin düzenli kontrol edilmesi gerekir. Ürünler, açıklamalar, iletişim bilgileri, görseller ve firma tanıtımı zamanla güncelliğini kaybedebilir." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Europages Firma Profili Yönetimi Süreci Nasıl İlerler?",
+          "intro": "Süreç firmanızın ürünleri, hedef ülkeleri, mevcut Europages profili, ihracat hedefleri ve profil yönetimi ihtiyacı değerlendirilerek başlar. Ardından profil analizi, içerik planı, İngilizce metin hazırlığı, profil düzenleme, web sitesi bağlantısı, CRM ilişkisi ve düzenli kontrol yapısı planlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Firmanızın ürünleri, hedef ülkeleri, mevcut Europages profili, ihracat hedefleri ve profil yönetimi ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Profil Analizi", "body": "Mevcut firma profili, şirket açıklaması, ürün grupları, görseller, kategori yapısı ve iletişim alanları incelenir." },
+            { "n": 3, "title": "İçerik Planı", "body": "Şirket tanıtımı, ürün açıklamaları, ürün grupları, kategori yapısı ve teklif yönlendirmeleri planlanır." },
+            { "n": 4, "title": "İngilizce Metin Hazırlığı", "body": "Firma tanıtımı, ürün açıklamaları, B2B alıcıya yönelik kısa ve net açıklamalar hazırlanır." },
+            { "n": 5, "title": "Profil Düzenleme", "body": "Europages profilindeki uygun alanlar düzenlenir, ürün ve firma bilgileri daha profesyonel hale getirilir." },
+            { "n": 6, "title": "Web Sitesi ve CRM Bağlantısı", "body": "Profil, ihracata yönelik web sitesi, teklif formu ve CRM müşteri takibiyle ilişkilendirilir." },
+            { "n": 7, "title": "Düzenli Kontrol", "body": "Profilin güncelliği, ürün bilgileri, iletişim alanları ve müşteri yönlendirme yapısı belirli aralıklarla kontrol edilir." },
+            { "n": 8, "title": "Raporlama", "body": "Profil durumu, yapılan düzenlemeler, müşteri adayları ve takip edilmesi gereken noktalar raporlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Europages Firma Profili Yönetiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Firma profiliniz daha profesyonel görünür",
+            "Yabancı alıcılar şirketinizi daha kolay anlar",
+            "İngilizce şirket tanıtımınız güçlenir",
+            "Ürün gruplarınız daha düzenli sunulur",
+            "Ürün açıklamalarınız B2B satışa uygun hale gelir",
+            "Görselleriniz daha kontrollü kullanılır",
+            "İletişim ve teklif yönlendirmesi netleşir",
+            "Web siteniz ve B2B profiliniz birlikte çalışır",
+            "Mail marketing ve LinkedIn çalışmalarınız desteklenir",
+            "CRM ile müşteri takibi yapılabilir",
+            "Profiliniz pasif bir kayıt olmaktan çıkar",
+            "İhracat müşteri bulma süreciniz daha profesyonel görünür"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Europages Firma Profili Yönetiminde Sık Yapılan Hatalar",
+          "items": [
+            "Firma tanıtımını eksik bırakmak",
+            "Zayıf veya otomatik çeviri gibi görünen İngilizce metin kullanmak",
+            "Ürün gruplarını net belirtmemek",
+            "Ürün açıklamalarını çok kısa bırakmak",
+            "Görselleri yetersiz kullanmak",
+            "Kategori yapısını düzenlememek",
+            "İletişim bilgilerini güncel tutmamak",
+            "Web sitesi bağlantısını eklememek veya kontrol etmemek",
+            "Teklif yönlendirmesi oluşturmamak",
+            "Profil güncelliğini takip etmemek",
+            "Europages profilini web sitesi ve CRM sürecinden ayrı düşünmek",
+            "B2B alıcıya güven veren bilgileri eklememek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Europages Firma Profili Yönetimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Europages firma profili yönetimi, ihracat müşteri bulma ve B2B platform yönetimi sürecinin parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Europages Firma Profili Yönetimi, B2B Firma Tanıtımı ve İhracat Görünürlüğü",
+          "body": [
+            "Europages firma profili yönetimi; Europages profil yönetimi, şirket profili düzenleme, ürün yayınlama, B2B profil yönetimi, İngilizce firma tanıtımı, ürün açıklaması hazırlama, ihracat müşteri bulma, B2B satış, firma kaydı yönetimi, ürün grubu düzenleme, CRM müşteri takibi ve ihracat platform yönetimi süreçleri için planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Europages firma profili yönetimi nedir?",
+          "body": [
+            "Europages firma profili yönetimi; Europages üzerinde şirket profilinin düzenlenmesi, İngilizce firma tanıtımının hazırlanması, ürün gruplarının planlanması, ürün açıklamalarının yazılması, görsellerin kontrol edilmesi, iletişim ve teklif yönlendirmelerinin oluşturulması ve gelen müşteri adaylarının CRM üzerinden takip edilmesi hizmetidir. {{appName}}, Europages profili olan ihracatçı firmaların B2B dijital görünürlüğünü daha profesyonel ve takip edilebilir hale getirmesine yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Europages Firma Profili Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Europages firma profili yönetimi kimler için uygundur?", "a": "Europages firma profili yönetimi; Europages üzerinde profili olan, ürünlerini yurt dışı alıcılara daha profesyonel sunmak isteyen, İngilizce firma tanıtımını geliştirmek isteyen ve B2B görünürlüğünü artırmak isteyen firmalar için uygundur." },
+            { "q": "Europages profilimi düzenleyebilir misiniz?", "a": "Evet. Firma tanıtımı, ürün grupları, kategori yapısı, ürün açıklamaları, görseller, iletişim bilgileri ve teklif yönlendirmeleri düzenlenebilir." },
+            { "q": "İngilizce şirket tanıtımı hazırlanıyor mu?", "a": "Evet. Firmanız için yabancı alıcıların anlayabileceği sade, profesyonel ve B2B satışa uygun İngilizce şirket tanıtımı hazırlanabilir." },
+            { "q": "Europages üzerinde ürün açıklaması hazırlanabilir mi?", "a": "Evet. Ürünleriniz için kullanım alanı, teknik bilgiler, ambalaj, hedef sektör ve teklif sürecini anlatan İngilizce ürün açıklamaları hazırlanabilir." },
+            { "q": "Europages profili ihracat müşteri bulma sürecine katkı sağlar mı?", "a": "Evet. Doğru hazırlanmış bir Europages profili, yabancı alıcıların firmanızı daha profesyonel değerlendirmesine ve B2B görünürlüğünüzün desteklenmesine yardımcı olabilir." },
+            { "q": "Europages satış garantisi verir mi?", "a": "Hayır. Europages firma profili yönetimi satış garantisi vermez. Ancak profilinizin daha düzenli, profesyonel ve alıcıya güven veren hale gelmesine yardımcı olur." },
+            { "q": "Europages profili web sitesiyle birlikte kullanılabilir mi?", "a": "Evet. Europages profiliniz, ihracata yönelik web siteniz, teklif formunuz, ürün kataloglarınız ve CRM müşteri takibinizle birlikte planlanabilir." },
+            { "q": "Profil güncelliği takip ediliyor mu?", "a": "Evet. Firma açıklaması, ürün grupları, görseller, iletişim bilgileri, web sitesi bağlantısı ve teklif yönlendirmeleri belirli aralıklarla kontrol edilebilir." },
+            { "q": "Europages üzerinden gelen müşteriler CRM’e aktarılabilir mi?", "a": "Evet. Firma adı, ülke, ilgili kişi, talep edilen ürün, iletişim tarihi, teklif durumu ve takip tarihi gibi bilgiler CRM’e aktarılabilir." },
+            { "q": "Europages firma profili yönetimi hangi hizmetlerle birlikte alınabilir?", "a": "Europages firma profili yönetimi; B2B platformlarda ürün yükleme, Alibaba hesap yönetimi, TradeWheel platform yönetimi, Go4WorldBusiness platform yönetimi, mail marketing, LinkedIn ile B2B müşteri bulma, CRM müşteri takibi ve ihracat operasyon yönetimiyle birlikte alınabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Europages Profilinizi Pasif Bir Kayıt Olarak Bırakmayalım",
+        "body": "Europages profiliniz var ama firma tanıtımınız, ürün açıklamalarınız, görselleriniz, kategori yapınız ve iletişim yönlendirmeleriniz profesyonel görünmüyorsa yabancı alıcılar firmanızı yeterince güçlü değerlendiremeyebilir. {{appName}} Europages Firma Profili Yönetimi hizmeti ile şirket tanıtımınızı düzenleyelim, ürün gruplarınızı daha profesyonel sunalım, İngilizce açıklamalarınızı güçlendirelim ve Europages profilinizi ihracat müşteri bulma sürecinizin destekleyici bir parçası haline getirelim.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

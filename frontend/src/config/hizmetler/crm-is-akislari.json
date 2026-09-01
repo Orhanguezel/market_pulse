@@ -1,0 +1,171 @@
+{
+  "slug": "crm-is-akislari",
+  "category": "crm-satis",
+  "module": "crm",
+  "order": 20,
+  "icon": "Workflow",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "CRM İş Akışları | Satış, Teklif, Görev, Müşteri Takibi ve Otomasyon Süreçleri",
+        "description": "CRM iş akışları ile müşteri adaylarını, satış görevlerini, teklif takiplerini, hatırlatmaları, ekip sorumluluklarını ve müşteri iletişim süreçlerini otomatik ve düzenli hale getirin.",
+        "ogTitle": "CRM İş Akışları | {{appName}}",
+        "ogDescription": "Satış, müşteri adayı, teklif, sipariş, mail marketing, telefon araması, ihracat operasyonu ve görev yönetimi süreçlerinizi CRM iş akışlarıyla sistemli hale getirin."
+      },
+      "hero": {
+        "eyebrow": "CRM ve Satış",
+        "title": "CRM İş Akışları",
+        "lead": "Şirketinizde işler hâlâ kişilerin hafızasına, WhatsApp mesajlarına, Excel tablolarına veya manuel takiplere mi bağlı ilerliyor? Bir müşteri geldiğinde kime atanacak, teklif gönderildikten sonra kim takip edecek, cevap gelmezse ne zaman hatırlatma yapılacak, sipariş oluşursa hangi ekip devreye girecek belli değilse şirketinizde gerçek bir iş akışı sistemi yok demektir. {{appName}} CRM İş Akışları ile satış, müşteri adayı, teklif, sipariş, mail marketing, telefon araması, ihracat operasyonu, görev yönetimi ve müşteri takip süreçlerinizi sistemli hale getiriyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Kurulum süreci nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "CRM İş Akışları Nedir?",
+          "body": [
+            "CRM iş akışları, müşteri ve satış süreçlerinde tekrar eden görevlerin belirli kurallara göre düzenlenmesi, takip edilmesi ve mümkün olan alanlarda otomatik hale getirilmesidir.",
+            "Bir müşteri adayı geldiğinde otomatik görev oluşması, teklif gönderildiğinde takip tarihi belirlenmesi, cevap gelmeyen müşteriler için hatırlatma yapılması, sıcak müşteri adaylarının satış temsilcisine atanması ve siparişe dönüşen tekliflerin operasyon ekibine aktarılması CRM iş akışlarına örnektir.",
+            "{{appName}} CRM İş Akışları, şirketinizin satış ve müşteri yönetimi süreçlerini daha kontrollü, ölçülebilir ve yönetilebilir hale getirmek için tasarlanır.",
+            "Müşteri adayları, satış görevleri, teklif hatırlatmaları, telefon aramaları, mail marketing dönüşleri, fuar sonrası takipler ve operasyon görevleri CRM üzerinde düzenli şekilde yönetilebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM İş Akışları Neden Gereklidir?",
+          "body": [
+            "Birçok şirkette süreçler yazılı değildir. İşler alışkanlıklarla yürür. Müşteri gelirse biri ilgilenir, teklif gönderilirse satış temsilcisi takip etmeye çalışır, sipariş oluşursa operasyon ekibine sözlü bilgi verilir.",
+            "Bu yapı şirket büyüdükçe sorun üretmeye başlar. CRM iş akışları bu dağınıklığı azaltır. Her müşteri adayı, her teklif, her görev ve her takip adımı belirli bir sistem içinde ilerler."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Şirketinizde işler kişilere bağlı ilerliyorsa, CRM iş akışlarına ihtiyacınız var demektir.",
+          "items": [
+            { "title": "Satış Süreci Dağınık İlerleyen Şirketler", "body": "Satış adımlarını daha düzenli hale getirmek isteyen firmalar için uygundur." },
+            { "title": "Müşteri Adaylarını Takip Etmekte Zorlananlar", "body": "Yeni leadlerin sahipsiz kalmasını önlemek isteyen işletmelere destek olur." },
+            { "title": "Teklif Sonrası Takipleri Unutan Ekipler", "body": "Teklif sonrası arama, mail ve revize süreçlerini düzenli takip eder." },
+            { "title": "Görev ve Sorumlulukları Netleştirmek İsteyenler", "body": "Kim, ne zaman, hangi müşteriyi takip edecek sorusunu sistemleştirir." },
+            { "title": "CRM Kullanıp Verim Alamayan Firmalar", "body": "CRM’i sadece kayıt sistemi olmaktan çıkarıp iş akışına dönüştürür." },
+            { "title": "Mail Marketing Sonrası Takip Yapanlar", "body": "Cevap veren firmaları satış sürecine bağlamak isteyen şirketler için uygundur." },
+            { "title": "İhracat Müşteri Bulma Süreci Yürütenler", "body": "Yurt dışı müşteri, teklif, numune ve proforma süreçlerini takip eder." },
+            { "title": "Satış, Operasyon ve Yönetim Ekipleri", "body": "Ekiplerin aynı sistemde koordineli çalışmasını isteyen KOBİ’ler için uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM İş Akışları ile Hangi Süreçler Yönetilebilir?",
+          "body": [
+            "CRM iş akışları şirketinizin farklı alanlarında kullanılabilir. Bu yapı sayesinde müşteriyle ilgili tüm süreçler daha düzenli hale gelir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "CRM İş Akışları ile Hangi Alanları Otomatikleştirebilirsiniz?",
+          "intro": "{{appName}}, şirketinizin gerçek işleyişine göre müşteri, satış, teklif, operasyon ve takip süreçlerini planlar.",
+          "items": [
+            { "title": "Müşteri Adayı Geldiğinde Otomatik Süreç Başlatma", "body": "Bir müşteri adayı geldiğinde ilk yapılması gereken şey onu kayıt altına almak ve doğru kişiye yönlendirmektir. Müşteri adayı CRM’e kaydedilir, kaynağı ve ilgilendiği ürün belirlenir, satış temsilcisine atanır, ilk iletişim görevi ve takip tarihi oluşturulur." },
+            { "title": "Satış Temsilcisine Görev Atama", "body": "Satış ekibinde görevlerin net olması gerekir. Hangi müşteriyi kimin arayacağı ve hangi teklifi kimin hazırlayacağı sistemde görünmelidir. Yeni müşteri adayını ara, müşteri ihtiyacını öğren ve teklif hazırla, takip maili gönder veya toplantı planla, müşteri cevabını CRM’e işle." },
+            { "title": "Teklif Gönderildikten Sonra Takip İş Akışı", "body": "Teklif gönderildikten sonra takip yapılmazsa satış fırsatı kaybedilebilir. Bu nedenle teklif sonrası otomatik takip iş akışı kurulmalıdır. Teklif durumu “gönderildi” olarak işaretlenir, teklif takip tarihi ve hatırlatma atanır, dönüş olmazsa ikinci takip görevi açılır, olumlu dönüşte sipariş sürecine aktarılır." },
+            { "title": "Cevap Gelmeyen Müşteriler İçin Hatırlatma Süreci", "body": "Birçok müşteri ilk görüşmeden veya ilk tekliften sonra hemen dönüş yapmaz. Bu nedenle cevap gelmeyen müşteriler için takip iş akışı oluşturulmalıdır. 2 gün sonra tekrar ara, 3 gün sonra takip maili gönder, teklif geçerlilik süresi dolmadan hatırlat, ileri tarihli takip listesine ekle." },
+            { "title": "Mail Marketing Cevaplarını Satış Sürecine Bağlama", "body": "Mail marketing çalışmaları tek başına yeterli değildir. Asıl değer, cevap veren firmaların satış sürecine alınmasıyla oluşur. Cevap veren firma müşteri adayı olarak kaydedilir, ilgi seviyesi belirlenir, teklif isteyen firma satış temsilcisine atanır, kampanya sonucu raporlanır." },
+            { "title": "Telefon Araması İş Akışları", "body": "Telefon aramaları özellikle B2B satış ve ihracat müşteri bulma süreçlerinde önemlidir. Ancak arama sonuçları kayıt altına alınmazsa takip yapılamaz. Aranacak firma listesi oluşturulur, satış temsilcisine arama görevi atanır, görüşme sonucu CRM’e işlenir, ulaşılamayan firmaya tekrar arama tarihi verilir." },
+            { "title": "LinkedIn ve Sales Navigator İş Akışları", "body": "LinkedIn ve Sales Navigator ile müşteri bulma çalışmaları CRM iş akışlarına bağlanabilir. Bu yapı fırsatların kişisel mesaj kutusunda kaybolmasını önler. Hedef kişi CRM’e eklenir, bağlantı isteği ve mesaj tarihi kaydedilir, cevap gelirse takip görevi oluşturulur, teklif talebi varsa teklif sürecine aktarılır." },
+            { "title": "Fuar Sonrası Takip İş Akışları", "body": "Fuar sonrası müşteri takibi yapılmazsa fuar için harcanan zaman ve bütçe verimli kullanılamaz. Görüşülen firmalar CRM’e eklenir, fuar adı müşteri kaynağı olarak işaretlenir, teklif isteyen firmalara teklif görevi açılır, fuar sonrası teşekkür maili ve takip tarihi oluşturulur." },
+            { "title": "İhracat Müşteri Bulma İş Akışları", "body": "İhracat müşteri bulma süreçlerinde çok sayıda firma, ülke, ilgili kişi, e-posta ve telefon araması takip edilir. Konşimento verileriyle bulunan firmalar CRM’e alınır, GTİP / HS koduna göre müşteri grupları oluşturulur, cevap veren firmalar sıcak lead olarak işaretlenir, siparişe dönüşen firmalar operasyon ekibine aktarılır." },
+            { "title": "Siparişe Dönüşen Tekliflerin Operasyona Aktarılması", "body": "Teklif onaylandığında satış süreci operasyon sürecine dönüşür. Bu geçiş doğru yönetilmezse müşteri memnuniyeti zarar görebilir. Teklif durumu “siparişe dönüştü” olarak güncellenir, operasyon ekibine görev atanır, proforma, fatura ve ödeme süreci başlatılır, nakliye, teslimat ve müşteri bilgilendirme görevi açılır." },
+            { "title": "Müşteri Memnuniyeti ve Satış Sonrası İş Akışları", "body": "Satış tamamlandığında müşteri ilişkisi bitmez. Satış sonrası takip, tekrar satış ve müşteri memnuniyeti için önemlidir. Teslimat sonrası müşteriyi ara, memnuniyet durumunu ve geri bildirimi al, tekrar sipariş ihtimalini değerlendir, destek talebi varsa ilgili ekibe aktar." },
+            { "title": "Yönetici Onay ve Kontrol İş Akışları", "body": "Bazı süreçlerde yönetici onayı gerekebilir. Özellikle indirim, özel fiyat, büyük teklif veya riskli işlem durumlarında onay mekanizması kurulabilir. Belirli tutarın üzerindeki teklifler yöneticiye gönderilir, özel indirim ve ödeme şartı değişiklikleri kontrol edilir, önemli müşteri fırsatları yöneticiye bildirilir, geciken görevler yönetici ekranına düşer." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "CRM İş Akışları ile Şirketiniz Ne Kazanır?",
+          "items": [
+            "Müşteri adayları unutulmaz",
+            "Satış görevleri netleşir",
+            "Teklif takipleri otomatik hatırlatılır",
+            "E-posta ve telefon süreçleri kayıt altına alınır",
+            "Fuar ve LinkedIn çalışmaları satış sürecine bağlanır",
+            "İhracat müşteri bulma süreçleri daha sistemli ilerler",
+            "Satıştan operasyona geçiş daha kontrollü olur",
+            "Yönetici kritik süreçleri daha net görür",
+            "Ekipler arasında sorumluluk karmaşası azalır",
+            "Şirketin satış ve müşteri yönetimi kurumsallaşır"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "CRM İş Akışlarında Sık Yapılan Hatalar",
+          "items": [
+            "Şirketin gerçek satış sürecini analiz etmeden iş akışı kurmak",
+            "Çok fazla gereksiz görev oluşturmak",
+            "Satış ekibini dinlemeden otomasyon planlamak",
+            "Teklif ve takip süreçlerini net tanımlamamak",
+            "Müşteri kaynaklarını CRM’e doğru işlememek",
+            "Görev hatırlatmalarını kullanmamak",
+            "Yönetici raporlarını baştan planlamamak",
+            "İş akışlarını test etmeden ekibe kullandırmak",
+            "CRM’i yalnızca kayıt sistemi gibi kullanmak",
+            "Sistemi kurduktan sonra iyileştirme yapmamak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM ile Satış, Görev ve Takip Süreçleri İçin Dijital Altyapı",
+          "body": [
+            "CRM iş akışları; satış iş akışı, CRM görev yönetimi, müşteri takip otomasyonu, teklif takip otomasyonu, B2B satış otomasyonu, ihracat müşteri takip sistemi ve satıştan operasyona iş akışı için kullanılabilir."
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "CRM İş Akışları Kurulum Süreci Nasıl İlerler?",
+          "intro": "CRM iş akışları, şirketinizin mevcut satış, müşteri takibi, teklif, sipariş, operasyon ve ekip yönetimi süreçleri analiz edilerek kurgulanır. Amaç, kullanılabilir ve satış odaklı bir yapı oluşturmaktır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin satış, müşteri takibi, teklif, sipariş, operasyon ve ekip yönetimi süreçleri değerlendirilir." },
+            { "n": 2, "title": "Mevcut Süreç Analizi", "body": "Müşteri adaylarının nereden geldiği, kimin takip ettiği, tekliflerin nasıl yönetildiği ve hangi görevlerin aksadığı analiz edilir." },
+            { "n": 3, "title": "İş Akışı Haritası Oluşturma", "body": "Müşteri adayından satış sonrası takibe kadar sürecin adımları çıkarılır." },
+            { "n": 4, "title": "CRM Alanlarının Planlanması", "body": "Müşteri kaynağı, satış aşaması, görev tipi, takip tarihi, teklif durumu, sorumlu kişi ve rapor alanları belirlenir." },
+            { "n": 5, "title": "Görev ve Hatırlatma Yapısı", "body": "Tekrar eden satış, teklif, arama, takip ve operasyon görevleri için hatırlatma yapısı kurulur." },
+            { "n": 6, "title": "Otomasyon Kuralları", "body": "Hangi durumda hangi görevin açılacağı, hangi müşterinin kime atanacağı ve hangi bildirimin oluşacağı planlanır." },
+            { "n": 7, "title": "Ekip Eğitimi", "body": "Satış, pazarlama ve operasyon ekiplerine iş akışlarının nasıl kullanılacağı anlatılır." },
+            { "n": 8, "title": "Test ve İyileştirme", "body": "Kurulan iş akışları gerçek kullanımda test edilir ve gerekli düzenlemeler yapılır." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM iş akışları nedir?",
+          "body": [
+            "CRM iş akışları; müşteri adaylarının satış temsilcilerine atanması, tekliflerin takip edilmesi, telefon aramalarının planlanması, mail marketing cevaplarının satış sürecine alınması, siparişe dönüşen tekliflerin operasyona aktarılması ve müşteri takip görevlerinin otomatik veya düzenli şekilde yönetilmesini sağlayan CRM süreç yapısıdır. {{appName}}, şirketlerin satış ve müşteri yönetimi süreçlerini kişilere bağlı olmaktan çıkarıp sistemli hale getirir."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "CRM İş Akışları Hakkında Merak Edilenler",
+          "items": [
+            { "q": "CRM iş akışları kimler için uygundur?", "a": "CRM iş akışları; satış, müşteri takibi, teklif, sipariş, mail marketing, telefon araması ve operasyon süreçlerini daha düzenli yönetmek isteyen şirketler için uygundur." },
+            { "q": "CRM iş akışı ne işe yarar?", "a": "CRM iş akışı, müşteri ve satış süreçlerinde tekrar eden görevlerin düzenli ilerlemesini sağlar. Müşteri adayı atama, teklif takibi, arama hatırlatma ve satış sonrası takip gibi süreçler daha kontrollü yönetilir." },
+            { "q": "Müşteri adayı geldiğinde otomatik görev oluşturulabilir mi?", "a": "Evet. Web sitesi, mail marketing, fuar, LinkedIn veya B2B platformdan gelen müşteri adayları için satış temsilcisine görev atanabilir." },
+            { "q": "Teklif sonrası takip otomatikleştirilebilir mi?", "a": "Evet. Teklif gönderildikten sonra belirli tarihlerde arama, takip maili veya revize teklif görevi oluşturulabilir." },
+            { "q": "Mail marketing cevapları CRM iş akışına bağlanabilir mi?", "a": "Evet. Cevap veren firmalar müşteri adayı olarak CRM’e alınabilir, teklif isteyenler satış temsilcisine atanabilir ve takip görevleri oluşturulabilir." },
+            { "q": "İhracat müşteri bulma süreci CRM iş akışlarıyla yönetilebilir mi?", "a": "Evet. Konşimento verileri, GTİP / HS kodu listeleri, mail marketing, telefon aramaları, teklif talepleri ve proforma süreçleri CRM iş akışlarıyla takip edilebilir." },
+            { "q": "Fuar sonrası müşteri takipleri için iş akışı kurulabilir mi?", "a": "Evet. Fuar görüşmeleri CRM’e eklenebilir, satış temsilcilerine takip görevleri atanabilir ve teklif isteyen firmalar ayrı takip edilebilir." },
+            { "q": "Satıştan operasyona geçiş CRM ile yönetilebilir mi?", "a": "Evet. Teklif siparişe dönüştüğünde operasyon ekibine görev atanabilir; proforma, ödeme, teslimat ve müşteri bilgilendirme süreçleri takip edilebilir." },
+            { "q": "CRM iş akışları ekibe fazla yük oluşturur mu?", "a": "Doğru kurgulanırsa hayır. Gereksiz görevler yerine şirketin gerçek satış sürecine uygun iş akışları kurulursa ekip daha düzenli ve verimli çalışır." },
+            { "q": "CRM iş akışları kurulurken eğitim veriyor musunuz?", "a": "Evet. Satış, pazarlama, operasyon ve yönetim ekiplerine CRM iş akışlarının nasıl kullanılacağı konusunda eğitim ve uygulama desteği verilebilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Şirketiniz İçin Doğru CRM İş Akışı Yapısını Birlikte Kuralım",
+        "body": "Şirketinizde müşteri takipleri, teklifler, aramalar, görevler ve sipariş süreçleri kişilere bağlı ilerliyorsa büyüme süreciniz risk altındadır. {{appName}} CRM İş Akışları ile satış ve müşteri yönetimi süreçlerinizi sistemli hale getirin. Müşteri adayları unutulmasın, teklifler takipsiz kalmasın, ekipler ne yapacağını net bilsin.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

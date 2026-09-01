@@ -28,15 +28,23 @@ export const tags = [
   'MarketStats',
   'LeadCandidates',
   'LeadMachineJobs',
+  'CustomsIntelligence',
+  'DecisionMakerJobs',
+  'DecisionMakerResults',
   'AmazonRiskScores',
   'IcpProfiles',
   'LeadEnrichment',
   'OutreachDrafts',
   'OutreachCampaigns',
+  'OutreachLists',
   'MarketTestRuns',
   'MarketDeveloperNotes',
   'ScanRules',
   'SavedSearches',
+  'Tenants',
+  'ModuleEntitlements',
+  'Crm',
+  'PlatformSettings',
 ] as const;
 
 export type tag = typeof tags[number];

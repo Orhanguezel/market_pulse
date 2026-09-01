@@ -1,0 +1,101 @@
+{
+  "slug": "uctan-uca-ihracat-yonetimi",
+  "category": "ihracat-musteri-bulma",
+  "module": "service",
+  "order": 140,
+  "icon": "Workflow",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Uçtan Uca İhracat Yönetimi | Dış Ticaret Departmanı Hizmeti",
+        "description": "İhracat yapmak isteyen şirketleri sıfırdan ihracata hazırlıyor, yurt dışı müşteri buluyor, mail marketing ve telefon aramaları yapıyor, sipariş oluştuğunda ihracat operasyonlarını yönetiyoruz.",
+        "ogTitle": "Uçtan Uca İhracat Yönetimi | {{appName}}",
+        "ogDescription": "Şirketinizi ihracata hazırlıyor, yurt dışı müşteri araştırması yapıyor, mail marketing, telefon aramaları ve ihracat operasyon süreçlerini yönetiyoruz."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "Uçtan Uca İhracat Yönetimi",
+        "lead": "İhracat yapmak istiyor ancak nereden başlayacağınızı bilmiyor musunuz? {{appName}} olarak şirketinizi sıfırdan ihracata hazırlıyor, potansiyel yurt dışı müşterilere ulaşıyor, mail marketing ve telefon aramalarıyla satış sürecinizi destekliyor, sipariş oluştuğunda ihracat operasyonlarınızı yönetiyoruz. Dış ticaret departmanı kurmadan, ihracat sürecinizi profesyonel bir sistemle yönetmek isteyen şirketler için uçtan uca ihracat yönetimi hizmeti sunuyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Uçtan Uca İhracat Yönetimi Nedir?",
+          "body": [
+            "Uçtan uca ihracat yönetimi, bir şirketin ihracat sürecinin baştan sona planlanması, hazırlanması, uygulanması ve takip edilmesidir.",
+            "Bu hizmet yalnızca ihracat danışmanlığı değildir. Şirketinizin ihracata hazırlanmasından potansiyel müşteri bulunmasına, mail marketing çalışmalarından telefon aramalarına, teklif takibinden sipariş sonrası ihracat operasyon yönetimine kadar tüm süreci kapsar.",
+            "{{appName}}, ihracat yapmak isteyen şirketler için dış ticaret departmanı gibi çalışır. Amacımız, şirketinizin ürünlerini yurt dışı pazarlara daha profesyonel şekilde sunmak, gerçek alıcı firmalara ulaşmak ve ihracat satış sürecinizi düzenli şekilde yönetmektir.",
+            "Dış ticaret departmanı kurmadan ihracat sürecinizi yönetin: Ürün analizi, hedef pazar araştırması, müşteri bulma, mail marketing, telefon aramaları, teklif takibi ve sipariş sonrası ihracat operasyonları tek bir sistem içinde planlanır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Hangi Şirketler İçin Uygundur?",
+          "intro": "Bu hizmet sayesinde şirketler ihracat sürecini dağınık şekilde yürütmek yerine planlı, ölçülebilir ve takip edilebilir bir yapıya kavuşturabilir.",
+          "items": [
+            { "title": "Üretici Firmalar", "body": "İhracata yeni başlamak isteyen üretici firmalar için uygundur." },
+            { "title": "KOBİ’ler", "body": "Yurt dışı müşteri bulmak isteyen KOBİ’lere sistemli destek sağlar." },
+            { "title": "Dış Ticaret Ekibi Olmayan Şirketler", "body": "Dış ticaret departmanı olmayan işletmeler için profesyonel model sunar." },
+            { "title": "Yeni Pazarlara Açılmak İsteyenler", "body": "Mevcut ihracatını artırmak ve yeni ülkelere ulaşmak isteyen firmalara uygundur." },
+            { "title": "Müşteri Bulmak İsteyenler", "body": "Gerçek ticari potansiyeli olan yurt dışı alıcı firmalara ulaşmayı hedefler." },
+            { "title": "Satış Sürecini Desteklemek İsteyenler", "body": "Mail marketing ve telefon aramalarıyla yurt dışı satış sürecini güçlendirir." },
+            { "title": "Operasyon Desteği Arayanlar", "body": "Sipariş oluştuğunda ihracat operasyon sürecinde destek verir." },
+            { "title": "Nereden Başlayacağını Bilmeyenler", "body": "İhracat sürecinin ilk adımlarını netleştirmek isteyen işletmeler için uygundur." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "İhracat Sürecinde Hangi Aşamaları Yönetiyoruz?",
+          "intro": "Uçtan uca ihracat yönetimi hizmetimiz; analiz, hazırlık, müşteri araştırması, iletişim, takip ve operasyon yönetimi aşamalarından oluşur.",
+          "items": [
+            { "title": "Şirket ve Ürün Analizi", "body": "İlk aşamada şirketinizin mevcut durumu, ürün grupları, üretim kapasitesi, hedefleri ve ihracata uygunluk seviyesi analiz edilir: ürünleriniz ihracata uygun mu; hangi ülkelerde talep görebilir; web siteniz yabancı alıcılar için yeterli mi; teklif, katalog ve fiyat listesi yapınız ihracata uygun mu." },
+            { "title": "Şirketi İhracata Hazırlama", "body": "Yabancı alıcıların güven duyacağı kurumsal sunum yapısı oluşturulur: İngilizce şirket tanıtım metni; İngilizce ürün açıklamaları; teklif ve proforma formatı; kurumsal iletişim yapısı." },
+            { "title": "Yurt Dışı Müşteri Araştırması", "body": "Potansiyel yurt dışı alıcı firmalar farklı kaynaklar ve veri yöntemleriyle araştırılır: konşimento verileri; GTİP / HS kodu araştırması; LinkedIn ve B2B platform analizi; karar verici kişi araştırması." },
+            { "title": "Mail Marketing ve Tanıtım Süreci", "body": "Potansiyel alıcılara doğru başlık, doğru metin ve düzenli takip yapısıyla profesyonel tanıtım e-postaları gönderilir: İngilizce tanıtım maili; takip maili kurgusu; cevap veren firmaların sınıflandırılması; ilgilenen firmaların satış sürecine alınması." },
+            { "title": "Telefon Aramaları ve Müşteri Takibi", "body": "Gerekli durumlarda potansiyel alıcı firmalara telefon aramalarıyla ulaşılır: satın alma departmanına ulaşma; gönderilen tanıtım mailinin teyidi; ürünle ilgilenme durumunun öğrenilmesi; takip edilecek firmaların raporlanması." },
+            { "title": "Sipariş ve İhracat Operasyon Yönetimi", "body": "Yurt dışı müşteriyle sipariş oluştuğunda operasyon süreci takip edilir: proforma invoice hazırlanması; ödeme sürecinin takibi; nakliye ve gümrük evrak desteği; sevkiyat sonrası müşteri takibi." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "İş Sürecimiz Nasıl İlerler?",
+          "intro": "Ön görüşmeden operasyona kadar ihracat süreci adım adım planlanır. Her aşama şirketinizin ürününe, hedef pazarına ve mevcut hazırlık seviyesine göre yapılandırılır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin ürünleri, hedefleri, mevcut satış kanalları ve ihracat durumu değerlendirilir." },
+            { "n": 2, "title": "Analiz", "body": "Ürün, sektör, hedef ülke, web sitesi, tanıtım materyalleri ve müşteri bulma potansiyeli analiz edilir." },
+            { "n": 3, "title": "Hazırlık", "body": "İngilizce tanıtım metinleri, ürün açıklamaları, mail şablonları, teklif formatı ve altyapı hazırlanır." },
+            { "n": 4, "title": "Müşteri Bulma", "body": "Konşimento verileri, GTİP / HS kodu analizleri, LinkedIn ve B2B platformlar üzerinden müşteriler belirlenir." },
+            { "n": 5, "title": "İletişim", "body": "Potansiyel müşterilere mail marketing çalışmaları yapılır ve gerekli durumlarda telefon aramalarıyla süreç desteklenir." },
+            { "n": 6, "title": "Takip", "body": "Cevap veren, ilgilenen, teklif isteyen veya daha sonra takip edilmesi gereken firmalar sınıflandırılır." },
+            { "n": 7, "title": "Operasyon", "body": "Sipariş oluştuğunda proforma, ödeme, lojistik, evrak ve sevkiyat takibi konusunda destek sağlanır." }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Uçtan Uca İhracat Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Uçtan uca ihracat yönetimi hizmeti kimler için uygundur?", "a": "Bu hizmet; ihracata başlamak isteyen üretici firmalar, dış ticaret departmanı olmayan KOBİ’ler, yurt dışı müşteri bulmak isteyen şirketler ve ihracat operasyonlarını profesyonel destekle yürütmek isteyen işletmeler için uygundur." },
+            { "q": "Şirketimi sıfırdan ihracata hazırlıyor musunuz?", "a": "Evet. Şirketinizin ürünlerini, web sitesini, İngilizce tanıtım metinlerini, teklif formatını, hedef pazarını ve müşteri bulma sürecini ihracata uygun hale getiriyoruz." },
+            { "q": "Yurt dışı müşteri bulma sürecini siz mi yapıyorsunuz?", "a": "Evet. Konşimento verileri, GTİP / HS kodu araştırmaları, ürün adına göre ithalatçı firma araştırması, LinkedIn, B2B platformlar ve diğer kaynaklar üzerinden potansiyel yurt dışı müşteriler araştırılır." },
+            { "q": "Mail marketing çalışmasını siz yapıyor musunuz?", "a": "Evet. Potansiyel alıcı firmalara yönelik İngilizce tanıtım mailleri, takip mailleri ve kampanya kurguları hazırlanabilir. Süreç müşteri listesine ve hedef pazara göre planlanır." },
+            { "q": "Telefon aramaları yapıyor musunuz?", "a": "Evet. Gerekli durumlarda potansiyel müşterilere telefon aramaları yapılarak ilgili kişi veya departmana ulaşılmaya çalışılır, gönderilen mailin teyidi alınır ve satış süreci desteklenir." },
+            { "q": "Sipariş oluştuğunda ihracat operasyonlarını yönetiyor musunuz?", "a": "Evet. Sipariş oluştuğunda proforma, ödeme süreci, nakliye organizasyonu, gümrük evrakları, teslim şekli, sevkiyat planlaması ve müşteri bilgilendirme süreçlerinde destek veriyoruz." },
+            { "q": "Dış ticaret departmanı olmayan firmalar bu hizmetten yararlanabilir mi?", "a": "Evet. Bu hizmet özellikle dış ticaret departmanı olmayan veya ihracat sürecini dışarıdan profesyonel destekle yönetmek isteyen şirketler için uygundur." },
+            { "q": "Bu hizmet danışmanlık mı yoksa operasyon desteği mi?", "a": "Bu hizmet hem danışmanlık hem de operasyon desteği içerir. Şirketinize ne yapmanız gerektiğini söylemekle kalmaz; müşteri araştırması, mail marketing, telefon aramaları, takip ve ihracat operasyon süreçlerinde aktif destek sağlar." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Şirketiniz İçin Uygulanabilir Bir İhracat Yol Haritası Hazırlayalım",
+        "body": "Şirketiniz ihracata başlamak, yurt dışı müşteri bulmak, mail marketing ve telefon aramalarıyla satış sürecini güçlendirmek veya sipariş sonrası ihracat operasyonlarını profesyonel destekle yönetmek istiyorsa {{appName}} ile iletişime geçin.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

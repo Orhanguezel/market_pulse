@@ -1,11 +1,11 @@
 'use client';
 
-import React, { Fragment, useMemo, useEffect, useState } from 'react';
-import dynamic from 'next/dynamic';
+import React, { Fragment, useEffect, useState } from 'react';
 import { usePathname, useSearchParams } from 'next/navigation';
-import Header from '../layout/header/Header';
 import type { PublicMenuItemDto } from '@/integrations/shared';
-import FooterTwo from '../layout/footer/Footer';
+import IyHeader from '../components/iy/IyHeader';
+import IyFooter from '../components/iy/IyFooter';
+import AppShell from '../components/iy/AppShell';
 import ScrollProgress from '../layout/ScrollProgress';
 
 import AnalyticsScripts from '../features/analytics/AnalyticsScripts';
@@ -15,31 +15,26 @@ import PwaRegistration from '../components/system/PwaRegistration';
 import DevPaymentCardBanner from '../components/dev/DevPaymentCardBanner';
 import { resetLayoutSeo } from '../seo';
 
-const SitePopups = dynamic(() => import('../layout/banner/SitePopups'), {
-  ssr: false,
-  loading: () => null,
-});
 const SupportBotWidget = () => null;
 
 
 import { SplashScreen } from '../layout/SplashScreen';
-import { getPublicAppName } from '@/lib/site-config';
 
 export default function ClientLayout({
   children,
   locale,
-  initialMenuItems,
+  initialMenuItems: _initialMenuItems,
 }: {
   children: React.ReactNode;
   locale?: string;
   initialMenuItems?: PublicMenuItemDto[];
 }) {
-  // Keep layout light: Header already fetches dynamic brand/settings on its own.
-  const brand = useMemo(() => ({ name: getPublicAppName() }), []);
-  
   const pathname = usePathname();
   const searchParams = useSearchParams();
   const [deferWidgets, setDeferWidgets] = useState(false);
+
+  // Uygulama (giriş sonrası) sayfaları: marketing chrome yerine AppShell.
+  const isAppPath = /^\/[^/]+\/(dashboard|amazon|firma-bulucu|musteriler|satis-firsatlari|aktiviteler|kontaklar|potansiyel-musteriler|teklifler|siparisler|urunler|belgeler|gorevler|takvim|hatirlatmalar|karar-vericiler|mail-yonetimi|isletme-yonetimi|kullanicilar|raporlar|bildirimler|paketler|listelerim|me\/settings)(\/|$)/.test(pathname || '');
 
   useEffect(() => {
      // Reset SEO store on route change
@@ -138,18 +133,24 @@ export default function ClientLayout({
         {locale === 'tr' ? 'Ana içeriğe geç' : 'Skip to main content'}
       </a>
       
-      <Header brand={brand} locale={locale} initialMenuItems={initialMenuItems} />
-      <main id="main-content" className="min-h-screen bg-bg-primary" tabIndex={-1}>
-        {children}
-      </main>
-
-      <FooterTwo locale={locale} />
+      {isAppPath ? (
+        <main id="main-content" tabIndex={-1}>
+          <AppShell locale={locale}>{children}</AppShell>
+        </main>
+      ) : (
+        <>
+          <IyHeader locale={locale} />
+          <main id="main-content" className="min-h-screen bg-bg-primary" tabIndex={-1}>
+            {children}
+          </main>
+          <IyFooter locale={locale} />
+        </>
+      )}
       <ScrollProgress />
 
       <CookieConsentBanner />
       {deferWidgets && (
         <>
-          <SitePopups />
           <SupportBotWidget />
         </>
       )}

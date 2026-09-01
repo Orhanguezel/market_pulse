@@ -57,6 +57,7 @@ export async function adminSmtpTest(req: FastifyRequest, reply: FastifyReply) {
       subject: 'SMTP Test Maili',
       html: '<p>Bu bir test mailidir. SMTP yapılandırmanız başarıyla çalışıyor.</p>',
       text: 'Bu bir test mailidir. SMTP yapilandirmaniz basariyla calisiyor.',
+      useUserSender: false,
     });
 
     return reply.send({ ok: true, message: `Test maili ${to.trim()} adresine gönderildi.` });

@@ -26,6 +26,7 @@ import { Input } from '@/components/ui/input';
 import { Separator } from '@/components/ui/separator';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { Skeleton } from '@/components/ui/skeleton';
+import { useGetUserTenantsQuery, useGetUserModulesQuery, useSetUserModuleMutation } from '@/integrations/endpoints/admin/entitlements_admin.endpoints';
 
 import type { UserRoleName, AdminUserView } from '@/integrations/shared';
 import {
@@ -411,6 +412,83 @@ export default function UserDetailClient({ id }: { id: string }) {
           </Card>
         </div>
       </div>
+
+      <UserModulesCard userId={u.id} />
+    </div>
+  );
+}
+
+function UserModulesCard({ userId }: { userId: string }) {
+  const { data: tenantsData, isLoading } = useGetUserTenantsQuery(userId);
+  const tenants = tenantsData?.tenants ?? [];
+
+  return (
+    <Card className="bg-gm-surface/20 border-gm-border-soft rounded-[32px] overflow-hidden backdrop-blur-sm shadow-xl">
+      <CardHeader className="p-8 pb-4 bg-gm-surface/40 border-b border-gm-border-soft">
+        <CardTitle className="font-serif text-2xl flex items-center gap-3">Modül Erişimi</CardTitle>
+        <CardDescription className="font-serif italic text-gm-muted opacity-70">
+          Kullanıcının üye olduğu her workspace (tenant) için hangi modülleri göreceğini yönetin. Mail ve Takvim herkese açıktır.
+        </CardDescription>
+      </CardHeader>
+      <CardContent className="p-8 space-y-10">
+        {isLoading ? (
+          <div className="text-sm text-gm-muted">Yükleniyor…</div>
+        ) : tenants.length === 0 ? (
+          <div className="text-sm text-gm-muted">Bu kullanıcı hiçbir workspace'e üye değil.</div>
+        ) : (
+          tenants.map((t) => <TenantModuleSection key={t.tenant_key} tenantKey={t.tenant_key} role={t.role} userId={userId} />)
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+
+function TenantModuleSection({ tenantKey, role, userId }: { tenantKey: string; role: string; userId: string }) {
+  const { data, isLoading } = useGetUserModulesQuery({ tenantKey, userId });
+  const [setUserModule, setState] = useSetUserModuleMutation();
+
+  const toggle = async (moduleKey: string, next: boolean) => {
+    try {
+      await setUserModule({ tenantKey, userId, module_key: moduleKey, status: next ? 'active' : 'suspended' }).unwrap();
+      toast.success('Modül erişimi güncellendi');
+    } catch {
+      toast.error('Güncellenemedi');
+    }
+  };
+
+  return (
+    <div className="space-y-4">
+      <div className="flex items-center gap-3">
+        <span className="text-sm font-bold text-gm-text">{tenantKey}</span>
+        <Badge variant="outline" className="rounded-full border-gm-border-soft bg-gm-surface/30 text-gm-muted text-[9px] font-bold tracking-widest uppercase px-2.5 py-0.5">
+          {role}
+        </Badge>
+      </div>
+      {isLoading ? (
+        <div className="text-sm text-gm-muted">Yükleniyor…</div>
+      ) : !data || data.modules.length === 0 ? (
+        <div className="text-sm text-gm-muted/70">Bu workspace'te modül yok.</div>
+      ) : (
+        data.modules.map((m) => (
+          <div key={m.module_key} className="flex items-center justify-between border-b border-gm-border-soft/50 pb-3">
+            <div className="space-y-0.5">
+              <div className="text-sm font-semibold text-gm-text">{m.name}</div>
+              <div className="text-[11px] uppercase tracking-wider text-gm-muted/60">{m.module_key}{m.category ? ` · ${m.category}` : ''}</div>
+            </div>
+            {m.default_on ? (
+              <Badge variant="outline" className="rounded-full border-gm-success/30 bg-gm-success/10 text-gm-success text-[10px] font-bold tracking-widest uppercase px-3 py-1">
+                Herkese açık
+              </Badge>
+            ) : (
+              <Switch
+                checked={m.user_status === 'active'}
+                disabled={setState.isLoading}
+                onCheckedChange={(v) => toggle(m.module_key, v)}
+              />
+            )}
+          </div>
+        ))
+      )}
     </div>
   );
 }

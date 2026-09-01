@@ -2,13 +2,14 @@ import { beforeEach, describe, expect, mock, test } from 'bun:test';
 import { createDbMock } from '../../market/__tests__/helpers/mock-db';
 
 const dbMock = createDbMock();
-const env = { TENTIMES_API_KEY: '', PUBLIC_URL: 'http://localhost:8086' };
+const env = { TENANT_KEY: 'avrasya', TENTIMES_API_KEY: '', PUBLIC_URL: 'http://localhost:8086' };
 const scrape = mock(() => Promise.resolve({ data: {} }));
 const searchGoogleMaps = mock(() => Promise.resolve({ places: [] }));
 const verifyScraperWebhook = mock(() => true);
 const fetchMock = mock(() => Promise.resolve(Response.json({ attendees: [] })));
 
 globalThis.fetch = fetchMock as unknown as typeof fetch;
+process.env.MESSE_FRANKFURT_API_KEY = 'messe-test-key';
 
 mock.module('@/db/client', () => ({
   db: dbMock.db,
@@ -116,7 +117,7 @@ describe('fair lead machine job runner', () => {
       params: '{"fair_name":"Automechanika","fair_url":"https://fair.example","fair_date":"2026-09-01","icp_id":"icp-1"}',
       result_count: 0,
       error_msg: null,
-      created_by: null,
+    owner_user_id: null,
       created_at: '2026-05-08',
       started_at: null,
       finished_at: null,
@@ -142,10 +143,10 @@ describe('fair lead machine job runner', () => {
 
     await runFairJob('job-1');
 
-    expect(dbMock.poolExecutions[1]?.values).toEqual(['running', null, 'job-1']);
+    expect(dbMock.poolExecutions[1]?.values).toEqual(['running', null, 'job-1', 'avrasya']);
     const insert = dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'));
     expect(insert?.values).toEqual(expect.arrayContaining(['job-1', 'trade_fair', 'icp-1', 'Automotive Distributor Fair Co']));
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-1', 'avrasya']);
   });
 
   test('marks fair job failed on scraper error', async () => {
@@ -157,7 +158,7 @@ describe('fair lead machine job runner', () => {
       params: '{"fair_url":"https://fair.example"}',
       result_count: 0,
       error_msg: null,
-      created_by: null,
+      owner_user_id: null,
       created_at: '2026-05-08',
       started_at: null,
       finished_at: null,
@@ -166,7 +167,27 @@ describe('fair lead machine job runner', () => {
 
     await runFairJob('job-1');
 
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'FAIR_DOWN', 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'FAIR_DOWN', 'job-1', 'avrasya']);
+  });
+
+  test('resumes an interrupted fair job without duplicating existing candidates', async () => {
+    dbMock.queuePoolExecute([{
+      id: 'job-resume', channel: 'trade_fair', status: 'running', icp_id: null,
+      params: '{"fair_url":"https://fair.example"}', result_count: 0, error_msg: null,
+      owner_user_id: null, created_at: '2026-05-08', started_at: '2026-05-08', finished_at: null,
+    }]);
+    dbMock.queuePoolExecute([{
+      name: 'Existing Fair Company',
+      detail_url: 'https://fair.example/existing',
+    }]);
+    scrape.mockImplementation(() => Promise.resolve({
+      data: { exhibitors: [{ name: 'Existing Fair Company', source_url: 'https://fair.example/existing' }] },
+    }));
+
+    await runFairJob('job-resume');
+
+    expect(dbMock.poolExecutions.some((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'))).toBe(false);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-resume', 'avrasya']);
   });
 });
 
@@ -212,8 +233,8 @@ describe('fair lead machine scraper', () => {
         hits: [{
           exhibitor: {
             id: 'mf-1',
-            rewriteId: 'avrasya-paspas-otomotiv-sanayi-ve-ticaret-limited-sirketi',
-            name: 'Avrasya Paspas Otomotiv Sanayi Ve Ticaret Limited Sirketi',
+            rewriteId: 'avrasya-otomotiv-sanayi-ve-ticaret-limited-sirketi',
+            name: 'Avrasya Otomotiv Sanayi Ve Ticaret Limited Sirketi',
             homepage: 'www.promats.com.tr',
             address: {
               city: 'Istanbul',
@@ -239,8 +260,8 @@ describe('fair lead machine scraper', () => {
     const url = new URL(String(fetchMock.mock.calls[0]?.[0]));
     expect(url.searchParams.get('location')).toBe('3.1');
     expect(scrape).not.toHaveBeenCalled();
-    expect(result).toEqual([{
-      name: 'Avrasya Paspas Otomotiv Sanayi Ve Ticaret Limited Sirketi',
+    expect(result).toEqual([expect.objectContaining({
+      name: 'Avrasya Otomotiv Sanayi Ve Ticaret Limited Sirketi',
       website: 'https://www.promats.com.tr',
       country: 'TUR',
       city: 'Istanbul',
@@ -248,10 +269,104 @@ describe('fair lead machine scraper', () => {
       phone: '+90 539 860 75 80',
       email: 'info@avrasyaotomotiv.net',
       hall: '3.1',
-      detail_url: 'https://automechanika.messefrankfurt.com/frankfurt/en/exhibitor-search.detail.html/avrasya-paspas-otomotiv-sanayi-ve-ticaret-limited-sirketi.html',
+      detail_url: 'https://automechanika.messefrankfurt.com/frankfurt/en/exhibitor-search.detail.html/avrasya-otomotiv-sanayi-ve-ticaret-limited-sirketi.html',
       booth_number: '3.1 D11',
       description: undefined,
-    }]);
+    })]);
+  });
+
+  test('discovers the official Messe browser public key when env key is absent', async () => {
+    const previousKey = process.env.MESSE_FRANKFURT_API_KEY;
+    delete process.env.MESSE_FRANKFURT_API_KEY;
+    fetchMock
+      .mockImplementationOnce(() => Promise.resolve(new Response(
+        'Object.defineProperty(this,"APIKEY_PUBLIC_PRD",{value:"OfficialBrowserPublicKey12345=="})',
+        { status: 200, headers: { 'content-type': 'application/javascript' } },
+      )))
+      .mockImplementationOnce(() => Promise.resolve(Response.json({
+        success: true,
+        result: { metaData: { hitsTotal: 0 }, hits: [] },
+      })));
+
+    try {
+      const result = await scrapeOfficialExhibitorList(
+        'https://automechanika.messefrankfurt.com/frankfurt/en/exhibitor-search.html',
+        { halls: ['3.1'] },
+      );
+
+      expect(result).toEqual([]);
+      expect(String(fetchMock.mock.calls[0]?.[0])).toBe('https://exhibitorsearch.messefrankfurt.com/assets/main.js');
+      expect(fetchMock.mock.calls[1]?.[1]).toEqual(expect.objectContaining({
+        headers: { apikey: 'OfficialBrowserPublicKey12345==' },
+      }));
+    } finally {
+      if (previousKey) process.env.MESSE_FRANKFURT_API_KEY = previousKey;
+    }
+  });
+
+  test('extracts Growtech Swapcard widget exhibitors from embedded Apollo state', async () => {
+    const widgetUrl = 'https://visit.growtech.com.tr/widget/event/growtech-antalya-2025/exhibitors/RXZlbnRWaWV3XzEyMDk1Mjk=?paginationMode=infinite&lng=tr-TR';
+    const nextData = {
+      props: {
+        pageProps: {
+          apolloState: {
+            'Core_Exhibitor:RXhoaWJpdG9yXzE=': {
+              __typename: 'Core_Exhibitor',
+              _id: 'RXhoaWJpdG9yXzE=',
+              name: 'AGROTAN TOHUMCULUK',
+              websiteUrl: 'www.agrotan.example',
+              htmlDescription: '<p>Vegetable seed producer &amp; greenhouse supplier</p>',
+              categories: [{ name: 'Seeds' }, { label: 'Greenhouse' }],
+              country: { name: 'Turkiye' },
+              city: 'Antalya',
+              'withEvent({"eventId":"RXZlbnRfMjczNjY1OQ=="})': {
+                booth: '3-B102',
+              },
+            },
+            'Core_Exhibitor:RXhoaWJpdG9yXzI=': {
+              __typename: 'Core_Exhibitor',
+              _id: 'RXhoaWJpdG9yXzI=',
+              name: 'Pepper Seeds BV',
+              description: 'Pepper and tomato seed distributor',
+              tags: ['Pepper seed', 'Distributor'],
+              withEvent: {
+                booth: '2-A14',
+              },
+            },
+          },
+        },
+      },
+    };
+    const html = `<html><body><script id="__NEXT_DATA__" type="application/json">${JSON.stringify(nextData)}</script></body></html>`;
+    fetchMock.mockImplementation(() => Promise.resolve(new Response(html, {
+      status: 200,
+      headers: { 'content-type': 'text/html' },
+    })));
+
+    const result = await scrapeOfficialExhibitorList(widgetUrl, { maxExhibitors: 10 });
+
+    expect(scrape).not.toHaveBeenCalled();
+    expect(fetchMock).toHaveBeenCalledWith(widgetUrl, expect.objectContaining({
+      headers: expect.objectContaining({ accept: expect.stringContaining('text/html') }),
+    }));
+    expect(result).toEqual([
+      expect.objectContaining({
+        name: 'AGROTAN TOHUMCULUK',
+        website: 'https://www.agrotan.example',
+        country: 'Turkiye',
+        city: 'Antalya',
+        booth_number: '3-B102',
+        detail_url: `${widgetUrl}#RXhoaWJpdG9yXzE%3D`,
+        description: 'Vegetable seed producer & greenhouse supplier',
+        product_groups: ['Seeds', 'Greenhouse'],
+      }),
+      expect.objectContaining({
+        name: 'Pepper Seeds BV',
+        booth_number: '2-A14',
+        description: 'Pepper and tomato seed distributor',
+        product_groups: ['Pepper seed', 'Distributor', 'Seeds'],
+      }),
+    ]);
   });
 
   test('scrapes exhibitor detail with fair-exhibitor-detail profile', async () => {

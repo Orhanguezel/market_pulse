@@ -1,0 +1,147 @@
+{
+  "slug": "ihracata-yonelik-web-sitesi-hazirligi",
+  "category": "ihracat-musteri-bulma",
+  "module": "service",
+  "order": 160,
+  "icon": "Globe2",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "İhracata Yönelik Web Sitesi Hazırlığı | İngilizce B2B Web Sitesi Hizmeti",
+        "description": "İhracat yapmak isteyen şirketler için İngilizce, mobil uyumlu, SEO odaklı, teklif almaya yönelik ve yabancı alıcılara güven veren ihracata uygun web siteleri hazırlıyoruz.",
+        "ogTitle": "İhracata Yönelik Web Sitesi Hazırlığı | {{appName}}",
+        "ogDescription": "İhracat yapmak isteyen şirketler için İngilizce, mobil uyumlu, SEO ve GEO odaklı, teklif almaya yönelik B2B web siteleri hazırlıyoruz."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "İhracata Yönelik Web Sitesi Hazırlığı",
+        "lead": "Yurt dışı müşterilerle çalışmak isteyen şirketler için web sitesi yalnızca dijital vitrin değildir. Web siteniz, yabancı alıcının firmanızı tanıdığı, ürünlerinizi incelediği ve sizinle çalışıp çalışmayacağına karar verdiği en önemli kurumsal alanlardan biridir. {{appName}} olarak ihracat yapmak isteyen şirketler için İngilizce, mobil uyumlu, hızlı, SEO odaklı ve teklif almaya yönelik web siteleri hazırlıyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "İhracata Yönelik Web Sitesi Nedir?",
+          "body": [
+            "İhracata yönelik web sitesi, ürünlerini yurt dışına satmak isteyen şirketlerin yabancı alıcılara profesyonel şekilde hitap etmesi için hazırlanan kurumsal web sitesidir.",
+            "Bu tür web siteleri yalnızca görsel tasarımdan ibaret değildir. İngilizce içerik, ürün sayfaları, teklif formları, kurumsal güven unsurları, iletişim bilgileri, B2B odaklı metinler, SEO uyumlu yapı ve mobil uyumluluk birlikte düşünülmelidir.",
+            "Yabancı bir alıcı firmanızdan e-posta aldığında, LinkedIn üzerinden sizi gördüğünde, B2B platformda ürününüzü incelediğinde veya müşteri listenizden size dönüş yaptığında ilk olarak web sitenizi kontrol eder.",
+            "Web siteniz ihracat satış sürecinizin temel parçasıdır: İngilizce sayfalar, ürün detayları, teklif alma formu, güven veren kurumsal içerikler, SEO ve GEO uyumlu yapı ile web siteniz yurt dışı müşteri bulma çalışmalarınızı destekler."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden İhracata Uygun Web Sitesi Gerekir?",
+          "body": [
+            "Birçok üretici firma kaliteli ürünlere sahip olmasına rağmen web sitesi ihracata uygun olmadığı için yurt dışı müşterilerden yeterli güveni alamaz.",
+            "Web siteniz yabancı alıcıya firmanızın ne yaptığını, hangi ürünleri sunduğunu, nasıl iletişim kurulacağını ve sizinle neden çalışılabileceğini net şekilde göstermelidir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Bu hizmet, ihracat sürecine başlamadan önce dijital kurumsal kimliğini güçlendirmek isteyen tüm şirketler için uygundur.",
+          "items": [
+            { "title": "Üretici Firmalar", "body": "İhracata başlamak isteyen üretici firmalar için uygundur." },
+            { "title": "KOBİ’ler", "body": "Yurt dışı müşterilere daha profesyonel görünmek isteyen KOBİ’lere destek olur." },
+            { "title": "İngilizce Siteye İhtiyaç Duyanlar", "body": "Mevcut web sitesi Türkçe olan ve İngilizce siteye ihtiyaç duyan şirketler için uygundur." },
+            { "title": "Eski Web Sitesi Olan Firmalar", "body": "Web sitesi eski, yavaş veya mobil uyumsuz olan işletmeler için uygundur." },
+            { "title": "Mail Marketing Yapacak Firmalar", "body": "Yurt dışı alıcıya mail göndermeden önce web sitesini güçlendirmek isteyen firmalara uygundur." },
+            { "title": "LinkedIn ve B2B Platform Kullananlar", "body": "Alibaba, TradeWheel, Europages ve LinkedIn çalışmalarını destekler." },
+            { "title": "Fuar Öncesi Hazırlık Yapanlar", "body": "Fuar öncesinde web sitesini güçlendirmek isteyen ihracatçılar için uygundur." },
+            { "title": "Global Pazara Açılmak İsteyen Markalar", "body": "Ürünlerini global pazara sunmak isteyen markalara kurumsal görünüm sağlar." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "İhracata Yönelik Web Sitesi İçin Hangi Alanları Hazırlıyoruz?",
+          "intro": "Web sitesi; içerik, tasarım, teknik yapı, teklif formu, SEO, GEO ve güven unsurlarıyla birlikte ele alınmalıdır.",
+          "items": [
+            { "title": "İngilizce Kurumsal Web Sitesi Hazırlığı", "body": "Yabancı alıcının firmanızı anlayabilmesi için içerikler net ve profesyonel İngilizce ile hazırlanır: Home page ve About us page; Products ve Product detail pages; Export page ve Contact page; Request a Quote form." },
+            { "title": "Ürün ve Kategori Sayfaları", "body": "Ürünler net, anlaşılır ve düzenli sunulmalıdır; kategori sayfaları hem kullanıcı deneyimi hem de SEO açısından önemlidir: ürün adı, açıklaması ve kullanım alanları; teknik özellikler ve ambalaj bilgileri; GTİP / HS kodu ve minimum sipariş miktarı; teklif talep butonu ve ürün görselleri." },
+            { "title": "Teklif Alma Formu", "body": "Web siteniz yalnızca tanıtım aracı değil, doğrudan müşteri adayı oluşturan bir satış kanalına dönüşmelidir: ad soyad, şirket adı ve ülke; e-posta, telefon ve mesaj alanı; ilgilenilen ürün ve talep edilen miktar; dosya yükleme ve gizlilik onayı alanı." },
+            { "title": "B2B Odaklı İçerik Yapısı", "body": "Yurt dışı alıcılar net, ticari ve güven veren bilgilere önem verir: üretim kabiliyeti ve tedarik kapasitesi; kalite standartları ve sertifikalar; hedef sektörler ve teslimat yaklaşımı; iş birliği ve distribütörlük imkanları." },
+            { "title": "İhracat Sayfası Hazırlığı", "body": "Özel bir ihracat sayfası, firmanın yurt dışı müşterilerle çalışmaya hazır olduğunu gösterir: ihracat yaklaşımı ve hedef pazarlar; ürün grupları ve teslim şekilleri; ödeme yöntemleri ve sevkiyat bilgileri; B2B iş birliği ve teklif alma yönlendirmesi." },
+            { "title": "SEO Uyumlu Web Sitesi Yapısı", "body": "İhracat web sitesi arama motorları açısından da doğru yapılandırılmalıdır: doğru sayfa başlıkları ve meta açıklamalar; H1, H2 ve H3 başlık düzeni; ürün ve hizmet odaklı anahtar kelimeler; sık sorulan sorular ve sayfa içi bağlantılar." },
+            { "title": "GEO Odaklı İçerik Hazırlığı", "body": "Yapay zeka aramalarına uygun içerik yapısı modern web siteleri için giderek daha önemli hale gelmektedir: hizmetin net tanımı; kime uygun olduğunun açıklanması; süreçlerin adım adım anlatılması; kısa cevap alanları ve SSS yapısı." },
+            { "title": "Mobil Uyumlu ve Hızlı Web Sitesi", "body": "Yabancı alıcıların önemli bir kısmı web sitelerini mobil cihazlardan inceler; hızlı ve mobil uyumlu yapı müşteri kaybını azaltır: menü kolay açılmalı; ürünler rahat incelenmeli; formlar sorunsuz çalışmalı; teklif alma butonu kolay erişilebilir olmalı." },
+            { "title": "Güven Veren Kurumsal Yapı", "body": "Web sitesinde firmanın gerçek, ulaşılabilir ve profesyonel olduğu açık şekilde anlaşılmalıdır: açık şirket bilgileri ve fiziksel adres; kurumsal e-posta, telefon ve WhatsApp iletişimi; sertifikalar, referanslar ve kalite belgeleri; hakkımızda sayfası ve sık sorulan sorular." },
+            { "title": "Web Sitesi ve İhracat Müşteri Bulma İlişkisi", "body": "Web sitesi, mail marketing, LinkedIn, B2B platformlar ve telefon aramalarıyla ulaşılan müşterilere güven verir: mail marketing dönüş oranını destekler; LinkedIn üzerinden gelen müşterilere güven verir; B2B platform profilinizi destekler; teklif alma sürecini kolaylaştırır." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "İhracata Yönelik Web Sitesi Hazırlama Sürecimiz",
+          "intro": "Şirketinizin sektörü, ürünleri, hedef ülkeleri ve ihracat hedeflerine göre web sitesi yapısı planlanır. İçerik, tasarım, SEO, GEO, teklif formu ve yayına hazırlık süreci birlikte ele alınır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin sektörü, ürünleri, hedef ülkeleri, mevcut web sitesi ve ihracat hedefleri değerlendirilir." },
+            { "n": 2, "title": "İçerik Planı", "body": "Ana sayfa, hakkımızda, ürünler, ihracat, iletişim ve teklif alma gibi sayfaların yapısı belirlenir." },
+            { "n": 3, "title": "İngilizce Metin Hazırlığı", "body": "Şirket tanıtımı, ürün açıklamaları, hizmet metinleri ve ihracat odaklı içerikler hazırlanır." },
+            { "n": 4, "title": "Tasarım ve Sayfa Yapısı", "body": "Yabancı alıcıya güven veren, sade, mobil uyumlu ve B2B odaklı tasarım yapısı oluşturulur." },
+            { "n": 5, "title": "Teklif Formu ve İletişim Alanları", "body": "Teklif formu, WhatsApp, e-posta ve iletişim alanları müşteri adaylarının kolayca ulaşabileceği şekilde düzenlenir." },
+            { "n": 6, "title": "SEO ve GEO Düzenlemesi", "body": "Sayfa başlıkları, meta açıklamalar, sık sorulan sorular ve kısa cevap alanları hazırlanır." },
+            { "n": 7, "title": "Yayına Hazırlık", "body": "Web sitesi kontrol edilir, mobil görünüm incelenir, formlar test edilir ve yayına hazır hale getirilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "İhracat Web Sitesinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Yurt dışı müşterilere daha profesyonel görünürsünüz",
+            "İngilizce içeriklerle alıcıların sizi anlamasını kolaylaştırırsınız",
+            "Ürünlerinizi daha düzenli sunarsınız",
+            "Teklif alma sürecini hızlandırırsınız",
+            "Mail marketing çalışmalarını desteklersiniz",
+            "LinkedIn ve B2B platformlardan gelen müşterilere güven verirsiniz",
+            "SEO ve GEO uyumlu içeriklerle dijital görünürlüğünüzü artırırsınız",
+            "Mobil uyumlu yapı ile müşteri kaybını azaltırsınız",
+            "Kurumsal marka algınızı güçlendirirsiniz",
+            "İhracat satış sürecinizi daha sistemli hale getirirsiniz"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "İhracata Uygun Web Sitesinde Sık Yapılan Hatalar",
+          "items": [
+            "Sadece Türkçe içerik kullanmak",
+            "Ürün açıklamalarının yetersiz olması",
+            "Teklif alma formunun olmaması",
+            "İletişim bilgilerinin zor bulunması",
+            "Mobil uyumsuz tasarım",
+            "Yavaş açılan sayfalar",
+            "Yabancı müşteriye hitap etmeyen metinler",
+            "Ürün görsellerinin yetersiz olması",
+            "Sertifika ve kalite bilgilerinin yer almaması",
+            "GEO odaklı kısa cevap alanlarının olmaması"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "İhracata Yönelik Web Sitesi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "İhracata yönelik web sitesi kimler için uygundur?", "a": "Bu hizmet; ihracata başlamak isteyen üretici firmalar, yurt dışı müşterilere ulaşmak isteyen KOBİ’ler, mevcut web sitesini İngilizce ve B2B odaklı hale getirmek isteyen şirketler için uygundur." },
+            { "q": "İngilizce web sitesi hazırlıyor musunuz?", "a": "Evet. Şirketinizin ürünlerine, sektörüne ve hedef pazarına uygun İngilizce kurumsal web sitesi hazırlanabilir." },
+            { "q": "Ürün açıklamalarını İngilizce hazırlıyor musunuz?", "a": "Evet. Ürünleriniz için yabancı alıcıların anlayabileceği, net ve ihracat odaklı İngilizce ürün açıklamaları hazırlanabilir." },
+            { "q": "Teklif alma formu ekleniyor mu?", "a": "Evet. Web sitesine yurt dışı müşterilerin ürün, miktar, ülke ve iletişim bilgilerini iletebileceği teklif alma formu eklenebilir." },
+            { "q": "Web sitem SEO uyumlu olur mu?", "a": "Evet. Sayfa başlıkları, meta açıklamalar, H1-H2 yapısı, ürün metinleri, URL yapısı, görsel açıklamaları ve sık sorulan sorular SEO uyumlu şekilde hazırlanabilir." },
+            { "q": "GEO odaklı içerik hazırlıyor musunuz?", "a": "Evet. Web sitesi içerikleri yapay zeka aramalarında daha kolay anlaşılabilecek şekilde açık, cevap odaklı ve yapılandırılmış olarak hazırlanabilir." },
+            { "q": "Mevcut web sitemi ihracata uygun hale getirebilir misiniz?", "a": "Evet. Mevcut web siteniz analiz edilerek İngilizce içerik, ürün sayfaları, teklif formları, iletişim alanları ve B2B odaklı sayfa yapılarıyla ihracata uygun hale getirilebilir." },
+            { "q": "Mobil uyumlu web sitesi hazırlıyor musunuz?", "a": "Evet. Hazırlanan web sitesi masaüstü, tablet ve mobil cihazlarda düzgün çalışacak şekilde planlanabilir." },
+            { "q": "Web sitesi ihracat müşteri bulma sürecine nasıl katkı sağlar?", "a": "Web sitesi, mail marketing, LinkedIn, B2B platformlar ve telefon aramalarıyla ulaşılan müşterilere güven verir. Yabancı alıcı firmanızı araştırdığında profesyonel bir web sitesi satış ihtimalini artırabilir." },
+            { "q": "İhracat sayfası ayrı hazırlanmalı mı?", "a": "Evet. Web sitesinde ihracat yaklaşımını, ürün gruplarını, teslim süreçlerini ve iş birliği imkanlarını anlatan ayrı bir ihracat sayfası olması yabancı alıcılar için faydalıdır." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Şirketiniz İçin İhracata Uygun Web Sitesi Yapısını Hazırlayalım",
+        "body": "Yurt dışı müşterilere daha profesyonel görünmek, ürünlerinizi İngilizce ve B2B odaklı sunmak, teklif alma sürecinizi kolaylaştırmak ve ihracat müşteri bulma çalışmalarınızı güçlü bir web sitesiyle desteklemek istiyorsanız {{appName}} ile iletişime geçin.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

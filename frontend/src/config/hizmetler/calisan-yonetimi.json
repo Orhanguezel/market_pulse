@@ -1,0 +1,215 @@
+{
+  "slug": "calisan-yonetimi",
+  "category": "urun-modulleri",
+  "module": "crm",
+  "order": 30,
+  "icon": "UserCog",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Çalışan Yönetim Sistemi | Personel Takip ve Performans",
+        "description": "İşletmenizdeki çalışanların görevlerini, performanslarını ve vardiyalarını tek bir merkezden kolayca yönetin.",
+        "ogTitle": "Çalışan Yönetim Sistemi | {{appName}}",
+        "ogDescription": "İş görevlerinizi yönetin, yöneticilerinizle iletişim kurun ve servis cihazlarınızı takip edin. Size atanan servis cihazlarını kolayca yönetin ve durumlarını güncelleyin. Tarafınıza zimmetlenmiş envanterleri kolayca yönetin ve takip edin."
+      },
+      "hero": {
+        "eyebrow": "Ürün Modülü",
+        "title": "Çalışan Yönetimi Modülü",
+        "lead": "İş görevlerinizi yönetin, yöneticilerinizle iletişim kurun ve servis cihazlarınızı takip edin. Size atanan servis cihazlarını kolayca yönetin ve durumlarını güncelleyin. Tarafınıza zimmetlenmiş envanterleri kolayca yönetin ve takip edin.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Nasıl çalışır?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Öne Çıkan Özellikler",
+          "items": [
+            {
+              "title": "Chat Paneli",
+              "body": "Yöneticilerinizle anlık mesajlaşma yoluyla hızlı ve etkili iletişim kurun."
+            },
+            {
+              "title": "Servis Cihazları Yönetimi",
+              "body": "Size atanan cihazları görüntüleyin, yönetin ve durumlarını güncelleyin."
+            },
+            {
+              "title": "Envanter ve Ürün Takibi",
+              "body": "Envanterlerinizi ve ürünlerinizi kolayca görüntüleyin ve yönetin."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Nasıl Çalışır?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Giriş Yapın",
+              "body": "Sisteme giriş yaparak size atanan görevleri ve cihazları görüntüleyin."
+            },
+            {
+              "n": 2,
+              "title": "Görevleri Yönetin",
+              "body": "Size atanan görevleri takip edin, servis cihazlarını yönetin ve durumlarını güncelleyin."
+            },
+            {
+              "n": 3,
+              "title": "İletişim Kurun",
+              "body": "Chat paneli üzerinden yöneticilerinizle iletişim kurun ve bilgi alışverişinde bulunun."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Sıkça Sorulan Sorular",
+          "items": [
+            {
+              "q": "İhracat Radarı nedir ve kimler için uygundur?",
+              "a": "İhracat Radarı, ihracat yapan firmalar için geliştirilmiş bir işletme yönetim ve CRM platformudur. Müşteri yönetimi, teklif ve sipariş takibi, WhatsApp entegrasyonu, ihracat verileri ve toplu e-posta gönderimi gibi araçları tek panelde sunar. Özellikle dış ticaret firmaları, üreticiler, toptancılar ve B2B satış yapan işletmeler için uygundur."
+            },
+            {
+              "q": "İhracat Radarı hangi modülleri içerir?",
+              "a": "Platform; müşteri yönetimi (CRM), teklif ve sipariş yönetimi, envanter yönetimi, hatırlatıcı sistemi, toplu e-posta gönderimi, WhatsApp yazılımı, WhatsApp AI araçları, Google Maps veri çekme aracı ve ihracat verileri gibi birçok modül içerir. Bu modüller entegre çalışarak satış ve operasyon süreçlerini dijitalleştirir."
+            },
+            {
+              "q": "WhatsApp entegrasyonu nasıl çalışır?",
+              "a": "WhatsApp modülü sayesinde müşterilere bireysel veya toplu mesaj gönderilebilir. WhatsApp AI özelliği ise otomatik yanıtlar oluşturarak müşteri taleplerine hızlı dönüş sağlar. CRM ile entegre çalıştığı için müşteri geçmişi ve sipariş bilgileri mesaj içeriklerine dahil edilebilir."
+            },
+            {
+              "q": "İhracat yapan firmalara nasıl katkı sağlar?",
+              "a": "İhracat Radarı, ihracat yapan firmaların potansiyel müşteri bulmasını, teklif süreçlerini yönetmesini ve sipariş takibini düzenli şekilde yapmasını sağlar. Dünyadan gelen talepler ve ihracat verileri gibi araçlar sayesinde yeni pazar fırsatları analiz edilebilir. Bu da satış hacmini artırmaya yardımcı olur."
+            },
+            {
+              "q": "Verilerim güvende mi?",
+              "a": "Platformda yer alan tüm müşteri ve işletme verileri güvenli sunucularda saklanır. Yetkilendirme sistemi sayesinde kullanıcı bazlı erişim kontrolü sağlanır. Böylece firma içi veri güvenliği korunur ve dış erişimlere karşı önlem alınır."
+            },
+            {
+              "q": "İhracat Radarı’nı kullanmak için teknik bilgi gerekir mi?",
+              "a": "Hayır. Platform kullanıcı dostu arayüze sahiptir ve teknik bilgi gerektirmez. Satış ekipleri, ihracat departmanları ve işletme sahipleri kolayca kullanabilir. Kurulum ve kullanım süreci hızlıdır ve işletmeler kısa sürede aktif olarak sistemi kullanmaya başlayabilir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Çalışan Yönetimini Optimize Edin",
+        "body": "İş akışınızı hızlandırın, iletişimi güçlendirin ve verimliliğinizi artırın.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "seo": {
+        "title": "Employee Management - Efficient Workflow and Communication | isletmeyonetim.com",
+        "description": "Optimize your workflow with the employee management module, easily manage product assignments, sales, and service device responsibilities. Try it for free!",
+        "ogTitle": "Employee Management - Efficient Workflow and Communication | {{appName}}",
+        "ogDescription": "Manage your work tasks, communicate with your managers, and track your service devices. Easily manage and update the status of service devices assigned to you. Easily manage and track inventories assigned to you."
+      },
+      "hero": {
+        "eyebrow": "Product Module",
+        "title": "Employee Management Module",
+        "lead": "Manage your work tasks, communicate with your managers, and track your service devices. Easily manage and update the status of service devices assigned to you. Easily manage and track inventories assigned to you.",
+        "primaryCTA": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "How it works?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Featured Characteristics",
+          "items": [
+            {
+              "title": "Chat Panel",
+              "body": "Communicate quickly and effectively with your managers through instant messaging."
+            },
+            {
+              "title": "Service Device Management",
+              "body": "View, manage, and update the status of devices assigned to you."
+            },
+            {
+              "title": "Inventory and Product Tracking",
+              "body": "Easily view and manage your inventories and products."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "How Does It Work?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Log In",
+              "body": "Log into the system to view tasks and devices assigned to you."
+            },
+            {
+              "n": 2,
+              "title": "Manage Tasks",
+              "body": "Track assigned tasks, manage service devices, and update their status."
+            },
+            {
+              "n": 3,
+              "title": "Communicate",
+              "body": "Communicate with your managers through the chat panel and exchange information."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Frequently Asked Questions",
+          "items": [
+            {
+              "q": "Is the system easy to use?",
+              "a": "Yes, our system has a user-friendly interface. Additionally, we provide full support to our users with comprehensive training videos and live support service."
+            },
+            {
+              "q": "Can it be integrated with our existing systems?",
+              "a": "Yes, we can provide integration with many popular accounting and e-commerce platforms. Contact our team for custom integrations."
+            },
+            {
+              "q": "How is the product assignment process done?",
+              "a": "The product assignment process can be easily done through the system. Go to the inventory module, select the relevant product, and click the \"Assign\" button. Then you can complete the assignment process by selecting the employee. Assigned products can be viewed on the respective employee's profile."
+            },
+            {
+              "q": "Can employees make sales through the system?",
+              "a": "Yes, employees can make sales through the system. Employees with access to the sales module can create new sales records by entering customer information and selecting products."
+            },
+            {
+              "q": "How is service device responsibility determined and tracked?",
+              "a": "Service device responsibility is assigned by managers through the system. In the technical service module, a responsible employee can be designated for each device. Employees can view the devices assigned to them, update their status, and perform necessary operations. The system tracks the status of devices and responsible employees in real-time."
+            },
+            {
+              "q": "Is access from mobile devices possible?",
+              "a": "Yes, our system is fully mobile-compatible. You can easily perform your customer and sales management operations from your smartphone or tablet."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Optimize Your Employee Management",
+        "body": "Accelerate your workflow, strengthen communication, and increase your productivity.",
+        "button": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

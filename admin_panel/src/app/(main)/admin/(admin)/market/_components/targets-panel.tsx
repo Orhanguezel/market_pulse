@@ -103,7 +103,7 @@ const HOW_TO_STEPS = [
   {
     icon: TrendingUp,
     title: 'Churn Risk Takibi',
-    desc: 'Paspas müşterisiyse churn risk skoru otomatik hesaplanır; kaybetmeden önce uyarı alırsın.',
+    desc: 'ERP müşterisiyse churn risk skoru otomatik hesaplanır; kaybetmeden önce uyarı alırsın.',
   },
 ];
 
@@ -638,11 +638,11 @@ function TargetIntelPanel({ targetId, fallback }: { targetId: string; fallback: 
                 <span className="font-mono text-gm-text">+{data.churn.age_score.toFixed(0)}</span>
               </div>
               <div className="flex items-center justify-between">
-                <span className="text-gm-muted">Paspas sipariş trendi</span>
-                {data.churn.paspas_score === null ? (
+                <span className="text-gm-muted">ERP sipariş trendi</span>
+                {data.churn.erp_score === null ? (
                   <span className="font-mono text-xs italic text-gm-muted/60">veri yok</span>
                 ) : (
-                  <span className="font-mono text-gm-text">+{data.churn.paspas_score.toFixed(0)}</span>
+                  <span className="font-mono text-gm-text">+{data.churn.erp_score.toFixed(0)}</span>
                 )}
               </div>
               <div className="border-t border-gm-border-soft pt-2 mt-2 flex items-center justify-between">
@@ -655,15 +655,15 @@ function TargetIntelPanel({ targetId, fallback }: { targetId: string; fallback: 
           )}
         </div>
 
-        {/* Paspas orders trend */}
+        {/* ERP orders trend */}
         <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/20 p-4">
-          <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-gm-muted">Sipariş Geçmişi (Paspas)</div>
+          <div className="mb-3 text-[10px] font-bold uppercase tracking-widest text-gm-muted">Sipariş Geçmişi (ERP)</div>
           {isLoading ? (
             <Skeleton className="h-24 w-full bg-gm-surface/20" />
           ) : data?.orders?.error ? (
-            <div className="text-sm text-gm-warning">Paspas ERP'den çekilemedi: {data.orders.error}</div>
-          ) : !t.paspasCustomerId ? (
-            <div className="text-sm text-gm-muted">Bu hedef paspas müşterisiyle eşleştirilmemiş</div>
+            <div className="text-sm text-gm-warning">ERP'den çekilemedi: {data.orders.error}</div>
+          ) : !t.externalCustomerId ? (
+            <div className="text-sm text-gm-muted">Bu hedef ERP müşterisiyle eşleştirilmemiş</div>
           ) : data?.orders ? (
             <div className="space-y-3 text-sm">
               <div className="grid grid-cols-2 gap-3">

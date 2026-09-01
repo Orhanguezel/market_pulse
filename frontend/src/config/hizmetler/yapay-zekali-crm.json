@@ -1,0 +1,202 @@
+{
+  "slug": "yapay-zekali-crm",
+  "category": "crm-satis",
+  "module": "crm",
+  "order": 80,
+  "icon": "Sparkles",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Yapay Zekâlı CRM | AI Destekli Satış, Müşteri Takibi, Teklif ve E-posta Yönetimi",
+        "description": "Yapay zekâlı CRM ile müşteri notlarını özetleyin, satış takiplerini güçlendirin, e-posta taslakları oluşturun, müşteri adaylarını analiz edin ve satış ekibinizin verimliliğini artırın.",
+        "ogTitle": "Yapay Zekâlı CRM | {{appName}}",
+        "ogDescription": "AI destekli CRM yapısıyla müşteri notlarını özetleyin, e-posta taslakları hazırlayın, satış takiplerini güçlendirin ve müşteri adaylarını daha düzenli yönetin."
+      },
+      "hero": {
+        "eyebrow": "CRM ve Satış",
+        "title": "Yapay Zekâlı CRM",
+        "lead": "Satış ekibiniz müşteri notları, e-posta cevapları, teklif takipleri, görüşme özetleri ve kampanya dönüşleri arasında zaman kaybediyor mu? Günümüzde CRM yalnızca müşteri kaydı tutan bir sistem olmaktan çıktı. Yapay zekâ destekli CRM yapısı; müşteri görüşmelerini özetleyebilir, satış temsilcilerine takip metni hazırlayabilir, e-posta taslakları oluşturabilir, müşteri adaylarını sınıflandırabilir ve satış sürecindeki fırsatları daha görünür hale getirebilir. {{appName}} Yapay Zekâlı CRM hizmeti ile şirketinizin satış, müşteri takibi, mail marketing, teklif yönetimi, ihracat müşteri bulma ve ekip performansı süreçlerinde yapay zekâdan nasıl yararlanabileceğinizi planlıyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Kurulum süreci nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Yapay Zekâlı CRM Nedir?",
+          "body": [
+            "Yapay zekâlı CRM, müşteri ilişkileri yönetimi sisteminin yapay zekâ araçlarıyla desteklenmiş halidir.",
+            "Klasik CRM sistemleri müşteri bilgilerini, görüşme notlarını, teklifleri, görevleri ve satış aşamalarını kayıt altına alır. Yapay zekâlı CRM yaklaşımı ise bu verileri daha hızlı yorumlamaya, metin oluşturmaya, müşteri takibini kolaylaştırmaya ve satış ekibinin iş yükünü azaltmaya yardımcı olur.",
+            "{{appName}}, yapay zekâlı CRM yapısını şirketinizin gerçek satış sürecine göre planlar. Böylece yapay zekâ sadece denenen bir teknoloji değil, günlük iş akışına katkı sağlayan pratik bir satış desteğine dönüşür.",
+            "CRM sisteminizi daha akıllı bir satış yönetim aracına dönüştürün: Müşteri notları, e-posta taslakları, teklif takip mesajları, mail marketing metinleri, satış raporu özetleri ve müşteri sınıflandırmaları AI destekli CRM yapısıyla daha hızlı hazırlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Yapay Zekâlı CRM Şirketler İçin Neden Önemlidir?",
+          "body": [
+            "Satış ekipleri her gün çok sayıda müşteriyle görüşür, not alır, teklif hazırlar, e-posta yazar, takip yapar ve rapor hazırlar. Bu süreçlerin önemli bir bölümü tekrar eden işlerden oluşur.",
+            "Yapay zekâ doğru kullanıldığında bu tekrar eden işlerin bir kısmını hızlandırabilir. Yapay zekâlı CRM, satış ekibinin yerine geçmez; satış ekibinin daha hızlı, daha düzenli ve daha profesyonel çalışmasına yardımcı olur."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Şirketinizde CRM var ama ekipler hâlâ birçok işi manuel yapıyorsa, yapay zekâlı CRM yaklaşımı süreci daha verimli hale getirebilir.",
+          "items": [
+            { "title": "Satış Ekibinin Verimliliğini Artırmak İsteyenler", "body": "Satış ekibinin yazışma, takip ve raporlama yükünü azaltmak isteyen şirketler için uygundur." },
+            { "title": "CRM Kullanan İşletmeler", "body": "CRM’den daha fazla değer almak ve verileri yorumlanabilir hale getirmek isteyen firmalara uygundur." },
+            { "title": "Mail Marketing Yapan Firmalar", "body": "E-posta metinlerini, takip mesajlarını ve kampanya dönüşlerini güçlendirmek isteyen şirketler için uygundur." },
+            { "title": "İhracat Müşterileriyle Yazışanlar", "body": "İngilizce yazışmaları daha hızlı ve profesyonel yönetmek isteyen ihracatçılara destek olur." },
+            { "title": "B2B Satış Yapan İşletmeler", "body": "Uzun takip süreci olan B2B müşteri adaylarını daha düzenli yönetmek isteyen şirketler için uygundur." },
+            { "title": "Teklif Sonrası Takibi Güçlendirmek İsteyenler", "body": "Teklif sonrası mesaj, revize talebi ve karar süreci takibini hızlandırabilir." },
+            { "title": "LinkedIn ve Sales Navigator Kullananlar", "body": "LinkedIn mesajlarını ve müşteri adaylarını CRM sürecine bağlamak isteyen ekipler için uygundur." },
+            { "title": "Yapay Zekâyı Doğru Kullanmak İsteyen KOBİ’ler", "body": "Yapay zekâ araçlarını kontrollü, güvenli ve satış odaklı kullanmak isteyen KOBİ’ler için uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Yapay Zekâlı CRM ile Hangi Süreçler Güçlendirilebilir?",
+          "body": [
+            "Yapay zekâlı CRM, şirketinizin birçok satış ve müşteri yönetimi sürecinde kullanılabilir. Doğru kurgulandığında CRM sisteminiz yalnızca veri saklayan bir araç olmaktan çıkar."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Yapay Zekâlı CRM ile Hangi Alanları Destekleyebilirsiniz?",
+          "intro": "{{appName}}, yapay zekâ kullanım senaryolarını şirketinizin satış, müşteri takip, ihracat ve pazarlama süreçlerine göre planlar.",
+          "items": [
+            { "title": "Müşteri Görüşme Notlarını Özetleme", "body": "Satış temsilcileri müşterilerle telefon, toplantı, e-posta veya LinkedIn üzerinden birçok görüşme yapar. Yapay zekâlı CRM ile bu notlar daha düzenli özetlenebilir. Müşterinin ihtiyacı ve ilgilendiği ürün, teklif talebi, bütçe veya miktar bilgisi, karar verici kişi ve satın alma süreci, sonraki aksiyon, takip tarihi ve satış fırsatı potansiyeli daha net hale getirilebilir." },
+            { "title": "E-posta Cevap Taslakları Oluşturma", "body": "Satış ekipleri gün içinde birçok e-posta yazar. Yapay zekâlı CRM ile satış temsilcileri için e-posta taslakları hazırlanabilir. İlk tanıtım maili ve teklif sonrası takip maili, ürün bilgisi, toplantı talebi ve fiyat açıklama maili, numune süreci ve fuar sonrası teşekkür maili, olumlu veya olumsuz müşteri dönüşüne profesyonel cevap gibi metinler oluşturulabilir." },
+            { "title": "Teklif Sonrası Takip Mesajları", "body": "Teklif gönderildikten sonra doğru takip yapılmazsa satış fırsatı kaybolabilir. Yapay zekâlı CRM ile teklif sonrası takip mesajları hazırlanabilir. Teklif gönderildikten sonra nazik hatırlatma, teklif geçerlilik süresi dolmadan bilgilendirme, revize teklif talebi sonrası cevap, fiyat itirazı yapan müşteriye açıklama metni gibi mesajlar üretilebilir." },
+            { "title": "Müşteri Adayı Sınıflandırma", "body": "Her müşteri adayı aynı değerde değildir. Yapay zekâlı CRM yaklaşımıyla müşteri adayları belirli kriterlere göre daha düzenli sınıflandırılabilir. Sıcak, orta veya düşük potansiyelli müşteri, teklif isteyen veya numune isteyen müşteri, daha sonra takip edilecek firma, ihracat potansiyeli yüksek veya B2B satış fırsatı taşıyan firma şeklinde ayrım yapılabilir." },
+            { "title": "Mail Marketing Metinleri Hazırlama", "body": "Mail marketing çalışmalarında doğru metin kullanımı çok önemlidir. Yapay zekâlı CRM yapısı ile farklı kampanyalar için e-posta metinleri hazırlanabilir. B2B tanıtım ve ürün tanıtım maili, ihracat odaklı İngilizce tanıtım maili, fuar öncesi randevu ve fuar sonrası takip maili, distribütörlük görüşmesi ve yeni ürün duyuru maili gibi içerikler oluşturulabilir." },
+            { "title": "İhracat Müşterileri İçin İngilizce Yazışma Desteği", "body": "İhracat yapan şirketlerde İngilizce yazışmalar büyük önem taşır. Yapay zekâlı CRM ile daha profesyonel İngilizce yazışma taslakları oluşturulabilir. İlk tanıtım e-postası ve ürün açıklama mesajı, teklif, proforma ve ödeme bilgilendirme maili, nakliye, sevkiyat ve numune süreci mesajı, fuar sonrası takip ve müşteri sorularına cevap taslağı hazırlanabilir." },
+            { "title": "Kampanya Dönüşlerini Yorumlama", "body": "CRM kampanyalarında çok sayıda veri oluşabilir. Yapay zekâlı CRM yaklaşımıyla kampanya sonuçları daha anlaşılır hale getirilebilir. Hangi kampanya daha fazla dönüş aldı, hangi ülke, sektör veya ürün grubu daha çok ilgi gördü, hangi müşteriler öncelikli takip edilmeli, hangi kampanya tekrar edilmeli veya iyileştirilmeli gibi sorular yanıtlanabilir." },
+            { "title": "Satış Raporlarını Özetleme", "body": "Yöneticiler için uzun CRM raporlarını incelemek her zaman kolay olmayabilir. Satış verileri özetlenerek daha hızlı karar alınabilir. Haftalık ve aylık satış raporu, açık teklifler ve kaybedilen fırsatlar raporu, satış temsilcisi performansı, ihracat müşteri bulma ve tekliften siparişe dönüşüm raporu daha anlaşılır hale getirilebilir." },
+            { "title": "Müşteri Hizmetleri ve Destek Cevapları", "body": "Yapay zekâlı CRM yalnızca satış için değil, müşteri hizmetleri ve destek süreçleri için de kullanılabilir. Sık sorulan sorulara cevap taslakları, teslimat süreci ve ürün kullanımı açıklamaları, şikayet cevap metinleri, destek talebi özetleri ve tekrar eden sorunların raporlanması bu kapsamda ele alınabilir." },
+            { "title": "Yapay Zekâ Destekli Görev ve Hatırlatma Önerileri", "body": "CRM içinde müşteri kayıtları arttıkça hangi müşteriye ne zaman dönüş yapılacağı karışabilir. Yapay zekâ destekli yaklaşım görev ve takip önerileri için kullanılabilir. Teklif gönderildi ama dönüş alınmadı, müşteri uzun süredir aranmadı, fuar sonrası takip yapılmadı, sipariş sonrası memnuniyet araması yapılmalı gibi durumlar hatırlatılabilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Yapay Zekâlı CRM ile Satış Ekibi Nasıl Güçlenir?",
+          "intro": "Yapay zekâlı CRM, satış ekibinin yerini alan bir sistem değil; satış ekibinin performansını destekleyen bir yardımcıdır.",
+          "items": [
+            "E-posta yazma süresi azalır",
+            "Müşteri notları daha düzenli hale gelir",
+            "Takip mesajları daha hızlı hazırlanır",
+            "İngilizce yazışmalar daha profesyonel kurgulanır",
+            "Müşteri adayları daha net sınıflandırılır",
+            "Satış raporları daha kolay yorumlanır",
+            "Ekip aynı dil ve standartta müşteriyle iletişim kurar"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Yapay Zekâlı CRM ile İhracat Süreci Nasıl Desteklenir?",
+          "intro": "İhracat satış sürecinde İngilizce iletişim, hedef müşteri araştırması, mail marketing, teklif, proforma ve takip süreçleri yoğun iş yükü oluşturur.",
+          "items": [
+            "İngilizce tanıtım ve takip maili hazırlama",
+            "Ürün açıklamalarını İngilizce düzenleme",
+            "Proforma ve sevkiyat bilgilendirme metni hazırlama",
+            "Konşimento verileriyle bulunan alıcıları sınıflandırma",
+            "Ülke bazlı müşteri notlarını özetleme",
+            "Yurt dışı müşteri görüşmelerini CRM’de özetleme"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Yapay Zekâlı CRM Kullanırken Nelere Dikkat Edilmelidir?",
+          "body": [
+            "Yapay zekâ güçlü bir araçtır ancak doğru kullanılmadığında hatalı, eksik veya uygun olmayan sonuçlar üretebilir. Bu nedenle yapay zekâlı CRM kullanımında dikkatli bir yapı kurulmalıdır."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Yapay Zekâlı CRM Hizmetinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Satış ekibinin yazışma yükünü azaltır",
+            "Müşteri görüşme notlarını daha anlaşılır hale getirir",
+            "E-posta ve takip mesajlarını daha hızlı hazırlamaya yardımcı olur",
+            "İhracat müşterileriyle İngilizce iletişimi destekler",
+            "Mail marketing kampanyalarını daha profesyonel hale getirir",
+            "Müşteri adaylarının sınıflandırılmasını kolaylaştırır",
+            "Satış raporlarının daha hızlı yorumlanmasını sağlar",
+            "Kampanya dönüşlerini daha anlaşılır hale getirir",
+            "CRM verilerinden daha fazla değer alınmasına yardımcı olur",
+            "Şirketin dijital dönüşüm sürecini güçlendirir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Yapay Zekâlı CRM Kullanımında Sık Yapılan Hatalar",
+          "items": [
+            "Yapay zekâyı sadece metin yazdırma aracı gibi görmek",
+            "CRM verileri düzenli olmadan yapay zekâdan sonuç beklemek",
+            "Yapay zekâ çıktısını kontrol etmeden müşteriye göndermek",
+            "Şirket dili ve marka tonu oluşturmamak",
+            "Satış sürecine uygun kullanım senaryosu belirlememek",
+            "Gizli müşteri bilgilerini dikkatsiz kullanmak",
+            "Ekipleri eğitmeden yapay zekâ kullanımına geçmek",
+            "Her müşteriye aynı mesajı göndermek",
+            "Yapay zekâyı satış temsilcisinin yerine koymak",
+            "Sonuçları ölçmeden sistemi kullanmaya devam etmek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Yapay Zekâ ile Satış, Müşteri Takibi ve E-posta Yönetimi",
+          "body": [
+            "Yapay zekâlı CRM; AI destekli satış CRM, yapay zekâ müşteri takibi, CRM e-posta otomasyonu, yapay zekâ ile mail marketing, ihracat için yapay zekâlı CRM ve yapay zekâ destekli satış ekibi süreçleri için kullanılabilir."
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Yapay Zekâlı CRM Kurulum Süreci Nasıl İlerler?",
+          "intro": "Yapay zekâlı CRM kurulumu, şirketinizin mevcut CRM kullanımı, satış süreci, müşteri iletişimi, e-posta yoğunluğu ve yapay zekâ ihtiyacı değerlendirilerek planlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin CRM kullanımı, satış süreci, müşteri iletişimi, e-posta yoğunluğu ve yapay zekâ ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Kullanım Senaryolarının Belirlenmesi", "body": "E-posta, müşteri notu, teklif takibi, mail marketing, raporlama veya ihracat yazışmaları gibi alanlar belirlenir." },
+            { "n": 3, "title": "CRM Veri Yapısının İncelenmesi", "body": "Müşteri kayıtları, görüşme notları, satış aşamaları, teklif bilgileri ve kampanya verileri gözden geçirilir." },
+            { "n": 4, "title": "Mesaj ve Şablon Yapısının Hazırlanması", "body": "Satış ekibi için e-posta, takip, teklif sonrası dönüş, fuar sonrası mesaj ve ihracat yazışma şablonları hazırlanır." },
+            { "n": 5, "title": "Yapay Zekâ Kullanım Kuralları", "body": "Hangi bilgilerin kullanılacağı, hangi bilgilerin paylaşılmayacağı ve çıktıların nasıl kontrol edileceği belirlenir." },
+            { "n": 6, "title": "Ekip Eğitimi", "body": "Satış, pazarlama, ihracat ve müşteri hizmetleri ekiplerine yapay zekâ destekli CRM kullanım süreci anlatılır." },
+            { "n": 7, "title": "Test ve İyileştirme", "body": "Hazırlanan yapılar gerçek satış sürecinde test edilir, eksikler belirlenir ve kullanım senaryoları geliştirilir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Yapay zekâlı CRM nedir?",
+          "body": [
+            "Yapay zekâlı CRM; müşteri ilişkileri yönetimi sisteminin yapay zekâ araçlarıyla desteklenerek müşteri notlarını özetleme, e-posta taslakları hazırlama, satış takip mesajları oluşturma, müşteri adaylarını sınıflandırma, kampanya dönüşlerini analiz etme ve satış raporlarını yorumlama süreçlerinde kullanılan gelişmiş CRM yaklaşımıdır. {{appName}}, şirketlerin yapay zekâlı CRM yapısını satış, ihracat, mail marketing ve müşteri takip süreçlerine uygun şekilde planlar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Yapay Zekâlı CRM Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Yapay zekâlı CRM kimler için uygundur?", "a": "Yapay zekâlı CRM; satış ekibi bulunan, müşteri iletişimini hızlandırmak isteyen, CRM kullanan, mail marketing yapan, ihracat müşterileriyle yazışan ve yapay zekâyı iş süreçlerine entegre etmek isteyen şirketler için uygundur." },
+            { "q": "Yapay zekâlı CRM ne işe yarar?", "a": "Yapay zekâlı CRM; müşteri notlarını özetleme, e-posta taslakları hazırlama, takip mesajları oluşturma, müşteri adaylarını sınıflandırma, kampanya sonuçlarını yorumlama ve satış ekibinin verimliliğini artırma konularında yardımcı olur." },
+            { "q": "Yapay zekâ satış ekibinin yerine geçer mi?", "a": "Hayır. Yapay zekâ satış ekibinin yerine geçmez. Satış ekibinin daha hızlı, düzenli ve profesyonel çalışmasına destek olur." },
+            { "q": "CRM içinde yapay zekâ ile e-posta hazırlanabilir mi?", "a": "Evet. Tanıtım maili, takip maili, teklif sonrası dönüş, ürün bilgilendirme, fuar sonrası mesaj ve İngilizce ihracat yazışmaları için e-posta taslakları hazırlanabilir." },
+            { "q": "Yapay zekâ müşteri görüşme notlarını özetleyebilir mi?", "a": "Evet. Müşteri görüşme notları özetlenebilir; müşterinin ihtiyacı, teklif talebi, takip tarihi ve sonraki aksiyon daha anlaşılır hale getirilebilir." },
+            { "q": "İhracat yazışmalarında yapay zekâlı CRM kullanılabilir mi?", "a": "Evet. Yurt dışı müşteriler için İngilizce tanıtım, teklif, proforma, takip, sevkiyat ve fuar sonrası iletişim metinleri hazırlanabilir." },
+            { "q": "Yapay zekâ müşteri adaylarını sınıflandırabilir mi?", "a": "Evet. Müşteri adayları sıcak, orta, düşük potansiyelli, teklif isteyen, numune isteyen veya daha sonra takip edilecek müşteri olarak sınıflandırılabilir." },
+            { "q": "Yapay zekâlı CRM güvenli kullanılmalı mı?", "a": "Evet. Müşteri ve şirket verileri dikkatli yönetilmelidir. Gizli veya hassas bilgilerin rastgele yapay zekâ araçlarına girilmemesi ve yapay zekâ çıktılarının insan tarafından kontrol edilmesi gerekir." },
+            { "q": "Yapay zekâlı CRM kurulurken eğitim veriyor musunuz?", "a": "Evet. Satış, pazarlama, ihracat ve müşteri hizmetleri ekiplerine yapay zekâ destekli CRM kullanım senaryoları konusunda eğitim verilebilir." },
+            { "q": "Yapay zekâlı CRM satışları artırır mı?", "a": "Yapay zekâlı CRM doğrudan satış garantisi vermez. Ancak satış ekibinin daha hızlı çalışmasına, takiplerin düzenli yapılmasına, müşteri iletişiminin güçlenmesine ve satış fırsatlarının daha iyi yönetilmesine yardımcı olabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Yapay Zekâyı Şirketinizde Kontrollü, Güvenli ve Satış Odaklı Kullanın",
+        "body": "CRM sisteminiz var ama satış ekibiniz hâlâ e-posta yazmak, müşteri notlarını düzenlemek, takip mesajları hazırlamak ve raporları yorumlamak için fazla zaman harcıyorsa yapay zekâ destekli bir yapıya geçmenin zamanı gelmiş olabilir. {{appName}} Yapay Zekâlı CRM hizmeti ile satış, ihracat, mail marketing ve müşteri takip süreçlerinizi AI destekli hale getirin.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

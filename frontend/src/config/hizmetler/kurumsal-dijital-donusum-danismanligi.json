@@ -1,0 +1,154 @@
+{
+  "slug": "kurumsal-dijital-donusum-danismanligi",
+  "category": "mail-outreach",
+  "module": "service",
+  "order": 50,
+  "icon": "Rocket",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Kurumsal Dijital Dönüşüm Danışmanlığı | CRM, Yapay Zeka, E-Ticaret ve İhracat Otomasyonu",
+        "description": "Şirketinizin satış, CRM, ihracat, e-ticaret, yapay zeka, mail marketing, müşteri yönetimi ve operasyon süreçlerini dijital sistemlerle daha verimli hale getiriyoruz.",
+        "ogTitle": "Kurumsal Dijital Dönüşüm Danışmanlığı | {{appName}}",
+        "ogDescription": "Satış, CRM, ihracat, e-ticaret, yapay zeka, mail marketing, müşteri yönetimi ve raporlama süreçlerinizi dijital sistemlerle daha verimli hale getiriyoruz."
+      },
+      "hero": {
+        "eyebrow": "Mail & Telefon İletişimi",
+        "title": "Kurumsal Dijital Dönüşüm Danışmanlığı",
+        "lead": "Şirketiniz büyümek istiyor ancak satış, müşteri takibi, ihracat, e-ticaret, raporlama ve ekip yönetimi süreçleri hâlâ dağınık mı ilerliyor? {{appName}} olarak şirketlerin iş süreçlerini dijital sistemlerle daha düzenli, ölçülebilir ve yönetilebilir hale getiriyoruz. CRM kurulumu, satış süreci takibi, yapay zeka kullanımı, mail marketing otomasyonu, e-ticaret pazaryeri yönetimi, ihracat müşteri bulma ve operasyon takip sistemleriyle şirketinizin dijital dönüşüm yol haritasını oluşturuyoruz. Amacımız yalnızca yazılım önermek değil; mevcut işleyişinizi analiz ederek uygulanabilir bir sistem kurmanıza yardımcı olmaktır.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Kurumsal Dijital Dönüşüm Danışmanlığı Nedir?",
+          "body": [
+            "Kurumsal dijital dönüşüm danışmanlığı, şirketlerin satış, pazarlama, müşteri ilişkileri, ihracat, e-ticaret, operasyon, raporlama ve ekip yönetimi süreçlerini dijital sistemlerle daha verimli hale getirme hizmetidir.",
+            "Bu hizmet sadece bir yazılım kurulumu değildir. Dijital dönüşüm; şirketin çalışma şeklini analiz etmek, tekrar eden işleri belirlemek, manuel süreçleri azaltmak, müşteri takibini düzenlemek, satış fırsatlarını görünür hale getirmek ve ekibin daha sistemli çalışmasını sağlamaktır.",
+            "{{appName}} olarak şirketinizin mevcut yapısını inceliyor, dijitalleşmesi gereken alanları belirliyor ve iş modelinize uygun bir dönüşüm planı hazırlıyoruz.",
+            "Satış, CRM, teklif, müşteri takibi, ihracat, e-ticaret, mail marketing, yapay zeka, görev yönetimi ve raporlama süreçleri tek bir dijital dönüşüm yol haritası içinde planlanır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Dijital Dönüşüm Şirketler İçin Neden Önemlidir?",
+          "body": [
+            "Birçok şirket büyümek ister ancak süreçleri hâlâ dağınık şekilde yürütür. Müşteri bilgileri farklı Excel dosyalarında tutulur, satış görüşmeleri kişisel WhatsApp mesajlarında kalır, teklifler düzenli takip edilmez ve yöneticiler gerçek zamanlı rapor alamaz.",
+            "Dijital dönüşüm sayesinde şirket içindeki süreçler daha görünür hale gelir. Satış fırsatları takip edilir, müşteri ilişkileri kayıt altına alınır, ekip görevleri düzenlenir, ihracat ve e-ticaret süreçleri ölçülebilir hale gelir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Bu hizmet, sadece büyük şirketler için değil; büyümek isteyen KOBİ’ler, üretici firmalar, ihracatçılar ve hizmet işletmeleri için de uygundur.",
+          "items": [
+            { "title": "Satış Sürecini Düzenlemek İsteyenler", "body": "Satış görüşmeleri, teklifler ve müşteri adaylarını daha net takip etmek isteyen şirketler için uygundur." },
+            { "title": "CRM Sistemine Geçmek İsteyenler", "body": "Müşteri bilgilerini ve satış süreçlerini tek merkezde yönetmek isteyen işletmelere destek olur." },
+            { "title": "İhracat ve E-Ticaret Yapanlar", "body": "İhracat, e-ticaret ve satış süreçlerini tek yapı altında toplamak isteyen şirketlere uygundur." },
+            { "title": "Yapay Zeka Kullanmak İsteyen Ekipler", "body": "Yapay zeka araçlarını iş süreçlerinde doğru şekilde kullanmak isteyen ekipler için uygundur." },
+            { "title": "Mail Marketing Sürecini Otomatikleştirmek İsteyenler", "body": "Mail marketing ve müşteri takip süreçlerini sistemli hale getirmek isteyen firmalara destek sağlar." },
+            { "title": "Pazaryeri Yöneten Şirketler", "body": "Trendyol, Amazon, Etsy, eBay, Alibaba ve B2B platformları birlikte yöneten şirketler için uygundur." },
+            { "title": "Dış Ticaret Operasyonu Yönetenler", "body": "İhracat müşteri bulma, teklif, proforma, nakliye ve sevkiyat sürecini takip etmek isteyen işletmelere uygundur." },
+            { "title": "Yöneticiler ve KOBİ’ler", "body": "Görevleri, hedefleri, raporları ve ekip performansını daha net görmek isteyen yöneticilere uygundur." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Dijital Dönüşümde Hangi Süreçleri İnceliyoruz?",
+          "intro": "Kurumsal dijital dönüşüm sürecinde şirketinizin ihtiyaçlarına göre farklı alanlar analiz edilir. Bu analiz sonucunda uygulanabilir bir dijital dönüşüm yol haritası hazırlanır.",
+          "items": [
+            { "title": "Satış Süreci Dijitalleşmesi", "body": "Satış görüşmeleri, müşteri notları ve teklifler dağınık kalmamalıdır. Müşteri adayı kayıt sistemi, satış fırsatı ve teklif takibi, sıcak / orta / soğuk müşteri sınıflandırması, satış raporları ve kaybedilen fırsat analizi kurgulanır." },
+            { "title": "CRM ve Müşteri Yönetimi", "body": "CRM, dijital dönüşümün merkezinde yer alır. Müşteri kayıt yapısı, müşteri adayı yönetimi, teklif ve sipariş takibi, görev / hatırlatma / raporlama ekranları CRM üzerinde düzenli yönetilir." },
+            { "title": "Mail Marketing ve Satış Takip Otomasyonu", "body": "Mail marketing çalışmalarının yalnızca gönderim değil, gerçek bir satış takip sistemine dönüşmesi gerekir. Hedef müşteri listesi, mail gönderim ve takip planı, cevap veren firmaların sınıflandırılması ve CRM’e müşteri adayı aktarımı sağlanır." },
+            { "title": "İhracat Süreçlerinin Dijitalleşmesi", "body": "İhracat süreci kişisel takipten çıkarak şirketin kurumsal sistemi haline gelmelidir. Yurt dışı müşteri listeleri, mail marketing ve telefon araması kayıtları, proforma / ödeme / nakliye takibi ile gümrük evrak kontrolü ve operasyon sonrası takip düzenlenir." },
+            { "title": "E-Ticaret ve Pazaryeri Süreçlerinin Dijitalleşmesi", "body": "Trendyol, Amazon, Etsy, eBay, Alibaba ve B2B platformlarda satışı ayrı ayrı takip etmek zaman kaybına neden olabilir. Mağaza hesap yönetimi, ürün yükleme / stok / fiyat kontrolü, sipariş ve müşteri mesajları takibi, platform performans raporları tek yapıda toplanır." },
+            { "title": "Yapay Zeka ile İş Süreçlerini Güçlendirme", "body": "Yapay zeka araçları satış, pazarlama, ihracat, e-ticaret, raporlama, yazılım ve içerik üretimi süreçlerinde avantaj sağlar. ChatGPT ile kurumsal yazışma ve içerik, Claude Code ile yazılım ve teknik süreç desteği, Gemini ile araştırma / analiz / doküman ve yapay zeka ile rapor / özet / müşteri cevabı üretimi kullanılabilir." },
+            { "title": "Ekip Görev ve Sorumluluk Yönetimi", "body": "Dijital dönüşüm sadece yazılım kullanımı değildir; ekiplerin görev ve sorumluluklarının netleşmesi de önemlidir. Kim hangi müşteriden sorumlu, hangi teklif hangi aşamada, hangi görev ne zaman tamamlanmalı ve yönetici hangi raporları görmeli netleştirilir." },
+            { "title": "Raporlama ve Performans Takibi", "body": "Dijital dönüşümün en büyük avantajlarından biri yöneticilerin daha net rapor alabilmesidir. Yeni müşteri adayı ve gönderilen teklif sayısı, satışa dönüşen fırsatlar ve açık teklifler, mail kampanya ve telefon araması sonuçları ile e-ticaret ve ekip görev performansı raporlanır." },
+            { "title": "Web Sitesi ve Dijital Müşteri Kazanımı", "body": "Web sitesi sadece tanıtım alanı değil, müşteri adayı oluşturan bir satış kanalı olarak kurgulanmalıdır. Teklif alma ve iletişim formları, WhatsApp bağlantıları ve CRM entegrasyonu, SEO uyumlu hizmet sayfaları ve GEO odaklı kısa cevap / SSS alanları planlanır." },
+            { "title": "Şirketinize Özel Dijital Dönüşüm Yol Haritası", "body": "Her şirketin dijital dönüşüm ihtiyacı farklıdır. Standart bir şablonla değil, mevcut süreç analizi, dijitalleşmesi gereken alanlar, kullanılacak araçlar ve CRM yapısı ile uygulama takvimi ve raporlama ihtiyaçlarına göre yol haritası oluşturulur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Kurumsal Dijital Dönüşüm Kapsamında Değerlendirilen Başlıklar",
+          "body": [
+            "Şirketinizin ihtiyacına göre CRM danışmanlığı, satış otomasyonu, ihracat otomasyonu, e-ticaret süreç yönetimi, mail marketing otomasyonu, yapay zeka danışmanlığı ve iş süreçleri dijitalleşmesi birlikte ele alınabilir."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Kurumsal Dijital Dönüşüm Hizmetinin Avantajları",
+          "items": [
+            "Satış süreçleri daha düzenli takip edilir",
+            "Müşteri bilgileri tek merkezde toplanır",
+            "Teklif ve sipariş süreçleri görünür hale gelir",
+            "Mail marketing ve telefon takibi sistemli ilerler",
+            "İhracat müşteri bulma süreci kayıt altına alınır",
+            "E-ticaret ve pazaryeri yönetimi daha kontrollü olur",
+            "Yapay zeka araçları iş süreçlerine entegre edilir",
+            "Ekip görevleri ve sorumlulukları netleşir",
+            "Yönetici raporları daha anlaşılır hale gelir",
+            "Manuel iş yükü, müşteri kaybı ve takip hataları azalır"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Dijital Dönüşümde Sık Yapılan Hatalar",
+          "items": [
+            "Sadece yazılım almayı dijital dönüşüm sanmak",
+            "Şirket süreçlerini analiz etmeden sistem kurmak",
+            "CRM’i yalnızca müşteri rehberi gibi kullanmak",
+            "Ekipleri eğitmeden yeni sisteme geçirmek",
+            "Mail marketing sonuçlarını takip etmemek",
+            "Satış fırsatlarını kayıt altına almamak",
+            "E-ticaret hesaplarını ayrı ayrı ve plansız yönetmek",
+            "Yapay zeka araçlarını rastgele kullanmak",
+            "Raporlama ihtiyacını en başta belirlememek",
+            "Web sitesini satış sürecine bağlamamak"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Dijital Dönüşüm Sürecimiz Nasıl İlerler?",
+          "intro": "Ön görüşmeden takip ve iyileştirmeye kadar süreç adım adım planlanır. Amaç, şirketinizin mevcut yapısına uygun, uygulanabilir ve sürdürülebilir bir dijital dönüşüm sistemi oluşturmaktır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin mevcut yapısı, satış süreci, müşteri yönetimi, ihracat durumu, e-ticaret kanalları ve dijital ihtiyaçları değerlendirilir." },
+            { "n": 2, "title": "Mevcut Durum Analizi", "body": "Hangi süreçlerin manuel, dağınık veya ölçülemez olduğu belirlenir." },
+            { "n": 3, "title": "İhtiyaçların Belirlenmesi", "body": "CRM, mail marketing, e-ticaret, ihracat, yapay zeka, web sitesi ve raporlama alanlarında ihtiyaçlar netleştirilir." },
+            { "n": 4, "title": "Yol Haritası Hazırlığı", "body": "Şirketinize özel dijital dönüşüm planı oluşturulur." },
+            { "n": 5, "title": "Sistem Kurulumu ve Düzenleme", "body": "Gerekli CRM, takip sistemi, görev yapısı, müşteri listesi, e-posta süreci veya platform yönetim yapısı hazırlanır." },
+            { "n": 6, "title": "Eğitim ve Kullanım Desteği", "body": "Ekibin sistemi doğru kullanması için gerekli eğitim ve yönlendirmeler sağlanır." },
+            { "n": 7, "title": "Takip ve İyileştirme", "body": "Sistem kullanıldıkça eksikler belirlenir, süreçler iyileştirilir ve raporlama yapısı güçlendirilir." }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Kurumsal Dijital Dönüşüm Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Kurumsal dijital dönüşüm danışmanlığı kimler için uygundur?", "a": "Bu hizmet; satış, müşteri takibi, ihracat, e-ticaret, CRM, yapay zeka ve ekip yönetimi süreçlerini daha düzenli hale getirmek isteyen şirketler için uygundur." },
+            { "q": "Dijital dönüşüm sadece yazılım kurulumu mudur?", "a": "Hayır. Dijital dönüşüm yalnızca yazılım kurulumu değildir. Şirketin iş süreçlerinin analiz edilmesi, manuel işlerin azaltılması, takip sistemlerinin kurulması, ekiplerin eğitilmesi ve raporlama yapısının oluşturulması gerekir." },
+            { "q": "CRM kurulumu dijital dönüşümün parçası mıdır?", "a": "Evet. CRM, müşteri yönetimi, satış takibi, teklif süreçleri, görevler ve raporlama için dijital dönüşümün en önemli parçalarından biridir." },
+            { "q": "Yapay zeka araçlarını şirket süreçlerine entegre ediyor musunuz?", "a": "Evet. ChatGPT, Claude Code, Gemini ve Antigravity gibi yapay zeka araçlarının satış, ihracat, e-ticaret, yazılım, içerik ve raporlama süreçlerinde nasıl kullanılabileceği konusunda destek sağlanabilir." },
+            { "q": "E-ticaret süreçleri de dijital dönüşüme dahil mi?", "a": "Evet. Trendyol, Amazon, Etsy, eBay, Alibaba ve B2B platformlarda hesap yönetimi, ürün takibi, müşteri mesajları ve performans raporları dijital dönüşüm kapsamında değerlendirilebilir." },
+            { "q": "İhracat süreçleri dijitalleştirilebilir mi?", "a": "Evet. Yurt dışı müşteri listeleri, konşimento verileriyle bulunan alıcılar, mail marketing, telefon aramaları, teklifler, proforma, nakliye ve sevkiyat süreçleri dijital takip sistemlerine alınabilir." },
+            { "q": "Mail marketing süreci otomatik takip edilebilir mi?", "a": "Evet. Mail marketing kampanyaları, cevap veren firmalar, takip tarihleri, teklif talepleri ve satış fırsatları CRM veya özel takip sistemleriyle yönetilebilir." },
+            { "q": "Şirket çalışanlarına eğitim veriyor musunuz?", "a": "Evet. Kullanılacak CRM, yapay zeka araçları, LinkedIn, Sales Navigator, e-ticaret ve dijital süreçler hakkında şirket çalışanlarına uygulamalı eğitimler verilebilir." },
+            { "q": "Küçük ve orta ölçekli şirketler için uygun mu?", "a": "Evet. Dijital dönüşüm sadece büyük şirketlere yönelik değildir. KOBİ’ler için doğru kurgulanmış dijital sistemler, satış ve operasyon süreçlerinde ciddi verimlilik sağlayabilir." },
+            { "q": "Dijital dönüşüm süreci ne ile başlar?", "a": "Dijital dönüşüm süreci mevcut durum analiziyle başlar. Önce şirketin hangi süreçleri manuel, dağınık veya ölçülemez ilerliyor belirlenir; ardından uygulanabilir dijital dönüşüm yol haritası hazırlanır." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Şirketinizin Dijital Dönüşüm Yol Haritasını Birlikte Hazırlayalım",
+        "body": "Şirketinizde satış, müşteri takibi, ihracat, e-ticaret, yapay zeka, CRM ve raporlama süreçleri dağınık ilerliyorsa artık bunları daha sistemli hale getirmenin zamanı gelmiş olabilir. {{appName}} olarak şirketinizin mevcut yapısını analiz ediyor, dijitalleşmesi gereken alanları belirliyor ve uygulanabilir bir dönüşüm planı oluşturuyoruz.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

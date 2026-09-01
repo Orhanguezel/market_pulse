@@ -7,6 +7,8 @@ from typing import Any
 from src.config import get_settings
 from src.schemas.scrape import ScrapeRequest
 
+FAIR_PROXY_PROFILES = {"fair-exhibitor", "fair-exhibitor-detail"}
+
 
 @dataclass(frozen=True)
 class FetchResult:
@@ -41,6 +43,9 @@ def _browser_kwargs(request: ScrapeRequest) -> dict[str, Any]:
         kwargs["wait_selector"] = request.options.wait_for
     if request.options.user_agent:
         kwargs["useragent"] = request.options.user_agent
+    proxy_url = _proxy_url_for_request(request)
+    if proxy_url:
+        kwargs["proxy"] = proxy_url
     return kwargs
 
 
@@ -57,7 +62,16 @@ def _fast_kwargs(request: ScrapeRequest) -> dict[str, Any]:
     }
     if request.cookies:
         kwargs["cookies"] = request.cookies
+    proxy_url = _proxy_url_for_request(request)
+    if proxy_url:
+        kwargs["proxy"] = proxy_url
     return kwargs
+
+
+def _proxy_url_for_request(request: ScrapeRequest) -> str | None:
+    if request.profile in FAIR_PROXY_PROFILES:
+        return get_settings().fair_proxy_url.strip() or None
+    return None
 
 
 def _extract_cookies(response: Any) -> dict[str, Any] | None:

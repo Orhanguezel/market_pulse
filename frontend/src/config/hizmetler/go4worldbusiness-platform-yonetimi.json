@@ -1,0 +1,194 @@
+{
+  "slug": "go4worldbusiness-platform-yonetimi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 110,
+  "icon": "Globe",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Go4WorldBusiness Platform Yönetimi | B2B Alıcı Takibi, Ürün Yayınlama ve İhracat Müşteri Bulma",
+        "description": "Go4WorldBusiness platformunda ihracat müşteri bulmak isteyen firmalar için firma profili düzenleme, İngilizce ürün yayınlama, alıcı talepleri, teklif takibi ve CRM müşteri yönetimi desteği sunuyoruz.",
+        "ogTitle": "Go4WorldBusiness Platform Yönetimi | {{appName}}",
+        "ogDescription": "Go4WorldBusiness firma profili, İngilizce ürün yayınlama, alıcı talepleri, teklif takibi ve CRM müşteri yönetimi süreçleri için profesyonel destek alın."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "Go4WorldBusiness Platform Yönetimi",
+        "lead": "Go4WorldBusiness üzerinde firma profiliniz var ama ürünlerinizi düzenli yayınlayamıyor, alıcı taleplerini takip edemiyor, İngilizce ürün açıklamalarınızı hazırlayamıyor veya gelen fırsatları satış sürecine bağlayamıyor musunuz? B2B platformlarda sadece hesap açmak yeterli değildir. Yabancı alıcıların firmanızı doğru anlaması için firma profiliniz, ürün açıklamalarınız, görselleriniz, teklif yaklaşımınız, yanıt hızınız ve müşteri takip süreciniz profesyonel şekilde yönetilmelidir. {{appName}} olarak Go4WorldBusiness platformunda yer alan veya bu platformu ihracat müşteri bulma sürecinde kullanmak isteyen firmalara platform yönetimi desteği sunuyoruz. Amacımız, Go4WorldBusiness hesabınızı pasif bir firma kaydı olmaktan çıkarıp daha düzenli bir B2B satış kanalına dönüştürmektir.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Go4WorldBusiness Platform Yönetimi Nedir?",
+          "body": [
+            "Go4WorldBusiness platform yönetimi, Go4WorldBusiness üzerinde firma profilinin, ürün bilgilerinin, İngilizce açıklamaların, alıcı taleplerinin, teklif süreçlerinin ve müşteri takip adımlarının düzenli yönetilmesidir.",
+            "Bu platformda alıcılar genellikle ürün, tedarikçi, üretici, ihracatçı, toptancı veya distribütör arayışıyla hareket eder. Bu nedenle firmanızın ve ürünlerinizin yabancı alıcıya net, güven verici ve ticari açıdan anlaşılır şekilde sunulması gerekir.",
+            "{{appName}}, Go4WorldBusiness platform yönetimini yalnızca ürün yayınlama işlemi olarak değil, ihracat müşteri bulma ve B2B satış takip sürecinin parçası olarak ele alır.",
+            "Ürün yayınlama, alıcı talebi takibi, teklif süreci, CRM müşteri yönetimi ve ihracat satış takibi birlikte planlandığında Go4WorldBusiness hesabınız daha düzenli ve takip edilebilir hale gelir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Go4WorldBusiness Platform Yönetimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Go4WorldBusiness hesabı doğru yönetildiğinde firma profili, ürün sayfaları, alıcı talepleri, teklif süreçleri ve CRM müşteri takibi daha düzenli ilerler.",
+            "Bu çalışma, Go4WorldBusiness hesabınızı yalnızca ürün yayınlama alanı olarak değil, ihracat satış stratejinize bağlı aktif bir B2B müşteri kanalı olarak kullanmanıza yardımcı olur."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Go4WorldBusiness Neden B2B Satış Sürecinde Kullanılabilir?",
+          "body": [
+            "Go4WorldBusiness, yurt dışı alıcı ve tedarikçi firmaların bir araya geldiği B2B platformlardan biridir. İhracat yapmak isteyen firmalar için dijital görünürlük, ürün tanıtımı ve alıcı taleplerini takip etme açısından destekleyici bir kanal olabilir.",
+            "Ancak bu tür platformlarda başarılı olmak için yalnızca hesap açmak yeterli değildir. Alıcılar ürününüzü, şirket açıklamanızı, İngilizce metinlerinizi, iletişim hızınızı ve teklif yaklaşımınızı birlikte değerlendirir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Go4WorldBusiness hesabınız var ama düzenli ürün yayını, alıcı takibi ve satış süreci yönetimi yapılmıyorsa bu hizmet sizin için uygundur.",
+          "items": [
+            { "title": "Go4WorldBusiness Hesabı Olan Firmalar", "body": "Hesabı olan ancak aktif yönetemeyen firmalar için uygundur." },
+            { "title": "Ürün Yayınlamak İsteyen Üretici Şirketler", "body": "Ürünlerini B2B platformda yurt dışı alıcılara sunmak isteyen üreticiler için planlanabilir." },
+            { "title": "İhracat Müşteri Bulmak İsteyen KOBİ’ler", "body": "Go4WorldBusiness hesabını ihracat müşteri bulma süreciyle birlikte kullanmak isteyen KOBİ’ler için uygundur." },
+            { "title": "Yurt Dışı Alıcı Taleplerini Takip Etmek İsteyen Firmalar", "body": "Alıcı taleplerini, mesajları ve teklif isteklerini düzenli takip etmek isteyen satış ekipleri için uygundur." },
+            { "title": "B2B Platformlarda Görünürlüğünü Artırmak İsteyenler", "body": "Firma profili ve ürün sayfalarını yabancı alıcılar için güçlendirmek isteyen işletmelere uygundur." },
+            { "title": "İngilizce Ürün Açıklaması Hazırlamakta Zorlanan Şirketler", "body": "Ürün açıklamalarını B2B satış diline uygun hale getirmek isteyen firmalara destek verilebilir." },
+            { "title": "CRM ile Platform Takibi Yapmak İsteyenler", "body": "Alıcı mesajlarını ve teklif taleplerini CRM’e aktarmak isteyen satış ekipleri için uygundur." },
+            { "title": "B2B Müşteri Bulma Sürecini Güçlendirmek İsteyenler", "body": "Platform yönetimini ihracat müşteri bulma çalışmalarıyla desteklemek isteyen şirketlere uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Go4WorldBusiness Platform Yönetimi Kapsamında Neler Yapıyoruz?",
+          "body": [
+            "Go4WorldBusiness platform yönetimi, firmanızın ürün yapısına, hedef pazarına ve mevcut hesap durumuna göre planlanabilir. Amaç, hesabınızı daha düzenli, güven verici ve satışa uygun hale getirmektir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Go4WorldBusiness Platform Yönetiminde Hangi Alanlar İncelenir?",
+          "intro": "Go4WorldBusiness platform yönetimi; firma profili, İngilizce şirket tanıtımı, ürün grupları, kategori seçimi, ürün yayınlama, alıcı talepleri, mesaj yanıt süreci, teklif takibi, CRM aktarımı ve düzenli platform kontrolüyle birlikte planlanır.",
+          "items": [
+            { "title": "Firma Profili Düzenleme", "body": "Go4WorldBusiness üzerinde firma profili, yabancı alıcının şirketinizi tanıdığı ilk alanlardan biridir. Firma profiliniz eksik veya dağınık görünüyorsa alıcı sizinle iletişime geçmeden önce tereddüt edebilir." },
+            { "title": "İngilizce Şirket Tanıtımı Hazırlama", "body": "Go4WorldBusiness üzerinde İngilizce şirket tanıtımı profesyonel hazırlanmalıdır. Yabancı alıcı firmanızın ne yaptığını, hangi ürünleri sunduğunu ve nasıl çalıştığını hızlıca anlamalıdır." },
+            { "title": "Ürün Gruplarının Planlanması", "body": "Go4WorldBusiness hesabında ürünlerin rastgele yayınlanması yerine ürün grupları belirlenerek düzenli bir yapı kurulmalıdır." },
+            { "title": "Ürün Kategori Seçimi", "body": "B2B platformlarda doğru kategori seçimi, ürünün doğru alıcıyla buluşması açısından önemlidir. Yanlış kategori, ürün görünürlüğünü ve alıcı ilgisini olumsuz etkileyebilir." },
+            { "title": "Go4WorldBusiness Ürün Yayınlama", "body": "Go4WorldBusiness ürün yayınlama süreci yalnızca ürün adı ve görsel eklemekten ibaret değildir. Ürün sayfası, yabancı alıcının ürününüzü değerlendirdiği dijital satış alanıdır." },
+            { "title": "Ürün Başlığı Hazırlama", "body": "Go4WorldBusiness ürün başlığı, alıcının ürününüzü ilk gördüğü alanlardan biridir. Başlık hem ürünün ne olduğunu açık anlatmalı hem de B2B arama mantığına uygun hazırlanmalıdır." },
+            { "title": "İngilizce Ürün Açıklaması Hazırlama", "body": "Go4WorldBusiness üzerinde ürün açıklaması, yabancı alıcının ürününüzü doğru anlamasını sağlar. Açıklama yalnızca kısa ürün tanımı değil; ürünün ticari değerini anlatan B2B satış metni olarak hazırlanmalıdır." },
+            { "title": "Anahtar Kelime Planlaması", "body": "Go4WorldBusiness ürün sayfalarında anahtar kelime planlaması dikkatli yapılmalıdır. Ürün adı, kullanım alanı, teknik özellikler ve alıcının arama şekli birlikte değerlendirilmelidir." },
+            { "title": "Ürün Görseli ve Katalog Düzeni", "body": "B2B platformlarda ürün görselleri alıcı güveni açısından önemlidir. Görseller ürünün kalitesini, ambalajını, kullanımını ve teknik detaylarını desteklemelidir." },
+            { "title": "MOQ, Ambalaj ve Teslim Bilgileri", "body": "B2B alıcılar yalnızca ürüne değil, ticari şartlara da bakar. Minimum sipariş miktarı, ambalaj bilgisi, teslim süresi ve teklif süreci açık olmalıdır." },
+            { "title": "Alıcı Taleplerinin Takibi", "body": "Go4WorldBusiness platformunda alıcı talepleri düzenli takip edilmelidir. Bazı alıcılar belirli ürünler için tedarikçi arayabilir, fiyat isteyebilir veya tedarik koşullarını öğrenmek isteyebilir." },
+            { "title": "Alıcı Mesajları ve Yanıt Süreci", "body": "Platform üzerinden gelen mesajlara hızlı, net ve profesyonel cevap verilmelidir. Yanıt süreci B2B satışta güven oluşturur." },
+            { "title": "Teklif Taleplerinin Yönetimi", "body": "Go4WorldBusiness üzerinden gelen alıcılar fiyat, numune, katalog veya proforma talep edebilir. Bu talepler düzenli takip edilmezse satış fırsatları kaybedilebilir." },
+            { "title": "CRM ile Go4WorldBusiness Müşteri Takibi", "body": "Go4WorldBusiness üzerinden gelen müşteri adayları CRM’e aktarılmadığında takip süreci dağınık kalabilir. Hangi alıcı teklif istedi, hangi firma numune talep etti, hangi müşteri cevap bekliyor gibi bilgiler kayıt altına alınmalıdır." },
+            { "title": "Platform Performansı ve Düzenli Kontrol", "body": "Go4WorldBusiness hesabı düzenli kontrol edilmelidir. Ürün sayfaları, gelen mesajlar, alıcı talepleri, teklif süreçleri, içerik güncellemeleri ve firma profili belirli aralıklarla incelenmelidir." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Go4WorldBusiness Platform Yönetimi Süreci Nasıl İlerler?",
+          "intro": "Süreç firmanızın ürünleri, hedef ülkeleri, mevcut Go4WorldBusiness hesabı, ihracat hedefleri ve platform yönetimi ihtiyacı değerlendirilerek başlar. Ardından firma profili, ürün kategorileri, İngilizce içerikler, ürün yayınları, alıcı talepleri, mesaj takibi ve CRM takip yapısı birlikte planlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Firmanızın ürünleri, hedef ülkeleri, mevcut Go4WorldBusiness hesabı, ihracat hedefleri ve platform yönetimi ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Hesap ve Firma Profili Analizi", "body": "Mevcut firma profili, şirket açıklaması, ürün grupları, görseller ve iletişim alanları incelenir." },
+            { "n": 3, "title": "Ürün ve Kategori Planı", "body": "Ürün grupları, kategori yapısı, ürün başlıkları, açıklamalar ve anahtar kelime planı oluşturulur." },
+            { "n": 4, "title": "İngilizce İçerik Hazırlığı", "body": "Firma tanıtımı, ürün açıklamaları, başlıklar, teknik bilgiler ve B2B alıcıya yönelik metinler hazırlanır." },
+            { "n": 5, "title": "Ürün Yayınlama ve Güncelleme", "body": "Ürünler Go4WorldBusiness hesabına düzenli şekilde yüklenir veya mevcut ürün sayfaları iyileştirilir." },
+            { "n": 6, "title": "Alıcı Talepleri ve Mesaj Takibi", "body": "Gelen mesajlar, alıcı talepleri, teklif istekleri, numune talepleri ve ürün soruları takip edilir." },
+            { "n": 7, "title": "CRM Aktarımı", "body": "İlgilenen alıcılar CRM’e aktarılır. Teklif, proforma, numune ve takip süreçleri kayıt altına alınır." },
+            { "n": 8, "title": "Raporlama", "body": "Hesap durumu, ürünler, gelen talepler, cevaplanan mesajlar ve satış fırsatları düzenli şekilde raporlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Go4WorldBusiness Platform Yönetiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Firma profiliniz daha profesyonel görünür",
+            "Ürünleriniz İngilizce ve B2B odaklı yayınlanır",
+            "Ürün başlıkları ve açıklamaları daha anlaşılır hale gelir",
+            "Yabancı alıcılar ürün bilgilerinizi daha kolay değerlendirir",
+            "Alıcı talepleri daha düzenli takip edilir",
+            "Gelen mesajlar satış sürecine alınır",
+            "Teklif talepleri CRM üzerinden izlenir",
+            "Ürün sayfaları daha düzenli ve güven verici hale gelir",
+            "Anahtar kelime ve kategori yapısı daha dikkatli planlanır",
+            "İhracat satış ekibi gelen talepleri daha net yönetir",
+            "Platform hesabı pasif kalmaz, düzenli kontrol edilir",
+            "B2B platform yönetimi ihracat stratejinizle bütünleşir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Go4WorldBusiness Platform Yönetiminde Sık Yapılan Hatalar",
+          "items": [
+            "Firma profilini eksik bırakmak",
+            "Ürünleri yanlış veya yetersiz bilgilerle yayınlamak",
+            "Ürün başlıklarını zayıf hazırlamak",
+            "İngilizce ürün açıklamalarını yetersiz yazmak",
+            "Görselleri profesyonel kullanmamak",
+            "MOQ, ambalaj ve teslim bilgilerini belirtmemek",
+            "Anahtar kelime planlaması yapmamak",
+            "Alıcı taleplerini düzenli takip etmemek",
+            "Gelen mesajlara geç cevap vermek",
+            "Teklif isteyen alıcıları CRM’e aktarmamak",
+            "Her ürüne aynı açıklama yapısını kullanmak",
+            "Platform hesabını düzenli kontrol etmemek",
+            "Go4WorldBusiness hesabını satış sürecinden bağımsız düşünmek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Go4WorldBusiness Platform Yönetimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Go4WorldBusiness platform yönetimi, ihracat müşteri bulma ve B2B platform yönetimi sürecinin bir parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Go4WorldBusiness Platform Yönetimi, Ürün Yayınlama, Alıcı Talepleri ve CRM Takibi",
+          "body": [
+            "Go4WorldBusiness platform yönetimi; Go4WorldBusiness hesap yönetimi, ürün yükleme, ürün yayınlama, B2B hesap yönetimi, firma profili düzenleme, ürün açıklaması hazırlama, İngilizce ürün açıklaması, alıcı talepleri takibi, alıcı mesajları takibi, teklif takibi, ihracat müşteri bulma ve CRM müşteri takibi süreçleri için planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Go4WorldBusiness platform yönetimi nedir?",
+          "body": [
+            "Go4WorldBusiness platform yönetimi; Go4WorldBusiness üzerinde firma profilinin düzenlenmesi, İngilizce şirket tanıtımının hazırlanması, ürünlerin doğru kategori, başlık, açıklama, görsel, anahtar kelime, MOQ, ambalaj ve teslim bilgileriyle yayınlanması, alıcı taleplerinin takip edilmesi ve teklif isteklerinin CRM üzerinden satış sürecine alınması hizmetidir. {{appName}}, Go4WorldBusiness hesabı olan ihracatçı firmaların B2B platform süreçlerini daha düzenli, profesyonel ve takip edilebilir şekilde yönetmesine yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Go4WorldBusiness Platform Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Go4WorldBusiness platform yönetimi kimler için uygundur?", "a": "Go4WorldBusiness platform yönetimi; Go4WorldBusiness hesabı olan, ürünlerini yurt dışı alıcılara sunmak isteyen, alıcı taleplerini takip etmek isteyen ve B2B platform sürecini profesyonel yönetmek isteyen firmalar için uygundur." },
+            { "q": "Go4WorldBusiness üzerinde ürün yayınlama desteği veriyor musunuz?", "a": "Evet. Ürün başlığı, kategori, açıklama, görsel, anahtar kelime, MOQ, ambalaj ve teslim bilgileriyle ürün yayınlama desteği verilebilir." },
+            { "q": "İngilizce ürün açıklamaları hazırlanıyor mu?", "a": "Evet. Ürünleriniz için yabancı alıcıların anlayabileceği, B2B satışa uygun, sade ve profesyonel İngilizce ürün açıklamaları hazırlanabilir." },
+            { "q": "Go4WorldBusiness firma profili düzenlenebilir mi?", "a": "Evet. Firma tanıtımı, ürün grupları, şirket açıklaması, görseller, kalite bilgileri ve iletişim alanları daha profesyonel hale getirilebilir." },
+            { "q": "Go4WorldBusiness alıcı talepleri takip ediliyor mu?", "a": "Evet. Platform üzerinden gelen alıcı talepleri, teklif istekleri, numune talepleri ve ürün soruları düzenli takip edilebilir." },
+            { "q": "Go4WorldBusiness’den gelen müşteriler CRM’e aktarılabilir mi?", "a": "Evet. Firma adı, ülke, ilgili kişi, ürün talebi, miktar, teklif durumu, numune talebi ve takip tarihi gibi bilgiler CRM’e aktarılabilir." },
+            { "q": "Go4WorldBusiness hesabı satış garantisi verir mi?", "a": "Hayır. Go4WorldBusiness platform yönetimi satış garantisi vermez. Ancak hesabın daha düzenli, profesyonel ve takip edilebilir şekilde yönetilmesine yardımcı olur." },
+            { "q": "Ürün görselleri kontrol ediliyor mu?", "a": "Evet. Ürün görsellerinin ürünle uyumu, kalite durumu, ambalaj görselleri ve ürün sayfasındaki sunumu değerlendirilebilir." },
+            { "q": "Go4WorldBusiness ihracat müşteri bulma sürecine katkı sağlar mı?", "a": "Evet. Doğru yönetilen Go4WorldBusiness hesabı, yurt dışı alıcıların firmanızı ve ürünlerinizi inceleyebileceği bir B2B görünürlük alanı oluşturabilir." },
+            { "q": "Go4WorldBusiness platform yönetimi hangi hizmetlerle birlikte alınabilir?", "a": "Go4WorldBusiness platform yönetimi; B2B platformlarda ürün yükleme, Alibaba hesap yönetimi, TradeWheel platform yönetimi, Europages firma profili yönetimi, mail marketing, LinkedIn ile B2B müşteri bulma, CRM müşteri takibi ve ihracat operasyon yönetimiyle birlikte alınabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Go4WorldBusiness Hesabınızı Pasif Bir Sayfa Olarak Bırakmayalım",
+        "body": "Go4WorldBusiness hesabınız var ama firma profiliniz, ürün sayfalarınız, İngilizce açıklamalarınız ve alıcı talepleriniz düzenli takip edilmiyorsa B2B satış fırsatlarını kaçırıyor olabilirsiniz. {{appName}} Go4WorldBusiness Platform Yönetimi hizmeti ile firma profilinizi düzenleyelim, ürünlerinizi profesyonel şekilde yayınlayalım, gelen alıcı taleplerini takip edelim ve Go4WorldBusiness hesabınızı ihracat müşteri bulma sürecinizin aktif bir parçası haline getirelim.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

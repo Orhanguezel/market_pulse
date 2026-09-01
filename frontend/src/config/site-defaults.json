@@ -4,7 +4,7 @@
     "titleTemplate": "%s | {{appName}}"
   },
   "brand": {
-    "appName": "MarketPulse",
+    "appName": "İhracat Radarı",
     "taglineTr": "Amazon'da doğru kategoriye gir",
     "taglineEn": "Enter the right Amazon category",
     "wordMarkLine1": "{{appName}}",

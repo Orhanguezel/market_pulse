@@ -6,11 +6,14 @@ const scrape = mock(() => Promise.resolve({ data: {}, text: null }));
 const searchGoogleMaps = mock(() => Promise.resolve({ places: [] }));
 const verifyScraperWebhook = mock(() => true);
 const askBestAvailable = mock(() => Promise.reject(new Error('AI unavailable')));
+const getGoogleMapsKey = mock(() => Promise.resolve(null));
 
 mock.module('@/db/client', () => ({
   db: dbMock.db,
   pool: dbMock.pool,
 }));
+
+mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'avrasya' } }));
 
 mock.module('@/modules/lead-machine/_shared/scraper.client', () => ({
   scrape,
@@ -22,6 +25,11 @@ mock.module('@/modules/lead-machine/_shared/ai.client', () => ({
   askBestAvailable,
 }));
 
+mock.module('../../siteSettings', () => ({
+  getGoogleMapsKey,
+  getGoogleSettings: mock(() => Promise.resolve({ mapsApiKey: 'maps-test-key' })),
+}));
+
 const { searchDirectory } = await import('../b2b/directory.scraper');
 const { analyzeCompanyWebsite } = await import('../b2b/website.analyzer');
 const { runB2bJob } = await import('../b2b/b2b.job');
@@ -31,9 +39,11 @@ beforeEach(() => {
   scrape.mockReset();
   searchGoogleMaps.mockReset();
   askBestAvailable.mockReset();
+  getGoogleMapsKey.mockReset();
   scrape.mockImplementation(() => Promise.resolve({ data: {}, text: null }));
   searchGoogleMaps.mockImplementation(() => Promise.resolve({ places: [] }));
   askBestAvailable.mockImplementation(() => Promise.reject(new Error('AI unavailable')));
+  getGoogleMapsKey.mockImplementation(() => Promise.resolve(null));
 });
 
 describe('b2b lead machine job runner', () => {
@@ -46,7 +56,7 @@ describe('b2b lead machine job runner', () => {
       params: '{"icp_id":"icp-1","source":"google_maps","search_query":"automotive distributor","country":"DE","limit":5}',
       result_count: 0,
       error_msg: null,
-      created_by: null,
+    owner_user_id: null,
       created_at: '2026-05-08',
       started_at: null,
       finished_at: null,
@@ -77,10 +87,10 @@ describe('b2b lead machine job runner', () => {
 
     await runB2bJob('job-1');
 
-    expect(dbMock.poolExecutions[1]?.values).toEqual(['running', null, 'job-1']);
+    expect(dbMock.poolExecutions[1]?.values).toEqual(['running', null, 'job-1', 'avrasya']);
     const insert = dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'));
     expect(insert?.values).toEqual(expect.arrayContaining(['job-1', 'b2b_directory', 'icp-1', 'Automotive Distributor A']));
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-1', 'avrasya']);
   });
 
   test('marks b2b job failed on directory error', async () => {
@@ -92,7 +102,7 @@ describe('b2b lead machine job runner', () => {
       params: '{"source":"google_maps"}',
       result_count: 0,
       error_msg: null,
-      created_by: null,
+      owner_user_id: null,
       created_at: '2026-05-08',
       started_at: null,
       finished_at: null,
@@ -101,7 +111,7 @@ describe('b2b lead machine job runner', () => {
 
     await runB2bJob('job-1');
 
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'MAPS_DOWN', 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'MAPS_DOWN', 'job-1', 'avrasya']);
   });
 });
 
@@ -117,11 +127,12 @@ describe('b2b lead machine directory scraper', () => {
       limit: 25,
     });
 
-    expect(searchGoogleMaps).toHaveBeenCalledWith('car mat distributor', {
+    expect(searchGoogleMaps.mock.calls[0]?.[0]).toBe('car mat distributor');
+    expect(searchGoogleMaps.mock.calls[0]?.[1]).toEqual(expect.objectContaining({
       total: 10,
       language: 'en',
-      region: 'DE',
-    });
+      region: 'de',
+    }));
     expect(result).toEqual([{ name: 'Dealer A', website: 'https://dealer.example', phone: '+49' }]);
   });
 
@@ -139,11 +150,12 @@ describe('b2b lead machine directory scraper', () => {
       { country: 'NL', limit: 3 },
     );
 
-    expect(searchGoogleMaps).toHaveBeenCalledWith('automotive accessories', {
+    expect(searchGoogleMaps.mock.calls[0]?.[0]).toBe('automotive accessories');
+    expect(searchGoogleMaps.mock.calls[0]?.[1]).toEqual(expect.objectContaining({
       total: 3,
       language: 'en',
-      region: 'NL',
-    });
+      region: 'nl',
+    }));
   });
 
   test('scrapes non-google directory and normalizes companies', async () => {
@@ -153,7 +165,9 @@ describe('b2b lead machine directory scraper', () => {
           {
             name: 'Europages Dealer',
             website: 'https://dealer.example',
+            email: 'sales@dealer.example',
             phone: '+31',
+            description: 'Floor mats distributor',
             source_url: 'https://source.example/dealer',
           },
         ],
@@ -166,19 +180,65 @@ describe('b2b lead machine directory scraper', () => {
       limit: 12,
     });
 
-    expect(scrape).toHaveBeenCalledWith('https://www.europages.com/search/companies?query=floor%20mats', {
+    expect(scrape.mock.calls[0]?.[0]).toBe('https://www.europages.co.uk/companies/floor%20mats.html');
+    expect(scrape.mock.calls[0]?.[1]).toEqual(expect.objectContaining({
       profile: 'directory-listing',
       return_text: true,
       mode: 'stealthy',
       options: { country: 'NL', limit: 12 },
-    });
+    }));
     expect(result).toEqual([{
       name: 'Europages Dealer',
       website: 'https://dealer.example',
+      email: 'sales@dealer.example',
       phone: '+31',
+      description: 'Floor mats distributor',
       address: null,
       place_url: 'https://source.example/dealer',
     }]);
+  });
+
+  test('uses website analysis before ICP gate so real product signals can qualify a lead', async () => {
+    dbMock.queuePoolExecute([{
+      id: 'job-1',
+      channel: 'b2b_directory',
+      status: 'pending',
+      icp_id: 'icp-1',
+      params: '{"icp_id":"icp-1","source":"google_maps","search_query":"agro dealer","country":"TR","limit":5}',
+      result_count: 0,
+      error_msg: null,
+      owner_user_id: null,
+      created_at: '2026-05-08',
+      started_at: null,
+      finished_at: null,
+    }]);
+    dbMock.queuePoolExecute([{
+      id: 'icp-1',
+      name: 'VistaSeeds ICP',
+      is_active: 1,
+      definition: '{"priority_crop":"pepper","keywords":{"tr":["biber tohumu"],"en":["pepper seeds"]},"firm_types":["seed distributor"],"min_lead_score_for_candidate":5}',
+      created_at: '2026-05-08',
+      updated_at: '2026-05-08',
+    }]);
+    searchGoogleMaps.mockImplementation(() => Promise.resolve({
+      places: [{ name: 'Anadolu Tarim', website: 'https://seed.example' }],
+    }));
+    scrape.mockImplementation(() => Promise.resolve({
+      text: 'Biber tohumu ve pepper seeds distributor',
+      data: {
+        title: 'Anadolu Tarim',
+        description: 'Biber tohumu ve pepper seeds distributor',
+        product_keywords: ['biber tohumu', 'pepper seeds'],
+        has_b2b_signals: true,
+        firm_type_hints: ['seed distributor'],
+      },
+    }));
+
+    await runB2bJob('job-1');
+
+    const insert = dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'));
+    expect(insert?.values).toEqual(expect.arrayContaining(['Anadolu Tarim']));
+    expect(insert?.values).toContain(9.5);
   });
 });
 

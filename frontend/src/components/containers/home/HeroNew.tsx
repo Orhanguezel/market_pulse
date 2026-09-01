@@ -202,7 +202,7 @@ export default function HeroNew({ locale = 'tr' }: { locale?: string }) {
             className="relative mx-auto hidden min-h-[420px] w-full max-w-[420px] place-items-center lg:grid"
             aria-hidden
           >
-            <div className="absolute inset-x-0 bottom-8 mx-auto h-[min(520px,70vw)] w-[min(520px,95%)] animate-hero-float rounded-[46%_54%_55%_45%/55%_42%_58%_45%] bg-[radial-gradient(circle_at_34%_22%,rgba(255,255,255,0.9),transparent_22%),linear-gradient(135deg,#dcfce7,#86efac_48%,#16a34a)] opacity-[0.82] shadow-[0_24px_70px_rgba(22,163,74,0.24)]" />
+            <div className="absolute inset-x-0 bottom-8 mx-auto h-[min(520px,70vw)] w-[min(520px,95%)] animate-hero-float rounded-[46%_54%_55%_45%/55%_42%_58%_45%] bg-[radial-gradient(circle_at_34%_22%,rgba(255,255,255,0.9),transparent_22%),linear-gradient(135deg,#ccfbf1,#5eead4_48%,#0d9488)] opacity-[0.82] shadow-[0_24px_70px_rgba(13,148,136,0.24)]" />
 
             <div className="absolute right-0 top-[8%] z-[3] max-w-[140px] rotate-[-8deg] rounded-2xl border border-white/70 bg-white/90 px-3 py-2 shadow-lg backdrop-blur-sm">
               <div className="text-lg leading-none" aria-hidden>

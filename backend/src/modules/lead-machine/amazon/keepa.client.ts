@@ -2,6 +2,7 @@ import { randomUUID } from 'node:crypto';
 
 import { pool } from '@/db/client';
 import { getKeepaSettings } from '@/modules/siteSettings/service';
+import { getActiveTenantKey } from '@/modules/_shared';
 
 export type KeepaSnapshot = {
   asin: string;
@@ -27,17 +28,18 @@ function todayUtcDate(): string {
 }
 
 async function getRemainingDailyBudget(): Promise<number> {
+  const tenantKey = await getActiveTenantKey();
   const { tokenBudget } = await getKeepaSettings();
   const date = todayUtcDate();
   await pool.execute(
-    `INSERT INTO amazon_keepa_daily_budget (budget_date, token_budget, tokens_used)
-     VALUES (?, ?, 0)
+    `INSERT INTO amazon_keepa_daily_budget (tenant_key, budget_date, token_budget, tokens_used)
+     VALUES (?, ?, ?, 0)
      ON DUPLICATE KEY UPDATE token_budget = token_budget`,
-    [date, tokenBudget],
+    [tenantKey, date, tokenBudget],
   );
   const [rows] = await pool.execute(
-    `SELECT token_budget, tokens_used FROM amazon_keepa_daily_budget WHERE budget_date = ? LIMIT 1`,
-    [date],
+    `SELECT token_budget, tokens_used FROM amazon_keepa_daily_budget WHERE tenant_key = ? AND budget_date = ? LIMIT 1`,
+    [tenantKey, date],
   );
   const row = (rows as Array<{ token_budget?: number | string; tokens_used?: number | string }>)[0];
   const budget = Number(row?.token_budget ?? tokenBudget);
@@ -47,20 +49,22 @@ async function getRemainingDailyBudget(): Promise<number> {
 
 async function consumeDailyTokens(amount: number): Promise<void> {
   if (amount <= 0) return;
+  const tenantKey = await getActiveTenantKey();
   await pool.execute(
-    `UPDATE amazon_keepa_daily_budget SET tokens_used = tokens_used + ? WHERE budget_date = ?`,
-    [amount, todayUtcDate()],
+    `UPDATE amazon_keepa_daily_budget SET tokens_used = tokens_used + ? WHERE tenant_key = ? AND budget_date = ?`,
+    [amount, tenantKey, todayUtcDate()],
   );
 }
 
 export async function enqueueKeepaAsins(jobId: string, asins: string[]): Promise<number> {
   if (!await isKeepaConfigured()) return 0;
+  const tenantKey = await getActiveTenantKey();
   const uniqueAsins = [...new Set(asins.map((asin) => asin.trim()).filter(Boolean))];
   for (const asin of uniqueAsins) {
     await pool.execute(
-      `INSERT INTO amazon_keepa_queue (id, job_id, asin, status, retry_count)
-       VALUES (?, ?, ?, 'pending', 0)`,
-      [randomUUID(), jobId, asin],
+      `INSERT INTO amazon_keepa_queue (id, tenant_key, job_id, asin, status, retry_count)
+       VALUES (?, ?, ?, ?, 'pending', 0)`,
+      [randomUUID(), tenantKey, jobId, asin],
     );
   }
   return uniqueAsins.length;
@@ -68,12 +72,14 @@ export async function enqueueKeepaAsins(jobId: string, asins: string[]): Promise
 
 export async function processKeepaQueue(limit = 10): Promise<{ processed: number; skippedByBudget: number }> {
   if (!await isKeepaConfigured()) return { processed: 0, skippedByBudget: 0 };
+  const tenantKey = await getActiveTenantKey();
   const limitInt = Math.floor(limit);
   const [rows] = await pool.execute(
     `SELECT id, asin FROM amazon_keepa_queue
-     WHERE status = 'pending'
+     WHERE tenant_key = ? AND status = 'pending'
      ORDER BY created_at ASC
      LIMIT ${limitInt}`,
+    [tenantKey],
   );
   const queue = rows as Array<{ id: string; asin: string }>;
   if (queue.length === 0) return { processed: 0, skippedByBudget: 0 };
@@ -93,16 +99,16 @@ export async function processKeepaQueue(limit = 10): Promise<{ processed: number
       remaining -= 1;
       processed += 1;
       await pool.execute(
-        `UPDATE amazon_keepa_queue SET status = 'done', processed_at = CURRENT_TIMESTAMP WHERE id = ?`,
-        [item.id],
+        `UPDATE amazon_keepa_queue SET status = 'done', processed_at = CURRENT_TIMESTAMP WHERE tenant_key = ? AND id = ?`,
+        [tenantKey, item.id],
       );
     } catch (error) {
       const message = error instanceof Error ? error.message : 'KEEPA_UNKNOWN_ERROR';
       await pool.execute(
         `UPDATE amazon_keepa_queue
          SET status = 'failed', retry_count = retry_count + 1, last_error = ?, processed_at = CURRENT_TIMESTAMP
-         WHERE id = ?`,
-        [message, item.id],
+         WHERE tenant_key = ? AND id = ?`,
+        [message, tenantKey, item.id],
       );
     }
   }
@@ -139,12 +145,14 @@ function centsToUnit(value: number | undefined) {
 }
 
 export async function saveKeepaSnapshot(snapshot: KeepaSnapshot) {
+  const tenantKey = await getActiveTenantKey();
   await pool.execute(
     `INSERT INTO amazon_keepa_snapshots (
-      id, asin, price_30d_min, price_30d_max, price_90d_avg, buy_box_change_count, seller_count_trend, stock_history_json
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
+      id, tenant_key, asin, price_30d_min, price_30d_max, price_90d_avg, buy_box_change_count, seller_count_trend, stock_history_json
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       randomUUID(),
+      tenantKey,
       snapshot.asin,
       snapshot.price_30d_min,
       snapshot.price_30d_max,

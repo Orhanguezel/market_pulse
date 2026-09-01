@@ -1,6 +1,6 @@
 import type { FastifyInstance } from 'fastify';
 import { authSecurity } from '../_shared';
-import { signup, token, googleToken, googleConfig, refresh, passwordResetRequest, passwordResetConfirm, me, status, update, logout } from './controller';
+import { signup, token, googleToken, googleConfig, socialLogin, refresh, passwordResetRequest, passwordResetConfirm, me, status, update, logout } from './controller';
 
 export async function registerAuth(app: FastifyInstance) {
   const B = '/auth';
@@ -28,6 +28,10 @@ export async function registerAuth(app: FastifyInstance) {
   app.get(`${B}/google/config`, {
     schema: { tags: ['auth'] },
   }, googleConfig);
+  app.post(`${B}/social-login`, {
+    config: { rateLimit: { max: 30, timeWindow: '1 minute' } },
+    schema: { tags: ['auth'] },
+  }, socialLogin);
   app.post(`${B}/token/refresh`, {
     config: { rateLimit: { max: 60, timeWindow: '1 minute' } },
     schema: { tags: ['auth'] },

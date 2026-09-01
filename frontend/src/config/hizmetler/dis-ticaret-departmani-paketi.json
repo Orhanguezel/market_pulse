@@ -1,0 +1,170 @@
+{
+  "slug": "dis-ticaret-departmani-paketi",
+  "category": "ihracat-musteri-bulma",
+  "module": "service",
+  "order": 90,
+  "icon": "Building2",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Dış Ticaret Departmanı Paketi | İhracat Yönetimi, Müşteri Bulma, Teklif, Operasyon ve Takip",
+        "description": "Dış Ticaret Departmanı Paketi ile dış ticaret departmanı olmayan şirketler için ihracat müşteri bulma, teklif, proforma, mail marketing, LinkedIn, operasyon, nakliye, evrak ve CRM takip süreçlerinde destek sunuyoruz.",
+        "ogTitle": "Dış Ticaret Departmanı Paketi | {{appName}}",
+        "ogDescription": "Dış ticaret departmanı olmayan şirketler için ihracat müşteri bulma, teklif, proforma, ödeme, nakliye, evrak, sevkiyat, müşteri iletişimi ve CRM takip desteği."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "Dış Ticaret Departmanı Paketi",
+        "lead": "İhracat yapmak istiyor ama şirketinizde dış ticaret departmanı yok mu? Yurt dışı müşteri bulma, teklif hazırlama, proforma düzenleme, ödeme takibi, nakliye koordinasyonu, gümrük evrakları ve müşteri iletişimi süreçlerini kimin yöneteceğini bilmiyor musunuz? {{appName}} olarak bu paket kapsamında şirketinizin ihracat müşteri bulma, satış takibi, teklif ve proforma hazırlığı, müşteri iletişimi, mail marketing, LinkedIn, telefon takibi, CRM müşteri yönetimi ve ihracat operasyon süreçlerinde destek sağlıyoruz. Amacımız, şirketinizde dış ticaret departmanı yoksa bu süreci dağınık şekilde yürütmek yerine; planlı, takip edilebilir, raporlanabilir ve profesyonel bir dış ticaret yapısı oluşturmaktır.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Dış Ticaret Departmanı Paketi Nedir?",
+          "body": [
+            "Dış Ticaret Departmanı Paketi, dış ticaret departmanı olmayan veya ihracat süreçlerini daha düzenli yönetmek isteyen şirketlere dışarıdan profesyonel ihracat yönetimi desteği sunmak için hazırlanan pakettir.",
+            "Bu paket; müşteri bulma, hedef pazar araştırması, alıcı firma listesi, karar verici kişi araştırması, mail marketing, LinkedIn iletişimi, telefon takibi, teklif hazırlığı, proforma invoice, ödeme takibi, nakliye koordinasyonu, gümrük evrak kontrolü, sevkiyat takibi ve CRM müşteri yönetimi gibi süreçleri kapsayabilir.",
+            "Bu pakette amaç yalnızca müşteri listesi hazırlamak veya yalnızca operasyon desteği vermek değildir. Asıl amaç, şirketin dış ticaret sürecini baştan sona daha düzenli ve takip edilebilir hale getirmektir.",
+            "İhracat sürecini tek kişinin hafızasına bırakmayın: müşteri bulma, teklif, proforma, ödeme, nakliye, evrak, sevkiyat, müşteri bilgilendirme ve CRM takibini daha düzenli bir yapıya kavuşturun."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden Dış Ticaret Departmanı Paketi Gerekir?",
+          "body": [
+            "İhracat yapmak isteyen şirketlerde en büyük sorunlardan biri sürecin tek bir kişinin zaman buldukça ilgilendiği dağınık bir yapıda ilerlemesidir. Oysa ihracat müşteri bulma, iletişim, teklif, ödeme, operasyon, evrak ve raporlama adımlarının birlikte yönetilmesini gerektirir.",
+            "Dış ticaret departmanı olmayan şirketlerde ihracat süreci çoğu zaman tek kişinin zaman buldukça ilgilendiği dağınık bir yapıda ilerler. Oysa ihracat süreklilik, takip, disiplin ve operasyon bilgisi ister.",
+            "Dış Ticaret Departmanı Paketi, bu sorunları azaltmak ve ihracat sürecini sistemli hale getirmek için hazırlanmıştır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Paket Kimler İçin Uygundur?",
+          "intro": "Bu paket, ihracatı sürekli ve takip edilebilir bir iş geliştirme sürecine dönüştürmek isteyen şirketler için uygundur.",
+          "items": [
+            { "title": "Dış Ticaret Departmanı Olmayan Üreticiler", "body": "İhracat sürecini yönetmek isteyen ancak dış ticaret ekibi bulunmayan üretici firmalar için uygundur." },
+            { "title": "İhracata Başlamak İsteyen KOBİ’ler", "body": "Müşteri bulma, teklif, proforma, ödeme ve operasyon takibini düzenlemek isteyen KOBİ’ler için planlanabilir." },
+            { "title": "Müşteri Bulmuş Ama Operasyonu Yönetemeyen Firmalar", "body": "Teklif, ödeme, nakliye, evrak ve müşteri bilgilendirme sürecinde desteğe ihtiyaç duyan işletmeler için uygundur." },
+            { "title": "Mail Marketing ve LinkedIn Çalışması Yapan Firmalar", "body": "Yurt dışı müşteri bulma çalışmalarını düzenli yürütmek ve CRM ile takip etmek isteyen firmalar için uygundur." },
+            { "title": "Telefon Aramalarıyla Müşteri Takibi Yapmak İsteyenler", "body": "Mail ve LinkedIn sonrası telefon aramalarıyla müşteri takibi yapmak isteyen şirketler için uygundur." },
+            { "title": "Mevcut Satış Ekibini Güçlendirmek İsteyenler", "body": "Şirket içi satış ekibini ihracat müşteri bulma ve operasyon takibiyle desteklemek isteyen işletmeler için uygundur." },
+            { "title": "Fuar Sonrası Takip Yapmak İsteyen Firmalar", "body": "Fuar sonrası yurt dışı müşteri takibini daha profesyonel ve ölçülebilir hale getirmek isteyen firmalar için uygundur." },
+            { "title": "CRM ile İhracat Takibi Kurmak İsteyenler", "body": "Müşteri, teklif, proforma, ödeme, sevkiyat ve takip aşamalarını CRM üzerinden yönetmek isteyen firmalar için uygundur." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Dış Ticaret Departmanı Paketinde Hangi Alanlar Çalışılır?",
+          "intro": "Aşağıdaki başlıklar şirketin ihracat seviyesine, mevcut ekibine ve operasyon ihtiyacına göre planlanır.",
+          "items": [
+            "İhracata hazırlık durumunun değerlendirilmesi: İngilizce firma profili, ürün açıklamaları, web sitesi, görseller, katalog, teklif/proforma, fiyatlandırma ve CRM kullanımı incelenir",
+            "Hedef müşteri profili oluşturma: hangi ürün için müşteri aranacak, hedef müşteri ithalatçı mı distribütör mü toptancı mı, hangi ülkeler öncelikli ve karar verici kim olmalı belirlenir",
+            "Hedef ülke ve sektör belirleme: talep ihtimali olan ülkeler, rakiplerin aktif olduğu pazarlar, lojistik avantajlar, fiyat uyumu ve B2B platform uygunluğu değerlendirilir",
+            "Alıcı firma araştırması: ürün adına göre, GTİP / HS koduna göre, konşimento verileriyle ve B2B platform/fuar listesi/sektör rehberi/LinkedIn üzerinden hedef firmalar araştırılır",
+            "GTİP / HS koduna göre müşteri araştırması: ürün için uygun kod, hedef ülkelerdeki alıcılar, sevkiyat/miktar/tutar/ithalat sıklığı ve alıcı firma önceliği değerlendirilir",
+            "Ürün adına göre ithalatçı firma araştırması: ürün adı, İngilizce karşılığı, alternatif açıklamalar, rakip ürün açıklamaları, ithalatçı/distribütör/toptancı firmalar ve LinkedIn kontrolü yapılır",
+            "Karar verici kişi araştırması: satın alma müdürü, procurement/purchasing manager, import/export/general manager, company owner, founder ve business development/supply chain manager belirlenir",
+            "Kurumsal iletişim bilgisi araştırması: kurumsal ve departman e-postaları, web sitesi iletişim formları, telefon numaraları, LinkedIn profilleri ve ilgili kişi/unvan/kaynak notları araştırılır",
+            "Mail marketing süreci: İngilizce tanıtım maili ve konu başlığı, katalog/web sitesi yönlendirmesi, takip maili, gönderim takvimi, cevap sınıflandırma ve telefon/LinkedIn takip planı hazırlanır",
+            "LinkedIn ile karar verici takibi: hedef firma şirket sayfası inceleme, karar verici kişi araştırması, bağlantı talebi, ilk tanıtım/takip mesajı ve profil linklerini CRM’e işleme yapılır",
+            "Telefon aramaları ile müşteri takibi: aranacak firma listesi, ilgili kişi, telefon, mail gönderim tarihi, arama amacı, konuşma metni, görüşme sonucu ve tekrar arama tarihi düzenlenir",
+            "Teklif hazırlığı: satıcı/alıcı bilgileri, ürün adı, açıklama, miktar, birim fiyat, toplam tutar, teslim şekli, ödeme şekli, ambalaj, teslim süresi ve teklif geçerlilik süresi hazırlanır",
+            "Proforma invoice hazırlığı: proforma numarası, tarih, satıcı/alıcı bilgileri, GTİP / HS kodu, miktar, fiyat, teslim/ödeme şekli, banka ve sevkiyat bilgileri düzenlenir",
+            "Ödeme süreci takibi: peşin, kısmi ön ödeme, bakiye ödeme, mal/vesaik mukabili, akreditifli ödeme, banka bilgileri kontrolü ve sevkiyat öncesi ödeme durumu takip edilir",
+            "Nakliye ve lojistik koordinasyonu: kara/deniz/hava yolu, parsiyel/komple/konteyner taşımacılığı, nakliye firmasıyla iletişim, navlun değerlendirme ve yükleme/teslim takibi yapılır",
+            "Gümrük evraklarının kontrolü: proforma/commercial invoice, packing list, konşimento, menşe şahadetnamesi, ATR, EUR.1, sigorta poliçesi ve ülkeye özel belgeler kontrol edilir",
+            "Sevkiyat ve müşteri bilgilendirme: sipariş onayı, ödeme durumu, ürün hazırlık süreci, sevkiyat tarihi, nakliye detayları, evrak gönderimi ve teslimat takibi yürütülür",
+            "CRM ile dış ticaret süreci takibi: firma, ülke, sektör, ilgili kişi, iletişim bilgileri, mail/teklif/proforma/ödeme/nakliye/evrak durumu ve satış aşaması izlenir",
+            "Haftalık raporlama: araştırılan firma sayısı, gönderilen mail, cevap veren firmalar, teklif isteyenler, hazırlanan teklif/proformalar, telefon sonuçları ve devam eden siparişler raporlanır",
+            "Operasyon sonrası müşteri takibi: teslimat teyidi, müşteri memnuniyeti, ürün sorunları, sonraki sipariş ihtimali ve satış sonrası CRM notu işlenir"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Dış Ticaret Departmanı Paketi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketin sektörü, ürünleri, mevcut ihracat durumu, hedef ülkeleri, müşteri bulma ihtiyacı ve operasyon beklentisi değerlendirilerek başlar. Ardından mevcut durum analizi, hedef plan, müşteri araştırması, iletişim süreci, teklif/proforma desteği, operasyon takibi, CRM ve raporlama adımlarıyla ilerler.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketin sektörü, ürünleri, mevcut ihracat durumu, hedef ülkeleri, müşteri bulma ihtiyacı ve operasyon beklentisi değerlendirilir." },
+            { "n": 2, "title": "Mevcut Durum Analizi", "body": "Firma profili, ürün açıklamaları, web sitesi, teklif yapısı, müşteri takip sistemi ve ihracat hazırlık durumu incelenir." },
+            { "n": 3, "title": "Hedef Plan Oluşturma", "body": "Hangi ürünler için hangi ülkelerde, hangi müşteri profiline ulaşılacağı belirlenir." },
+            { "n": 4, "title": "Müşteri Araştırması ve Listeleme", "body": "Hedef firmalar, karar verici kişiler, iletişim bilgileri ve potansiyel alıcılar araştırılır." },
+            { "n": 5, "title": "İletişim Süreci", "body": "Mail marketing, LinkedIn mesajları ve telefon takip planı oluşturulur." },
+            { "n": 6, "title": "Teklif ve Proforma Desteği", "body": "Gelen taleplere göre teklif ve proforma hazırlığı yapılabilir veya mevcut belgeler kontrol edilebilir." },
+            { "n": 7, "title": "Operasyon Takibi", "body": "Sipariş oluştuğunda ödeme, ürün hazırlığı, nakliye, evrak ve sevkiyat süreci takip edilir." },
+            { "n": 8, "title": "CRM ve Raporlama", "body": "Tüm müşteri adayları, teklifler, görüşmeler, siparişler ve operasyon aşamaları CRM veya takip sistemi üzerinden izlenir." },
+            { "n": 9, "title": "Sürekli İyileştirme", "body": "Geri dönüşler, teklif sonuçları, müşteri cevapları ve satış fırsatları değerlendirilerek süreç geliştirilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Dış Ticaret Departmanı Paketinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Dış ticaret departmanı olmayan şirketler destek alabilir",
+            "İhracat müşteri bulma süreci daha düzenli yürütülür",
+            "Hedef müşteri profili netleşir",
+            "Alıcı firma ve karar verici kişi araştırması yapılabilir",
+            "Mail marketing ve LinkedIn süreci planlanır",
+            "Telefon aramalarıyla müşteri takibi desteklenir",
+            "Teklif ve proforma süreci daha profesyonel hale gelir",
+            "Ödeme, nakliye ve evrak süreçleri daha kontrollü takip edilir",
+            "Müşteri bilgilendirmesi daha düzenli yapılır",
+            "CRM ile müşteri hafızası oluşturulur",
+            "Satış ve operasyon süreci birlikte yönetilir",
+            "Yönetici ihracat sürecini raporlarla takip edebilir",
+            "Fuar sonrası müşteri takibi daha düzenli yapılabilir",
+            "Tekrar sipariş potansiyeli daha iyi izlenebilir",
+            "Şirketin dış ticaret süreci kişilere bağlı olmaktan çıkar"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Dış Ticaret Sürecinde Sık Yapılan Hatalar",
+          "items": [
+            "Müşteri bulma çalışmalarını düzensiz yapmak",
+            "Firma listelerini takip etmemek",
+            "Karar verici kişileri araştırmamak",
+            "Mail gönderip takip yapmamak",
+            "LinkedIn bağlantılarını satış sürecine bağlamamak",
+            "Telefon araması sonuçlarını kayıt altına almamak",
+            "Teklifleri farklı formatlarda hazırlamak",
+            "Proforma bilgilerini eksik yazmak",
+            "Ödeme sürecini net takip etmemek",
+            "Nakliye planını son dakikaya bırakmak",
+            "Gümrük evraklarını geç kontrol etmek",
+            "Müşteriye süreç hakkında bilgi vermemek",
+            "Sevkiyat sonrası takip yapmamak",
+            "CRM kullanmadan müşteri yönetmeye çalışmak",
+            "Dış ticaret sürecini tek kişinin hafızasına bırakmak"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Dış Ticaret Departmanı Paketi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Dış Ticaret Departmanı Paketi kimler için uygundur?", "a": "Bu paket; dış ticaret departmanı olmayan KOBİ’ler, ihracata başlamak isteyen üretici firmalar, yurt dışı müşteri bulmak isteyen şirketler ve ihracat operasyonlarını daha düzenli yönetmek isteyen işletmeler için uygundur." },
+            { "q": "Bu paket müşteri bulma hizmeti içerir mi?", "a": "Evet. Paket kapsamında hedef müşteri profili oluşturma, alıcı firma araştırması, karar verici kişi araştırması, mail marketing, LinkedIn ve telefon takip planı yer alabilir." },
+            { "q": "Teklif ve proforma hazırlığı yapılır mı?", "a": "Evet. Yurt dışı müşterilerden gelen taleplere göre teklif ve proforma invoice hazırlığı yapılabilir veya mevcut belgeler kontrol edilebilir." },
+            { "q": "İhracat operasyon sürecini takip ediyor musunuz?", "a": "Evet. Sipariş oluştuğunda ödeme durumu, ürün hazırlığı, nakliye planı, evrak kontrolü, sevkiyat ve müşteri bilgilendirme süreçlerinde takip desteği sağlanabilir." },
+            { "q": "Gümrük işlemlerini siz mi yapıyorsunuz?", "a": "Bu paket gümrük müşavirliği hizmeti değildir. Gümrük işlemleri ilgili gümrük müşaviri tarafından yürütülür. {{appName}} evrak ve süreç takibinde operasyonel destek sağlayabilir." },
+            { "q": "Nakliye sürecinde destek veriliyor mu?", "a": "Evet. Teslim şekline ve müşteri talebine göre nakliye firmalarıyla iletişim, navlun değerlendirme, yükleme tarihi ve sevkiyat takibi konularında destek verilebilir." },
+            { "q": "CRM ile takip yapılır mı?", "a": "Evet. Müşteri adayları, teklifler, proformalar, takip tarihleri, ödeme durumu, sevkiyat ve müşteri iletişimi CRM veya takip sistemi üzerinden yönetilebilir." },
+            { "q": "Bu paket dış ticaret personeli yerine geçer mi?", "a": "Bu paket, dış ticaret departmanı olmayan şirketlere dışarıdan profesyonel destek sunar. Kapsam şirketin ihtiyacına göre belirlenir. Gerekirse şirket içi personel ile birlikte hibrit bir yapı da kurulabilir." },
+            { "q": "Satış garantisi veriyor musunuz?", "a": "Hayır. Dış Ticaret Departmanı Paketi satış garantisi vermez. Ancak müşteri bulma, iletişim, teklif, operasyon ve takip süreçlerinin daha düzenli yönetilmesine yardımcı olur." },
+            { "q": "Paket fiyatı var mı?", "a": "Bu sayfada fiyat verilmez. Şirketin sektörü, ürün grubu, hedef ülkeleri, müşteri bulma ihtiyacı, operasyon kapsamı ve çalışma süresine göre teklif hazırlanır." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Dış Ticaret Sürecinizi Tek Kişinin Hafızasına Bırakmayın",
+        "body": "Şirketinizde dış ticaret departmanı yoksa ve ihracat süreciniz müşteri bulma, teklif, proforma, ödeme, nakliye, evrak ve müşteri takibi açısından dağınık ilerliyorsa {{appName}} ile iletişime geçin. Dış Ticaret Departmanı Paketi ile ihracat müşteri bulma sürecinizi, müşteri iletişiminizi, teklif ve operasyon takibinizi, CRM kayıtlarınızı ve raporlama yapınızı birlikte düzenleyelim.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

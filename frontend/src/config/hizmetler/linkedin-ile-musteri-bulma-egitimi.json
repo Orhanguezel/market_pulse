@@ -1,0 +1,365 @@
+{
+  "slug": "linkedin-ile-musteri-bulma-egitimi",
+  "category": "egitim",
+  "module": "training",
+  "order": 70,
+  "icon": "Linkedin",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "LinkedIn ile Müşteri Bulma Eğitimi | B2B Lead, Karar Verici Kişi ve Satış Takibi",
+        "description": "LinkedIn ile müşteri bulma eğitimi ile hedef müşteri belirleme, karar verici kişi araştırması, bağlantı kurma, mesaj yazma, B2B lead listesi oluşturma ve CRM ile müşteri takibi süreçlerini uygulamalı olarak öğretiyoruz.",
+        "ogTitle": "LinkedIn ile Müşteri Bulma Eğitimi | {{appName}}",
+        "ogDescription": "LinkedIn ile hedef firma araştırması, karar verici kişi bulma, bağlantı mesajı, takip mesajı, B2B lead listesi ve CRM müşteri takibi süreçlerini öğrenin."
+      },
+      "hero": {
+        "eyebrow": "LinkedIn Eğitimi",
+        "title": "LinkedIn ile Müşteri Bulma Eğitimi",
+        "lead": "LinkedIn üzerinden müşteri bulmak istiyor ama doğru firmaları nasıl seçeceğinizi, karar verici kişilere nasıl ulaşacağınızı, bağlantı mesajlarını nasıl yazacağınızı ve potansiyel müşterileri nasıl takip edeceğinizi bilmiyor musunuz? LinkedIn, B2B satış, ihracat, danışmanlık, yazılım, e-ticaret, üretim ve kurumsal hizmetler için güçlü bir müşteri bulma kanalı olabilir. Ancak LinkedIn’de müşteri bulmak, rastgele kişilere bağlantı göndermek veya herkese aynı mesajı yazmak değildir. {{appName}} olarak satış ekiplerine, ihracat ekiplerine, şirket sahiplerine, girişimcilere ve B2B müşteri bulmak isteyen işletmelere uygulamalı LinkedIn ile müşteri bulma eğitimi sunuyoruz. Amacımız, LinkedIn’i rastgele bağlantı kurulan bir platform olmaktan çıkarıp; hedef müşteri araştırması, karar verici kişi bulma, bağlantı kurma, mesajlaşma, takip ve CRM kayıt süreciyle çalışan profesyonel bir B2B müşteri geliştirme kanalına dönüştürmektir.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "LinkedIn ile Müşteri Bulma Eğitimi Nedir?",
+          "body": [
+            "LinkedIn ile müşteri bulma eğitimi, LinkedIn üzerinden hedef firmaları, karar verici kişileri, satın alma yetkililerini, ithalatçıları, distribütörleri, iş geliştirme bağlantılarını ve potansiyel B2B müşterileri bulmayı öğreten uygulamalı eğitimdir.",
+            "Bu eğitimde amaç yalnızca LinkedIn’de arama yapmayı göstermek değildir. Asıl amaç, katılımcıların kendi sektörüne uygun hedef müşteri profili oluşturmasını, doğru kişileri bulmasını, profesyonel bağlantı mesajları hazırlamasını, takip mesajları yazmasını ve bulunan kişileri CRM üzerinden satış sürecine almasını sağlamaktır.",
+            "{{appName}}, LinkedIn ile müşteri bulma eğitimini teorik anlatım yerine gerçek sektör, gerçek hedef müşteri ve uygulamalı arama senaryolarıyla planlar.",
+            "LinkedIn’i profesyonel bir B2B müşteri geliştirme kanalına dönüştürün",
+            "Hedef müşteri profili, karar verici kişi araştırması, bağlantı mesajı, ilk mesaj, takip mesajı, mail marketing, telefon araması ve CRM takibiyle LinkedIn çalışmalarınızı ölçülebilir hale getirin."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn ile Müşteri Bulma Eğitimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "LinkedIn’den müşteri bulmak için yalnızca bağlantı göndermek yeterli değildir. Doğru hedef müşteri profili, profesyonel profil, doğru unvanlar, kişiye özel mesaj, düzenli takip ve CRM kaydı birlikte planlanmalıdır.",
+            "Eğitimde LinkedIn üzerinden hedef firma araştırması, karar verici kişi bulma, satın alma müdürü ve ithalat sorumlusu tespiti, bağlantı talebi, ilk mesaj, takip mesajı, İngilizce mesajlaşma, mail marketing ilişkisi, telefon araması öncesi hazırlık ve CRM müşteri takibi süreçleri uygulamalı olarak ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn ile Müşteri Bulmak Neden Önemlidir?",
+          "body": [
+            "B2B satışta doğru kişiye ulaşmak çoğu zaman satış sürecinin en kritik adımlarından biridir. Ürün veya hizmetiniz kaliteli olsa bile yanlış kişilere ulaşıyorsanız geri dönüş almak zorlaşır.",
+            "LinkedIn yanlış kullanılırsa profesyonel görünüm zarar görebilir. Kopyala-yapıştır mesajlar, ilgisiz kişilere gönderilen bağlantı talepleri, aşırı satış odaklı ilk mesajlar ve düzensiz takip süreci güven kaybına neden olabilir.",
+            "LinkedIn doğru kullanıldığında şu alanlarda destek sağlayabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Eğitim Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, LinkedIn’i sadece bağlantı kurma alanı olarak değil, müşteri bulma ve satış geliştirme kanalı olarak kullanmak isteyen herkes için uygundur.",
+          "items": [
+            {
+              "title": "B2B Müşteri Bulmak İsteyen Şirketler",
+              "body": "Hedef firma ve karar verici kişi araştırmasını LinkedIn üzerinden daha sistemli yapmak isteyen firmalar için uygundur."
+            },
+            {
+              "title": "Satış Ekipleri",
+              "body": "Bağlantı, mesajlaşma, takip ve CRM sürecini satış hedefleriyle ilişkilendirmek isteyen ekipler için uygundur."
+            },
+            {
+              "title": "İhracat ve Dış Ticaret Ekipleri",
+              "body": "Yurt dışı distribütör, ithalatçı, toptancı ve satın alma yetkilisi araştırması yapan ekipler için planlanabilir."
+            },
+            {
+              "title": "İş Geliştirme Ekipleri",
+              "body": "Yeni pazar, yeni firma ve yeni karar verici kişi araştırması yapmak isteyen iş geliştirme ekipleri için uygundur."
+            },
+            {
+              "title": "KOBİ’ler ve Üretici Firmalar",
+              "body": "LinkedIn’i ihracat ve B2B satış için daha bilinçli kullanmak isteyen işletmelere uygundur."
+            },
+            {
+              "title": "Danışmanlık ve Hizmet İşletmeleri",
+              "body": "Kurumsal müşterilere ulaşmak isteyen danışmanlık ve hizmet firmaları için planlanabilir."
+            },
+            {
+              "title": "Yazılım ve Teknoloji Firmaları",
+              "body": "B2B SaaS, yazılım, teknoloji ve dijital hizmet satışı yapan şirketler için uygundur."
+            },
+            {
+              "title": "Fuar Öncesi ve Sonrası Takip Yapan Firmalar",
+              "body": "Fuar öncesinde hedef kişi araştırmak, fuar sonrasında ise görüşmeleri LinkedIn üzerinden sürdürmek isteyen firmalar için uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn ile Müşteri Bulma Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "Eğitim, katılımcıların sektörüne, ürünlerine, hedef pazarına ve satış modeline göre planlanabilir. Genel olarak LinkedIn ile B2B müşteri bulma mantığı, profesyonel profil hazırlığı, şirket sayfası kontrolü, hedef müşteri profili, hedef ülke ve sektör belirleme, firma araştırması, karar verici kişi bulma, satın alma müdürü araştırması, bağlantı talebi, ilk mesaj, takip mesajı, İngilizce LinkedIn mesajları, mail marketing ilişkisi, telefon araması öncesi araştırma, fuar öncesi ve sonrası LinkedIn kullanımı, CRM takibi, haftalık çalışma planı ve performans takibi konuları ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "LinkedIn ile Müşteri Bulma Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Bu başlıklar satış, ihracat, danışmanlık, yazılım, üretim veya e-ticaret sektörüne göre uyarlanabilir.",
+          "items": [
+            {
+              "title": "LinkedIn ile Müşteri Bulma Mantığı",
+              "body": "Eğitimin ilk bölümünde LinkedIn’in müşteri bulma sürecindeki yeri anlatılır. LinkedIn doğrudan satış yapılacak bir alan gibi değil, profesyonel ilişki başlatma ve doğru kişiye ulaşma kanalı olarak değerlendirilmelidir. Kapsam: LinkedIn müşteri bulmada nasıl kullanılır?; B2B satışta LinkedIn’in rolü nedir?; Profil güveni neden önemlidir?; LinkedIn çalışmaları nasıl CRM’e bağlanır?."
+            },
+            {
+              "title": "Profesyonel Profil Hazırlığı",
+              "body": "LinkedIn üzerinden müşteri bulmak isteyen kişinin profili güven vermelidir. Potansiyel müşteri mesajınızı gördüğünde profilinizi inceleyebilir. Kapsam: Profil fotoğrafı, kapak görseli ve başlık alanı; Hakkında bölümü, deneyim alanı ve uzmanlık alanları; İletişim bilgileri, web sitesi ve hizmet açıklamaları; Profesyonel anahtar kelimeler ve profil dili."
+            },
+            {
+              "title": "Şirket Sayfası ve Dijital Güven Kontrolü",
+              "body": "LinkedIn’de müşteri bulma çalışması kişisel profil üzerinden ilerlese bile şirket sayfası da önemlidir. Potansiyel müşteri, şirketinizi araştırdığında sayfanızın profesyonel görünmesini bekler. Kapsam: Logo, kapak görseli ve şirket açıklaması; Web sitesi, sektör bilgisi ve iletişim bilgileri; Ürün veya hizmet açıklamaları; B2B güven unsurları ve kurumsal dil."
+            },
+            {
+              "title": "Hedef Müşteri Profili Oluşturma",
+              "body": "LinkedIn’de müşteri bulmanın en önemli adımı hedef müşteri profilini netleştirmektir. Kime ulaşmak istediğiniz belli değilse aramalarınız verimsiz olur. Kapsam: Hangi sektöre ve hangi ülkelere satış yapmak istiyoruz?; Hangi firma büyüklüğü uygun?; Hangi unvanlar karar verici?; Distribütör, toptancı, ithalat sorumlusu veya şirket sahibi mi hedefleniyor?."
+            },
+            {
+              "title": "Hedef Ülke ve Sektör Belirleme",
+              "body": "Özellikle ihracat yapan firmalar için LinkedIn’de hedef ülke ve sektör seçimi çok önemlidir. Her ülke ve her sektör aynı önceliğe sahip olmayabilir. Kapsam: Hedef ülkeler, bölgeler ve sektörel öncelikler; Ürün veya hizmet uyumu; İthalatçı firma potansiyeli ve distribütörlük ihtimali; LinkedIn’de erişilebilir karar verici yoğunluğu."
+            },
+            {
+              "title": "Firma Araştırması",
+              "body": "LinkedIn’de müşteri bulurken sadece kişi aramak yeterli değildir. Önce hedef firmalar belirlenebilir, ardından bu firmalarda çalışan karar verici kişiler araştırılabilir. Kapsam: Şirket adı, sektör, ülke ve şirket büyüklüğü; Web sitesi ve LinkedIn şirket sayfası; Ürün veya hizmet uyumu; Şirket içindeki karar vericiler ve ortak bağlantılar."
+            },
+            {
+              "title": "Karar Verici Kişi Bulma",
+              "body": "B2B satışta doğru kişiye ulaşmak çok önemlidir. LinkedIn, karar verici kişileri bulmak için etkili şekilde kullanılabilir. Kapsam: Satın alma müdürü, procurement manager ve purchasing manager; Import manager, export manager ve general manager; Company owner, founder ve managing director; Business development, category, product ve supply chain manager."
+            },
+            {
+              "title": "Satın Alma Müdürü ve İthalat Yetkilisi Araştırması",
+              "body": "İhracat ve B2B satışta satın alma müdürü, ithalat müdürü veya sourcing sorumlusu kritik kişiler olabilir. Bu kişilere ulaşmak için doğru arama kelimeleri ve unvan kombinasyonları kullanılmalıdır. Kapsam: Purchasing Manager, Procurement Manager ve Sourcing Manager; Supply Chain Manager, Import Manager ve Import Specialist; Category Manager, Buyer, Senior Buyer ve Head of Purchasing; International Buyer ve Global Sourcing Manager."
+            },
+            {
+              "title": "Bağlantı Talebi Hazırlama",
+              "body": "LinkedIn’de bağlantı talebi gönderirken mesaj kısa, profesyonel ve kişiye uygun olmalıdır. Herkese aynı mesajı göndermek spam algısı oluşturabilir. Kapsam: Kısa ve kişiye özel görünmeli; Hemen satış yapılmamalı; Ortak sektör veya ilgi alanı kullanılmalı; Ürün kataloğu ilk mesajda zorlanmamalı."
+            },
+            {
+              "title": "İlk Mesaj Yazma",
+              "body": "Bağlantı kabul edildikten sonra gönderilecek ilk mesaj çok önemlidir. İlk mesajda doğrudan satış yapmak yerine güven veren, kısa ve profesyonel bir giriş yapılmalıdır. Kapsam: Teşekkür cümlesi ve kısa tanıtım; Neden iletişim kurulduğu; Ürün veya hizmetin kısa açıklaması; Cevap vermeyi kolaylaştıran soru."
+            },
+            {
+              "title": "Takip Mesajı Hazırlama",
+              "body": "İlk mesajdan sonra cevap gelmezse nazik ve profesyonel bir takip mesajı hazırlanabilir. Ancak çok sık mesaj göndermek veya ısrarcı olmak profesyonel görünümü zedeler. Kapsam: Kısa hatırlatma ve net açıklama; Katalog veya web sitesi yönlendirmesi; Görüşme talebi ve soru ile kapanış; Takip mesajlarını aralıklı ve saygılı hazırlama."
+            },
+            {
+              "title": "İngilizce LinkedIn Mesajları",
+              "body": "Yurt dışı müşteri bulma sürecinde İngilizce LinkedIn mesajları sade, kısa ve profesyonel olmalıdır. Karmaşık cümleler, uzun tanıtımlar ve agresif satış dili kullanılmamalıdır. Kapsam: Basit ve net cümleler kullanma; Kişiye özel giriş yapma; Ürün veya hizmeti kısa anlatma; Hedef ülke ve sektöre göre mesaj örnekleri hazırlama."
+            },
+            {
+              "title": "LinkedIn Arama Kelimeleri ve Unvan Stratejisi",
+              "body": "LinkedIn’de doğru kişileri bulmak için doğru arama kelimeleri kullanılmalıdır. Her sektör için karar verici unvanları farklı olabilir. Kapsam: Sektörel anahtar kelimeler ve ürün adı ile arama; Hedef firma tipi ve unvan kombinasyonları; İngilizce unvanlar ve yerel dilde unvan ihtimali; Rakip, sektör firmaları ve fuar katılımcıları üzerinden araştırma."
+            },
+            {
+              "title": "LinkedIn ile İhracat Müşteri Bulma",
+              "body": "LinkedIn, ihracat müşteri bulma sürecinde özellikle karar verici kişilere ulaşmak için destekleyici bir kanaldır. İthalatçı firmalar, distribütörler, toptancılar, satın alma yetkilileri ve şirket yöneticileri LinkedIn üzerinden araştırılabilir. Kapsam: Hedef ülkedeki firmaları ve ithalatçı profillerini inceleme; Distribütör ve toptancı firmaları araştırma; Satın alma müdürlerini ve ithalat sorumlularını bulma; Mail marketing sonrası LinkedIn takibi yapma."
+            },
+            {
+              "title": "LinkedIn ve Mail Marketing Birlikte Nasıl Kullanılır?",
+              "body": "LinkedIn, mail marketing çalışmalarını destekleyen önemli bir kanaldır. E-posta gönderilen firmalarda karar verici kişileri LinkedIn üzerinden bulmak, takip sürecini güçlendirebilir. Kapsam: Mail gönderilecek firmaların LinkedIn’de araştırılması; Mail sonrası bağlantı talebi gönderilmesi; Telefon araması öncesi kişi bilgisi incelenmesi; Mail ve LinkedIn cevaplarının CRM’e işlenmesi."
+            },
+            {
+              "title": "Telefon Araması Öncesi LinkedIn Araştırması",
+              "body": "Telefon araması yapmadan önce LinkedIn üzerinden kişi ve firma araştırması yapmak görüşmeyi daha profesyonel hale getirebilir. Kapsam: Kişinin unvanı, şirketi, sektörü ve görev alanı; Firma büyüklüğü, web sitesi ve ortak bağlantılar; Son paylaşımlar ve ürün veya hizmet uyumu; Görüşmede kullanılabilecek giriş cümlesi ve CRM notu."
+            },
+            {
+              "title": "Fuar Öncesi ve Fuar Sonrası LinkedIn Kullanımı",
+              "body": "Fuarlar, LinkedIn ile müşteri bulma sürecinde önemli fırsatlar oluşturabilir. Fuar öncesinde hedef firmalar ve katılımcılar araştırılabilir, fuar sonrasında ise görüşülen kişilerle bağlantı kurulabilir. Kapsam: Katılımcı firmaları ve karar verici kişileri araştırma; Bağlantı talebi ve görüşme talebi mesajı hazırlama; Fuar sonrası teşekkür mesajı ve katalog paylaşımı; CRM kaydı, takip tarihi ve teklif sürecini başlatma."
+            },
+            {
+              "title": "CRM ile LinkedIn Müşteri Takibi",
+              "body": "LinkedIn üzerinden bulunan kişiler CRM’e aktarılmadığında takip süreci dağınık kalabilir. Hangi kişiyle bağlantı kuruldu, kim cevap verdi, kim teklif istedi ve kim tekrar aranacak gibi bilgiler kayıt altına alınmalıdır. Kapsam: Kişi adı, unvan, şirket adı, ülke ve sektör; LinkedIn profil bağlantısı, bağlantı tarihi ve ilk mesaj tarihi; Cevap durumu, e-posta, telefon ve ilgilendiği ürün; Teklif durumu, takip tarihi, satış temsilcisi ve sonraki aksiyon."
+            },
+            {
+              "title": "Haftalık LinkedIn Müşteri Bulma Planı",
+              "body": "LinkedIn müşteri bulma çalışmaları rastgele değil, haftalık planla yürütülmelidir. Düzenli çalışma yapılmadığında sonuçlar takip edilemez. Kapsam: Hedef ülke veya sektör belirleme; Hedef firma ve karar verici kişi listesi oluşturma; Bağlantı talepleri, ilk mesajlar ve takip mesajlarını planlama; Haftalık performans raporu ve yeni hedefler belirleme."
+            },
+            {
+              "title": "LinkedIn Performans Takibi",
+              "body": "LinkedIn çalışmaları düzenli ölçülmelidir. Sadece bağlantı sayısı başarı göstergesi değildir. Önemli olan doğru kişilere ulaşılıp ulaşılmadığı ve bu kişilerin satış sürecine alınıp alınmadığıdır. Kapsam: Araştırılan firma ve bulunan karar verici kişi sayısı; Gönderilen bağlantı talebi ve kabul edilen bağlantı sayısı; İlk mesaj, cevap ve görüşme talebi oranı; CRM’e eklenen müşteri adayları ve satış fırsatları."
+            },
+            {
+              "title": "LinkedIn’de Spam Algısından Kaçınma",
+              "body": "LinkedIn müşteri bulma sürecinde en büyük hatalardan biri spam gibi görünmektir. Aynı mesajı çok sayıda kişiye göndermek, ilgisiz kişilerle iletişime geçmek ve sürekli satış baskısı yapmak güven kaybına neden olabilir."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "LinkedIn ile Müşteri Bulma Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketin sektörü, ürünleri, hedef ülkeleri, hedef müşteri profili, mevcut LinkedIn kullanımı ve eğitim ihtiyacı değerlendirilerek başlar. Ardından profil ve şirket sayfası kontrolü, hedef müşteri profili belirleme, uygulamalı firma ve kişi araştırması, mesaj şablonları, CRM takip yapısı, haftalık çalışma planı ve performans değerlendirme adımlarıyla ilerler.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Şirketin sektörü, ürünleri, hedef ülkeleri, hedef müşteri profili, mevcut LinkedIn kullanımı ve eğitim ihtiyacı değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Profil ve Şirket Sayfası Kontrolü",
+              "body": "Kişisel profil, şirket sayfası, başlık alanı, hakkında bölümü, görsel yapı ve kurumsal güven unsurları incelenir."
+            },
+            {
+              "n": 3,
+              "title": "Hedef Müşteri Profili Belirleme",
+              "body": "Hangi firmalara, hangi ülkelere, hangi sektörlere ve hangi unvanlara ulaşılacağı netleştirilir."
+            },
+            {
+              "n": 4,
+              "title": "Uygulamalı Firma ve Kişi Araştırması",
+              "body": "Katılımcıların kendi sektörleri üzerinden hedef firmalar ve karar verici kişiler LinkedIn’de araştırılır."
+            },
+            {
+              "n": 5,
+              "title": "Mesaj Şablonları Hazırlama",
+              "body": "Bağlantı talebi, ilk mesaj, takip mesajı, İngilizce mesaj ve görüşme talebi örnekleri hazırlanır."
+            },
+            {
+              "n": 6,
+              "title": "CRM Takip Yapısı",
+              "body": "Bulunan kişilerin CRM’e nasıl aktarılacağı, hangi bilgilerin kaydedileceği ve takip sürecinin nasıl ilerleyeceği anlatılır."
+            },
+            {
+              "n": 7,
+              "title": "Haftalık Çalışma Planı",
+              "body": "LinkedIn’de günlük, haftalık ve aylık müşteri bulma çalışmasının nasıl yürütüleceği planlanır."
+            },
+            {
+              "n": 8,
+              "title": "Performans Değerlendirme",
+              "body": "Bağlantı kabul oranı, cevap oranı, CRM’e eklenen müşteri adayı sayısı ve satış fırsatları takip edilir."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "LinkedIn ile Müşteri Bulma Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Hedef müşteri profili daha net belirlenir",
+            "Doğru firmalar daha sistemli araştırılır",
+            "Karar verici kişilere ulaşma becerisi gelişir",
+            "Satın alma ve ithalat sorumluları daha doğru tespit edilir",
+            "Bağlantı mesajları daha profesyonel hazırlanır",
+            "İlk mesaj ve takip mesajları daha etkili hale gelir",
+            "Yurt dışı müşteri bulma süreci desteklenir",
+            "Mail marketing çalışmaları LinkedIn ile güçlendirilir",
+            "Telefon araması öncesi kişi ve firma araştırması yapılır",
+            "Fuar öncesi ve sonrası LinkedIn takibi planlanır",
+            "CRM müşteri adayı kayıtları daha düzenli tutulur",
+            "LinkedIn çalışmaları ölçülebilir satış sürecine bağlanır"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "LinkedIn ile Müşteri Bulmada Sık Yapılan Hatalar",
+          "items": [
+            "Hedef müşteri profili oluşturmadan arama yapmak",
+            "Eksik profille bağlantı talebi göndermek",
+            "Yanlış unvanlara ulaşmaya çalışmak",
+            "İlgisiz sektörlere mesaj göndermek",
+            "Aynı mesajı herkese göndermek",
+            "İlk mesajda doğrudan satış yapmaya çalışmak",
+            "Çok uzun mesajlar yazmak",
+            "Yabancı kişilere zayıf İngilizce mesaj göndermek",
+            "Cevap gelmeyince aşırı ısrarcı olmak",
+            "LinkedIn çalışmalarını CRM’e aktarmamak",
+            "Mail marketing ile LinkedIn’i birlikte planlamamak",
+            "Telefon araması öncesi kişi araştırması yapmamak",
+            "Fuar sonrası LinkedIn takibi yapmamak",
+            "Spam algısı oluşturmak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn ile Müşteri Bulma Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "LinkedIn ile müşteri bulma eğitimi, satış, ihracat, CRM ve dijital pazarlama süreçleriyle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn ile Müşteri Bulma, B2B Lead ve Karar Verici Kişi Araştırması",
+          "body": [
+            "LinkedIn ile müşteri bulma eğitimi; LinkedIn müşteri bulma, LinkedIn B2B müşteri bulma, LinkedIn lead generation eğitimi, LinkedIn karar verici kişi bulma, LinkedIn satın alma müdürü bulma, LinkedIn ithalatçı firma bulma, LinkedIn distribütör bulma, LinkedIn satış eğitimi, LinkedIn ihracat müşteri bulma, LinkedIn bağlantı mesajı eğitimi, LinkedIn ilk mesaj eğitimi, LinkedIn takip mesajı, LinkedIn CRM müşteri takibi, LinkedIn mail marketing ilişkisi ve LinkedIn ile B2B satış konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn ile müşteri bulma eğitimi nedir?",
+          "body": [
+            "LinkedIn ile müşteri bulma eğitimi; LinkedIn üzerinden hedef firma araştırması, karar verici kişi bulma, satın alma müdürü ve ithalat sorumlusu tespiti, bağlantı talebi hazırlama, ilk mesaj ve takip mesajı yazma, İngilizce B2B mesajlaşma, mail marketing ve telefon aramasıyla birlikte takip etme ve bulunan müşteri adaylarını CRM üzerinden yönetme sürecini öğreten uygulamalı eğitimdir. {{appName}}, satış ekiplerine, ihracat ekiplerine ve B2B müşteri bulmak isteyen şirketlere LinkedIn ile müşteri bulma eğitimi sunar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "LinkedIn ile Müşteri Bulma Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "LinkedIn ile müşteri bulma eğitimi kimler için uygundur? +",
+              "a": "Bu eğitim; B2B müşteri bulmak isteyen satış ekipleri, ihracat ekipleri, iş geliştirme uzmanları, şirket sahipleri, KOBİ’ler, üretici firmalar ve LinkedIn’i satış kanalı olarak kullanmak isteyen işletmeler için uygundur."
+            },
+            {
+              "q": "LinkedIn ile gerçekten müşteri bulunabilir mi? +",
+              "a": "LinkedIn, doğru hedefleme, profesyonel profil, kişiye özel mesajlaşma ve düzenli takip ile B2B müşteri araştırması için destekleyici bir kanal olabilir. Ancak satış garantisi vermez; düzenli çalışma ve doğru takip gerekir."
+            },
+            {
+              "q": "LinkedIn ile ihracat müşterisi bulunabilir mi? +",
+              "a": "Evet. Hedef ülkelerdeki ithalatçılar, distribütörler, toptancılar, satın alma müdürleri ve karar verici kişiler LinkedIn üzerinden araştırılabilir. Bu süreç mail marketing, telefon aramaları ve CRM takibiyle birlikte planlanabilir."
+            },
+            {
+              "q": "Eğitimde bağlantı mesajı yazımı anlatılıyor mu? +",
+              "a": "Evet. Bağlantı talebi, ilk mesaj, takip mesajı, İngilizce LinkedIn mesajları ve görüşme talebi mesajları uygulamalı şekilde hazırlanabilir."
+            },
+            {
+              "q": "Satın alma müdürü veya ithalat müdürü bulma anlatılıyor mu? +",
+              "a": "Evet. Sektöre göre satın alma müdürü, procurement manager, sourcing manager, import manager, buyer ve benzeri karar verici kişilerin nasıl araştırılacağı anlatılır."
+            },
+            {
+              "q": "LinkedIn çalışmaları CRM ile takip edilebilir mi? +",
+              "a": "Evet. LinkedIn üzerinden bulunan kişiler CRM üzerinde kişi adı, unvan, şirket, ülke, mesaj durumu, cevap durumu, teklif durumu ve takip tarihi gibi bilgilerle takip edilebilir."
+            },
+            {
+              "q": "Mail marketing ile LinkedIn birlikte kullanılabilir mi? +",
+              "a": "Evet. E-posta gönderilen firmalardaki karar verici kişiler LinkedIn üzerinden araştırılabilir, bağlantı kurulabilir ve mail sonrası takip süreci LinkedIn ile desteklenebilir."
+            },
+            {
+              "q": "Telefon araması öncesi LinkedIn kullanılabilir mi? +",
+              "a": "Evet. Aranacak kişinin unvanı, şirketi, sektörü, görev alanı ve firma bilgileri LinkedIn üzerinden incelenerek daha hazırlıklı bir telefon görüşmesi yapılabilir."
+            },
+            {
+              "q": "Eğitim şirketimize özel hazırlanabilir mi? +",
+              "a": "Evet. Eğitim şirketinizin sektörü, hedef ülkeleri, ürünleri, hedef müşteri profili, satış süreci ve ekip yapısına göre özelleştirilebilir."
+            },
+            {
+              "q": "LinkedIn ile müşteri bulma satış garantisi verir mi? +",
+              "a": "Hayır. LinkedIn ile müşteri bulma eğitimi satış garantisi vermez. Ancak doğru müşteri araştırması, profesyonel mesajlaşma ve CRM takibiyle satış çalışmalarınızı daha düzenli hale getirmenize yardımcı olur."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "LinkedIn’i Rastgele Bağlantı Kurulan Bir Platform Olarak Bırakmayalım",
+        "body": "LinkedIn hesabınız var ama doğru müşterileri bulamıyor, karar verici kişilere ulaşamıyor, bağlantı mesajlarını profesyonel yazamıyor veya bulduğunuz kişileri satış sürecine aktaramıyorsanız LinkedIn’den yeterince verim alamıyor olabilirsiniz. {{appName}} LinkedIn ile Müşteri Bulma Eğitimi ile hedef müşteri profilinizi belirleyelim, doğru firmaları ve karar verici kişileri bulmayı öğretelim, bağlantı ve takip mesajlarınızı hazırlayalım, LinkedIn çalışmalarınızı mail marketing, telefon araması ve CRM takibiyle birlikte planlayalım.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

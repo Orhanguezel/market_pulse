@@ -1,0 +1,113 @@
+{
+  "slug": "teklif-siparis-yonetimi",
+  "category": "urun-modulleri",
+  "module": "crm",
+  "order": 70,
+  "icon": "FileText",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Teklif ve Satış Yönetimi - Verimli ve Kolay Sipariş Takibi | isletmeniyonet.com",
+        "description": "Teklif ve satış yönetimi yazılımı ile cihaz takibini kolaylaştırın, müşteri memnuniyetini artırın. Ücretsiz deneyin!",
+        "ogTitle": "Teklif ve Satış Yönetimi - Verimli ve Kolay Sipariş Takibi | {{appName}}",
+        "ogDescription": "Müşteri siparişlerini yönetin, tekliflerin satışa dönüşme takibini kolaylaştırın ve müşteri memnuniyetini artırın. Müşterilerinize hazırladığınız teklifleri ve oluşan siparişleri daha hızlı ve etkili bir şekilde yönetmek için personel atama sistemimizi kullanabilirsiniz. Servis durumlarını anlık olarak izleyin, müşterilerinize canlı takip imkanı sunun."
+      },
+      "hero": {
+        "eyebrow": "Ürün Modülü",
+        "title": "Teklif ve Satış Yönetimi",
+        "lead": "Müşteri siparişlerini yönetin, tekliflerin satışa dönüşme takibini kolaylaştırın ve müşteri memnuniyetini artırın. Müşterilerinize hazırladığınız teklifleri ve oluşan siparişleri daha hızlı ve etkili bir şekilde yönetmek için personel atama sistemimizi kullanabilirsiniz. Servis durumlarını anlık olarak izleyin, müşterilerinize canlı takip imkanı sunun.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Nasıl çalışır?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Öne Çıkan Özellikler",
+          "items": [
+            {
+              "title": "Kolay Teklif Hazırlama",
+              "body": "Potansiyel müşterilerinize kolayca teklif hazırlayabilirsiniz."
+            },
+            {
+              "title": "Teklifi Satışa Dönüştürün",
+              "body": "{{appName}} otomasyonu ile sıfırdan tekrark belge hazırlamanıza gerek kalmaz. Teklifi satışa dönüştürebilirsiniz."
+            },
+            {
+              "title": "Sipariş Takibi",
+              "body": "Kazandığınız siparişleri sürükle bırak özelliğimiz ile üretimden sevk aşamasına, limandan testimata siparişi takibini yapabilirsiniz."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Nasıl Çalışır?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Teklif Hazırlama",
+              "body": "Müşterinin şirket bilgilerini ve ilgili çalışanı teklife ekleyin, daha sonra teklif edeceğiniz ürünü ve fiyatını otomatik olarak ürünler kısmından çekiniz. Tarih ve teklif referans numarası otomatik olarak gelecektir."
+            },
+            {
+              "n": 2,
+              "title": "Sorumlu Personel Atama",
+              "body": "Kaydedilen teklifler için en uygun personeli atayın. Personelin uzmanlık alanı ve iş yükü göz önünde bulundurularak yapılan bu atama, sipariş sürecini hızlandırır ve verimliliği artırır."
+            },
+            {
+              "n": 3,
+              "title": "Durum Güncelleme",
+              "body": "Sipariş sürecindeki her adımı güncelleyin. Teklifin siparişe dönüşme aşamasında otomasyonumuz ile siparişin durumunu hızlıca güncelleyebilirsiniz. Bu güncellemeler, müşteriye otomatik bildirimler gönderilmesini sağlar ve şeffaf bir süreç yönetimi sunar."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Sıkça Sorulan Sorular",
+          "items": [
+            {
+              "q": "Bu uygulama hangi tür işletmeler için uygundur?",
+              "a": "Uygulamamız, ürün atışı veya hizmet sunan tüm işletmeler için uygundur. Küçük ölçekli işletmelerden büyük ölçekli işletmelere kadar her boyutta işletme için özelleştirilebilir çözümler sunuyoruz."
+            },
+            {
+              "q": "Uygulamayı kullanmak için teknik bilgi gerekiyor mu?",
+              "a": "Uygulamamız kullanıcı dostu bir arayüze sahiptir ve özel bir teknik bilgi gerektirmez. Basit ve sezgisel tasarımı sayesinde, kısa bir oryantasyon sonrasında tüm ekibiniz kolayca kullanabilir."
+            },
+            {
+              "q": "Uygulama üzerinden müşterilerle nasıl iletişim kurabilirim?",
+              "a": "Uygulamamız, müşterilerinize otomatik bildirimler gönderme, sipariş durumu hakkında güncellemeler paylaşma ve özel mesajlar iletme gibi çeşitli iletişim araçları sunar. Ayrıca, müşterileriniz için özel bir takip sayfası oluşturabilirsiniz."
+            },
+            {
+              "q": "Uygulamanın raporlama özellikleri nelerdir?",
+              "a": "Uygulamamız, işletmenizin performansını analiz etmenize yardımcı olacak çeşitli raporlar sunar. Bu raporlar arasında servis süresi istatistikleri, müşteri memnuniyeti oranları, en sık karşılaşılan sorunlar ve çalışan performans analizleri bulunmaktadır."
+            },
+            {
+              "q": "Uygulama mobil cihazlarla uyumlu mu?",
+              "a": "Evet, uygulamamız tamamen mobil uyumludur. İster akıllı telefonunuzdan ister tabletinizden, dilediğiniz yerden işletmenizi yönetebilir ve servis durumlarını takip edebilirsiniz."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Sipariş Yönetiminizi Optimize Edin",
+        "body": "Müşteri memnuniyetini artırın, iş süreçlerinizi iyileştirin ve verimliliğinizi yükseltin.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

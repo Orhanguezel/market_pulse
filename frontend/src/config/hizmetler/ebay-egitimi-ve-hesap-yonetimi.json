@@ -1,0 +1,342 @@
+{
+  "slug": "ebay-egitimi-ve-hesap-yonetimi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 60,
+  "icon": "ShoppingBag",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "eBay Eğitimi ve Hesap Yönetimi | Ürün Listeleme, Mağaza Yönetimi ve Yurt Dışı Satış",
+        "description": "eBay’de satış yapmak isteyen işletmeler için hesap açma, ürün listeleme, ürün başlığı, açıklama, fiyatlandırma, kargo, sipariş, müşteri iletişimi ve hesap yönetimi konularında eğitim ve destek sunuyoruz.",
+        "ogTitle": "eBay Eğitimi ve Hesap Yönetimi | {{appName}}",
+        "ogDescription": "eBay’de hesap açma, ürün listeleme, kategori, başlık, açıklama, fiyatlandırma, kargo, sipariş, müşteri mesajları ve hesap yönetimi süreçleri için eğitim ve destek alın."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "eBay Eğitimi ve Hesap Yönetimi",
+        "lead": "eBay’de satış yapmak istiyor ama hesap açma, ürün listeleme, kategori seçimi, fiyatlandırma, kargo, sipariş, iade, müşteri mesajları ve hesap yönetimi süreçlerinde nereden başlayacağınızı bilmiyor musunuz? eBay, yurt dışı müşterilere ulaşmak isteyen işletmeler için önemli pazaryerlerinden biridir. Ancak eBay’de satış yapmak yalnızca ürün yüklemekten ibaret değildir. Ürün başlığı, açıklama, görseller, kategori, fiyatlandırma, kargo seçenekleri, müşteri iletişimi, iade süreçleri ve hesap performansı birlikte yönetilmelidir. {{appName}} olarak eBay’de satış yapmak isteyen işletmelere, üreticilere, KOBİ’lere, marka sahiplerine ve e-ticaret ekiplerine eBay eğitimi ve hesap yönetimi desteği sunuyoruz.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "eBay Eğitimi ve Hesap Yönetimi Nedir?",
+          "body": [
+            "eBay eğitimi ve hesap yönetimi, eBay’de satış yapmak isteyen kişi ve işletmelerin hesap açma, ürün listeleme, ürün açıklaması hazırlama, fiyatlandırma, kargo, sipariş, müşteri mesajları, iade süreçleri ve hesap performansı konularını öğrenmesini ve daha düzenli yönetmesini sağlayan hizmettir.",
+            "eBay’de satış yaparken ürünün doğru kategoride yayınlanması, ürün başlığının alıcı tarafından anlaşılması, açıklamanın güven vermesi, kargo sürecinin net olması ve müşteri sorularının zamanında cevaplanması gerekir.",
+            "{{appName}}, eBay sürecini yalnızca panel kullanımı olarak değil, yurt dışı satış ve pazaryeri operasyonu olarak ele alır.",
+            "eBay satış sürecinizi daha planlı ve ölçülebilir hale getirin",
+            "Ürün listeleme, başlık, açıklama, ürün durumu, fiyatlandırma, kargo ve müşteri iletişimi doğru planlandığında eBay hesabınız daha düzenli yönetilebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "eBay Eğitimi ve Hesap Yönetimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "eBay’de satış sürecine başlamadan önce hesap yapısı, ürün türü, hedef pazar, kategori, fiyatlandırma, kargo, sipariş ve müşteri iletişimi birlikte değerlendirilmelidir.",
+            "Bu hizmet, eBay hesabınızı deneme yanılma sürecinden çıkarıp daha düzenli ve takip edilebilir bir pazaryeri operasyonuna dönüştürmeyi hedefler."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "eBay’de Satış Yapmak Neden Planlı Yönetilmelidir?",
+          "body": [
+            "eBay’de satış yapmak isteyen birçok kişi ürün yükleyerek satış bekler. Ancak başarılı satış süreci için ürünün doğru sunulması, doğru fiyatlandırılması, güven veren açıklamalarla desteklenmesi ve müşteri iletişiminin düzenli yürütülmesi gerekir.",
+            "Plansız eBay yönetimi; yanlış kategori, yetersiz açıklama, yanlış kargo maliyeti, belirsiz teslimat süresi, geç müşteri cevabı ve düşük hesap performansı gibi sorunlara neden olabilir.",
+            "Plansız ilerleme şu sorunları doğurabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "eBay’de satış yapmak istiyor ama süreci nereden başlatacağınızı bilmiyorsanız, bu hizmet size düzenli bir yol haritası sunar.",
+          "items": [
+            {
+              "title": "eBay’de Satışa Başlamak İsteyen Girişimciler",
+              "body": "eBay satış sürecini temelden öğrenmek isteyen girişimciler için uygundur."
+            },
+            {
+              "title": "Yurt Dışı Müşterilere Ürün Satmak İsteyen KOBİ’ler",
+              "body": "Ürünlerini global pazarda sunmak isteyen KOBİ’ler için planlanabilir."
+            },
+            {
+              "title": "Üretici Firmalar",
+              "body": "Ürünlerini eBay üzerinden yurt dışı pazarlara açmak isteyen üreticiler için uygundur."
+            },
+            {
+              "title": "Mevcut eBay Hesabı Olan Satıcılar",
+              "body": "Mevcut hesabını daha düzenli yönetmek isteyen satıcılar için analiz ve yönetim desteği verilebilir."
+            },
+            {
+              "title": "Ürün Listeleme Desteği İsteyen İşletmeler",
+              "body": "Ürün başlığı, açıklama, görsel, kategori ve fiyat alanlarında destek alınabilir."
+            },
+            {
+              "title": "Kargo ve Fiyatlandırma Sürecini Anlamak İsteyenler",
+              "body": "Yurt dışı kargo, teslimat süresi ve kârlılık hesabı birlikte değerlendirilebilir."
+            },
+            {
+              "title": "Niş Ürün Gruplarında Satış Yapmak İsteyenler",
+              "body": "İkinci el, koleksiyon, yedek parça, özel ürün veya niş ürün grupları için süreç planlanabilir."
+            },
+            {
+              "title": "E-ticaret Ekibini Eğitmek İsteyen Şirketler",
+              "body": "eBay konusunda şirket içi ekip eğitimi ve operasyon planı hazırlanabilir."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "eBay Eğitimi Kapsamında Hangi Konular Anlatılır?",
+          "body": [
+            "eBay eğitimi işletmenin ürün yapısına, hedef pazarına ve mevcut deneyimine göre planlanabilir. Genel olarak pazaryeri mantığı, hesap açma, satıcı paneli, ürün listeleme, kategori seçimi, ürün başlığı, açıklama, görsel, ürün durumu, fiyatlandırma, kargo, sipariş, müşteri mesajları, iade, hesap performansı ve raporlama başlıkları birlikte ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "eBay Hesap Yönetimi Kapsamında Neler Yapıyoruz?",
+          "body": [
+            "eBay hesap yönetimi hizmeti, hesabınızın ve ürünlerinizin durumuna göre farklı başlıklarda planlanabilir. Amaç, eBay hesabınızın dağınık ilerlemesini önlemek ve satış sürecinizi daha düzenli, anlaşılır ve takip edilebilir hale getirmektir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "eBay Eğitimi ve Hesap Yönetiminde Hangi Alanlar İncelenir?",
+          "intro": "eBay süreci; hesap açma, ürün listeleme, kategori, başlık, açıklama, görsel, ürün durumu, fiyatlandırma, kargo, stok, sipariş, müşteri mesajları, iade, hesap performansı ve raporlama alanlarıyla birlikte planlanır.",
+          "items": [
+            {
+              "title": "eBay Pazaryeri Mantığını Anlama",
+              "body": "eBay’de satışa başlamadan önce platformun nasıl çalıştığını anlamak gerekir. eBay’de müşteri ürün ararken fiyat, ürün durumu, satıcı güveni, teslimat süresi, açıklama ve görselleri birlikte değerlendirir. Bu kapsamda: eBay pazaryeri yapısı, satıcı ve alıcı ilişkisi; Ürün listeleme mantığı, kategori yapısı ve arama görünürlüğü; Ürün durumu açıklamaları ve satıcı güven unsurları; Müşteri mesajları, sipariş, teslimat süreci ve hesap performansı."
+            },
+            {
+              "title": "eBay Hesap Açma Süreci",
+              "body": "eBay’de satış yapmak için hesap açılışı ve temel satıcı ayarlarının doğru hazırlanması gerekir. Hesap açılışında ülke, satış modeli, ödeme bilgileri, mağaza ayarları ve ürün planı dikkatli değerlendirilmelidir. Bu kapsamda: eBay hesap oluşturma mantığı ve satıcı hesabı hazırlığı; Hesap bilgileri, ödeme bilgileri, mağaza adı ve profil düzeni; Satış yapılacak pazar seçimi ve ürün kategorisi planı; Kargo ayarları, iade politikası ve açılış sonrası kontroller."
+            },
+            {
+              "title": "eBay Satıcı Paneli Kullanımı",
+              "body": "eBay satıcı paneli, ürünlerin, siparişlerin, mesajların, kargo bilgilerinin ve performans göstergelerinin yönetildiği ana alandır. Bu kapsamda: Ürün listeleme ekranı, aktif ürünler ve taslak ürünler; Siparişler, müşteri mesajları ve kargo bilgileri; Satış raporları, hesap ayarları ve performans bildirimleri; İade, iptal süreçleri ve ürün düzenleme alanları."
+            },
+            {
+              "title": "eBay Ürün Listeleme",
+              "body": "eBay’de ürün listeleme süreci satış performansı açısından önemlidir. Ürün doğru kategori, başlık, açıklama, görsel, fiyat ve kargo bilgisiyle yayına alınmalıdır. Bu kapsamda: Ürün adı, kategori seçimi ve ürün durumu; Ürün başlığı, açıklaması, görselleri ve fiyat bilgisi; Stok miktarı, varyant bilgileri ve kargo seçenekleri; Teslimat süresi, iade bilgisi ve ürünü yayına alma."
+            },
+            {
+              "title": "Ürün Başlığı Hazırlama",
+              "body": "eBay’de ürün başlığı, müşterinin ürünü bulması ve anlaması için çok önemlidir. Başlık, ürünün ne olduğunu net anlatmalı ve müşterinin arama davranışına uygun hazırlanmalıdır. Bu kapsamda: Marka adı, ürün adı, model veya seri bilgisi; Ürün durumu, ölçü, boyut, renk, adet veya set bilgisi; Uyumluluk bilgisi, kullanım alanı ve temel ürün özelliği; Yanıltıcı ifadelerden ve ilgisiz kelimelerden kaçınma."
+            },
+            {
+              "title": "Ürün Açıklaması Hazırlama",
+              "body": "eBay ürün açıklaması müşteriye güven vermeli ve ürünle ilgili temel soruları cevaplamalıdır. Açıklama sade, net, güven veren ve ürünle tamamen uyumlu olmalıdır. Bu kapsamda: Ürün nedir, hangi amaçla kullanılır ve ürün durumu nedir?; Ölçüler, teknik özellikler, paket içeriği ve uyumluluk bilgisi; Kullanım alanları, kargo ve teslimat bilgisi; İade koşulları ve müşterinin bilmesi gereken özel notlar."
+            },
+            {
+              "title": "Ürün Görselleri ve Sunum Düzeni",
+              "body": "eBay’de görseller müşterinin satın alma kararını doğrudan etkiler. Ürünü fiziksel olarak göremeyen müşteri, görseller üzerinden değerlendirme yapar. Bu kapsamda: Ana ürün görseli, ek ürün görselleri ve farklı açı görselleri; Detay fotoğrafları, kusur veya kullanım izi varsa açık gösterim; Ölçü, uyumluluk ve paket içeriği görselleri; Görsel çözünürlüğü, arka plan düzeni ve açıklama uyumu."
+            },
+            {
+              "title": "Ürün Durumu Bilgisi",
+              "body": "eBay’de ürünün yeni, kullanılmış, yenilenmiş veya farklı bir durumda olması müşteri kararını etkiler. Bu nedenle ürün durumu açık ve doğru belirtilmelidir. Bu kapsamda: Yeni ürün, kullanılmış ürün, yenilenmiş ürün veya açık kutu ürün; Hasar, kusur, eksik parça ve kozmetik durum bilgisi; Çalışma durumu, garanti veya test bilgisi; Fotoğraflarla desteklenen açık ürün durumu açıklaması."
+            },
+            {
+              "title": "Fiyatlandırma ve Kârlılık Hesabı",
+              "body": "eBay’de fiyatlandırma yapılırken yalnızca ürün maliyetine bakmak yeterli değildir. Platform kesintileri, kargo, paketleme, kur farkı, reklam, iade riski ve rekabet birlikte değerlendirilmelidir. Bu kapsamda: Ürün maliyeti, platform kesintileri ve kargo maliyeti; Paketleme, kur farkı, reklam maliyeti ve iade riski; Rakip fiyatları, minimum kârlı satış fiyatı ve indirim etkisi; Yurt dışı teslimat maliyeti ve kârlılık değerlendirmesi."
+            },
+            {
+              "title": "Kargo ve Teslimat Planı",
+              "body": "eBay’de yurt dışı satış yaparken kargo ve teslimat bilgileri müşteri için kritik öneme sahiptir. Teslimat süresi, kargo ücreti, takip bilgisi ve iade koşulları açık şekilde belirtilmelidir. Bu kapsamda: Hangi ülkelere gönderim yapılacağı ve kargo ücretinin hesaplanması; Teslimat süresi, takip numarası ve ürünün kırılabilirlik durumu; Paketleme, kargo maliyetinin fiyata dahil edilip edilmeyeceği; İade süreci ve müşteriye teslimat bilgisinin aktarılması."
+            },
+            {
+              "title": "Stok ve Varyant Yönetimi",
+              "body": "eBay’de ürünlerin stok ve varyant bilgileri doğru yönetilmelidir. Renk, model, ölçü, uyumluluk veya paket seçeneği olan ürünlerde varyant yapısı dikkatli kurulmalıdır. Bu kapsamda: Ürün stok miktarı, varyant bazlı stok ve stok biten ürünler; Renk, ölçü, model, uyumluluk ve paket seçenekleri; Varyant görselleri, varyant fiyatları ve güncellenecek ürünler; Sipariş iptali ve müşteri memnuniyetsizliği riskini azaltma."
+            },
+            {
+              "title": "Sipariş Takibi",
+              "body": "eBay’de siparişlerin düzenli takip edilmesi gerekir. Sipariş geldikten sonra hazırlık, paketleme, kargo ve müşteri bilgilendirme süreçleri dikkatli yürütülmelidir. Bu kapsamda: Yeni siparişler, hazırlanacak siparişler ve paketleme süreci; Kargo takip bilgisi, teslimat durumu ve geciken siparişler; Müşteri mesajları, iptal talepleri ve iade talepleri; Satış sonrası iletişim ve müşteri memnuniyeti."
+            },
+            {
+              "title": "Müşteri Mesajları ve İletişim",
+              "body": "eBay’de müşteri mesajları profesyonel şekilde yönetilmelidir. Müşteri ürün durumu, kargo, ölçü, uyumluluk, iade veya fiyat hakkında soru sorabilir. Bu kapsamda: Ürün detayları, ürün durumu ve uyumluluk soruları; Kargo süresi, kargo ücreti ve sipariş durumu; İndirim talepleri, toplu alım soruları ve ek fotoğraf talepleri; İade koşulları ve profesyonel müşteri mesaj dili."
+            },
+            {
+              "title": "İade ve İptal Süreçleri",
+              "body": "eBay satışlarında iade ve iptal süreçleri dikkatli yönetilmelidir. Yanlış ürün açıklaması, eksik bilgi, kargo gecikmesi veya ürün durumu uyuşmazlığı iade riskini artırabilir. Bu kapsamda: İade talebi nedeni, ürün açıklamasıyla uyum ve görsel kontrolü; Ürün durumu, kargo kaynaklı sorunlar ve müşteri beklentisi; İptal talebi, geri ödeme süreci ve tekrar eden sorunlar; Ürün sayfası iyileştirme ihtiyacı ve müşteri iletişim notları."
+            },
+            {
+              "title": "Hesap Performansı ve Raporlama",
+              "body": "eBay hesap yönetiminde performans düzenli takip edilmelidir. Satış, müşteri memnuniyeti, sipariş süreci, mesajlar, iade oranları ve ürün performansı birlikte analiz edilmelidir."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "eBay Eğitimi ve Hesap Yönetimi Süreci Nasıl İlerler?",
+          "intro": "Süreç ürünleriniz, hedef pazarınız, mevcut eBay durumunuz, satış hedefleriniz ve eğitim veya yönetim ihtiyacınız değerlendirilerek başlar. İhtiyacınıza göre eBay eğitimi, hesap yönetimi veya ikisinin birlikte yürütüleceği bir plan oluşturulur.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Ürünleriniz, hedef pazarınız, mevcut eBay durumunuz, satış hedefleriniz ve eğitim veya yönetim ihtiyacınız değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Eğitim veya Yönetim Planı Hazırlığı",
+              "body": "İhtiyacınıza göre eBay eğitimi, hesap yönetimi veya ikisinin birlikte yürütüleceği bir plan oluşturulur."
+            },
+            {
+              "n": 3,
+              "title": "Hesap ve Ürün Analizi",
+              "body": "Mevcut hesap, ürünler, görseller, fiyatlandırma, kargo bilgileri, açıklamalar ve performans durumu incelenir."
+            },
+            {
+              "n": 4,
+              "title": "Ürün Listeleme Planı",
+              "body": "Başlık, açıklama, kategori, görsel, ürün durumu, fiyat, stok ve kargo bilgileri ürün bazlı planlanır."
+            },
+            {
+              "n": 5,
+              "title": "Operasyon ve Sipariş Takibi",
+              "body": "Sipariş, kargo, müşteri mesajları, iade ve iptal süreçleri için düzenli takip yapısı oluşturulur."
+            },
+            {
+              "n": 6,
+              "title": "Hesap Performansı Takibi",
+              "body": "Satış raporları, ürün performansı, müşteri iletişimi ve hesap bildirimleri düzenli değerlendirilir."
+            },
+            {
+              "n": 7,
+              "title": "Raporlama ve İyileştirme",
+              "body": "Ürün sayfaları, fiyatlandırma, kargo ve müşteri iletişimi performansa göre geliştirilir."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "eBay Eğitimi ve Hesap Yönetiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "eBay satış sürecini daha bilinçli öğrenirsiniz",
+            "Hesap açılış ve mağaza yönetimini daha düzenli planlarsınız",
+            "Ürünlerinizi daha profesyonel listelersiniz",
+            "Ürün başlığı ve açıklamalarınızı geliştirirsiniz",
+            "Görsellerinizi daha dikkatli değerlendirirsiniz",
+            "Fiyatlandırma ve kargo maliyetlerini daha doğru hesaplarsınız",
+            "Sipariş ve müşteri mesajlarını daha düzenli takip edersiniz",
+            "İade ve iptal nedenlerini analiz edebilirsiniz",
+            "Yurt dışı müşterilere daha güven veren ürün sayfaları sunarsınız",
+            "Hesap performansınızı daha kontrollü izlersiniz",
+            "Satış raporlarını daha doğru yorumlarsınız",
+            "eBay hesabınızı daha sistemli bir pazaryeri kanalına dönüştürürsünüz"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "eBay’de Sık Yapılan Hatalar",
+          "items": [
+            "Hesap açmadan önce ürün planı yapmamak",
+            "Yanlış kategori seçmek",
+            "Ürün başlıklarını eksik yazmak",
+            "Ürün açıklamalarını yetersiz bırakmak",
+            "Ürün durumunu net belirtmemek",
+            "Görselleri düşük kalitede kullanmak",
+            "Kargo maliyetlerini doğru hesaplamamak",
+            "Teslimat süresini net yazmamak",
+            "Fiyatlandırmada tüm maliyetleri hesaba katmamak",
+            "Müşteri mesajlarına geç cevap vermek",
+            "İade ve iptal süreçlerini takip etmemek",
+            "Satış raporlarını analiz etmemek",
+            "Hesap performans uyarılarını dikkate almamak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "eBay Eğitimi ve Hesap Yönetimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "eBay eğitimi ve hesap yönetimi, e-ticaret ve pazaryeri yönetimi sürecinin parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "eBay Eğitimi, Hesap Yönetimi, Ürün Listeleme ve Yurt Dışı Pazaryeri Satışı",
+          "body": [
+            "eBay eğitimi ve hesap yönetimi; eBay mağaza yönetimi, ürün listeleme, ürün yükleme, satış eğitimi, satıcı paneli eğitimi, ürün açıklaması hazırlama, ürün başlığı hazırlama, kargo ayarları, fiyatlandırma, sipariş takibi, müşteri mesajları, iade yönetimi ve yurt dışı pazaryeri eğitimi süreçleri için planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "eBay eğitimi ve hesap yönetimi nedir?",
+          "body": [
+            "eBay eğitimi ve hesap yönetimi; eBay’de satış yapmak isteyen kişi ve işletmeler için hesap açma, satıcı paneli kullanımı, ürün listeleme, kategori seçimi, ürün başlığı, açıklama, görsel, fiyatlandırma, kargo, sipariş, müşteri mesajları, iade, iptal ve hesap performansı süreçlerinin öğrenilmesi ve düzenli yönetilmesi hizmetidir. {{appName}}, eBay mağazası açmak veya mevcut hesabını geliştirmek isteyen satıcılara eğitim ve hesap yönetimi desteği sunar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "eBay Eğitimi ve Hesap Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "eBay eğitimi kimler için uygundur?",
+              "a": "eBay eğitimi; eBay’de satışa başlamak isteyen girişimciler, üretici firmalar, KOBİ’ler, marka sahipleri ve yurt dışı pazaryerlerinde satış yapmak isteyen e-ticaret ekipleri için uygundur."
+            },
+            {
+              "q": "eBay hesap yönetimi hizmeti veriyor musunuz?",
+              "a": "Evet. eBay hesabı, ürün listeleme, başlık, açıklama, görsel, fiyat, kargo, sipariş, müşteri mesajları, iade ve hesap performansı konularında yönetim desteği verilebilir."
+            },
+            {
+              "q": "eBay’de ürün listeleme desteği sunuyor musunuz?",
+              "a": "Evet. Ürün başlığı, açıklama, kategori, görsel, fiyat, stok, ürün durumu ve kargo bilgileriyle ürün listeleme sürecinde destek sağlanabilir."
+            },
+            {
+              "q": "eBay’de hangi ürünler satılabilir?",
+              "a": "Bu konu ürün türü, hedef pazar, kategori kuralları, rekabet, kargo uygunluğu ve hesap yapısına göre değerlendirilmelidir. Eğitim veya danışmanlık sürecinde ürün planı yapılabilir."
+            },
+            {
+              "q": "eBay ürün açıklamalarını hazırlıyor musunuz?",
+              "a": "Evet. Ürün özelliklerine, ürün durumuna, hedef müşteriye ve yurt dışı satış diline uygun ürün açıklamaları hazırlanabilir."
+            },
+            {
+              "q": "eBay’de kargo süreci planlanıyor mu?",
+              "a": "Evet. Hangi ülkelere gönderim yapılacağı, kargo maliyeti, teslimat süresi, paketleme ve takip bilgisi gibi alanlar değerlendirilebilir."
+            },
+            {
+              "q": "eBay’de satış garantisi veriyor musunuz?",
+              "a": "Hayır. eBay eğitimi ve hesap yönetimi satış garantisi vermez. Ancak hesap, ürün listeleme, fiyatlandırma, kargo ve müşteri iletişimi süreçlerinin daha düzenli yönetilmesine yardımcı olur."
+            },
+            {
+              "q": "Mevcut eBay hesabım analiz edilebilir mi?",
+              "a": "Evet. Mevcut eBay hesabınız ürün başlıkları, açıklamalar, görseller, fiyatlandırma, kargo, sipariş, müşteri mesajları ve performans açısından analiz edilebilir."
+            },
+            {
+              "q": "eBay eğitimi uygulamalı mı yapılır?",
+              "a": "Evet. Eğitim işletmenizin ürünleri, hesap durumu ve hedefleri üzerinden uygulamalı şekilde planlanabilir."
+            },
+            {
+              "q": "eBay hesap yönetimi hangi hizmetlerle birlikte alınabilir?",
+              "a": "eBay hesap yönetimi; e-ticaret eğitimi, ürün içerik hazırlığı, ürün fotoğrafı değerlendirme, yurt dışı satış stratejisi, CRM müşteri takibi ve B2B müşteri bulma çalışmalarıyla birlikte planlanabilir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "eBay Hesabınızı Daha Planlı, Güven Veren ve Profesyonel Hale Getirelim",
+        "body": "eBay’de satış yapmak istiyor ama hesap açma, ürün listeleme, ürün açıklaması, fiyatlandırma, kargo, sipariş ve müşteri yönetimi süreçlerini nasıl yürüteceğinizi bilmiyorsanız {{appName}} ile iletişime geçin. eBay hesabınızı birlikte planlayalım, ürünlerinizi daha düzenli listeleyelim ve yurt dışı müşterilere daha profesyonel görünmenizi sağlayacak pazaryeri yapısını oluşturalım.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

@@ -1,0 +1,213 @@
+{
+  "slug": "b2b-musteri-bulma-paketi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 30,
+  "icon": "Package",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "B2B Müşteri Bulma Paketi | İhracat Müşteri Bulma, Alıcı Firma, Karar Verici Kişi ve CRM Takibi",
+        "description": "B2B Müşteri Bulma Paketi ile ihracat yapmak isteyen şirketler için hedef ülke, sektör, alıcı firma, GTİP / HS kodu, ürün adına göre ithalatçı, karar verici kişi, mail marketing, LinkedIn ve CRM takip süreçlerini planlıyoruz.",
+        "ogTitle": "B2B Müşteri Bulma Paketi | {{appName}}",
+        "ogDescription": "Hedef müşteri profili, alıcı firma araştırması, GTİP / HS kodu, ürün adına göre ithalatçı firma, karar verici kişi, mail marketing, LinkedIn, telefon takibi ve CRM müşteri adayı yönetimi."
+      },
+      "hero": {
+        "eyebrow": "İhracat & B2B Müşteri Bulma",
+        "title": "B2B Müşteri Bulma Paketi",
+        "lead": "Yurt dışı müşterilere ulaşmak istiyor ama hangi firmaları hedefleyeceğinizi, doğru alıcıları nereden bulacağınızı, satın alma müdürü veya karar verici kişilere nasıl ulaşacağınızı ve bu müşterileri nasıl takip edeceğinizi bilmiyor musunuz? B2B müşteri bulma süreci yalnızca firma listesi hazırlamak değildir. Doğru ürün, doğru hedef ülke, doğru sektör, doğru alıcı firma, doğru karar verici kişi, doğru tanıtım metni, profesyonel e-posta, LinkedIn bağlantısı, telefon takibi ve CRM kaydı birlikte yönetilmelidir. {{appName}} olarak B2B Müşteri Bulma Paketi ile şirketiniz için hedef müşteri araştırması, alıcı firma tespiti, karar verici kişi araştırması, kurumsal iletişim hazırlığı, mail marketing, LinkedIn destekli takip, telefon araması planı ve CRM müşteri adayı yönetimi süreçlerini birlikte ele alıyoruz. Amacımız, ihracat müşteri bulma sürecinizi rastgele liste çalışması olmaktan çıkarıp; araştırılan, sınıflandırılan, iletişime geçilen, takip edilen ve CRM üzerinden yönetilen profesyonel bir B2B satış sistemine dönüştürmektir.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "B2B Müşteri Bulma Paketi Nedir?",
+          "body": [
+            "B2B Müşteri Bulma Paketi, yurt içi veya yurt dışı kurumsal müşterilere ulaşmak isteyen şirketler için hedef firma, alıcı firma, ithalatçı, distribütör, toptancı, satın alma müdürü, karar verici kişi ve müşteri adayı takip süreçlerini kapsayan profesyonel müşteri geliştirme paketidir.",
+            "Bu paket; ihracat yapmak isteyen üretici firmalar, B2B hizmet sunan şirketler, yurt dışı alıcı arayan işletmeler, distribütör bulmak isteyen markalar ve kurumsal satış yapmak isteyen firmalar için planlanabilir.",
+            "Paketin amacı yalnızca liste hazırlamak değildir. Amaç, şirketin ürün veya hizmetine uygun hedef müşteri profilini belirlemek, doğru firmaları araştırmak, karar verici kişilere ulaşmak, profesyonel tanıtım metinleri hazırlamak, iletişim sürecini başlatmak ve müşteri adaylarını CRM üzerinden takip edilebilir hale getirmektir.",
+            "Liste değil, takip edilebilir satış sistemi kurun: Hedef müşteri profili, alıcı firma listesi, karar verici kişi araştırması, İngilizce tanıtım maili, LinkedIn mesajları, telefon takip planı ve CRM müşteri adayı yönetimiyle müşteri bulma sürecinizi sistemli hale getirin."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Bu Paket Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Birçok firma müşteri listesi bulsa bile bu listeleri nasıl sınıflandıracağını, hangi firmaya öncelik vereceğini, kime ulaşacağını, nasıl tanıtım yapacağını ve geri dönüşleri nasıl takip edeceğini bilmediği için ihracat müşteri bulma çalışmalarından yeterli verim alamaz.",
+            "{{appName}}, bu paketi şirketin sektörü, ürün grubu, hedef pazarı, mevcut hazırlık seviyesi ve satış hedeflerine göre planlar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden B2B Müşteri Bulma Paketi Gerekir?",
+          "body": [
+            "B2B müşteri bulma sürecinde en büyük sorunlardan biri doğru firmaya ve doğru kişiye ulaşamamaktır. Bir şirket binlerce firma adı bulabilir; ancak bu firmalar hedef müşteri profiline uygun değilse zaman kaybı oluşur.",
+            "B2B Müşteri Bulma Paketi, bu dağınıklığı azaltmak ve müşteri bulma sürecini hedefleme, araştırma, iletişim, takip ve CRM yapısıyla daha sistemli hale getirmek için hazırlanmıştır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Paket Kimler İçin Uygundur?",
+          "intro": "Bu paket, müşteri bulma sürecini plansız deneme yerine araştırma, iletişim ve takip sistemiyle yürütmek isteyen firmalar için uygundur.",
+          "items": [
+            { "title": "Yurt Dışı Müşteri Bulmak İsteyen Üreticiler", "body": "Ürünleri için hedef ülke, alıcı firma, ithalatçı ve distribütör araştırması yapmak isteyen üreticiler için uygundur." },
+            { "title": "İhracat Yapmak İsteyen KOBİ’ler", "body": "İhracat müşteri bulma sürecini daha planlı yürütmek isteyen KOBİ’ler için planlanabilir." },
+            { "title": "Distribütör ve İthalatçı Arayan Firmalar", "body": "Hedef ülkelerde ithalatçı, distribütör, toptancı veya kurumsal alıcı bulmak isteyen şirketler için uygundur." },
+            { "title": "B2B Satış Yapan Şirketler", "body": "Yurt içi veya yurt dışı kurumsal müşterilere ulaşmak isteyen hizmet, yazılım, üretim ve tedarik firmaları için uygundur." },
+            { "title": "Dış Ticaret Departmanı Olmayan İşletmeler", "body": "Müşteri bulma sürecini profesyonel yapıya oturtmak isteyen ancak dış ticaret ekibi olmayan firmalar için uygundur." },
+            { "title": "Mail Marketing ile Müşteri Bulmak İsteyenler", "body": "Hedef liste, İngilizce tanıtım maili, takip maili ve CRM yapısıyla B2B iletişim kurmak isteyen firmalar için uygundur." },
+            { "title": "LinkedIn ile Karar Verici Kişilere Ulaşmak İsteyenler", "body": "Satın alma müdürü, ithalat sorumlusu, procurement manager ve şirket yöneticilerine ulaşmak isteyen firmalar için uygundur." },
+            { "title": "Fuar Öncesi ve Sonrası Takip Yapmak İsteyenler", "body": "Fuar öncesi hedef müşteri listesi oluşturmak veya fuar sonrası müşteri takibini düzenlemek isteyen ihracatçılar için uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B Müşteri Bulma Paketinde Neler Var?",
+          "body": [
+            "B2B Müşteri Bulma Paketi, şirketin ihtiyacına göre farklı çalışmaları kapsayabilir. Çalışmalar şirketin sektörüne, ürün grubuna, hedef ülkesine ve mevcut dijital hazırlık durumuna göre özelleştirilebilir.",
+            "Genel olarak hedef müşteri profili, hedef ülke ve sektör, GTİP / HS koduna göre araştırma, ürün adına göre ithalatçı firma araştırması, alıcı firma listesi, karar verici kişi, kurumsal e-posta, LinkedIn, mail marketing, telefon araması ve CRM müşteri adayı takip yapısı planlanabilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "B2B Müşteri Bulma Paketinde Hangi Alanlar Çalışılır?",
+          "intro": "Aşağıdaki başlıklar şirketin ürününe, hedef ülkesine, sektörüne ve satış hedeflerine göre planlanır.",
+          "items": [
+            { "title": "Hedef Müşteri Profili Oluşturma", "body": "B2B müşteri bulma sürecinin ilk adımı hedef müşteri profilini doğru belirlemektir. Her firma potansiyel müşteri değildir. Doğru müşteri, ürün veya hizmetinizle gerçek ticari uyum taşıyan firmadır. Hangi ürün veya hizmet için müşteri aranacak; alıcı firma üretici mi, ithalatçı mı, distribütör mü; hedef ülke, sektör ve firma büyüklüğü nedir; karar verici kişi kim olabilir gibi sorular netleştirilir." },
+            { "title": "Hedef Ülke ve Sektör Belirleme", "body": "B2B müşteri bulmada her ülke ve her sektör aynı önceliğe sahip değildir. Hedef ülke seçimi ürün, fiyat, rekabet, lojistik, talep, ithalat yapısı ve pazar uygunluğuna göre değerlendirilmelidir. Ürün hangi ülkelerde talep görebilir; rakipler hangi pazarlarda aktif; lojistik maliyeti hedef pazar için uygun mu; hangi sektörler ürünü satın alabilir gibi sorular değerlendirilir." },
+            { "title": "GTİP / HS Koduna Göre Müşteri Araştırması", "body": "GTİP / HS kodu, dış ticarette ürünlerin sınıflandırılması için kullanılan temel kod sistemidir. Doğru ürün kodu üzerinden yapılan araştırmalar, ilgili ürün grubunda ithalat yapan firmaları bulmaya yardımcı olabilir. Ürün için uygun GTİP / HS kodu; hedef ülkelerdeki ithalatçı firmalar; sevkiyat miktarı, tutar ve işlem sıklığı; potansiyel müşteri önceliği belirlenir." },
+            { "title": "Ürün Adına Göre İthalatçı Firma Araştırması", "body": "Bazı durumlarda müşteri araştırması yalnızca GTİP / HS kodu ile değil, ürün adı veya ürün açıklaması üzerinden de yapılmalıdır. İngilizce ürün karşılığı ve alternatif ürün adları; sektörel kullanım adları ve rakip ürün açıklamaları; ithalatçı, distribütör ve toptancı firmalar; hedef ülkelerdeki potansiyel alıcılar araştırılır." },
+            { "title": "Konşimento Verileri ile Alıcı Firma Bulma", "body": "Konşimento ve dış ticaret verileri, belirli ürün gruplarında alıcı firma araştırması yapmak için kullanılabilecek önemli kaynaklardan biridir. Bu veriler satış garantisi vermez; ancak hedef müşteri listesi oluşturmak için güçlü bir araştırma altyapısı sağlayabilir. Alıcı firma, satıcı firma ve ürün açıklaması; GTİP / HS kodu, sevkiyat tarihi ve alıcı ülke; ürün miktarı, toplam tutar ve işlem sıklığı; potansiyel alıcı önceliği değerlendirilir." },
+            { "title": "190+ Ülke Alıcı Firma Verileri", "body": "B2B müşteri bulma sürecinde geniş ülke verileri, hedef pazarı ve potansiyel alıcıları daha kapsamlı değerlendirmeye yardımcı olabilir. Hedef ülke bazlı firma araştırması; ürün grubu bazlı alıcı firma analizi; düzenli ithalat yapan firmaları ayırma; CRM’e aktarılabilecek müşteri listesi hazırlama yapılır." },
+            { "title": "Alıcı Firma Listesi Hazırlama", "body": "Araştırma sonucunda bulunan firmalar düzenli bir listeye alınmalıdır. Dağınık firma isimleri satış ekibinin işini zorlaştırır. Firma adı, ülke, şehir ve sektör; ürün ilgisi, GTİP / HS kodu ve kaynak bilgisi; web sitesi, LinkedIn ve iletişim bilgileri; öncelik seviyesi, notlar ve CRM aktarım durumu düzenlenir." },
+            { "title": "Firma Önceliklendirme", "body": "Her bulunan firma aynı öncelikte değildir. Bazı firmalar ürününüzle daha yüksek uyum gösterebilir; bazıları ise düşük potansiyelli olabilir. Ürün uyumu, ithalat sıklığı ve hedef ülke önceliği; firma büyüklüğü ve sektör uygunluğu; karar verici kişiye ulaşılabilirlik; distribütör, toptancı veya tekrar alım potansiyeli değerlendirilir." },
+            { "title": "Karar Verici Kişi Araştırması", "body": "B2B satışta sadece firma bulmak yeterli değildir. O firmada kiminle görüşüleceğini bilmek gerekir. Satın alma müdürü, procurement manager ve purchasing manager; sourcing manager, import manager ve general manager; company owner, founder ve managing director; business development, category ve supply chain manager araştırılır." },
+            { "title": "Kurumsal E-Posta ve İletişim Bilgisi Araştırması", "body": "Hedef firmalara ulaşmak için kurumsal iletişim bilgileri araştırılabilir. Bu süreç profesyonel, dikkatli ve mevzuata duyarlı şekilde yürütülmelidir. Kurumsal e-posta ve departman e-posta adresleri; web sitesi iletişim formları ve telefon numaraları; LinkedIn profil bağlantıları ve şirket sayfaları; ilgili kişi adı, unvanı ve veri kaynağı notu toplanır." },
+            { "title": "LinkedIn Profil Araştırması", "body": "LinkedIn, karar verici kişilere ulaşmak için destekleyici bir kanaldır. Hedef firmalar belirlendikten sonra bu firmalardaki ilgili kişiler LinkedIn üzerinden araştırılabilir. Firma şirket sayfası ve çalışan araştırması; satın alma veya ithalat sorumlularını bulma; genel müdür veya şirket sahibini tespit etme; LinkedIn kaynak bilgisini CRM’e ekleme yapılır." },
+            { "title": "İngilizce Tanıtım Maili Hazırlığı", "body": "Hedef firmalara ulaşırken kullanılacak tanıtım maili kısa, net ve profesyonel olmalıdır. Yurt dışı müşteriler uzun, karmaşık ve otomatik çeviri gibi görünen metinlerden uzak durabilir. Kısa selamlama, firma tanıtımı ve ürün açıklaması; B2B iş birliği vurgusu ve hedef sektör bilgisi; web sitesi veya katalog yönlendirmesi; teklif veya görüşme çağrısı ve profesyonel imza hazırlanır." },
+            { "title": "Takip Maili Taslakları", "body": "İlk mailden sonra takip yapılmazsa birçok potansiyel fırsat kaybolabilir. Ancak takip maili baskıcı değil, nazik ve kısa olmalıdır. Önceki maili hatırlatma; katalog veya ürün bilgisi paylaşma; görüşme veya teklif hazırlama daveti; doğru departmana yönlendirme isteme taslakları hazırlanır." },
+            { "title": "LinkedIn Bağlantı ve Takip Mesajları", "body": "Mail marketing çalışması LinkedIn ile desteklenebilir. Karar verici kişilerle bağlantı kurmak, ilk teması güçlendirebilir. Bağlantı talebi ve bağlantı sonrası ilk mesaj; mail gönderimi sonrası takip mesajı; katalog paylaşım ve görüşme talebi mesajı; fuar öncesi ve fuar sonrası mesaj taslakları hazırlanır." },
+            { "title": "Mail Marketing Kampanya Planı", "body": "B2B müşteri bulma sürecinde mail marketing planlı yapılmalıdır. Hangi listeye, hangi metinle, hangi tarihte gönderim yapılacağı ve sonrasında nasıl takip edileceği önceden belirlenmelidir. Hedef liste, gönderim tarihi ve mail konusu; mail metni, katalog veya web sitesi yönlendirmesi; takip maili, telefon araması ve LinkedIn takip tarihi; cevap durumu, teklif talebi ve CRM kayıt durumu planlanır." },
+            { "title": "Telefon Araması Takip Planı", "body": "Mail gönderilen veya ilgisi olabilecek firmalar telefonla takip edilebilir. Telefon araması, özellikle B2B satış ve ihracat müşteri bulma sürecinde iletişimi güçlendirebilir. Aranacak firma, ilgili kişi ve telefon numarası; mail gönderim tarihi ve arama amacı; konuşma metni, görüşme sonucu ve tekrar arama tarihi; CRM notu ve sonraki aksiyon planlanır." },
+            { "title": "CRM Müşteri Adayı Takip Yapısı", "body": "B2B müşteri bulma çalışmalarında CRM kullanımı kritik öneme sahiptir. Bulunan firmalar ve kişiler CRM’e aktarılmadığında takip süreci dağınık kalır. Firma adı, ülke, sektör, ilgili kişi ve unvan; e-posta, telefon, LinkedIn profili ve kaynak bilgisi; mail, LinkedIn, telefon, teklif ve takip durumu; satış aşaması, öncelik seviyesi ve sonraki aksiyon kaydedilir." },
+            { "title": "Müşteri Listesi Sınıflandırma", "body": "Bulunan müşterilerin tamamı aynı aşamada değildir. Bu nedenle müşteri adayları belirli kategorilere ayrılmalıdır. Yüksek, orta ve düşük potansiyelli firma; teklif isteyen, katalog isteyen veya cevap beklenen müşteri; telefonla veya LinkedIn üzerinden takip edilecek kişi; distribütör, toptancı ve ithalatçı adayı olarak sınıflandırılır." },
+            { "title": "Haftalık B2B Müşteri Bulma Planı", "body": "B2B müşteri bulma tek seferlik bir çalışma değildir. Düzenli araştırma, iletişim ve takip gerekir. Hedef ülke, hedef sektör ve yeni firma araştırması; karar verici kişi araştırması ve mail gönderimi; LinkedIn bağlantı çalışması ve telefon araması; CRM güncelleme, haftalık rapor ve sonraki hafta öncelikleri planlanır." },
+            { "title": "Performans ve Dönüşüm Takibi", "body": "B2B müşteri bulma çalışmalarında başarı yalnızca bulunan firma sayısıyla ölçülmemelidir. Önemli olan doğru firmalara ulaşılıp ulaşılmadığı ve bu firmaların satış sürecine alınıp alınmadığıdır. Araştırılan firma ve bulunan karar verici kişi sayısı; gönderilen mail, cevap ve olumlu dönüş sayısı; teklif isteyen müşteri ve telefonla ulaşılan kişi sayısı; CRM’e eklenen müşteri adayları ve satış fırsatları izlenir." },
+            { "title": "Mevzuata ve Profesyonel İletişim Kurallarına Dikkat", "body": "B2B müşteri bulma sürecinde e-posta, telefon ve LinkedIn iletişimi yapılırken hedef ülke kuralları, gizlilik, kişisel veri, ticari iletişim ve profesyonel etik konularına dikkat edilmelidir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Bu Paket Neleri Kapsamaz?",
+          "body": [
+            "B2B Müşteri Bulma Paketi, hedef müşteri araştırması, iletişim planı ve takip yapısını oluşturmak için hazırlanır. Aşağıdaki çalışmalar ihtiyaç halinde ilgili hizmet veya paketler kapsamında ayrıca planlanabilir."
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "B2B Müşteri Bulma Paketi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketin sektörü, ürünleri, mevcut müşteri bulma çalışmaları, hedef ülkeleri ve satış hedefleri değerlendirilerek başlar. Ardından hedef müşteri profili, veri ve firma araştırması, liste oluşturma, karar verici kişi araştırması, mail ve LinkedIn mesajları, telefon takip planı, CRM takip yapısı ve yol haritası ile ilerler.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketin sektörü, ürünleri, mevcut müşteri bulma çalışmaları, hedef ülkeleri ve satış hedefleri değerlendirilir." },
+            { "n": 2, "title": "Hedef Müşteri Profili Belirleme", "body": "Hangi ülkelere, sektörlere, firma tiplerine ve karar verici kişilere ulaşılacağı netleştirilir." },
+            { "n": 3, "title": "Veri ve Firma Araştırması", "body": "GTİP / HS kodu, ürün adı, konşimento verileri, alıcı firma verileri, B2B kaynaklar ve LinkedIn üzerinden potansiyel firmalar araştırılır." },
+            { "n": 4, "title": "Liste Oluşturma ve Önceliklendirme", "body": "Bulunan firmalar ülke, sektör, ürün uyumu, potansiyel ve ulaşılabilirlik durumuna göre sınıflandırılır." },
+            { "n": 5, "title": "Karar Verici Kişi ve İletişim Araştırması", "body": "Hedef firmalarda satın alma, ithalat, genel müdürlük veya ilgili departman kişileri araştırılır." },
+            { "n": 6, "title": "Mail ve LinkedIn Mesaj Hazırlığı", "body": "İngilizce tanıtım maili, takip maili, LinkedIn bağlantı ve takip mesajları hazırlanabilir." },
+            { "n": 7, "title": "Mail Marketing ve Telefon Takip Planı", "body": "Hangi firmalara ne zaman mail gönderileceği, ne zaman takip yapılacağı ve hangi firmaların aranacağı planlanır." },
+            { "n": 8, "title": "CRM Takip Yapısı", "body": "Müşteri adaylarının CRM üzerinde nasıl takip edileceği ve hangi satış aşamalarında izleneceği belirlenir." },
+            { "n": 9, "title": "Raporlama ve Yol Haritası", "body": "Çalışmanın sonunda hedef liste, öncelikli takip firmaları, iletişim planı ve sonraki adımlar raporlanabilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "B2B Müşteri Bulma Paketinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Hedef müşteri profili netleşir",
+            "Doğru ülke ve sektörlere odaklanılır",
+            "Alıcı firma araştırması daha sistemli yapılır",
+            "GTİP / HS koduna göre müşteri bulma süreci desteklenir",
+            "Ürün adına göre ithalatçı firma araştırması yapılabilir",
+            "Konşimento verileri daha anlamlı yorumlanır",
+            "Karar verici kişi araştırması yapılır",
+            "Kurumsal iletişim bilgileri daha düzenli toplanır",
+            "İngilizce tanıtım maili hazırlanabilir",
+            "LinkedIn mesajlaşma süreci desteklenir",
+            "Mail marketing ve telefon takibi birlikte planlanır",
+            "Müşteri adayları CRM üzerinden takip edilebilir",
+            "Satış ekibi doğru firmalara odaklanır",
+            "B2B müşteri bulma süreci ölçülebilir hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "B2B Müşteri Bulmada Sık Yapılan Hatalar",
+          "items": [
+            "Hedef müşteri profili oluşturmadan liste hazırlamak",
+            "Yanlış ülkelere odaklanmak",
+            "Ürünle ilgisi olmayan firmalara ulaşmak",
+            "GTİP / HS kodunu kontrol etmeden araştırma yapmak",
+            "Ürün adının İngilizce karşılıklarını belirlememek",
+            "Sadece firma adı bulup karar verici kişiyi araştırmamak",
+            "Kurumsal iletişim bilgilerini doğrulamamak",
+            "Herkese aynı tanıtım mailini göndermek",
+            "LinkedIn mesajlarını plansız hazırlamak",
+            "Mail sonrası telefon takibi yapmamak",
+            "Cevap veren firmaları CRM’e kaydetmemek",
+            "Teklif isteyen müşterileri zamanında takip etmemek",
+            "Müşteri listesini önceliklendirmemek",
+            "Spam algısı oluşturacak iletişim yapmak",
+            "Satış garantisi beklentisiyle süreci tek seferlik görmek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Hangi Paketlerle Birlikte Alınabilir?",
+          "body": [
+            "B2B Müşteri Bulma Paketi, diğer paketlerle birlikte planlanabilir. Genellikle ihracata yeni başlayacak firmalarda önce İhracata Hazırlık Paketi, ardından B2B Müşteri Bulma Paketi planlanabilir. Müşteri bulma sonrasında teklif, proforma, ödeme, nakliye ve sevkiyat süreçleri için Dış Ticaret Departmanı Paketi değerlendirilebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B Müşteri Bulma Paketi, İhracat Müşteri Bulma ve Alıcı Firma Araştırması",
+          "body": [
+            "B2B müşteri bulma paketi; ihracat müşteri bulma paketi, yurt dışı müşteri bulma, alıcı firma bulma, ithalatçı firma bulma, GTİP müşteri bulma, HS koduna göre müşteri bulma, ürün adına göre ithalatçı firma bulma, konşimento verileri ile müşteri bulma, 190 ülke alıcı firma verileri, satın alma müdürü bulma, karar verici kişi bulma, B2B lead generation, ihracat lead generation, mail marketing ile müşteri bulma, LinkedIn ile müşteri bulma, B2B firma listesi hazırlama, yurt dışı alıcı listesi, ihracat hedef müşteri listesi ve CRM müşteri adayı takibi konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B Müşteri Bulma Paketi nedir?",
+          "body": [
+            "B2B Müşteri Bulma Paketi; ihracat yapmak veya kurumsal müşterilere ulaşmak isteyen şirketler için hedef müşteri profili oluşturma, hedef ülke ve sektör belirleme, GTİP / HS koduna göre alıcı firma araştırması, ürün adına göre ithalatçı firma bulma, konşimento verileriyle potansiyel alıcı analizi, karar verici kişi araştırması, kurumsal iletişim bilgisi araştırması, İngilizce tanıtım maili, LinkedIn mesajları, telefon takip planı ve CRM müşteri adayı yönetimi süreçlerini kapsayan müşteri geliştirme paketidir. {{appName}}, B2B müşteri bulma sürecini liste çalışmasından çıkarıp takip edilebilir satış sistemine dönüştürmeye yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "B2B Müşteri Bulma Paketi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "B2B Müşteri Bulma Paketi kimler için uygundur?", "a": "Bu paket; ihracat yapmak isteyen üretici firmalar, B2B satış yapan şirketler, yurt dışı alıcı arayan KOBİ’ler, distribütör veya ithalatçı bulmak isteyen işletmeler ve kurumsal müşterilere ulaşmak isteyen firmalar için uygundur." },
+            { "q": "Bu paket sadece firma listesi mi içerir?", "a": "Hayır. Paket yalnızca firma listesi hazırlamaya odaklanmaz. Hedef müşteri profili, alıcı firma araştırması, karar verici kişi araştırması, iletişim planı, mail marketing, LinkedIn, telefon takibi ve CRM müşteri adayı yönetimi birlikte değerlendirilir." },
+            { "q": "GTİP / HS koduna göre müşteri bulunabilir mi?", "a": "Evet. Ürüne uygun GTİP / HS kodu üzerinden ilgili ürün grubunda ithalat yapan firmalar araştırılabilir. Kodun doğru belirlenmesi ve ürün açıklamalarıyla birlikte değerlendirilmesi önemlidir." },
+            { "q": "Ürün adına göre ithalatçı firma bulunabilir mi?", "a": "Evet. Ürün adı, İngilizce ürün karşılığı, alternatif ürün isimleri ve sektörel kullanım adları üzerinden potansiyel ithalatçı ve alıcı firmalar araştırılabilir." },
+            { "q": "Karar verici kişiler araştırılıyor mu?", "a": "Evet. Satın alma müdürü, procurement manager, import manager, general manager, company owner ve ilgili departman kişileri araştırılabilir." },
+            { "q": "Kurumsal e-posta adresleri bulunuyor mu?", "a": "Hedef firmalar için kurumsal iletişim bilgileri, departman e-postaları, web sitesi iletişim kanalları ve LinkedIn profilleri araştırılabilir. Bu süreç profesyonel iletişim ve mevzuat farkındalığıyla yürütülmelidir." },
+            { "q": "Mail marketing bu pakete dahil mi?", "a": "Paket kapsamında mail marketing planı, İngilizce tanıtım maili, takip maili ve gönderim/takip yapısı hazırlanabilir. Kampanya kapsamı şirketin ihtiyacına göre ayrıca netleştirilir." },
+            { "q": "LinkedIn ile müşteri bulma çalışması yapılabilir mi?", "a": "Evet. Hedef firmalardaki karar verici kişilerin LinkedIn üzerinden araştırılması, bağlantı mesajları ve takip mesajları pakete dahil edilebilir." },
+            { "q": "CRM müşteri takibi kuruluyor mu?", "a": "Bu paket kapsamında müşteri adaylarının CRM üzerinde nasıl takip edileceğine dair temel alanlar, satış aşamaları ve takip mantığı oluşturulabilir. CRM yazılım kurulumu ayrıca CRM Kurulum Paketi kapsamında planlanabilir." },
+            { "q": "Bu paket satış garantisi verir mi?", "a": "Hayır. B2B Müşteri Bulma Paketi satış garantisi vermez. Ancak doğru hedef müşteri araştırması, profesyonel iletişim, takip planı ve CRM yapısıyla satış fırsatlarının daha düzenli yönetilmesine yardımcı olur." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Müşteri Bulma Sürecinizi Rastgele Liste Çalışması Olmaktan Çıkaralım",
+        "body": "Yurt dışı müşteri bulmak istiyor ama doğru firmalara ulaşamıyor, karar verici kişileri tespit edemiyor, mail marketing ve LinkedIn sürecini düzenli yürütemiyor veya müşteri adaylarını CRM üzerinden takip edemiyorsanız {{appName}} ile iletişime geçin. B2B Müşteri Bulma Paketi ile ürününüz için doğru hedef müşteri profilini belirleyelim, alıcı firma araştırması yapalım, karar verici kişileri bulalım, profesyonel tanıtım metinleri hazırlayalım ve müşteri adaylarınızı takip edilebilir satış sürecine dönüştürelim.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

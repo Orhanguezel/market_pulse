@@ -22,6 +22,14 @@ export const profileUpsertSchema = z.object({
   city: z.string().max(128).optional(),
   country: z.string().max(128).optional(),
   postal_code: z.string().max(32).optional(),
+  sender_enabled: z.union([z.boolean(), z.number()]).optional(),
+  sender_name: z.string().max(191).nullable().optional(),
+  sender_email: z.string().email().max(255).nullable().optional(),
+  sender_smtp_host: z.string().max(255).nullable().optional(),
+  sender_smtp_port: z.number().int().min(1).max(65535).nullable().optional(),
+  sender_smtp_username: z.string().max(255).nullable().optional(),
+  sender_smtp_password: z.string().max(1000).nullable().optional(),
+  sender_smtp_secure: z.union([z.boolean(), z.number()]).nullable().optional(),
 });
 
 export type ProfileUpsertInput = z.infer<typeof profileUpsertSchema>;

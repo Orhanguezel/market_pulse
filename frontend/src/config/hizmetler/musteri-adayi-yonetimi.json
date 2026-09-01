@@ -1,0 +1,184 @@
+{
+  "slug": "musteri-adayi-yonetimi",
+  "category": "ihracat-musteri-bulma",
+  "module": "discover",
+  "order": 60,
+  "icon": "Users",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Müşteri Adayı Yönetimi | CRM ile Lead Takibi, Satış Fırsatı ve Teklif Süreci Yönetimi",
+        "description": "Web sitesi, mail marketing, LinkedIn, fuar, B2B platform ve ihracat müşteri bulma çalışmalarından gelen müşteri adaylarını CRM ile tek merkezden yönetin, takip edin ve satışa dönüştürün.",
+        "ogTitle": "Müşteri Adayı Yönetimi | {{appName}}",
+        "ogDescription": "Web sitesi, mail marketing, LinkedIn, fuar, B2B platform ve ihracat müşteri bulma çalışmalarından gelen leadleri CRM ile tek merkezden yönetin."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "Müşteri Adayı Yönetimi",
+        "lead": "Müşteri adayları geliyor ama düzenli takip edilmediği için satışa dönüşmeden kayboluyor mu? {{appName}} Müşteri Adayı Yönetimi ile web sitesi formları, mail marketing çalışmaları, LinkedIn, Sales Navigator, fuarlar, B2B platformlar, telefon aramaları ve ihracat müşteri bulma süreçlerinden gelen tüm potansiyel müşterileri tek merkezden takip edebilirsiniz. Amacımız, şirketinize gelen her müşteri adayını kayıt altına almak, doğru satış temsilcisine yönlendirmek, takip sürecini planlamak ve satış fırsatlarını ölçülebilir hale getirmektir.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Müşteri Adayı Yönetimi Nedir?",
+          "body": [
+            "Müşteri adayı yönetimi, şirketinize farklı kanallardan gelen potansiyel müşterilerin kayıt altına alınması, sınıflandırılması, ilgili satış temsilcisine atanması, takip edilmesi ve satış fırsatına dönüştürülmesi sürecidir.",
+            "Bir müşteri adayı web sitenizdeki teklif formundan gelebilir. Bir diğeri LinkedIn üzerinden mesaj atabilir. Bir başka müşteri fuarda kartvizit bırakabilir, mail marketing kampanyanıza cevap verebilir veya B2B platform üzerinden ürün talebi gönderebilir.",
+            "{{appName}} Müşteri Adayı Yönetimi, tüm bu lead kaynaklarını tek yapı altında toplar. Her müşteri adayının nereden geldiği, hangi ürünle ilgilendiği, hangi satış aşamasında olduğu ve ne zaman tekrar takip edilmesi gerektiği kayıt altına alınır.",
+            "Tüm potansiyel müşterileri tek merkezde toplayın: Web sitesi, mail marketing, LinkedIn, fuar, B2B platform, telefon araması ve ihracat müşteri bulma kanallarından gelen leadler CRM tabanlı sistemle takip edilebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Müşteri Adayı Yönetimi Neden Önemlidir?",
+          "body": [
+            "Birçok şirket yeni müşteri bulmak için reklam, fuar, mail marketing, LinkedIn, web sitesi, B2B platform ve telefon araması gibi farklı kanallara yatırım yapar.",
+            "Ancak gelen müşteri adayları düzenli takip edilmezse bu çalışmaların büyük bölümü boşa gidebilir. Müşteri adayı yönetimi, bu dağınıklığı ortadan kaldırır ve potansiyel müşterileri satış sürecine düzenli şekilde dahil eder."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Bu hizmet, potansiyel müşterileri kaçırmadan satış sürecine almak isteyen tüm şirketler için uygundur.",
+          "items": [
+            { "title": "Web Sitesinden Teklif Formu Alanlar", "body": "Web sitesi formlarından gelen talepleri CRM ile takip etmek isteyen şirketler için uygundur." },
+            { "title": "Mail Marketing Yapan Firmalar", "body": "Mail marketing cevaplarını satış sürecine bağlamak isteyen işletmelere destek olur." },
+            { "title": "LinkedIn ve Sales Navigator Kullananlar", "body": "LinkedIn üzerinden bulunan potansiyel müşterileri sistemli takip etmeye yardımcı olur." },
+            { "title": "B2B Satış Yapan Firmalar", "body": "Uzun takip süreci olan B2B müşteri adaylarını düzenli yönetmek için uygundur." },
+            { "title": "İhracat Müşteri Bulma Süreci Yürütenler", "body": "Yurt dışı alıcı listelerini, mail gönderimlerini ve teklif süreçlerini takip edebilir." },
+            { "title": "B2B Platformlardan Talep Alanlar", "body": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages taleplerini tek merkezde toplayabilir." },
+            { "title": "Satış Ekibi Bulunan KOBİ’ler", "body": "Müşteri adaylarını Excel yerine CRM ile yönetmek isteyen KOBİ’ler için uygundur." },
+            { "title": "Satış Fırsatlarını Takip Etmek İsteyenler", "body": "Yöneticilerin açık fırsatları, lead kaynaklarını ve satış dönüşlerini görmesini sağlar." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Müşteri Adayı Yönetimi ile Hangi Süreçler Yönetilir?",
+          "intro": "Müşteri adayı yönetimi yalnızca isim ve telefon numarası kaydetmek değildir. Asıl amaç, potansiyel müşteriyi satışa dönüşene kadar doğru şekilde takip etmektir.",
+          "items": [
+            { "title": "Lead Kaydı Oluşturma", "body": "İlk adım lead kaydı oluşturmaktır: firma adı, ilgili kişi ve departman; ülke, şehir, e-posta ve telefon bilgisi; ilgilendiği ürün veya hizmet; müşteri kaynağı, lead durumu ve takip tarihi düzenli kaydedilir." },
+            { "title": "Müşteri Kaynağını Belirleme", "body": "Satış ve pazarlama yatırımlarının performansı buna göre ölçülür: web sitesi, teklif formu veya Google araması; mail marketing, LinkedIn veya Sales Navigator; fuar, telefon araması veya B2B platform; konşimento verisi, GTİP / HS kodu veya referans." },
+            { "title": "Müşteri Adayını Sınıflandırma", "body": "Her müşteri adayı aynı öncelikte değildir: yeni lead ve ilk iletişim kuruldu; sıcak, orta veya düşük potansiyelli müşteri; teklif isteyen veya numune isteyen müşteri; daha sonra takip edilecek, kaybedilen veya satışa dönüşen lead." },
+            { "title": "Satış Temsilcisine Atama", "body": "Her lead ilgili satış temsilcisine atanmalıdır: ülke, bölge veya ürün grubu; sektör ve müşteri kaynağı; satış temsilcisi uzmanlığı; dil bilgisi, ihracat deneyimi ve satış kapasitesi dikkate alınır." },
+            { "title": "İlk İletişim Süreci", "body": "Hızlı ve profesyonel dönüş önemlidir: müşteri talebi ve ilgilendiği ürün incelenir; telefon veya e-posta ile dönüş yapılır; müşteri ihtiyacı netleştirilir; görüşme notu ve sonraki takip tarihi CRM’e eklenir." },
+            { "title": "Telefon Araması ve Görüşme Notları", "body": "Telefon görüşmeleri kayıt altına alınmalıdır: arama tarihi ve arayan satış temsilcisi; görüşülen kişi ve görüşme sonucu; müşteri ihtiyacı, ürün ilgisi ve miktar bilgisi; sonraki adım ve tekrar arama tarihi." },
+            { "title": "Teklif Talebi ve Teklif Takibi", "body": "Satış fırsatı genellikle teklif talebiyle başlar: teklif talep tarihi ve istenen ürün; talep edilen miktar ve tekliften sorumlu kişi; teklif gönderim tarihi, tutarı ve geçerlilik süresi; müşteri dönüş durumu, revize ihtiyacı ve takip tarihi." },
+            { "title": "Takip Tarihi ve Hatırlatma Sistemi", "body": "Her müşteri adayı için takip tarihi belirlenir: yarın tekrar ara; 3 gün sonra teklif durumunu sor; 1 hafta sonra takip maili gönder; fuar sonrası görüşme planla veya yeni ürün kataloğunu gönder." },
+            { "title": "Müşteri Adayından Satış Fırsatına Geçiş", "body": "Doğru takip edilen leadler zamanla satış fırsatına dönüşebilir: ürün hakkında detay veya fiyat teklifi istemesi; numune, teslim süresi veya teknik bilgi talep etmesi; toplantı yapmak istemesi; sipariş miktarı veya karar verici kişi bilgisi paylaşması." },
+            { "title": "Kaybedilen Müşteri Adaylarını Analiz Etme", "body": "Kaybedilen leadler de değerli bilgi taşır: fiyat yüksek bulundu veya müşteri başka tedarikçi seçti; ürün, teslim süresi veya bütçe uygun olmadı; müşteri cevap vermedi veya karar süreci ertelendi; yanlış hedef müşteri veya gerçek alıcı talebi değildi." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "İhracat Müşteri Bulma Süreci",
+          "intro": "İhracat yapan şirketlerde müşteri adayı yönetimi daha da kritiktir. Çok sayıda firma, ülke, ilgili kişi ve teklif süreci aynı anda takip edilir.",
+          "items": [
+            "Yurt dışı alıcı firma adı ve ülke",
+            "GTİP / HS kodu ve ürün grubu",
+            "Konşimento verisi kaynağı",
+            "Mail gönderim tarihi ve telefon araması sonucu",
+            "Teklif, numune, proforma ve sipariş potansiyeli"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Mail Marketing Sonrası Takip",
+          "intro": "Mail marketing kampanyalarında asıl değer, cevap veren ve ilgilenen firmaları doğru takip etmektir.",
+          "items": [
+            "Mail gönderilen firmalar",
+            "Cevap veren ve teklif isteyen firmalar",
+            "Numune talep eden veya telefonla aranacak firmalar",
+            "Takip maili gönderilecek firmalar",
+            "Satış temsilcisine atanacak leadler"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "LinkedIn ve Sales Navigator Takibi",
+          "intro": "LinkedIn ve Sales Navigator ile müşteri bulma çalışmaları, CRM sistemiyle desteklendiğinde daha güçlü hale gelir.",
+          "items": [
+            "Bağlantı kurulan kişiler",
+            "Mesaj gönderilen ve cevap veren firmalar",
+            "Satın alma müdürleri ve karar vericiler",
+            "Takip mesajı gönderilecek kişiler",
+            "Teklif sürecine alınacak firmalar"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Müşteri Adayı Yönetimi Kurulum Süreci Nasıl İlerler?",
+          "intro": "Müşteri adayı yönetim sistemi şirketinizin müşteri kaynaklarına, satış ekibi yapısına, teklif sürecine ve mevcut takip yöntemine göre planlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin müşteri kaynakları, satış ekibi yapısı, teklif süreci ve mevcut takip yöntemi değerlendirilir." },
+            { "n": 2, "title": "Lead Kaynaklarının Belirlenmesi", "body": "Web sitesi, mail marketing, LinkedIn, B2B platform, fuar, telefon araması ve ihracat verileri gibi kaynaklar tanımlanır." },
+            { "n": 3, "title": "CRM Alanlarının Planlanması", "body": "Müşteri adı, kaynak, ürün, ülke, satış temsilcisi, lead durumu, teklif durumu ve takip tarihi gibi alanlar belirlenir." },
+            { "n": 4, "title": "Satış Aşamalarının Kurgulanması", "body": "Müşteri adayının yeni lead aşamasından satışa dönüşene kadar geçeceği aşamalar oluşturulur." },
+            { "n": 5, "title": "Atama ve Görev Yapısı", "body": "Leadlerin hangi satış temsilcisine atanacağı ve hangi görevlerin oluşturulacağı planlanır." },
+            { "n": 6, "title": "Raporlama Yapısı", "body": "Yönetici için lead kaynakları, açık fırsatlar, teklif talepleri ve satışa dönüşen müşteri adayları raporlanır." },
+            { "n": 7, "title": "Ekip Eğitimi", "body": "Satış ekibine müşteri adayı kaydı, takip, görev yönetimi ve teklif süreci anlatılır." },
+            { "n": 8, "title": "Takip ve İyileştirme", "body": "Sistem kullanıldıkça eksikler belirlenir ve müşteri adayı yönetimi daha verimli hale getirilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Müşteri Adayı Yönetiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Potansiyel müşteriler tek merkezde toplanır",
+            "Lead kaynakları net şekilde görülür",
+            "Satış temsilcilerine doğru atama yapılır",
+            "Müşteri takipleri unutulmaz",
+            "Teklif isteyen firmalar düzenli izlenir",
+            "Sıcak müşteri adaylarına öncelik verilir",
+            "Mail marketing dönüşleri satış sürecine bağlanır",
+            "LinkedIn ve fuar görüşmeleri kayıt altına alınır",
+            "İhracat müşteri bulma süreci daha sistemli hale gelir",
+            "Kaybedilen leadlerden öğrenme sağlanır"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Müşteri Adayı Yönetiminde Sık Yapılan Hatalar",
+          "items": [
+            "Leadleri Excel dosyalarında dağınık tutmak",
+            "Müşteri kaynağını kayıt altına almamak",
+            "Web sitesi formlarına geç dönüş yapmak",
+            "Satış temsilcisine lead atamamak",
+            "Müşteri adaylarını sıcak, orta ve düşük olarak ayırmamak",
+            "Teklif isteyen müşterileri düzenli takip etmemek",
+            "Telefon görüşmelerini kayıt altına almamak",
+            "Mail marketing cevaplarını CRM’e aktarmamak",
+            "LinkedIn görüşmelerini sistem dışında bırakmak",
+            "Kaybedilen leadleri analiz etmemek"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Müşteri Adayı Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Müşteri adayı yönetimi kimler için uygundur?", "a": "Müşteri adayı yönetimi; web sitesi, mail marketing, LinkedIn, fuar, B2B platform veya telefon aramalarından potansiyel müşteri alan tüm şirketler için uygundur." },
+            { "q": "Lead yönetimi ile müşteri adayı yönetimi aynı şey midir?", "a": "Evet. Lead yönetimi, müşteri adayı yönetiminin İngilizce karşılığıdır. Her iki kavram da potansiyel müşterilerin satış sürecine alınmasını ve takip edilmesini ifade eder." },
+            { "q": "CRM ile müşteri adayları takip edilebilir mi?", "a": "Evet. CRM sistemiyle müşteri adayları kayıt altına alınabilir, kaynaklarına göre sınıflandırılabilir, satış temsilcilerine atanabilir ve satışa dönüşene kadar takip edilebilir." },
+            { "q": "Web sitesinden gelen talepler CRM’e alınabilir mi?", "a": "Evet. Web sitesi teklif formları, iletişim formları ve diğer müşteri talepleri CRM sistemine aktarılabilir." },
+            { "q": "Mail marketing cevapları takip edilebilir mi?", "a": "Evet. Mail marketing kampanyalarından gelen cevaplar CRM’de müşteri adayı olarak takip edilebilir ve ilgili satış temsilcisine atanabilir." },
+            { "q": "LinkedIn ve Sales Navigator müşteri adayları CRM’de yönetilebilir mi?", "a": "Evet. LinkedIn ve Sales Navigator üzerinden bulunan potansiyel müşteriler CRM’e eklenebilir, mesajlaşma durumu, takip tarihi ve satış aşaması kayıt altına alınabilir." },
+            { "q": "İhracat müşteri adayları takip edilebilir mi?", "a": "Evet. Konşimento verileri, GTİP / HS kodu araştırmaları, yurt dışı alıcı listeleri, mail marketing ve telefon aramalarıyla bulunan ihracat müşteri adayları CRM üzerinden yönetilebilir." },
+            { "q": "Müşteri adayları sıcak ve soğuk olarak ayrılabilir mi?", "a": "Evet. Müşteri adayları sıcak, orta, düşük potansiyelli, teklif isteyen, numune isteyen, takip edilecek veya uygun olmayan lead olarak sınıflandırılabilir." },
+            { "q": "Satış temsilcisine müşteri adayı atanabilir mi?", "a": "Evet. Her müşteri adayı ilgili satış temsilcisine atanabilir. Böylece kimin hangi müşteriyle ilgilendiği netleşir." },
+            { "q": "Müşteri adayı yönetimi satışları artırır mı?", "a": "Müşteri adayı yönetimi doğrudan satış garantisi vermez; ancak potansiyel müşterilerin unutulmasını önler, takip sürecini düzenler ve satış fırsatlarının daha iyi yönetilmesine yardımcı olur." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Müşteri Adayı Yönetim Sisteminizi Birlikte Kuralım",
+        "body": "Şirketinize gelen müşteri adayları farklı kanallarda dağınık şekilde kalıyorsa, önemli satış fırsatlarını fark etmeden kaybediyor olabilirsiniz. {{appName}} Müşteri Adayı Yönetimi ile web sitesi, mail marketing, LinkedIn, fuar, B2B platform ve ihracat müşteri bulma çalışmalarından gelen tüm potansiyel müşterileri tek merkezden takip edin.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

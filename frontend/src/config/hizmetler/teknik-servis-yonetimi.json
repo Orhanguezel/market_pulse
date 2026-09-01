@@ -1,0 +1,207 @@
+{
+  "slug": "teknik-servis-yonetimi",
+  "category": "urun-modulleri",
+  "module": "crm",
+  "order": 40,
+  "icon": "Wrench",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Teknik Servis Yönetim Yazılımı | Arıza ve Bakım Takibi",
+        "description": "Teknik servis süreçlerinizi dijitalleştirin. Arıza kaydı, parça takibi ve servis formlarını tek bir platformdan profesyonelce yönetin.",
+        "ogTitle": "Teknik Servis Yönetim Yazılımı | {{appName}}",
+        "ogDescription": "Müşteri siparişlerini yönetin, tekliflerin satışa dönüşme takibini kolaylaştırın ve müşteri memnuniyetini artırın. Müşterilerinize hazırladığınız teklifleri ve oluşan siparişleri daha hızlı ve etkili bir şekilde yönetmek için personel atama sistemimizi kullanabilirsiniz. Servis durumlarını anlık olarak izleyin, müşterilerinize canlı takip imkanı sunun."
+      },
+      "hero": {
+        "eyebrow": "Ürün Modülü",
+        "title": "Teknik Servis Yönetimi",
+        "lead": "Müşteri siparişlerini yönetin, tekliflerin satışa dönüşme takibini kolaylaştırın ve müşteri memnuniyetini artırın. Müşterilerinize hazırladığınız teklifleri ve oluşan siparişleri daha hızlı ve etkili bir şekilde yönetmek için personel atama sistemimizi kullanabilirsiniz. Servis durumlarını anlık olarak izleyin, müşterilerinize canlı takip imkanı sunun.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Nasıl çalışır?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Öne Çıkan Özellikler",
+          "items": [
+            {
+              "title": "Kolay Cihaz Yönetimi",
+              "body": "Servise gelen cihazları hızlıca ekleyin, durumlarını güncelleyin ve takip edin."
+            },
+            {
+              "title": "Görev Atama ve Çalışan Yönetimi",
+              "body": "Cihazları çalışanlara atayın, görev durumlarını takip edin ve verimliliği artırın."
+            },
+            {
+              "title": "Müşteri Canlı Takip",
+              "body": "Müşterilerinize cihazlarının durumunu anlık olarak takip edebilecekleri özel link sunun."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Nasıl Çalışır?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Cihaz Kaydı",
+              "body": "Müşterinin cihazını sisteme ekleyin. Marka, model ve arıza bilgilerini detaylı bir şekilde kaydedin. Bu, servis sürecinin doğru başlamasını sağlar."
+            },
+            {
+              "n": 2,
+              "title": "Sorumlu Personel Atama",
+              "body": "Kaydedilen teklifler için en uygun personeli atayın. Personelin uzmanlık alanı ve iş yükü göz önünde bulundurularak yapılan bu atama, sipariş sürecini hızlandırır ve verimliliği artırır."
+            },
+            {
+              "n": 3,
+              "title": "Durum Güncelleme",
+              "body": "Servis sürecindeki her adımı güncelleyin. Teşhis, parça siparişi, onarım ve test aşamalarını sisteme işleyin. Bu güncellemeler, müşteriye otomatik bildirimler gönderilmesini sağlar ve şeffaf bir süreç yönetimi sunar."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Sıkça Sorulan Sorular",
+          "items": [
+            {
+              "q": "Bu uygulama hangi tür işletmeler için uygundur?",
+              "a": "Uygulamamız, ürün atışı veya hizmet sunan tüm işletmeler için uygundur. Küçük ölçekli işletmelerden büyük ölçekli işletmelere kadar her boyutta işletme için özelleştirilebilir çözümler sunuyoruz."
+            },
+            {
+              "q": "Uygulamayı kullanmak için teknik bilgi gerekiyor mu?",
+              "a": "Hayır, uygulamamız kullanıcı dostu bir arayüze sahiptir ve özel bir teknik bilgi gerektirmez. Basit ve sezgisel tasarımı sayesinde, kısa bir oryantasyon sonrasında tüm ekibiniz kolayca kullanabilir."
+            },
+            {
+              "q": "Uygulama üzerinden müşterilerle nasıl iletişim kurabilirim?",
+              "a": "Uygulamamız, müşterilerinize otomatik bildirimler gönderme, servis durumu hakkında güncellemeler paylaşma ve özel mesajlar iletme gibi çeşitli iletişim araçları sunar. Ayrıca, müşterileriniz için özel bir takip sayfası oluşturabilirsiniz."
+            },
+            {
+              "q": "Uygulamanın raporlama özellikleri nelerdir?",
+              "a": "Uygulamamız, işletmenizin performansını analiz etmenize yardımcı olacak çeşitli raporlar sunar. Bu raporlar arasında servis süresi istatistikleri, müşteri memnuniyeti oranları, en sık karşılaşılan sorunlar ve çalışan performans analizleri bulunmaktadır."
+            },
+            {
+              "q": "Uygulama mobil cihazlarla uyumlu mu?",
+              "a": "Evet, uygulamamız tamamen mobil uyumludur. İster akıllı telefonunuzdan ister tabletinizden, dilediğiniz yerden işletmenizi yönetebilir ve servis durumlarını takip edebilirsiniz."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Sipariş Yönetiminizi Optimize Edin",
+        "body": "Müşteri memnuniyetini artırın, iş süreçlerinizi iyileştirin ve verimliliğinizi yükseltin.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "seo": {
+        "title": "Technical Service Management - Efficient and Easy Device Tracking | isletmeyonetim.com",
+        "description": "Simplify device tracking and increase customer satisfaction with technical service management software. Try it for free!",
+        "ogTitle": "Technical Service Management - Efficient and Easy Device Tracking | {{appName}}",
+        "ogDescription": "Manage service requests, simplify device tracking, and increase customer satisfaction. You can use our personnel assignment system to manage devices coming to technical service quickly and effectively. Monitor service statuses instantly, provide live tracking for your customers."
+      },
+      "hero": {
+        "eyebrow": "Product Module",
+        "title": "Technical Service Management",
+        "lead": "Manage service requests, simplify device tracking, and increase customer satisfaction. You can use our personnel assignment system to manage devices coming to technical service quickly and effectively. Monitor service statuses instantly, provide live tracking for your customers.",
+        "primaryCTA": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "How it works?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Featured Characteristics",
+          "items": [
+            {
+              "title": "Easy Device Management",
+              "body": "Quickly add, update status, and track devices coming in for service."
+            },
+            {
+              "title": "Task Assignment and Employee Management",
+              "body": "Assign devices to employees, track task statuses, and increase productivity."
+            },
+            {
+              "title": "Customer Live Tracking",
+              "body": "Provide your customers with a special link to track the status of their devices in real-time."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "How Does It Work?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Device Registration",
+              "body": "Add the customer's device to the system. Record the brand, model, and fault information in detail. This ensures the service process starts correctly."
+            },
+            {
+              "n": 2,
+              "title": "Assign Responsible Personnel",
+              "body": "Assign the most suitable technical personnel for the registered device. This assignment, made considering the personnel's area of expertise and workload, speeds up the repair process and increases efficiency."
+            },
+            {
+              "n": 3,
+              "title": "Status Update",
+              "body": "Update every step in the service process. Record the diagnosis, part ordering, repair, and testing phases in the system. These updates enable automatic notifications to be sent to the customer and provide transparent process management."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Frequently Asked Questions",
+          "items": [
+            {
+              "q": "What types of businesses is this application suitable for?",
+              "a": "Our application is suitable for all businesses providing technical service. We offer customizable solutions for businesses of all sizes, from small repair shops to large service centers."
+            },
+            {
+              "q": "Is technical knowledge required to use the application?",
+              "a": "No, our application has a user-friendly interface and doesn't require special technical knowledge. Thanks to its simple and intuitive design, your entire team can easily use it after a brief orientation."
+            },
+            {
+              "q": "How can I communicate with customers through the application?",
+              "a": "Our application offers various communication tools such as sending automatic notifications to your customers, sharing updates about service status, and sending custom messages. You can also create a special tracking page for your customers."
+            },
+            {
+              "q": "What are the reporting features of the application?",
+              "a": "Our application provides various reports to help you analyze your business performance. These reports include service time statistics, customer satisfaction rates, most common issues, and employee performance analyses."
+            },
+            {
+              "q": "Is the application compatible with mobile devices?",
+              "a": "Yes, our application is fully mobile-compatible. You can manage your business and track service statuses from anywhere, whether from your smartphone or tablet."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Optimize Your Technical Service Management",
+        "body": "Increase customer satisfaction, improve your business processes, and boost your efficiency.",
+        "button": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

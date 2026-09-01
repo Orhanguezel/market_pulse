@@ -1,0 +1,164 @@
+{
+  "slug": "ihracata-hazirlik-paketi",
+  "category": "ihracat-musteri-bulma",
+  "module": "service",
+  "order": 80,
+  "icon": "Rocket",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "İhracata Hazırlık Paketi | İngilizce Firma Profili, Ürün Metinleri, Teklif ve Web Sitesi Hazırlığı",
+        "description": "İhracata Hazırlık Paketi ile şirketinizi yurt dışı müşterilere daha profesyonel sunmak için İngilizce firma profili, ürün açıklamaları, teklif/proforma yapısı, web sitesi hazırlığı ve ihracat kontrol listesi oluşturuyoruz.",
+        "ogTitle": "İhracata Hazırlık Paketi | {{appName}}",
+        "ogDescription": "İngilizce firma profili, ürün açıklamaları, teklif/proforma yapısı, web sitesi ihracat uygunluk kontrolü, tanıtım maili, LinkedIn mesajları ve CRM takip altyapısı hazırlığı."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "İhracata Hazırlık Paketi",
+        "lead": "İhracata başlamak istiyor ama şirketinizin yurt dışı müşterilere profesyonel görünüp görünmediğinden emin olamıyor musunuz? Birçok firma kaliteli ürünlere sahip olmasına rağmen ihracata başlamadan önce gerekli hazırlıkları tamamlamadığı için yurt dışı müşterilerden yeterli güveni alamaz. İhracata Hazırlık Paketi, şirketinizi yurt dışı müşteri bulma çalışmalarına başlamadan önce daha düzenli, güven verici ve profesyonel hale getirmek için hazırlanmıştır. {{appName}} olarak bu paket kapsamında şirketinizin ihracata hazır görünmesi için temel kurumsal içerikleri, ürün sunum yapısını, teklif/proforma altyapısını, web sitesi hazırlık ihtiyaçlarını ve ihracat başlangıç kontrol listesini birlikte oluşturuyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "İhracata Hazırlık Paketi Nedir?",
+          "body": [
+            "İhracata Hazırlık Paketi, ihracata başlamak isteyen şirketlerin yurt dışı müşterilere daha profesyonel görünmesi ve ihracat müşteri bulma çalışmalarına daha hazır hale gelmesi için hazırlanan başlangıç paketidir.",
+            "Bu paket; İngilizce firma profili, ürün açıklamaları, ürün kategori yapısı, teklif ve proforma hazırlığı, web sitesi kontrolü, ihracat iletişim metinleri, temel hedef pazar bakışı ve müşteri takip yapısı gibi alanları kapsayabilir.",
+            "Bu paketin amacı doğrudan müşteri bulma kampanyası yürütmek değildir. Asıl amaç, müşteri bulma çalışmalarına başlamadan önce şirketin dışarıdan bakıldığında güven veren, anlaşılır ve ihracata hazır bir yapıya kavuşmasını sağlamaktır.",
+            "Müşteri bulmaya başlamadan önce altyapınızı güçlendirin: İngilizce firma profili, ürün açıklamaları, ürün kategori yapısı, teklif ve proforma formatı, web sitesi ihracat kontrolü, mail ve LinkedIn mesaj taslaklarıyla şirketinizi daha profesyonel gösterin."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden İhracata Hazırlık Paketi Gerekir?",
+          "body": [
+            "İhracatta ilk izlenim çok önemlidir. Yurt dışı alıcı firmanızdan e-posta aldığında, LinkedIn profilinizi gördüğünde, B2B platformda ürününüzü incelediğinde veya web sitenize girdiğinde sizi hızlıca değerlendirir.",
+            "Bu değerlendirmede firma güvenilirliği, İngilizce iletişim, ürün anlatımı, web sitesi kalitesi, teklif isteyebilme kolaylığı, açık iletişim bilgileri ve B2B alıcıya uygun içerik yapısı öne çıkar.",
+            "İhracata Hazırlık Paketi, müşteri aramaya başlamadan önce şirketin hangi alanlarda hazır olduğunu ve hangi alanlarda eksik kaldığını görmenize yardımcı olur."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Paket Kimler İçin Uygundur?",
+          "intro": "Bu paket, ihracat sürecine daha düzenli ve güven veren bir başlangıç yapmak isteyen firmalar için uygundur.",
+          "items": [
+            { "title": "İhracata Yeni Başlamak İsteyen Üreticiler", "body": "Ürününü yurt dışına satmak isteyen ancak İngilizce tanıtım ve ürün sunum altyapısı eksik olan üretici firmalar için uygundur." },
+            { "title": "İlk Kez Yurt Dışı Müşteri Arayacak KOBİ’ler", "body": "Müşteri bulma çalışmalarına başlamadan önce şirket görünümünü ve teklif altyapısını güçlendirmek isteyen KOBİ’ler için planlanabilir." },
+            { "title": "İngilizce İçeriği Olmayan Şirketler", "body": "İngilizce firma profili, ürün açıklaması, tanıtım maili ve LinkedIn mesaj taslağı hazırlamak isteyen şirketler için uygundur." },
+            { "title": "Web Sitesi İhracata Uygun Olmayan Firmalar", "body": "Yurt dışı müşterilere daha güven veren bir dijital görünüm oluşturmak isteyen işletmeler için uygundur." },
+            { "title": "B2B Platforma Hazırlanan İşletmeler", "body": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi platformlara ürün yayınlamadan önce içeriklerini düzenlemek isteyen firmalar için uygundur." },
+            { "title": "Teklif ve Proforma Formatı Hazır Olmayan Firmalar", "body": "Yurt dışı müşterilere daha profesyonel teklif ve proforma göndermek isteyen firmalar için uygundur." },
+            { "title": "Mail Marketing veya LinkedIn Öncesi Hazırlık Yapmak İsteyenler", "body": "E-posta, LinkedIn ve müşteri takip çalışmalarına başlamadan önce içerik altyapısını güçlendirmek isteyen ekipler için uygundur." },
+            { "title": "Fuar Öncesi Hazırlık Yapmak İsteyen İhracatçılar", "body": "Fuar öncesinde İngilizce profil, ürün açıklaması, tanıtım maili, LinkedIn mesajı ve web sitesi kontrolü yapmak isteyen firmalar için uygundur." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "İhracata Hazırlık Paketinde Hangi Alanlar Düzenlenir?",
+          "intro": "Aşağıdaki başlıklar şirketin mevcut durumuna, ürün sayısına ve hazırlık seviyesine göre planlanır.",
+          "items": [
+            "Mevcut durum analizi: web sitesi ve İngilizce içerik, ürün görselleri ve katalog, teklif/proforma ve firma tanıtımı, LinkedIn, B2B platform ve müşteri takip yöntemi değerlendirilir",
+            "İhracata hazırlık kontrol listesi: İngilizce firma profili, ürün açıklamaları, görseller, kategori yapısı, teklif/proforma, teslim ve ödeme bilgileri, web sitesi, mail metni, LinkedIn mesajı ve CRM yapısı kontrol edilir",
+            "İngilizce firma profili hazırlığı: şirket tanıtımı, deneyim, ürün grupları, hizmet verilen sektörler, üretim kabiliyeti, kalite yaklaşımı ve B2B iş birliği dili oluşturulur",
+            "Şirket tanıtım metni düzenleme: firma ne yapıyor, üretici mi tedarikçi mi, B2B müşteriye nasıl değer sunuyor ve nasıl iletişime geçilir sorularına net cevap verilir",
+            "Ürün kategori yapısı oluşturma: ana ürün grupları, alt kategoriler, ürün kodları, varyasyonlar, ambalaj seçenekleri ve web sitesi/B2B yayın planı düzenlenir",
+            "İngilizce ürün açıklamaları hazırlama: ürün adı, kısa açıklama, teknik özellikler, malzeme, ambalaj, MOQ, üretim süresi ve private label bilgileri hazırlanır",
+            "Ürün teknik bilgilerinin düzenlenmesi: ölçü, ağırlık, malzeme, ambalaj türü, koli içi adet, palet bilgisi, üretim kapasitesi, sertifika ve GTİP / HS kodu netleştirilir",
+            "Ambalaj, MOQ ve teslim bilgisi hazırlığı: ambalaj türü, koli ölçüleri, palet bilgisi, minimum sipariş miktarı, numune imkânı, üretim süresi ve yükleme noktası belirlenir",
+            "Teklif formatı hazırlığı: satıcı/alıcı bilgileri, ürün adı, açıklama, miktar, fiyat, teslim şekli, ödeme şekli, ambalaj, teslim süresi ve teklif geçerliliği düzenlenir",
+            "Proforma invoice yapısı oluşturma: proforma numarası, tarih, satıcı/alıcı bilgileri, GTİP / HS kodu, miktar, fiyat, teslim/ödeme şekli, banka ve sevkiyat bilgileri hazırlanır",
+            "İngilizce tanıtım maili taslağı: kısa selamlama, firma tanıtımı, ürün grubu, B2B iş birliği açıklaması, web sitesi/katalog yönlendirmesi ve teklif çağrısı oluşturulur",
+            "LinkedIn kısa tanıtım mesajı taslağı: bağlantı talebi, ilk mesaj, takip mesajı, fuar sonrası bağlantı ve hedef ülke/sektör/kişi profiline göre özelleştirme hazırlanır",
+            "Web sitesi ihracat uygunluk kontrolü: İngilizce içerik, ürün sayfaları, teklif alma formu, iletişim bilgileri, WhatsApp/e-posta bağlantıları, mobil uyum ve sayfa hızı kontrol edilir",
+            "İhracat sayfası içerik önerisi: şirketin ihracat yaklaşımı, ürün grupları, hedef sektörler, teslim/ödeme yöntemleri, paketleme, sevkiyat ve teklif alma yönlendirmesi planlanır",
+            "B2B platform ürün içerik altyapısı: İngilizce ürün başlığı, kısa açıklama, detay metni, kategori, MOQ, ambalaj, teslim süresi ve Alibaba/TradeWheel/Go4WorldBusiness/Europages altyapısı hazırlanır",
+            "CRM müşteri takip yapısı önerisi: firma, ülke, sektör, ilgili kişi, e-posta, telefon, LinkedIn, mail gönderim tarihi, cevap durumu, takip tarihi ve satış aşaması düzenlenir",
+            "İhracat başlangıç yol haritası: hangi adımların hangi sırayla yapılacağını gösteren uygulanabilir bir başlangıç planı hazırlanır"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "İhracata Hazırlık Paketi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketin sektörü, ürünleri, mevcut ihracat durumu, hedefleri ve hazırlık ihtiyacı değerlendirilerek başlar. Ardından mevcut durum analizi, eksiklerin belirlenmesi, içerik hazırlığı, teklif ve proforma yapısı, web sitesi ve B2B hazırlık önerileri, CRM takip yapısı ve yol haritası adımlarıyla ilerler.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketin sektörü, ürünleri, mevcut ihracat durumu, hedefleri ve hazırlık ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Mevcut Durum Analizi", "body": "Web sitesi, ürün açıklamaları, firma tanıtımı, teklif yapısı, katalog, ürün bilgileri ve dijital görünüm incelenir." },
+            { "n": 3, "title": "Eksiklerin Belirlenmesi", "body": "İhracata başlamadan önce tamamlanması gereken içerik, teklif, web sitesi, ürün ve müşteri takip eksikleri belirlenir." },
+            { "n": 4, "title": "İçerik Hazırlığı", "body": "İngilizce firma profili, ürün açıklamaları, tanıtım metinleri, mail ve LinkedIn mesaj taslakları hazırlanabilir." },
+            { "n": 5, "title": "Teklif ve Proforma Yapısı", "body": "Yurt dışı müşterilere gönderilecek teklif ve proforma yapısı düzenlenir." },
+            { "n": 6, "title": "Web Sitesi ve B2B Hazırlık Önerileri", "body": "Web sitesinin ihracata uygunluğu değerlendirilir ve B2B platform içerik altyapısı için öneriler oluşturulur." },
+            { "n": 7, "title": "CRM Takip Yapısı", "body": "Müşteri adaylarının nasıl takip edileceğine dair temel CRM veya takip tablosu mantığı oluşturulur." },
+            { "n": 8, "title": "Yol Haritası", "body": "Şirketin müşteri bulma ve ihracat sürecine geçebilmesi için uygulanabilir başlangıç planı hazırlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "İhracata Hazırlık Paketinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Şirketiniz ihracata daha hazır görünür",
+            "Yurt dışı müşterilere daha profesyonel tanıtım yapılabilir",
+            "İngilizce firma profili güçlenir",
+            "Ürün açıklamaları daha düzenli hale gelir",
+            "Web sitesi ihracat açısından değerlendirilir",
+            "Teklif ve proforma yapısı hazırlanır",
+            "Mail marketing öncesi tanıtım metni oluşur",
+            "LinkedIn iletişim taslakları hazırlanır",
+            "B2B platform ürün içerik altyapısı güçlenir",
+            "Ürün, ambalaj ve teslim bilgileri daha net hale gelir",
+            "Müşteri takip süreci için temel yapı oluşur",
+            "İhracat müşteri bulma paketine geçiş kolaylaşır",
+            "Fuar, mail marketing ve LinkedIn çalışmalarına daha hazırlıklı başlanır",
+            "Şirketin dijital güven algısı desteklenir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "İhracata Hazırlıkta Sık Yapılan Hatalar",
+          "items": [
+            "İngilizce firma profili hazırlamadan müşteri aramak",
+            "Web sitesi ihracata uygun olmadan mail marketing yapmak",
+            "Ürün açıklamalarını zayıf bırakmak",
+            "Ürün görsellerini yetersiz kullanmak",
+            "Teklif ve proforma formatı olmadan müşteriyle görüşmek",
+            "Ambalaj ve MOQ bilgilerini netleştirmemek",
+            "Teslim ve ödeme şartlarını önceden düşünmemek",
+            "B2B platforma eksik ürün bilgisi yüklemek",
+            "LinkedIn mesajlarını plansız hazırlamak",
+            "Mail metinlerini otomatik çeviri gibi yazmak",
+            "Müşteri takip sistemi kurmadan müşteri aramak",
+            "Her hedef pazara aynı metinle ulaşmaya çalışmak",
+            "Şirketin dijital güven unsurlarını ihmal etmek",
+            "Müşteri bulmayı hazırlıktan önce başlatmak"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "İhracata Hazırlık Paketi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "İhracata Hazırlık Paketi kimler için uygundur?", "a": "Bu paket; ihracata başlamak isteyen üretici firmalar, KOBİ’ler, dış ticaret departmanı olmayan şirketler, İngilizce firma profili ve ürün açıklaması hazırlamak isteyen işletmeler için uygundur." },
+            { "q": "Bu paket müşteri bulma hizmeti içerir mi?", "a": "İhracata Hazırlık Paketi’nin temel amacı müşteri bulma kampanyası yürütmek değil, şirketi müşteri bulma çalışmalarına hazır hale getirmektir. Aktif müşteri bulma çalışmaları B2B Müşteri Bulma Paketi kapsamında ayrıca planlanabilir." },
+            { "q": "İngilizce firma profili hazırlanıyor mu?", "a": "Evet. Şirketin sektörüne, ürünlerine ve hedef müşteri yapısına uygun İngilizce firma profili hazırlanabilir." },
+            { "q": "İngilizce ürün açıklamaları hazırlanıyor mu?", "a": "Evet. Ürün adı, kullanım alanı, teknik özellikler, ambalaj bilgisi, MOQ, teslim süresi ve B2B müşteri ihtiyacına uygun İngilizce ürün açıklamaları hazırlanabilir." },
+            { "q": "Web sitesi de hazırlanıyor mu?", "a": "Bu pakette web sitesinin ihracata uygunluğu analiz edilebilir ve içerik önerileri hazırlanabilir. Web sitesi tasarım veya yazılım çalışması ihtiyaç halinde ayrıca planlanabilir." },
+            { "q": "Teklif ve proforma formatı hazırlanıyor mu?", "a": "Evet. Yurt dışı müşterilere gönderilebilecek teklif ve proforma invoice yapısı oluşturulabilir." },
+            { "q": "Mail marketing için metin hazırlanıyor mu?", "a": "Evet. İhracat müşteri bulma çalışmalarında kullanılabilecek İngilizce tanıtım maili ve takip metni taslakları hazırlanabilir." },
+            { "q": "LinkedIn mesaj taslakları hazırlanıyor mu?", "a": "Evet. Bağlantı talebi, ilk mesaj ve takip mesajı gibi LinkedIn iletişim taslakları hazırlanabilir." },
+            { "q": "Bu paket fuar öncesi hazırlık için uygun mu?", "a": "Evet. Fuar öncesinde İngilizce firma profili, ürün açıklamaları, tanıtım maili, LinkedIn mesajı ve web sitesi kontrolü açısından faydalı olabilir." },
+            { "q": "Paket fiyatı var mı?", "a": "Bu sayfada fiyat verilmez. Şirketin sektörü, ürün sayısı, mevcut hazırlık seviyesi ve ihtiyaç kapsamına göre teklif hazırlanır." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "İhracata Rastgele Başlamayın",
+        "body": "İhracata başlamak istiyor ama şirketinizin İngilizce tanıtımı, ürün açıklamaları, teklif yapısı, web sitesi, mail metinleri ve müşteri takip altyapısı hazır değilse müşteri bulma çalışmalarından yeterli verim alamayabilirsiniz. {{appName}} İhracata Hazırlık Paketi ile şirketinizi yurt dışı müşterilere daha profesyonel sunmak için gerekli temel hazırlıkları birlikte yapalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

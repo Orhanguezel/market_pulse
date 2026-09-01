@@ -41,8 +41,8 @@ const architectureNotes = [
     text: 'Önce env ve dış servis anahtarları, sonra API response sözleşmesi, en son UI state yönetimi kontrol edilmelidir.',
   },
   {
-    title: 'Paspas ile paralellik',
-    text: 'Bu ekran Paspas page feedback yapısına hazırlanmış hafif kayıt yüzeyidir; kalıcı backend tablo bağlantısı sonraki adımdır.',
+    title: 'Geri bildirim notları',
+    text: 'Bu ekran page feedback yapısına hazırlanmış hafif kayıt yüzeyidir; kalıcı backend tablo bağlantısı sonraki adımdır.',
   },
 ];
 
@@ -110,7 +110,7 @@ export function MarketDeveloperNotesClient() {
         <div className="max-w-4xl space-y-4">
           <h1 className="font-serif text-4xl text-gm-text md:text-5xl">Yazılımcı Notları</h1>
           <p className="font-serif text-base italic leading-7 text-gm-muted md:text-lg">
-            Paspas admin panelindeki sayfa notu yaklaşımının Market Pulse’a uyarlanmış başlangıç yüzeyidir. Bu sürüm notları tarayıcıda saklar;
+            Market Pulse sayfa notları için başlangıç yüzeyidir. Bu sürüm notları tarayıcıda saklar;
             notlar backend üzerinde kalıcı olarak saklanır ve ekip tarafından durumlandırılabilir.
           </p>
         </div>

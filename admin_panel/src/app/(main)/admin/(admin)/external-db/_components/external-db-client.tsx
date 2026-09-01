@@ -31,8 +31,8 @@ import {
 } from '@/integrations/hooks';
 
 const DEFAULT_FORM = {
-  key: 'PASPAS',
-  name: 'Paspas ERP',
+  key: 'PROMAT',
+  name: 'Promat ERP',
   description: '',
   host: '',
   port: 3306,
@@ -98,7 +98,7 @@ export default function ExternalDbClient() {
           </div>
           <h1 className="font-serif text-4xl text-gm-text">Harici Veritabanı</h1>
           <p className="text-gm-muted text-sm font-serif italic opacity-70">
-            Paspas ERP ve diğer harici veri kaynaklarına güvenli bağlantılar kurun.
+            ERP ve diğer harici veri kaynaklarına güvenli bağlantılar kurun.
           </p>
         </div>
 
@@ -133,7 +133,7 @@ export default function ExternalDbClient() {
                 <div className="relative group">
                   <Key className="absolute left-4 top-1/2 -translate-y-1/2 size-4 text-gm-muted/50 group-focus-within:text-gm-gold transition-colors" />
                   <Input 
-                    placeholder="Örn: PASPAS"
+                    placeholder="Örn: PROMAT"
                     value={form.key} 
                     onChange={(e) => setForm((p) => ({ ...p, key: e.target.value.toUpperCase() }))}
                     className="pl-12 bg-gm-surface/40 border-gm-border-soft rounded-2xl h-12 focus:ring-gm-gold/50 text-sm text-gm-text"
@@ -143,7 +143,7 @@ export default function ExternalDbClient() {
               <div className="space-y-3">
                 <Label className="text-[10px] font-bold text-gm-muted tracking-[0.2em] uppercase ml-1">Bağlantı Adı</Label>
                 <Input 
-                  placeholder="Örn: Paspas ERP Üretim"
+                  placeholder="Örn: Promat ERP Üretim"
                   value={form.name} 
                   onChange={(e) => setForm((p) => ({ ...p, name: e.target.value }))}
                   className="bg-gm-surface/40 border-gm-border-soft rounded-2xl h-12 focus:ring-gm-gold/50 text-sm text-gm-text"
@@ -185,7 +185,7 @@ export default function ExternalDbClient() {
               <div className="space-y-3">
                 <Label className="text-[10px] font-bold text-gm-muted tracking-[0.2em] uppercase ml-1">Veritabanı Adı</Label>
                 <Input 
-                  placeholder="paspas_prod"
+                  placeholder="promat_prod"
                   value={form.db_name} 
                   onChange={(e) => setForm((p) => ({ ...p, db_name: e.target.value }))}
                   className="bg-gm-surface/40 border-gm-border-soft rounded-2xl h-12 focus:ring-gm-gold/50 text-sm text-gm-text"
@@ -310,7 +310,7 @@ export default function ExternalDbClient() {
             <div className="flex gap-4">
               <Info className="size-5 text-gm-gold shrink-0" />
               <p className="text-xs text-gm-text font-serif italic leading-relaxed">
-                Harici bağlantılar Paspas ERP entegrasyonu için kullanılır. Bağlantı bilgilerinin doğruluğu, market verilerinin senkronizasyonu için kritiktir.
+                Harici bağlantılar ERP entegrasyonu için kullanılır. Bağlantı bilgilerinin doğruluğu, market verilerinin senkronizasyonu için kritiktir.
               </p>
             </div>
           </Card>

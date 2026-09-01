@@ -40,8 +40,26 @@ const sampleTarget = {
   notes: null,
   churnRiskScore: 12,
   lastSeenAt: null,
+  externalCustomerId: 'customer-1',
   createdAt: '2026-05-08',
   updatedAt: '2026-05-08',
+};
+
+const sampleIntel = {
+  target: sampleTarget,
+  churn: {
+    total: 12,
+    signal_score: 5,
+    age_score: 7,
+    age_days: 10,
+    erp_score: null,
+  },
+  signals: [],
+  orders: {
+    latest: [],
+    trend: { last90_count: 0, last90_value: 0, prev90_count: 0, prev90_value: 0, delta_pct: null },
+    error: null,
+  },
 };
 
 const sampleLead = {
@@ -133,15 +151,27 @@ mock.module('@/app/(main)/admin/_components/admin-settings-provider', () => ({
 }));
 
 mock.module('@/integrations/hooks', () => ({
+  useListTenantsQuery: () => query([{ key: 'vistaseeds', name: 'VistaSeeds', branding: { displayName: 'VistaSeeds' } }]),
+  useGetTenantQuery: () => query({ key: 'vistaseeds', name: 'VistaSeeds', branding: { appName: 'VistaSeeds' } }),
+  useOnboardTenantMutation: () => mutationTuple(),
+  useUpdateTenantProfileMutation: () => mutationTuple(),
+  useListTenantRolesQuery: () => query([]),
+  useCreateTenantRoleMutation: () => mutationTuple(),
+  useListPlatformSettingsQuery: () => query([]),
+  useUpsertPlatformSettingMutation: () => mutationTuple(),
   useGetMarketStatsQuery: () => query({ totalTargets: 7, totalLeads: 4, pendingSignals: 2 }),
   useListMarketTargetsQuery: () => query([sampleTarget]),
   useDeleteMarketTargetMutation: () => mutationTuple(),
   useRecalculateChurnMutation: () => mutationTuple(),
+  useGetTargetIntelQuery: () => query(sampleIntel),
+  useLazyGetTargetIntelQuery: () => [lazy, { isFetching: false }] as const,
   useScanCompetitorMutation: () => mutationTuple(),
   useScanAllCompetitorsMutation: () => mutationTuple(),
+  useScanMarketplaceMutation: () => mutationTuple(),
+  useGetMarketplaceHistoryQuery: () => query({ platform: 'amazon', target_id: 'target-1', points: [] }),
   useCreateMarketTargetMutation: () => mutationTuple(),
   useUpdateMarketTargetMutation: () => mutationTuple(),
-  useListPaspasCustomersQuery: () => query([{ id: 'customer-1', name: 'Paspas Customer' }]),
+  useListErpCustomersQuery: () => query({ enabled: true, items: [{ id: 'customer-1', name: 'ERP Customer' }] }),
   useListMarketLeadsQuery: () => query([sampleLead]),
   useDeleteMarketLeadMutation: () => mutationTuple(),
   useCreateMarketLeadMutation: () => mutationTuple(),
@@ -155,24 +185,106 @@ mock.module('@/integrations/hooks', () => ({
   useApproveToLeadMutation: () => mutationTuple(),
   useListCandidateEnrichmentQuery: () => query([{ id: 'enrich-1', decision_maker: { email: 'sales@gamma.example' } }]),
   useEnrichCandidateMutation: () => mutationTuple(),
+  useEnrichBatchMutation: () => mutationTuple(),
+  useGetCandidateByIdQuery: () => query(sampleCandidate),
   useGenerateOutreachDraftMutation: () => mutationTuple(),
   useListAmazonJobsQuery: () => query([sampleJob]),
   useStartAmazonJobMutation: () => mutationTuple(),
   useStartAmazonScanMutation: () => mutationTuple(),
+  useListAmazonScanProductsQuery: () => query([]),
+  useRescoreAmazonJobMutation: () => mutationTuple(),
   useGetAmazonRiskScoreQuery: () => query(null),
   useListB2bJobsQuery: () => query([{ ...sampleJob, channel: 'b2b_directory' }]),
   useStartB2bJobMutation: () => mutationTuple(),
+  useListCustomsJobsQuery: () => query([{ ...sampleJob, channel: 'customs', params: { hs_prefix: '0904', min_value: 1000, limit: 200 } }]),
+  useStartCustomsJobMutation: () => mutationTuple(),
   useListFairJobsQuery: () => query([{ ...sampleJob, channel: 'trade_fair' }]),
   useStartFairJobMutation: () => mutationTuple(),
+  useGetDecisionMakerPresetsQuery: () => query({
+    sectors: ['fitness'],
+    business_types: { fitness: ['fitness center', 'gym'] },
+    default_titles: ['Founder', 'Owner'],
+    export_b2b_titles: ['Owner'],
+    default_exclude_keywords: ['supplement'],
+  }),
+  useListDecisionMakerJobsQuery: () => query([
+    {
+      ...sampleJob,
+      id: 'decision-maker-job-1',
+      channel: 'decision_maker',
+      params: { sector: 'fitness', cities: ['Istanbul'], targetCount: 50 },
+    },
+  ]),
+  useStartDecisionMakerJobMutation: () => mutationTuple(),
+  usePromoteDecisionMakersToCandidatesMutation: () => mutationTuple(),
+  usePromoteDecisionMakersToCrmMutation: () => mutationTuple(),
+  useReviewDecisionMakerMutation: () => mutationTuple(),
+  useUpdateCompanyPoolStatusMutation: () => mutationTuple(),
+  useListDecisionMakerResultsQuery: () => query({
+    rows: [
+      {
+        company_name: 'Acme Fitness',
+        city: 'Istanbul',
+        business_type: 'fitness center',
+        decision_maker_name: 'Ayse Demir',
+        title: 'Founder',
+        linkedin_profile_url: 'https://linkedin.com/in/ayse',
+        company_website: 'https://acme.example',
+        social_url: null,
+        source_url: 'https://linkedin.com/in/ayse',
+        fit_note: 'LinkedIn/karar verici eslesmesi guclu.',
+        confidence_score: 'A',
+        last_verified_at: '2026-06-30',
+      },
+    ],
+    stats: { companies: 1, withDecisionMaker: 1 },
+  }),
+  useListDecisionMakerCompanyPoolQuery: () => query({
+    rows: [
+      {
+        company_name: 'Acme Fitness',
+        city: 'Istanbul',
+        business_type: 'fitness center',
+        website: 'https://acme.example',
+        phone: '+90',
+        google_maps_url: 'https://maps.example/acme',
+        address: 'Istanbul',
+        quality_score: 85,
+        quality_status: 'qualified',
+        exclude_reason: null,
+        source: 'google_places',
+        last_verified_at: '2026-06-30',
+      },
+    ],
+    stats: { total: 1, qualified: 1, possible: 0, manualReview: 0, excluded: 0 },
+  }),
   useListIcpProfilesQuery: () => query([sampleIcp]),
   useCreateIcpProfileMutation: () => mutationTuple(),
   useUpdateIcpProfileMutation: () => mutationTuple(),
   useDeleteIcpProfileMutation: () => mutationTuple(),
   useListOutreachDraftsQuery: () => query([{ id: 'draft-1', subject: 'Intro', body: 'Hello', status: 'draft', created_at: '2026-05-08' }]),
   useUpdateOutreachDraftMutation: () => mutationTuple(),
+  useSendOutreachDraftMutation: () => mutationTuple(),
+  useListOutreachCampaignsQuery: () => query([]),
+  useCreateOutreachCampaignMutation: () => mutationTuple(),
+  useUpdateOutreachCampaignMutation: () => mutationTuple(),
+  useDeleteOutreachCampaignMutation: () => mutationTuple(),
+  useGenerateOutreachDraftsMutation: () => mutationTuple(),
+  useSyncHostKeywordsMutation: () => mutationTuple(),
+  useListSavedSearchesQuery: () => query([]),
+  useCreateSavedSearchMutation: () => mutationTuple(),
+  useUpdateSavedSearchMutation: () => mutationTuple(),
+  useDeleteSavedSearchMutation: () => mutationTuple(),
+  useRunSavedSearchMutation: () => mutationTuple(),
+  useListScanRulesQuery: () => query([]),
+  useCreateScanRuleMutation: () => mutationTuple(),
+  useDeleteScanRuleMutation: () => mutationTuple(),
+  useGetFeedbackRejectionStatsQuery: () => query({}),
+  useGetFeedbackApprovedStatsQuery: () => query({}),
+  useGetBulkAmazonRiskScoresMutation: () => mutationTuple(),
   useLazyPreviewWeeklyReportQuery: () => [lazy, { isFetching: false }] as const,
   useSendWeeklyReportMutation: () => mutationTuple(),
-  useSyncPaspasTargetsMutation: () => mutationTuple(),
+  useSyncErpTargetsMutation: () => mutationTuple(),
   useBulkImportTargetsMutation: () => mutationTuple(),
   useLazyDownloadImportTemplateQuery: () => [lazy, { isFetching: false }] as const,
   useListMarketTestRunsQuery: () => query([{ id: 'run-1', title: 'Admin tests', command: 'cd admin_panel && bun test', status: 'passed', passCount: 18, failCount: 0, skipCount: 0, outputExcerpt: '18 pass' }]),
@@ -191,7 +303,9 @@ const SignalsPanel = (await import('../signals-panel')).default;
 const LeadCandidatesPanel = (await import('../lead-candidates-panel')).default;
 const AmazonLeadSearchPanel = (await import('../amazon-lead-search-panel')).default;
 const B2bLeadSearchPanel = (await import('../b2b-lead-search-panel')).default;
+const CustomsLeadSearchPanel = (await import('../customs-lead-search-panel')).default;
 const FairLeadSearchPanel = (await import('../fair-lead-search-panel')).default;
+const DecisionMakerPanel = (await import('../decision-maker-panel')).default;
 const IcpProfilesPanel = (await import('../icp-profiles-panel')).default;
 const OutreachDraftsPanel = (await import('../outreach-drafts-panel')).default;
 const ReportsPanel = (await import('../reports-panel')).default;
@@ -275,7 +389,9 @@ describe('market admin component smoke tests', () => {
     expect(render(<LeadCandidatesPanel />)).toContain('Gamma Seller');
     expect(render(<AmazonLeadSearchPanel />)).toContain('car mats');
     expect(render(<B2bLeadSearchPanel />)).toContain('B2B Job Listesi');
+    expect(render(<CustomsLeadSearchPanel />)).toContain('Gümrük Job Listesi');
     expect(render(<FairLeadSearchPanel />)).toContain('Fuar Job Listesi');
+    expect(render(<DecisionMakerPanel />)).toContain('Acme Fitness');
     const riskHtml = render(<RiskScoreCard report={sampleRiskReport} />);
     expect(riskHtml).toContain('Yüksek riskli kategori');
     expect(riskHtml).toContain('Risk Profili (5 Boyut)');

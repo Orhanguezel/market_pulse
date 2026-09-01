@@ -48,6 +48,9 @@ type ErrorWithMessage = { message?: string };
 export async function publicServe(req: FastifyRequest, reply: FastifyReply) {
   try {
     const { bucket } = req.params as { bucket: string; "*": string };
+    if (bucket.startsWith("user-docs-")) {
+      return reply.code(404).send({ message: "not_found" });
+    }
     const raw = (req as WildcardParamsRequest).params["*"] || "";
     const path = normalizePath(bucket, raw);
 
@@ -66,6 +69,9 @@ export async function publicServe(req: FastifyRequest, reply: FastifyReply) {
 export async function uploadToBucket(req: FastifyRequest, reply: FastifyReply) {
   try {
     const { bucket } = req.params as { bucket: string };
+    if (bucket.startsWith("user-docs-")) {
+      return reply.code(404).send({ message: "not_found" });
+    }
     const query = req.query as { path?: string; upsert?: string };
 
     const cfg = await getCloudinaryConfig();

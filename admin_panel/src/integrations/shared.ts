@@ -51,3 +51,4 @@ export * from '@/integrations/shared/home';
 export * from '@/integrations/shared/adminUi';
 export * from '@/integrations/shared/users/admin_users.types';
 export * from '@/integrations/shared/audit.types';
+export * from '@/integrations/shared/customs-intelligence.types';

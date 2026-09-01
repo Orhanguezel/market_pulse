@@ -2,17 +2,18 @@ import { beforeEach, describe, expect, mock, test } from 'bun:test';
 import { createDbMock } from './helpers/mock-db';
 
 const dbMock = createDbMock();
-const getCustomerOrders = mock(() => Promise.resolve([]));
+const erpProvider = {
+  getCustomerOrders: mock(() => Promise.resolve([])),
+};
+const getErpProvider = mock(() => Promise.resolve(erpProvider));
 
 mock.module('@/db/client', () => ({
   db: dbMock.db,
   pool: dbMock.pool,
 }));
 
-mock.module('../external/paspas.repository', () => ({
-  getCustomerOrders,
-  getPaspasCustomers: mock(() => Promise.resolve([])),
-  getPaspasProducts: mock(() => Promise.resolve([])),
+mock.module('../external/erp', () => ({
+  getErpProvider,
 }));
 
 const service = await import('../churn.service');
@@ -23,8 +24,10 @@ function daysAgo(days: number) {
 
 beforeEach(() => {
   dbMock.reset();
-  getCustomerOrders.mockReset();
-  getCustomerOrders.mockImplementation(() => Promise.resolve([]));
+  getErpProvider.mockReset();
+  erpProvider.getCustomerOrders.mockReset();
+  getErpProvider.mockImplementation(() => Promise.resolve(erpProvider));
+  erpProvider.getCustomerOrders.mockImplementation(() => Promise.resolve([]));
 });
 
 describe('market churn service', () => {
@@ -45,13 +48,13 @@ describe('market churn service', () => {
       { severity: 'medium', count: 3 },
       { severity: 'low', count: 9 },
     ]);
-    getCustomerOrders.mockImplementation(() => Promise.resolve([{ siparisTarihi: daysAgo(5) }]));
+    erpProvider.getCustomerOrders.mockImplementation(() => Promise.resolve([{ siparisTarihi: daysAgo(5) }]));
 
     const score = await service.recalculateChurnScore('target-1');
 
     expect(score).toBe(70);
     expect(dbMock.poolQueries.at(-1)).toEqual(expect.objectContaining({
-      values: [70, 'target-1'],
+      values: [70, 'avrasya', 'target-1'],
     }));
   });
 
@@ -64,7 +67,7 @@ describe('market churn service', () => {
 
     for (const item of cases) {
       dbMock.reset();
-      getCustomerOrders.mockImplementation(() => Promise.resolve([{ siparisTarihi: daysAgo(3) }]));
+      erpProvider.getCustomerOrders.mockImplementation(() => Promise.resolve([{ siparisTarihi: daysAgo(3) }]));
       dbMock.queuePoolQuery([{ id: `target-${item.days}`, last_seen_at: daysAgo(item.days) }]);
       dbMock.queuePoolQuery([]);
 
@@ -74,20 +77,20 @@ describe('market churn service', () => {
     }
   });
 
-  test('adds order risk when there are no orders', async () => {
-    dbMock.queuePoolQuery([{ id: 'target-1', last_seen_at: daysAgo(2) }]);
+  test('does not add order risk when order history is empty', async () => {
+    dbMock.queuePoolQuery([{ id: 'target-1', last_seen_at: daysAgo(2), external_customer_id: 'cust-1' }]);
     dbMock.queuePoolQuery([]);
-    getCustomerOrders.mockImplementation(() => Promise.resolve([]));
+    erpProvider.getCustomerOrders.mockImplementation(() => Promise.resolve([]));
 
     const score = await service.recalculateChurnScore('target-1');
 
-    expect(score).toBe(15);
+    expect(score).toBe(0);
   });
 
   test('adds order risk when recent order volume drops sharply', async () => {
-    dbMock.queuePoolQuery([{ id: 'target-1', last_seen_at: daysAgo(2) }]);
+    dbMock.queuePoolQuery([{ id: 'target-1', last_seen_at: daysAgo(2), external_customer_id: 'cust-1' }]);
     dbMock.queuePoolQuery([]);
-    getCustomerOrders.mockImplementation(() => Promise.resolve([
+    erpProvider.getCustomerOrders.mockImplementation(() => Promise.resolve([
       { siparisTarihi: daysAgo(10) },
       { siparisTarihi: daysAgo(100) },
       { siparisTarihi: daysAgo(110) },
@@ -99,10 +102,21 @@ describe('market churn service', () => {
     expect(score).toBe(10);
   });
 
+  test('does not add order risk when ERP is disabled', async () => {
+    dbMock.queuePoolQuery([{ id: 'target-1', last_seen_at: daysAgo(2), external_customer_id: 'cust-1' }]);
+    dbMock.queuePoolQuery([]);
+    getErpProvider.mockImplementation(() => Promise.resolve(null));
+
+    const score = await service.recalculateChurnScore('target-1');
+
+    expect(score).toBe(0);
+    expect(erpProvider.getCustomerOrders).not.toHaveBeenCalled();
+  });
+
   test('normalizes score to 100', async () => {
     dbMock.queuePoolQuery([{ id: 'target-1', last_seen_at: daysAgo(200) }]);
     dbMock.queuePoolQuery([{ severity: 'critical', count: 10 }]);
-    getCustomerOrders.mockImplementation(() => Promise.resolve([]));
+    erpProvider.getCustomerOrders.mockImplementation(() => Promise.resolve([]));
 
     const score = await service.recalculateChurnScore('target-1');
 

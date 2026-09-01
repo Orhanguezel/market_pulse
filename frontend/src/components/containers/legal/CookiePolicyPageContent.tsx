@@ -15,13 +15,16 @@ const CookiePolicyPageContent: React.FC = () => {
   const { ui } = useUiSection('ui_cookie_policy', locale as any);
   const isTr = locale === 'tr';
 
-  const { data, isLoading, isError } = useListCustomPagesPublicQuery({
-    module_key: 'cookies',
-    locale,
-    limit: 10,
-    sort: 'created_at',
-    orderDir: 'asc',
-  });
+  const { data, isLoading, isError } = useListCustomPagesPublicQuery(
+    {
+      module_key: 'cookies',
+      locale,
+      limit: 10,
+      sort: 'created_at',
+      orderDir: 'asc',
+    },
+    { skip: isTr },
+  );
 
   const page = useMemo(() => pickFirstPublished((data as any)?.items), [data]);
 
@@ -39,6 +42,62 @@ const CookiePolicyPageContent: React.FC = () => {
     const safe = raw ? downgradeH1ToH2(raw) : '';
     return safe;
   }, [page]);
+
+  const turkishFallback = (
+    <article className="max-w-4xl mx-auto rounded-2xl border border-(--gm-border-soft) bg-(--gm-surface) p-6 text-(--gm-text-dim) shadow-card md:p-10">
+      <p className="leading-7">
+        İhracat Radarı, internet sitesinin güvenli ve düzgün çalışmasını sağlamak, tercihlerinizi
+        hatırlamak ve onay vermeniz halinde site kullanımını analiz etmek için çerezlerden yararlanır.
+      </p>
+
+      <h2 className="mt-8 text-2xl font-semibold text-(--gm-text)">Çerez nedir?</h2>
+      <p className="mt-3 leading-7">
+        Çerezler, bir internet sitesini ziyaret ettiğinizde tarayıcınız aracılığıyla cihazınıza
+        kaydedilen küçük metin dosyalarıdır. Çerezler cihazınıza zarar vermez ve tek başına kimliğinizi
+        doğrudan belirlemez.
+      </p>
+
+      <h2 className="mt-8 text-2xl font-semibold text-(--gm-text)">Kullandığımız çerezler</h2>
+      <div className="mt-4 overflow-x-auto">
+        <table className="w-full border-collapse text-left text-sm">
+          <thead>
+            <tr className="border-b border-(--gm-border)">
+              <th className="p-3 font-semibold">Kategori</th>
+              <th className="p-3 font-semibold">Amaç</th>
+              <th className="p-3 font-semibold">Durum</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr className="border-b border-(--gm-border-soft)">
+              <td className="p-3 font-medium">Zorunlu çerezler</td>
+              <td className="p-3">Güvenlik, oturum, dil ve çerez tercihlerinin saklanması.</td>
+              <td className="p-3">Her zaman etkin</td>
+            </tr>
+            <tr>
+              <td className="p-3 font-medium">Analitik çerezler</td>
+              <td className="p-3">Ziyaret ve performans verilerini toplu olarak değerlendirmek.</td>
+              <td className="p-3">Yalnızca onayınızla</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h2 className="mt-8 text-2xl font-semibold text-(--gm-text)">Tercihlerinizi yönetme</h2>
+      <p className="mt-3 leading-7">
+        İlk ziyaretinizde görünen çerez bandından analitik çerezleri kabul edebilir, reddedebilir veya
+        ayrıntılı tercihlerinizi belirleyebilirsiniz. Tarayıcı ayarlarınız üzerinden çerezleri silebilir
+        ya da engelleyebilirsiniz. Zorunlu çerezlerin engellenmesi sitenin bazı işlevlerini etkileyebilir.
+      </p>
+
+      <h2 className="mt-8 text-2xl font-semibold text-(--gm-text)">Saklama süresi ve iletişim</h2>
+      <p className="mt-3 leading-7">
+        Çerez tercihiniz en fazla 180 gün saklanır. Politika veya kişisel verilerinizle ilgili
+        sorularınız için <a className="font-semibold text-brand-primary hover:underline" href="mailto:destek@isletmeniyonet.com">destek@isletmeniyonet.com</a> adresinden bize ulaşabilirsiniz.
+      </p>
+
+      <p className="mt-8 text-sm text-(--gm-muted)">Son güncelleme: 29 Temmuz 2026</p>
+    </article>
+  );
 
   return (
     <section className="relative min-h-[60vh] py-16 lg:py-24 overflow-hidden">
@@ -60,16 +119,13 @@ const CookiePolicyPageContent: React.FC = () => {
           </div>
         )}
 
-        {!isLoading && (isError || !page) && (
+        {!isLoading && (isError || !page) && (isTr ? turkishFallback : (
           <div className="max-w-4xl mx-auto text-center py-20">
-            <div
-              className="inline-block bg-(--gm-surface) border border-(--gm-border-soft) text-(--gm-text-dim) px-8 py-4 rounded-2xl font-serif italic"
-              role="alert"
-            >
-              {ui('ui_cookie_policy_empty', 'İçerik henüz hazırlanmadı.')}
+            <div className="inline-block bg-(--gm-surface) border border-(--gm-border-soft) text-(--gm-text-dim) px-8 py-4 rounded-2xl" role="alert">
+              {ui('ui_cookie_policy_empty', 'Content is being prepared.')}
             </div>
           </div>
-        )}
+        ))}
 
         {!!page && !isLoading && (
           <div className="max-w-4xl mx-auto">

@@ -1,0 +1,197 @@
+{
+  "slug": "teklif-ve-siparis-yonetimi",
+  "category": "crm-satis",
+  "module": "crm",
+  "order": 110,
+  "icon": "FileText",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Teklif ve Sipariş Yönetimi | CRM ile Teklif Takibi, Sipariş Süreci ve Satış Kontrolü",
+        "description": "Tekliflerinizi, müşteri dönüşlerinizi, açık fırsatlarınızı, siparişe dönüşen satışlarınızı ve takip süreçlerinizi CRM ile tek merkezden yönetin. Satış fırsatlarını kaçırmayın.",
+        "ogTitle": "Teklif ve Sipariş Yönetimi | {{appName}}",
+        "ogDescription": "Tekliflerinizi, açık fırsatlarınızı, müşteri dönüşlerinizi, revize taleplerinizi ve siparişe dönüşen satışlarınızı CRM ile tek merkezden yönetin."
+      },
+      "hero": {
+        "eyebrow": "CRM ve Satış",
+        "title": "Teklif ve Sipariş Yönetimi",
+        "lead": "Teklif gönderiyorsunuz ama hangi teklifin beklemede olduğunu, hangi müşterinin tekrar aranması gerektiğini ve hangi satış fırsatının siparişe dönüşmek üzere olduğunu net göremiyor musunuz? Bu durum birçok şirkette satış kaybına neden olur. Çünkü teklif gönderildikten sonra takip edilmezse müşteri başka tedarikçiye yönelebilir, satış fırsatı soğuyabilir veya açık teklifler unutulabilir. {{appName}} Teklif ve Sipariş Yönetimi ile tüm tekliflerinizi, müşteri dönüşlerinizi, açık fırsatlarınızı, revize taleplerinizi, siparişe dönüşen satışlarınızı ve takip tarihlerinizi CRM üzerinden tek merkezden yönetebilirsiniz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Kurulum süreci nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Teklif ve Sipariş Yönetimi Nedir?",
+          "body": [
+            "Teklif ve sipariş yönetimi, müşterilere gönderilen tekliflerin, teklif durumlarının, müşteri geri dönüşlerinin, revize taleplerinin, siparişe dönüşen satışların ve açık fırsatların düzenli şekilde takip edilmesini sağlayan CRM tabanlı satış yönetimi sürecidir.",
+            "Birçok şirkette teklif gönderildikten sonra süreç dağılır. Bazı teklifler e-posta kutusunda kalır, bazıları Excel dosyasında tutulur, bazıları ise sadece satış temsilcisinin hafızasında yer alır.",
+            "{{appName}} Teklif ve Sipariş Yönetimi, teklif sürecinizi kişisel takipten çıkarıp şirketin kontrol edebileceği kurumsal bir satış sistemine dönüştürür.",
+            "Açık tekliflerinizi ve siparişe dönüşen satışlarınızı tek panelde görün: Teklif tarihi, teklif tutarı, müşteri dönüşü, revize talebi, takip tarihi, açık fırsat değeri, siparişe dönüşme durumu ve kaybedilme nedeni CRM üzerinde düzenli şekilde takip edilebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Teklif Takibi Neden Satışın En Kritik Aşamasıdır?",
+          "body": [
+            "Satış sürecinde en önemli kırılma noktalarından biri teklif aşamasıdır. Çünkü müşteri bu aşamada artık ürün veya hizmetle ilgilenmiştir.",
+            "Fiyat, teslim süresi, ödeme şartı, teknik detay veya hizmet kapsamı değerlendirilmektedir. Bu aşamada doğru takip yapılmazsa satış kaybedilebilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Teklif gönderiyorsanız ama tekliflerin akıbetini net göremiyorsanız, bu sisteme ihtiyacınız var demektir.",
+          "items": [
+            { "title": "Düzenli Teklif Gönderen Satış Ekipleri", "body": "Teklif takibini profesyonel hale getirmek isteyen ekipler için uygundur." },
+            { "title": "B2B Satış Yapan Şirketler", "body": "Uzun satış döngüsüne sahip B2B firmalar için açık fırsatları görünür hale getirir." },
+            { "title": "İhracat Teklifi Hazırlayan Firmalar", "body": "Yurt dışı teklif, proforma, teslim şekli ve ödeme şartı takibini düzenler." },
+            { "title": "Teklif Takibini Excel ile Yapanlar", "body": "Excel yerine CRM ile merkezi teklif takip sistemi kurmak isteyen işletmelere uygundur." },
+            { "title": "Satış Fırsatlarını Görmek İsteyen Yöneticiler", "body": "Açık teklifleri, toplam fırsat değerini ve satış boru hattını raporlayabilir." },
+            { "title": "Müşteri Dönüşlerini Takip Etmekte Zorlananlar", "body": "Teklif sonrası arama, e-posta ve revize süreçlerini takip etmeye yardımcı olur." },
+            { "title": "Fiyat, Proforma ve Sipariş Süreci Yönetenler", "body": "Tekliften siparişe geçiş sürecini daha kontrollü hale getirir." },
+            { "title": "Üretici, Distribütör ve Hizmet Şirketleri", "body": "Düzenli teklif veren üretici, distribütör, ihracatçı ve hizmet şirketleri için uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Teklif ve Sipariş Yönetimi ile Hangi Süreçler Takip Edilir?",
+          "body": [
+            "{{appName}} CRM yapısı ile teklif ve sipariş sürecinin tamamı kayıt altına alınabilir. Bu bilgiler düzenli takip edildiğinde şirketiniz teklif sürecini daha profesyonel yönetir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Teklif ve Sipariş Yönetimi ile Hangi Alanları Yönetebilirsiniz?",
+          "intro": "Teklif yönetimi yalnızca kayıt tutmak değildir. Açık fırsatları koruyan, tekliften siparişe dönüşüm ihtimalini artıran ve satış sürecini ölçülebilir hale getiren bir sistemdir.",
+          "items": [
+            { "title": "Teklif Kaydı Oluşturma", "body": "Teklif yönetiminin ilk adımı, gönderilen her teklifin CRM sistemine düzenli şekilde kaydedilmesidir. Müşteri firma adı ve ilgili kişi, ürün veya hizmet adı, teklif tarihi, tutarı ve para birimi, teslim süresi, ödeme şartı ve teklif geçerlilik süresi kaydedilir." },
+            { "title": "Açık Tekliflerin Takibi", "body": "Bir şirkette en önemli raporlardan biri açık teklifler listesidir. Çünkü açık teklifler, potansiyel satış gelirini gösterir. Şu anda kaç açık teklif var, açık tekliflerin toplam değeri nedir, hangi teklifler bu hafta takip edilmeli ve hangi müşterilerden cevap bekleniyor görülebilir." },
+            { "title": "Teklif Sonrası Takip Hatırlatmaları", "body": "Teklif gönderildikten sonra en önemli adım takip sürecidir. Birçok müşteri ilk tekliften sonra hemen sipariş vermez. 2 gün sonra müşteriyi ara, 1 hafta sonra takip maili gönder, teklif geçerlilik süresi dolmadan hatırlat ve revize teklif veya proforma için müşteri onayı al gibi hatırlatmalar oluşturulur." },
+            { "title": "Revize Teklif Yönetimi", "body": "Müşteriler çoğu zaman ilk teklife doğrudan onay vermez. Fiyat, miktar, teslim süresi, ödeme şartı veya ürün kapsamı için revize talep edebilir. İlk teklif tarihi ve revize talep nedeni, yeni teklif tutarı ve değişen kapsam, revize teklif tarihi ve müşteri notu, eski teklif ve yeni teklif karşılaştırması takip edilir." },
+            { "title": "Siparişe Dönüşen Tekliflerin Yönetimi", "body": "Teklif müşteri tarafından onaylandığında süreç sipariş yönetimine dönüşür. Bu aşamada satış ekibi ile operasyon ekibinin koordineli çalışması gerekir. Sipariş tarihi, tutarı ve ürün kapsamı, ödeme durumu ve teslim tarihi, üretim veya hazırlık durumu, fatura, proforma, nakliye ve müşteri bilgilendirme notları yönetilir." },
+            { "title": "Kaybedilen Tekliflerin Analizi", "body": "Her teklif satışa dönüşmeyebilir. Ancak kaybedilen teklifler de şirket için önemli veri kaynağıdır. Fiyat yüksek bulundu, müşteri başka tedarikçi seçti, teslim süresi veya ödeme şartı uygun olmadı, teklif geç gönderildi veya müşteri dönüş yapmadı gibi nedenler analiz edilir." },
+            { "title": "Satış Temsilcisi Bazlı Teklif Takibi", "body": "Satış ekibiniz varsa her temsilcinin teklif performansını görmek önemlidir. Bu bilgiler satış yöneticisinin ekibi daha doğru yönetmesini sağlar. Hangi temsilci kaç teklif gönderdi, hangi teklifler açık durumda, hangi teklifler siparişe dönüştü veya kaybedildi ve tekliften satışa dönüşüm oranı nedir izlenir." },
+            { "title": "Ürün ve Hizmet Bazlı Teklif Analizi", "body": "Teklifler yalnızca müşteri bazlı değil, ürün veya hizmet bazlı da analiz edilmelidir. En çok hangi ürün için teklif isteniyor, hangi hizmet daha çok ilgi görüyor, hangi ürün teklifleri satışa daha çok dönüşüyor ve hangi ürünlerde fiyat itirazı fazla görülebilir." },
+            { "title": "İhracat Teklif ve Proforma Takibi", "body": "İhracat yapan şirketlerde teklif süreci daha fazla detay içerir. Ürün, miktar, para birimi, teslim şekli, ödeme şartı, ülke, nakliye ve proforma süreçleri birlikte takip edilmelidir. Yurt dışı alıcı firma, ülke ve ilgili kişi, ürün grubu, GTİP / HS kodu ve para birimi, teslim şekli, ödeme şekli ve minimum sipariş miktarı, proforma, numune, nakliye ve siparişe dönüşme ihtimali takip edilir." },
+            { "title": "Sipariş Sonrası Takip", "body": "Sipariş alındıktan sonra müşteri ilişkisi bitmez. Özellikle B2B satışta tekrar sipariş, memnuniyet ve uzun vadeli ilişki çok önemlidir. Teslimat durumu ve müşteri memnuniyeti, eksik veya sorun bildirimi, tekrar sipariş ihtimali ve yeni teklif fırsatı, fatura takibi, operasyon sonrası görüşme ve ilişki sürdürme planı yönetilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Teklif ve Sipariş Yönetimi Satış Gelirini Nasıl Etkiler?",
+          "intro": "Teklif ve sipariş yönetimi doğru kurulduğunda şirketin satış süreci daha kontrollü hale gelir. Kısacası, teklif ve sipariş yönetimi yalnızca kayıt tutmak değildir.",
+          "items": [
+            "Teklifler unutulmaz",
+            "Müşterilere daha hızlı dönüş yapılır",
+            "Açık fırsatlar görünür olur",
+            "Satış ekibi takiplerini zamanında yapar",
+            "Yönetici satış potansiyelini net görür",
+            "Kaybedilen teklifler analiz edilir",
+            "Siparişe dönüşen işler daha düzenli yönetilir",
+            "Şirketin satış tahmini daha gerçekçi hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "İhracat Tekliflerinde Daha Kontrollü Süreç",
+          "intro": "Yurt dışı tekliflerde teslim şekli, ödeme şartı, para birimi, proforma, numune, nakliye ve takip tarihi birlikte yönetilmediğinde operasyonel karışıklık oluşabilir.",
+          "items": [
+            "Yurt dışı alıcı firma bilgileri kayıt altında tutulur",
+            "Proforma durumu düzenli takip edilir",
+            "Numune ve nakliye bilgileri teklif sürecine bağlanır",
+            "Teklif geçerlilik süresi unutulmaz",
+            "Siparişe dönüşen teklifler operasyon sürecine aktarılır",
+            "Kaybedilen ihracat teklifleri analiz edilebilir"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM ile Teklif ve Sipariş Takibi İçin Dijital Altyapı",
+          "body": [
+            "Teklif ve sipariş yönetimi; teklif takip sistemi, sipariş takip sistemi, satış teklif yönetimi, CRM sipariş yönetimi, B2B teklif takip sistemi, ihracat teklif yönetimi, proforma takip sistemi ve açık teklif takibi için kullanılabilir."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Teklif ve Sipariş Yönetiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Tüm teklifler tek merkezde toplanır",
+            "Açık teklifler ve bekleyen fırsatlar görünür hale gelir",
+            "Teklif sonrası takipler unutulmaz",
+            "Satış temsilcilerinin teklif performansı izlenir",
+            "Müşteri dönüşleri kayıt altına alınır",
+            "Revize teklifler düzenli yönetilir",
+            "Siparişe dönüşen teklifler operasyon sürecine aktarılır",
+            "Kaybedilen tekliflerin nedenleri analiz edilir",
+            "İhracat teklifleri ve proforma süreçleri daha düzenli takip edilir",
+            "Tekliften siparişe dönüşüm oranı ölçülebilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Teklif Yönetiminde Sık Yapılan Hatalar",
+          "items": [
+            "Teklifleri Excel dosyalarında dağınık takip etmek",
+            "Teklif sonrası müşteriyi aramamak",
+            "Teklif geçerlilik süresini takip etmemek",
+            "Revize teklifleri karıştırmak",
+            "Müşteri dönüşlerini kayıt altına almamak",
+            "Satış temsilcisi bazlı teklif performansını izlememek",
+            "Kaybedilen tekliflerin nedenini analiz etmemek",
+            "Açık tekliflerin toplam değerini görememek",
+            "İhracat tekliflerinde teslim ve ödeme şartlarını düzensiz takip etmek",
+            "Siparişe dönüşen teklifleri operasyon sürecine doğru aktarmamak"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Teklif ve Sipariş Yönetimi Kurulum Süreci Nasıl İlerler?",
+          "intro": "Teklif ve sipariş yönetimi şirketinizin teklif hazırlama, takip, satış ve sipariş süreçlerine göre planlanır. Amaç, tekliften siparişe kadar tüm süreci daha ölçülebilir hale getirmektir.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin teklif hazırlama, takip, satış ve sipariş süreçleri değerlendirilir." },
+            { "n": 2, "title": "Mevcut Durum Analizi", "body": "Tekliflerin nerede tutulduğu, kimlerin takip ettiği ve hangi aşamada sorun yaşandığı analiz edilir." },
+            { "n": 3, "title": "Teklif Alanlarının Planlanması", "body": "Müşteri, ürün, fiyat, para birimi, geçerlilik süresi, satış temsilcisi, teklif durumu ve takip tarihi gibi alanlar belirlenir." },
+            { "n": 4, "title": "Satış Aşamalarının Kurgulanması", "body": "Teklif gönderildi, takip ediliyor, revize bekliyor, onaylandı, siparişe döndü, kaybedildi gibi aşamalar oluşturulur." },
+            { "n": 5, "title": "Takip Hatırlatmaları", "body": "Teklif sonrası arama, mail, revize ve karar takipleri için görev yapısı kurulur." },
+            { "n": 6, "title": "Siparişe Geçiş Yapısı", "body": "Onaylanan tekliflerin sipariş ve operasyon sürecine nasıl aktarılacağı planlanır." },
+            { "n": 7, "title": "Raporlama", "body": "Açık teklifler, kazanılan teklifler, kaybedilen teklifler, satış temsilcisi performansı ve tekliften siparişe dönüşüm oranları raporlanır." },
+            { "n": 8, "title": "Ekip Eğitimi", "body": "Satış ekibine teklif kaydı, teklif takibi, görev yönetimi ve raporlama süreci anlatılır." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Teklif ve sipariş yönetimi nedir?",
+          "body": [
+            "Teklif ve sipariş yönetimi; müşterilere gönderilen tekliflerin, açık fırsatların, revize taleplerinin, müşteri dönüşlerinin, takip tarihlerinin, siparişe dönüşen satışların ve kaybedilen tekliflerin CRM sistemiyle tek merkezden takip edilmesi sürecidir. {{appName}}, şirketlerin tekliften siparişe uzanan satış sürecini daha düzenli, ölçülebilir ve yönetilebilir hale getirir."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Teklif ve Sipariş Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Teklif ve sipariş yönetimi kimler için uygundur?", "a": "Bu hizmet; düzenli teklif gönderen, teklifleri takip etmekte zorlanan, satış fırsatlarını daha iyi yönetmek isteyen ve sipariş süreçlerini CRM ile kontrol altına almak isteyen şirketler için uygundur." },
+            { "q": "Teklifler CRM üzerinden takip edilebilir mi?", "a": "Evet. Teklif tarihi, teklif tutarı, müşteri adı, teklif durumu, geçerlilik süresi, takip tarihi ve müşteri dönüşleri CRM üzerinden takip edilebilir." },
+            { "q": "Açık teklifler görülebilir mi?", "a": "Evet. CRM üzerinden açık teklifler, bekleyen fırsatlar, kapanmaya yakın teklifler ve takip edilmesi gereken müşteriler görülebilir." },
+            { "q": "Teklif sonrası hatırlatma oluşturulabilir mi?", "a": "Evet. Teklif gönderildikten sonra müşteriyi arama, takip maili gönderme veya revize teklif hazırlama gibi görevler oluşturulabilir." },
+            { "q": "Revize teklifler takip edilebilir mi?", "a": "Evet. İlk teklif, revize teklif, değişen fiyat, değişen kapsam ve müşteri dönüşleri CRM üzerinde düzenli şekilde takip edilebilir." },
+            { "q": "Siparişe dönüşen teklifler yönetilebilir mi?", "a": "Evet. Onaylanan teklifler sipariş sürecine aktarılabilir. Sipariş tarihi, ödeme durumu, teslim süreci ve operasyon notları takip edilebilir." },
+            { "q": "Kaybedilen teklifler analiz edilebilir mi?", "a": "Evet. Kaybedilen tekliflerin nedenleri kayıt altına alınabilir. Böylece fiyat, teslim süresi, rakip tercihleri veya takip eksiklikleri analiz edilebilir." },
+            { "q": "İhracat teklifleri ve proforma süreçleri takip edilebilir mi?", "a": "Evet. Yurt dışı alıcı firmalara gönderilen teklifler, para birimi, teslim şekli, ödeme şartı, GTİP / HS kodu, proforma ve sipariş durumu CRM ile takip edilebilir." },
+            { "q": "Satış temsilcisi bazlı teklif raporu alınabilir mi?", "a": "Evet. Her satış temsilcisinin gönderdiği teklif sayısı, teklif tutarı, açık teklifleri, kazandığı ve kaybettiği teklifler raporlanabilir." },
+            { "q": "Teklif yönetimi satışları artırır mı?", "a": "Teklif yönetimi doğrudan satış garantisi vermez; ancak açık tekliflerin unutulmasını önler, takip disiplinini artırır ve satış fırsatlarının daha iyi değerlendirilmesine yardımcı olur." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Satış Ekibinizin Teklif Takip Sistemini Birlikte Kuralım",
+        "body": "Teklif gönderiyor ama tekliflerinizi düzenli takip edemiyorsanız, satış fırsatlarınızın bir kısmını fark etmeden kaybediyor olabilirsiniz. {{appName}} Teklif ve Sipariş Yönetimi ile tüm tekliflerinizi, açık fırsatlarınızı, revize taleplerinizi ve siparişe dönüşen satışlarınızı tek merkezden takip edin.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

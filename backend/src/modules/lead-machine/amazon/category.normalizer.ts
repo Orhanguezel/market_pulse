@@ -2,6 +2,7 @@ import type { AmazonProduct } from './amazon.scraper';
 import type { AmazonCategoryStats, NormalizedProduct } from './amazon.types';
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { OUTLIER_CONFIG } from './scoring.config';
 
 function sortedValues(products: AmazonProduct[], key: 'price' | 'review_count' | 'rating'): number[] {
@@ -73,10 +74,11 @@ export const calculateCategoryStats = (keyword: string, marketplace: string, pro
   buildCategoryStats(products, keyword, marketplace);
 
 export async function upsertAmazonCategoryStats(stats: AmazonCategoryStats) {
+  const tenantKey = await getActiveTenantKey();
   await pool.execute(
     `INSERT INTO amazon_category_stats (
-      id, keyword, marketplace, product_count, price_min, price_max, price_median, price_sigma, seller_count, dominant_brand_ratio
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      id, tenant_key, keyword, marketplace, product_count, price_min, price_max, price_median, price_sigma, seller_count, dominant_brand_ratio
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
     ON DUPLICATE KEY UPDATE
       product_count = VALUES(product_count),
       price_min = VALUES(price_min),
@@ -87,6 +89,7 @@ export async function upsertAmazonCategoryStats(stats: AmazonCategoryStats) {
       dominant_brand_ratio = VALUES(dominant_brand_ratio)`,
     [
       randomUUID(),
+      tenantKey,
       stats.keyword,
       stats.marketplace,
       Math.floor(stats.productCount) || 0,

@@ -38,6 +38,27 @@ def test_directory_listing_extracts_company_cards():
     assert data["companies"][0]["website"] == "https://example.com/north"
 
 
+def test_europages_directory_listing_prefers_outbound_company_website():
+    html = """
+    <article class="company-card">
+      <a data-test="company-name" href="/en/company/agrotan-tohumculuk-123.html"><h2>AGROTAN TOHUMCULUK</h2></a>
+      <p>Vegetable seed producer info@agrotan.example</p>
+      <a href="https://www.agrotan.example">Visit website</a>
+    </article>
+    """
+    response = FakeResponse()
+    response.url = "https://www.europages.co.uk/companies/pepper%20seed.html"
+
+    data = extract_directory_listing(html, response.url, response)
+
+    assert data["count"] == 1
+    company = data["companies"][0]
+    assert company["name"] == "AGROTAN TOHUMCULUK"
+    assert company["website"] == "https://www.agrotan.example"
+    assert company["source_url"] == "https://www.europages.co.uk/en/company/agrotan-tohumculuk-123.html"
+    assert company["email"] == "info@agrotan.example"
+
+
 def test_fair_exhibitor_extracts_booth_hint():
     html = """
     <div class="exhibitor"><h3>Expo Mats Ltd</h3><p>Hall 4 Stand A12 automotive accessories</p></div>

@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import React from 'react';
-import HomeContent from '@/components/containers/home/HomeContent';
+import IyHome from '@/components/iy/IyHome';
 
 import { normPath, absUrlJoin } from '@/integrations/shared';
 import { buildMetadataFromSeo, fetchSeoObject, fetchSeoPageObject, mergeSeoPageIntoSeo } from '@/seo/server';
@@ -25,5 +25,5 @@ export default async function HomePage({
   params: Promise<{ locale: string }>;
 }) {
   const { locale } = await params;
-  return <HomeContent locale={locale} />;
+  return <IyHome locale={locale} />;
 }

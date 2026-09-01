@@ -1,0 +1,353 @@
+{
+  "slug": "gemini-egitimi",
+  "category": "egitim",
+  "module": "training",
+  "order": 40,
+  "icon": "Bot",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Gemini Eğitimi | Google Yapay Zeka Araçları, Prompt Yazma ve İş Süreçlerinde AI Kullanımı",
+        "description": "Gemini eğitimi ile Google yapay zeka araçlarını e-posta, doküman, tablo, toplantı notu, araştırma, satış, pazarlama, ihracat, CRM ve günlük ofis süreçlerinde nasıl kullanacağınızı uygulamalı olarak öğretiyoruz.",
+        "ogTitle": "Gemini Eğitimi | {{appName}}",
+        "ogDescription": "Gemini’yi e-posta, doküman, tablo, toplantı, araştırma, satış, pazarlama, ihracat, CRM, e-ticaret ve günlük ofis süreçlerinde doğru kullanmayı öğrenin."
+      },
+      "hero": {
+        "eyebrow": "Yapay Zeka Eğitimi",
+        "title": "Gemini Eğitimi",
+        "lead": "Google Gemini kullanmak istiyor ama bu aracı e-posta, doküman, tablo, toplantı, araştırma, raporlama, satış, pazarlama, ihracat ve günlük ofis süreçlerinize nasıl uyarlayacağınızı bilmiyor musunuz? Gemini yalnızca soru sorulan bir yapay zeka aracı değildir. Doğru kullanıldığında fikir üretme, metin hazırlama, e-posta taslağı oluşturma, uzun dokümanları özetleme, toplantı notlarını düzenleme, tabloları yorumlama, araştırma planı oluşturma, müşteri iletişimi hazırlama ve Google Workspace kullanan ekiplerin iş akışlarını hızlandırma konusunda destekleyici bir araç olabilir. {{appName}} olarak bireylere, ekiplerine ve şirketlere uygulamalı Gemini eğitimi sunuyoruz. Eğitimi satış, pazarlama, ihracat, CRM, e-ticaret, yönetim, insan kaynakları, raporlama ve ofis süreçlerine göre özelleştiriyoruz. Amacımız, Gemini’yi rastgele kullanılan bir yapay zeka aracı olmaktan çıkarıp; Google ekosistemiyle çalışan şirketler için verimlilik, içerik üretimi, iş takibi, raporlama ve iletişim süreçlerini destekleyen pratik bir iş yardımcısına dönüştürmektir.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Gemini Eğitimi Nedir?",
+          "body": [
+            "Gemini eğitimi, Google’ın yapay zeka araçlarının günlük iş süreçlerinde doğru, güvenli ve verimli şekilde kullanılmasını öğretmek için hazırlanan uygulamalı yapay zeka eğitimidir.",
+            "Bu eğitimde amaç yalnızca Gemini’ye soru sormayı göstermek değildir. Asıl amaç, Gemini’yi iş akışlarına nasıl dahil edeceğinizi, doğru prompt yazmayı, e-posta ve doküman süreçlerinde nasıl kullanacağınızı, araştırma ve raporlama çalışmalarında nasıl destek alacağınızı, çıkan cevapları nasıl kontrol edeceğinizi ve şirket içinde güvenli kullanım kültürünü nasıl oluşturacağınızı öğretmektir.",
+            "{{appName}}, Gemini eğitimini teorik anlatım yerine gerçek iş senaryoları ve uygulamalı örneklerle planlar.",
+            "Gemini’yi günlük iş akışlarınızın verimli bir parçası haline getirin",
+            "Doğru prompt yazma, rol ve bağlam verme, formatlı çıktı alma, Google Workspace senaryoları, çıktı kontrolü ve güvenli veri kullanımıyla Gemini’den daha kaliteli sonuç alabilirsiniz."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Gemini Eğitimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Gemini’den verim almak için doğru prompt yazmayı, bağlam vermeyi, hedefi net belirtmeyi, çıktıyı kontrol etmeyi, şirket verilerini dikkatli kullanmayı ve yapay zeka sonuçlarını insan kontrolünden geçirmeyi bilmek gerekir.",
+            "Eğitimde Gemini’nin e-posta, doküman, tablo, toplantı notu, araştırma, satış, pazarlama, ihracat, CRM, e-ticaret ve günlük ofis süreçlerinde nasıl kullanılabileceği uygulamalı olarak ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Gemini Neden İş Süreçlerinde Kullanılmalıdır?",
+          "body": [
+            "Birçok çalışan yapay zeka araçlarını yalnızca basit metin yazdırmak veya kısa cevap almak için kullanır. Oysa Gemini doğru yönlendirildiğinde günlük iş süreçlerinde ciddi zaman kazandırabilecek bir yardımcıya dönüşebilir.",
+            "Ancak verimli sonuç almak için Gemini’ye net hedef, doğru bağlam, uygun ton ve istenen çıktı formatı verilmelidir. Aksi halde alınan cevaplar genel, eksik veya doğrudan kullanılamayacak seviyede kalabilir.",
+            "Gemini şu alanlarda destek sağlayabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Gemini Eğitimi Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, Gemini’yi yalnızca denemek değil, iş süreçlerinde gerçekten kullanmak isteyen kişi ve şirketler için uygundur.",
+          "items": [
+            {
+              "title": "Google Workspace Kullanan Şirketler",
+              "body": "Gmail, Docs, Sheets, Drive ve Meet ile çalışan ekipler için Gemini senaryoları planlanabilir."
+            },
+            {
+              "title": "Satış Ekipleri",
+              "body": "Müşteri e-postası, teklif takibi, satış mesajı ve CRM notları için Gemini kullanabilirler."
+            },
+            {
+              "title": "Pazarlama Ekipleri",
+              "body": "Sosyal medya, blog, reklam, mail marketing ve web sitesi içeriklerinde destek alabilirler."
+            },
+            {
+              "title": "İhracat ve Dış Ticaret Ekipleri",
+              "body": "İngilizce mail, ürün açıklaması, B2B platform metni ve müşteri takibi için uygundur."
+            },
+            {
+              "title": "CRM ve Müşteri Takip Ekipleri",
+              "body": "Müşteri notları, takip mesajları, satış aşamaları ve görev listelerinde destek alabilirler."
+            },
+            {
+              "title": "E-ticaret ve Pazaryeri Ekipleri",
+              "body": "Ürün açıklaması, ürün başlığı, müşteri cevapları ve kampanya metinlerinde kullanabilirler."
+            },
+            {
+              "title": "Yönetici ve Ekip Liderleri",
+              "body": "Toplantı notu, rapor özeti, görev listesi ve karar takip süreçlerinde fayda sağlayabilirler."
+            },
+            {
+              "title": "KOBİ’ler, Üreticiler ve Girişimciler",
+              "body": "Yapay zekayı günlük iş akışlarına kontrollü şekilde dahil etmek isteyen işletmeler için uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Gemini Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "Gemini eğitimi kişinin veya şirketin ihtiyacına göre özelleştirilebilir. Genel olarak Gemini temel kullanımı, prompt yazma, rol ve bağlam verme, Gmail, Docs, Sheets, Drive, Meet, araştırma, e-posta, satış, pazarlama, ihracat, CRM, e-ticaret, raporlama, veri güvenliği ve departmanlara özel kullanım senaryoları ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Gemini Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Eğitim modülleri şirketinize göre daraltılabilir veya genişletilebilir. Aşağıdaki yapı, Gemini’yi günlük iş süreçlerinde uygulamalı, güvenli ve verimli kullanmak için planlanmıştır.",
+          "items": [
+            {
+              "title": "Gemini Temel Kullanımı",
+              "body": "Eğitimin ilk bölümünde Gemini’nin temel kullanım mantığı anlatılır. Katılımcıların Gemini’yi yalnızca bir sohbet aracı olarak değil, iş süreçlerini destekleyen yapay zeka yardımcısı olarak kullanması hedeflenir. Kapsam: Gemini ne işe yarar?; Hangi işlerde kullanılabilir?; Metin hazırlama, özetleme ve fikir geliştirme nasıl yapılır?; Cevap nasıl revize ettirilir?."
+            },
+            {
+              "title": "Prompt Yazma Eğitimi",
+              "body": "Gemini’den kaliteli sonuç almak için doğru prompt yazmak gerekir. Prompt, yapay zekaya verilen komuttur. Komut ne kadar net olursa alınan cevap o kadar kullanılabilir olur. Kapsam: Prompt nedir ve iyi prompt nasıl yazılır?; Rol, bağlam, hedef ve hedef kitle nasıl belirtilir?; Ton ve çıktı formatı nasıl istenir?; Örnek vererek sonuç nasıl iyileştirilir?."
+            },
+            {
+              "title": "Rol, Bağlam ve Format Verme",
+              "body": "Gemini’ye yalnızca “bir yazı yaz” demek çoğu zaman yeterli değildir. Daha iyi sonuç almak için rol, bağlam, hedef ve format birlikte verilmelidir. Kapsam: Gemini’ye uzman rolü verme; İşin amacını ve hedef kitlesini açıklama; Tablo, liste veya paragraf formatı isteme; Kaçınılacak ifadeleri belirtme."
+            },
+            {
+              "title": "Gmail ve E-Posta Süreçlerinde Gemini Kullanımı",
+              "body": "Şirket çalışanlarının en çok zaman harcadığı alanlardan biri e-posta yazışmalarıdır. Gemini, e-posta taslağı hazırlama, cevap yazma, metni sadeleştirme ve farklı tonlarda alternatif oluşturma süreçlerinde destek sağlayabilir. Kapsam: Müşteri e-postası ve teklif gönderim metni; Teklif takip, toplantı talebi ve hatırlatma e-postası; İngilizce e-posta hazırlama; Uzun e-postayı sadeleştirme."
+            },
+            {
+              "title": "Google Docs ve Doküman Hazırlamada Gemini Kullanımı",
+              "body": "Gemini, doküman taslağı oluşturma, uzun metinleri düzenleme, açıklama yazma, rapor metni geliştirme ve kurumsal dokümanları sadeleştirme süreçlerinde kullanılabilir. Kapsam: Rapor taslağı ve prosedür metni hazırlama; Toplantı notunu düzenleme; Eğitim dokümanı ve duyuru metni oluşturma; Mevcut dokümanı profesyonelleştirme."
+            },
+            {
+              "title": "Google Sheets ve Tablo Süreçlerinde Gemini Kullanımı",
+              "body": "Tablo verileri birçok şirket için kritik öneme sahiptir. Gemini, tablo yorumlama, veri sınıflandırma, rapor taslağı oluşturma ve analiz soruları geliştirme süreçlerinde destekleyici olarak kullanılabilir. Kapsam: Satış tablosu yorumlama; Müşteri listesi sınıflandırma; Rapor tablosu hazırlama; Tablodan yönetici özeti çıkarma."
+            },
+            {
+              "title": "Google Drive ve Dosya Düzeninde Gemini Kullanımı",
+              "body": "Google Drive kullanan şirketlerde doküman, tablo, sunum, görsel ve klasör düzeni zamanla karmaşık hale gelebilir. Gemini ve yapay zeka destekli çalışma mantığı, dosya düzeni ve bilgiye daha hızlı ulaşma süreçlerinde yardımcı olabilir. Kapsam: Dokümanları özetleme mantığı; Proje klasörü için yapı önerisi alma; Doküman isimlendirme standardı oluşturma; İç dokümanlardan aksiyon listesi çıkarma."
+            },
+            {
+              "title": "Google Meet ve Toplantı Süreçlerinde Gemini Kullanımı",
+              "body": "Toplantılar çoğu zaman karar, görev ve takip maddeleri içerir. Yapay zeka destekli araçlar toplantı notlarını düzenleme, kararları çıkarma ve görevleri listeleme süreçlerinde destek olabilir. Kapsam: Toplantı gündemi ve hazırlık listesi oluşturma; Toplantı notlarını düzenleme; Karar ve aksiyon maddelerini çıkarma; Toplantı sonrası özet e-postası hazırlama."
+            },
+            {
+              "title": "Araştırma ve Fikir Geliştirmede Gemini Kullanımı",
+              "body": "Gemini, araştırma planı oluşturma, fikir geliştirme, konu başlıkları belirleme, soru listesi hazırlama ve alternatif çözüm yolları üretme süreçlerinde kullanılabilir. Kapsam: Pazar araştırması için soru listesi; Rakip analizi başlıkları; Yeni ürün fikri geliştirme; Risk ve fırsat listesi çıkarma."
+            },
+            {
+              "title": "Satış Süreçlerinde Gemini Kullanımı",
+              "body": "Satış ekipleri Gemini’yi müşteri iletişimi, teklif takibi, arama senaryosu, itiraz karşılama ve CRM notları gibi alanlarda kullanabilir. Kapsam: Satış e-postası ve müşteri takip mesajı; Teklif sonrası hatırlatma metni; Telefon araması konuşma senaryosu; CRM görüşme notlarını düzenleme."
+            },
+            {
+              "title": "Pazarlama ve İçerik Üretiminde Gemini Kullanımı",
+              "body": "Pazarlama ekipleri Gemini’yi sosyal medya içerikleri, blog taslakları, web sitesi metinleri, kampanya fikirleri ve reklam metinleri için kullanabilir. Kapsam: Sosyal medya içerik fikri üretme; Blog başlığı ve web sitesi metni taslağı; Mail marketing ve reklam metni hazırlama; SEO ve GEO odaklı içerik taslağı oluşturma."
+            },
+            {
+              "title": "İhracat ve Dış Ticarette Gemini Kullanımı",
+              "body": "İhracat yapan firmalar için Gemini, İngilizce yazışma, ürün açıklaması, B2B platform metni, müşteri takip mesajı ve fuar sonrası iletişim gibi alanlarda kullanılabilir. Kapsam: İngilizce tanıtım maili hazırlama; Ürün açıklamalarını İngilizce hazırlama; Fuar sonrası takip mesajı yazma; İhracat operasyon kontrol listesi hazırlama."
+            },
+            {
+              "title": "CRM ve Müşteri Takibinde Gemini Kullanımı",
+              "body": "CRM süreçlerinde müşteri notları, takip mesajları, satış aşamaları ve görev listeleri düzenli tutulmalıdır. Gemini bu süreçleri hızlandırmak için destek sağlayabilir. Kapsam: Müşteri görüşme notlarını özetleme; Takip mesajı hazırlama; Müşteri ilgi seviyesini sınıflandırma; Satış süreci raporu taslağı hazırlama."
+            },
+            {
+              "title": "E-Ticaret ve Pazaryeri Süreçlerinde Gemini Kullanımı",
+              "body": "E-ticaret ve pazaryeri ekipleri Gemini’yi ürün açıklamaları, ürün başlıkları, müşteri soruları, kampanya metinleri ve satış raporu yorumları için kullanabilir. Kapsam: Trendyol, Amazon, Etsy ve eBay ürün metinleri; B2B platform ürün açıklaması oluşturma; Müşteri sorularına cevap taslağı hazırlama; SEO uyumlu ürün açıklaması hazırlama."
+            },
+            {
+              "title": "İnsan Kaynakları ve Kurumsal İletişimde Gemini Kullanımı",
+              "body": "İnsan kaynakları ve kurumsal iletişim ekipleri Gemini’yi iş ilanı, görev tanımı, iç duyuru, eğitim dokümanı ve oryantasyon metni hazırlamak için kullanabilir. Kapsam: İş ilanı ve görev tanımı yazma; Mülakat soru listesi oluşturma; Çalışan duyuru metni hazırlama; Şirket içi prosedür metni yazma."
+            },
+            {
+              "title": "Gemini Cevaplarını Kontrol Etme",
+              "body": "Gemini faydalı bir yapay zeka aracı olsa da her cevabı doğru kabul edilmemelidir. Kullanıcılar çıkan cevabı kontrol etmeyi öğrenmelidir. Kapsam: Bilgi doğru mu, güncellik gerekiyor mu?; Kaynak kontrolü gerekli mi?; Müşteriye gönderilebilir mi?; İnsan onayı gerekiyor mu?."
+            },
+            {
+              "title": "Gemini Kullanımında Gizlilik ve Veri Güvenliği",
+              "body": "Gemini kullanırken şirket verileri, müşteri bilgileri, kişisel bilgiler ve ticari sırlar konusunda dikkatli olunmalıdır. Her bilgi yapay zeka aracına girilmemelidir. Kapsam: Şirket gizli bilgileri nasıl korunmalı?; Müşteri bilgileri paylaşılırken nelere dikkat edilmeli?; Ticari sırlar yapay zekaya girilmeli mi?; Şirket içinde kullanım kuralları nasıl oluşturulmalı?."
+            },
+            {
+              "title": "Departmanlara Özel Gemini Kullanım Senaryoları",
+              "body": "Gemini her departmanda farklı şekilde kullanılabilir. Bu nedenle eğitimde departmanlara özel örnekler hazırlanabilir."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Gemini Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç eğitim alacak kişinin veya şirketin ihtiyacı, departman yapısı, mevcut Gemini kullanım seviyesi ve hedefleri değerlendirilerek başlar. Ardından eğitim içeriği planlanır, temel kullanım ve prompt eğitimi verilir, Google Workspace senaryoları gösterilir, uygulamalı örnekler yapılır, güvenli kullanım kuralları anlatılır ve pratik kullanım yol haritası oluşturulur.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Eğitim alacak kişinin veya şirketin ihtiyacı, departman yapısı, mevcut Gemini kullanım seviyesi ve hedefleri değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Eğitim İçeriği Planlama",
+              "body": "Satış, pazarlama, ihracat, CRM, e-ticaret, yönetim, insan kaynakları veya ofis süreçlerinden hangilerine odaklanılacağı belirlenir."
+            },
+            {
+              "n": 3,
+              "title": "Temel Kullanım ve Prompt Eğitimi",
+              "body": "Gemini temel kullanımı, prompt yazma, rol verme, bağlam oluşturma ve doğru çıktı alma mantığı anlatılır."
+            },
+            {
+              "n": 4,
+              "title": "Google Workspace Senaryoları",
+              "body": "Gmail, Docs, Sheets, Drive ve Meet gibi çalışma alanlarında Gemini kullanımına yönelik örnek senaryolar gösterilir."
+            },
+            {
+              "n": 5,
+              "title": "Uygulamalı Örnekler",
+              "body": "Katılımcıların kendi iş süreçlerine uygun e-posta, rapor, müşteri mesajı, ürün açıklaması ve içerik örnekleri hazırlanır."
+            },
+            {
+              "n": 6,
+              "title": "Departman Bazlı Çalışmalar",
+              "body": "Eğitim şirket için yapılıyorsa departmanlara özel kullanım senaryoları oluşturulur."
+            },
+            {
+              "n": 7,
+              "title": "Güvenli Kullanım Kuralları",
+              "body": "Gizlilik, kişisel veri, müşteri bilgileri, şirket verileri ve çıktı kontrolü konuları anlatılır."
+            },
+            {
+              "n": 8,
+              "title": "Kullanım Yol Haritası",
+              "body": "Eğitim sonunda Gemini’nin günlük işlerde nasıl kullanılacağına dair pratik bir yol haritası oluşturulur."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Gemini Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Çalışanlar Gemini’yi daha bilinçli kullanır",
+            "Prompt yazma becerisi gelişir",
+            "Google Workspace kullanan ekipler yapay zekayı iş akışlarına daha kolay dahil edebilir",
+            "E-posta ve yazışma süreçleri hızlanabilir",
+            "Doküman ve rapor hazırlama süreçleri desteklenir",
+            "Toplantı notları daha düzenli hale getirilebilir",
+            "Satış ve müşteri takip mesajları daha profesyonel hazırlanabilir",
+            "Pazarlama ve içerik üretimi desteklenir",
+            "İhracat yazışmaları daha düzenli hazırlanabilir",
+            "CRM notları ve takip süreçleri daha sistemli hale getirilebilir",
+            "E-ticaret ürün açıklamaları daha hızlı oluşturulabilir",
+            "Gizlilik ve veri güvenliği farkındalığı artar",
+            "Şirket içinde yapay zeka kullanım kültürü gelişir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Gemini Kullanımında Sık Yapılan Hatalar",
+          "items": [
+            "Çok genel soru sormak",
+            "Bağlam vermeden sonuç beklemek",
+            "Hedef kitle belirtmemek",
+            "Çıktı formatını söylememek",
+            "İlk cevabı yeterli kabul etmek",
+            "Cevabı kontrol etmeden kullanmak",
+            "Şirket gizli bilgilerini paylaşmak",
+            "Kişisel verileri bilinçsiz kullanmak",
+            "Yanlış bilgileri müşteri iletişimine aktarmak",
+            "Gemini’yi uzman görüşünün yerine koymak",
+            "Her işi tek komutla yaptırmaya çalışmak",
+            "Google Workspace kullanım senaryolarını planlamamak",
+            "Prompt yazma mantığını öğrenmeden kullanmak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Gemini Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Gemini eğitimi, yapay zeka ve dijital dönüşüm sürecinin parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Gemini Eğitimi, Google Workspace Gemini Eğitimi ve Prompt Yazma Eğitimi",
+          "body": [
+            "Gemini eğitimi; Google Gemini eğitimi, kurumsal Gemini eğitimi, şirketlere Gemini eğitimi, Gemini prompt eğitimi, prompt yazma eğitimi, Gemini kullanım eğitimi, iş süreçlerinde Gemini kullanımı, Google Workspace Gemini eğitimi, Gmail Gemini kullanımı, Google Docs Gemini kullanımı, Google Sheets Gemini kullanımı, Google Meet Gemini kullanımı, satışta Gemini kullanımı, pazarlamada Gemini eğitimi, ihracatta Gemini kullanımı, CRM Gemini eğitimi ve e-ticarette Gemini kullanımı konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Gemini eğitimi nedir?",
+          "body": [
+            "Gemini eğitimi; Google Gemini’nin e-posta yazma, doküman hazırlama, tablo yorumlama, toplantı notu düzenleme, araştırma, satış mesajı oluşturma, pazarlama içeriği üretme, ihracat yazışmaları hazırlama, CRM müşteri takibi, e-ticaret ürün açıklaması ve günlük ofis süreçlerinde doğru, güvenli ve verimli kullanılmasını öğreten uygulamalı yapay zeka eğitimidir. {{appName}}, bireylere, ekiplerine ve şirketlere ihtiyaçlarına göre Gemini eğitimi sunar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Gemini Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "Gemini eğitimi kimler için uygundur? +",
+              "a": "Gemini eğitimi; Google Workspace kullanan şirketler, satış ekipleri, pazarlama ekipleri, ihracat ekipleri, CRM kullanıcıları, e-ticaret ekipleri, yöneticiler, KOBİ’ler ve Gemini’yi iş süreçlerinde kullanmak isteyen herkes için uygundur."
+            },
+            {
+              "q": "Gemini eğitimi uygulamalı mı yapılır? +",
+              "a": "Evet. Eğitim gerçek iş örnekleri üzerinden uygulamalı şekilde yapılabilir. E-posta, doküman, rapor, müşteri mesajı, ürün açıklaması ve içerik üretimi gibi örnekler üzerinde çalışılabilir."
+            },
+            {
+              "q": "Prompt yazma eğitimi veriliyor mu? +",
+              "a": "Evet. Eğitimde doğru prompt yazma, rol verme, bağlam oluşturma, hedef belirtme, ton seçme ve formatlı çıktı alma konuları detaylı şekilde anlatılır."
+            },
+            {
+              "q": "Google Workspace kullanan şirketler için uygun mu? +",
+              "a": "Evet. Gmail, Docs, Sheets, Drive ve Meet gibi Google Workspace araçlarıyla çalışan ekipler için Gemini kullanım senaryoları özel olarak planlanabilir."
+            },
+            {
+              "q": "Satış ekibi için Gemini eğitimi alabilir miyiz? +",
+              "a": "Evet. Satış ekipleri için müşteri e-postası, teklif takip mesajı, telefon araması senaryosu, LinkedIn mesajı, CRM notları ve müşteri takip süreçlerinde Gemini kullanımı anlatılabilir."
+            },
+            {
+              "q": "İhracat ekibi için Gemini eğitimi veriliyor mu? +",
+              "a": "Evet. İhracat ekipleri için İngilizce tanıtım maili, ürün açıklaması, B2B platform içerikleri, fuar sonrası takip mesajı, müşteri cevapları ve ihracat operasyon kontrol listeleri hazırlanabilir."
+            },
+            {
+              "q": "E-ticaret ürün açıklamaları için Gemini kullanılabilir mi? +",
+              "a": "Evet. Trendyol, Amazon, Etsy, eBay ve B2B platformlar için ürün açıklaması, ürün başlığı, kampanya metni ve müşteri soru cevapları hazırlamak için Gemini’den destek alınabilir."
+            },
+            {
+              "q": "Gemini eğitimi şirketimize özel hazırlanabilir mi? +",
+              "a": "Evet. Eğitim şirketinizin sektörü, departmanları, çalışan profili ve iş süreçlerine göre özelleştirilebilir."
+            },
+            {
+              "q": "Gemini kullanırken gizlilik konusu anlatılıyor mu? +",
+              "a": "Evet. Şirket verileri, müşteri bilgileri, kişisel veriler, ticari sırlar ve Gemini çıktılarının kontrol edilmesi konuları eğitimde özellikle ele alınır."
+            },
+            {
+              "q": "Gemini cevapları doğrudan kullanılabilir mi? +",
+              "a": "Hayır. Gemini çıktıları mutlaka kontrol edilmelidir. Özellikle güncel bilgi, hukuki, finansal, teknik veya müşteriyle paylaşılacak konularda insan kontrolü önemlidir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Gemini’yi Rastgele Kullanılan Bir Yapay Zeka Aracı Olmaktan Çıkaralım",
+        "body": "Gemini kullanmak istiyor ama doğru prompt yazmayı, Google ekosistemiyle birlikte kullanmayı, iş süreçlerinize uyarlamayı ve güvenli kullanım kurallarını bilmiyorsanız bu araçtan yeterince verim alamıyor olabilirsiniz. {{appName}} Gemini Eğitimi ile Gemini’yi e-posta, doküman, tablo, toplantı, satış, pazarlama, ihracat, CRM, e-ticaret, raporlama ve günlük ofis süreçlerinde nasıl kullanacağınızı uygulamalı olarak öğrenin.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

@@ -1,0 +1,192 @@
+{
+  "slug": "tradewheel-platform-yonetimi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 130,
+  "icon": "Globe",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "TradeWheel Platform Yönetimi | B2B Ürün Yayınlama, Firma Profili ve Alıcı Takibi",
+        "description": "TradeWheel platformunda B2B müşteri bulmak isteyen firmalar için firma profili düzenleme, İngilizce ürün yayınlama, ürün açıklaması hazırlama, alıcı mesajları, teklif talepleri ve CRM takip süreci desteği sunuyoruz.",
+        "ogTitle": "TradeWheel Platform Yönetimi | {{appName}}",
+        "ogDescription": "TradeWheel firma profili, İngilizce ürün yayınlama, alıcı mesajları, teklif talepleri ve CRM müşteri takibi süreçleri için profesyonel destek alın."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "TradeWheel Platform Yönetimi",
+        "lead": "TradeWheel üzerinde firma profiliniz var ama ürünlerinizi düzenli yayınlayamıyor, İngilizce açıklamalarınızı hazırlayamıyor, gelen alıcı taleplerini takip edemiyor veya platformu ihracat müşteri bulma sürecinize bağlayamıyor musunuz? B2B platformlarda yer almak tek başına yeterli değildir. Firma profilinizin güven vermesi, ürün sayfalarınızın yabancı alıcıya doğru bilgi sunması, İngilizce başlık ve açıklamaların net olması, ürün görsellerinin düzenli kullanılması, alıcı mesajlarının zamanında cevaplanması ve teklif taleplerinin CRM üzerinden takip edilmesi gerekir. {{appName}} olarak TradeWheel platformunda yer alan veya bu platformu ihracat müşteri bulma sürecinde kullanmak isteyen firmalara platform yönetimi desteği sunuyoruz. Amacımız, TradeWheel hesabınızı pasif bir firma kaydı olmaktan çıkarıp daha profesyonel bir B2B satış kanalına dönüştürmektir.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "TradeWheel Platform Yönetimi Nedir?",
+          "body": [
+            "TradeWheel platform yönetimi, TradeWheel üzerinde firma profilinin, ürün sayfalarının, İngilizce ürün açıklamalarının, ürün görsellerinin, kategori yapısının, alıcı mesajlarının, teklif taleplerinin ve müşteri takip sürecinin düzenli yönetilmesidir.",
+            "TradeWheel gibi B2B platformlarda alıcılar genellikle ürün, tedarikçi, üretici, ithalatçı, toptancı veya distribütör arayışıyla hareket eder. Bu nedenle firma profilinizin ve ürün sayfalarınızın yabancı alıcıya açık, güven verici ve ticari açıdan anlaşılır şekilde hazırlanması önemlidir.",
+            "{{appName}}, TradeWheel platform yönetimini yalnızca ürün yükleme işlemi olarak değil, ihracat müşteri bulma ve B2B satış takip sürecinin parçası olarak ele alır.",
+            "TradeWheel hesabınızı pasif bir firma kaydı olmaktan çıkarıp ürün yayınlama, alıcı mesajı takibi, teklif süreci ve CRM müşteri yönetimiyle desteklenen daha profesyonel bir B2B satış kanalına dönüştürmenize yardımcı oluyoruz."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "TradeWheel Platform Yönetimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "TradeWheel hesabı doğru yönetildiğinde firma profili, ürün sayfaları, İngilizce içerikler, alıcı mesajları, teklif talepleri ve CRM müşteri takibi daha düzenli ilerler.",
+            "Bu çalışma, TradeWheel hesabınızı yalnızca bir kayıt alanı olarak değil, ihracat satış sürecine bağlanan aktif bir B2B kanal olarak kullanmanıza yardımcı olur."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "TradeWheel Neden B2B Satış Sürecinde Kullanılabilir?",
+          "body": [
+            "TradeWheel, üretici, ihracatçı, tedarikçi ve alıcı firmaların bir araya geldiği B2B platformlardan biri olarak değerlendirilebilir. Özellikle yurt dışı müşterilere ulaşmak isteyen firmalar için dijital görünürlük ve ürün tanıtımı açısından destekleyici bir kanal olabilir.",
+            "Ancak bu tür platformlarda yalnızca hesap açmak yeterli değildir. Alıcı firmalar ürünlerinizi, açıklamalarınızı, firma profilinizi, iletişim hızınızı ve teklif yaklaşımınızı birlikte değerlendirir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "TradeWheel hesabınız var ama düzenli içerik, ürün yayını ve müşteri takibi yapılmıyorsa bu hizmet sürecinizi daha profesyonel hale getirmeye yardımcı olur.",
+          "items": [
+            { "title": "TradeWheel Hesabı Olan Firmalar", "body": "Hesabı olan ancak platformu aktif yönetemeyen firmalar için uygundur." },
+            { "title": "Ürün Yayınlamak İsteyen Üretici Şirketler", "body": "Ürünlerini B2B alıcılara İngilizce ve profesyonel şekilde sunmak isteyen üreticiler için uygundur." },
+            { "title": "İhracat Müşteri Bulmak İsteyen KOBİ’ler", "body": "TradeWheel hesabını ihracat satış süreciyle birlikte kullanmak isteyen KOBİ’ler için planlanabilir." },
+            { "title": "B2B Platformlarda Görünürlük İsteyen İşletmeler", "body": "Firma profili ve ürün sayfalarını yabancı alıcılar için güçlendirmek isteyen işletmelere uygundur." },
+            { "title": "İngilizce Ürün Açıklaması Hazırlamakta Zorlanan Firmalar", "body": "Ürün açıklamalarını B2B satış diline uygun hale getirmek isteyen firmalara uygundur." },
+            { "title": "Alıcı Mesajlarını Takip Etmek İsteyen Satış Ekipleri", "body": "Gelen alıcı mesajları, teklif talepleri ve numune istekleri düzenli takip edilebilir." },
+            { "title": "B2B Platform Hesabını CRM’e Bağlamak İsteyenler", "body": "TradeWheel üzerinden gelen müşteri adayları CRM üzerinde takip edilebilir." },
+            { "title": "Dijital Ürün Kataloğu Oluşturmak İsteyen Şirketler", "body": "Ürünlerini yurt dışı alıcılara düzenli bir katalog yapısıyla sunmak isteyen şirketler için uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "TradeWheel Platform Yönetimi Kapsamında Neler Yapıyoruz?",
+          "body": [
+            "TradeWheel platform yönetimi, firmanızın ürün yapısına, hedef pazarına ve mevcut hesap durumuna göre planlanabilir. Amaç, TradeWheel hesabınızı daha düzenli ve B2B satışa uygun hale getirmektir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "TradeWheel Platform Yönetiminde Hangi Alanlar İncelenir?",
+          "intro": "TradeWheel platform yönetimi; firma profili, İngilizce şirket tanıtımı, ürün grupları, kategori seçimi, ürün yayınlama, başlık, açıklama, görsel, anahtar kelime, MOQ, alıcı mesajları, teklif talepleri, CRM takibi ve düzenli platform kontrolüyle birlikte planlanır.",
+          "items": [
+            { "title": "Firma Profili Düzenleme", "body": "TradeWheel üzerinde firma profili, yabancı alıcının şirketinizi tanıdığı ilk alanlardan biridir. Bu alan eksik veya dağınık olduğunda alıcının güven duyması zorlaşabilir. Şirket adı, şirket tanıtımı ve ürün grupları; üretim veya tedarik kabiliyeti, hedef sektörler ve ihracat yaklaşımı; kalite, sertifika, ambalaj ve teslimat bilgileri; web sitesi bağlantısı, iletişim bilgileri, firma görselleri ve kurumsal tanıtım metni." },
+            { "title": "İngilizce Şirket Tanıtımı Hazırlama", "body": "B2B platformlarda İngilizce şirket tanıtımı çok önemlidir. Yabancı alıcı, firmanızın ne yaptığını, hangi ürünleri sunduğunu ve neden sizinle iletişime geçmesi gerektiğini net şekilde anlamalıdır. Şirketin faaliyet alanı, ürün grupları ve tedarik kapasitesi; hedef sektörler, ihracat deneyimi ve kalite yaklaşımı; ambalaj, teslimat, toptan satış ve distribütörlük yaklaşımı; teklif alma süreci ve iletişim yönlendirmesi." },
+            { "title": "Ürün Gruplarının Planlanması", "body": "TradeWheel hesabında ürünlerin dağınık şekilde yayınlanması yerine ürün grupları belirlenerek düzenli bir yapı kurulmalıdır. Ana ürün kategorileri ve alt ürün grupları; hedef müşteri profili ve sektörel kullanım alanları; ambalaj seçenekleri, model veya varyant yapısı; toptan satışa ve ihracata uygun ürünlerin belirlenmesi." },
+            { "title": "Ürün Kategori Seçimi", "body": "B2B platformlarda doğru kategori seçimi, ürünün doğru alıcıyla buluşması açısından önemlidir. Yanlış kategori, ürün görünürlüğünü ve alıcı ilgisini olumsuz etkileyebilir. Ürün tipi, sektörel kullanım alanı ve alıcının arama davranışı; rakip ürünlerin yer aldığı kategoriler; ana kategori, alt kategori ve teknik özellik uyumu; hedef pazar beklentisi, B2B satış modeli ve toptan satış uygunluğu." },
+            { "title": "TradeWheel Ürün Yayınlama", "body": "TradeWheel ürün yayınlama süreci yalnızca ürün adı ve görsel eklemekten ibaret değildir. Ürün sayfası, yabancı alıcının ürününüzü değerlendirdiği dijital satış alanıdır. Ürün adı, İngilizce ürün başlığı ve ürün kategorisi; ürün açıklaması, teknik özellikler ve kullanım alanları; ambalaj, MOQ, teslimat bilgileri ve ürün görselleri; toptan satış bilgileri, anahtar kelimeler ve teklif talep yönlendirmesi." },
+            { "title": "Ürün Başlığı Hazırlama", "body": "TradeWheel ürün başlığı, alıcının ürününüzü ilk gördüğü alanlardan biridir. Başlık hem ürünün ne olduğunu açık anlatmalı hem de B2B arama mantığına uygun hazırlanmalıdır. Ürün adı, ürün tipi, malzeme veya içerik bilgisi; kullanım alanı, ambalaj seçeneği, model veya ölçü bilgisi; hedef sektör, toptan satış vurgusu ve ihracat odaklı ürün tanımı; ürün grubuna ait anahtar kelime ve doğru başlık kurgusu." },
+            { "title": "İngilizce Ürün Açıklaması Hazırlama", "body": "TradeWheel üzerinde ürün açıklaması, yabancı alıcının ürününüzü doğru anlamasını sağlar. Açıklama yalnızca kısa ürün tanımı değil; ürünün ticari değerini anlatan B2B satış metni olarak hazırlanmalıdır. Ürün nedir, hangi sektörlerde kullanılır ve teknik özellikleri nelerdir? Ambalaj seçenekleri, MOQ ve üretim veya tedarik kapasitesi; özel etiket, paketleme ve teslimat süreci; teklif için gerekli bilgiler ve iletişim yönlendirmesi." },
+            { "title": "Anahtar Kelime Planlaması", "body": "TradeWheel ürün sayfalarında anahtar kelime planlaması dikkatli yapılmalıdır. Ürün adı, kullanım alanı, teknik özellikler ve alıcının arama şekli birlikte değerlendirilmelidir. İngilizce ürün adı, alternatif ürün adları ve teknik ürün ifadeleri; sektörel kullanım kelimeleri, toptan satış ve ihracat odaklı ifadeler; hedef alıcı arama ifadeleri ve rakip ürünlerde kullanılan kelimeler; ürün varyasyonları ve uzun kuyruklu arama ifadeleri." },
+            { "title": "Ürün Görseli ve Katalog Düzeni", "body": "B2B platformlarda ürün görselleri alıcı güveni açısından önemlidir. Görseller ürünün kalitesini, ambalajını, kullanımını ve teknik detaylarını desteklemelidir. Ana ürün görseli, ek ürün görselleri ve ambalaj görselleri; kullanım, teknik detay ve ürün varyasyon görselleri; katalog, üretim veya stok görselleri; görsel çözünürlüğü ve açıklamayla uyum kontrolü." },
+            { "title": "MOQ, Ambalaj ve Teslim Bilgileri", "body": "B2B alıcılar yalnızca ürüne değil, ticari şartlara da bakar. Minimum sipariş miktarı, ambalaj bilgisi, teslim süresi ve teklif süreci açık olmalıdır. Minimum sipariş miktarı, ambalaj türü, koli veya palet bilgisi; özel etiket, OEM veya private label imkânı; teslim süresi, üretim hazırlık süresi ve numune imkânı; ödeme, teklif süreci ve lojistik yaklaşımı." },
+            { "title": "Alıcı Mesajları Takibi", "body": "TradeWheel platformunda gelen alıcı mesajları düzenli takip edilmelidir. Cevaplanmayan veya geç cevaplanan mesajlar satış fırsatının kaybedilmesine neden olabilir. Talep edilen ürün, miktar, alıcının ülkesi ve firma bilgisi; teklif, numune, ambalaj, özel üretim veya etiket talepleri; teslimat soruları, fiyat beklentisi ve teknik bilgi soruları; iletişim bilgileri ve sonraki takip tarihi." },
+            { "title": "Teklif Taleplerinin Yönetimi", "body": "B2B platformlardan gelen alıcılar çoğu zaman fiyat, numune, katalog veya proforma talep edebilir. Bu talepler düzenli takip edilmezse satış fırsatları kaybedilebilir. Alıcı firma adı, ülke, ürün talebi ve talep edilen miktar; ambalaj tercihi, teslimat ülkesi ve özel ürün şartları; fiyatlandırma, teslim şekli, ödeme yaklaşımı ve numune durumu; teklif gönderim tarihi ve takip tarihi." },
+            { "title": "CRM ile TradeWheel Müşteri Takibi", "body": "TradeWheel üzerinden gelen müşteri adayları CRM’e aktarılmadığında takip süreci dağınık kalabilir. Hangi alıcı teklif istedi, hangi firma numune talep etti, hangi müşteri cevap bekliyor gibi bilgiler kayıt altına alınmalıdır. Firma adı, ülke, ilgili kişi, ürün talebi ve talep edilen miktar; e-posta, telefon, TradeWheel kaynak bilgisi ve mesaj tarihi; teklif durumu, numune talebi ve proforma durumu; takip tarihi, satış temsilcisi, satış aşaması ve sonraki aksiyon." },
+            { "title": "Platform Performansı ve Düzenli Kontrol", "body": "TradeWheel hesabı düzenli kontrol edilmelidir. Ürün sayfaları, gelen mesajlar, teklif talepleri, içerik güncellemeleri ve firma profili belirli aralıklarla incelenmelidir. Yayındaki ürünler, eksik ürün bilgileri ve güncellenecek ürünler; gelen mesajlar, cevap bekleyen alıcılar ve teklif talepleri; ürün görünürlüğü, anahtar kelime uyumu ve firma profili güncelliği; görsel, katalog düzeni, CRM’e aktarılacak müşteriler ve raporlama ihtiyacı." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "TradeWheel Platform Yönetimi Süreci Nasıl İlerler?",
+          "intro": "Süreç firmanızın ürünleri, hedef ülkeleri, mevcut TradeWheel hesabı, ihracat hedefleri ve platform yönetimi ihtiyacı değerlendirilerek başlar. Ardından firma profili, ürün kategorileri, İngilizce içerikler, ürün yayınları, alıcı mesajları ve CRM takip yapısı birlikte planlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Firmanızın ürünleri, hedef ülkeleri, mevcut TradeWheel hesabı, ihracat hedefleri ve platform yönetimi ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Hesap ve Firma Profili Analizi", "body": "Mevcut firma profili, şirket açıklaması, ürün grupları, görseller ve iletişim alanları incelenir." },
+            { "n": 3, "title": "Ürün ve Kategori Planı", "body": "Ürün grupları, kategori yapısı, ürün başlıkları, açıklamalar ve anahtar kelime planı oluşturulur." },
+            { "n": 4, "title": "İngilizce İçerik Hazırlığı", "body": "Firma tanıtımı, ürün açıklamaları, başlıklar, teknik bilgiler ve B2B alıcıya yönelik metinler hazırlanır." },
+            { "n": 5, "title": "Ürün Yayınlama ve Güncelleme", "body": "Ürünler TradeWheel hesabına düzenli şekilde yüklenir veya mevcut ürün sayfaları iyileştirilir." },
+            { "n": 6, "title": "Alıcı Mesajları ve Teklif Takibi", "body": "Gelen mesajlar, teklif talepleri, numune istekleri ve alıcı soruları takip edilir." },
+            { "n": 7, "title": "CRM Aktarımı", "body": "İlgilenen alıcılar CRM’e aktarılır. Teklif, proforma, numune ve takip süreçleri kayıt altına alınır." },
+            { "n": 8, "title": "Raporlama", "body": "Hesap durumu, ürünler, gelen talepler, cevaplanan mesajlar ve satış fırsatları düzenli şekilde raporlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "TradeWheel Platform Yönetiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Firma profiliniz daha profesyonel görünür",
+            "Ürünleriniz İngilizce ve B2B odaklı yayınlanır",
+            "Ürün başlıkları ve açıklamaları daha anlaşılır hale gelir",
+            "Yabancı alıcılar ürün bilgilerinizi daha kolay değerlendirir",
+            "Gelen alıcı mesajları daha düzenli takip edilir",
+            "Teklif talepleri satış sürecine alınır",
+            "Ürün sayfaları daha düzenli ve güven verici hale gelir",
+            "Anahtar kelime ve kategori yapısı daha dikkatli planlanır",
+            "CRM ile TradeWheel kaynaklı müşteri takibi yapılabilir",
+            "İhracat satış ekibi gelen talepleri daha net yönetir",
+            "Platform hesabı pasif kalmaz, düzenli kontrol edilir",
+            "B2B platform yönetimi ihracat stratejinizle bütünleşir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "TradeWheel Platform Yönetiminde Sık Yapılan Hatalar",
+          "items": [
+            "Firma profilini eksik bırakmak",
+            "Ürünleri yanlış veya yetersiz bilgilerle yayınlamak",
+            "Ürün başlıklarını zayıf hazırlamak",
+            "İngilizce ürün açıklamalarını yetersiz yazmak",
+            "Görselleri profesyonel kullanmamak",
+            "MOQ, ambalaj ve teslim bilgilerini belirtmemek",
+            "Anahtar kelime planlaması yapmamak",
+            "Gelen mesajlara geç cevap vermek",
+            "Teklif isteyen alıcıları CRM’e aktarmamak",
+            "Her ürüne aynı açıklama yapısını kullanmak",
+            "Platform hesabını düzenli kontrol etmemek",
+            "TradeWheel hesabını satış sürecinden bağımsız düşünmek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "TradeWheel Platform Yönetimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "TradeWheel platform yönetimi, ihracat müşteri bulma ve B2B platform yönetimi sürecinin bir parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "TradeWheel Platform Yönetimi, Ürün Yayınlama, Firma Profili ve B2B Müşteri Takibi",
+          "body": [
+            "TradeWheel platform yönetimi; TradeWheel hesap yönetimi, ürün yükleme, ürün yayınlama, B2B hesap yönetimi, firma profili düzenleme, ürün açıklaması hazırlama, İngilizce ürün açıklaması, alıcı mesajları takibi, teklif takibi, ihracat müşteri bulma ve CRM müşteri takibi süreçleri için planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "TradeWheel platform yönetimi nedir?",
+          "body": [
+            "TradeWheel platform yönetimi; TradeWheel üzerinde firma profilinin düzenlenmesi, İngilizce şirket tanıtımının hazırlanması, ürünlerin doğru kategori, başlık, açıklama, görsel, anahtar kelime, MOQ, ambalaj ve teslim bilgileriyle yayınlanması, gelen alıcı mesajlarının takip edilmesi ve teklif taleplerinin CRM üzerinden satış sürecine alınması hizmetidir. {{appName}}, TradeWheel hesabı olan ihracatçı firmaların B2B platform süreçlerini daha düzenli, profesyonel ve takip edilebilir şekilde yönetmesine yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "TradeWheel Platform Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "TradeWheel platform yönetimi kimler için uygundur?", "a": "TradeWheel platform yönetimi; TradeWheel hesabı olan, ürünlerini yurt dışı alıcılara sunmak isteyen, gelen alıcı mesajlarını takip etmek isteyen ve B2B platform sürecini profesyonel yönetmek isteyen firmalar için uygundur." },
+            { "q": "TradeWheel üzerinde ürün yayınlama desteği veriyor musunuz?", "a": "Evet. Ürün başlığı, kategori, açıklama, görsel, anahtar kelime, MOQ, ambalaj ve teslim bilgileriyle ürün yayınlama desteği verilebilir." },
+            { "q": "İngilizce ürün açıklamaları hazırlanıyor mu?", "a": "Evet. Ürünleriniz için yabancı alıcıların anlayabileceği, B2B satışa uygun, sade ve profesyonel İngilizce ürün açıklamaları hazırlanabilir." },
+            { "q": "TradeWheel firma profili düzenlenebilir mi?", "a": "Evet. Firma tanıtımı, ürün grupları, şirket açıklaması, görseller, kalite bilgileri ve iletişim alanları daha profesyonel hale getirilebilir." },
+            { "q": "TradeWheel alıcı mesajları takip ediliyor mu?", "a": "Evet. Gelen alıcı mesajları, teklif talepleri, numune istekleri ve ürün soruları düzenli takip edilebilir." },
+            { "q": "TradeWheel’den gelen müşteriler CRM’e aktarılabilir mi?", "a": "Evet. Firma adı, ülke, ilgili kişi, ürün talebi, miktar, teklif durumu, numune talebi ve takip tarihi gibi bilgiler CRM’e aktarılabilir." },
+            { "q": "TradeWheel hesabı satış garantisi verir mi?", "a": "Hayır. TradeWheel platform yönetimi satış garantisi vermez. Ancak hesabın daha düzenli, profesyonel ve takip edilebilir şekilde yönetilmesine yardımcı olur." },
+            { "q": "Ürün görselleri kontrol ediliyor mu?", "a": "Evet. Ürün görsellerinin ürünle uyumu, kalite durumu, ambalaj görselleri ve ürün sayfasındaki sunumu değerlendirilebilir." },
+            { "q": "TradeWheel ihracat müşteri bulma sürecine katkı sağlar mı?", "a": "Evet. Doğru yönetilen TradeWheel hesabı, yurt dışı alıcıların firmanızı ve ürünlerinizi inceleyebileceği bir B2B görünürlük alanı oluşturabilir." },
+            { "q": "TradeWheel platform yönetimi hangi hizmetlerle birlikte alınabilir?", "a": "TradeWheel platform yönetimi; B2B platformlarda ürün yükleme, Alibaba hesap yönetimi, Go4WorldBusiness platform yönetimi, Europages firma profili yönetimi, mail marketing, LinkedIn ile B2B müşteri bulma, CRM müşteri takibi ve ihracat operasyon yönetimiyle birlikte alınabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "TradeWheel Hesabınızı Pasif Bir Sayfa Olarak Bırakmayalım",
+        "body": "TradeWheel hesabınız var ama firma profiliniz, ürün sayfalarınız, İngilizce açıklamalarınız ve alıcı mesajlarınız düzenli takip edilmiyorsa B2B satış fırsatlarını kaçırıyor olabilirsiniz. {{appName}} TradeWheel Platform Yönetimi hizmeti ile firma profilinizi düzenleyelim, ürünlerinizi profesyonel şekilde yayınlayalım, gelen alıcı taleplerini takip edelim ve TradeWheel hesabınızı ihracat müşteri bulma sürecinizin aktif bir parçası haline getirelim.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

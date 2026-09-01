@@ -3,6 +3,7 @@ import { insertCandidate, updateSearchJob, getSearchJob } from '../_shared/db';
 import { getRulesForJob } from '../scan-rules.service';
 import { searchDirectory } from './directory.scraper';
 import { matchesIcp } from './icp.matcher';
+import { getActiveUserId } from '@/modules/_shared';
 import { analyzeCompanyWebsite } from './website.analyzer';
 import {
   buildSummary,
@@ -51,12 +52,13 @@ interface B2bJobParams {
 }
 
 export async function runB2bJob(jobId: string) {
-  const job = await getSearchJob(jobId);
+  const ownerUserId = getActiveUserId() ?? null;
+  const job = await getSearchJob(jobId, { ownerUserId });
   if (!job) throw new Error('JOB_NOT_FOUND');
   const params = job.params as B2bJobParams;
   await updateSearchJob(jobId, { status: 'running', started: true, errorMsg: null });
   try {
-    const icp = params.icp_id ? await getIcpProfile(params.icp_id) : null;
+    const icp = params.icp_id ? await getIcpProfile(params.icp_id, ownerUserId) : null;
     const hostKeywords = extractHostKeywords(icp?.definition);
     const leads = await searchDirectory(params.source ?? 'google_maps', icp, params);
     const icpDefinition = (icp?.definition ?? {}) as Record<string, unknown>;
@@ -70,12 +72,18 @@ export async function runB2bJob(jobId: string) {
     const trustQuery = params.source === 'europages' || params.source === 'tobb';
     for (const lead of leads) {
       if (!lead.name) continue;
-      const match = matchesIcp({ ...lead, country: params.country }, icpDefinition);
-      if (!match.matches && !trustQuery) continue;
       const analysis = lead.website ? await analyzeCompanyWebsite(lead.website) : null;
-      const directoryFloor = trustQuery ? 5 : 0;
+      const enrichedDescription = [
+        (lead as { description?: string | null }).description ?? null,
+        analysis?.summary ?? null,
+        ...(analysis?.sells ?? []),
+        analysis?.firm_type ?? null,
+      ].filter((s): s is string => typeof s === 'string' && s.length > 0).join(' ');
+      const match = matchesIcp({ ...lead, country: params.country, description: enrichedDescription }, icpDefinition);
+      if (!match.matches && !trustQuery) continue;
+      const directoryFloor = trustQuery ? 3 : 0;
       const icpScore = analysis?.is_b2b
-        ? Math.min(10, Math.max(match.score, directoryFloor) + 2)
+        ? Math.min(10, Math.max(match.score, directoryFloor) + 1.5)
         : Math.max(match.score, directoryFloor);
       const icpScoreAfterRules = Math.max(0, icpScore - rulePenalty);
       if (icpScoreAfterRules < 3) continue;

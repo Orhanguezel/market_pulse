@@ -1,5 +1,5 @@
-import OutreachDraftsPanel from '../../_components/outreach-drafts-panel';
+import { redirect } from 'next/navigation';
 
 export default function OutreachDraftsPage() {
-  return <OutreachDraftsPanel />;
+  redirect('/admin/market/lead-machine/outreach/drafts');
 }

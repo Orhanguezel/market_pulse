@@ -11,6 +11,14 @@ export type Profile = {
   city: string | null;
   country: string | null;
   postal_code: string | null;
+  sender_enabled: number | boolean | null;
+  sender_name: string | null;
+  sender_email: string | null;
+  sender_smtp_host: string | null;
+  sender_smtp_port: number | null;
+  sender_smtp_username: string | null;
+  sender_smtp_secure: number | boolean | null;
+  sender_smtp_configured: boolean;
   push_notifications: number | boolean | null;
   email_notifications: number | boolean | null;
   sms_notifications: number | boolean | null;
@@ -30,11 +38,18 @@ export type ProfileUpsertInput = Partial<
     | 'city'
     | 'country'
     | 'postal_code'
+    | 'sender_enabled'
+    | 'sender_name'
+    | 'sender_email'
+    | 'sender_smtp_host'
+    | 'sender_smtp_port'
+    | 'sender_smtp_username'
+    | 'sender_smtp_secure'
     | 'push_notifications'
     | 'email_notifications'
     | 'sms_notifications'
   >
->;
+> & { sender_smtp_password?: string | null };
 
 export type ProfileUpsertRequest = {
   profile: ProfileUpsertInput;

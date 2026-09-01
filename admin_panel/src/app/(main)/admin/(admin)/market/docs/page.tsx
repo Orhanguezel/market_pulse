@@ -39,8 +39,8 @@ const pages = [
     href: '/admin/market/targets',
     icon: Building2,
     purpose: 'Takip edilen bayi, rakip, distribütör ve potansiyel iş ortaklarının yönetildiği ekrandır.',
-    useFor: ['Firma ekleme ve düzenleme', 'Churn risk skorunu yenileme', 'Rakip web sitesi tarama', 'Toplu CSV içe aktarma', 'Paspas ERP müşteri verisini hedeflere senkronlama'],
-    notes: 'Website alanı dolu olan hedeflerde rakip tarama sinyal üretebilir. ERP bağlantılı kayıtlar `paspas_customer_id` ile eşleşir.',
+    useFor: ['Firma ekleme ve düzenleme', 'Churn risk skorunu yenileme', 'Rakip web sitesi tarama', 'Toplu CSV içe aktarma', 'ERP müşteri verisini hedeflere senkronlama'],
+    notes: 'Website alanı dolu olan hedeflerde rakip tarama sinyal üretebilir. ERP bağlantılı kayıtlar `external_customer_id` ile eşleşir.',
   },
   {
     title: 'Lead Pipeline',
@@ -118,7 +118,7 @@ const pages = [
 
 const setupItems = [
   { label: 'MySQL', text: 'MarketPulse ve Lead Machine tabloları seed/migration dosyalarıyla oluşturulmuş olmalı.' },
-  { label: 'Paspas ERP DB', text: 'ERP müşteri ve ürün importları için harici DB bağlantısı tanımlanmalı.' },
+  { label: 'ERP DB', text: 'ERP müşteri ve ürün importları için harici DB bağlantısı tanımlanmalı.' },
   { label: 'Scraper Service', text: 'Rakip tarama, B2B/fuar scraping ve enrichment için scraper servis URL/API key ayarları gerekir.' },
   { label: 'Oxylabs', text: 'Amazon ürün ve yorum taraması için Oxylabs kullanıcı adı ve şifresi gerekir.' },
   { label: 'AI Provider', text: 'Outreach, review analizi ve bazı özetler için OpenAI veya Groq API key gerekir.' },
@@ -127,7 +127,7 @@ const setupItems = [
 
 const flow = [
   'ICP profilini tanımla veya mevcut profili güncelle.',
-  'Hedef firmaları manuel, CSV veya Paspas ERP sync ile oluştur.',
+  'Hedef firmaları manuel, CSV veya ERP sync ile oluştur.',
   'Amazon/B2B/Fuar jobları ile lead adayı üret.',
   'Lead adaylarını incele, zenginleştir ve uygun olanları lead pipeline’a aktar.',
   'Rakip tarama ve manuel gözlemlerle sinyal üret.',
@@ -206,7 +206,7 @@ export default function MarketDocumentationPage() {
         <Link href="/admin/market/test-center" className="rounded-2xl border border-gm-border-soft bg-gm-surface/10 p-5 transition hover:border-gm-gold/50 hover:bg-gm-surface/20">
           <ClipboardCheck className="mb-4 size-5 text-gm-gold" />
           <h2 className="font-serif text-xl text-gm-text">Test Notları</h2>
-          <p className="mt-2 text-sm leading-6 text-gm-muted">Paspas Test Merkezi mantığıyla çalıştırılacak kalite kapıları ve komutlar.</p>
+          <p className="mt-2 text-sm leading-6 text-gm-muted">Market Pulse kalite kapıları ve komutları.</p>
         </Link>
         <Link href="/admin/market/developer-notes" className="rounded-2xl border border-gm-border-soft bg-gm-surface/10 p-5 transition hover:border-gm-gold/50 hover:bg-gm-surface/20">
           <Code2 className="mb-4 size-5 text-gm-gold" />
@@ -295,7 +295,7 @@ export default function MarketDocumentationPage() {
           <h2 className="font-serif text-2xl text-gm-text">Test Notları</h2>
         </div>
         <div className="rounded-2xl border border-gm-border-soft bg-gm-surface/10 p-5 text-sm leading-6 text-gm-muted">
-          Paspas admin panelindeki Test Merkezi yaklaşımı Market Pulse için kalite kapısı olarak uygulanır: önce izole Bun testleri, sonra tip kontrolü,
+          Test Merkezi yaklaşımı Market Pulse için kalite kapısı olarak uygulanır: önce izole Bun testleri, sonra tip kontrolü,
           son olarak build doğrulaması çalıştırılır. Gerçek dış servis testleri eklendiğinde önce snapshot/backup adımı zorunlu kabul edilmelidir.
         </div>
         <div className="grid gap-4 xl:grid-cols-2">

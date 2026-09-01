@@ -1,0 +1,123 @@
+{
+  "slug": "ihracat-operasyon-yonetimi",
+  "category": "ihracat-musteri-bulma",
+  "module": "service",
+  "order": 130,
+  "icon": "Settings",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "İhracat Operasyon Yönetimi | Proforma, Nakliye, Gümrük ve Sevkiyat Süreci Desteği",
+        "description": "İhracat siparişi oluştuğunda proforma, ödeme takibi, nakliye, gümrük evrakları, teslim şekli, sevkiyat planlaması ve müşteri bilgilendirme süreçlerinde ihracat operasyon yönetimi desteği sunuyoruz.",
+        "ogTitle": "İhracat Operasyon Yönetimi | {{appName}}",
+        "ogDescription": "Proforma, ödeme takibi, nakliye, gümrük evrakları, sevkiyat planlaması ve müşteri bilgilendirme süreçlerinde ihracat operasyon desteği sunuyoruz."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "İhracat Operasyon Yönetimi",
+        "lead": "Yurt dışı müşteriden sipariş almak ihracat sürecinin yalnızca başlangıcıdır. Siparişten sonra proforma, ödeme, nakliye, gümrük evrakları, teslim şekli ve sevkiyat süreci doğru yönetilmelidir. {{appName}} olarak ihracat siparişi oluştuğunda şirketlere operasyonel süreçlerde destek sağlıyoruz. Proforma hazırlığı, ödeme takibi, lojistik koordinasyonu, evrak kontrolü, sevkiyat planlaması ve müşteri bilgilendirme süreçlerinde yanınızda oluyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "İhracat Operasyon Yönetimi Nedir?",
+          "body": [
+            "İhracat operasyon yönetimi, yurt dışı müşteriden sipariş alındıktan sonra ürünün sevkiyata hazır hale getirilmesi, gerekli evrakların düzenlenmesi, ödeme ve nakliye süreçlerinin takip edilmesi ve müşteriye teslim sürecinin yönetilmesidir.",
+            "Bu süreçte küçük hatalar bile gecikmelere, müşteri memnuniyetsizliğine, yanlış belge düzenlemelerine veya operasyonel sorunlara neden olabilir. Bu nedenle ihracat operasyonlarının planlı, dikkatli ve takip edilebilir şekilde yönetilmesi gerekir.",
+            "{{appName}} olarak şirketlerin ihracat operasyon süreçlerini daha düzenli hale getirmesine yardımcı oluyoruz. Amacımız, siparişten sevkiyata kadar olan sürecin profesyonel şekilde ilerlemesini sağlamaktır.",
+            "Siparişten sevkiyata kadar takip edilebilir operasyon süreci: Proforma, ödeme, üretim hazırlığı, nakliye koordinasyonu, gümrük evrakları, sevkiyat planlaması ve müşteri bilgilendirme süreçleri daha düzenli şekilde takip edilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "İhracat Operasyon Yönetimi Kimler İçin Uygundur?",
+          "intro": "İhracat operasyon yönetimi, özellikle ilk ihracatını yapacak şirketler ve operasyon sürecinde profesyonel desteğe ihtiyaç duyan işletmeler için kritik öneme sahiptir.",
+          "items": [
+            { "title": "İhracata Yeni Başlayan Firmalar", "body": "İlk ihracat sürecini daha kontrollü yönetmek isteyen şirketler için uygundur." },
+            { "title": "Dış Ticaret Departmanı Olmayan KOBİ’ler", "body": "Operasyon sürecini dışarıdan profesyonel destekle yönetmek isteyen işletmelere uygundur." },
+            { "title": "Yurt Dışı Sipariş Alan Şirketler", "body": "Sipariş aldıktan sonra proforma, ödeme, nakliye ve evrak sürecinde destek sağlar." },
+            { "title": "Sevkiyat Sürecini Düzenlemek İsteyenler", "body": "Sevkiyat sürecinde hata riskini azaltmak isteyen firmalar için uygundur." },
+            { "title": "Profesyonel Müşteri İletişimi İsteyenler", "body": "İhracat müşterileriyle daha güven veren iletişim kurmak isteyen işletmelere destek olur." },
+            { "title": "Sipariş Yönetimi Desteği Arayanlar", "body": "Müşteri bulma sonrası sipariş yönetimi desteği almak isteyen firmalar için uygundur." },
+            { "title": "Evrak Sürecini Kontrol Etmek İsteyenler", "body": "Proforma, gümrük evrakları ve sevkiyat belgelerinin daha düzenli takibini sağlar." },
+            { "title": "Operasyonu Ölçülebilir Hale Getirmek İsteyenler", "body": "Sipariş, ödeme, evrak ve müşteri bilgilendirme sürecini kayıt altına almaya yardımcı olur." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "İhracat Operasyon Sürecinde Hangi Aşamaları Yönetiyoruz?",
+          "intro": "İhracat operasyon yönetimi hizmetimiz, sipariş oluştuğu andan sevkiyat tamamlanana kadar farklı aşamaları kapsar.",
+          "items": [
+            { "title": "Sipariş Bilgilerinin Kontrol Edilmesi", "body": "Süreç, müşteriden gelen sipariş bilgilerinin doğru anlaşılmasıyla başlar: müşteri firma bilgileri; ürün adı, ürün kodu ve sipariş miktarı; birim fiyat, toplam fiyat ve para birimi; teslim şekli, ödeme şekli ve sevkiyat ülkesi." },
+            { "title": "Proforma Invoice Hazırlığı", "body": "Proforma invoice, müşteriye sunulan temel ticari belgelerden biridir: satıcı ve alıcı firma bilgileri; ürün açıklamaları ve GTİP / HS kodu; miktar, birim fiyat ve toplam tutar; teslim şekli, ödeme şekli ve banka bilgileri." },
+            { "title": "Ödeme Süreci Takibi", "body": "Ödeme şekline göre süreç dikkatli takip edilir: peşin, kısmi ön ödeme veya bakiye ödeme; akreditifli, vesaik mukabili veya mal mukabili ödeme; banka bilgileri ve ödeme dekontu takibi; sevkiyat öncesi ödeme durumunun kontrolü." },
+            { "title": "Ürün Hazırlık ve Termin Takibi", "body": "Sipariş onaylandıktan sonra ürünlerin üretim, paketleme veya sevkiyata hazırlık süreci takip edilir: ürünlerin hazır olma durumu; ambalaj ve özel etiket talepleri; sevkiyat için tahmini hazır olma tarihi; depo veya üretim ekibiyle koordinasyon." },
+            { "title": "Nakliye ve Lojistik Koordinasyonu", "body": "Nakliye süreci ürünün türüne, teslim şekline ve hedef ülkeye göre planlanır: kara yolu, deniz yolu veya hava yolu seçenekleri; parsiyel veya komple yük seçenekleri; nakliye firmasıyla iletişim ve yükleme tarihi planlaması; müşteriye sevkiyat bilgisi iletme." },
+            { "title": "Gümrük Evraklarının Kontrolü", "body": "İhracat evrakları ürün, ülke ve teslim şekline göre kontrol edilir: commercial invoice ve packing list; konşimento veya taşıma belgesi; menşe şahadetnamesi, ATR veya EUR.1 belgesi; ürün veya ülkeye özel ek belgeler." },
+            { "title": "Teslim ve Ödeme Şekline Göre Süreç Yönetimi", "body": "Sipariş aşamasında teslim ve ödeme şartları netleştirilir: nakliyeyi kimin organize edeceği; sigorta sorumluluğunun kimde olacağı; masrafların hangi aşamaya kadar satıcıya ait olacağı; müşterinin talep ettiği belgeler." },
+            { "title": "Sevkiyat Planlaması", "body": "Ürünler hazır olduğunda ve ödeme süreci netleştiğinde sevkiyat planlaması yapılır: yükleme tarihi ve araç/konteyner bilgisi; çıkış noktası, varış ülkesi ve teslim adresi; tahmini varış tarihi; müşteriye iletilecek evraklar." },
+            { "title": "Müşteri Bilgilendirme Süreci", "body": "Profesyonel müşteri bilgilendirmesi güven oluşturur ve tekrar sipariş ihtimalini artırır: sipariş onayı ve ödeme durumu; ürün hazırlık süreci; tahmini sevkiyat tarihi ve yükleme bilgileri; evrak gönderimi ve tahmini varış bilgisi." },
+            { "title": "Operasyon Sonrası Takip", "body": "Sevkiyat sonrası süreç de takip edilir: teslimat teyidi ve memnuniyet kontrolü; eksik veya sorun olup olmadığının kontrolü; sonraki sipariş potansiyelinin değerlendirilmesi; müşteri iletişim kaydının CRM’e işlenmesi." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "İhracat Operasyonunda En Sık Yapılan Hatalar",
+          "intro": "İhracat operasyonlarında bazı hatalar gecikmelere, müşteri kaybına veya ticari risklere neden olabilir.",
+          "items": [
+            "Eksik sipariş bilgisiyle sürece başlamak",
+            "Proforma bilgilerini hatalı hazırlamak",
+            "Ödeme şartlarını netleştirmeden sevkiyat planlamak",
+            "Teslim şeklini doğru yorumlamamak",
+            "Evrakları son dakikaya bırakmak",
+            "Nakliye planını geç yapmak",
+            "Müşteriyi süreç hakkında yeterince bilgilendirmemek",
+            "Sevkiyat sonrası müşteri takibi yapmamak"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "İhracat Operasyon Yönetimi Süreci Nasıl İlerler?",
+          "intro": "Sipariş bilgilerinin alınmasından operasyon sonrası takibe kadar ihracat operasyon süreci adım adım planlanır ve takip edilir.",
+          "steps": [
+            { "n": 1, "title": "Sipariş Bilgilerinin Alınması", "body": "Müşteri talebi, ürün bilgileri, miktar, fiyat, teslim şekli ve ödeme şartları netleştirilir." },
+            { "n": 2, "title": "Proforma ve Ticari Belgelerin Hazırlanması", "body": "Siparişe uygun proforma ve gerekli ticari belgeler düzenlenir veya kontrol edilir." },
+            { "n": 3, "title": "Ödeme Sürecinin Takibi", "body": "Ödeme şartlarına göre müşteri ödeme süreci takip edilir ve şirket bilgilendirilir." },
+            { "n": 4, "title": "Ürün Hazırlık Kontrolü", "body": "Ürünlerin üretim, paketleme veya sevkiyata hazır olma süreci takip edilir." },
+            { "n": 5, "title": "Nakliye Planlaması", "body": "Teslim şekline göre nakliye süreci organize edilir veya nakliye firmasıyla koordinasyon sağlanır." },
+            { "n": 6, "title": "Evrak Kontrolü", "body": "Sevkiyat için gerekli belgeler kontrol edilir ve eksik belge riski azaltılır." },
+            { "n": 7, "title": "Sevkiyat ve Müşteri Bilgilendirme", "body": "Yükleme ve sevkiyat süreci takip edilir, müşteriye gerekli bilgiler iletilir." },
+            { "n": 8, "title": "Operasyon Sonrası Takip", "body": "Teslimat sonrası müşteri memnuniyeti ve tekrar sipariş potansiyeli değerlendirilir." }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "İhracat Operasyon Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "İhracat operasyon yönetimi hizmeti kimler için uygundur?", "a": "Bu hizmet; ihracata yeni başlayan firmalar, dış ticaret departmanı olmayan KOBİ’ler, yurt dışı sipariş alan üretici şirketler ve ihracat operasyonlarını daha düzenli yönetmek isteyen işletmeler için uygundur." },
+            { "q": "Sipariş oluştuğunda süreci siz yönetiyor musunuz?", "a": "Evet. Sipariş oluştuğunda proforma, ödeme takibi, ürün hazırlık süreci, nakliye planlaması, evrak kontrolü ve sevkiyat takibi konularında destek sağlıyoruz." },
+            { "q": "Proforma invoice hazırlıyor musunuz?", "a": "Evet. Sipariş bilgilerine göre proforma invoice hazırlanmasına veya mevcut proformanın kontrol edilmesine destek verilebilir." },
+            { "q": "Nakliye sürecinde destek veriyor musunuz?", "a": "Evet. Teslim şekline ve sevkiyat ülkesine göre nakliye sürecinin planlanması, nakliye firmalarıyla koordinasyon ve sevkiyat takibi konularında destek sağlanabilir." },
+            { "q": "Gümrük evraklarını hazırlıyor musunuz?", "a": "Gümrük evraklarının hazırlanması ve kontrolü sürecinde operasyonel destek verilebilir. Ürün, ülke ve sevkiyat türüne göre gerekli belgeler ayrıca değerlendirilir." },
+            { "q": "Ödeme sürecini takip ediyor musunuz?", "a": "Evet. Ödeme şekline göre müşterinin ödeme süreci takip edilir, dekont ve ödeme durumu kontrol edilir, sevkiyat öncesi gerekli kontroller yapılır." },
+            { "q": "Müşteri bilgilendirme sürecini yönetiyor musunuz?", "a": "Evet. Sipariş durumu, ürün hazırlığı, sevkiyat tarihi, nakliye bilgileri ve evrak gönderimi gibi konularda müşteriye profesyonel bilgilendirme yapılmasına destek olunur." },
+            { "q": "İlk ihracatını yapacak firmalar için uygun mu?", "a": "Evet. İlk ihracatını yapacak firmalar için ihracat operasyon yönetimi hizmeti oldukça uygundur. Sürecin daha kontrollü ve hatasız ilerlemesine yardımcı olur." },
+            { "q": "İhracat operasyon süreci CRM ile takip edilebilir mi?", "a": "Evet. Sipariş, proforma, ödeme, evrak, nakliye ve müşteri bilgilendirme süreçleri CRM veya özel takip tablosu üzerinden düzenli şekilde takip edilebilir." },
+            { "q": "Bu hizmet müşteri bulma hizmetinden ayrı mı?", "a": "Evet. Müşteri bulma hizmeti potansiyel alıcıya ulaşma sürecini kapsar. İhracat operasyon yönetimi ise sipariş oluştuğunda proforma, ödeme, nakliye, evrak ve sevkiyat sürecini kapsar. Ancak iki hizmet birlikte de sunulabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "İhracat Operasyon Sürecinizi Birlikte Planlayalım",
+        "body": "Yurt dışı siparişlerinizi daha düzenli yönetmek, proforma, ödeme, nakliye, gümrük evrakları ve sevkiyat süreçlerinde profesyonel destek almak istiyorsanız {{appName}} ile iletişime geçin. Siparişten sevkiyata kadar daha kontrollü bir yapı oluşturalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

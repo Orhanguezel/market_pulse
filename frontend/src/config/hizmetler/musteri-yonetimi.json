@@ -1,0 +1,199 @@
+{
+  "slug": "musteri-yonetimi",
+  "category": "urun-modulleri",
+  "module": "crm",
+  "order": 10,
+  "icon": "Users",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Müşteri Yönetimi - Verimli İşletme Çözümleri | isletmeniyonet.com",
+        "description": "Müşteri yönetimi yazılımı ile işletmenizi optimize edin. Müşteri ilişkilerinizi güçlendirin, satışlarınızı artırın. Ücretsiz deneyin!",
+        "ogTitle": "Müşteri Yönetimi - Verimli İşletme Çözümleri | {{appName}}",
+        "ogDescription": "Müşterilerinizi yönetin, satışlarınızı takip edin ve işletmenizi büyütün. Müşteri bilgilerini kolayca yönetin, satış geçmişlerini inceleyin ve ilişkilerinizi güçlendirin. İşletme yönetim uygulamamız şimdi ve her zaman ücretsiz. Tüm özellikleri sınırsız kullanın, ek ücret yok!"
+      },
+      "hero": {
+        "eyebrow": "Ürün Modülü",
+        "title": "Müşteri Yönetimi",
+        "lead": "Müşterilerinizi yönetin, satışlarınızı takip edin ve işletmenizi büyütün. Müşteri bilgilerini kolayca yönetin, satış geçmişlerini inceleyin ve ilişkilerinizi güçlendirin. İşletme yönetim uygulamamız şimdi ve her zaman ücretsiz. Tüm özellikleri sınırsız kullanın, ek ücret yok!",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Nasıl çalışır?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Öne Çıkan Özellikler",
+          "items": [
+            {
+              "title": "Kapsamlı Müşteri Yönetimi",
+              "body": "Müşteri bilgilerini ekleyin, güncelleyin ve satış geçmişlerini kolayca takip edin."
+            },
+            {
+              "title": "Etkili Satış Yönetimi",
+              "body": "Ürünleri ekleyin, satışları gerçekleştirin ve geçmiş satışları analiz edin."
+            },
+            {
+              "title": "Detaylı Raporlama",
+              "body": "Satış performansınızı analiz edin, müşteri davranışlarını inceleyin ve işletmenizi büyütün."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Nasıl Çalışır?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Müşteri Ekleme",
+              "body": "Müşterilerinizi bir kez kaydedin, tekrar kaydetmenize gerek kalmasın. Tüm müşteri bilgileriniz her zaman elinizin altında."
+            },
+            {
+              "n": 2,
+              "title": "Ürün Ekleme",
+              "body": "Ürünlerinizi kolayca ekleyin, stok takibi yapın. Detaylı ürün bilgileri ile satış yönetimini basitleştirin."
+            },
+            {
+              "n": 3,
+              "title": "Satış İşlemleri",
+              "body": "Ürünlerinizi müşterilerinize satın, tüm satış geçmişinizi kolayca inceleyin. Satış performansınızı anında görüntüleyin."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Sıkça Sorulan Sorular",
+          "items": [
+            {
+              "q": "Sistemin kullanımı kolay mı?",
+              "a": "Evet, sistemimiz kullanıcı dostu bir arayüze sahiptir. Ayrıca, kapsamlı eğitim videoları ve canlı destek hizmetimizle kullanıcılarımıza tam destek sağlıyoruz."
+            },
+            {
+              "q": "Mevcut sistemlerimizle entegre edilebilir mi?",
+              "a": "Evet, birçok popüler muhasebe ve e-ticaret platformu ile entegrasyon sağlayabiliyoruz. Özel entegrasyonlar için ekibimizle iletişime geçin."
+            },
+            {
+              "q": "Müşteri verilerinin güvenliği nasıl sağlanıyor?",
+              "a": "Müşteri verileriniz, en son güvenlik protokolleri ve şifreleme teknolojileri kullanılarak korunmaktadır. Düzenli güvenlik denetimleri ve yedeklemeler ile veri güvenliğini en üst düzeyde tutuyoruz."
+            },
+            {
+              "q": "Mobil cihazlardan erişim mümkün mü?",
+              "a": "Evet, sistemimiz tamamen mobil uyumludur. Akıllı telefonunuz veya tabletinizden müşteri yönetimi işlemlerinizi kolayca gerçekleştirebilirsiniz."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Müşteri ve Satış Yönetiminizi Optimize Edin",
+        "body": "Müşteri ilişkilerinizi güçlendirin, satışlarınızı artırın ve işletmenizi büyütün.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "seo": {
+        "title": "Sales and Customer Management - Efficient Business Solutions | isletmeyonetim.com",
+        "description": "Optimize your business with customer and sales management software. Strengthen your customer relationships, increase your sales. Try it for free!",
+        "ogTitle": "Sales and Customer Management - Efficient Business Solutions | {{appName}}",
+        "ogDescription": "Manage your customers, track your sales, and grow your business. Easily manage customer information, review sales history, and strengthen your relationships. Our business management application is free now and always. Use all features unlimitedly, no additional fees!"
+      },
+      "hero": {
+        "eyebrow": "Product Module",
+        "title": "Customer and Sales Management",
+        "lead": "Manage your customers, track your sales, and grow your business. Easily manage customer information, review sales history, and strengthen your relationships. Our business management application is free now and always. Use all features unlimitedly, no additional fees!",
+        "primaryCTA": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "How it works?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "cards",
+          "heading": "Featured Characteristics",
+          "items": [
+            {
+              "title": "Comprehensive Customer Management",
+              "body": "Add and update customer information, and easily track sales history."
+            },
+            {
+              "title": "Effective Sales Management",
+              "body": "Add products, complete sales, and analyze past sales."
+            },
+            {
+              "title": "Detailed Reporting",
+              "body": "Analyze your sales performance, examine customer behaviors, and grow your business."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "How Does It Work?",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Adding Customers",
+              "body": "Register your customers once, and you won't need to register them again. All your customer information is always at your fingertips."
+            },
+            {
+              "n": 2,
+              "title": "Adding Products",
+              "body": "Easily add your products and track inventory. Simplify sales management with detailed product information."
+            },
+            {
+              "n": 3,
+              "title": "Sales Transactions",
+              "body": "Sell your products to your customers, easily review all your sales history. View your sales performance instantly."
+            }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Frequently Asked Questions",
+          "items": [
+            {
+              "q": "Is the system easy to use?",
+              "a": "Yes, our system has a user-friendly interface. Additionally, we provide full support to our users with comprehensive training videos and live support service."
+            },
+            {
+              "q": "Can it be integrated with our existing systems?",
+              "a": "Yes, we can provide integration with many popular accounting and e-commerce platforms. Contact our team for custom integrations."
+            },
+            {
+              "q": "How is customer data security ensured?",
+              "a": "Your customer data is protected using the latest security protocols and encryption technologies. We maintain the highest level of data security with regular security audits and backups."
+            },
+            {
+              "q": "Is access from mobile devices possible?",
+              "a": "Yes, our system is fully mobile-compatible. You can easily perform your customer and sales management operations from your smartphone or tablet."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Optimize Your Customer and Sales Management",
+        "body": "Strengthen your customer relationships, increase your sales, and grow your business.",
+        "button": {
+          "label": "Get a Quote",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

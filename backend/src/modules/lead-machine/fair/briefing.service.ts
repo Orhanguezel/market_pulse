@@ -1,4 +1,5 @@
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { getCandidate, type LeadCandidate } from '../_shared/db';
 import { listCandidateEnrichment } from '../enrichment/enrichment.service';
 
@@ -124,12 +125,15 @@ export async function generateFairBriefingPdf(candidateIds: string[]) {
 }
 
 export async function listFairBriefingCandidateIdsForDay(_date: string) {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
     `SELECT id FROM lead_candidates
-     WHERE channel = 'trade_fair'
+     WHERE tenant_key = ?
+       AND channel = 'trade_fair'
        AND status IN ('approved', 'favorite')
      ORDER BY lead_score DESC, created_at DESC
      LIMIT 100`,
+    [tenantKey],
   );
   return (rows as Array<{ id: string }>).map((row) => row.id);
 }

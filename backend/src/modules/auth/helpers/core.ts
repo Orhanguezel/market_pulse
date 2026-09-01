@@ -2,6 +2,8 @@ import type { FastifyInstance, FastifyRequest, FastifyReply } from 'fastify';
 import { randomUUID } from 'crypto';
 import bcrypt from 'bcryptjs';
 import { verify as argonVerify } from 'argon2';
+import type { RowDataPacket } from 'mysql2';
+import { pool } from '@/db/client';
 import { env } from '../../../core/env';
 import { repoCreateRefreshToken } from '../repository';
 
@@ -11,6 +13,9 @@ export interface JWTPayload {
   sub: string;
   email?: string;
   role?: Role;
+  isSuperAdmin?: boolean;
+  tenants?: string[];
+  defaultTenant?: string | null;
   purpose?: 'password_reset';
   iat?: number;
   exp?: number;
@@ -22,6 +27,7 @@ export interface JWTLike {
 }
 
 type UserRow = { id: string; email: string | null; [k: string]: unknown };
+type TenantRoleRow = RowDataPacket & { tenant_key: string | null };
 
 /* -------------------- JWT -------------------- */
 
@@ -76,13 +82,35 @@ export function clearAuthCookies(reply: FastifyReply) {
 
 /* -------------------- Token Issue -------------------- */
 
-export async function issueTokens(app: FastifyInstance, u: UserRow, role: Role) {
-  const jwt = getJWT(app);
-  const access = jwt.sign(
-    { sub: u.id, email: u.email ?? undefined, role },
-    { expiresIn: `${ACCESS_MAX_AGE}s` },
+async function getUserTenantKeys(userId: string): Promise<string[]> {
+  const [rows] = await pool.execute<TenantRoleRow[]>(
+    'SELECT tenant_key FROM tenant_user_roles WHERE user_id = ? ORDER BY created_at ASC',
+    [userId],
   );
+  return rows
+    .map((row) => row.tenant_key?.trim())
+    .filter((tenantKey): tenantKey is string => Boolean(tenantKey));
+}
 
+async function buildAccessPayload(u: UserRow, role: Role): Promise<JWTPayload> {
+  const tenants = await getUserTenantKeys(u.id);
+  return {
+    sub: u.id,
+    email: u.email ?? undefined,
+    role,
+    isSuperAdmin: role === 'admin',
+    tenants,
+    defaultTenant: tenants[0] ?? env.TENANT_KEY ?? null,
+  };
+}
+
+export async function issueAccessToken(app: FastifyInstance, u: UserRow, role: Role): Promise<string> {
+  const jwt = getJWT(app);
+  return jwt.sign(await buildAccessPayload(u, role), { expiresIn: `${ACCESS_MAX_AGE}s` });
+}
+
+export async function issueTokens(app: FastifyInstance, u: UserRow, role: Role) {
+  const access = await issueAccessToken(app, u, role);
   const jti = randomUUID();
   const refreshRaw = `${jti}.${randomUUID()}`;
   await repoCreateRefreshToken(u.id, refreshRaw);

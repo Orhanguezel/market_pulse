@@ -1,0 +1,1 @@
+export { registerTenants } from './router';

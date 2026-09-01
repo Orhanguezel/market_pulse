@@ -1,0 +1,378 @@
+{
+  "slug": "b2b-platformlarda-urun-yukleme",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 50,
+  "icon": "Upload",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "B2B Platformlarda Ürün Yükleme | Alibaba, TradeWheel, Go4WorldBusiness ve Europages Ürün Yayınlama",
+        "description": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi B2B platformlarda ürün yükleme, İngilizce ürün açıklaması, kategori seçimi, görsel düzeni, MOQ, ambalaj ve teklif yönlendirme süreçlerinde destek sunuyoruz.",
+        "ogTitle": "B2B Platformlarda Ürün Yükleme | {{appName}}",
+        "ogDescription": "Alibaba, TradeWheel, Go4WorldBusiness ve Europages gibi B2B platformlarda ürünlerinizi İngilizce başlık, açıklama, kategori, görsel, MOQ, ambalaj ve teklif yönlendirmesiyle profesyonel şekilde yayınlayın."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "B2B Platformlarda Ürün Yükleme",
+        "lead": "Alibaba, TradeWheel, Go4WorldBusiness veya Europages gibi B2B platformlarda ürünlerinizi yayınlamak istiyor ama İngilizce ürün başlığı, açıklama, kategori, görsel, teknik bilgi, MOQ, ambalaj ve teslim bilgilerini nasıl hazırlayacağınızı bilmiyor musunuz? B2B platformlarda ürün yüklemek yalnızca ürün adı ve görsel eklemekten ibaret değildir. Yurt dışı alıcıların ürününüzü anlaması, güven duyması ve teklif istemesi için ürün sayfalarının doğru hazırlanması gerekir. {{appName}} olarak ihracat yapmak isteyen firmalara B2B platformlarda ürün yükleme desteği sunuyoruz. Ürün başlığı, İngilizce açıklama, kategori seçimi, teknik bilgiler, kullanım alanları, ambalaj bilgileri, minimum sipariş miktarı, ürün görselleri ve teklif yönlendirme alanlarını daha profesyonel hale getirmenize yardımcı oluyoruz.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "B2B Platformlarda Ürün Yükleme Nedir?",
+          "body": [
+            "B2B platformlarda ürün yükleme, şirket ürünlerinin Alibaba, TradeWheel, Go4WorldBusiness, Europages ve benzeri B2B platformlarda yabancı alıcılara uygun şekilde yayınlanmasıdır.",
+            "Bu süreçte ürün adı, İngilizce başlık, kategori, açıklama, teknik özellikler, görseller, ambalaj, minimum sipariş miktarı, teslim süresi ve teklif alma yönlendirmesi birlikte hazırlanmalıdır.",
+            "{{appName}}, B2B platformlarda ürün yükleme sürecini yalnızca teknik veri girişi olarak değil, ihracat müşteri bulma ve dijital B2B satış sürecinin önemli bir parçası olarak ele alır.",
+            "Ürünlerinizi yabancı alıcıya güven veren sayfalarla sunun",
+            "Amacımız, ürünlerinizi B2B platformlarda dağınık ve eksik bilgilerle yayınlamak yerine, yabancı alıcıya güven veren, anlaşılır ve teklif almaya uygun ürün sayfaları oluşturmaktır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B Ürün Yükleme Süreci Hangi Sorulara Cevap Verir?",
+          "body": [
+            "B2B platformlarda ürün sayfası, yabancı alıcının ürününüzü değerlendirdiği dijital satış alanıdır. Bu nedenle ürünün kategori, başlık, açıklama, teknik bilgi, görsel, MOQ ve teklif yönlendirmesi birlikte planlanmalıdır.",
+            "Ürün sayfanız doğru hazırlanırsa alıcının ürünü anlaması, firmanıza güven duyması ve teklif talep etmesi kolaylaşır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B Platformlarda Ürün Sayfası Neden Önemlidir?",
+          "body": [
+            "Yurt dışı alıcılar B2B platformlarda ürün ararken çok sayıda tedarikçiyle karşılaşır. Bu nedenle ürün sayfanızın net, güven verici ve ticari bilgi açısından yeterli olması gerekir.",
+            "Doğru hazırlanmış bir ürün sayfası, firmanızın daha profesyonel görünmesini sağlar, ürünün daha kolay anlaşılmasına yardımcı olur ve teklif talebi alma ihtimalini destekler.",
+            "Eksik hazırlanmış bir ürün sayfasında alıcı:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Hangi B2B Platformlarda Ürün Yükleme Desteği Verilebilir?",
+          "intro": "B2B platformlarda ürün yükleme desteği, firmanın hedef pazarına ve platform tercihine göre planlanabilir. Her platformun ürün yükleme mantığı, kategori yapısı, görsel alanları ve açıklama formatı farklı olabilir.",
+          "items": [
+            {
+              "title": "Alibaba",
+              "body": "B2B ürün yayınlama, ürün başlığı, açıklama, MOQ, ambalaj ve teklif yönlendirmesi hazırlanabilir."
+            },
+            {
+              "title": "TradeWheel",
+              "body": "Firma profiliyle uyumlu ürün grupları ve İngilizce ürün açıklamaları planlanabilir."
+            },
+            {
+              "title": "Go4WorldBusiness",
+              "body": "Alıcı taleplerine uygun ürün sunumu, teknik bilgi ve teklif süreci kurgulanabilir."
+            },
+            {
+              "title": "Europages",
+              "body": "Firma profili, ürün grupları, kategori düzeni ve İngilizce ürün açıklamaları güçlendirilebilir."
+            },
+            {
+              "title": "B2B Firma Rehberleri",
+              "body": "Firma ve ürün bilgileriniz farklı B2B rehber yapılarına uygun şekilde düzenlenebilir."
+            },
+            {
+              "title": "Sektörel B2B Platformlar",
+              "body": "Sektöre özel platformlarda ürün yayınlama alanları ve kategori yapısı planlanabilir."
+            },
+            {
+              "title": "Dijital Katalog Alanları",
+              "body": "Yurt dışı alıcıların inceleyebileceği dijital katalog ve ürün listeleme yapısı hazırlanabilir."
+            },
+            {
+              "title": "İhracat Odaklı Ürün Yayınlama Alanları",
+              "body": "Ürünleriniz ihracat, toptan satış ve B2B teklif alma yaklaşımına uygun şekilde hazırlanabilir."
+            }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Ürünleriniz var ama B2B platformlarda doğru şekilde sunulmuyorsa, potansiyel alıcılar ürününüzü yeterince güçlü değerlendiremeyebilir.",
+          "items": [
+            {
+              "title": "Alibaba’da Ürün Yayınlamak İsteyen Üreticiler",
+              "body": "Ürünlerini Alibaba üzerinde daha profesyonel yayınlamak isteyen üreticiler için uygundur."
+            },
+            {
+              "title": "TradeWheel Ürün Listeleme İsteyen Şirketler",
+              "body": "TradeWheel üzerinde ürünlerini İngilizce ve B2B odaklı sunmak isteyen firmalara uygundur."
+            },
+            {
+              "title": "Go4WorldBusiness Kullanan İhracatçılar",
+              "body": "Alıcı taleplerine görünmek ve ürün sayfalarını güçlendirmek isteyen ihracatçılar için uygundur."
+            },
+            {
+              "title": "Europages Profilini Güçlendirmek İsteyenler",
+              "body": "Europages profilinde ürün gruplarını ve açıklamalarını düzenlemek isteyen firmalara uygundur."
+            },
+            {
+              "title": "İngilizce Ürün Açıklaması Hazırlamakta Zorlananlar",
+              "body": "Ürünlerini yabancı alıcıya net, sade ve profesyonel İngilizceyle anlatmak isteyen işletmeler için uygundur."
+            },
+            {
+              "title": "B2B Platformlarda Hesap Açmış Firmalar",
+              "body": "Hesabı olan ancak ürünlerini henüz yüklememiş veya eksik yüklemiş şirketler için uygundur."
+            },
+            {
+              "title": "Mevcut Ürün Sayfalarını Güçlendirmek İsteyenler",
+              "body": "Daha önce yüklenmiş ürünleri başlık, açıklama, kategori, görsel ve teknik bilgi açısından geliştirmek isteyenlere uygundur."
+            },
+            {
+              "title": "İhracat Müşteri Bulmayı Desteklemek İsteyenler",
+              "body": "Ürün yayınlama çalışmasını mail marketing, LinkedIn ve CRM takibiyle birleştirmek isteyen firmalara uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B Platformlarda Ürün Yükleme Kapsamında Neler Yapıyoruz?",
+          "body": [
+            "B2B platformlarda ürün yükleme hizmeti, firmanızın ürünlerine, hedef pazarına ve mevcut içerik durumuna göre planlanabilir. Bu yapı, ürünlerinizi platformlara yalnızca eklemekle kalmaz; B2B alıcıya daha profesyonel sunmanıza yardımcı olur."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "B2B Platformlarda Ürün Yükleme Sürecinde Hangi Alanlar İncelenir?",
+          "intro": "Ürün yükleme çalışması; ürün bilgisi, ürün grubu, kategori, İngilizce başlık, açıklama, teknik bilgi, kullanım alanı, MOQ, ambalaj, teslim bilgisi, görsel, anahtar kelime, yayın sonrası kontrol ve CRM takibiyle birlikte planlanır.",
+          "items": [
+            {
+              "title": "Ürün Bilgilerinin Toplanması",
+              "body": "Ürün yükleme sürecinin ilk adımı ürün bilgilerinin düzenli şekilde toplanmasıdır. Eksik ürün bilgileriyle ürün yüklemek, sayfanın zayıf görünmesine neden olabilir. Bu kapsamda: Ürün adı, ürün grubu, teknik özellikler ve kullanım alanları; Malzeme, içerik, ölçü, model, renk veya varyant bilgileri; Ambalaj, MOQ, üretim kapasitesi ve teslim süresi; Ürün görselleri, sertifika, kalite bilgileri ve teklif için gerekli bilgiler."
+            },
+            {
+              "title": "Ürün Gruplarının Planlanması",
+              "body": "B2B platformlarda ürünlerin rastgele yüklenmesi yerine ürün grupları belirlenerek düzenli bir yapı kurulmalıdır. Bu planlama sayesinde alıcı firmanızın sunduğu ürünleri daha kolay anlayabilir. Bu kapsamda: Ana ürün kategorileri, alt ürün grupları ve benzer ürünler; Tamamlayıcı ürünler ve toptan satışa uygun ürünler; İhracat potansiyeli yüksek ürünler ve hedef sektörlere göre ürün grupları; Platforma göre öncelikli ürünler ve ambalaj tipine göre ürün grupları."
+            },
+            {
+              "title": "Kategori Seçimi",
+              "body": "B2B platformlarda doğru kategori seçimi ürünün doğru alıcıyla buluşmasına yardımcı olur. Yanlış kategori, ürünün görünürlüğünü ve alıcı ilgisini zayıflatabilir. Bu kapsamda: Ürün tipi, sektörel kullanım alanı ve ana kategori uyumu; Alt kategori, alıcının arama davranışı ve rakip ürünlerin kategori yapısı; Ürün teknik özellikleri, ambalaj yapısı ve hedef pazar beklentisi; B2B satış modeli ve toptan satış uygunluğu."
+            },
+            {
+              "title": "İngilizce Ürün Başlığı Hazırlama",
+              "body": "B2B platformlarda ürün başlığı, alıcının ürününüzü ilk gördüğü alanlardan biridir. Başlık hem ürünün ne olduğunu anlatmalı hem de arama mantığına uygun hazırlanmalıdır. Bu kapsamda: Ürün adı, ürün tipi, malzeme veya içerik bilgisi; Kullanım alanı, ambalaj seçeneği, model veya ölçü bilgisi; Hedef sektör, toptan satış vurgusu ve ihracat odaklı ürün tanımı; Ürün grubuna ait anahtar kelime ve yanıltıcı ifadelerden kaçınma."
+            },
+            {
+              "title": "İngilizce Ürün Açıklaması Hazırlama",
+              "body": "B2B platformlarda ürün açıklaması yabancı alıcının ürünü doğru anlaması için kritik öneme sahiptir. Açıklama yalnızca kısa tanım olmamalı; ürünün ticari değerini, kullanım alanını ve teklif sürecini desteklemelidir. Bu kapsamda: Ürün nedir, hangi sektörlerde kullanılır ve temel özellikleri nelerdir?; Teknik bilgiler, ambalaj seçenekleri ve minimum sipariş miktarı; Üretim veya tedarik kapasitesi, özel etiket ve paketleme imkânı; Teslim süreci, teklif için gerekli bilgiler ve alıcının iletişime geçme nedeni."
+            },
+            {
+              "title": "Teknik Özelliklerin Düzenlenmesi",
+              "body": "B2B alıcılar ürünün teknik detaylarını görmek ister. Özellikle sanayi, gıda, ambalaj, yapı malzemeleri, makine, tekstil, kimyasal veya teknik ürünlerde bu bilgiler çok önemlidir. Bu kapsamda: Ürün ölçüleri, ağırlık, malzeme, içerik ve kapasite; Model, renk seçenekleri, kullanım alanı ve uyumluluk bilgisi; Ambalaj ölçüleri, koli, palet, standart ve sertifika bilgileri; Raf ömrü, saklama koşulları, üretim toleransları ve özel üretim seçenekleri."
+            },
+            {
+              "title": "Kullanım Alanlarının Belirtilmesi",
+              "body": "Yabancı alıcı ürünün hangi sektörlerde ve hangi amaçlarla kullanılabileceğini görmek ister. Kullanım alanları açık yazıldığında ürünün ticari değeri daha iyi anlaşılır. Bu kapsamda: Hedef sektörler ve ürünün kullanıldığı uygulamalar; B2B alıcı türleri, toptan satış kanalları ve distribütörlere uygunluk; Market, fabrika veya endüstriyel kullanım alanları; Perakende, toplu satış, özel proje ve özel üretim imkanları."
+            },
+            {
+              "title": "MOQ ve Ambalaj Bilgilerinin Hazırlanması",
+              "body": "B2B satışta alıcılar minimum sipariş miktarı ve ambalaj bilgilerini görmek ister. Bu bilgiler eksikse alıcı teklif istemeden sayfadan ayrılabilir. Bu kapsamda: Minimum sipariş miktarı, koli içi adet, palet ve konteyner bilgisi; Ambalaj türü, özel etiket, OEM ve private label imkânı; Numune gönderimi, toplu sipariş yapısı ve üretim hazırlık süresi; Teslimat yaklaşımı ve ticari ürün sunumu."
+            },
+            {
+              "title": "Teslim Süreci ve Teklif Yönlendirmesi",
+              "body": "B2B platformlarda ürün sayfası alıcıyı teklif istemeye yönlendirmelidir. Bu nedenle teslim süreci, teklif için gerekli bilgiler ve iletişim yönlendirmesi açık olmalıdır. Bu kapsamda: Talep edilen ürün, talep edilen miktar ve teslim ülkesi; Ambalaj tercihi, özel etiket ihtiyacı ve numune talebi; Teknik şartname, hedef teslim süresi ve iletişim bilgileri; Teklif alma yönlendirmesi ve doğru bilgi isteme yapısı."
+            },
+            {
+              "title": "Ürün Görsellerinin Kontrolü",
+              "body": "B2B platformlarda görseller ürün sayfasının güven veren en önemli alanlarından biridir. Zayıf veya eksik görseller ürünün profesyonel görünmesini engelleyebilir. Bu kapsamda: Ana ürün görseli, ek ürün görselleri, ambalaj ve kullanım görselleri; Teknik detay görselleri, ürün varyasyonları ve katalog görselleri; Üretim veya stok görselleri, görsel çözünürlüğü ve açıklama uyumu; Ürünü yanıltıcı göstermeme ve alıcının ürünü anlamasını kolaylaştırma."
+            },
+            {
+              "title": "Anahtar Kelime Planlaması",
+              "body": "B2B platformlarda ürünlerin doğru aramalarda görünmesi için anahtar kelime planlaması dikkatli yapılmalıdır. Ürün adı, teknik ifadeler, kullanım alanları ve hedef alıcı arama davranışı birlikte değerlendirilmelidir. Bu kapsamda: İngilizce ürün adı, alternatif ürün adları ve teknik ürün ifadeleri; Sektörel kullanım kelimeleri, toptan satış kelimeleri ve ihracat odaklı ifadeler; Hedef alıcı arama ifadeleri ve rakip ürünlerde kullanılan kelimeler; Ürün varyasyonları ve uzun kuyruklu arama ifadeleri."
+            },
+            {
+              "title": "Platforma Uygun Ürün Yayınlama",
+              "body": "Her B2B platformun ürün yayınlama yapısı farklı olabilir. Bu nedenle ürün içerikleri platformun alanlarına uygun şekilde düzenlenmelidir. Bu kapsamda: Zorunlu ürün alanları, kategori kuralları ve başlık karakter yapısı; Açıklama alanı, görsel yükleme formatı ve teknik özellik alanları; MOQ, fiyat, teslim bilgisi ve anahtar kelime alanları; Ürün onay süreci ve yayın sonrası kontrol."
+            },
+            {
+              "title": "Yayındaki Ürünlerin Kontrolü",
+              "body": "Ürünler yüklendikten sonra kontrol edilmelidir. Ürün sayfası alıcı tarafında doğru görünüyor mu, eksik bilgi var mı, görseller düzgün mü ve açıklama anlaşılır mı gibi sorular değerlendirilmelidir. Bu kapsamda: Ürün yayına alındı mı, kategori doğru mu ve başlık doğru görünüyor mu?; Açıklama düzgün mü, teknik bilgiler eksiksiz mi?; Görseller doğru sıralandı mı, MOQ ve ambalaj bilgileri var mı?; Teklif yönlendirmesi açık mı ve ürün sayfası yabancı alıcıya güven veriyor mu?."
+            },
+            {
+              "title": "Mevcut Ürün Sayfalarının Düzenlenmesi",
+              "body": "B2B platformlarda daha önce yüklenmiş ürünler zamanla güncellenmeye ihtiyaç duyabilir. Zayıf ürün başlıkları, eksik açıklamalar veya eski görseller iyileştirilebilir. Bu kapsamda: Ürün başlıkları, İngilizce açıklamalar ve kategori yapısı; Görseller, teknik bilgiler, MOQ bilgisi ve ambalaj bilgisi; Teslim bilgileri, anahtar kelimeler ve teklif yönlendirmesi; Ürün grup yapısı ve iletişim alanları."
+            },
+            {
+              "title": "CRM ve Teklif Süreciyle Bağlantı",
+              "body": "B2B platformlarda ürün sayfası yalnızca görünürlük için değil, müşteri adayı oluşturmak için kullanılmalıdır. Ürün sayfasından gelen talepler CRM’e aktarılmalı ve satış sürecine bağlanmalıdır."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "B2B Platformlarda Ürün Yükleme Süreci Nasıl İlerler?",
+          "intro": "Süreç firmanızın ürünleri, hedef ülkeleri, mevcut B2B platform hesapları ve ihracat hedefleri değerlendirilerek başlar. Ardından ürün bilgileri toplanır, kategori planı yapılır, İngilizce içerikler hazırlanır, görseller kontrol edilir, platformlara ürün yüklenir ve gelen talepler CRM ile takip edilir.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Firmanızın ürünleri, hedef ülkeleri, mevcut B2B platform hesapları ve ihracat hedefleri değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Ürün Bilgilerinin Toplanması",
+              "body": "Ürün adları, teknik bilgiler, görseller, ambalaj bilgileri, MOQ, kullanım alanları ve teslim bilgileri hazırlanır."
+            },
+            {
+              "n": 3,
+              "title": "Ürün Grubu ve Kategori Planı",
+              "body": "Ürünler ana gruplara ayrılır, platformlara uygun kategori yapısı planlanır."
+            },
+            {
+              "n": 4,
+              "title": "İngilizce İçerik Hazırlığı",
+              "body": "Ürün başlıkları, açıklamalar, teknik metinler, kullanım alanları ve teklif yönlendirme metinleri İngilizce hazırlanır."
+            },
+            {
+              "n": 5,
+              "title": "Ürün Görsel Kontrolü",
+              "body": "Ürün görselleri kalite, açıklık, ambalaj, ürün uyumu ve platforma uygunluk açısından değerlendirilir."
+            },
+            {
+              "n": 6,
+              "title": "Platformlara Ürün Yükleme",
+              "body": "Ürünler seçilen B2B platformlara uygun alanlarla yüklenir veya mevcut ürün sayfaları düzenlenir."
+            },
+            {
+              "n": 7,
+              "title": "Yayın Sonrası Kontrol",
+              "body": "Ürünlerin yayında nasıl göründüğü, eksik alanlar, kategori uyumu ve alıcı tarafındaki görünüm kontrol edilir."
+            },
+            {
+              "n": 8,
+              "title": "Talep ve CRM Takibi",
+              "body": "Ürünlerden gelen alıcı talepleri satış sürecine alınır, teklif ve takip kayıtları CRM’de düzenlenir."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "B2B Platformlarda Ürün Yüklemenin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Ürünleriniz yabancı alıcıya daha profesyonel sunulur",
+            "İngilizce ürün açıklamalarınız güçlenir",
+            "Kategori ve ürün grubu yapınız daha düzenli olur",
+            "Görselleriniz daha kontrollü kullanılır",
+            "MOQ, ambalaj ve teslim bilgileri netleşir",
+            "Alıcıların teklif istemesi kolaylaşır",
+            "B2B platform profilleriniz daha güven verici görünür",
+            "Mail marketing ve LinkedIn çalışmalarınız desteklenir",
+            "İhracat web sitenizle daha tutarlı dijital görünüm oluşur",
+            "Gelen talepler CRM ile takip edilebilir",
+            "Satış ekibiniz ürün taleplerini daha düzenli yönetir",
+            "Ürünleriniz pasif katalog yerine satış sürecine bağlı hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "B2B Platformlarda Ürün Yüklemede Sık Yapılan Hatalar",
+          "items": [
+            "Ürünleri yanlış kategoriye yüklemek",
+            "Ürün başlıklarını yetersiz hazırlamak",
+            "Otomatik çeviri gibi görünen zayıf İngilizce açıklama kullanmak",
+            "Teknik özellikleri eksik yazmak",
+            "Ambalaj ve MOQ bilgilerini belirtmemek",
+            "Görselleri düşük kalitede kullanmak",
+            "Her ürüne aynı açıklamayı yazmak",
+            "Alıcıya teklif için gerekli bilgileri açıklamamak",
+            "Anahtar kelime planlaması yapmamak",
+            "Ürünleri yükledikten sonra kontrol etmemek",
+            "Gelen talepleri CRM’e aktarmamak",
+            "Platformları satış sürecinden bağımsız düşünmek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B Platformlarda Ürün Yükleme Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "B2B platformlarda ürün yükleme, ihracat müşteri bulma ve dijital B2B satış sürecinin parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B Platformlarda Ürün Yükleme, Ürün Yayınlama ve İngilizce Ürün Açıklaması",
+          "body": [
+            "B2B platformlarda ürün yükleme; B2B ürün yayınlama, Alibaba ürün yükleme, TradeWheel ürün yükleme, Go4WorldBusiness ürün yükleme, Europages ürün yayınlama, B2B platform ürün listeleme, İngilizce ürün açıklaması hazırlama, B2B ürün açıklaması, ihracat ürün yükleme, B2B pazaryeri ürün yükleme ve yurt dışı ürün yayınlama süreçleri için planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B platformlarda ürün yükleme nedir?",
+          "body": [
+            "B2B platformlarda ürün yükleme; Alibaba, TradeWheel, Go4WorldBusiness, Europages ve benzeri platformlarda ürünlerin doğru kategori, İngilizce başlık, açıklama, teknik özellik, görsel, MOQ, ambalaj, teslim bilgisi ve teklif yönlendirmesiyle yayınlanması hizmetidir. {{appName}}, ihracat yapmak isteyen firmaların ürünlerini B2B platformlarda daha profesyonel, anlaşılır ve alıcı odaklı şekilde sunmasına yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "B2B Platformlarda Ürün Yükleme Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "B2B platformlarda ürün yükleme kimler için uygundur?",
+              "a": "Bu hizmet; Alibaba, TradeWheel, Go4WorldBusiness, Europages ve benzeri B2B platformlarda ürünlerini yayınlamak isteyen üretici, ihracatçı, KOBİ ve tedarikçi firmalar için uygundur."
+            },
+            {
+              "q": "Hangi platformlarda ürün yükleme desteği veriyorsunuz?",
+              "a": "Alibaba, TradeWheel, Go4WorldBusiness, Europages ve firmanın ihtiyacına göre farklı B2B platformlarda ürün yükleme desteği planlanabilir."
+            },
+            {
+              "q": "İngilizce ürün açıklamaları hazırlanıyor mu?",
+              "a": "Evet. Ürünleriniz için yabancı alıcıların anlayabileceği, B2B satışa uygun, sade ve profesyonel İngilizce ürün açıklamaları hazırlanabilir."
+            },
+            {
+              "q": "Ürün başlıkları da hazırlanıyor mu?",
+              "a": "Evet. Ürün adı, ürün tipi, kullanım alanı, teknik özellik ve B2B arama mantığı dikkate alınarak İngilizce ürün başlıkları hazırlanabilir."
+            },
+            {
+              "q": "Ürün görselleri kontrol ediliyor mu?",
+              "a": "Evet. Ürün görsellerinin ürünle uyumu, kalite durumu, ambalaj görselleri, teknik detay görselleri ve platforma uygunluğu değerlendirilebilir."
+            },
+            {
+              "q": "MOQ ve ambalaj bilgileri ekleniyor mu?",
+              "a": "Evet. Minimum sipariş miktarı, ambalaj türü, koli, palet, özel etiket, üretim süresi ve teslim bilgileri ürün sayfasına uygun şekilde eklenebilir."
+            },
+            {
+              "q": "Mevcut ürün sayfalarım düzenlenebilir mi?",
+              "a": "Evet. Daha önce yüklenmiş ürünler başlık, açıklama, kategori, görsel, teknik bilgi, MOQ, ambalaj ve anahtar kelime açısından incelenerek düzenlenebilir."
+            },
+            {
+              "q": "B2B platformlarda ürün yükleme satış garantisi verir mi?",
+              "a": "Hayır. Ürün yükleme hizmeti satış garantisi vermez. Ancak ürünlerin daha profesyonel, anlaşılır ve teklif almaya uygun şekilde sunulmasına yardımcı olur."
+            },
+            {
+              "q": "Ürünlerden gelen talepler takip edilebilir mi?",
+              "a": "Evet. Platformlardan gelen alıcı talepleri CRM’e aktarılabilir, teklif, numune, proforma ve tekrar takip süreçleri kayıt altına alınabilir."
+            },
+            {
+              "q": "Bu hizmet ihracat müşteri bulma süreciyle birlikte kullanılabilir mi?",
+              "a": "Evet. B2B platformlarda ürün yükleme; mail marketing, LinkedIn ile müşteri bulma, karar verici kişi araştırması, CRM takibi ve telefon aramaları ile müşteri takibi hizmetleriyle birlikte planlanabilir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Ürünlerinizi Sadece Platforma Eklemeyelim, B2B Satış Sürecine Bağlayalım",
+        "body": "Alibaba, TradeWheel, Go4WorldBusiness veya Europages gibi B2B platformlarda ürünleriniz eksik, dağınık veya zayıf açıklamalarla yayındaysa yabancı alıcılar firmanızı yeterince profesyonel değerlendiremeyebilir. {{appName}} B2B Platformlarda Ürün Yükleme hizmeti ile ürünlerinizi doğru kategori, İngilizce başlık, açıklama, görsel, teknik bilgi, MOQ, ambalaj ve teklif yönlendirmesiyle daha profesyonel şekilde yayınlayalım.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

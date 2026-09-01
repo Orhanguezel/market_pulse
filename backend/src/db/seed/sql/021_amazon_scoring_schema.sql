@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS amazon_scan_jobs (
   id CHAR(36) PRIMARY KEY,
+  tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya',
   keyword VARCHAR(255) NOT NULL,
   marketplace VARCHAR(20) NOT NULL DEFAULT 'com',
   status VARCHAR(30) NOT NULL DEFAULT 'pending',
@@ -7,12 +8,14 @@ CREATE TABLE IF NOT EXISTS amazon_scan_jobs (
   error_msg TEXT NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   finished_at DATETIME NULL,
+  INDEX idx_amazon_scan_jobs_tenant (tenant_key),
   INDEX idx_amazon_scan_jobs_keyword (keyword),
   INDEX idx_amazon_scan_jobs_status (status)
 );
 
 CREATE TABLE IF NOT EXISTS amazon_products (
   id CHAR(36) PRIMARY KEY,
+  tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya',
   job_id CHAR(36) NOT NULL,
   title TEXT NOT NULL,
   price DECIMAL(10,2) NULL,
@@ -23,12 +26,14 @@ CREATE TABLE IF NOT EXISTS amazon_products (
   product_url VARCHAR(1000) NULL,
   asin VARCHAR(20) NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_amazon_products_tenant (tenant_key),
   INDEX idx_amazon_products_job_id (job_id),
   INDEX idx_amazon_products_asin (asin)
 );
 
 CREATE TABLE IF NOT EXISTS amazon_category_stats (
   id CHAR(36) PRIMARY KEY,
+  tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya',
   keyword VARCHAR(255) NOT NULL,
   marketplace VARCHAR(20) NOT NULL DEFAULT 'com',
   product_count INT NOT NULL DEFAULT 0,
@@ -39,11 +44,13 @@ CREATE TABLE IF NOT EXISTS amazon_category_stats (
   seller_count INT NOT NULL DEFAULT 0,
   dominant_brand_ratio DECIMAL(5,4) NOT NULL DEFAULT 0.0000,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  UNIQUE KEY uniq_amazon_category_stats_keyword_marketplace (keyword, marketplace)
+  KEY idx_amazon_category_stats_tenant (tenant_key),
+  UNIQUE KEY uniq_amazon_category_stats_keyword_marketplace (tenant_key, keyword, marketplace)
 );
 
 CREATE TABLE IF NOT EXISTS amazon_risk_scores (
   id CHAR(36) PRIMARY KEY,
+  tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya',
   job_id CHAR(36) NOT NULL,
   keyword VARCHAR(255) NOT NULL,
   category_risk_score DECIMAL(4,1) NULL,
@@ -71,12 +78,14 @@ CREATE TABLE IF NOT EXISTS amazon_risk_scores (
   brand_name VARCHAR(255) NULL,
   enrichment JSON NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_amazon_risk_scores_tenant (tenant_key),
   INDEX idx_amazon_risk_scores_job_id (job_id),
   INDEX idx_amazon_risk_scores_keyword_created_at (keyword, created_at)
 );
 
 CREATE TABLE IF NOT EXISTS amazon_keepa_snapshots (
   id CHAR(36) PRIMARY KEY,
+  tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya',
   asin VARCHAR(20) NOT NULL,
   price_30d_min DECIMAL(10,2) NULL,
   price_30d_max DECIMAL(10,2) NULL,
@@ -85,29 +94,35 @@ CREATE TABLE IF NOT EXISTS amazon_keepa_snapshots (
   seller_count_trend VARCHAR(30) NULL,
   stock_history_json JSON NULL,
   fetched_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_amazon_keepa_snapshots_tenant (tenant_key),
   INDEX idx_amazon_keepa_snapshots_asin (asin),
   INDEX idx_amazon_keepa_snapshots_fetched_at (fetched_at)
 );
 
 CREATE TABLE IF NOT EXISTS amazon_job_error_logs (
   id CHAR(36) PRIMARY KEY,
+  tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya',
   job_id CHAR(36) NOT NULL,
   error_type VARCHAR(100) NOT NULL,
   error_msg TEXT NOT NULL,
   retry_count INT NOT NULL DEFAULT 1,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_amazon_job_error_logs_tenant (tenant_key),
   INDEX idx_amazon_job_error_logs_job_id_created_at (job_id, created_at)
 );
 
 CREATE TABLE IF NOT EXISTS amazon_keepa_daily_budget (
-  budget_date DATE PRIMARY KEY,
+  tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya',
+  budget_date DATE NOT NULL,
   token_budget INT NOT NULL DEFAULT 1000,
   tokens_used INT NOT NULL DEFAULT 0,
-  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (tenant_key, budget_date)
 );
 
 CREATE TABLE IF NOT EXISTS amazon_keepa_queue (
   id CHAR(36) PRIMARY KEY,
+  tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya',
   job_id CHAR(36) NOT NULL,
   asin VARCHAR(20) NOT NULL,
   status VARCHAR(20) NOT NULL DEFAULT 'pending',
@@ -115,12 +130,14 @@ CREATE TABLE IF NOT EXISTS amazon_keepa_queue (
   last_error TEXT NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   processed_at DATETIME NULL,
+  INDEX idx_amazon_keepa_queue_tenant (tenant_key),
   INDEX idx_amazon_keepa_queue_status_created_at (status, created_at),
   INDEX idx_amazon_keepa_queue_job_id (job_id)
 );
 
 CREATE TABLE IF NOT EXISTS amazon_saved_searches (
   id CHAR(36) PRIMARY KEY,
+  tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya',
   label VARCHAR(255) NOT NULL,
   keyword VARCHAR(255) NOT NULL,
   marketplace VARCHAR(20) NOT NULL DEFAULT 'com',
@@ -129,5 +146,6 @@ CREATE TABLE IF NOT EXISTS amazon_saved_searches (
   last_run_at DATETIME NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_amazon_saved_searches_tenant (tenant_key),
   INDEX idx_amazon_saved_searches_keyword (keyword)
 );

@@ -182,7 +182,7 @@ export default function SignalsPanel() {
                   <div className="space-y-3 rounded-2xl border border-gm-border-soft bg-gm-surface/30 p-5 text-left text-xs text-gm-muted">
                     <div className="flex gap-2"><span>🔍</span><span><strong className="text-gm-text">Rakip taraması</strong> — Hedef Firmalar → "Rakipleri Tara" butonu, web sitesindeki fiyat / ürün / kampanya değişikliklerini sinyal olarak kaydeder.</span></div>
                     <div className="flex gap-2"><span>⚡</span><span><strong className="text-gm-text">Manuel sinyal</strong> — Bir bayinin sosyal medyada veya görüşmede aktardığı bilgiyi ekleyebilirsiniz.</span></div>
-                    <div className="flex gap-2"><span>📉</span><span><strong className="text-gm-text">Churn skoru</strong> — Birikmiş sinyaller + son görülme tarihi + paspas sipariş geçmişine göre 0-100 hesaplanır.</span></div>
+                    <div className="flex gap-2"><span>📉</span><span><strong className="text-gm-text">Churn skoru</strong> — Birikmiş sinyaller + son görülme tarihi + ERP sipariş geçmişine göre 0-100 hesaplanır.</span></div>
                   </div>
                   <p className="text-[11px] italic text-gm-muted/70">
                     Sinyal üretmek için önce Hedef Firmalar sayfasından bayilerin web sitelerini eklemeniz gerekir.

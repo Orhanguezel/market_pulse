@@ -10,11 +10,11 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import {
-  useListPaspasCustomersQuery,
+  useListErpCustomersQuery,
   useCreateMarketLeadMutation,
   useUpdateMarketLeadMutation,
   type MarketLead,
-  type PaspasCustomer,
+  type ErpCustomer,
 } from '@/integrations/hooks';
 
 interface Props {
@@ -47,13 +47,14 @@ const EMPTY: Form = {
 
 export default function AddLeadDialog({ open, onOpenChange, existing }: Props) {
   const [form, setForm] = React.useState<Form>(EMPTY);
-  const [paspasQ, setPaspasQ] = React.useState('');
+  const [erpQ, setErpQ] = React.useState('');
   const [create, { isLoading: isCreating }] = useCreateMarketLeadMutation();
   const [update, { isLoading: isUpdating }] = useUpdateMarketLeadMutation();
-  const { data: paspasCustomers = [], isFetching: isPaspasLoading } = useListPaspasCustomersQuery(
-    { q: paspasQ || undefined, limit: 8 },
+  const { data: erpCustomers, isFetching: isErpLoading } = useListErpCustomersQuery(
+    { q: erpQ || undefined, limit: 8 },
     { skip: !open },
   );
+  const erpItems = erpCustomers?.items ?? [];
   const busy = isCreating || isUpdating;
 
   React.useEffect(() => {
@@ -81,17 +82,17 @@ export default function AddLeadDialog({ open, onOpenChange, existing }: Props) {
   const set = (k: keyof Form) => (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
     setForm((p) => ({ ...p, [k]: e.target.value }));
 
-  const importPaspasCustomer = (customer: PaspasCustomer) => {
+  const importErpCustomer = (customer: ErpCustomer) => {
     setForm((p) => ({
       ...p,
       name: customer.name,
-      source: 'paspas',
+      source: 'erp',
       phone: customer.phone ?? '',
-      notes: [p.notes, customer.address ? `Paspas adres: ${customer.address}` : '']
+      notes: [p.notes, customer.address ? `ERP adres: ${customer.address}` : '']
         .filter(Boolean)
         .join('\n'),
     }));
-    toast.success('Paspas müşterisi forma aktarıldı');
+    toast.success('ERP müşterisi forma aktarıldı');
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -141,25 +142,25 @@ export default function AddLeadDialog({ open, onOpenChange, existing }: Props) {
             <div className="space-y-2 rounded-md border bg-muted/20 p-3">
               <div className="flex items-end gap-2">
                 <div className="min-w-0 flex-1 space-y-1.5">
-                  <Label>Paspas'tan İçe Aktar</Label>
+                  <Label>ERP'den İçe Aktar</Label>
                   <Input
-                    value={paspasQ}
-                    onChange={(e) => setPaspasQ(e.target.value)}
+                    value={erpQ}
+                    onChange={(e) => setErpQ(e.target.value)}
                     placeholder="Müşteri adı veya telefon ara"
                     disabled={busy}
                   />
                 </div>
               </div>
               <div className="max-h-40 overflow-y-auto rounded border bg-background">
-                {isPaspasLoading ? (
+                {isErpLoading ? (
                   <div className="px-3 py-2 text-sm text-muted-foreground">Yükleniyor...</div>
-                ) : paspasCustomers.length ? (
-                  paspasCustomers.map((customer) => (
+                ) : erpItems.length ? (
+                  erpItems.map((customer) => (
                     <button
                       key={customer.id}
                       type="button"
                       className="flex w-full items-center justify-between gap-3 border-b px-3 py-2 text-left text-sm last:border-b-0 hover:bg-muted"
-                      onClick={() => importPaspasCustomer(customer)}
+                      onClick={() => importErpCustomer(customer)}
                     >
                       <span className="min-w-0">
                         <span className="block truncate font-medium">{customer.name}</span>

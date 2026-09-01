@@ -8,6 +8,8 @@
 -- ICP (İdeal Müşteri Profili) tanımları
 CREATE TABLE IF NOT EXISTS `icp_profiles` (
   `id`         char(36)      NOT NULL,
+  `tenant_key` varchar(64)   NOT NULL DEFAULT 'avrasya',
+  `owner_user_id` char(36)   DEFAULT NULL,
   `name`       varchar(100)  NOT NULL,
   `is_active`  tinyint(1)    NOT NULL DEFAULT 1,
   -- JSON yapısı:
@@ -17,12 +19,15 @@ CREATE TABLE IF NOT EXISTS `icp_profiles` (
   `created_at` datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_icp_profiles_tenant` (`tenant_key`),
+  KEY `idx_icp_profiles_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_icp_is_active` (`is_active`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Arama kampanya iş kayıtları
 CREATE TABLE IF NOT EXISTS `lead_search_jobs` (
   `id`           char(36)     NOT NULL,
+  `tenant_key`   varchar(64)  NOT NULL DEFAULT 'avrasya',
   `channel`      varchar(30)  NOT NULL,   -- 'amazon' | 'b2b_directory' | 'trade_fair'
   `status`       varchar(20)  NOT NULL DEFAULT 'pending',
   --   pending → running → done | failed
@@ -34,19 +39,23 @@ CREATE TABLE IF NOT EXISTS `lead_search_jobs` (
   `params`       json         NOT NULL,
   `result_count` int          NOT NULL DEFAULT 0,
   `error_msg`    text         DEFAULT NULL,
-  `created_by`   char(36)     DEFAULT NULL,
+  `owner_user_id` char(36)    DEFAULT NULL,
   `created_at`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `started_at`   datetime     DEFAULT NULL,
   `finished_at`  datetime     DEFAULT NULL,
   PRIMARY KEY (`id`),
+  KEY `idx_lead_search_jobs_tenant` (`tenant_key`),
   KEY `idx_jobs_channel`  (`channel`),
   KEY `idx_jobs_status`   (`status`),
-  KEY `idx_jobs_icp`      (`icp_id`)
+  KEY `idx_jobs_icp`      (`icp_id`),
+  KEY `idx_jobs_owner`    (`tenant_key`, `owner_user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Ham lead adayları — kullanıcı onayından önce
 CREATE TABLE IF NOT EXISTS `lead_candidates` (
   `id`             char(36)      NOT NULL,
+  `tenant_key`     varchar(64)   NOT NULL DEFAULT 'avrasya',
+  `owner_user_id`  char(36)      DEFAULT NULL,
   `job_id`         char(36)      NOT NULL,
   `channel`        varchar(30)   NOT NULL,
   `icp_id`         char(36)      DEFAULT NULL,
@@ -75,6 +84,8 @@ CREATE TABLE IF NOT EXISTS `lead_candidates` (
   `reviewed_at`    datetime      DEFAULT NULL,
   `created_at`     datetime      NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_lead_candidates_tenant` (`tenant_key`),
+  KEY `idx_lead_candidates_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_candidates_job`     (`job_id`),
   KEY `idx_candidates_status`  (`status`),
   KEY `idx_candidates_channel` (`channel`),
@@ -100,6 +111,8 @@ ALTER TABLE `lead_candidates`
 -- candidate_id VEYA market_lead_id olur (onay öncesi/sonrası)
 CREATE TABLE IF NOT EXISTS `lead_enrichment` (
   `id`             char(36)    NOT NULL,
+  `tenant_key`     varchar(64) NOT NULL DEFAULT 'avrasya',
+  `owner_user_id`  char(36)    DEFAULT NULL,
   `candidate_id`   char(36)    DEFAULT NULL,
   `market_lead_id` char(36)    DEFAULT NULL,
   -- { name, title, linkedin_url, email, phone }
@@ -114,6 +127,8 @@ CREATE TABLE IF NOT EXISTS `lead_enrichment` (
   `source_vendor`  varchar(50) DEFAULT NULL,
   `enriched_at`    datetime    NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_lead_enrichment_tenant` (`tenant_key`),
+  KEY `idx_lead_enrichment_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_enrichment_candidate`   (`candidate_id`),
   KEY `idx_enrichment_market_lead` (`market_lead_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -121,8 +136,14 @@ CREATE TABLE IF NOT EXISTS `lead_enrichment` (
 -- Outreach taslakları (otomatik gönderilmez — kullanıcı onaylar)
 CREATE TABLE IF NOT EXISTS `lead_outreach_drafts` (
   `id`             char(36)     NOT NULL,
+  `tenant_key`     varchar(64)  NOT NULL DEFAULT 'avrasya',
+  `owner_user_id`  char(36)     DEFAULT NULL,
   `candidate_id`   char(36)     DEFAULT NULL,
   `market_lead_id` char(36)     DEFAULT NULL,
+  `campaign_id`    char(36)     DEFAULT NULL,
+  `recipient_list_id` char(36)  DEFAULT NULL,   -- bulk liste kaynağı (outreach_recipient_lists)
+  `recipient_email`   varchar(255) DEFAULT NULL, -- pipeline'sız bulk için alıcı
+  `recipient_name`    varchar(255) DEFAULT NULL,
   `subject`        varchar(300) NOT NULL,
   `body`           text         NOT NULL,
   `ai_model`       varchar(50)  DEFAULT NULL,  -- hangi model ürettiyse
@@ -138,8 +159,12 @@ CREATE TABLE IF NOT EXISTS `lead_outreach_drafts` (
   `reply_status`   varchar(20)  DEFAULT NULL,              -- replied | no_reply
   `created_at`     datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_lead_outreach_drafts_tenant` (`tenant_key`),
+  KEY `idx_lead_outreach_drafts_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_outreach_candidate`   (`candidate_id`),
-  KEY `idx_outreach_market_lead` (`market_lead_id`)
+  KEY `idx_outreach_market_lead` (`market_lead_id`),
+  KEY `idx_outreach_draft_campaign` (`campaign_id`),
+  KEY `idx_outreach_draft_reclist` (`recipient_list_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 SET @add_lead_outreach_sent_at := IF(
@@ -230,17 +255,21 @@ DEALLOCATE PREPARE stmt;
 -- Bu tablo lead_candidates.reject_reason'dan periyodik olarak derlenir
 CREATE TABLE IF NOT EXISTS `lead_rejection_patterns` (
   `id`          char(36)     NOT NULL,
+  `tenant_key`  varchar(64)  NOT NULL DEFAULT 'avrasya',
   `channel`     varchar(30)  NOT NULL,
   `pattern`     varchar(200) NOT NULL,  -- tespit edilen pattern
   `count`       int          NOT NULL DEFAULT 1,
   `last_seen`   datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `uq_rejection_channel_pattern` (`channel`, `pattern`(100))
+  KEY `idx_lead_rejection_patterns_tenant` (`tenant_key`),
+  UNIQUE KEY `uq_rejection_channel_pattern` (`tenant_key`, `channel`, `pattern`(100))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 -- Kullanıcı tanımlı tarama dışlama kuralları ("Bu profil tipini bir daha getirme")
 CREATE TABLE IF NOT EXISTS `lead_scan_rules` (
   `id`         char(36)     NOT NULL,
+  `tenant_key` varchar(64)  NOT NULL DEFAULT 'avrasya',
+  `owner_user_id` char(36)  DEFAULT NULL,
   `icp_id`     char(36)     DEFAULT NULL,  -- NULL = tüm ICP'ler
   `channel`    varchar(30)  DEFAULT NULL,  -- NULL = tüm kanallar
   `rule_type`  varchar(30)  NOT NULL DEFAULT 'exclude_reject_tag',
@@ -248,38 +277,34 @@ CREATE TABLE IF NOT EXISTS `lead_scan_rules` (
   `label`      varchar(300) DEFAULT NULL,  -- opsiyonel açıklama / ICP adı
   `created_at` datetime     NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
+  KEY `idx_lead_scan_rules_tenant` (`tenant_key`),
+  KEY `idx_lead_scan_rules_owner` (`tenant_key`, `owner_user_id`),
   KEY `idx_scan_rule_icp` (`icp_id`),
   KEY `idx_scan_rule_channel` (`channel`),
-  UNIQUE KEY `uq_scan_rule` (`icp_id`, `channel`, `value`(100))
+  UNIQUE KEY `uq_scan_rule` (`tenant_key`, `icp_id`, `channel`, `value`(100))
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
--- Varsayılan ICP: Paspas için oto aksesuar distribütör profili
-INSERT INTO `icp_profiles` (`id`, `name`, `is_active`, `definition`) VALUES (
-  UUID(),
-  'Oto Aksesuar Distribütörü — Avrupa',
-  1,
-  JSON_OBJECT(
-    'sectors',          JSON_ARRAY('automotive accessories', 'car care', 'floor mats'),
-    'firm_types',       JSON_ARRAY('distributor', 'importer', 'wholesaler', 'e-commerce seller'),
-    'geographies',      JSON_ARRAY('DE', 'AT', 'NL', 'PL', 'CZ', 'FR', 'IT', 'ES'),
-    'sales_types',      JSON_ARRAY('B2B', 'B2C'),
-    'sales_channels',   JSON_ARRAY('own website', 'amazon', 'ebay', 'wholesale'),
-    'price_segment',    'mid',
-    'exclude_patterns', JSON_ARRAY()
-  )
-);
-
--- Automechanika 2026 — Avrasya Paspas için kalibre ICP (v1, 2026-05-21)
--- Kaynak: docs/teknik/icp-automechanika-final.md
-INSERT INTO `icp_profiles` (`id`, `name`, `is_active`, `definition`)
-SELECT
+-- Automechanika 2026 — Avrasya/ProMats kalibre ICP v2.
+-- Bu profil yalnızca avrasya tenant'ında ve seed admin hesabında görünür.
+INSERT INTO `icp_profiles` (`id`, `tenant_key`, `owner_user_id`, `name`, `is_active`, `definition`) VALUES (
   '9f4c8f04-64b8-4da5-9c7d-4a4b5cf4b1b0',
-  'Automechanika 2026 — Paspas/Oto Aksesuar Alıcısı',
+  'avrasya',
+  '{{ADMIN_ID}}',
+  'Avrasya ProMats — Automechanika Frankfurt 2026 Alıcı ICP',
   1,
   JSON_OBJECT(
-    'version', 1,
+    'version', 2,
+    'host_company', JSON_OBJECT(
+      'name', 'Avrasya Paspas Otomotiv San. ve Tic. Ltd. Şti.',
+      'brand', 'ProMats',
+      'website', 'https://promats.com.tr',
+      'email', 'info@promats.com.tr',
+      'business_model', 'Turkish floor mat manufacturer and private-label/ODM exporter'
+    ),
     'fair', JSON_OBJECT(
       'name', 'Automechanika Frankfurt 2026',
+      'url', 'https://automechanika.messefrankfurt.com/frankfurt/en/exhibitor-search.html',
+      'start_date', '2026-09-08',
       'dates', '2026-09-08/2026-09-12',
       'host_exhibitor', JSON_OBJECT(
         'name', 'Avrasya Paspas Otomotiv San. ve Tic. Ltd. Şti.',
@@ -292,6 +317,10 @@ SELECT
       'automotive accessories','car care','floor mats','car mats','car carpet',
       'interior accessories','boot liners','trunk mats','auto trim','rubber mats'
     ),
+    'sub_sectors', JSON_ARRAY(
+      '3D floor mats','rubber car mats','textile car mats','custom-fit car mats',
+      'boot liners','trunk trays','vehicle interior protection'
+    ),
     'firm_types', JSON_ARRAY(
       'distributor','importer','wholesaler','e-commerce seller','buying group',
       'aftermarket retailer','tuning shop chain','auto parts catalog company'
@@ -301,6 +330,7 @@ SELECT
       'RO','HU','SK','SE','DK','NO','FI','CH','GR','BG','PT','IE'
     ),
     'priority_geographies', JSON_ARRAY('DE','AT','NL','PL','FR'),
+    'exclude_geographies', JSON_ARRAY('CN','HK','IN','PK','BD','VN','TH','TR'),
     'sales_types', JSON_ARRAY('B2B','B2B2C','B2C'),
     'sales_channels', JSON_ARRAY(
       'own website','amazon','ebay','kaufland','otto','cdiscount','fruugo',
@@ -310,6 +340,20 @@ SELECT
     'company_size_min', 'small',
     'company_size_max', 'enterprise',
     'annual_revenue_min_eur', 500000,
+    'keywords', JSON_ARRAY(
+      'floor mats','car mats','automotive floor mats','rubber mats','textile mats',
+      'boot liner','trunk mat','car interior accessories','private label','ODM',
+      'automotive aftermarket distributor','auto accessories importer'
+    ),
+    'search_queries', JSON_ARRAY(
+      'automotive floor mats distributor','car mats importer','boot liner wholesaler',
+      'automotive interior accessories distributor','private label car mats'
+    ),
+    'preferred_b2b_source', 'google_maps',
+    'amazon_keyword', 'car floor mats',
+    'amazon_marketplace', 'de',
+    'customs_product_query', 'automotive floor mats',
+    'hs_codes', JSON_ARRAY('5703','4016.91'),
     'exclude_firm_types', JSON_ARRAY(
       'manufacturer (own production)','OEM tier-1 supplier','single car brand official dealer',
       'raw material supplier','tooling supplier'
@@ -318,8 +362,11 @@ SELECT
       'engine oil only','lubricants only','battery only','tire only',
       'electronic parts only','mechanical parts only'
     ),
-    'exclude_patterns', JSON_ARRAY('chinese factory direct','made in china reseller only'),
-    'exclude_geographies', JSON_ARRAY('CN','HK','IN','PK','BD','VN','TH'),
+    'exclude_patterns', JSON_ARRAY(
+      'chinese factory direct','made in china reseller only','own floor mat production',
+      'paspas üretici','manufacturer of car mats','industry association','dernek',
+      'buying alliance only','single-brand official dealer'
+    ),
     'positive_signals', JSON_ARRAY(
       'private label interest','ODM partnership signals','european-made preference',
       'amazon FBA seller','multi-brand catalog','stocking distributor'
@@ -328,6 +375,10 @@ SELECT
       'in-house production line','patent on floor mat manufacturing',
       'established china supplier chain','single OEM contract revenue >70%'
     ),
+    'strong_match_sectors', JSON_ARRAY(
+      'floor mats','car mats','boot liners','interior accessories','automotive aftermarket'
+    ),
+    'weak_match_sectors', JSON_ARRAY('car care','tuning accessories','general auto parts'),
     'scoring_weights', JSON_OBJECT(
       'sector_match', 0.30,
       'firm_type_match', 0.25,
@@ -336,10 +387,16 @@ SELECT
       'positive_signal', 0.10,
       'negative_signal', -0.15
     ),
-    'min_lead_score_for_candidate', 5.0
+    'neighbor_bonus', 0.5,
+    'priority_boost', 1.0,
+    'target_halls', JSON_ARRAY('3.0','3.1','4.0'),
+    'min_lead_score_for_candidate', 5.5,
+    'auto_approve_threshold', 7.0
   )
-WHERE NOT EXISTS (
-  SELECT 1 FROM `icp_profiles`
-  WHERE `id` = '9f4c8f04-64b8-4da5-9c7d-4a4b5cf4b1b0'
-     OR `name` = 'Automechanika 2026 — Paspas/Oto Aksesuar Alıcısı'
-);
+)
+ON DUPLICATE KEY UPDATE
+  `tenant_key` = VALUES(`tenant_key`),
+  `owner_user_id` = VALUES(`owner_user_id`),
+  `name` = VALUES(`name`),
+  `is_active` = VALUES(`is_active`),
+  `definition` = VALUES(`definition`);

@@ -2,15 +2,17 @@ import type { FastifyRequest, FastifyReply } from 'fastify';
 import { randomUUID } from 'crypto';
 import { hash as argonHash } from 'argon2';
 import { OAuth2Client } from 'google-auth-library';
-import { handleRouteError } from '../_shared';
+import { handleRouteError, getActiveTenantKey } from '../_shared';
+import { env } from '@/core/env';
 import { getGoogleSettings } from '../siteSettings';
 import { getPrimaryRole } from '../userRoles';
-import { sendWelcomeMail, sendPasswordChangedMail } from '../mail';
+import { sendWelcomeMail, sendPasswordChangedMail, sendNewMemberAdminAlert } from '../mail';
 import { telegramNotify } from '../telegram';
 import {
   signupBody,
   tokenBody,
   googleBody,
+  socialLoginBody,
   updateBody,
   passwordResetRequestBody,
   passwordResetConfirmBody,
@@ -24,6 +26,7 @@ import {
   repoUpdateLastSignIn,
   repoSyncGoogleUser,
   repoAssignRole,
+  repoEnsureTenantMembership,
   repoEnsureProfileRow,
   repoGetRefreshToken,
   repoRevokeRefreshToken,
@@ -39,10 +42,10 @@ import {
   setAccessCookie,
   setRefreshCookie,
   clearAuthCookies,
+  issueAccessToken,
   issueTokens,
   verifyPasswordSmart,
   parseAdminEmailAllowlist,
-  ACCESS_MAX_AGE,
 } from './helpers';
 
 const adminEmails = parseAdminEmailAllowlist();
@@ -53,6 +56,26 @@ function getGoogleClient() {
     googleClient = new OAuth2Client();
   }
   return googleClient;
+}
+
+function rejectNonAdmin(role: Role, reply: FastifyReply) {
+  // Acik kayit (varsayilan): normal kullanicilar da girebilir. Sadece ADMIN_ONLY_LOGIN=1
+  // ise platform admin'e kilitlenir.
+  if (env.ADMIN_ONLY_LOGIN !== '1') return false;
+  if (role === 'admin') return false;
+  reply.status(403).send({ error: { message: 'admin_only' } });
+  return true;
+}
+
+/** Yeni kullaniciyi default tenant'a (env.TENANT_KEY) otomatik uye yapar. Best-effort. */
+async function assignDefaultTenant(userId: string, role: Role, req: FastifyRequest) {
+  const tenantKey = env.TENANT_KEY;
+  if (!tenantKey) return;
+  try {
+    await repoEnsureTenantMembership(userId, tenantKey, role === 'admin' ? 'tenant_admin' : 'tenant_editor');
+  } catch (err) {
+    req.log?.error?.(err, 'default_tenant_assign_failed');
+  }
 }
 
 async function verifyGoogleIdentityToken(idToken: string) {
@@ -83,6 +106,30 @@ async function verifyGoogleIdentityToken(idToken: string) {
 }
 
 /** POST /auth/signup */
+/**
+ * Yeni uye kaydinda admin'e "bu kisiyi Google test user yap" hatirlatma maili.
+ * Best-effort: hata signup'i bozmaz. Alici env.AUTH_ADMIN_EMAILS (ADMIN_EMAIL fallback).
+ */
+async function notifyNewMemberByEmail(
+  member: { email: string; name?: string | null; phone?: string | null; role?: string | null; source?: string | null },
+) {
+  const adminEmail = (env.AUTH_ADMIN_EMAILS || '').split(',').map((s) => s.trim()).filter(Boolean)[0];
+  if (!adminEmail) return;
+  const adminUser = (await repoGetUserByEmail(adminEmail).catch(() => null)) as { id?: string } | null;
+  let tenant: string | null = null;
+  try { tenant = getActiveTenantKey(); } catch { tenant = null; }
+  await sendNewMemberAdminAlert({
+    to: adminEmail,
+    viaUserId: adminUser?.id ?? null,
+    member_email: member.email,
+    member_name: member.name ?? null,
+    member_phone: member.phone ?? null,
+    role: member.role ?? null,
+    source: member.source ?? null,
+    tenant,
+  });
+}
+
 export async function signup(req: FastifyRequest, reply: FastifyReply) {
   try {
     const parsed = signupBody.safeParse(req.body);
@@ -92,7 +139,7 @@ export async function signup(req: FastifyRequest, reply: FastifyReply) {
     const meta = (parsed.data.options?.data ?? {}) as Record<string, unknown>;
     const full_name = (parsed.data.full_name ?? (typeof meta['full_name'] === 'string' ? meta['full_name'] : undefined)) || undefined;
     const phone = (parsed.data.phone ?? (typeof meta['phone'] === 'string' ? meta['phone'] : undefined)) || undefined;
-    const requestedRole = meta['role'] === 'editor' ? 'editor' : 'admin';
+    const requestedRole = meta['role'] === 'editor' ? 'editor' : 'customer';
     const rulesAccepted = parsed.data.rules_accepted === true;
 
     const exists = await repoGetUserByEmail(email);
@@ -106,11 +153,14 @@ export async function signup(req: FastifyRequest, reply: FastifyReply) {
     const assignedRole: Role = isAdmin ? 'admin' : requestedRole;
     await repoAssignRole(id, assignedRole);
     await repoEnsureProfileRow(id, { full_name: full_name ?? null, phone: phone ?? null });
+    await assignDefaultTenant(id, assignedRole, req);
 
     void sendWelcomeMail({ to: email, user_name: full_name || email.split('@')[0], user_email: email }).catch((err) => req.log?.error?.(err, 'welcome_mail_failed'));
     void telegramNotify({ event: 'new_user', data: { user_name: full_name || email.split('@')[0], user_email: email, role: assignedRole, created_at: new Date().toISOString() } });
+    void notifyNewMemberByEmail({ email, name: full_name, phone, role: assignedRole, source: 'signup' }).catch((err) => req.log?.error?.(err, 'new_member_alert_failed'));
 
     const u = await repoGetUserById(id);
+    if (rejectNonAdmin(assignedRole, reply)) return;
     const { access, refresh } = await issueTokens(req.server, u!, assignedRole);
     setAccessCookie(reply, access);
     setRefreshCookie(reply, refresh);
@@ -148,6 +198,7 @@ export async function token(req: FastifyRequest, reply: FastifyReply) {
     await repoUpdateLastSignIn(u.id);
     await repoEnsureProfileRow(u.id);
     const role = await getPrimaryRole(u.id);
+    if (rejectNonAdmin(role, reply)) return;
     const { access, refresh } = await issueTokens(req.server, u, role);
     setAccessCookie(reply, access);
     setRefreshCookie(reply, refresh);
@@ -219,6 +270,7 @@ export async function googleToken(req: FastifyRequest, reply: FastifyReply) {
         phone: null,
         avatar_url: avatar_url ?? null,
       });
+      await assignDefaultTenant(id, role, req);
 
       void sendWelcomeMail({
         to: email,
@@ -235,6 +287,7 @@ export async function googleToken(req: FastifyRequest, reply: FastifyReply) {
           created_at: new Date().toISOString(),
         },
       });
+      void notifyNewMemberByEmail({ email, name: full_name, role, source: 'google' }).catch((err) => req.log?.error?.(err, 'new_member_alert_failed'));
 
       user = await repoGetUserById(id);
     } else {
@@ -256,6 +309,7 @@ export async function googleToken(req: FastifyRequest, reply: FastifyReply) {
 
     await repoUpdateLastSignIn(user.id);
     const role = await getPrimaryRole(user.id);
+    if (rejectNonAdmin(role, reply)) return;
     const { access, refresh } = await issueTokens(req.server, user, role);
     setAccessCookie(reply, access);
     setRefreshCookie(reply, refresh);
@@ -279,10 +333,150 @@ export async function googleToken(req: FastifyRequest, reply: FastifyReply) {
   }
 }
 
+/**
+ * Google access_token'ı doğrula (tokeninfo ile audience kontrolü) ve profili getir.
+ * tokeninfo: aud + email doğrular (token-substitution'a karşı). userinfo: ad/avatar (best-effort).
+ */
+async function resolveGoogleProfileFromAccessToken(accessToken: string) {
+  const { clientId } = await getGoogleSettings();
+  if (!clientId) return { ok: false as const, code: 'google_oauth_not_configured' };
+
+  try {
+    const ti = await fetch(
+      `https://oauth2.googleapis.com/tokeninfo?access_token=${encodeURIComponent(accessToken)}`,
+    );
+    if (!ti.ok) return { ok: false as const, code: 'invalid_google_token' };
+    const info = (await ti.json()) as {
+      aud?: string; email?: string; email_verified?: string | boolean;
+    };
+    if (info.aud !== clientId) return { ok: false as const, code: 'google_audience_mismatch' };
+    const email = (info.email ?? '').toLowerCase();
+    if (!email) return { ok: false as const, code: 'google_email_missing' };
+    if (info.email_verified === false || info.email_verified === 'false') {
+      return { ok: false as const, code: 'google_email_not_verified' };
+    }
+
+    // Profil detayı (ad/avatar) — başarısız olursa giriş yine de devam eder.
+    let full_name: string | undefined;
+    let avatar_url: string | undefined;
+    try {
+      const ui = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+        headers: { Authorization: `Bearer ${accessToken}` },
+      });
+      if (ui.ok) {
+        const p = (await ui.json()) as { name?: string; picture?: string };
+        full_name = p.name?.trim() || undefined;
+        avatar_url = p.picture?.trim() || undefined;
+      }
+    } catch { /* yoksay */ }
+
+    return { ok: true as const, email, full_name, avatar_url };
+  } catch {
+    return { ok: false as const, code: 'invalid_google_token' };
+  }
+}
+
+/** POST /auth/social-login — public müşteri sosyal girişi (şimdilik Google) */
+export async function socialLogin(req: FastifyRequest, reply: FastifyReply) {
+  try {
+    const parsed = socialLoginBody.safeParse(req.body);
+    if (!parsed.success) return reply.status(400).send({ error: { message: 'invalid_body' } });
+
+    const { type } = parsed.data;
+    let email = '';
+    let full_name: string | undefined;
+    let avatar_url: string | undefined;
+
+    if (type === 'google') {
+      if (parsed.data.id_token) {
+        const v = await verifyGoogleIdentityToken(parsed.data.id_token);
+        if (!v.ok) {
+          const status = v.code === 'google_oauth_not_configured' ? 503 : 401;
+          return reply.status(status).send({ error: { message: v.code } });
+        }
+        email = (v.payload.email ?? '').toLowerCase();
+        full_name = v.payload.name?.trim() || undefined;
+        avatar_url = typeof v.payload.picture === 'string' ? v.payload.picture.trim() || undefined : undefined;
+      } else if (parsed.data.access_token) {
+        const v = await resolveGoogleProfileFromAccessToken(parsed.data.access_token);
+        if (!v.ok) {
+          const status = v.code === 'google_oauth_not_configured' ? 503 : 401;
+          return reply.status(status).send({ error: { message: v.code } });
+        }
+        email = v.email;
+        full_name = v.full_name;
+        avatar_url = v.avatar_url;
+      } else {
+        return reply.status(400).send({ error: { message: 'missing_token' } });
+      }
+    } else {
+      return reply.status(400).send({ error: { message: 'social_provider_not_supported' } });
+    }
+
+    if (!email) return reply.status(401).send({ error: { message: 'social_email_missing' } });
+
+    let user = await repoGetUserByEmail(email);
+    if (!user) {
+      const id = randomUUID();
+      const password_hash = await argonHash(randomUUID());
+      const role: Role = adminEmails.has(email) ? 'admin' : 'customer';
+      await repoCreateUser({
+        id, email, password_hash, full_name,
+        rules_accepted_at: new Date(), email_verified: true,
+      });
+      await repoAssignRole(id, role);
+      await repoEnsureProfileRow(id, {
+        full_name: full_name ?? null, phone: null, avatar_url: avatar_url ?? null,
+      });
+      await assignDefaultTenant(id, role, req);
+      void sendWelcomeMail({
+        to: email, user_name: full_name || email.split('@')[0], user_email: email,
+      }).catch((err) => req.log?.error?.(err, 'social_welcome_mail_failed'));
+      void telegramNotify({
+        event: 'new_user',
+        data: {
+          user_name: full_name || email.split('@')[0], user_email: email,
+          role, source: type, created_at: new Date().toISOString(),
+        },
+      });
+      void notifyNewMemberByEmail({ email, name: full_name, role, source: type }).catch((err) => req.log?.error?.(err, 'new_member_alert_failed'));
+      user = await repoGetUserById(id);
+    } else {
+      await repoSyncGoogleUser(user.id, {
+        full_name: full_name ?? user.full_name ?? null, email_verified: true,
+      });
+      await repoEnsureProfileRow(user.id, {
+        full_name: full_name ?? user.full_name ?? null, phone: null, avatar_url: avatar_url ?? null,
+      });
+      user = await repoGetUserById(user.id);
+    }
+
+    if (!user) return reply.status(500).send({ error: { message: 'social_user_resolution_failed' } });
+
+    await repoUpdateLastSignIn(user.id);
+    const role = await getPrimaryRole(user.id);
+    const { access, refresh } = await issueTokens(req.server, user, role);
+    setAccessCookie(reply, access);
+    setRefreshCookie(reply, refresh);
+
+    return reply.send({
+      access_token: access,
+      token_type: 'bearer',
+      user: {
+        id: user.id, email: user.email,
+        full_name: user.full_name ?? full_name ?? null,
+        phone: user.phone ?? null, email_verified: 1,
+        is_active: user.is_active, ecosystem_id: user.ecosystem_id ?? null, role,
+      },
+    });
+  } catch (e) {
+    return handleRouteError(reply, req, e, 'auth_social_login');
+  }
+}
+
 /** POST /auth/token/refresh */
 export async function refresh(req: FastifyRequest, reply: FastifyReply) {
   try {
-    const jwt = getJWTFromReq(req);
     const raw = ((req.cookies as Record<string, string | undefined> | undefined)?.refresh_token ?? '').trim();
     if (!raw.includes('.')) return reply.status(401).send({ error: { message: 'no_refresh' } });
 
@@ -300,7 +494,8 @@ export async function refresh(req: FastifyRequest, reply: FastifyReply) {
     if (!u) return reply.status(401).send({ error: { message: 'invalid_user' } });
 
     const role = await getPrimaryRole(u.id);
-    const access = jwt.sign({ sub: u.id, email: u.email ?? undefined, role }, { expiresIn: `${ACCESS_MAX_AGE}s` });
+    if (rejectNonAdmin(role, reply)) return;
+    const access = await issueAccessToken(req.server, u, role);
     const newRaw = await repoRotateRefreshToken(raw, u.id);
     setAccessCookie(reply, access);
     setRefreshCookie(reply, newRaw);
@@ -375,6 +570,7 @@ export async function me(req: FastifyRequest, reply: FastifyReply) {
     const u = await repoGetUserById(p.sub);
     if (!u) return reply.status(401).send({ error: { message: 'invalid_token' } });
     const role = await getPrimaryRole(p.sub);
+    if (rejectNonAdmin(role, reply)) return;
     return reply.send({
       user: {
         id: u.id,

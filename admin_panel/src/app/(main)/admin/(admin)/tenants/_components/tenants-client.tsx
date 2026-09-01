@@ -1,0 +1,239 @@
+'use client';
+
+import * as React from 'react';
+import { toast } from 'sonner';
+import { Building2, CalendarClock, KeyRound, Package, Plus, Save, UserPlus, Users } from 'lucide-react';
+
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Textarea } from '@/components/ui/textarea';
+import {
+  useCreateTenantRoleMutation,
+  useListTenantSecretsQuery,
+  useGetTenantMembersQuery,
+  useListTenantsAdminQuery,
+  useOnboardTenantMutation,
+  useUpsertTenantSecretMutation,
+  useUpdateTenantProfileMutation,
+  type TenantAdminSummary,
+  type TenantMember,
+} from '@/integrations/hooks';
+import Link from 'next/link';
+
+function safeJson(text: string) {
+  if (!text.trim()) return {};
+  return JSON.parse(text);
+}
+
+function formatExpiry(value: string | null): string {
+  if (!value) return 'Süresiz';
+  const d = new Date(value);
+  if (Number.isNaN(d.getTime())) return 'Süresiz';
+  return d.toLocaleDateString('tr-TR', { day: '2-digit', month: 'short', year: 'numeric' });
+}
+
+function TenantSummaryStrip({ tenant }: { tenant: TenantAdminSummary }) {
+  const expired = tenant.next_expires_at ? new Date(tenant.next_expires_at).getTime() < Date.now() : false;
+  return (
+    <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+      <span className="inline-flex items-center gap-1 rounded border px-2 py-1">
+        <Users className="size-3.5" />
+        {tenant.member_count} üye
+      </span>
+      <span className="inline-flex items-center gap-1 rounded border px-2 py-1">
+        <Package className="size-3.5" />
+        {tenant.active_module_count} aktif modül
+      </span>
+      <span className={`inline-flex items-center gap-1 rounded border px-2 py-1 ${expired ? 'border-red-400 text-red-500' : ''}`}>
+        <CalendarClock className="size-3.5" />
+        {formatExpiry(tenant.next_expires_at)}
+      </span>
+      <Badge variant={tenant.status === 'active' ? 'secondary' : 'outline'}>{tenant.status}</Badge>
+    </div>
+  );
+}
+
+function TenantEditor({ tenant }: { tenant: TenantAdminSummary }) {
+  const [brandingText, setBrandingText] = React.useState(() => JSON.stringify(tenant.branding ?? {}, null, 2));
+  const [userId, setUserId] = React.useState('');
+  const [secretKey, setSecretKey] = React.useState('scraper_api_key');
+  const [secretValue, setSecretValue] = React.useState('');
+  const [updateTenant, updateState] = useUpdateTenantProfileMutation();
+  const [createRole, roleState] = useCreateTenantRoleMutation();
+  const [upsertSecret, secretState] = useUpsertTenantSecretMutation();
+  const { data: membersData } = useGetTenantMembersQuery(tenant.key);
+  const members: TenantMember[] = membersData?.members ?? [];
+  const { data: secrets = [] } = useListTenantSecretsQuery(tenant.key);
+
+  React.useEffect(() => {
+    setBrandingText(JSON.stringify(tenant.branding ?? {}, null, 2));
+  }, [tenant]);
+
+  const save = async () => {
+    try {
+      await updateTenant({ key: tenant.key, body: { branding: safeJson(brandingText) } }).unwrap();
+      toast.success('Tenant profili güncellendi');
+    } catch {
+      toast.error('JSON veya kayıt hatası');
+    }
+  };
+
+  const addRole = async () => {
+    if (!userId.trim()) return;
+    try {
+      await createRole({ key: tenant.key, user_id: userId.trim(), role: 'tenant_admin' }).unwrap();
+      setUserId('');
+      toast.success('Rol atandı');
+    } catch {
+      toast.error('Rol atanamadı');
+    }
+  };
+
+  const saveSecret = async () => {
+    if (!secretKey.trim() || !secretValue.trim()) return;
+    try {
+      await upsertSecret({ tenantKey: tenant.key, key: secretKey.trim(), value: secretValue }).unwrap();
+      setSecretValue('');
+      toast.success('Secret kaydedildi');
+    } catch {
+      toast.error('Secret kaydedilemedi');
+    }
+  };
+
+  return (
+    <Card className="rounded-lg">
+      <CardHeader className="pb-3">
+        <div className="flex items-center justify-between gap-3">
+          <CardTitle className="text-base">{tenant.branding?.displayName || tenant.name}</CardTitle>
+          <Badge variant="outline">{tenant.key}</Badge>
+        </div>
+        <div className="mt-2">
+          <TenantSummaryStrip tenant={tenant} />
+        </div>
+      </CardHeader>
+      <CardContent className="space-y-4">
+        <div className="grid gap-2">
+          <Label>Branding JSON</Label>
+          <Textarea value={brandingText} onChange={(e) => setBrandingText(e.target.value)} className="min-h-36 font-mono text-xs" />
+        </div>
+        <Button onClick={save} disabled={updateState.isLoading} size="sm">
+          <Save className="mr-2 size-4" />
+          Kaydet
+        </Button>
+        <div className="grid gap-2 border-t pt-4">
+          <div className="flex items-center justify-between">
+            <Label>Üyeler &amp; Modüller ({members.length})</Label>
+          </div>
+          <div className="flex gap-2">
+            <Input value={userId} onChange={(e) => setUserId(e.target.value)} placeholder="user_id — tenant admin ata" />
+            <Button onClick={addRole} disabled={roleState.isLoading || !userId.trim()} size="icon" aria-label="Rol ata">
+              <UserPlus className="size-4" />
+            </Button>
+          </div>
+          <div className="space-y-2 text-xs">
+            {members.length ? members.map((m) => (
+              <div key={m.user_id} className="rounded border px-2 py-2">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="truncate font-medium text-gm-text">{m.full_name || m.email || m.user_id}</span>
+                  <div className="flex items-center gap-1">
+                    <Badge variant={m.role === 'tenant_admin' ? 'default' : 'outline'} className="text-[10px]">
+                      {m.role === 'tenant_admin' ? 'admin' : 'editor'}
+                    </Badge>
+                    <Link href={`/admin/users/${m.user_id}`} className="text-gm-gold underline underline-offset-2">
+                      yönet
+                    </Link>
+                  </div>
+                </div>
+                <div className="mt-1 flex flex-wrap gap-1">
+                  {m.modules.map((mod) => (
+                    <Badge key={mod.module_key} variant="secondary" className="text-[10px]" title={mod.default_on ? 'Herkese açık (varsayılan)' : 'Paket erişimi'}>
+                      {mod.name}{mod.default_on ? '' : ' •'}
+                    </Badge>
+                  ))}
+                </div>
+              </div>
+            )) : <span className="text-muted-foreground">Üye yok</span>}
+          </div>
+        </div>
+        <div className="grid gap-2 border-t pt-4">
+          <Label>Tenant secret</Label>
+          <div className="grid gap-2 md:grid-cols-[minmax(0,1fr)_minmax(0,1fr)_auto]">
+            <Input value={secretKey} onChange={(e) => setSecretKey(e.target.value)} placeholder="scraper_api_key" />
+            <Input
+              value={secretValue}
+              onChange={(e) => setSecretValue(e.target.value)}
+              placeholder="Yeni değer"
+              type="password"
+              autoComplete="off"
+            />
+            <Button onClick={saveSecret} disabled={secretState.isLoading || !secretKey.trim() || !secretValue.trim()} size="icon" aria-label="Secret kaydet">
+              <KeyRound className="size-4" />
+            </Button>
+          </div>
+          <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
+            {secrets.length ? secrets.map((secret) => (
+              <Badge key={secret.key} variant="secondary">{secret.key}</Badge>
+            )) : <span>Secret tanımlı değil</span>}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
+  );
+}
+
+export default function TenantsClient() {
+  const { data: tenants = [], isLoading } = useListTenantsAdminQuery();
+  const [tenantKey, setTenantKey] = React.useState('');
+  const [name, setName] = React.useState('');
+  const [onboard, onboardState] = useOnboardTenantMutation();
+
+  const handleOnboard = async () => {
+    if (!tenantKey.trim() || !name.trim()) return;
+    try {
+      await onboard({
+        tenant_key: tenantKey.trim(),
+        name: name.trim(),
+        branding: { appName: 'MarketPulse', displayName: name.trim(), logoUrl: '', sector: 'platform' },
+      }).unwrap();
+      setTenantKey('');
+      setName('');
+      toast.success('Tenant oluşturuldu');
+    } catch {
+      toast.error('Tenant oluşturulamadı');
+    }
+  };
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <div className="flex items-center gap-2 text-gm-gold">
+          <Building2 className="size-5" />
+          <span className="text-xs font-bold uppercase tracking-[0.2em]">SaaS</span>
+        </div>
+        <h1 className="mt-2 font-serif text-3xl text-gm-text">Tenant Yönetimi</h1>
+      </div>
+
+      <Card className="rounded-lg">
+        <CardContent className="grid gap-3 p-4 md:grid-cols-[1fr_1fr_auto]">
+          <Input value={tenantKey} onChange={(e) => setTenantKey(e.target.value)} placeholder="tenant_key" />
+          <Input value={name} onChange={(e) => setName(e.target.value)} placeholder="Görünen ad" />
+          <Button onClick={handleOnboard} disabled={onboardState.isLoading || !tenantKey.trim() || !name.trim()}>
+            <Plus className="mr-2 size-4" />
+            Onboard
+          </Button>
+        </CardContent>
+      </Card>
+
+      {isLoading ? (
+        <div className="text-sm text-muted-foreground">Yükleniyor...</div>
+      ) : (
+        <div className="grid gap-4 xl:grid-cols-2">
+          {tenants.map((tenant) => <TenantEditor key={tenant.key} tenant={tenant} />)}
+        </div>
+      )}
+    </div>
+  );
+}

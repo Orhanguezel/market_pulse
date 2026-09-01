@@ -3,6 +3,7 @@ import { createDbMock } from '../../market/__tests__/helpers/mock-db';
 
 const dbMock = createDbMock();
 const env = {
+  TENANT_KEY: 'avrasya',
   OXYLABS_USERNAME: 'user',
   OXYLABS_PASSWORD: 'pass',
   GROQ_API_KEY: '',
@@ -147,7 +148,7 @@ describe('amazon lead machine job runner', () => {
       params: '{"keyword":"car mats","marketplace":"de","review_min":50,"review_max":200,"rating_min":4,"rating_max":4.5}',
       result_count: 0,
       error_msg: null,
-      created_by: null,
+    owner_user_id: null,
       created_at: '2026-05-08',
       started_at: null,
       finished_at: null,
@@ -182,13 +183,13 @@ describe('amazon lead machine job runner', () => {
 
     await runAmazonJob('job-1');
 
-    expect(dbMock.poolExecutions[1]?.values).toEqual(['running', null, 'job-1']);
+    expect(dbMock.poolExecutions[1]?.values).toEqual(['running', null, 'job-1', 'avrasya']);
     expect(dbMock.poolExecutions.some((entry) => entry.sql.includes('INSERT INTO amazon_risk_scores'))).toBe(true);
     expect(dbMock.poolExecutions.some((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'))).toBe(true);
     const insert = dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'));
     expect(insert?.values).toEqual(expect.arrayContaining(['job-1', 'amazon']));
     expect(insert?.values).toEqual(expect.arrayContaining(['car mats — Amazon Skor Raporu']));
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, 'job-1', 'avrasya']);
   });
 
   test('marks amazon job failed on scrape error', async () => {
@@ -200,7 +201,7 @@ describe('amazon lead machine job runner', () => {
       params: '{"keyword":"car mats"}',
       result_count: 0,
       error_msg: null,
-      created_by: null,
+      owner_user_id: null,
       created_at: '2026-05-08',
       started_at: null,
       finished_at: null,
@@ -212,7 +213,7 @@ describe('amazon lead machine job runner', () => {
     expect(
       dbMock.poolExecutions.some((entry) => entry.sql.includes('INSERT INTO amazon_job_error_logs')),
     ).toBe(true);
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'OXYLABS_AMAZON_SEARCH_FAILED_500', 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'OXYLABS_AMAZON_SEARCH_FAILED_500', 'job-1', 'avrasya']);
   });
 });
 

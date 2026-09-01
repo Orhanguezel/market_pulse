@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { askBestAvailable } from '../_shared/ai.client';
 import { getCandidate } from '../_shared/db';
 import { listCandidateEnrichment } from '../enrichment/enrichment.service';
@@ -41,7 +42,7 @@ function fallbackParagraph(language: OutreachLanguage, country: string) {
     return `Wir haben Ihr Aftermarket-Programm für den ${country}-Markt gesehen und sehen klare Überschneidungen zu unserer Floor-Mat-Linie.`;
   }
   if (language === 'TR') {
-    return `${country} pazarındaki aftermarket programınızı inceledik; paspas serimizle net bir örtüşme görüyoruz.`;
+    return `${country} pazarındaki aftermarket programınızı inceledik; oto aksesuar serimizle net bir örtüşme görüyoruz.`;
   }
   return `We've seen your aftermarket programme covering the ${country} market and noticed a clear product-range overlap with our floor mat line.`;
 }
@@ -67,7 +68,7 @@ Avrasya / ProMats | www.promats.com.tr`;
 
 ${paragraph}
 
-Biz Avrasya / ProMats olarak Türkiye'de oto paspası üretiyoruz, 30+ ülkeye sevkiyat yapıyoruz. 8-12 Eylül arası Automechanika Frankfurt'tayız - Hall 3.1, Stand D11.
+Biz Avrasya / ProMats olarak Türkiye'de oto oto aksesuarı üretiyoruz, 30+ ülkeye sevkiyat yapıyoruz. 8-12 Eylül arası Automechanika Frankfurt'tayız - Hall 3.1, Stand D11.
 
 10 dakikalık bir görüşme için müsait olur musunuz?
 
@@ -95,8 +96,9 @@ Avrasya / ProMats | www.promats.com.tr`;
 export async function generateOutreachEmail(candidateId: string, opts?: {
   calendlyLink?: string;
   senderName?: string;
+  ownerUserId?: string | null;
 }) {
-  const candidate = await getCandidate(candidateId);
+  const candidate = await getCandidate(candidateId, { ownerUserId: opts?.ownerUserId });
   if (!candidate) throw new Error('CANDIDATE_NOT_FOUND');
 
   const raw = asRecord(candidate.raw_data);
@@ -166,10 +168,11 @@ AI summary:
     opts?.senderName || '{gonderici_ad_soyad}',
   );
 
+  const tenantKey = await getActiveTenantKey();
   const id = randomUUID();
   await pool.execute(
-    'INSERT INTO lead_outreach_drafts (id, candidate_id, subject, body, ai_model) VALUES (?, ?, ?, ?, ?)',
-    [id, candidateId, subject.slice(0, 300), body, 'gpt-4o-mini'],
+    'INSERT INTO lead_outreach_drafts (id, tenant_key, candidate_id, subject, body, ai_model) VALUES (?, ?, ?, ?, ?, ?)',
+    [id, tenantKey, candidateId, subject.slice(0, 300), body, 'gpt-4o-mini'],
   );
   return { id, candidateId, subject, body };
 }

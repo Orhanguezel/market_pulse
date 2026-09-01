@@ -22,6 +22,7 @@ import type { TranslateFn } from '@/i18n';
 
 import { NavMain } from './nav-main';
 import { NavUser } from './nav-user';
+import { TenantSwitcher } from './tenant-switcher';
 import { useAdminSettings } from '../admin-settings-provider';
 import { useStatusQuery, useGetMyProfileQuery } from '@/integrations/hooks';
 import { getAdminAppName, getAdminBrandSubtitle } from '@/lib/admin-brand';
@@ -54,6 +55,7 @@ export function AppSidebar({
   appName?: string;
 }) {
   const { copy } = useAdminUiCopy();
+  const { state } = useSidebar();
   const t = useAdminT();
   const { pageMeta, branding } = useAdminSettings();
 
@@ -137,6 +139,7 @@ export function AppSidebar({
       </SidebarHeader>
 
       <SidebarContent className="px-3 py-6">
+        <TenantSwitcher collapsed={state === 'collapsed'} />
         <NavMain items={groupsForMe} showQuickCreate={false} />
       </SidebarContent>
 

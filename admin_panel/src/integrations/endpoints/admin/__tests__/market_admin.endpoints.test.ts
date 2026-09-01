@@ -19,6 +19,7 @@ const fetchMock = mock(async (input: RequestInfo | URL, init?: RequestInit) => {
   const body = init?.body ?? (request ? await request.clone().text() : null);
   capturedFetchCalls.push({ url: new URL(rawUrl), method, body: body || null });
   if (contentType.includes('text/csv')) return Promise.resolve(new Response('name,category\n'));
+  if (rawUrl.includes('export.xlsx')) return Promise.resolve(new Response(new Uint8Array([80, 75])));
   return Promise.resolve(Response.json({ ok: true }));
 });
 
@@ -156,16 +157,16 @@ describe('market admin RTK endpoints', () => {
     expect(call.url.pathname).toBe('/api/v1/admin/market/signals/signal-1');
   });
 
-  test('Paspas external and report endpoints map correctly', async () => {
-    let call = await dispatchEndpoint('listPaspasCustomers', { q: 'bayi', limit: 20 });
-    expect(call.url.pathname).toBe('/api/v1/admin/market/external/paspas/customers');
+  test('ERP external and report endpoints map correctly', async () => {
+    let call = await dispatchEndpoint('listErpCustomers', { q: 'bayi', limit: 20 });
+    expect(call.url.pathname).toBe('/api/v1/admin/market/external/erp/customers');
     expect(call.url.searchParams.get('q')).toBe('bayi');
 
-    call = await dispatchEndpoint('listPaspasProducts', { q: 'paspas', limit: 10 });
-    expect(call.url.pathname).toBe('/api/v1/admin/market/external/paspas/products');
+    call = await dispatchEndpoint('listErpProducts', { q: 'accessory', limit: 10 });
+    expect(call.url.pathname).toBe('/api/v1/admin/market/external/erp/products');
 
-    call = await dispatchEndpoint('listPaspasCustomerOrders', 'customer-1');
-    expect(call.url.pathname).toBe('/api/v1/admin/market/external/paspas/customers/customer-1/orders');
+    call = await dispatchEndpoint('listErpCustomerOrders', 'customer-1');
+    expect(call.url.pathname).toBe('/api/v1/admin/market/external/erp/customers/customer-1/orders');
 
     call = await dispatchEndpoint('previewWeeklyReport');
     expect(call.method).toBe('GET');
@@ -186,9 +187,9 @@ describe('market admin RTK endpoints', () => {
     expect(call.method).toBe('POST');
     expect(call.url.pathname).toBe('/api/v1/admin/market/targets/scan-all-competitors');
 
-    call = await dispatchEndpoint('syncPaspasTargets', { mode: 'customers' });
+    call = await dispatchEndpoint('syncErpTargets', { mode: 'customers' });
     expect(call.method).toBe('POST');
-    expect(call.url.pathname).toBe('/api/v1/admin/market/sync-paspas');
+    expect(call.url.pathname).toBe('/api/v1/admin/market/erp/sync');
     expect(jsonBody(call)).toEqual({ mode: 'customers' });
 
     call = await dispatchEndpoint('bulkImportTargets', { rows: [{ name: 'Target A' }], dry_run: true, on_conflict: 'skip' });
@@ -352,16 +353,95 @@ describe('lead machine admin RTK endpoints', () => {
     expect(call.method).toBe('POST');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/b2b/jobs');
 
+    call = await dispatchEndpoint('getDecisionMakerPresets');
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/presets');
+
+    call = await dispatchEndpoint('listDecisionMakerJobs');
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/jobs');
+
+    call = await dispatchEndpoint('startDecisionMakerJob', {
+      sector: 'fitness',
+      cities: ['Istanbul'],
+      targetCount: 200,
+      excludeKeywords: ['supplement'],
+    });
+    expect(call.method).toBe('POST');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/jobs');
+    expect(jsonBody(call)).toEqual({
+      sector: 'fitness',
+      cities: ['Istanbul'],
+      targetCount: 200,
+      excludeKeywords: ['supplement'],
+    });
+
+    call = await dispatchEndpoint('listDecisionMakerResults', { job_id: 'job-1', confidence: 'A', limit: 50 });
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/results');
+    expect(call.url.searchParams.get('job_id')).toBe('job-1');
+    expect(call.url.searchParams.get('confidence')).toBe('A');
+    expect(call.url.searchParams.get('limit')).toBe('50');
+
+    call = await dispatchEndpoint('listDecisionMakerCompanyPool', { job_id: 'job-1', status: 'qualified', include_excluded: true, limit: 25 });
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/company-pool');
+    expect(call.url.searchParams.get('job_id')).toBe('job-1');
+    expect(call.url.searchParams.get('status')).toBe('qualified');
+    expect(call.url.searchParams.get('include_excluded')).toBe('true');
+    expect(call.url.searchParams.get('limit')).toBe('25');
+
+    call = await dispatchEndpoint('exportDecisionMakersCsv', { job_id: 'job-1', confidence: 'all' });
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/export.csv');
+    expect(call.url.searchParams.get('job_id')).toBe('job-1');
+    expect(call.url.searchParams.get('confidence')).toBeNull();
+
+    call = await dispatchEndpoint('exportDecisionMakersXlsx', { job_id: 'job-1', confidence: 'A' });
+    expect(call.method).toBe('GET');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/export.xlsx');
+    expect(call.url.searchParams.get('job_id')).toBe('job-1');
+    expect(call.url.searchParams.get('confidence')).toBe('A');
+
+    call = await dispatchEndpoint('promoteDecisionMakersToCandidates', { job_id: 'job-1', confidence: 'A', limit: 100 });
+    expect(call.method).toBe('POST');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/promote-candidates');
+    expect(jsonBody(call)).toEqual({ job_id: 'job-1', confidence: 'A', limit: 100 });
+
+    call = await dispatchEndpoint('promoteDecisionMakersToCrm', { job_id: 'job-1', confidence: 'A', limit: 100 });
+    expect(call.method).toBe('POST');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/decision-makers/promote-crm');
+    expect(jsonBody(call)).toEqual({ job_id: 'job-1', confidence: 'A', limit: 100 });
+
+    call = await dispatchEndpoint('listCustomsJobs');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/jobs');
+
+    call = await dispatchEndpoint('startCustomsJob', { hs_prefix: '0904' });
+    expect(call.method).toBe('POST');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/jobs');
+
+    call = await dispatchEndpoint('getCustomsIntelligenceSummary', { hs_prefix: '401691', date_from: '2024-01-01' });
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/intelligence/summary');
+    expect(call.url.searchParams.get('hs_prefix')).toBe('401691');
+
+    call = await dispatchEndpoint('createCustomsTrackedEntity', {
+      entity_type: 'own',
+      name: 'Avrasya Paspas',
+      aliases: [{ alias: 'AVRASYA PASPAS', match_type: 'prefix' }],
+    });
+    expect(call.method).toBe('POST');
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/intelligence/entities');
+
+    call = await dispatchEndpoint('getCustomsIntelligenceEvidence', { entityId: 'entity-1', limit: 50 });
+    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/customs/intelligence/entities/entity-1/evidence');
+    expect(call.url.searchParams.get('limit')).toBe('50');
+
     call = await dispatchEndpoint('listFairJobs');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/fair/jobs');
 
     call = await dispatchEndpoint('startFairJob', { fair_name: 'Automechanika' });
     expect(call.method).toBe('POST');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/fair/jobs');
-
-    call = await dispatchEndpoint('startGenericFairRunner', { fair_url: 'https://fair.example', icp_id: 'icp-1' });
-    expect(call.method).toBe('POST');
-    expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/fair/run');
 
     call = await dispatchEndpoint('listIcpProfiles');
     expect(call.url.pathname).toBe('/api/v1/admin/lead-machine/icp');
@@ -396,10 +476,10 @@ describe('lead machine admin RTK endpoints', () => {
       'useCreateMarketSignalMutation',
       'useReviewMarketSignalMutation',
       'useDeleteMarketSignalMutation',
-      'useListPaspasCustomersQuery',
-      'useListPaspasProductsQuery',
-      'useListPaspasCustomerOrdersQuery',
-      'useGetPaspasCustomerOrdersQuery',
+      'useListErpCustomersQuery',
+      'useListErpProductsQuery',
+      'useListErpCustomerOrdersQuery',
+      'useGetErpCustomerOrdersQuery',
       'usePreviewWeeklyReportQuery',
       'useLazyPreviewWeeklyReportQuery',
       'useSendWeeklyReportMutation',
@@ -425,14 +505,31 @@ describe('lead machine admin RTK endpoints', () => {
       'useGetAmazonRiskScoreQuery',
       'useListB2bJobsQuery',
       'useStartB2bJobMutation',
+      'useGetDecisionMakerPresetsQuery',
+      'useListDecisionMakerJobsQuery',
+      'useStartDecisionMakerJobMutation',
+      'useListDecisionMakerResultsQuery',
+      'useListDecisionMakerCompanyPoolQuery',
+      'useExportDecisionMakersCsvQuery',
+      'useLazyExportDecisionMakersCsvQuery',
+      'useExportDecisionMakersXlsxQuery',
+      'useLazyExportDecisionMakersXlsxQuery',
+      'usePromoteDecisionMakersToCandidatesMutation',
+      'usePromoteDecisionMakersToCrmMutation',
+      'useListCustomsJobsQuery',
+      'useStartCustomsJobMutation',
+      'useListCustomsTrackedEntitiesQuery',
+      'useCreateCustomsTrackedEntityMutation',
+      'useDeleteCustomsTrackedEntityMutation',
+      'useGetCustomsIntelligenceSummaryQuery',
+      'useGetCustomsIntelligenceEvidenceQuery',
       'useListFairJobsQuery',
       'useStartFairJobMutation',
-      'useStartGenericFairRunnerMutation',
       'useListIcpProfilesQuery',
       'useCreateIcpProfileMutation',
       'useUpdateIcpProfileMutation',
       'useDeleteIcpProfileMutation',
-      'useSyncPaspasTargetsMutation',
+      'useSyncErpTargetsMutation',
       'useBulkImportTargetsMutation',
       'useLazyDownloadImportTemplateQuery',
       'useScanCompetitorMutation',

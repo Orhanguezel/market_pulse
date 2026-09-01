@@ -1,4 +1,12 @@
 import { baseApi } from '@/integrations/baseApi';
+import type { FetchBaseQueryError } from '@reduxjs/toolkit/query';
+import type {
+  CustomsEvidenceResponse,
+  CustomsEntityType,
+  CustomsIntelligenceFilters,
+  CustomsIntelligenceSummary,
+  CustomsTrackedEntity,
+} from '@/integrations/shared/customs-intelligence.types';
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -21,7 +29,7 @@ export interface MarketTarget {
   notes:            string | null;
   churnRiskScore:   number;
   lastSeenAt:       string | null;
-  paspasCustomerId: string | null;
+  externalCustomerId: string | null;
   createdAt:        string;
   updatedAt:        string;
 }
@@ -73,7 +81,7 @@ export interface MarketStats {
   pendingSignals: number;
 }
 
-export interface PaspasCustomer {
+export interface ErpCustomer {
   id: string;
   tur: string;
   name: string;
@@ -82,7 +90,7 @@ export interface PaspasCustomer {
   discount: number | null;
 }
 
-export interface PaspasProduct {
+export interface ErpProduct {
   id: string;
   kategori: string;
   kod: string;
@@ -94,7 +102,7 @@ export interface PaspasProduct {
   unitPrice: number | null;
 }
 
-export interface PaspasOrder {
+export interface ErpOrder {
   id: string;
   siparisNo: string;
   customerId: string;
@@ -104,8 +112,13 @@ export interface PaspasOrder {
   toplamTutar: number;
 }
 
+export interface ErpListResponse<T> {
+  enabled: boolean;
+  items: T[];
+}
+
 export type LeadCandidateStatus = 'pending' | 'approved' | 'rejected' | 'favorite';
-export type LeadCandidateChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match';
+export type LeadCandidateChannel = 'amazon' | 'b2b_directory' | 'trade_fair' | 'trade_fair_in_person' | 'icp_match' | 'customs' | 'decision_maker';
 
 export interface LeadCandidate {
   id: string;
@@ -139,11 +152,92 @@ export interface LeadSearchJob {
   params: Record<string, unknown>;
   result_count: number;
   error_msg: string | null;
-  created_by: string | null;
+  owner_user_id: string | null;
   created_at: string;
   started_at: string | null;
   finished_at: string | null;
   risk_report?: AmazonRiskReport;
+}
+
+export type DecisionMakerConfidence = 'A' | 'B' | 'C';
+export type CompanyQualityStatus = 'qualified' | 'possible' | 'manual_review' | 'excluded';
+export type DecisionMakerReviewStatus = 'pending' | 'verified' | 'rejected' | 'manual_review';
+
+export interface DecisionMakerRow {
+  id?: string;
+  company_name: string;
+  city: string | null;
+  business_type: string | null;
+  decision_maker_name: string | null;
+  title: string | null;
+  linkedin_profile_url: string | null;
+  company_website: string | null;
+  social_url: string | null;
+  source_url: string | null;
+  fit_note: string | null;
+  confidence_score: DecisionMakerConfidence;
+  review_status?: DecisionMakerReviewStatus;
+  last_verified_at: string | null;
+}
+
+export interface CompanyPoolRow {
+  id?: string;
+  company_name: string;
+  city: string | null;
+  business_type: string | null;
+  website: string | null;
+  phone: string | null;
+  google_maps_url: string | null;
+  address: string | null;
+  quality_score: number;
+  quality_status: CompanyQualityStatus;
+  exclude_reason: string | null;
+  source: string;
+  last_verified_at: string | null;
+}
+
+export interface CompanyPoolResults {
+  rows: CompanyPoolRow[];
+  stats: { total: number; qualified: number; possible: number; manualReview: number; excluded: number };
+}
+
+export interface DecisionMakerResults {
+  rows: DecisionMakerRow[];
+  stats: { companies: number; withDecisionMaker: number };
+}
+
+export interface DecisionMakerPresets {
+  sectors: string[];
+  business_types: Record<string, string[]>;
+  default_titles: string[];
+  export_b2b_titles: string[];
+  default_exclude_keywords: string[];
+}
+
+export interface StartDecisionMakerJobBody {
+  sector?: string;
+  businessTypes?: string[];
+  cities: string[];
+  country?: string;
+  titles?: string[];
+  excludeKeywords?: string[];
+  apolloFallback?: boolean;
+  perCityLimit?: number;
+  targetCount?: number;
+}
+
+export interface DecisionMakerResultsParams {
+  job_id?: string;
+  confidence?: DecisionMakerConfidence | 'all';
+  sector?: string;
+  limit?: number;
+}
+
+export interface CompanyPoolParams {
+  job_id?: string;
+  status?: CompanyQualityStatus | 'all';
+  include_excluded?: boolean;
+  limit?: number;
 }
 
 export interface IcpDefinition {
@@ -230,8 +324,9 @@ export interface BulkImportResult {
   preview:  BulkImportPreviewRow[];
 }
 
-export interface PaspasSyncResult {
+export interface ErpSyncResult {
   ok:       boolean;
+  enabled:  boolean;
   inserted: number;
   updated:  number;
   total:    number;
@@ -441,6 +536,56 @@ export interface OutreachCampaign {
   updated_at:           string;
 }
 
+// ─── Outreach Bulk Lists (Excel/CSV alıcı listesi → toplu mail) ──────────────
+
+export interface OutreachRecipientList {
+  id:          string;
+  tenant_key:  string;
+  campaign_id: string | null;
+  name:        string;
+  source:      string;
+  status:      string;
+  total_count: number;
+  sent_count:  number;
+  created_at:  string;
+  updated_at:  string;
+}
+
+export interface OutreachRecipient {
+  id:            string;
+  tenant_key:    string;
+  list_id:       string;
+  email:         string;
+  name:          string | null;
+  company:       string | null;
+  country:       string | null;
+  custom_fields: Record<string, unknown> | null;
+  status:        string;
+  draft_id:      string | null;
+  created_at:    string;
+}
+
+export interface OutreachUploadResult {
+  list:       OutreachRecipientList;
+  inserted:   number;
+  invalid:    number;
+  duplicates: number;
+}
+
+export interface OutreachGenerateResult {
+  listId:    string;
+  generated: number;
+  skipped:   number;
+  draftIds:  string[];
+}
+
+export interface OutreachSendResult {
+  listId:  string;
+  sent:    number;
+  bounced: number;
+  total:   number;
+}
+
 export const marketAdminApi = baseApi.injectEndpoints({
   endpoints: (b) => ({
     getMarketStats: b.query<MarketStats, void>({
@@ -481,7 +626,7 @@ export const marketAdminApi = baseApi.injectEndpoints({
         signal_score: number;
         age_score: number;
         age_days: number | null;
-        paspas_score: number | null;
+        erp_score: number | null;
       } | null;
       signals: Array<{
         id: string;
@@ -588,14 +733,14 @@ export const marketAdminApi = baseApi.injectEndpoints({
       invalidatesTags: ['MarketSignals', 'MarketStats'],
     }),
 
-    listPaspasCustomers: b.query<PaspasCustomer[], { q?: string; limit?: number }>({
-      query: (params) => ({ url: '/admin/market/external/paspas/customers', params }),
+    listErpCustomers: b.query<ErpListResponse<ErpCustomer>, { q?: string; limit?: number }>({
+      query: (params) => ({ url: '/admin/market/external/erp/customers', params }),
     }),
-    listPaspasProducts: b.query<PaspasProduct[], { q?: string; limit?: number }>({
-      query: (params) => ({ url: '/admin/market/external/paspas/products', params }),
+    listErpProducts: b.query<ErpListResponse<ErpProduct>, { q?: string; limit?: number }>({
+      query: (params) => ({ url: '/admin/market/external/erp/products', params }),
     }),
-    listPaspasCustomerOrders: b.query<PaspasOrder[], string>({
-      query: (id) => ({ url: `/admin/market/external/paspas/customers/${id}/orders` }),
+    listErpCustomerOrders: b.query<ErpListResponse<ErpOrder>, string>({
+      query: (id) => ({ url: `/admin/market/external/erp/customers/${id}/orders` }),
     }),
 
     previewWeeklyReport: b.query<Blob, void>({
@@ -735,8 +880,8 @@ export const marketAdminApi = baseApi.injectEndpoints({
       invalidatesTags: ['MarketSignals', 'MarketTargets', 'MarketStats'],
     }),
 
-    syncPaspasTargets: b.mutation<PaspasSyncResult, { mode?: 'all' | 'customers' | 'dealers' }>({
-      query: (body) => ({ url: '/admin/market/sync-paspas', method: 'POST', body }),
+    syncErpTargets: b.mutation<ErpSyncResult, { mode?: 'all' | 'customers' | 'dealers' }>({
+      query: (body) => ({ url: '/admin/market/erp/sync', method: 'POST', body }),
       invalidatesTags: ['MarketTargets', 'MarketStats'],
     }),
     bulkImportTargets: b.mutation<BulkImportResult, {
@@ -882,16 +1027,151 @@ export const marketAdminApi = baseApi.injectEndpoints({
       query: (body) => ({ url: '/admin/lead-machine/b2b/jobs', method: 'POST', body }),
       invalidatesTags: ['LeadMachineJobs'],
     }),
+    getDecisionMakerPresets: b.query<DecisionMakerPresets, void>({
+      query: () => ({ url: '/admin/lead-machine/decision-makers/presets' }),
+      providesTags: ['DecisionMakerResults'],
+    }),
+    listDecisionMakerJobs: b.query<LeadSearchJob[], void>({
+      query: () => ({ url: '/admin/lead-machine/decision-makers/jobs' }),
+      providesTags: ['DecisionMakerJobs', 'LeadMachineJobs'],
+    }),
+    startDecisionMakerJob: b.mutation<LeadSearchJob, StartDecisionMakerJobBody>({
+      query: (body) => ({ url: '/admin/lead-machine/decision-makers/jobs', method: 'POST', body }),
+      invalidatesTags: ['DecisionMakerJobs', 'LeadMachineJobs', 'DecisionMakerResults'],
+    }),
+    listDecisionMakerResults: b.query<DecisionMakerResults, DecisionMakerResultsParams | void>({
+      query: (params) => ({
+        url: '/admin/lead-machine/decision-makers/results',
+        params: params ? {
+          ...params,
+          confidence: params.confidence && params.confidence !== 'all' ? params.confidence : undefined,
+        } : undefined,
+      }),
+      providesTags: ['DecisionMakerResults'],
+    }),
+    listDecisionMakerCompanyPool: b.query<CompanyPoolResults, CompanyPoolParams | void>({
+      query: (params) => ({
+        url: '/admin/lead-machine/decision-makers/company-pool',
+        params: params ? {
+          ...params,
+          status: params.status && params.status !== 'all' ? params.status : undefined,
+        } : undefined,
+      }),
+      providesTags: ['DecisionMakerResults'],
+    }),
+    exportDecisionMakersCsv: b.query<string, DecisionMakerResultsParams | void>({
+      query: (params) => ({
+        url: '/admin/lead-machine/decision-makers/export.csv',
+        params: params ? {
+          ...params,
+          confidence: params.confidence && params.confidence !== 'all' ? params.confidence : undefined,
+        } : undefined,
+        responseHandler: async (response) => response.text(),
+      }),
+    }),
+    exportDecisionMakersXlsx: b.query<ArrayBuffer, DecisionMakerResultsParams | void>({
+      query: (params) => ({
+        url: '/admin/lead-machine/decision-makers/export.xlsx',
+        params: params ? {
+          ...params,
+          confidence: params.confidence && params.confidence !== 'all' ? params.confidence : undefined,
+        } : undefined,
+        responseHandler: async (response) => response.arrayBuffer(),
+      }),
+    }),
+    promoteDecisionMakersToCandidates: b.mutation<{ created: number; total: number }, {
+      job_id: string;
+      confidence?: DecisionMakerConfidence | 'all';
+      limit?: number;
+    }>({
+      query: (body) => ({
+        url: '/admin/lead-machine/decision-makers/promote-candidates',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['LeadCandidates'],
+    }),
+    promoteDecisionMakersToCrm: b.mutation<{ accounts: number; contacts: number; total: number }, {
+      job_id: string;
+      confidence?: DecisionMakerConfidence | 'all';
+      limit?: number;
+    }>({
+      query: (body) => ({
+        url: '/admin/lead-machine/decision-makers/promote-crm',
+        method: 'POST',
+        body,
+      }),
+      invalidatesTags: ['Crm'],
+    }),
+    reviewDecisionMaker: b.mutation<{ id: string; review_status: DecisionMakerReviewStatus }, {
+      id: string;
+      status: DecisionMakerReviewStatus;
+    }>({
+      query: ({ id, status }) => ({
+        url: `/admin/lead-machine/decision-makers/${id}/review`,
+        method: 'POST',
+        body: { status },
+      }),
+      invalidatesTags: ['DecisionMakerResults'],
+    }),
+    updateCompanyPoolStatus: b.mutation<{ id: string; quality_status: CompanyQualityStatus }, {
+      id: string;
+      status: CompanyQualityStatus;
+      exclude_reason?: string;
+    }>({
+      query: ({ id, status, exclude_reason }) => ({
+        url: `/admin/lead-machine/decision-makers/company-pool/${id}/status`,
+        method: 'POST',
+        body: { status, exclude_reason },
+      }),
+      invalidatesTags: ['DecisionMakerResults'],
+    }),
+    listCustomsJobs: b.query<LeadSearchJob[], void>({
+      query: () => ({ url: '/admin/lead-machine/customs/jobs' }),
+      providesTags: ['LeadMachineJobs'],
+    }),
+    startCustomsJob: b.mutation<LeadSearchJob, Record<string, unknown>>({
+      query: (body) => ({ url: '/admin/lead-machine/customs/jobs', method: 'POST', body }),
+      invalidatesTags: ['LeadMachineJobs'],
+    }),
+    listCustomsTrackedEntities: b.query<CustomsTrackedEntity[], void>({
+      query: () => ({ url: '/admin/lead-machine/customs/intelligence/entities' }),
+      providesTags: ['CustomsIntelligence'],
+    }),
+    createCustomsTrackedEntity: b.mutation<CustomsTrackedEntity, {
+      entity_type: CustomsEntityType;
+      name: string;
+      country?: string;
+      aliases: Array<{ alias: string; match_type: 'exact' | 'prefix' }>;
+    }>({
+      query: (body) => ({ url: '/admin/lead-machine/customs/intelligence/entities', method: 'POST', body }),
+      invalidatesTags: ['CustomsIntelligence'],
+    }),
+    deleteCustomsTrackedEntity: b.mutation<void, string>({
+      query: (id) => ({ url: `/admin/lead-machine/customs/intelligence/entities/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['CustomsIntelligence'],
+    }),
+    getCustomsIntelligenceSummary: b.query<CustomsIntelligenceSummary, CustomsIntelligenceFilters>({
+      query: (params) => ({ url: '/admin/lead-machine/customs/intelligence/summary', params }),
+      providesTags: ['CustomsIntelligence'],
+    }),
+    getCustomsIntelligenceEvidence: b.query<CustomsEvidenceResponse, CustomsIntelligenceFilters & {
+      entityId: string;
+      page?: number;
+      limit?: number;
+    }>({
+      query: ({ entityId, ...params }) => ({
+        url: `/admin/lead-machine/customs/intelligence/entities/${entityId}/evidence`,
+        params,
+      }),
+      providesTags: ['CustomsIntelligence'],
+    }),
     listFairJobs: b.query<LeadSearchJob[], void>({
       query: () => ({ url: '/admin/lead-machine/fair/jobs' }),
       providesTags: ['LeadMachineJobs'],
     }),
     startFairJob: b.mutation<LeadSearchJob, Record<string, unknown>>({
       query: (body) => ({ url: '/admin/lead-machine/fair/jobs', method: 'POST', body }),
-      invalidatesTags: ['LeadMachineJobs'],
-    }),
-    startGenericFairRunner: b.mutation<LeadSearchJob, { fair_url: string; icp_id: string; fair_name?: string; fair_date?: string; hall_filters?: string[]; max_exhibitors?: number }>({
-      query: (body) => ({ url: '/admin/lead-machine/fair/run', method: 'POST', body }),
       invalidatesTags: ['LeadMachineJobs'],
     }),
     listIcpProfiles: b.query<IcpProfile[], void>({
@@ -1050,6 +1330,83 @@ export const marketAdminApi = baseApi.injectEndpoints({
       }),
       invalidatesTags: ['OutreachCampaigns', 'IcpProfiles'],
     }),
+
+    // ─── Outreach Bulk Lists (toplu alıcı listesi → mail) ──────────────
+    listBulkLists: b.query<OutreachRecipientList[], void>({
+      query: () => ({ url: '/admin/lead-machine/outreach/lists' }),
+      providesTags: ['OutreachLists'],
+    }),
+    getBulkList: b.query<OutreachRecipientList, string>({
+      query: (id) => ({ url: `/admin/lead-machine/outreach/lists/${id}` }),
+      providesTags: (_r, _e, id) => [{ type: 'OutreachLists' as const, id }],
+    }),
+    uploadBulkList: b.mutation<OutreachUploadResult, { file: File; name: string; campaignId?: string | null }>({
+      async queryFn(args, _api, _extra, baseQuery) {
+        try {
+          const fd = new FormData();
+          fd.append('file', args.file, args.file.name);
+          fd.append('name', args.name);
+          if (args.campaignId) fd.append('campaignId', args.campaignId);
+
+          const res = await baseQuery({
+            url: '/admin/lead-machine/outreach/lists',
+            method: 'POST',
+            body: fd,
+          });
+
+          if (res.error) return { error: res.error as FetchBaseQueryError };
+          return { data: res.data as OutreachUploadResult };
+        } catch (e) {
+          return {
+            error: {
+              status: 'CUSTOM_ERROR',
+              error: e instanceof Error ? e.message : 'upload_failed',
+            } as FetchBaseQueryError,
+          };
+        }
+      },
+      invalidatesTags: ['OutreachLists'],
+    }),
+    listBulkRecipients: b.query<OutreachRecipient[], { id: string; status?: string }>({
+      query: ({ id, status }) => ({
+        url: `/admin/lead-machine/outreach/lists/${id}/recipients`,
+        params: status ? { status } : undefined,
+      }),
+      providesTags: (_r, _e, { id }) => [{ type: 'OutreachLists' as const, id: `${id}:recipients` }],
+    }),
+    generateBulkDrafts: b.mutation<
+      OutreachGenerateResult,
+      { id: string; subjectTemplate: string; bodyTemplate: string }
+    >({
+      query: ({ id, subjectTemplate, bodyTemplate }) => ({
+        url: `/admin/lead-machine/outreach/lists/${id}/generate`,
+        method: 'POST',
+        body: { subjectTemplate, bodyTemplate },
+      }),
+      invalidatesTags: (_r, _e, { id }) => [
+        { type: 'OutreachLists' as const, id },
+        { type: 'OutreachLists' as const, id: `${id}:recipients` },
+        'OutreachLists',
+        'OutreachDrafts',
+      ],
+    }),
+    sendBulkList: b.mutation<OutreachSendResult, { id: string; ratePerMinute?: number }>({
+      query: ({ id, ratePerMinute }) => ({
+        url: `/admin/lead-machine/outreach/lists/${id}/send`,
+        method: 'POST',
+        body: ratePerMinute ? { ratePerMinute } : {},
+      }),
+      invalidatesTags: (_r, _e, { id }) => [
+        { type: 'OutreachLists' as const, id },
+        { type: 'OutreachLists' as const, id: `${id}:recipients` },
+        'OutreachLists',
+        'OutreachDrafts',
+      ],
+    }),
+    deleteBulkList: b.mutation<void, string>({
+      query: (id) => ({ url: `/admin/lead-machine/outreach/lists/${id}`, method: 'DELETE' }),
+      invalidatesTags: ['OutreachLists'],
+    }),
   }),
   overrideExisting: true,
 });
@@ -1075,9 +1432,9 @@ export const {
   useCreateMarketSignalMutation,
   useReviewMarketSignalMutation,
   useDeleteMarketSignalMutation,
-  useListPaspasCustomersQuery,
-  useListPaspasProductsQuery,
-  useListPaspasCustomerOrdersQuery,
+  useListErpCustomersQuery,
+  useListErpProductsQuery,
+  useListErpCustomerOrdersQuery,
   usePreviewWeeklyReportQuery,
   useLazyPreviewWeeklyReportQuery,
   useSendWeeklyReportMutation,
@@ -1108,14 +1465,33 @@ export const {
   useGetAmazonRiskScoreQuery,
   useListB2bJobsQuery,
   useStartB2bJobMutation,
+  useGetDecisionMakerPresetsQuery,
+  useListDecisionMakerJobsQuery,
+  useStartDecisionMakerJobMutation,
+  useListDecisionMakerResultsQuery,
+  useListDecisionMakerCompanyPoolQuery,
+  useExportDecisionMakersCsvQuery,
+  useLazyExportDecisionMakersCsvQuery,
+  useExportDecisionMakersXlsxQuery,
+  useLazyExportDecisionMakersXlsxQuery,
+  usePromoteDecisionMakersToCandidatesMutation,
+  usePromoteDecisionMakersToCrmMutation,
+  useReviewDecisionMakerMutation,
+  useUpdateCompanyPoolStatusMutation,
+  useListCustomsJobsQuery,
+  useStartCustomsJobMutation,
+  useListCustomsTrackedEntitiesQuery,
+  useCreateCustomsTrackedEntityMutation,
+  useDeleteCustomsTrackedEntityMutation,
+  useGetCustomsIntelligenceSummaryQuery,
+  useGetCustomsIntelligenceEvidenceQuery,
   useListFairJobsQuery,
   useStartFairJobMutation,
-  useStartGenericFairRunnerMutation,
   useListIcpProfilesQuery,
   useCreateIcpProfileMutation,
   useUpdateIcpProfileMutation,
   useDeleteIcpProfileMutation,
-  useSyncPaspasTargetsMutation,
+  useSyncErpTargetsMutation,
   useBulkImportTargetsMutation,
   useLazyDownloadImportTemplateQuery,
   useScanCompetitorMutation,
@@ -1139,7 +1515,13 @@ export const {
   useDeleteOutreachCampaignMutation,
   useGenerateOutreachDraftsMutation,
   useSyncHostKeywordsMutation,
+  useListBulkListsQuery,
+  useGetBulkListQuery,
+  useUploadBulkListMutation,
+  useListBulkRecipientsQuery,
+  useGenerateBulkDraftsMutation,
+  useSendBulkListMutation,
+  useDeleteBulkListMutation,
 } = marketAdminApi;
 
-// Checklist uyumu için alias hook isimleri
-export const useGetPaspasCustomerOrdersQuery = useListPaspasCustomerOrdersQuery;
+export const useGetErpCustomerOrdersQuery = useListErpCustomerOrdersQuery;

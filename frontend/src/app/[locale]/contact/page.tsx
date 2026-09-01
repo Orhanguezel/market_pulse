@@ -3,10 +3,11 @@
 
 import React, { useMemo } from 'react';
 
-import Banner from '@/layout/banner/Breadcrum';
 import { LayoutSeoBridge } from '@/seo';
 
 import ContactPage from '@/components/containers/contact/ContactPage';
+import IyPageHeader from '@/components/iy/IyPageHeader';
+import { IY_SURFACE_STYLE } from '@/components/iy/iy-data';
 
 import { useLocaleShort, useUiSection } from '@/i18n';
 import { isValidUiText } from '@/integrations/shared';
@@ -52,8 +53,14 @@ export default function ContactRoutePage() {
   return (
     <>
       <LayoutSeoBridge title={seoTitle} description={seoDescription} noindex={false} />
-      <Banner title={bannerTitle} />
-      <ContactPage />
+      <IyPageHeader
+        eyebrow="İletişim"
+        title={bannerTitle}
+        subtitle={locale === 'tr' ? 'Sorularınız ve talepleriniz için bize ulaşın; ekibimiz kısa sürede dönüş yapar.' : locale === 'de' ? 'Kontaktieren Sie uns; unser Team meldet sich in Kürze.' : 'Reach us with your questions; our team will get back to you shortly.'}
+      />
+      <div style={IY_SURFACE_STYLE} className="bg-bg-primary">
+        <ContactPage />
+      </div>
     </>
   );
 }

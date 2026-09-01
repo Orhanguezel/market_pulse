@@ -1,4 +1,5 @@
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { scoreAmazonCategory } from './amazon.scoring-engine';
 import { filterEligibleProducts } from './signal.validator';
 import type { AmazonProduct } from './amazon.scraper';
@@ -62,17 +63,18 @@ export async function rescoreForJob(
   excluded_count: number;
   remaining_count: number;
 } | null> {
+  const tenantKey = await getActiveTenantKey();
   const [scanRows] = await pool.execute(
-    `SELECT keyword, marketplace FROM amazon_scan_jobs WHERE id = ? LIMIT 1`,
-    [jobId],
+    `SELECT keyword, marketplace FROM amazon_scan_jobs WHERE tenant_key = ? AND id = ? LIMIT 1`,
+    [tenantKey, jobId],
   );
   const scan = (scanRows as Array<{ keyword: string; marketplace: string }>)[0];
   if (!scan) return null;
 
   const [productRows] = await pool.execute(
     `SELECT title, price, rating, review_count, seller_name, seller_url, product_url, asin
-     FROM amazon_products WHERE job_id = ?`,
-    [jobId],
+     FROM amazon_products WHERE tenant_key = ? AND job_id = ?`,
+    [tenantKey, jobId],
   );
   const allProducts = (productRows as DbProductRow[]).map(rowToProduct);
   const total_before = allProducts.length;

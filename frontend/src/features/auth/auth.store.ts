@@ -1,6 +1,6 @@
 'use client';
 
-import { useMemo } from 'react';
+import { useMemo, useSyncExternalStore } from 'react';
 import { useMeQuery } from '@/integrations/rtk/hooks';
 import { tokenStore } from '@/integrations/rtk/token';
 import type { User } from '@/integrations/shared';
@@ -15,12 +15,23 @@ type AuthState = {
 };
 
 export function useAuthStore(): AuthState {
-  const hasToken = typeof window !== 'undefined' ? !!tokenStore.get() : false;
+  // Server ve browser'in ilk render'i ayni olmali. Token sadece browser'da
+  // okunursa AppShell SSR'da bos, hydration'da spinner render ederek React #418
+  // uretir. Hydration sonrasinda snapshot true olur ve ME sorgusu baslar.
+  const hydrated = useSyncExternalStore(
+    () => () => undefined,
+    () => true,
+    () => false,
+  );
+  const hasToken = hydrated ? !!tokenStore.get() : false;
   const { data, isLoading, isFetching, isUninitialized, isError } = useMeQuery(undefined, {
     skip: !hasToken,
   });
 
   return useMemo<AuthState>(() => {
+    if (!hydrated) {
+      return { isAuthenticated: false, isLoading: true, isReady: false, user: null };
+    }
     const user = data?.user ?? null;
 
     // Token yok → hemen "unauthenticated/ready" durumu
@@ -41,5 +52,5 @@ export function useAuthStore(): AuthState {
       isReady: true,
       user,
     };
-  }, [data, hasToken, isLoading, isFetching, isUninitialized, isError]);
+  }, [data, hasToken, hydrated, isLoading, isFetching, isUninitialized, isError]);
 }

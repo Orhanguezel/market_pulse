@@ -1,6 +1,8 @@
 import type { RouteHandler } from 'fastify';
 import type { JwtUser } from '@/middleware/auth';
 import { pool } from '@/db/client';
+import { runWithTenantAndUser } from '@/core/tenant-context';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { createSearchJob, getSearchJob } from '@/modules/lead-machine/_shared/db';
 import { runAmazonJob } from '@/modules/lead-machine/amazon/amazon.job';
 import { getLatestAmazonRiskReport } from '@/modules/lead-machine/amazon/risk-report.service';
@@ -46,14 +48,19 @@ export const publicStartScan: RouteHandler<{ Body: unknown }> = async (req, repl
 
   const job = await createSearchJob('amazon', { keyword, marketplace, created_by: userId }, null, userId);
   if (!job) return reply.code(500).send({ error: { message: 'job_create_failed' } });
-  runInBackground(runAmazonJob(job.id));
+  const tenantKey = await getActiveTenantKey();
+  runInBackground(runWithTenantAndUser(tenantKey, userId, () => runAmazonJob(job.id)));
 
   return reply.code(201).send({ ...job, quota });
 };
 
 // GET /public/amazon/scan/:jobId
 export const publicGetScan: RouteHandler<{ Params: { jobId: string } }> = async (req, reply) => {
-  const job = await getSearchJob(req.params.jobId);
+  const jwtUser = getJwtUser(req as { user?: unknown });
+  const userId = jwtUser?.sub;
+  if (!userId) return reply.code(401).send({ error: { message: 'no_user' } });
+  // IDOR engeli: job yalnizca sahibine (owner_user_id) doner; baskasinin jobId'si → 404.
+  const job = await getSearchJob(req.params.jobId, { ownerUserId: userId });
   if (!job) return reply.code(404).send({ error: { message: 'not_found' } });
 
   // Attach risk report if job is done
@@ -71,10 +78,18 @@ export const publicGetScan: RouteHandler<{ Params: { jobId: string } }> = async 
 
 // GET /public/amazon/scan/:jobId/products
 export const publicGetScanProducts: RouteHandler<{ Params: { jobId: string } }> = async (req, reply) => {
+  const jwtUser = getJwtUser(req as { user?: unknown });
+  const userId = jwtUser?.sub;
+  if (!userId) return reply.code(401).send({ error: { message: 'no_user' } });
+  // IDOR engeli: amazon_products'ta owner kolonu yok; once job'i owner-filtreli dogrula.
+  // Baskasinin jobId'si icin job bulunmaz → 404, urunler sizmaz.
+  const job = await getSearchJob(req.params.jobId, { ownerUserId: userId });
+  if (!job) return reply.code(404).send({ error: { message: 'not_found' } });
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
     `SELECT asin, title, price, rating, review_count, seller_count, brand, product_url
-     FROM amazon_products WHERE job_id = ? ORDER BY rank ASC LIMIT 200`,
-    [req.params.jobId],
+     FROM amazon_products WHERE tenant_key = ? AND job_id = ? ORDER BY rank ASC LIMIT 200`,
+    [tenantKey, req.params.jobId],
   );
   return rows;
 };
@@ -138,6 +153,7 @@ export const publicDeleteByokKey: RouteHandler = async (req, reply) => {
 
 // GET /public/amazon/history
 export const publicGetHistory: RouteHandler = async (req, reply) => {
+  const tenantKey = await getActiveTenantKey();
   const jwtUser = getJwtUser(req as { user?: unknown });
   const userId = jwtUser?.sub;
   if (!userId) return reply.code(401).send({ error: { message: 'no_user' } });
@@ -146,11 +162,11 @@ export const publicGetHistory: RouteHandler = async (req, reply) => {
     `SELECT lsj.id, lsj.status, lsj.created_at, lsj.finished_at, lsj.params,
             ars.decision, ars.composite_score, ars.confidence
      FROM lead_search_jobs lsj
-     LEFT JOIN amazon_risk_scores ars ON ars.job_id = lsj.id
-     WHERE lsj.channel = 'amazon' AND lsj.created_by = ?
+     LEFT JOIN amazon_risk_scores ars ON ars.tenant_key = lsj.tenant_key AND ars.job_id = lsj.id
+     WHERE lsj.tenant_key = ? AND lsj.channel = 'amazon' AND lsj.owner_user_id = ?
      ORDER BY lsj.created_at DESC
      LIMIT 50`,
-    [userId],
+    [tenantKey, userId],
   );
   return (rows as Record<string, unknown>[]).map((row) => {
     const params = typeof row.params === 'string' ? JSON.parse(row.params) : (row.params ?? {});

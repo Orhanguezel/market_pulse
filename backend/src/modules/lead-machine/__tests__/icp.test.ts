@@ -8,7 +8,10 @@ mock.module('@/db/client', () => ({
   pool: dbMock.pool,
 }));
 
+mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'avrasya' } }));
+
 const icpRepo = await import('../icp/icp.repository');
+const { runWithTenant, runWithTenantAndUser } = await import('@/core/tenant-context');
 const { matchesIcp } = await import('../b2b/icp.matcher');
 
 const now = '2026-05-08 10:00:00';
@@ -43,12 +46,21 @@ describe('lead machine icp repository', () => {
     ]);
   });
 
+  test('lists only the active owner profiles inside the active tenant', async () => {
+    dbMock.queuePoolExecute([]);
+
+    await runWithTenantAndUser('avrasya', 'user-a', () => icpRepo.listIcpProfiles('user-a'));
+
+    expect(dbMock.poolExecutions[0]?.sql).toContain('tenant_key = ? AND owner_user_id = ?');
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'user-a']);
+  });
+
   test('gets a profile by id', async () => {
     dbMock.queuePoolExecute([profile({ id: 'icp-2', definition: { sectors: ['retail'] } })]);
 
     const result = await icpRepo.getIcpProfile('icp-2');
 
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['icp-2']);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'icp-2']);
     expect(result).toEqual(expect.objectContaining({
       id: 'icp-2',
       definition: { sectors: ['retail'] },
@@ -58,19 +70,40 @@ describe('lead machine icp repository', () => {
   test('creates a profile with active default', async () => {
     dbMock.queuePoolExecute([profile({ name: 'Created ICP', definition: '{}' })]);
 
-    const result = await icpRepo.createIcpProfile({
+    const result = await runWithTenant('avrasya', () => icpRepo.createIcpProfile({
       name: 'Created ICP',
       definition: {},
-    });
+    }));
 
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('INSERT INTO icp_profiles');
     expect(dbMock.poolExecutions[0]?.values).toEqual([
       expect.any(String),
+      'avrasya',
+      null, // owner_user_id — test baglaminda aktif kullanici yok
       'Created ICP',
       1,
       '{}',
     ]);
     expect(result).toEqual(expect.objectContaining({ name: 'Created ICP', definition: {} }));
+  });
+
+  test('creates a profile with tenant and owner from request context', async () => {
+    dbMock.queuePoolExecute([profile({ name: 'Owned ICP', definition: '{}' })]);
+
+    await runWithTenantAndUser('avrasya', 'user-a', () => icpRepo.createIcpProfile({
+      name: 'Owned ICP',
+      definition: { sectors: ['floor mats'] },
+    }));
+
+    expect(dbMock.poolExecutions[0]?.values).toEqual([
+      expect.any(String),
+      'avrasya',
+      'user-a',
+      'Owned ICP',
+      1,
+      '{"sectors":["floor mats"]}',
+    ]);
+    expect(dbMock.poolExecutions[1]?.values).toEqual(['avrasya', expect.any(String), 'user-a']);
   });
 
   test('updates profile fields', async () => {
@@ -86,12 +119,13 @@ describe('lead machine icp repository', () => {
       definition: { sectors: ['floor mats'] },
     });
 
-    expect(dbMock.poolExecutions[0]?.sql).toContain('UPDATE icp_profiles SET name = ?, is_active = ?, definition = ? WHERE id = ?');
+    expect(dbMock.poolExecutions[0]?.sql).toContain('UPDATE icp_profiles SET name = ?, is_active = ?, definition = ? WHERE id = ? AND tenant_key = ?');
     expect(dbMock.poolExecutions[0]?.values).toEqual([
       'Updated ICP',
       0,
       '{"sectors":["floor mats"]}',
       'icp-1',
+      'avrasya',
     ]);
     expect(result).toEqual(expect.objectContaining({
       name: 'Updated ICP',
@@ -110,16 +144,29 @@ describe('lead machine icp repository', () => {
   });
 
   test('deletes a profile when it has no jobs', async () => {
+    dbMock.queuePoolExecute([{ id: 'icp-1' }]);
     dbMock.queuePoolExecute([]);
 
-    await icpRepo.deleteIcpProfile('icp-1');
+    expect(await icpRepo.deleteIcpProfile('icp-1')).toBe(true);
 
-    expect(dbMock.poolExecutions[0]?.sql).toStartWith('SELECT id FROM lead_search_jobs');
-    expect(dbMock.poolExecutions[1]?.sql).toBe('DELETE FROM icp_profiles WHERE id = ?');
-    expect(dbMock.poolExecutions[1]?.values).toEqual(['icp-1']);
+    expect(dbMock.poolExecutions[0]?.sql).toStartWith('SELECT id FROM icp_profiles');
+    expect(dbMock.poolExecutions[1]?.sql).toStartWith('SELECT id FROM lead_search_jobs');
+    expect(dbMock.poolExecutions[2]?.sql).toBe('DELETE FROM icp_profiles WHERE tenant_key = ? AND id = ?');
+    expect(dbMock.poolExecutions[2]?.values).toEqual(['avrasya', 'icp-1']);
+  });
+
+  test('does not delete a profile owned by another user', async () => {
+    dbMock.queuePoolExecute([]);
+
+    const deleted = await runWithTenantAndUser('avrasya', 'user-a', () => icpRepo.deleteIcpProfile('icp-1', 'user-a', true));
+
+    expect(deleted).toBe(false);
+    expect(dbMock.poolExecutions).toHaveLength(1);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'icp-1', 'user-a']);
   });
 
   test('rejects deleting a profile that has jobs', async () => {
+    dbMock.queuePoolExecute([{ id: 'icp-1' }]);
     dbMock.queuePoolExecute([{ id: 'job-1' }]);
 
     await expect(icpRepo.deleteIcpProfile('icp-1')).rejects.toMatchObject({
@@ -171,5 +218,58 @@ describe('lead machine icp matcher', () => {
       score: 0,
       reasons: [],
     });
+  });
+
+  test('uses multilingual keywords and priority crop signals for seed ICPs', () => {
+    const result = matchesIcp(
+      {
+        name: 'Anadolu Agro Dealer',
+        description: 'Biber tohumu ve F1 pepper seeds ithalatçısı, seed distributor',
+        country: 'TR',
+        website: 'https://seed.example',
+      },
+      {
+        priority_crop: 'pepper',
+        sectors: ['vegetable seeds'],
+        priority_sectors: ['pepper seeds'],
+        keywords: {
+          tr: ['biber tohumu'],
+          en: ['F1 pepper seeds'],
+        },
+        firm_types: ['seed distributor'],
+        priority_firm_types: ['agro-dealer'],
+        geographies: ['TR'],
+        priority_geographies: ['TR'],
+        min_lead_score_for_candidate: 5,
+      },
+    );
+
+    expect(result.matches).toBe(true);
+    expect(result.score).toBe(10);
+    expect(result.reasons).toEqual(expect.arrayContaining([
+      'priority_crop:pepper',
+      'keyword:biber tohumu',
+      'keyword:F1 pepper seeds',
+      'geography:TR',
+    ]));
+  });
+
+  test('penalizes culinary pepper noise instead of giving a flat floor score', () => {
+    const result = matchesIcp(
+      {
+        name: 'Pepper Spice Export',
+        description: 'Dried pepper powder and culinary seasoning supplier',
+      },
+      {
+        priority_crop: 'pepper',
+        keywords: ['pepper seeds'],
+        sectors: ['vegetable seeds'],
+        min_lead_score_for_candidate: 5,
+      },
+    );
+
+    expect(result.matches).toBe(false);
+    expect(result.score).toBe(0);
+    expect(result.reasons).toEqual(expect.arrayContaining(['negative_term:spice', 'negative_term:culinary']));
   });
 });

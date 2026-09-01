@@ -44,7 +44,7 @@ function statusBadge(job: LeadSearchJob) {
 
 export default function FairLeadSearchPanel() {
   const { data: icps, isLoading: isIcpLoading } = useListIcpProfilesQuery();
-  const { data: jobs, isLoading, isFetching, refetch } = useListFairJobsQuery();
+  const { data: jobs, isLoading, isFetching, refetch } = useListFairJobsQuery(undefined, { pollingInterval: 10_000 });
   const [startFairJob, startState] = useStartFairJobMutation();
 
   const [fairName, setFairName] = React.useState('Automechanika Frankfurt');

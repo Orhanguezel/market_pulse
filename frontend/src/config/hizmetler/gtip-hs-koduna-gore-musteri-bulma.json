@@ -1,0 +1,117 @@
+{
+  "slug": "gtip-hs-koduna-gore-musteri-bulma",
+  "category": "ihracat-musteri-bulma",
+  "module": "discover-customs",
+  "order": 10,
+  "icon": "ScanSearch",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "GTİP / HS Koduna Göre Müşteri Bulma | İthalatçı Firma ve Yurt Dışı Alıcı Listesi",
+        "description": "GTİP / HS koduna göre ürününüzü ithal eden yurt dışı firmaları, hedef ülkeleri, ithalatçıları ve alıcı firma listelerini analiz ediyoruz. İhracat müşteri bulma sürecinizi veriye dayalı yönetin.",
+        "ogTitle": "GTİP / HS Koduna Göre Müşteri Bulma | {{appName}}",
+        "ogDescription": "GTİP / HS kodu, ürün açıklaması, hedef ülke ve ithalat geçmişi üzerinden gerçek alıcı firmaları analiz ediyoruz."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "GTİP / HS Koduna Göre Müşteri Bulma",
+        "lead": "Ürününüzü yurt dışına satmak istiyor ama bu ürünü hangi ülkelerin ithal ettiğini ve hangi firmaların satın aldığını bilmiyor musunuz? Doğru kodla yapılan dış ticaret veri analizi sayesinde ürün grubunuzu ithal eden ülkeler, alıcı firmalar, ithalat miktarları ve düzenli alım yapan potansiyel müşteriler tespit edilebilir.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "GTİP / HS Koduna Göre Müşteri Bulma Nedir?",
+          "body": [
+            "GTİP / HS koduna göre müşteri bulma, belirli bir ürün kodu üzerinden dış ticaret ve ithalat verilerinin analiz edilerek bu ürün grubunu ithal eden yurt dışı firmaların tespit edilmesidir.",
+            "GTİP ve HS kodları, ürünlerin uluslararası ticarette sınıflandırılması için kullanılır. Bir ürünün hangi kod altında işlem gördüğü doğru belirlenirse, o kodla ithalat yapan ülkeler ve firmalar analiz edilebilir.",
+            "{{appName}}, GTİP / HS kodu üzerinden yapılan araştırmayı yalnızca veri listesi olarak değil, ihracat satış sürecinde kullanılabilecek hedef müşteri çalışması olarak ele alır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Ürününüz için doğru alıcı firmaları bulmak istiyorsanız, GTİP / HS koduna göre müşteri araştırması güçlü bir başlangıç noktasıdır.",
+          "items": [
+            { "title": "İhracata Başlamak İsteyen Üreticiler", "body": "Ürününü yurt dışına satmak isteyen ve gerçek ithalatçı firmaları görmek isteyen üreticiler için uygundur." },
+            { "title": "Yurt Dışı İthalatçı Firma Arayan KOBİ’ler", "body": "Rastgele firma listesi yerine ürün koduna göre alıcı firma araştırması yapmak isteyen firmalara uygundur." },
+            { "title": "GTİP / HS Koduyla Liste Oluşturmak İsteyenler", "body": "Ürününe ait GTİP / HS koduyla alıcı firma listesi oluşturmak isteyen şirketler için uygundur." },
+            { "title": "Hedef Ülke Analizi Yapmak İsteyenler", "body": "Hangi ülkelerin ürününüzü ithal ettiğini görmek isteyen işletmeler için uygundur." },
+            { "title": "Mail Marketing Listesi Hazırlamak İsteyenler", "body": "GTİP / HS koduna göre bulunan firmalar mail marketing listesine dönüştürülebilir." },
+            { "title": "Telefon Araması Yapacak Satış Ekipleri", "body": "Yüksek potansiyelli alıcı firmalar telefon araması için önceliklendirilebilir." },
+            { "title": "Konşimento Verileriyle Çalışanlar", "body": "Konşimento verileriyle gerçek ithalatçıları bulmak isteyen şirketlere uygundur." },
+            { "title": "CRM’e Aktarılabilir Liste İsteyenler", "body": "Firma, ürün, iletişim ve takip bilgileri CRM sistemine uygun formatta düzenlenebilir." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "GTİP / HS Koduna Göre Müşteri Bulma Süreci Nasıl İlerler?",
+          "intro": "Süreç ürün bilgisinin alınmasıyla başlar. Ardından kod ön kontrolü, veri araştırması, hedef ülke analizi, alıcı firma listesi, iletişim bilgileri ve satış takip planı birlikte hazırlanır.",
+          "steps": [
+            { "n": 1, "title": "Ürün Bilgisi Alınır", "body": "Ürünün adı, kullanım alanı, teknik özellikleri, varsa mevcut GTİP / HS kodu ve hedef pazar bilgisi değerlendirilir." },
+            { "n": 2, "title": "Kod Ön Kontrolü Yapılır", "body": "Kullanılacak GTİP / HS kodunun ürünle uyumlu olup olmadığı incelenir. Gerekirse benzer kodlar ve ürün açıklamaları değerlendirilir." },
+            { "n": 3, "title": "Veri Araştırması Yapılır", "body": "Kod, ürün açıklaması, ülke ve dönem bazlı dış ticaret verileri analiz edilir." },
+            { "n": 4, "title": "Hedef Ülkeler Belirlenir", "body": "İlgili kodla ithalat yapan ülkeler ve bu ülkelerdeki alıcı firma yoğunluğu değerlendirilir." },
+            { "n": 5, "title": "Alıcı Firmalar Listelenir", "body": "İthalatçı firmalar, ürün açıklamaları, ithalat miktarları, tarihleri ve ticaret hacimleriyle birlikte düzenlenir." },
+            { "n": 6, "title": "Firma Önceliklendirme Yapılır", "body": "Düzenli ithalat yapan, son dönemde alım gerçekleştiren ve ürün açıklaması uyumlu firmalar önceliklendirilir." },
+            { "n": 7, "title": "İletişim Bilgileri Araştırılır", "body": "Firma web sitesi, kurumsal e-posta, telefon ve ilgili departman bilgileri açık kaynaklardan araştırılır." },
+            { "n": 8, "title": "Satış Takip Planı Oluşturulur", "body": "Mail marketing, telefon araması, LinkedIn araştırması, teklif takibi ve CRM süreci planlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "GTİP / HS Koduna Göre Müşteri Bulmanın Avantajları",
+          "items": [
+            "Ürününüzü ithal eden ülkeleri görebilirsiniz",
+            "Gerçek ithalatçı firmaları analiz edebilirsiniz",
+            "GTİP / HS koduna göre alıcı firma listesi oluşturabilirsiniz",
+            "Düzenli ithalat yapan firmaları önceliklendirebilirsiniz",
+            "Mail marketing için daha doğru hedef liste hazırlayabilirsiniz",
+            "LinkedIn üzerinden karar verici kişi araştırması yapabilirsiniz",
+            "Fuar öncesi hedef müşteri listesi oluşturabilirsiniz",
+            "CRM’e aktarılabilir satış listesi hazırlayabilirsiniz",
+            "İhracat satış ekibinizi veriye dayalı çalıştırabilirsiniz",
+            "Hedef ülke seçimini daha bilinçli yapabilirsiniz"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "GTİP / HS Koduna Göre Müşteri Bulmada Sık Yapılan Hatalar",
+          "items": [
+            "Yanlış GTİP / HS kodu ile araştırma yapmak",
+            "Çok genel kodla çalışıp listeyi temizlememek",
+            "Ürün açıklamalarını kontrol etmemek",
+            "Benzer ama farklı ürünleri aynı listeye almak",
+            "Alternatif HS kodlarını incelememek",
+            "Tek seferlik ithalat yapan firmalara fazla önem vermek",
+            "İletişim bilgilerini doğrulamadan kampanya yapmak",
+            "Alıcı firma listesini CRM’e aktarmamak",
+            "Mail marketing sonrası takip yapmamak",
+            "Veri analizini satış süreciyle birleştirmemek"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "GTİP / HS Koduna Göre Müşteri Bulma Hakkında Merak Edilenler",
+          "items": [
+            { "q": "GTİP / HS koduna göre bulunan firmalar gerçek müşteri midir?", "a": "Bulunan firmalar ilgili ürün grubunu geçmişte ithal etmiş firmalardır; bu nedenle rastgele listelere göre daha anlamlı potansiyel müşterilerdir. Ancak her firma kesin müşteri değildir — bazıları artık ithalat yapmıyor, farklı ürün almış veya mevcut tedarikçisiyle çalışıyor olabilir. Satış takibi ayrıca yapılmalıdır." },
+            { "q": "GTİP / HS kodu tek başına yeterli mi?", "a": "Her zaman yeterli olmayabilir. Bazı kodlar çok geniştir. En doğru sonuç için HS kodu, ürünün İngilizce adı, alternatif ürün tanımları ve dış ticaret kayıtlarındaki ürün açıklamaları birlikte değerlendirilmelidir." },
+            { "q": "Listede hangi bilgiler yer alır?", "a": "Firma adı, ülke, ürün açıklaması, GTİP / HS kodu, ithalat tarihi, ithalat miktarı, ithalat değeri, firma web sitesi, kurumsal e-posta, telefon ve takip notları yer alabilir." },
+            { "q": "Karar verici kişi araştırması yapılabilir mi?", "a": "Evet. Alıcı firma listesi hazırlandıktan sonra satın alma müdürü, ithalat sorumlusu, procurement / purchasing manager veya ilgili departman kişileri için kurumsal iletişim araştırması yapılabilir." },
+            { "q": "Bu çalışma müşteri garantisi verir mi?", "a": "Hayır. Kesin müşteri garantisi vermez; ancak rastgele firma aramak yerine geçmişte ilgili ürün grubunu ithal etmiş firmalara ulaşmayı sağlar. Sonuç için profesyonel iletişim, teklif takibi ve düzenli satış süreci gerekir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "İhracat Müşteri Bulma Sürecinizi Dış Ticaret Verilerine Dayalı Planlayalım",
+        "body": "Doğru GTİP / HS koduyla alıcı firma araştırması yapmadan başlıyorsanız yanlış firmalara zaman harcıyor olabilirsiniz. Ürününüzü ithal eden ülkeleri, gerçek alıcı firmaları ve satış ekibinizin takip edebileceği hedef müşteri listesini birlikte oluşturalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

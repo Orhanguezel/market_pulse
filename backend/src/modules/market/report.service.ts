@@ -2,6 +2,7 @@ import type { RowDataPacket } from 'mysql2/promise';
 import { createRequire } from 'node:module';
 import { env } from '@/core/env';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { renderWeeklyReportText, type WeeklyReportData } from './report.template';
 
 const require = createRequire(import.meta.url);
@@ -45,29 +46,39 @@ function createSimplePdf(lines: string[]): Buffer {
   return Buffer.from(pdf);
 }
 
-async function collectWeeklyReportData(): Promise<WeeklyReportData> {
+async function collectWeeklyReportData(ownerUserId?: string | null): Promise<WeeklyReportData> {
+  const tenantKey = await getActiveTenantKey();
+  // Kisi-bazli izolasyon: kullanici yolunda rapor yalnizca kendi verisini kapsar.
+  const o = ownerUserId ?? null;
+  const ownerAnd = o ? ' AND owner_user_id = ?' : '';
+  const sOwnerAnd = o ? ' AND s.owner_user_id = ?' : '';
+  const v = (...extra: string[]): string[] => (o ? [tenantKey, ...extra, o] : [tenantKey, ...extra]);
   const [[targetStats], [leadStats], [signalStats], [riskRows], [signalRows], [leadRows]] = await Promise.all([
-    pool.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM market_targets'),
-    pool.query<RowDataPacket[]>("SELECT COUNT(*) AS count FROM market_leads WHERE status NOT IN ('converted', 'rejected')"),
-    pool.query<RowDataPacket[]>('SELECT COUNT(*) AS count FROM market_signals WHERE is_reviewed = 0'),
+    pool.query<RowDataPacket[]>(`SELECT COUNT(*) AS count FROM market_targets WHERE tenant_key = ?${ownerAnd}`, v()),
+    pool.query<RowDataPacket[]>(`SELECT COUNT(*) AS count FROM market_leads WHERE tenant_key = ? AND status NOT IN ('converted', 'rejected')${ownerAnd}`, v()),
+    pool.query<RowDataPacket[]>(`SELECT COUNT(*) AS count FROM market_signals WHERE tenant_key = ? AND is_reviewed = 0${ownerAnd}`, v()),
     pool.query<RowDataPacket[]>(
       `SELECT name, churn_risk_score AS churnRiskScore, city
        FROM market_targets
-       WHERE churn_risk_score >= 60
+       WHERE tenant_key = ? AND churn_risk_score >= 60${ownerAnd}
        ORDER BY churn_risk_score DESC
        LIMIT 5`,
+      v(),
     ),
     pool.query<RowDataPacket[]>(
       `SELECT s.created_at AS createdAt, s.severity, s.title, t.name AS targetName
        FROM market_signals s
-       LEFT JOIN market_targets t ON t.id = s.target_id
-       WHERE s.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
-         AND s.severity IN ('critical', 'high')
+       LEFT JOIN market_targets t ON t.tenant_key = s.tenant_key AND t.id = s.target_id
+       WHERE s.tenant_key = ?
+         AND s.created_at >= DATE_SUB(NOW(), INTERVAL 7 DAY)
+         AND s.severity IN ('critical', 'high')${sOwnerAnd}
        ORDER BY s.created_at DESC
        LIMIT 20`,
+      v(),
     ),
     pool.query<RowDataPacket[]>(
-      'SELECT status, COUNT(*) AS count FROM market_leads GROUP BY status ORDER BY status ASC',
+      `SELECT status, COUNT(*) AS count FROM market_leads WHERE tenant_key = ?${ownerAnd} GROUP BY status ORDER BY status ASC`,
+      v(),
     ),
   ]);
 
@@ -94,12 +105,12 @@ async function collectWeeklyReportData(): Promise<WeeklyReportData> {
   };
 }
 
-export async function generateWeeklyReport(): Promise<Buffer> {
-  const data = await collectWeeklyReportData();
+export async function generateWeeklyReport(ownerUserId?: string | null): Promise<Buffer> {
+  const data = await collectWeeklyReportData(ownerUserId);
   return createSimplePdf(renderWeeklyReportText(data));
 }
 
-export async function sendWeeklyReportEmail(to: string): Promise<void> {
+export async function sendWeeklyReportEmail(to: string, ownerUserId?: string | null): Promise<void> {
   if (!env.SMTP_HOST) throw new Error('smtp_not_configured');
   const nodemailer = require('nodemailer') as typeof import('nodemailer');
   const transporter = nodemailer.createTransport({
@@ -109,7 +120,7 @@ export async function sendWeeklyReportEmail(to: string): Promise<void> {
     auth: env.SMTP_USER ? { user: env.SMTP_USER, pass: env.SMTP_PASSWORD } : undefined,
   });
 
-  const pdf = await generateWeeklyReport();
+  const pdf = await generateWeeklyReport(ownerUserId);
   await transporter.sendMail({
     from: env.SMTP_FROM,
     to,

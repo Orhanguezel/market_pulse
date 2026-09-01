@@ -1,0 +1,180 @@
+{
+  "slug": "sektorlere-gore-crm",
+  "category": "crm-satis",
+  "module": "crm",
+  "order": 70,
+  "icon": "Building2",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Sektörlere Göre CRM | Restoran, Perakende, Danışmanlık, BT, Medya ve Hizmet Sektörü İçin CRM",
+        "description": "Restoran, perakende, danışmanlık, BT, medya, müşteri hizmetleri, saha hizmetleri, fotoğrafçılık, catering ve tüketici ürünleri sektörleri için CRM süreçlerinizi satış, müşteri takibi ve ekip yönetimine uygun şekilde planlıyoruz.",
+        "ogTitle": "Sektörlere Göre CRM | {{appName}}",
+        "ogDescription": "Restoran, perakende, danışmanlık, BT, medya, saha hizmetleri, catering, B2B satış ve ihracat süreçlerinize uygun CRM yapısını birlikte planlayalım."
+      },
+      "hero": {
+        "eyebrow": "CRM ve Satış",
+        "title": "Sektörlere Göre CRM",
+        "lead": "Her sektörün müşteri yönetimi aynı değildir. Restoranın müşteri takibi farklıdır, perakende şirketinin satış süreci farklıdır, danışmanlık firmasının teklif yönetimi farklıdır, BT şirketinin proje ve destek süreci farklıdır. {{appName}} Sektörlere Göre CRM hizmeti ile restoran, perakende, medya, danışmanlık, BT, müşteri hizmetleri, saha hizmetleri, fotoğrafçılık, catering ve tüketici ürünleri gibi farklı sektörlerde müşteri yönetimi, satış takibi, teklif süreci, görev yönetimi, kampanya takibi ve raporlama yapınızı sektörünüze uygun şekilde kurguluyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Kurulum süreci nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Sektörlere Göre CRM Nedir?",
+          "body": [
+            "Sektörlere göre CRM, farklı sektörlerde faaliyet gösteren şirketlerin müşteri yönetimi, satış takibi, teklif süreci, operasyon, destek, kampanya ve raporlama ihtiyaçlarına göre özel olarak planlanan CRM yapısıdır.",
+            "Her şirket müşteriyle çalışır; ancak her şirket müşteriyi aynı şekilde yönetmez. Bir restoran rezervasyon ve tekrar ziyaret takibi yapmak isterken, bir danışmanlık firması teklif, görüşme, proje ve takip sürecini yönetmek ister.",
+            "{{appName}}, şirketinizin sektörünü ve iş modelini analiz ederek CRM yapınızı müşteri kazanımı, satış takibi, operasyon ve raporlama açısından daha verimli hale getirmenize yardımcı olur.",
+            "Sektörünüze uygun CRM yapısı; müşteri bilgilerini, satış aşamalarını, teklifleri, görevleri, operasyon süreçlerini, destek taleplerini ve yönetici raporlarını iş modelinize göre düzenler."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden Her Sektör İçin Aynı CRM Yapısı Yeterli Değildir?",
+          "body": [
+            "Birçok şirket CRM sistemine geçer ancak kısa süre sonra sistem kullanılmaz hale gelir. Bunun en önemli nedenlerinden biri CRM’in şirketin gerçek iş akışına uygun kurgulanmamasıdır.",
+            "CRM sistemi sektörünüze uygun planlandığında ekiplerin günlük çalışmasına destek olur. Müşteri bilgileri düzenlenir, takipler unutulmaz, satış fırsatları görünür hale gelir ve yönetici daha sağlıklı rapor alır.",
+            "Hazır ve genel CRM yapısı şu sorunlara neden olabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Şirketinizin müşteri ilişkileri, satış veya hizmet süreci diğer sektörlerden farklıysa CRM yapınız da buna göre planlanmalıdır.",
+          "items": [
+            { "title": "CRM Kurmak İsteyen Şirketler", "body": "Hangi yapıyla başlayacağını bilmeyen işletmeler için sektör odaklı planlama sağlar." },
+            { "title": "Mevcut CRM’ini Uyarlamak İsteyenler", "body": "Kullanılan CRM sisteminin sektör ve ekip yapısına uygun hale getirilmesine destek olur." },
+            { "title": "Satış ve Operasyonu Dağınık Olanlar", "body": "Müşteri, teklif, sipariş, destek ve operasyon süreçlerini tek yapıda toplar." },
+            { "title": "Restoran, Kafe ve Catering İşletmeleri", "body": "Rezervasyon, özel gün, tekrar ziyaret ve müşteri memnuniyeti takibini düzenler." },
+            { "title": "Perakende ve Tüketici Ürünleri Şirketleri", "body": "Müşteri segmentasyonu, kampanya, tekrar satın alma ve satış geçmişi takibini sağlar." },
+            { "title": "Danışmanlık, BT ve Medya Firmaları", "body": "Teklif, proje, destek, kampanya ve müşteri iletişim süreçlerini sektör yapısına göre kurgular." },
+            { "title": "Saha Hizmetleri ve Teknik Servis Ekipleri", "body": "Servis talebi, ekip ataması, randevu ve bakım geçmişi takibini kolaylaştırır." },
+            { "title": "B2B Satış ve İhracat Yapanlar", "body": "Uzun satış süreci, teklif, proforma, ülke ve müşteri takiplerini düzenler." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Sektörlere Göre CRM ile Hangi Süreçler Planlanabilir?",
+          "body": [
+            "Sektörünüze uygun CRM yapısı şirketinizin çalışma modeline göre farklı süreçleri kapsayabilir. Bu yapı sayesinde CRM sistemi sadece müşteri kaydı tutan bir alan değil, şirketinizin günlük işleyişini destekleyen bir yönetim aracına dönüşür."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Sektörünüze Göre CRM Yapısı Nasıl Kurgulanabilir?",
+          "intro": "{{appName}}, CRM yapısını sektörünüzün müşteri kazanım şekline, satış sürecine, hizmet modeline, operasyon ihtiyacına ve raporlama beklentisine göre planlar.",
+          "items": [
+            { "title": "Restoranlar İçin CRM", "body": "Restoran, kafe ve yeme-içme işletmeleri için müşteri ilişkileri sadece satış anında bitmez. Müşteri memnuniyeti, rezervasyon takibi, özel günler, tekrar ziyaretler ve kampanyalar önemli hale gelir. Müşteri kayıtları, rezervasyon geçmişi ve VIP müşteri takibi; doğum günü, özel gün, etkinlik ve grup rezervasyonları; müşteri memnuniyeti, şikayet ve geri bildirim kayıtları; kampanya, davet listeleri ve tekrar ziyaret hatırlatmaları yönetilir." },
+            { "title": "Perakende Sektörü İçin CRM", "body": "Perakende sektöründe müşteri davranışı, alışveriş geçmişi, kampanya ilgisi ve tekrar satın alma potansiyeli önemlidir. Müşteri profilleri, alışveriş geçmişi ve ürün ilgi alanları; kampanya katılımı, sadakat programı ve tekrar satın alma potansiyeli; mağaza veya online satış kaynağı; şikayet, iade, kampanya dönüşüm raporları ve müşteri yaşam döngüsü takibi yapılır." },
+            { "title": "Danışmanlık Sektörü İçin CRM", "body": "Danışmanlık firmalarında satış süreci genellikle görüşme, ihtiyaç analizi, teklif, revize, sözleşme ve proje takibi şeklinde ilerler. Potansiyel müşteri kaydı, ön görüşme ve ihtiyaç analizi; teklif hazırlık, gönderim ve takip süreci; revize teklif talepleri, sözleşme ve proje başlangıç tarihi; toplantı notları, müşteri memnuniyeti ve ek hizmet fırsatları yönetilir." },
+            { "title": "BT ve Yazılım Şirketleri İçin CRM", "body": "BT, yazılım ve teknoloji şirketlerinde müşteri yönetimi genellikle satış, proje, destek, bakım ve yenileme süreçlerini birlikte içerir. Müşteri adayı, demo talebi, teklif ve lisans süreci; proje başlangıç takibi ve teknik destek talepleri; bakım anlaşmaları, abonelik veya yenileme tarihleri; müşteri başarı notları, ek hizmet ve çapraz satış fırsatları takip edilir." },
+            { "title": "Medya ve Reklam Sektörü İçin CRM", "body": "Medya, reklam ve ajans şirketlerinde müşteri ilişkileri kampanya, teklif, yayın planı, kreatif süreç, raporlama ve müşteri memnuniyetiyle birlikte ilerler. Reklamveren müşteri kayıtları, kampanya talepleri ve teklif bilgileri; yayın planı, kreatif süreç ve müşteri onayları; kampanya başlangıç ve bitiş tarihleri; performans raporları, tekrar kampanya fırsatları ve ekip koordinasyonu yönetilir." },
+            { "title": "Müşteri Hizmetleri İçin CRM", "body": "Müşteri hizmetleri ekibi bulunan şirketlerde CRM sadece satış için değil, destek ve memnuniyet yönetimi için de kullanılmalıdır. Müşteri destek talepleri, şikayet kayıtları ve talep kategorileri; çözüm süresi, sorumlu destek personeli ve açık talepler; ürün veya hizmet geri bildirimleri; satış sonrası iletişim, iade veya değişim talepleri ve destek raporları takip edilir." },
+            { "title": "Saha Hizmetleri İçin CRM", "body": "Saha hizmetleri, teknik servis, bakım, montaj veya yerinde hizmet veren şirketlerde ekip ve görev takibi çok önemlidir. Müşteri lokasyonu, servis talebi ve teknik ekip ataması; randevu tarihi, servis durumu ve saha personeli notları; kullanılan ürün veya parça bilgisi ve bakım geçmişi; tekrar servis tarihi, müşteri onayı ve saha performans raporları yönetilir." },
+            { "title": "Fotoğrafçılık ve Kreatif Hizmetler İçin CRM", "body": "Fotoğrafçılık, video prodüksiyon, tasarım ve kreatif hizmetlerde müşteri ilişkileri teklif, randevu, çekim, teslimat ve tekrar iş fırsatlarıyla ilerler. Müşteri talebi, çekim veya proje tarihi ve hizmet paketi; teklif durumu, ön ödeme ve çekim lokasyonu; teslim tarihi, revize talepleri ve müşteri onayları; referans, portföy notları, tekrar hizmet fırsatları ve özel gün hatırlatmaları takip edilir." },
+            { "title": "Catering Yönetimi İçin CRM", "body": "Catering şirketlerinde müşteri talepleri, etkinlik tarihleri, kişi sayısı, menü tercihleri, teklif, operasyon ve teslimat süreci birlikte yönetilmelidir. Müşteri adı, etkinlik türü, etkinlik tarihi ve kişi sayısı; menü tercihi, lokasyon bilgisi ve teklif tutarı; ön ödeme bilgisi, operasyon notları ve teslimat planı; özel talepler, etkinlik sonrası memnuniyet ve tekrar etkinlik fırsatları yönetilir." },
+            { "title": "Tüketici Ürünleri Sektörü İçin CRM", "body": "Tüketici ürünleri sektöründe distribütörler, bayiler, perakendeciler, son kullanıcılar ve kurumsal müşteriler farklı şekilde takip edilmelidir. Bayi ve distribütör kayıtları, perakende müşteri listeleri; ürün ilgi alanları, sipariş geçmişi ve kampanya takibi; satış temsilcisi ziyaretleri ve bölge bazlı müşteri takibi; yeni ürün tanıtımları, tekrar sipariş fırsatları ve satış performans raporları yönetilir." },
+            { "title": "B2B Satış Yapan Şirketler İçin CRM", "body": "B2B satış süreçleri genellikle uzun, çok aşamalı ve takip gerektiren süreçlerdir. Bu nedenle B2B şirketlerde CRM yapısı müşteri adayı, teklif, karar verici kişi ve takip sürecine göre planlanmalıdır. Firma kayıtları, karar verici kişi ve satın alma müdürü takibi; ilk görüşme notları, teklif ve revize teklif süreci; toplantı tarihleri, numune veya demo talepleri; açık fırsatlar, kaybedilen fırsat nedenleri ve uzun vadeli takip tarihleri yönetilir." },
+            { "title": "İhracat Yapan Şirketler İçin CRM", "body": "İhracat yapan şirketlerde CRM yapısı ülke, alıcı firma, ürün grubu, GTİP / HS kodu, teklif, proforma ve sevkiyat sürecine uygun şekilde planlanmalıdır. Yurt dışı alıcı firma kayıtları ve ülke bazlı müşteri listeleri; konşimento verileri, GTİP / HS kodu ve karar verici kişi bilgileri; mail marketing, telefon aramaları, İngilizce teklifler ve numune talepleri; proforma, teslim, ödeme, nakliye, sevkiyat ve fuar sonrası müşteri ilişkileri takip edilir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Sektöre Özel CRM Yapısı Nasıl Planlanır?",
+          "body": [
+            "Sektöre özel CRM yapısı kurarken önce şirketin gerçek işleyişi anlaşılmalıdır. CRM sistemi şirketin sürecine uymalıdır; şirket CRM’e zorla uydurulmamalıdır.",
+            "Bu sorular doğru cevaplandığında CRM sistemi daha kullanılabilir, daha anlaşılır ve daha verimli hale gelir."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Sektörlere Göre CRM Hizmetinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "CRM sistemi şirketinizin gerçek iş akışına uyum sağlar",
+            "Ekiplerin sistemi kullanma ihtimali artar",
+            "Müşteri bilgileri daha doğru sınıflandırılır",
+            "Satış ve teklif süreçleri daha net takip edilir",
+            "Sektöre özel raporlar alınabilir",
+            "Operasyon ve müşteri hizmetleri süreci güçlenir",
+            "Kampanya ve müşteri geri dönüşleri ölçülebilir",
+            "Yönetici daha doğru karar alabilir",
+            "Müşteri kaybı ve takip hataları azalır",
+            "Şirketin müşteri yönetimi daha kurumsal hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Sektörel CRM Kurulumunda Sık Yapılan Hatalar",
+          "items": [
+            "Her sektöre aynı CRM yapısını kullanmak",
+            "Şirketin müşteri kazanım sürecini analiz etmemek",
+            "Satış aşamalarını sektöre göre düzenlememek",
+            "Ekiplerin ihtiyaçlarını dinlememek",
+            "Gereksiz alanlarla sistemi karmaşık hale getirmek",
+            "Yönetici raporlarını baştan planlamamak",
+            "Operasyon ve satış sonrası süreçleri CRM dışında bırakmak",
+            "Sektöre özel müşteri segmentasyonu yapmamak",
+            "CRM’i sadece kayıt sistemi gibi kullanmak",
+            "Eğitim vermeden ekibi sisteme geçirmek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Sektöre Özel CRM Kurulumu ve CRM Danışmanlığı",
+          "body": [
+            "Sektörlere göre CRM; restoranlar için CRM, perakende CRM yazılımı, danışmanlık firmaları için CRM, BT şirketleri için CRM, medya için CRM, müşteri hizmetleri CRM, saha hizmetleri CRM, B2B CRM ve ihracat CRM süreçleri için kullanılabilir."
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Sektörlere Göre CRM Kurulum Süreci Nasıl İlerler?",
+          "intro": "Sektörlere göre CRM kurulumu; şirketinizin sektörü, müşteri yapısı, satış süreci, hizmet modeli, ekip yapısı ve CRM ihtiyacı değerlendirilerek planlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin sektörü, müşteri yapısı, satış süreci, hizmet modeli, ekip yapısı ve CRM ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Sektör Analizi", "body": "Sektörünüzde müşteri kazanımı, teklif, operasyon, destek ve tekrar satış süreçleri incelenir." },
+            { "n": 3, "title": "Müşteri Yönetimi Haritası", "body": "Müşterinin ilk temasından satışa, satıştan teslimata ve satış sonrası takibe kadar süreç çıkarılır." },
+            { "n": 4, "title": "CRM Alanlarının Planlanması", "body": "Sektörünüze uygun müşteri bilgileri, satış aşamaları, teklif alanları, görevler, notlar ve rapor alanları belirlenir." },
+            { "n": 5, "title": "Ekip Rollerinin Belirlenmesi", "body": "Satış, pazarlama, operasyon, müşteri hizmetleri, saha ekipleri ve yönetim için CRM içindeki roller planlanır." },
+            { "n": 6, "title": "İş Akışlarının Kurgulanması", "body": "Müşteri adayı, teklif, sipariş, görev, destek, kampanya ve satış sonrası takip süreçleri için iş akışları oluşturulur." },
+            { "n": 7, "title": "Raporlama Yapısı", "body": "Yönetici ve ekipler için sektörünüze uygun raporlar hazırlanır." },
+            { "n": 8, "title": "Eğitim ve Kullanım Desteği", "body": "Ekiplere CRM sistemini nasıl kullanacakları anlatılır ve gerçek iş süreçlerine göre kullanım desteği sağlanır." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Sektörlere göre CRM nedir?",
+          "body": [
+            "Sektörlere göre CRM; restoran, perakende, danışmanlık, BT, medya, müşteri hizmetleri, saha hizmetleri, fotoğrafçılık, catering, tüketici ürünleri, B2B satış ve ihracat gibi farklı sektörlerin müşteri yönetimi, satış takibi, teklif, operasyon, destek ve raporlama ihtiyaçlarına göre planlanan CRM yapısıdır. {{appName}}, şirketlerin CRM sistemini sektörüne ve gerçek iş akışına uygun şekilde kurgulamasına yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Sektörlere Göre CRM Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Sektörlere göre CRM kimler için uygundur?", "a": "Sektörlere göre CRM; müşteri, satış, teklif, operasyon, destek veya kampanya süreçlerini sektörüne uygun şekilde yönetmek isteyen tüm şirketler için uygundur." },
+            { "q": "Her sektör için aynı CRM sistemi kullanılabilir mi?", "a": "Temel CRM mantığı benzer olabilir; ancak her sektörün müşteri süreci, satış aşamaları, takip ihtiyaçları ve raporları farklıdır. Bu nedenle CRM yapısı sektöre göre uyarlanmalıdır." },
+            { "q": "Restoranlar için CRM kullanılabilir mi?", "a": "Evet. Restoranlar için müşteri kayıtları, rezervasyon geçmişi, özel günler, kampanyalar, memnuniyet takibi ve tekrar ziyaret süreçleri CRM ile yönetilebilir." },
+            { "q": "Perakende sektörü için CRM ne işe yarar?", "a": "Perakende CRM; müşteri segmentasyonu, alışveriş geçmişi, kampanya takibi, sadakat programı, tekrar satın alma ve müşteri memnuniyeti süreçlerini yönetmeye yardımcı olur." },
+            { "q": "Danışmanlık firmaları için CRM uygun mu?", "a": "Evet. Danışmanlık firmaları için ön görüşme, ihtiyaç analizi, teklif, revize, sözleşme, proje ve tekrar hizmet fırsatları CRM ile takip edilebilir." },
+            { "q": "BT ve yazılım şirketleri CRM kullanabilir mi?", "a": "Evet. BT şirketleri demo talepleri, satış fırsatları, proje süreçleri, destek talepleri, bakım anlaşmaları ve müşteri başarı süreçlerini CRM ile yönetebilir." },
+            { "q": "Saha hizmetleri için CRM kullanılabilir mi?", "a": "Evet. Saha hizmetleri için müşteri lokasyonu, servis talebi, ekip ataması, randevu, bakım geçmişi ve servis sonrası memnuniyet CRM ile takip edilebilir." },
+            { "q": "İhracat yapan şirketler için CRM nasıl kullanılır?", "a": "İhracat CRM yapısında yurt dışı alıcı firmalar, ülke bazlı listeler, GTİP / HS kodları, konşimento verileri, mail marketing, telefon aramaları, teklifler, proforma ve sevkiyat süreçleri takip edilebilir." },
+            { "q": "Sektörel CRM kurulurken eğitim veriyor musunuz?", "a": "Evet. Sektörünüze uygun CRM yapısı kurulduktan sonra satış, operasyon, müşteri hizmetleri ve yönetim ekiplerine kullanım eğitimi verilebilir." },
+            { "q": "Sektöre özel CRM satışları artırır mı?", "a": "Sektöre özel CRM doğrudan satış garantisi vermez; ancak müşteri takibini düzenler, satış fırsatlarını görünür hale getirir, ekiplerin daha sistemli çalışmasına yardımcı olur ve satış sürecindeki kayıpları azaltabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Şirketinizin Sektörüne Uygun CRM Sistemini Birlikte Kuralım",
+        "body": "CRM sisteminiz sektörünüzün gerçek işleyişine uygun değilse ekipleriniz sistemi kullanmakta zorlanır, müşteri takipleri aksar ve satış fırsatları kaybolabilir. {{appName}} Sektörlere Göre CRM hizmeti ile restoran, perakende, danışmanlık, BT, medya, saha hizmetleri, catering, müşteri hizmetleri, B2B satış ve ihracat süreçlerinize uygun CRM yapısını birlikte planlayalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

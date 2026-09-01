@@ -1,0 +1,685 @@
+{
+  "count": 68,
+  "items": [
+    {
+      "slug": "crm-yazilimi",
+      "category": "crm-satis",
+      "module": "crm",
+      "order": 10,
+      "icon": "Users",
+      "title": "CRM Yazılımı",
+      "eyebrow": "CRM ve Satış",
+      "summary": "Müşteri bilgileriniz, satış görüşmeleriniz, teklifleriniz ve takip süreçleriniz dağınık mı ilerliyor? {{appName}} CRM Yazılımı ile müşteri adaylarınızı, satış e"
+    },
+    {
+      "slug": "crm-is-akislari",
+      "category": "crm-satis",
+      "module": "crm",
+      "order": 20,
+      "icon": "Workflow",
+      "title": "CRM İş Akışları",
+      "eyebrow": "CRM ve Satış",
+      "summary": "Şirketinizde işler hâlâ kişilerin hafızasına, WhatsApp mesajlarına, Excel tablolarına veya manuel takiplere mi bağlı ilerliyor? Bir müşteri geldiğinde kime atan"
+    },
+    {
+      "slug": "crm-kampanya-yonetimi",
+      "category": "crm-satis",
+      "module": "crm",
+      "order": 30,
+      "icon": "Megaphone",
+      "title": "CRM Kampanya Yönetimi",
+      "eyebrow": "CRM ve Satış",
+      "summary": "Kampanya yapıyorsunuz ama hangi çalışmanın gerçekten müşteri getirdiğini net göremiyor musunuz? Mail marketing yapılıyor, LinkedIn mesajları gönderiliyor, fuarl"
+    },
+    {
+      "slug": "crm-kurulum-paketi",
+      "category": "crm-satis",
+      "module": "crm",
+      "order": 40,
+      "icon": "PackageCheck",
+      "title": "CRM Kurulum Paketi",
+      "eyebrow": "CRM ve Satış",
+      "summary": "Müşteri bilgileriniz Excel dosyalarında, WhatsApp konuşmalarında, telefon rehberlerinde veya çalışanların kişisel notlarında mı kalıyor? Satış ekibiniz kiminle "
+    },
+    {
+      "slug": "ekipler-icin-crm",
+      "category": "crm-satis",
+      "module": "crm",
+      "order": 50,
+      "icon": "Users",
+      "title": "Ekipler İçin CRM",
+      "eyebrow": "CRM ve Satış",
+      "summary": "Şirketinizde satış ekibi ayrı, pazarlama ekibi ayrı, operasyon ekibi ayrı, yönetim ise tüm süreci farklı dosyalardan mı takip ediyor? Müşteri bilgileri farklı k"
+    },
+    {
+      "slug": "rollere-gore-crm",
+      "category": "crm-satis",
+      "module": "crm",
+      "order": 60,
+      "icon": "UserCog",
+      "title": "Rollere Göre CRM",
+      "eyebrow": "CRM ve Satış",
+      "summary": "Şirketinizde herkes CRM’i aynı amaçla kullanmaz. Satış ekibi müşteri ve teklif takibi ister, şirket sahibi rapor görmek ister, destek ekibi müşteri taleplerini "
+    },
+    {
+      "slug": "sektorlere-gore-crm",
+      "category": "crm-satis",
+      "module": "crm",
+      "order": 70,
+      "icon": "Building2",
+      "title": "Sektörlere Göre CRM",
+      "eyebrow": "CRM ve Satış",
+      "summary": "Her sektörün müşteri yönetimi aynı değildir. Restoranın müşteri takibi farklıdır, perakende şirketinin satış süreci farklıdır, danışmanlık firmasının teklif yön"
+    },
+    {
+      "slug": "yapay-zekali-crm",
+      "category": "crm-satis",
+      "module": "crm",
+      "order": 80,
+      "icon": "Sparkles",
+      "title": "Yapay Zekâlı CRM",
+      "eyebrow": "CRM ve Satış",
+      "summary": "Satış ekibiniz müşteri notları, e-posta cevapları, teklif takipleri, görüşme özetleri ve kampanya dönüşleri arasında zaman kaybediyor mu? Günümüzde CRM yalnızca"
+    },
+    {
+      "slug": "satis-ekibi-otomasyonu",
+      "category": "crm-satis",
+      "module": "crm",
+      "order": 90,
+      "icon": "Workflow",
+      "title": "Satış Ekibi Otomasyonu",
+      "eyebrow": "CRM ve Satış",
+      "summary": "Satış ekibiniz çok çalışıyor olabilir. Ancak satış süreciniz gerçekten kontrol altında mı? Hangi müşteri hangi aşamada, hangi teklif beklemede, hangi satış tems"
+    },
+    {
+      "slug": "satis-sureci-analizi",
+      "category": "crm-satis",
+      "module": "crm",
+      "order": 100,
+      "icon": "BarChart3",
+      "title": "Satış Süreci Analizi",
+      "eyebrow": "CRM ve Satış",
+      "summary": "Satış ekibiniz çalışıyor, teklifler gönderiliyor, müşteriler aranıyor; ancak satışlar neden beklediğiniz seviyeye çıkmıyor? Birçok şirkette sorun satış yapılmam"
+    },
+    {
+      "slug": "teklif-ve-siparis-yonetimi",
+      "category": "crm-satis",
+      "module": "crm",
+      "order": 110,
+      "icon": "FileText",
+      "title": "Teklif ve Sipariş Yönetimi",
+      "eyebrow": "CRM ve Satış",
+      "summary": "Teklif gönderiyorsunuz ama hangi teklifin beklemede olduğunu, hangi müşterinin tekrar aranması gerektiğini ve hangi satış fırsatının siparişe dönüşmek üzere old"
+    },
+    {
+      "slug": "alibaba-hesap-yonetimi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 10,
+      "icon": "Store",
+      "title": "Alibaba Hesap Yönetimi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "Alibaba’da firma profiliniz var ama ürünlerinizi doğru şekilde yayınlayamıyor, İngilizce açıklamalarınızı hazırlayamıyor, gelen alıcı mesajlarını düzenli takip "
+    },
+    {
+      "slug": "amazon-egitimi-ve-hesap-yonetimi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 20,
+      "icon": "ShoppingCart",
+      "title": "Amazon Eğitimi ve Hesap Yönetimi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "Amazon’da satış yapmak istiyor ama hesap açma, ürün listeleme, kategori seçimi, fiyatlandırma, stok, sipariş, reklam, içerik ve mağaza yönetimi süreçlerinde ner"
+    },
+    {
+      "slug": "b2b-musteri-bulma-paketi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 30,
+      "icon": "Package",
+      "title": "B2B Müşteri Bulma Paketi",
+      "eyebrow": "İhracat & B2B Müşteri Bulma",
+      "summary": "Yurt dışı müşterilere ulaşmak istiyor ama hangi firmaları hedefleyeceğinizi, doğru alıcıları nereden bulacağınızı, satın alma müdürü veya karar verici kişilere "
+    },
+    {
+      "slug": "b2b-platformlarda-urun-yayinlama",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 40,
+      "icon": "Upload",
+      "title": "B2B Platformlarda Ürün Yayınlama",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "İhracat yapmak isteyen şirketler için yalnızca web sitesi yeterli değildir. Ürünlerinizi global B2B platformlarda da profesyonel şekilde yayınlamanız gerekir. {"
+    },
+    {
+      "slug": "b2b-platformlarda-urun-yukleme",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 50,
+      "icon": "Upload",
+      "title": "B2B Platformlarda Ürün Yükleme",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "Alibaba, TradeWheel, Go4WorldBusiness veya Europages gibi B2B platformlarda ürünlerinizi yayınlamak istiyor ama İngilizce ürün başlığı, açıklama, kategori, görs"
+    },
+    {
+      "slug": "ebay-egitimi-ve-hesap-yonetimi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 60,
+      "icon": "ShoppingBag",
+      "title": "eBay Eğitimi ve Hesap Yönetimi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "eBay’de satış yapmak istiyor ama hesap açma, ürün listeleme, kategori seçimi, fiyatlandırma, kargo, sipariş, iade, müşteri mesajları ve hesap yönetimi süreçleri"
+    },
+    {
+      "slug": "e-ticaret-ve-pazaryeri-egitimi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 70,
+      "icon": "GraduationCap",
+      "title": "E-Ticaret ve Pazaryeri Eğitimi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "E-ticaret yapmak istiyor ama hangi pazaryerinde satış yapacağınızı, mağazanızı nasıl kuracağınızı, ürünlerinizi nasıl yükleyeceğinizi, fiyatlandırmayı nasıl yap"
+    },
+    {
+      "slug": "e-ticaret-ve-pazaryeri-paketi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 80,
+      "icon": "Package",
+      "title": "E-Ticaret ve Pazaryeri Paketi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "Ürünlerinizi e-ticaret ve pazaryerlerinde satmak istiyor ama hangi platformda başlamanız gerektiğini, mağaza kurulumunu, ürün yüklemeyi, açıklama yazmayı, fiyat"
+    },
+    {
+      "slug": "etsy-egitimi-ve-hesap-yonetimi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 90,
+      "icon": "Palette",
+      "title": "Etsy Eğitimi ve Hesap Yönetimi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "Etsy’de satış yapmak istiyor ama mağaza açma, ürün listeleme, Etsy SEO, ürün başlığı, etiket, açıklama, fiyatlandırma, kargo, sipariş ve müşteri yönetimi süreçl"
+    },
+    {
+      "slug": "europages-firma-profili-yonetimi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 100,
+      "icon": "Globe",
+      "title": "Europages Firma Profili Yönetimi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "Europages üzerinde firma profiliniz var ama şirket tanıtımınız, ürün açıklamalarınız, kategori yapınız, görselleriniz ve iletişim bilgileriniz yabancı alıcıya y"
+    },
+    {
+      "slug": "go4worldbusiness-platform-yonetimi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 110,
+      "icon": "Globe",
+      "title": "Go4WorldBusiness Platform Yönetimi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "Go4WorldBusiness üzerinde firma profiliniz var ama ürünlerinizi düzenli yayınlayamıyor, alıcı taleplerini takip edemiyor, İngilizce ürün açıklamalarınızı hazırl"
+    },
+    {
+      "slug": "linkedin-ile-b2b-musteri-bulma",
+      "category": "e-ticaret-pazaryeri",
+      "module": "discover",
+      "order": 120,
+      "icon": "Linkedin",
+      "title": "LinkedIn ile B2B Müşteri Bulma",
+      "eyebrow": "B2B Müşteri Bulma",
+      "summary": "Yurt dışı alıcı firmalara ulaşmak istiyor ama doğru kişiyi bulmakta, bağlantı kurmakta ve profesyonel mesaj göndermekte zorlanıyor musunuz? LinkedIn, B2B satış "
+    },
+    {
+      "slug": "tradewheel-platform-yonetimi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 130,
+      "icon": "Globe",
+      "title": "TradeWheel Platform Yönetimi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "TradeWheel üzerinde firma profiliniz var ama ürünlerinizi düzenli yayınlayamıyor, İngilizce açıklamalarınızı hazırlayamıyor, gelen alıcı taleplerini takip edemi"
+    },
+    {
+      "slug": "trendyol-egitimi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 140,
+      "icon": "GraduationCap",
+      "title": "Trendyol Eğitimi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "Trendyol’da satış yapmak istiyor ama mağaza açma, ürün yükleme, fiyatlandırma, reklam, kampanya, stok, sipariş ve müşteri yönetimi süreçlerinde nereden başlayac"
+    },
+    {
+      "slug": "trendyol-hesap-yonetimi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 150,
+      "icon": "Store",
+      "title": "Trendyol Hesap Yönetimi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "Trendyol mağazanız var ama ürün yükleme, stok güncelleme, sipariş takibi, kampanya yönetimi, reklam kontrolü, müşteri soruları ve satış raporları düzenli takip "
+    },
+    {
+      "slug": "trendyol-urun-yukleme-ve-magaza-yonetimi",
+      "category": "e-ticaret-pazaryeri",
+      "module": "ecommerce",
+      "order": 160,
+      "icon": "Upload",
+      "title": "Trendyol Ürün Yükleme ve Mağaza Yönetimi",
+      "eyebrow": "E-Ticaret & Pazaryeri",
+      "summary": "Trendyol mağazanıza ürün yüklemek, ürünleri doğru kategoride yayınlamak, stokları güncellemek, fiyatları kontrol etmek ve mağazayı düzenli yönetmek için zaman b"
+    },
+    {
+      "slug": "antigravity-egitimi",
+      "category": "egitim",
+      "module": "training",
+      "order": 10,
+      "icon": "Bot",
+      "title": "Antigravity Eğitimi",
+      "eyebrow": "Yapay Zeka Eğitimi",
+      "summary": "Yazılım geliştirme süreçlerinde yapay zeka ajanlarını kullanmak istiyor ama Antigravity ile proje analizi, kod düzenleme, terminal, tarayıcı, görev planlama, te"
+    },
+    {
+      "slug": "chatgpt-egitimi",
+      "category": "egitim",
+      "module": "training",
+      "order": 20,
+      "icon": "Bot",
+      "title": "ChatGPT Eğitimi",
+      "eyebrow": "Yapay Zeka Eğitimi",
+      "summary": "ChatGPT kullanmak istiyor ama doğru komut yazmayı, çıkan cevabı kontrol etmeyi ve bu aracı gerçek iş süreçlerinize nasıl uyarlayacağınızı bilmiyor musunuz? Chat"
+    },
+    {
+      "slug": "claude-code-egitimi",
+      "category": "egitim",
+      "module": "training",
+      "order": 30,
+      "icon": "Bot",
+      "title": "Claude Code Eğitimi",
+      "eyebrow": "Yapay Zeka Eğitimi",
+      "summary": "Yazılım geliştirme süreçlerinde yapay zekadan daha fazla verim almak istiyor ama Claude Code’u proje dosyalarınız, terminal, Git, hata ayıklama, kod analizi ve "
+    },
+    {
+      "slug": "gemini-egitimi",
+      "category": "egitim",
+      "module": "training",
+      "order": 40,
+      "icon": "Bot",
+      "title": "Gemini Eğitimi",
+      "eyebrow": "Yapay Zeka Eğitimi",
+      "summary": "Google Gemini kullanmak istiyor ama bu aracı e-posta, doküman, tablo, toplantı, araştırma, raporlama, satış, pazarlama, ihracat ve günlük ofis süreçlerinize nas"
+    },
+    {
+      "slug": "kurumsal-egitim-paketi",
+      "category": "egitim",
+      "module": "training",
+      "order": 50,
+      "icon": "GraduationCap",
+      "title": "Kurumsal Eğitim Paketi",
+      "eyebrow": "Kurumsal Eğitim",
+      "summary": "Şirketinizin ekipleri yapay zeka araçlarını, CRM sistemlerini, LinkedIn’i, ihracat müşteri bulma yöntemlerini, e-ticaret ve pazaryeri süreçlerini, mail marketin"
+    },
+    {
+      "slug": "linkedin-egitimi",
+      "category": "egitim",
+      "module": "training",
+      "order": 60,
+      "icon": "Linkedin",
+      "title": "LinkedIn Eğitimi",
+      "eyebrow": "LinkedIn Eğitimi",
+      "summary": "LinkedIn hesabınız var ama profilinizi profesyonel kullanamıyor, doğru kişilerle bağlantı kuramıyor, içerik paylaşımı yapamıyor veya LinkedIn’i B2B müşteri bulm"
+    },
+    {
+      "slug": "linkedin-ile-musteri-bulma-egitimi",
+      "category": "egitim",
+      "module": "training",
+      "order": 70,
+      "icon": "Linkedin",
+      "title": "LinkedIn ile Müşteri Bulma Eğitimi",
+      "eyebrow": "LinkedIn Eğitimi",
+      "summary": "LinkedIn üzerinden müşteri bulmak istiyor ama doğru firmaları nasıl seçeceğinizi, karar verici kişilere nasıl ulaşacağınızı, bağlantı mesajlarını nasıl yazacağı"
+    },
+    {
+      "slug": "linkedin-sales-navigator-egitimi",
+      "category": "egitim",
+      "module": "training",
+      "order": 80,
+      "icon": "Linkedin",
+      "title": "LinkedIn Sales Navigator Eğitimi",
+      "eyebrow": "LinkedIn Eğitimi",
+      "summary": "LinkedIn Sales Navigator kullanmak istiyor ama doğru hedef firmaları bulma, karar verici kişilere ulaşma, gelişmiş filtreleri kullanma, lead listeleri oluşturma"
+    },
+    {
+      "slug": "mail-marketing-egitimi",
+      "category": "egitim",
+      "module": "training",
+      "order": 90,
+      "icon": "Mail",
+      "title": "Mail Marketing Eğitimi",
+      "eyebrow": "Pazarlama Eğitimi",
+      "summary": "Yurt içi veya yurt dışı potansiyel müşterilere e-posta göndermek istiyor ama doğru hedef listeyi nasıl hazırlayacağınızı, profesyonel mail metnini nasıl yazacağ"
+    },
+    {
+      "slug": "sirketlere-ozel-yapay-zeka-egitimi",
+      "category": "egitim",
+      "module": "training",
+      "order": 100,
+      "icon": "Bot",
+      "title": "Şirketlere Özel Yapay Zeka Eğitimi",
+      "eyebrow": "Yapay Zeka Eğitimi",
+      "summary": "Şirketinizde yapay zeka kullanmak istiyor ama çalışanlarınız ChatGPT, Claude, Gemini ve benzeri araçları iş süreçlerine nasıl uyarlayacağını bilmiyor mu? Yapay "
+    },
+    {
+      "slug": "sirket-yonetim-egitimi",
+      "category": "egitim",
+      "module": "training",
+      "order": 110,
+      "icon": "BookOpen",
+      "title": "Şirket Yönetim Eğitimi",
+      "eyebrow": "Yönetim Eğitimi",
+      "summary": "Şirketiniz büyüyor ama işler hâlâ kişilere bağlı ilerliyor, ekipler net görevlerle çalışmıyor, satış süreci takip edilemiyor, müşteri bilgileri dağınık kalıyor "
+    },
+    {
+      "slug": "gtip-hs-koduna-gore-musteri-bulma",
+      "category": "ihracat-musteri-bulma",
+      "module": "discover-customs",
+      "order": 10,
+      "icon": "ScanSearch",
+      "title": "GTİP / HS Koduna Göre Müşteri Bulma",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "Ürününüzü yurt dışına satmak istiyor ama bu ürünü hangi ülkelerin ithal ettiğini ve hangi firmaların satın aldığını bilmiyor musunuz? Doğru kodla yapılan dış ti"
+    },
+    {
+      "slug": "190-ulke-alici-firma-verileri",
+      "category": "ihracat-musteri-bulma",
+      "module": "discover-customs",
+      "order": 20,
+      "icon": "Globe",
+      "title": "190+ Ülke Alıcı Firma Verileri",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "İhracat yapmak istiyorsunuz ama hangi ülkelerde gerçek alıcı olduğunu, hangi firmaların ürününüzü ithal ettiğini ve hangi pazara öncelik vermeniz gerektiğini bi"
+    },
+    {
+      "slug": "konsimento-verileri-ile-alici-firma-bulma",
+      "category": "ihracat-musteri-bulma",
+      "module": "discover-customs",
+      "order": 30,
+      "icon": "Ship",
+      "title": "Konşimento Verileri ile Alıcı Firma Bulma",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "Yurt dışına ihracat yapmak istiyor ama ürününüzü gerçekten satın alan ithalatçı firmalara nasıl ulaşacağınızı bilmiyor musunuz? Rastgele firma listeleriyle zama"
+    },
+    {
+      "slug": "urun-adina-gore-ithalatci-firma-bulma",
+      "category": "ihracat-musteri-bulma",
+      "module": "discover-customs",
+      "order": 40,
+      "icon": "Package",
+      "title": "Ürün Adına Göre İthalatçı Firma Bulma",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "Ürününüzü yurt dışına satmak istiyor ama bu ürünü hangi firmaların ithal ettiğini ve hangi ülkelerde gerçek alıcı olduğunu bilmiyor musunuz? Birçok şirket ihrac"
+    },
+    {
+      "slug": "satin-alma-muduru-ve-karar-verici-kisi-bulma",
+      "category": "ihracat-musteri-bulma",
+      "module": "discover-customs",
+      "order": 50,
+      "icon": "UserSearch",
+      "title": "Satın Alma Müdürü ve Karar Verici Kişi Bulma",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "Yurt dışı alıcı firmaları buluyorsunuz ama doğru kişiye ulaşamadığınız için cevap alamıyor musunuz? İhracat ve B2B satışta yalnızca firma adı bulmak çoğu zaman "
+    },
+    {
+      "slug": "musteri-adayi-yonetimi",
+      "category": "ihracat-musteri-bulma",
+      "module": "discover",
+      "order": 60,
+      "icon": "Users",
+      "title": "Müşteri Adayı Yönetimi",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "Müşteri adayları geliyor ama düzenli takip edilmediği için satışa dönüşmeden kayboluyor mu? {{appName}} Müşteri Adayı Yönetimi ile web sitesi formları, mail mar"
+    },
+    {
+      "slug": "mail-adresi-bulma",
+      "category": "ihracat-musteri-bulma",
+      "module": "outreach",
+      "order": 70,
+      "icon": "Mail",
+      "title": "Mail Adresi Bulma",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "Yurt dışı alıcı firmaları buldunuz ama bu firmalara hangi e-posta adresinden ulaşacağınızı bilmiyor musunuz? İhracat ve B2B satışta firma adı bulmak tek başına "
+    },
+    {
+      "slug": "ihracata-hazirlik-paketi",
+      "category": "ihracat-musteri-bulma",
+      "module": "service",
+      "order": 80,
+      "icon": "Rocket",
+      "title": "İhracata Hazırlık Paketi",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "İhracata başlamak istiyor ama şirketinizin yurt dışı müşterilere profesyonel görünüp görünmediğinden emin olamıyor musunuz? Birçok firma kaliteli ürünlere sahip"
+    },
+    {
+      "slug": "dis-ticaret-departmani-paketi",
+      "category": "ihracat-musteri-bulma",
+      "module": "service",
+      "order": 90,
+      "icon": "Building2",
+      "title": "Dış Ticaret Departmanı Paketi",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "İhracat yapmak istiyor ama şirketinizde dış ticaret departmanı yok mu? Yurt dışı müşteri bulma, teklif hazırlama, proforma düzenleme, ödeme takibi, nakliye koor"
+    },
+    {
+      "slug": "dys-ve-fuar-tesvikleri-paketi",
+      "category": "ihracat-musteri-bulma",
+      "module": "service",
+      "order": 100,
+      "icon": "Award",
+      "title": "DYS ve Fuar Teşvikleri Paketi",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "Yurt içi veya yurt dışı fuara katılmayı planlıyor ama fuar teşvikleri, DYS kayıt süreci, başvuru evrakları, ödeme belgeleri ve başvuru takibi konusunda nereden "
+    },
+    {
+      "slug": "dys-ve-fuar-tesvikleri-danismanligi",
+      "category": "ihracat-musteri-bulma",
+      "module": "service",
+      "order": 110,
+      "icon": "HandCoins",
+      "title": "DYS ve Fuar Teşvikleri Danışmanlığı",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "Fuar desteklerinden yararlanmak için başvuru süreci doğru planlanmalıdır. Yurt içi ve yurt dışı fuarlara katılan şirketler için devlet destekleri önemli bir ava"
+    },
+    {
+      "slug": "ihracat-egitimi",
+      "category": "ihracat-musteri-bulma",
+      "module": "service",
+      "order": 120,
+      "icon": "GraduationCap",
+      "title": "İhracat Eğitimi",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "İhracat yapmak istiyor ama nereden başlayacağınızı, hangi belgelerin gerektiğini, yurt dışı müşterilere nasıl ulaşacağınızı, teklif ve proforma sürecini nasıl y"
+    },
+    {
+      "slug": "ihracat-operasyon-yonetimi",
+      "category": "ihracat-musteri-bulma",
+      "module": "service",
+      "order": 130,
+      "icon": "Settings",
+      "title": "İhracat Operasyon Yönetimi",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "Yurt dışı müşteriden sipariş almak ihracat sürecinin yalnızca başlangıcıdır. Siparişten sonra proforma, ödeme, nakliye, gümrük evrakları, teslim şekli ve sevkiy"
+    },
+    {
+      "slug": "uctan-uca-ihracat-yonetimi",
+      "category": "ihracat-musteri-bulma",
+      "module": "service",
+      "order": 140,
+      "icon": "Workflow",
+      "title": "Uçtan Uca İhracat Yönetimi",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "İhracat yapmak istiyor ancak nereden başlayacağınızı bilmiyor musunuz? {{appName}} olarak şirketinizi sıfırdan ihracata hazırlıyor, potansiyel yurt dışı müşteri"
+    },
+    {
+      "slug": "sirketi-ihracata-hazirlama",
+      "category": "ihracat-musteri-bulma",
+      "module": "service",
+      "order": 150,
+      "icon": "ClipboardCheck",
+      "title": "Şirketinizi İhracata Hazırlıyoruz",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "İhracat yapmak istiyor ancak şirketinizin nereden başlaması gerektiğini bilmiyor musunuz? {{appName}} olarak şirketinizi ihracata hazır hale getiriyoruz. Ürünle"
+    },
+    {
+      "slug": "ihracata-yonelik-web-sitesi-hazirligi",
+      "category": "ihracat-musteri-bulma",
+      "module": "service",
+      "order": 160,
+      "icon": "Globe2",
+      "title": "İhracata Yönelik Web Sitesi Hazırlığı",
+      "eyebrow": "İhracat Müşteri Bulma",
+      "summary": "Yurt dışı müşterilerle çalışmak isteyen şirketler için web sitesi yalnızca dijital vitrin değildir. Web siteniz, yabancı alıcının firmanızı tanıdığı, ürünlerini"
+    },
+    {
+      "slug": "kurumsal-hakkimizda",
+      "category": "kurumsal",
+      "module": null,
+      "order": 10,
+      "icon": "Info",
+      "title": "İşletmenizi Dijital Dünyada Yönetin",
+      "eyebrow": "Kurumsal",
+      "summary": "{{appName}} ile müşteri ilişkilerinizi güçlendirin, operasyonlarınızı optimize edin ve işletmenizi büyütün."
+    },
+    {
+      "slug": "e-posta-pazarlama-ve-e-posta-izleme",
+      "category": "mail-outreach",
+      "module": "outreach",
+      "order": 10,
+      "icon": "Mail",
+      "title": "E-posta Pazarlama ve E-posta İzleme",
+      "eyebrow": "Mail & Telefon İletişimi",
+      "summary": "E-posta gönderiyorsunuz ama hangi firma cevap verdi, hangi müşteri teklif istedi ve hangi firmaya tekrar dönüş yapılmalı net göremiyor musunuz? Birçok şirket ma"
+    },
+    {
+      "slug": "mail-marketing-kampanyasi-hazirlama",
+      "category": "mail-outreach",
+      "module": "outreach",
+      "order": 20,
+      "icon": "Send",
+      "title": "Mail Marketing Kampanyası Hazırlama",
+      "eyebrow": "Mail & Telefon İletişimi",
+      "summary": "Yurt dışı alıcı firmalara e-posta göndermek istiyor ama hangi firmaya, hangi mesajla, hangi sırayla ve nasıl takip yaparak ulaşacağınızı bilmiyor musunuz? Mail "
+    },
+    {
+      "slug": "mail-marketing-ve-telefon-aramalari",
+      "category": "mail-outreach",
+      "module": "outreach",
+      "order": 30,
+      "icon": "PhoneCall",
+      "title": "İhracat İçin Mail Marketing ve Telefon Aramaları",
+      "eyebrow": "Mail & Telefon İletişimi",
+      "summary": "Yurt dışı müşterilere ulaşmak için yalnızca firma listesi hazırlamak yeterli değildir. Doğru tanıtım maili, düzenli takip, ilgili kişiye ulaşma ve profesyonel i"
+    },
+    {
+      "slug": "telefon-aramalari-ile-musteri-takibi",
+      "category": "mail-outreach",
+      "module": "outreach",
+      "order": 40,
+      "icon": "Phone",
+      "title": "Telefon Aramaları ile Müşteri Takibi",
+      "eyebrow": "Mail & Telefon İletişimi",
+      "summary": "Yurt dışı alıcı firmalara mail gönderiyor, LinkedIn üzerinden bağlantı kuruyor veya ithalatçı firma listeleri hazırlıyorsunuz ama bu firmaları düzenli şekilde t"
+    },
+    {
+      "slug": "kurumsal-dijital-donusum-danismanligi",
+      "category": "mail-outreach",
+      "module": "service",
+      "order": 50,
+      "icon": "Rocket",
+      "title": "Kurumsal Dijital Dönüşüm Danışmanlığı",
+      "eyebrow": "Mail & Telefon İletişimi",
+      "summary": "Şirketiniz büyümek istiyor ancak satış, müşteri takibi, ihracat, e-ticaret, raporlama ve ekip yönetimi süreçleri hâlâ dağınık mı ilerliyor? {{appName}} olarak ş"
+    },
+    {
+      "slug": "musteri-yonetimi",
+      "category": "urun-modulleri",
+      "module": "crm",
+      "order": 10,
+      "icon": "Users",
+      "title": "Müşteri Yönetimi",
+      "eyebrow": "Ürün Modülü",
+      "summary": "Müşterilerinizi yönetin, satışlarınızı takip edin ve işletmenizi büyütün. Müşteri bilgilerini kolayca yönetin, satış geçmişlerini inceleyin ve ilişkilerinizi gü"
+    },
+    {
+      "slug": "envanter-yonetimi",
+      "category": "urun-modulleri",
+      "module": "crm",
+      "order": 20,
+      "icon": "Boxes",
+      "title": "Envanter Yönetimi",
+      "eyebrow": "Ürün Modülü",
+      "summary": "Stok takibi, ürün yönetimi ve analitik araçlarla işletmenizi bir üst seviyeye taşıyın. Ürünleri çalışanlara kolayca atayın, sorumlulukları takip edin ve varlık "
+    },
+    {
+      "slug": "calisan-yonetimi",
+      "category": "urun-modulleri",
+      "module": "crm",
+      "order": 30,
+      "icon": "UserCog",
+      "title": "Çalışan Yönetimi Modülü",
+      "eyebrow": "Ürün Modülü",
+      "summary": "İş görevlerinizi yönetin, yöneticilerinizle iletişim kurun ve servis cihazlarınızı takip edin. Size atanan servis cihazlarını kolayca yönetin ve durumlarını gün"
+    },
+    {
+      "slug": "teknik-servis-yonetimi",
+      "category": "urun-modulleri",
+      "module": "crm",
+      "order": 40,
+      "icon": "Wrench",
+      "title": "Teknik Servis Yönetimi",
+      "eyebrow": "Ürün Modülü",
+      "summary": "Müşteri siparişlerini yönetin, tekliflerin satışa dönüşme takibini kolaylaştırın ve müşteri memnuniyetini artırın. Müşterilerinize hazırladığınız teklifleri ve "
+    },
+    {
+      "slug": "hatirlatici-yonetimi",
+      "category": "urun-modulleri",
+      "module": "crm",
+      "order": 50,
+      "icon": "BellRing",
+      "title": "Hatırlatıcı Uygulaması",
+      "eyebrow": "Ürün Modülü",
+      "summary": "Önemli görevlerinizi ve randevularınızı asla unutmayın. Ücretsiz hatırlatma sistemi ile her şey kontrolünüz altında! Müşterilerinize özel hatırlatmalar gönderin"
+    },
+    {
+      "slug": "isletme-yonetimi",
+      "category": "urun-modulleri",
+      "module": "crm",
+      "order": 60,
+      "icon": "Building2",
+      "title": "İşletmenizi Ücretsiz Tanıtın!",
+      "eyebrow": "Ürün Modülü",
+      "summary": "İşletmenizi kaydedin, uzmanlık alanınıza özel reklamınızı yapalım. Binlerce potansiyel müşteriye ulaşın ve işinizi büyütün!"
+    },
+    {
+      "slug": "teklif-siparis-yonetimi",
+      "category": "urun-modulleri",
+      "module": "crm",
+      "order": 70,
+      "icon": "FileText",
+      "title": "Teklif ve Satış Yönetimi",
+      "eyebrow": "Ürün Modülü",
+      "summary": "Müşteri siparişlerini yönetin, tekliflerin satışa dönüşme takibini kolaylaştırın ve müşteri memnuniyetini artırın. Müşterilerinize hazırladığınız teklifleri ve "
+    },
+    {
+      "slug": "osgb-isletme-yonetim-sistemi",
+      "category": "urun-modulleri",
+      "module": "service",
+      "order": 80,
+      "icon": "ShieldCheck",
+      "title": "OSGB İşletme Yönetim Sistemi",
+      "eyebrow": "Ürün Modülü",
+      "summary": "İBYS Bakanlığa veri gönderir; işinizi yönetmez. Hangi firmaya kim gitti, hangi ziyaret eksik kaldı, uzmanınızın kapasitesi doldu mu, bu ay ne kadar ci"
+    }
+  ]
+}

@@ -11,7 +11,12 @@ from src.lib.redis_client import get_redis
 class ApiPrincipal:
     key_hash: str
     project: str
+    tenant_key: str
     plan: str = "default"
+
+    @property
+    def quota_key(self) -> str:
+        return self.tenant_key or self.key_hash
 
 
 def _hash_key(api_key: str) -> str:
@@ -41,10 +46,12 @@ async def require_api_key(
     redis_record = await redis.hgetall(f"apikey:{key_hash}")
     if redis_record:
         project = redis_record.get("project", _project_from_key(api_key))
+        tenant_key = redis_record.get("tenant_key", project)
         plan = redis_record.get("plan", "default")
-        return ApiPrincipal(key_hash=key_hash, project=project, plan=plan)
+        return ApiPrincipal(key_hash=key_hash, project=project, tenant_key=tenant_key, plan=plan)
 
     if api_key in settings.api_key_set:
-        return ApiPrincipal(key_hash=key_hash, project=_project_from_key(api_key))
+        project = _project_from_key(api_key)
+        return ApiPrincipal(key_hash=key_hash, project=project, tenant_key=project)
 
     raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="invalid_api_key")

@@ -1,0 +1,184 @@
+{
+  "slug": "trendyol-hesap-yonetimi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 150,
+  "icon": "Store",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Trendyol Hesap Yönetimi | Mağaza, Ürün, Sipariş, Stok, Kampanya ve Reklam Yönetimi",
+        "description": "Trendyol mağazanız için ürün yönetimi, stok takibi, sipariş kontrolü, kampanya, reklam, fiyatlandırma, müşteri soruları ve satış raporları süreçlerinde profesyonel hesap yönetimi desteği sunuyoruz.",
+        "ogTitle": "Trendyol Hesap Yönetimi | {{appName}}",
+        "ogDescription": "Trendyol mağazanızın ürün, stok, fiyat, sipariş, kampanya, reklam, müşteri soruları ve satış raporlarını daha düzenli yönetin."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "Trendyol Hesap Yönetimi",
+        "lead": "Trendyol mağazanız var ama ürün yükleme, stok güncelleme, sipariş takibi, kampanya yönetimi, reklam kontrolü, müşteri soruları ve satış raporları düzenli takip edilmiyor mu? Trendyol’da satış yapmak yalnızca mağaza açmakla bitmez. Mağazanın düzenli yönetilmesi, ürünlerin doğru yayında kalması, fiyatların kontrol edilmesi, stokların güncellenmesi, siparişlerin zamanında takip edilmesi, müşteri sorularının cevaplanması ve satış performansının analiz edilmesi gerekir. {{appName}} olarak Trendyol mağazası olan işletmelere hesap yönetimi desteği sunuyoruz. Ürün, stok, fiyat, sipariş, kampanya, reklam, müşteri iletişimi ve raporlama süreçlerinizi daha düzenli hale getirmenize yardımcı oluyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Trendyol Hesap Yönetimi Nedir?",
+          "body": [
+            "Trendyol hesap yönetimi, Trendyol satıcı hesabının ürün, stok, fiyat, sipariş, kampanya, reklam, müşteri iletişimi ve performans raporları açısından düzenli şekilde takip edilmesi sürecidir.",
+            "Bir Trendyol mağazasında ürünlerin yayına alınması, ürün bilgilerinin güncel tutulması, siparişlerin kontrol edilmesi, stokların doğru yönetilmesi, kampanyaların değerlendirilmesi, reklam performansının takip edilmesi ve müşteri sorularının zamanında cevaplanması gerekir.",
+            "{{appName}}, Trendyol hesabınızı yalnızca panel takibi olarak değil, e-ticaret satış sürecinizin önemli bir parçası olarak yönetmenize yardımcı olur.",
+            "Amacımız, Trendyol mağazanızın dağınık ve kontrolsüz ilerlemesini önlemek; satış sürecinizi daha planlı, takip edilebilir ve profesyonel bir yapıya kavuşturmaktır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol Mağazası Neden Profesyonel Yönetilmelidir?",
+          "body": [
+            "Trendyol büyük ve rekabetçi bir pazaryeridir. Aynı ürün grubunda çok sayıda satıcı bulunabilir. Bu nedenle mağazanın yalnızca açık olması yeterli değildir.",
+            "Mağaza profesyonel yönetilmezse ürün, stok, fiyat, sipariş, reklam, kampanya ve müşteri iletişimi süreçlerinde sorunlar oluşabilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Mağazanız açık ama düzenli yönetilmiyorsa, Trendyol hesap yönetimi hizmeti sürecinizi daha kontrol edilebilir hale getirir.",
+          "items": [
+            { "title": "Trendyol Mağazası Olan İşletmeler", "body": "Mağazası açık olan ancak düzenli yönetemeyen işletmeler için uygundur." },
+            { "title": "Ürün Yükleme Desteğine İhtiyaç Duyan Firmalar", "body": "Ürün, kategori, açıklama, görsel, barkod, varyant ve fiyat süreçlerinde destek alınabilir." },
+            { "title": "Stok, Fiyat ve Sipariş Takibini Düzenlemek İsteyenler", "body": "Stok, fiyat, sipariş ve kargo süreçleri daha düzenli takip edilebilir." },
+            { "title": "Reklam ve Kampanya Kontrolü İsteyenler", "body": "Kampanya ve reklam kararları kârlılık, stok ve ürün performansına göre değerlendirilebilir." },
+            { "title": "Mağaza Performansını Takip Etmek İsteyen KOBİ’ler", "body": "Satış raporları, ürün performansı ve mağaza göstergeleri düzenli incelenebilir." },
+            { "title": "Üretici ve Marka Sahipleri", "body": "Ürünlerini Trendyol’da daha planlı şekilde yönetmek isteyen üreticiler için uygundur." },
+            { "title": "E-ticaret Ekibi Olmayan Şirketler", "body": "Pazaryeri operasyonunu dışarıdan profesyonel destekle yürütmek isteyen işletmelere uygundur." },
+            { "title": "Satış Sonrası Süreçlerde Zorlanan Satıcılar", "body": "Müşteri soruları, iade, iptal, kargo ve satış sonrası süreçler daha düzenli takip edilebilir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol Hesap Yönetimi Kapsamında Neler Yapıyoruz?",
+          "body": [
+            "Trendyol hesap yönetimi hizmeti, mağazanızın ihtiyacına göre farklı başlıklarda planlanabilir. Ürün, stok, fiyat, sipariş, kampanya, reklam, müşteri soruları ve raporlama süreçleri birlikte ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Trendyol Hesap Yönetiminde Hangi Alanlar Takip Edilir?",
+          "intro": "Mağaza yönetimi yalnızca ürün yüklemek değildir. Panel, ürün, stok, fiyat, sipariş, müşteri iletişimi, kampanya, reklam ve raporlar birlikte takip edilmelidir.",
+          "items": [
+            { "title": "Trendyol Satıcı Paneli Takibi", "body": "Trendyol hesap yönetiminin temel alanı satıcı panelinin düzenli takip edilmesidir. Panel düzenli kontrol edilmediğinde kritik işlemler gözden kaçabilir. Ürün yönetimi, sipariş yönetimi ve kargo alanları; müşteri soruları, kampanyalar ve reklam ekranları; stok, fiyat, bildirimler ve uyarılar; mağaza performansı, satış raporları ve finansal özetler." },
+            { "title": "Ürün Listeleme ve Yayın Kontrolü", "body": "Trendyol’da ürünlerin doğru şekilde yayında olması satış sürecinin temelidir. Ürün bilgileri eksik, hatalı veya yanlış kategorideyse müşteri ürünü anlamakta zorlanabilir. Ürün adı, kategori, marka ve barkod bilgisi; açıklama, özellik, görsel ve varyant yapısı; renk, beden, ölçü, stok ve fiyat bilgisi; kargo bilgisi ve ürünün yayında olup olmadığı." },
+            { "title": "Ürün Başlığı ve Açıklama Düzenleme", "body": "Trendyol’da müşteri ürünle ilgili ilk bilgiyi başlık, görsel ve açıklama alanlarından alır. Bu alanlar eksikse müşteri ürünü anlamadan sayfadan çıkabilir. Ürün adının, marka ve model bilgisinin net yazılması; ölçü, renk, beden veya içerik bilgisinin belirtilmesi; teknik özelliklerin ve kullanım alanlarının açıklanması; yanıltıcı ifadelerden kaçınılması ve görsel uyumu." },
+            { "title": "Ürün Görseli Kontrolü", "body": "Pazaryeri satışlarında ürün görselleri müşteri kararını doğrudan etkiler. Ürün fiziksel olarak görülmediği için görsel kalitesi ve açıklığı önemlidir. Ana ürün görseli ve ek ürün görselleri; farklı açı, ambalaj, ölçü ve kullanım görselleri; varyant görselleri, çözünürlük, fon ve sunum düzeni; eksik veya yanıltıcı görsel riskinin azaltılması." },
+            { "title": "Stok Yönetimi", "body": "Trendyol mağazasında stokların doğru yönetilmesi gerekir. Stok hatası, müşteri memnuniyetsizliği ve operasyon sorunu oluşturabilir. Ürün stok miktarları, stok biten ve azalan ürünler; yeni stok girişi ve varyant bazlı stok takibi; sezonluk stok planı ve kampanya öncesi kontrol; panel ve depo stok uyumu." },
+            { "title": "Fiyatlandırma ve Kârlılık Takibi", "body": "Trendyol’da fiyat belirlerken yalnızca ürün maliyetine bakmak yeterli değildir. Komisyon, kargo, reklam, kampanya, paketleme ve iade riskleri birlikte değerlendirilmelidir. Ürün maliyeti, komisyon, kargo ve paketleme etkisi; reklam maliyeti ve kampanya indirimi; rakip fiyatları, minimum satış fiyatı ve kârlı satış fiyatı; zarar riski ve fiyat güncelleme ihtiyacı." },
+            { "title": "Sipariş ve Kargo Süreci Takibi", "body": "Siparişlerin zamanında hazırlanması, doğru paketlenmesi ve kargoya verilmesi mağaza performansı için önemlidir. Yeni siparişler ve hazırlanacak siparişler; kargoya verilecek ürünler ve paketleme süreci; teslimat durumu, geciken siparişler ve kargo hataları; yanlış ürün gönderimi riski ve müşteri bilgilendirme ihtiyacı." },
+            { "title": "İade ve İptal Süreçleri", "body": "Pazaryeri satışlarında iade ve iptal süreçleri dikkatli yönetilmelidir. Bu süreçler operasyon, müşteri memnuniyeti ve kârlılık açısından önemlidir. İade talepleri, iptal nedenleri ve ürün hasarı; yanlış ürün gönderimi ve müşteri memnuniyetsizliği; ürün açıklaması, beden, renk veya ölçü uyuşmazlığı; iade oranı ve tekrar eden sorunların analizi." },
+            { "title": "Müşteri Soruları ve Mağaza İletişimi", "body": "Trendyol’da müşteri soruları zamanında ve doğru cevaplanmalıdır. Müşteri sorusuna verilen cevap satın alma kararını etkileyebilir. Ürün, stok, kargo, ölçü, beden ve renk soruları; garanti, içerik, kullanım alanı ve teknik detaylar; cevap süresi ve profesyonel yanıt dili; sık sorulan soruların ürün açıklamasına eklenmesi." },
+            { "title": "Kampanya Yönetimi", "body": "Trendyol kampanyaları satışları artırabilir; ancak kampanyaya katılmadan önce kârlılık ve stok değerlendirmesi yapılmalıdır. Kampanya uygunluğu, ürün seçimi ve stok hazırlığı; indirim oranı, kârlılık kontrolü ve kampanya süresi; rakip kampanyaları, kampanya ve reklam ilişkisi; kampanya sonrası satış analizi ve zarar riski." },
+            { "title": "Trendyol Reklam Takibi", "body": "Trendyol reklamları ürün görünürlüğünü artırabilir. Ancak reklam bütçesi plansız kullanılırsa verimsiz harcamaya dönüşebilir. Reklam verilen ürünler, reklam bütçesi ve tıklama ilişkisi; reklam maliyeti ve reklam sonrası satış performansı; ürün bazlı reklam sonucu ve kârlılık değerlendirmesi; durdurulması gereken reklamlar ve geliştirilmesi gereken ürünler." },
+            { "title": "Satış Raporları ve Performans Analizi", "body": "Trendyol hesap yönetiminde raporlar düzenli incelenmelidir. Satış raporları mağazanın ne durumda olduğunu anlamak için önemlidir. Toplam satış, ürün bazlı satış ve kategori bazlı satış; en çok satan ürünler, az satan ürünler ve iade oranları; kampanya performansı, reklam performansı ve stok hareketleri; gelir, kârlılık, müşteri soruları ve mağaza göstergeleri." },
+            { "title": "Rakip ve Kategori Takibi", "body": "Trendyol’da aynı kategorideki rakipleri takip etmek önemlidir. Fiyat, görsel, ürün açıklaması, kampanya ve müşteri yorumları rekabet üzerinde etkili olabilir. Rakip ürün fiyatları, başlıkları ve görsel kalitesi; kampanya durumu, yorumlar ve kategori yoğunluğu; benzer ürünlerin satış yaklaşımı ve fiyat değişimleri; paket, set seçenekleri ve ürün sayfası kalitesi." },
+            { "title": "Ekip Görev Dağılımı", "body": "Trendyol mağazası birden fazla kişi tarafından yönetiliyorsa görevler net olmalıdır. Aksi halde ürün, sipariş, stok ve müşteri soruları arasında karışıklık yaşanabilir. Ürün yükleme, stok takip ve sipariş hazırlık sorumlusu; kargo takip, müşteri soruları ve fiyat güncelleme sorumlusu; kampanya, reklam ve raporlama sorumlusu; genel mağaza yöneticisi ve operasyon planı." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Trendyol Hesap Yönetimi Süreci Nasıl İlerler?",
+          "intro": "Süreç mağazanızın mevcut durumu, ürün sayısı, satış hedefleri, ekip yapısı ve yönetim ihtiyacı değerlendirilerek başlar. Ardından mağaza analizi, eksiklerin belirlenmesi, yönetim planı, ürün düzenlemeleri, sipariş takibi, kampanya-reklam kontrolü ve raporlama adımları planlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Mağazanızın mevcut durumu, ürün sayısı, satış hedefleri, ekip yapısı ve yönetim ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Mağaza Analizi", "body": "Ürünler, kategori yapısı, fiyatlandırma, görseller, açıklamalar, stok, sipariş ve kampanya durumu incelenir." },
+            { "n": 3, "title": "Eksiklerin Belirlenmesi", "body": "Ürün sayfası, stok, fiyat, görsel, müşteri soruları, kampanya veya reklam alanlarında iyileştirme ihtiyacı olan noktalar belirlenir." },
+            { "n": 4, "title": "Yönetim Planı Oluşturma", "body": "Haftalık veya aylık takip edilecek alanlar, sorumlular, ürün güncellemeleri ve operasyon adımları planlanır." },
+            { "n": 5, "title": "Ürün ve Mağaza Düzenlemeleri", "body": "Ürün başlıkları, açıklamalar, görseller, fiyatlar, stoklar ve kategori bilgileri mağaza ihtiyacına göre düzenlenir." },
+            { "n": 6, "title": "Sipariş ve Müşteri Takibi", "body": "Siparişler, kargo süreçleri, müşteri soruları, iade ve iptal durumları düzenli takip edilir." },
+            { "n": 7, "title": "Kampanya ve Reklam Kontrolü", "body": "Kampanya ve reklam kararları ürün, stok, fiyat ve kârlılık durumuna göre değerlendirilir." },
+            { "n": 8, "title": "Raporlama", "body": "Satış, ürün performansı, kampanya, reklam, stok ve mağaza durumu düzenli olarak raporlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Trendyol Hesap Yönetiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Mağazanız daha düzenli takip edilir",
+            "Ürünleriniz daha doğru şekilde yayında kalır",
+            "Stok hataları azaltılabilir",
+            "Sipariş süreçleri daha kontrollü ilerler",
+            "Müşteri soruları daha hızlı cevaplanır",
+            "Kampanya kararları daha bilinçli verilir",
+            "Reklam bütçesi daha kontrollü takip edilir",
+            "Fiyatlandırma ve kârlılık daha dikkatli yönetilir",
+            "İade ve iptal nedenleri analiz edilir",
+            "Satış raporları düzenli incelenir",
+            "Ekip görevleri daha net belirlenir",
+            "Pazaryeri operasyonu daha profesyonel hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Trendyol Hesap Yönetiminde Sık Yapılan Hatalar",
+          "items": [
+            "Ürünleri yanlış kategoriye yüklemek",
+            "Ürün açıklamalarını eksik bırakmak",
+            "Görselleri yeterince düzenlememek",
+            "Stokları güncel tutmamak",
+            "Fiyatları kârlılık hesabı yapmadan belirlemek",
+            "Kampanyalara plansız katılmak",
+            "Reklam bütçesini kontrolsüz kullanmak",
+            "Müşteri sorularına geç cevap vermek",
+            "Sipariş ve kargo sürecini düzenli takip etmemek",
+            "İade nedenlerini analiz etmemek",
+            "Satış raporlarını incelememek",
+            "Mağaza yönetimini tamamen kişisel takibe bırakmak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol Hesap Yönetimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Trendyol hesap yönetimi, e-ticaret ve pazaryeri süreçlerinin bir parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol Mağaza Yönetimi, Ürün, Stok, Sipariş, Kampanya ve Reklam Takibi",
+          "body": [
+            "Trendyol hesap yönetimi; Trendyol mağaza yönetimi, Trendyol satıcı hesabı yönetimi, Trendyol ürün yönetimi, stok yönetimi, sipariş yönetimi, kampanya yönetimi, reklam yönetimi ve pazaryeri hesap yönetimi süreçleri için planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol hesap yönetimi nedir?",
+          "body": [
+            "Trendyol hesap yönetimi; Trendyol satıcı hesabında ürün listeleme, ürün açıklaması, stok, fiyat, sipariş, kargo, müşteri soruları, iade, kampanya, reklam ve satış raporlarının düzenli şekilde takip edilmesi hizmetidir. {{appName}}, Trendyol mağazası olan işletmelerin pazaryeri operasyonlarını daha planlı, kontrollü ve profesyonel şekilde yönetmesine yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Trendyol Hesap Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Trendyol hesap yönetimi kimler için uygundur?", "a": "Bu hizmet; Trendyol mağazası olan ancak ürün, stok, sipariş, kampanya, reklam ve müşteri soruları süreçlerini düzenli yönetmekte zorlanan işletmeler için uygundur." },
+            { "q": "Trendyol mağazamı sizinle yönetebilir miyim?", "a": "Evet. Mağazanızın ürün, stok, fiyat, sipariş, kampanya, reklam ve raporlama süreçleri için profesyonel yönetim desteği alınabilir." },
+            { "q": "Ürün yükleme desteği veriyor musunuz?", "a": "Evet. Ürün adı, kategori, açıklama, görsel, fiyat, stok, barkod ve varyant bilgileriyle ürün yükleme sürecinde destek sağlanabilir." },
+            { "q": "Stok ve fiyat takibi yapılıyor mu?", "a": "Evet. Ürün stokları, azalan stoklar, fiyat güncellemeleri ve kârlılık değerlendirmeleri takip edilebilir." },
+            { "q": "Trendyol reklam yönetimi yapıyor musunuz?", "a": "Reklam bütçesi, ürün seçimi, kampanya ilişkisi ve reklam performansı takip edilebilir. Reklam kararları ürün ve kârlılık durumuna göre değerlendirilmelidir." },
+            { "q": "Kampanya yönetimi desteği veriyor musunuz?", "a": "Evet. Kampanyaya uygun ürün seçimi, stok durumu, indirim oranı ve kârlılık değerlendirmesi yapılarak kampanya süreci takip edilebilir." },
+            { "q": "Müşteri soruları takip ediliyor mu?", "a": "Evet. Müşteri sorularının zamanında, doğru ve profesyonel şekilde cevaplanması için takip desteği sağlanabilir." },
+            { "q": "İade ve iptal süreçleri analiz ediliyor mu?", "a": "Evet. İade ve iptal nedenleri incelenerek ürün açıklaması, görsel, paketleme, stok veya kargo sürecinde iyileştirme yapılması gereken noktalar belirlenebilir." },
+            { "q": "Trendyol hesap yönetimi satış garantisi verir mi?", "a": "Hayır. Trendyol hesap yönetimi satış garantisi vermez. Ancak mağaza operasyonunun daha düzenli, takip edilebilir ve profesyonel yönetilmesine yardımcı olur." },
+            { "q": "Mevcut mağazam için analiz yapabilir misiniz?", "a": "Evet. Mevcut Trendyol mağazanız ürün, kategori, açıklama, görsel, fiyat, stok, kampanya, reklam ve satış raporu açısından analiz edilerek yönetim planı oluşturulabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Trendyol Mağazanızı Daha Düzenli, Kontrollü ve Profesyonel Şekilde Yönetelim",
+        "body": "Trendyol mağazanız var ama ürünleriniz, stoklarınız, siparişleriniz, kampanyalarınız ve reklamlarınız düzenli takip edilmiyorsa satış fırsatlarını kaçırıyor olabilirsiniz. {{appName}} Trendyol Hesap Yönetimi hizmeti ile ürünlerinizi, siparişlerinizi, stoklarınızı, kampanyalarınızı ve satış raporlarınızı birlikte takip edelim; Trendyol mağazanızı daha sistemli bir pazaryeri operasyonuna dönüştürelim.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

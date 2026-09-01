@@ -1,6 +1,7 @@
 'use client';
 
 import * as React from 'react';
+import { useSearchParams } from 'next/navigation';
 import { AlertTriangle, Ban, Check, ChevronDown, ChevronUp, ExternalLink, Filter, Globe, Mail, RefreshCw, Search, Sparkles, Star, Trash2, X, Zap } from 'lucide-react';
 import { toast } from 'sonner';
 
@@ -56,6 +57,7 @@ const CHANNEL_LABELS: Record<string, string> = {
   trade_fair: 'Fuar',
   trade_fair_in_person: 'Fuar Kartvizit',
   icp_match: 'ICP',
+  customs: 'Gümrük',
 };
 
 const CHANNEL_BADGE_CLS: Record<string, string> = {
@@ -64,6 +66,7 @@ const CHANNEL_BADGE_CLS: Record<string, string> = {
   trade_fair: 'border-purple-500/40 bg-purple-500/10 text-purple-400',
   trade_fair_in_person: 'border-gm-success/40 bg-gm-success/10 text-gm-success',
   icp_match: 'border-gm-success/40 bg-gm-success/10 text-gm-success',
+  customs: 'border-cyan-400/40 bg-cyan-500/10 text-cyan-300',
 };
 
 function channelBadgeCls(channel: string): string {
@@ -99,7 +102,6 @@ function compositeOf(candidate: LeadCandidate): number | null {
   const value = raw.composite_score ?? candidate.lead_score;
   if (value === null || value === undefined || value === '') return null;
   const number = Number(value);
-  if (number === 0 && decision !== 'GUVENLI') return null; // 0 usually means insufficient data unless it's a very low risk score which is unlikely to be exactly 0
   return Number.isFinite(number) ? number : null;
 }
 
@@ -229,13 +231,43 @@ function formatMatchReason(reason: string): string {
   return reason;
 }
 
+type RawDecisionMaker = {
+  name: string | null;
+  title: string | null;
+  linkedin_url: string | null;
+  confidence: 'A' | 'B' | 'C' | null;
+  source_url: string | null;
+};
+
+const DM_CONFIDENCE_CLS: Record<string, string> = {
+  A: 'border-gm-success/30 bg-gm-success/10 text-gm-success',
+  B: 'border-gm-warning/30 bg-gm-warning/10 text-gm-warning',
+  C: 'border-gm-border-soft bg-gm-surface/20 text-gm-muted',
+};
+
+/** raw_data.decision_makers[] — karar verici modülünün adaya işlediği kişiler (A/B/C). */
+function rawDecisionMakers(candidate: LeadCandidate): RawDecisionMaker[] {
+  const data = candidate.raw_data;
+  if (!data || typeof data !== 'object') return [];
+  const list = (data as Record<string, unknown>).decision_makers;
+  if (!Array.isArray(list)) return [];
+  return list
+    .filter((item): item is Record<string, unknown> => !!item && typeof item === 'object')
+    .map((item) => ({
+      name: typeof item.name === 'string' ? item.name : null,
+      title: typeof item.title === 'string' ? item.title : null,
+      linkedin_url: typeof item.linkedin_url === 'string' ? item.linkedin_url : null,
+      confidence: item.confidence === 'A' || item.confidence === 'B' || item.confidence === 'C' ? item.confidence : null,
+      source_url: typeof item.source_url === 'string' ? item.source_url : null,
+    }));
+}
+
 function CandidateCard({
   candidate,
   icpProfiles,
   onApprove,
   onReject,
   onFavorite,
-  onCreateRule,
   selected,
   onSelectedChange,
   isBusy,
@@ -245,7 +277,6 @@ function CandidateCard({
   onApprove: (candidate: LeadCandidate) => void;
   onReject: (candidate: LeadCandidate, tags: string[], saveAsRule: boolean) => void;
   onFavorite: (candidate: LeadCandidate) => void;
-  onCreateRule: (candidate: LeadCandidate, tags: string[]) => void;
   selected: boolean;
   onSelectedChange: (checked: boolean) => void;
   isBusy: boolean;
@@ -280,6 +311,7 @@ function CandidateCard({
   const painPoints: string[] = Array.isArray(analysis?.pain_points) ? analysis.pain_points as string[] : [];
   const sellsChina = analysis?.sells_china === true;
   const privateLabel = analysis?.private_label === true;
+  const dmRows = rawDecisionMakers(candidate);
 
   return (
     <Card className="bg-gm-bg-deep/60 border-gm-border-soft rounded-[28px] overflow-hidden shadow-xl">
@@ -523,6 +555,41 @@ function CandidateCard({
           </div>
         )}
 
+        {dmRows.length > 0 && (
+          <div className="space-y-2 rounded-2xl border border-gm-gold/20 bg-gm-gold/5 p-4">
+            <div className="flex items-center justify-between">
+              <div className="text-[9px] font-bold uppercase tracking-[0.2em] text-gm-muted">Karar Vericiler</div>
+              <span className="text-[9px] font-bold uppercase tracking-widest text-gm-muted">{dmRows.length} kişi</span>
+            </div>
+            <div className="space-y-2">
+              {dmRows.map((dm, idx) => (
+                <div key={`${dm.linkedin_url ?? dm.name ?? 'dm'}-${idx}`} className="flex flex-wrap items-center gap-2 rounded-xl border border-gm-border-soft bg-gm-bg-deep/30 px-3 py-2">
+                  <Badge variant="outline" className={cn('rounded-full text-[9px] font-bold uppercase tracking-widest', DM_CONFIDENCE_CLS[dm.confidence ?? 'C'])}>
+                    {dm.confidence ?? 'C'}
+                  </Badge>
+                  <span className="text-sm text-gm-text">{dm.name ?? 'Manuel araştırma'}</span>
+                  {dm.title && <span className="text-xs text-gm-muted">· {dm.title}</span>}
+                  {dm.confidence === 'C' && !dm.name && (
+                    <span className="text-[9px] font-bold uppercase tracking-widest text-gm-warning">Manuel araştırma kuyruğu</span>
+                  )}
+                  <div className="ml-auto flex items-center gap-2">
+                    {dm.linkedin_url && (
+                      <a href={dm.linkedin_url} target="_blank" rel="noreferrer" className="text-[10px] font-bold uppercase tracking-widest text-gm-gold hover:underline" title="LinkedIn profili (tek tık)">
+                        LinkedIn
+                      </a>
+                    )}
+                    {dm.source_url && !dm.linkedin_url && (
+                      <a href={dm.source_url} target="_blank" rel="noreferrer" className="text-[10px] font-bold uppercase tracking-widest text-gm-muted hover:text-gm-text" title="Kaynak">
+                        Kaynak
+                      </a>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {rejectOpen && (
           <div className="space-y-3 rounded-2xl border border-gm-error/20 bg-gm-error/5 p-4">
             <p className="text-[10px] font-bold uppercase tracking-[0.18em] text-gm-error/80">
@@ -600,9 +667,13 @@ export default function LeadCandidatesPanel({
   title = 'Lead Adayları',
   description = "Otomatik kanallardan gelen firmaları inceleyin, uygun olanları satış pipeline'ına aktarın.",
 }: LeadCandidatesPanelProps = {}) {
+  const searchParams = useSearchParams();
+  const urlChannel = searchParams.get('channel') as LeadCandidateChannel | null;
+  const urlStatus = searchParams.get('status') as LeadCandidateStatus | null;
   const [q, setQ] = React.useState('');
-  const [channel, setChannel] = React.useState<LeadCandidateChannel | 'all'>(initialChannel);
-  const [status, setStatus] = React.useState<LeadCandidateStatus | 'all'>(initialStatus);
+  const [channel, setChannel] = React.useState<LeadCandidateChannel | 'all'>(urlChannel ?? initialChannel);
+  const [status, setStatus] = React.useState<LeadCandidateStatus | 'all'>(urlStatus ?? initialStatus);
+  const [jobId, setJobId] = React.useState(searchParams.get('job_id') ?? '');
   const [recommendation, setRecommendation] = React.useState<string>('all');
   const [sortBy, setSortBy] = React.useState<string>('priority');
   const [selectedIds, setSelectedIds] = React.useState<Set<string>>(() => new Set());
@@ -613,6 +684,7 @@ export default function LeadCandidatesPanel({
   const { data, isLoading, isFetching, refetch } = useListLeadCandidatesQuery({
     channel,
     status,
+    job_id: jobId || undefined,
     limit: 500,
     page: 1,
   });
@@ -770,27 +842,6 @@ export default function LeadCandidatesPanel({
     }
   };
 
-  const handleCreateRule = async (candidate: LeadCandidate, tags: string[]) => {
-    if (!tags.length) return;
-    const icpName = candidate.icp_id ? (icpProfiles.find((p) => p.id === candidate.icp_id)?.name ?? null) : null;
-    try {
-      await Promise.allSettled(
-        tags.map((tag) =>
-          createScanRule({
-            icp_id: candidate.icp_id,
-            channel: candidate.channel,
-            rule_type: 'exclude_reject_tag',
-            value: tag,
-            label: icpName ? `${icpName} — ${candidate.channel}` : null,
-          }).unwrap(),
-        ),
-      );
-      toast.success('Kural kaydedildi');
-    } catch {
-      toast.error('Kural kaydedilemedi');
-    }
-  };
-
   const handleFavorite = async (candidate: LeadCandidate) => {
     try {
       await reviewCandidate({ id: candidate.id, action: 'favorite' }).unwrap();
@@ -869,7 +920,7 @@ export default function LeadCandidatesPanel({
 
       <Card className="rounded-[28px] border-gm-border-soft bg-gm-bg-deep/50 shadow-2xl">
         <CardContent className="space-y-4 p-6">
-          <div className="grid gap-5 md:grid-cols-[1fr_200px_200px]">
+          <div className="grid gap-5 md:grid-cols-[1fr_200px_200px_220px]">
             <div className="space-y-2">
               <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Arama</label>
               <div className="relative">
@@ -904,7 +955,10 @@ export default function LeadCandidatesPanel({
                     <SelectItem value="amazon">Amazon</SelectItem>
                     <SelectItem value="b2b_directory">B2B Dizin</SelectItem>
                     <SelectItem value="trade_fair">Fuar</SelectItem>
+                    <SelectItem value="trade_fair_in_person">Fuar Günü</SelectItem>
+                    <SelectItem value="customs">Gümrük</SelectItem>
                     <SelectItem value="icp_match">ICP</SelectItem>
+                    <SelectItem value="decision_maker">Karar Verici</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
@@ -924,6 +978,10 @@ export default function LeadCandidatesPanel({
                   <SelectItem value="rejected">Reddedildi</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Job ID</label>
+              <Input value={jobId} onChange={(event) => setJobId(event.target.value)} placeholder="Tüm işler" className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text" />
             </div>
           </div>
 
@@ -1058,7 +1116,6 @@ export default function LeadCandidatesPanel({
               onApprove={handleApprove}
               onReject={handleReject}
               onFavorite={handleFavorite}
-              onCreateRule={handleCreateRule}
               selected={selectedIds.has(candidate.id)}
               onSelectedChange={(checked) => {
                 setSelectedIds((current) => {

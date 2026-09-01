@@ -1,0 +1,184 @@
+{
+  "slug": "crm-yazilimi",
+  "category": "crm-satis",
+  "module": "crm",
+  "order": 10,
+  "icon": "Users",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "CRM Yazılımı | Satış, Müşteri Adayı, Teklif ve Ekip Yönetimi",
+        "description": "İhracat Radarı CRM Yazılımı ile müşteri adaylarını, satış ekiplerini, teklifleri, siparişleri, görevleri, kampanyaları ve müşteri iletişim süreçlerini tek panelden yönetin.",
+        "ogTitle": "CRM Yazılımı | {{appName}}",
+        "ogDescription": "Müşteri adaylarınızı, satış ekibinizi, tekliflerinizi, siparişlerinizi, görevlerinizi, kampanyalarınızı ve müşteri iletişim geçmişinizi tek panelden yönetin."
+      },
+      "hero": {
+        "eyebrow": "CRM ve Satış",
+        "title": "CRM Yazılımı",
+        "lead": "Müşteri bilgileriniz, satış görüşmeleriniz, teklifleriniz ve takip süreçleriniz dağınık mı ilerliyor? {{appName}} CRM Yazılımı ile müşteri adaylarınızı, satış ekibinizi, tekliflerinizi, siparişlerinizi, e-posta pazarlama süreçlerinizi, görevlerinizi ve müşteri iletişim geçmişinizi tek panelden yönetebilirsiniz. CRM yazılımımız; satış sürecini daha düzenli takip etmek, müşteri kaybını azaltmak, ekip performansını görmek ve şirketinizin büyüme sürecini ölçülebilir hale getirmek isteyen işletmeler için geliştirilmiştir.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Kurulum süreci nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "CRM Yazılımı Nedir?",
+          "body": [
+            "CRM yazılımı, şirketlerin müşteri ilişkilerini, satış süreçlerini, müşteri adaylarını, teklifleri, siparişleri, görevleri ve iletişim geçmişini tek merkezden yönetmesini sağlayan dijital müşteri yönetim sistemidir.",
+            "CRM, yalnızca müşteri bilgilerini saklayan bir rehber değildir. Doğru kullanıldığında şirketin satış hafızası, müşteri takip sistemi, görev yönetim merkezi ve performans analiz ekranı haline gelir.",
+            "{{appName}} CRM Yazılımı, şirketlerin satış süreçlerini daha düzenli, takip edilebilir ve ölçülebilir hale getirmek için tasarlanmıştır. Müşteri adayları, görüşme notları, teklifler, siparişler, görevler, hatırlatmalar, kampanyalar ve müşteri iletişim geçmişi tek bir CRM sistemi üzerinden takip edilebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM Yazılımı Şirketler İçin Neden Gereklidir?",
+          "body": [
+            "Birçok işletmede müşteri takibi hâlâ Excel dosyaları, WhatsApp mesajları, kişisel notlar, e-posta kutuları veya dağınık tablolar üzerinden yürütülür.",
+            "Bu yapı başlangıçta yeterli gibi görünse de şirket büyüdükçe tekliflerin unutulması, müşteri bilgilerinin kaybolması, satış ekibinin ölçülememesi ve şirket hafızasının oluşmaması gibi ciddi sorunlara yol açabilir."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Dağınık Müşteri Takibinde Yaşanabilecek Sorunlar",
+          "items": [
+            "Müşteri bilgileri kaybolabilir",
+            "Teklifler unutulabilir",
+            "Satış ekibinin performansı ölçülemez",
+            "Cevap bekleyen müşteriler takip edilemez",
+            "Aynı müşteriye farklı kişiler tekrar tekrar ulaşabilir",
+            "Yönetici satış sürecinin gerçek durumunu göremez",
+            "Müşteri ilişkileri kişilere bağlı kalır, şirket hafızası oluşmaz"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "{{appName}} CRM Yazılımı Kimler İçin Uygundur?",
+          "intro": "CRM yazılımı, müşteri ilişkilerini daha profesyonel yönetmek isteyen her şirket için önemli bir dijital altyapıdır.",
+          "items": [
+            { "title": "Satış Ekibini Yönetmek İsteyenler", "body": "Satış temsilcilerini, görevleri ve müşteri takiplerini düzenli yönetmek isteyen şirketler için uygundur." },
+            { "title": "Müşteri Adayı Takibi Yapanlar", "body": "Müşteri adaylarını takip etmekte zorlanan işletmeler için merkezi yapı sağlar." },
+            { "title": "Teklif ve Sipariş Yönetmek İsteyenler", "body": "Teklif ve sipariş süreçlerini dijitalleştirmek isteyen firmalara destek olur." },
+            { "title": "B2B Satış Yapan Şirketler", "body": "B2B satış yapan, uzun takip süreci olan firmalar için uygundur." },
+            { "title": "İhracat Müşteri Bulma Süreci Yürütenler", "body": "Yurt dışı müşteri listeleri, mail marketing ve telefon aramalarını kayıt altına alabilir." },
+            { "title": "Kampanya Takibi Yapanlar", "body": "Mail marketing kampanyalarını ve pazarlama çalışmalarından gelen talepleri takip etmek isteyen işletmelere uygundur." },
+            { "title": "E-Ticaret ve B2B Platform Yönetenler", "body": "Web sitesi, e-ticaret, B2B platform ve sosyal medya taleplerini tek merkezde toplayabilir." },
+            { "title": "KOBİ’ler", "body": "Satış sürecini Excel’den CRM sistemine taşımak isteyen KOBİ’ler için uygundur." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "CRM Yazılımı ile Hangi Süreçleri Yönetebilirsiniz?",
+          "intro": "{{appName}} CRM Yazılımı ile şirketinizdeki farklı satış ve müşteri yönetimi süreçlerini tek merkezden takip edebilirsiniz.",
+          "items": [
+            { "title": "Müşteri Adayı Yönetimi", "body": "CRM yazılımının en önemli işlevlerinden biri müşteri adaylarını düzenli şekilde takip etmektir. Web sitesi formları, telefon aramaları, mail marketing kampanyaları, LinkedIn, Sales Navigator, B2B platform talepleri, fuar görüşmeleri, referanslar ve saha satış kayıtları tek panelde toplanabilir." },
+            { "title": "Satış Ekibi Otomasyonu", "body": "Satış temsilcilerine müşteri atama, tekrar arama hatırlatmaları oluşturma, ekip bazlı performans izleme ve hangi temsilcinin hangi müşteriyle ilgilendiğini takip etme sağlanır." },
+            { "title": "Teklif ve Sipariş Yönetimi", "body": "Teklif tarihi, tutarı, durumu, geçerlilik süresi, müşteri dönüş durumu ile siparişe dönüşen ve kaybedilen teklifler CRM üzerinden takip edilir." },
+            { "title": "Müşteri İletişim Geçmişi", "body": "Telefon görüşmeleri, e-posta yazışmaları, toplantı notları, müşteri talepleri, gönderilen teklifler, satış sonrası notlar, tekrar iletişim tarihleri ve sorumlu temsilci kayıt altına alınır." },
+            { "title": "Görev ve Hatırlatma Yönetimi", "body": "Müşteriyi tekrar arama, teklif veya numune talebini takip etme, toplantı planlama ve fuar sonrası tekrar iletişime geçme gibi görev ve hatırlatmalar oluşturulabilir." },
+            { "title": "E-posta Pazarlama ve E-posta İzleme", "body": "Hangi müşteriye hangi mail gönderildi, hangi müşteri cevap verdi, hangi firmaya takip maili gönderilmeli ve hangi müşteri teklif istedi gibi süreçler birlikte yönetilir." },
+            { "title": "CRM Kampanya Yönetimi", "body": "Kampanya adı, hedef müşteri grubu, cevap veren firma sayısı, oluşan müşteri adayı, teklif talepleri ve satışa dönüşen fırsatlar net takip edilir." },
+            { "title": "Satış Süreci Analizi", "body": "En çok müşteri adayı hangi kanaldan geliyor, hangi teklifler satışa dönüşüyor, hangi aşamada müşteri kaybediliyor ve açık fırsatların toplam değeri nedir gibi sorular yanıtlanır." },
+            { "title": "Kullanıcı İzinleri ve Ekip Görünürlüğü", "body": "Yönetici, satış temsilcisi ve destek ekibi için kullanıcı yetkileri ve görünürlük ayarları şirket içi veri güvenliğini destekler." },
+            { "title": "Yapay Zekâlı CRM Kullanımı", "body": "Yapay zekâ; müşteri notlarından özet çıkarma, e-posta ve takip metni taslakları hazırlama, müşteri cevaplarına göre yanıt önerileri ve kampanya metni üretme gibi alanlarda ekibe yardımcı olur." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "CRM Yazılımı ile İhracat Süreçleri Nasıl Yönetilir?",
+          "intro": "{{appName}} CRM Yazılımı, ihracat müşteri bulma ve dış ticaret süreçlerinde de kullanılabilir. Bu yapı sayesinde ihracat müşteri bulma ve satış takip süreci daha sistemli hale gelir.",
+          "items": [
+            "Yurt dışı alıcı firma listeleri",
+            "Konşimento verileriyle bulunan ithalatçı firmalar",
+            "GTİP / HS koduna göre müşteri grupları",
+            "Mail marketing gönderimleri ve telefon aramaları",
+            "Teklif, numune, proforma ve sipariş süreçleri",
+            "Nakliye, sevkiyat ve fuar sonrası müşteri görüşmeleri"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "CRM ile E-Ticaret ve Pazaryeri Talepleri Nasıl Takip Edilir?",
+          "intro": "E-ticaret ve pazaryeri hesapları yöneten şirketler farklı kanallardan gelen müşteri taleplerini CRM üzerinden takip edebilir.",
+          "items": [
+            "Amazon, Etsy ve eBay mesajları",
+            "Alibaba, TradeWheel ve Go4WorldBusiness talepleri",
+            "Europages firma iletişimleri",
+            "Web sitesi teklif formları",
+            "Sosyal medya mesajları"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "CRM Yazılımının Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Müşteri bilgileri tek merkezde toplanır",
+            "Satış süreci daha düzenli takip edilir",
+            "Teklifler ve siparişler görünür hale gelir",
+            "Satış ekibi görevleri daha net yönetilir",
+            "Müşteri takipleri unutulmaz",
+            "E-posta kampanyaları daha ölçülebilir olur",
+            "Satış fırsatları kayıt altına alınır",
+            "Yönetici raporları daha net hale gelir",
+            "Müşteri iletişim geçmişi korunur",
+            "Yapay zekâ ile satış ekibinin verimliliği artırılabilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "CRM Yazılımı Kullanırken Sık Yapılan Hatalar",
+          "items": [
+            "CRM’i sadece müşteri rehberi gibi kullanmak",
+            "Satış aşamalarını net tanımlamamak",
+            "Ekipleri CRM kullanımı konusunda eğitmemek",
+            "Müşteri kayıtlarını düzenli girmemek",
+            "Teklif ve takip süreçlerini sisteme işlememek",
+            "Görev ve hatırlatmaları kullanmamak",
+            "Kampanya sonuçlarını ölçmemek",
+            "Raporlama ekranlarını ihtiyaçlara göre düzenlememek",
+            "Yönetici takibini ihmal etmek",
+            "CRM’i şirketin gerçek satış sürecine göre uyarlamamak"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "CRM Kurulum Süreci Nasıl İlerler?",
+          "intro": "CRM yapısı şirketinizin satış, müşteri yönetimi, teklif takibi, ekip yapısı ve raporlama ihtiyacına göre planlanır. Sistem kullanıldıkça eksikler belirlenir ve satış süreci daha verimli hale getirilir.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin satış süreci, müşteri yapısı, ekip sayısı, teklif takibi ve CRM ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Mevcut Süreç Analizi", "body": "Müşteri bilgilerinin nerede tutulduğu, satışların nasıl takip edildiği ve hangi süreçlerde sorun yaşandığı analiz edilir." },
+            { "n": 3, "title": "CRM Yapısının Planlanması", "body": "Müşteri alanları, satış aşamaları, görevler, kullanıcı yetkileri, raporlar ve takip süreçleri planlanır." },
+            { "n": 4, "title": "Sistem Kurulumu", "body": "CRM yapısı şirketinizin satış ve müşteri yönetim sürecine göre düzenlenir." },
+            { "n": 5, "title": "Veri Girişi ve Aktarım", "body": "Mevcut müşteri listeleri, müşteri adayları veya satış kayıtları uygun şekilde sisteme aktarılabilir." },
+            { "n": 6, "title": "Ekip Eğitimi", "body": "Satış ekibine CRM’in nasıl kullanılacağı, müşteri adaylarının nasıl takip edileceği ve görevlerin nasıl yönetileceği anlatılır." },
+            { "n": 7, "title": "Takip ve İyileştirme", "body": "Sistem kullanıldıkça eksikler belirlenir, raporlar geliştirilir ve satış süreci daha verimli hale getirilir." }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "CRM Yazılımı Hakkında Merak Edilenler",
+          "items": [
+            { "q": "CRM yazılımı kimler için uygundur?", "a": "CRM yazılımı; müşteri adaylarını, satış ekibini, teklifleri, siparişleri, kampanyaları ve müşteri iletişimini daha düzenli yönetmek isteyen tüm şirketler için uygundur." },
+            { "q": "CRM yazılımı ne işe yarar?", "a": "CRM yazılımı müşteri bilgilerini tek merkezde toplar, satış sürecini takip eder, teklifleri yönetir, görev ve hatırlatmalar oluşturur, satış ekibi performansını izler ve müşteri iletişim geçmişini kayıt altına alır." },
+            { "q": "CRM sadece büyük şirketler için mi uygundur?", "a": "Hayır. CRM yazılımı küçük ve orta ölçekli işletmeler için de uygundur. Özellikle müşteri takibini Excel veya dağınık yöntemlerle yapan KOBİ’ler için büyük kolaylık sağlar." },
+            { "q": "CRM yazılımı satış ekibine nasıl yardımcı olur?", "a": "CRM, satış ekibinin müşteri adaylarını, görüşmeleri, teklifleri, takip tarihlerini ve görevlerini düzenli şekilde yönetmesini sağlar. Böylece satış fırsatları daha kolay takip edilir." },
+            { "q": "Teklif ve sipariş takibi yapılabilir mi?", "a": "Evet. CRM sistemi üzerinden teklif gönderim durumu, teklif tutarı, geçerlilik süresi, müşteri dönüşü ve siparişe dönüşen fırsatlar takip edilebilir." },
+            { "q": "CRM ile e-posta pazarlama takip edilebilir mi?", "a": "Evet. E-posta kampanyaları, cevap veren müşteriler, takip edilecek firmalar ve satış fırsatları CRM üzerinde takip edilebilir." },
+            { "q": "CRM ihracat müşteri bulma sürecinde kullanılabilir mi?", "a": "Evet. Konşimento verileriyle bulunan alıcı firmalar, GTİP / HS koduna göre müşteri listeleri, mail marketing çalışmaları, telefon aramaları ve yurt dışı teklif süreçleri CRM üzerinden takip edilebilir." },
+            { "q": "CRM’de kullanıcı yetkilendirme yapılabilir mi?", "a": "Evet. Kullanıcıların hangi müşteri bilgilerini, raporları veya görevleri görebileceği yetkilere göre düzenlenebilir." },
+            { "q": "Yapay zekâ CRM içinde kullanılabilir mi?", "a": "Evet. Yapay zekâ müşteri notlarını özetleme, e-posta taslağı hazırlama, takip mesajları oluşturma ve satış sürecini destekleme gibi alanlarda kullanılabilir." },
+            { "q": "CRM kurulumu için eğitim veriyor musunuz?", "a": "Evet. CRM sisteminin doğru kullanılabilmesi için satış ekibine ve yöneticilere uygulamalı kullanım eğitimi verilebilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "CRM Yapınızı Birlikte Planlayalım",
+        "body": "Müşteri bilgileriniz, satış görüşmeleriniz, teklif takipleriniz ve ekip görevleriniz dağınık ilerliyorsa CRM sistemine geçmenin zamanı gelmiş olabilir. {{appName}} CRM Yazılımı ile satış sürecinizi dijitalleştirin, müşteri adaylarınızı daha düzenli takip edin ve şirketinizin müşteri ilişkilerini tek merkezden yönetin.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

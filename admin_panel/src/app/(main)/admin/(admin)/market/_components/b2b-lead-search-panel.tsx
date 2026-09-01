@@ -56,7 +56,7 @@ function statusBadge(job: LeadSearchJob) {
 
 export default function B2bLeadSearchPanel() {
   const { data: icps, isLoading: isIcpLoading } = useListIcpProfilesQuery();
-  const { data: jobs, isLoading, isFetching, refetch } = useListB2bJobsQuery();
+  const { data: jobs, isLoading, isFetching, refetch } = useListB2bJobsQuery(undefined, { pollingInterval: 10_000 });
   const [startB2bJob, startState] = useStartB2bJobMutation();
 
   const [icpId, setIcpId] = React.useState('');

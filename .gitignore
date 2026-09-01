@@ -2,7 +2,9 @@ node_modules
 dist
 .next
 .env
-.env.local
+.env.*
+!.env.example
+!**/.env.example
 *.tsbuildinfo
 
 # Claude Code workspace
@@ -22,3 +24,9 @@ build/
 # Bun lock — opsiyonel; commit edilmez çünkü her ortamda yeniden olusur
 # (Eger reproducible build istiyorsan kaldir)
 # bun.lock
+
+# Sizan credential / veri dosyalari (commit edilmez)
+client_secret*.json
+*.xlsx
+isletmeniyonet-GEO-SEO-Raporu-*.pdf
+fitness_b2b_*.csv

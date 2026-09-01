@@ -6,14 +6,13 @@
 import type { ReactNode } from 'react';
 
 import { AppSidebar } from '@/app/(main)/admin/_components/sidebar/app-sidebar';
-import { getAdminAppName, getAdminBrandSubtitle } from '@/lib/admin-brand';
-import { fetchBrandingConfig } from '@/server/fetch-branding';
 
 import { Separator } from '@/components/ui/separator';
 import { SidebarInset, SidebarProvider, SidebarTrigger } from '@/components/ui/sidebar';
 import { cn } from '@/lib/utils';
 
 import { AccountSwitcher } from './_components/sidebar/account-switcher';
+import { AdminHeaderBrand } from './_components/sidebar/admin-header-brand';
 import { AdminFooter } from './_components/sidebar/admin-footer';
 import { AdminSettingsDropdown } from './_components/sidebar/admin-settings-dropdown';
 import { LayoutControls } from './_components/sidebar/layout-controls';
@@ -23,9 +22,6 @@ import AdminAuthGate from './_components/admin-auth-gate';
 import { AdminSettingsProvider } from './_components/admin-settings-provider';
 
 export default async function Layout({ children }: Readonly<{ children: ReactNode }>) {
-  const branding = await fetchBrandingConfig();
-  const headerTitle = branding.app_name || getAdminAppName();
-  const headerSub = getAdminBrandSubtitle();
   return (
     <AdminAuthGate>
       <AdminSettingsProvider>
@@ -64,16 +60,7 @@ export default async function Layout({ children }: Readonly<{ children: ReactNod
                     orientation="vertical"
                     className="mx-3 h-6 bg-gm-border-soft"
                   />
-                  <div className="flex flex-col">
-                    <h2 className="text-sm font-serif font-bold tracking-tight text-foreground hidden sm:block">
-                      {headerTitle}
-                    </h2>
-                    {headerSub ? (
-                      <span className="text-[8px] font-bold tracking-[0.3em] text-gm-gold uppercase hidden sm:block">
-                        {headerSub}
-                      </span>
-                    ) : null}
-                  </div>
+                  <AdminHeaderBrand />
                 </div>
 
                 <div className="flex items-center gap-4">

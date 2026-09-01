@@ -1,0 +1,358 @@
+{
+  "slug": "antigravity-egitimi",
+  "category": "egitim",
+  "module": "training",
+  "order": 10,
+  "icon": "Bot",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Antigravity Eğitimi | AI Agent Destekli Yazılım Geliştirme, Kod Editörü ve Agentic Workflow",
+        "description": "Antigravity eğitimi ile yazılımcılara ve teknik ekiplere AI agent destekli yazılım geliştirme, proje analizi, kod düzenleme, terminal, tarayıcı, görev planlama, test, doğrulama ve güvenli kullanım süreçlerini uygulamalı olarak öğretiyoruz.",
+        "ogTitle": "Antigravity Eğitimi | {{appName}}",
+        "ogDescription": "Antigravity ile AI agent destekli yazılım geliştirme, proje analizi, görev planlama, kod düzenleme, terminal, tarayıcı, Git, test ve güvenli kullanım süreçlerini uygulamalı öğrenin."
+      },
+      "hero": {
+        "eyebrow": "Yapay Zeka Eğitimi",
+        "title": "Antigravity Eğitimi",
+        "lead": "Yazılım geliştirme süreçlerinde yapay zeka ajanlarını kullanmak istiyor ama Antigravity ile proje analizi, kod düzenleme, terminal, tarayıcı, görev planlama, test ve doğrulama süreçlerini nasıl yöneteceğinizi bilmiyor musunuz? Antigravity, klasik kod editörü mantığının ötesinde, yazılım geliştirme sürecine AI agent yaklaşımını dahil eden yeni nesil araçlardan biridir. Bu tür araçlarda amaç yalnızca kod yazdırmak değildir. Asıl hedef, yazılım görevlerini daha planlı yönetmek, proje dosyalarını anlamak, yapılacak işi adımlara bölmek, değişiklikleri kontrol etmek, test süreçlerini takip etmek ve geliştiricinin karar sürecini güçlendirmektir. {{appName}} olarak yazılımcılar, teknik ekipler, web geliştiriciler, yazılım ajansları, startup ekipleri ve şirket içi dijital dönüşüm ekipleri için Antigravity eğitimi sunuyoruz. Amacımız, Antigravity’yi rastgele kod yazdırılan bir araç olarak değil; planlama, kod analizi, görev takibi, test, doğrulama, Git iş akışı, güvenli terminal kullanımı ve yazılım ekipleri için kontrollü AI agent çalışma kültürü oluşturan profesyonel bir geliştirme yardımcısı olarak kullanmanızı sağlamaktır.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Antigravity Eğitimi Nedir?",
+          "body": [
+            "Antigravity eğitimi, yazılımcıların ve teknik ekiplerin Antigravity gibi AI agent destekli geliştirme ortamlarını doğru, güvenli ve verimli şekilde kullanmasını öğretmek için hazırlanan uygulamalı yazılım geliştirme eğitimidir.",
+            "Bu eğitimde amaç yalnızca aracın arayüzünü göstermek değildir. Asıl amaç, katılımcıların AI agent mantığını anlaması, yazılım görevlerini doğru tanımlaması, proje bağlamını doğru vermesi, kod değişikliklerini kontrollü yaptırması, terminal komutlarını dikkatli kullanması, test ve doğrulama süreçlerini ihmal etmemesi ve yapılan işleri insan kontrolünden geçirmesidir.",
+            "{{appName}}, Antigravity eğitimini teorik anlatım yerine gerçek yazılım senaryoları ve uygulamalı iş akışı örnekleriyle planlar.",
+            "Antigravity’yi kontrollü bir AI agent geliştirme yardımcısına dönüştürün",
+            "Görev tanımı, proje bağlamı, küçük adımlarla ilerleme, terminal güvenliği, tarayıcı kontrolü, Git diff inceleme, test ve doğrulama prensipleriyle AI agent destekli geliştirme sürecini daha güvenli yönetin."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Antigravity Eğitimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Antigravity’den verim almak için yalnızca kod yazdırmak yeterli değildir. AI agent yaklaşımını anlamak, görevleri doğru tanımlamak, proje bağlamını net vermek, kod değişikliklerini kontrol etmek, terminal komutlarını güvenli kullanmak ve test sürecini aksatmamak gerekir.",
+            "Eğitimde Antigravity’nin proje analizi, görev planlama, kod düzenleme, hata ayıklama, terminal, tarayıcı, Git, test, doğrulama ve ekip içi kullanım standartlarında nasıl kullanılabileceği uygulamalı olarak ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Antigravity Neden Yazılım Ekipleri İçin Önemlidir?",
+          "body": [
+            "Yapay zeka destekli yazılım geliştirme araçları, geliştiricilerin çalışma şeklini değiştirmeye başlamıştır. Artık birçok yazılım sürecinde yalnızca kod yazmak değil; görevleri planlamak, agent çıktılarını kontrol etmek, testleri takip etmek ve insan denetimiyle ilerlemek daha önemli hale gelmektedir.",
+            "Antigravity gibi araçlar doğru kullanıldığında yazılım ekibine hız ve düzen sağlayabilir. Ancak bu araçlar yazılımcının yerine geçmez. Nihai karar, test, güvenlik kontrolü ve yayın sorumluluğu yazılım ekibinde kalır.",
+            "Antigravity doğru kullanıldığında şu alanlarda destek sağlayabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Eğitim Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, yazılım geliştirme sürecinde yapay zeka ajanlarından faydalanmak isteyen ancak güvenli, kontrollü ve sistemli kullanım prensiplerini öğrenmek isteyen ekipler için uygundur.",
+          "items": [
+            {
+              "title": "Yazılım Geliştiriciler",
+              "body": "Antigravity’yi proje analizi, kod düzenleme, hata çözme ve test süreçlerinde kullanmak isteyen geliştiriciler için uygundur."
+            },
+            {
+              "title": "Frontend, Backend ve Full-stack Ekipler",
+              "body": "PHP, JavaScript, Python, React, Laravel veya farklı teknolojilerle çalışan teknik ekipler için planlanabilir."
+            },
+            {
+              "title": "Web Geliştiriciler",
+              "body": "HTML, CSS, JavaScript, WordPress ve özel web projelerinde AI agent workflow kullanmak isteyen ekipler için uygundur."
+            },
+            {
+              "title": "Yazılım Ajansları",
+              "body": "Farklı müşteri projelerinde yapay zeka ajanlarını kontrollü ve güvenli kullanmak isteyen ajanslar için planlanabilir."
+            },
+            {
+              "title": "Startup ve SaaS Ekipleri",
+              "body": "Ürün geliştirme, hata çözme, dokümantasyon ve test süreçlerini daha planlı yönetmek isteyen ekipler için uygundur."
+            },
+            {
+              "title": "Şirket İçi Yazılım Ekipleri",
+              "body": "Antigravity kullanımını ekip içinde standartlaştırmak isteyen şirketler için uygundur."
+            },
+            {
+              "title": "Teknik Proje Yöneticileri",
+              "body": "AI agent destekli iş akışlarını, Git değişikliklerini ve test süreçlerini daha iyi takip etmek isteyen teknik yöneticiler için uygundur."
+            },
+            {
+              "title": "Dijital Dönüşüm Ekipleri",
+              "body": "Yapay zeka destekli yazılım geliştirme araçlarını kurumsal yapıya dahil etmek isteyen ekipler için planlanabilir."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Antigravity Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "Antigravity eğitimi, katılımcıların teknik seviyesine, kullanılan teknolojiye ve şirketin proje yapısına göre özelleştirilebilir. Genel olarak Antigravity temel kullanımı, AI agent mantığı, kurulum, proje klasörüyle çalışma, görev tanımı hazırlama, kod tabanı analizi, terminal, tarayıcı, Git, test, refactoring, dokümantasyon, güvenli kullanım ve ekip içi kullanım standartları ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Antigravity Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Eğitim modülleri şirketin teknolojisine, proje yapısına ve ekip seviyesine göre özelleştirilebilir. Aşağıdaki yapı, Antigravity’yi yazılım geliştirme sürecine kontrollü ve güvenli şekilde dahil etmek için planlanmıştır.",
+          "items": [
+            {
+              "title": "Antigravity Temel Kullanımı",
+              "body": "Eğitimin ilk bölümünde Antigravity’nin temel kullanım mantığı anlatılır. Katılımcıların aracı klasik bir kod editörü gibi değil, agent destekli geliştirme ortamı olarak anlaması hedeflenir. Kapsam: Antigravity ne işe yarar?; AI agent destekli geliştirme nedir?; Editör, terminal ve tarayıcı mantığı nasıl birlikte düşünülür?; İnsan kontrolü neden vazgeçilmezdir?."
+            },
+            {
+              "title": "Kurulum ve Çalışma Ortamı Hazırlığı",
+              "body": "Antigravity kullanmadan önce çalışma ortamının doğru hazırlanması gerekir. Geliştiricinin proje dosyalarını, terminal erişimini, Git durumunu, test ortamını ve güvenlik sınırlarını bilmesi önemlidir. Kapsam: Kurulum öncesi hazırlık ve geliştirme ortamı kontrolü; Proje klasörü seçimi ve test projesiyle başlama; Terminal erişimi, yetki ve izin kontrolleri; Gizli dosyaların korunması ve güvenli ayarlar."
+            },
+            {
+              "title": "AI Agent Mantığını Anlama",
+              "body": "Antigravity gibi araçların merkezinde AI agent yaklaşımı bulunur. Bu yaklaşımda kullanıcı yalnızca tek bir kod parçası istemez; belirli bir görevi planlatabilir, adımlara böldürebilir, uygulatabilir ve doğrulatabilir. Kapsam: Agent nedir ve neyi planlayabilir?; Plan, işlem ve doğrulama adımları nasıl ayrılır?; Agent’a ne kadar yetki verilmelidir?; Çok adımlı görevlerde nasıl ilerlenmelidir?."
+            },
+            {
+              "title": "Proje Dosyalarını ve Kod Tabanını Analiz Etme",
+              "body": "Antigravity’nin önemli kullanım alanlarından biri mevcut proje dosyalarını ve kod tabanını anlamaktır. Özellikle devralınan projelerde, eski kodlarda veya dokümantasyonu zayıf yazılımlarda bu özellik faydalı olabilir. Kapsam: Proje klasör yapısını inceleme; Önemli dosyaları belirleme; Kod akışını açıklatma; Frontend ve backend bağlantılarını inceleme."
+            },
+            {
+              "title": "Görev Tanımı ve Bağlam Verme",
+              "body": "AI agent destekli araçlardan iyi sonuç almak için görev tanımı net olmalıdır. “Bu projeyi düzelt” gibi genel komutlar yerine hedefi, sınırları, dosyaları, beklenen çıktıyı ve kontrol adımlarını içeren komutlar verilmelidir. Kapsam: Görev nasıl net tanımlanır?; Proje bağlamı nasıl verilir?; Önce plan istemek neden önemlidir?; Agent’a yasaklı işlemler nasıl belirtilir?."
+            },
+            {
+              "title": "Kod Düzenleme ve Dosya Değişiklikleri",
+              "body": "Antigravity, kod dosyaları üzerinde düzenleme süreçlerinde destek sağlayabilir. Ancak dosya değişiklikleri küçük adımlarla ve mutlaka kontrol edilerek yapılmalıdır. Kapsam: Hangi dosyanın değişeceği nasıl belirlenir?; Kod değişikliği öncesi plan nasıl istenir?; Değişiklik sonrası diff kontrolü; Geri alma stratejisi nasıl hazırlanır?."
+            },
+            {
+              "title": "Yeni Özellik Geliştirme Süreçleri",
+              "body": "Antigravity, yeni özellik geliştirme sürecinde planlama, kod analizi, dosya tespiti ve uygulama adımlarında destek olabilir. Ancak yeni özellikler doğrudan kodlatılmadan önce kapsam netleştirilmelidir. Kapsam: Özellik ihtiyacını tanımlama; Kullanıcı senaryosu oluşturma; Etkilenecek dosyaları belirleme; Yayın öncesi kontrol listesi hazırlama."
+            },
+            {
+              "title": "Bug Tespiti ve Hata Ayıklama",
+              "body": "Yazılım projelerinde hata çözmek zaman alabilir. Antigravity, hata mesajlarını analiz etmek, ilgili dosyaları bulmak ve olası çözüm yollarını değerlendirmek için kullanılabilir. Kapsam: Hata mesajını analiz etme; Terminal veya tarayıcı çıktısını yorumlama; Olası nedenleri sıralama; Test adımlarını belirleme."
+            },
+            {
+              "title": "Terminal Komutlarıyla Güvenli Çalışma",
+              "body": "Antigravity gibi araçlarda terminal kullanımı büyük kolaylık sağlayabilir ancak aynı zamanda risklidir. Yanlış komut dosya silmeye, bağımlılık bozmaya veya proje yapısını değiştirmeye neden olabilir. Kapsam: Komut çalıştırmadan önce açıklama isteme; Komutun ne yaptığını anlamadan çalıştırmama; Dosya silme komutlarında dikkat; Komut çıktısını yorumlama."
+            },
+            {
+              "title": "Tarayıcı ve Görsel Kontrol Süreçleri",
+              "body": "Web projelerinde sadece kodun yazılması yeterli değildir. Değişikliklerin tarayıcıda nasıl göründüğü, mobil uyumluluk, buton davranışı, form çalışması ve kullanıcı deneyimi de kontrol edilmelidir. Kapsam: Mobil ve masaüstü görünüm testi; Menü, buton ve link davranışı kontrolü; Konsol hatalarını inceleme; Önceki çalışan yapıyı bozmama prensibi."
+            },
+            {
+              "title": "Test ve Doğrulama Süreçleri",
+              "body": "AI agent destekli geliştirme sürecinde test yapmak zorunludur. Kod yazılmış olsa bile bu kodun doğru çalıştığı, eski işlevleri bozmadığı ve beklenen sonucu verdiği kontrol edilmelidir. Kapsam: Test komutları nasıl çalıştırılır?; Manuel test listesi nasıl hazırlanır?; Hata çıktısı nasıl yorumlanır?; Agent’a test planı nasıl hazırlatılır?."
+            },
+            {
+              "title": "Git İş Akışı ve Değişiklik Kontrolü",
+              "body": "Yazılım ekipleri için Git süreci korunmalıdır. Antigravity ile yapılan değişiklikler mutlaka Git üzerinden takip edilmeli, diff incelenmeli ve commit öncesi kontrol yapılmalıdır. Kapsam: Git durumunu kontrol etme; Değişen dosyaları listeleme; Diff çıktısını yorumlama; Commit mesajı ve pull request açıklaması hazırlama."
+            },
+            {
+              "title": "Refactoring ve Kod Kalitesi",
+              "body": "Antigravity, mevcut kodu daha düzenli, okunabilir ve sürdürülebilir hale getirmek için refactoring süreçlerinde destek sağlayabilir. Ancak refactoring çalışmaları dikkatli yapılmalıdır. Kapsam: Uzun fonksiyonları bölme; Tekrar eden kodları azaltma; Kod standardı kontrolü; Refactoring sonrası test planı."
+            },
+            {
+              "title": "Dokümantasyon ve Teknik Açıklamalar",
+              "body": "Yazılım projelerinde dokümantasyon çoğu zaman eksik kalır. Antigravity, mevcut koddan yola çıkarak açıklama, kurulum notu, teknik doküman ve kullanım rehberi hazırlama süreçlerinde destek olabilir. Kapsam: Proje açıklaması ve README taslağı oluşturma; Kurulum adımlarını yazma; API kullanım notları hazırlama; Değişiklik özetleri hazırlama."
+            },
+            {
+              "title": "Web Sitesi Geliştirme Süreçlerinde Antigravity Kullanımı",
+              "body": "Antigravity, web sitesi geliştiren ekipler için pratik kullanım alanları sunabilir. PHP, HTML, CSS, JavaScript, WordPress, Laravel veya özel yazılım projelerinde kod analizi ve kontrollü düzenleme süreçlerinde kullanılabilir. Kapsam: HTML, CSS ve responsive sorunları inceleme; JavaScript ve PHP hata ayıklama; Header, footer ve include yapılarını anlama; Ortak dosyalarda dikkatli değişiklik yapma."
+            },
+            {
+              "title": "Şirket İçi Yazılım Ekiplerinde Antigravity Kullanımı",
+              "body": "Şirket içinde yazılım ekibi olan işletmelerde Antigravity kullanımı belirli kurallarla yönetilmelidir. Her geliştiricinin farklı şekilde kullanması yerine ortak standartlar oluşturulmalıdır. Kapsam: Hangi projelerde kullanılacak?; Terminal komutları nasıl onaylanacak?; Kod inceleme zorunluluğu nasıl uygulanacak?; Ekip içi kullanım rehberi nasıl oluşturulacak?."
+            },
+            {
+              "title": "Güvenli Kullanım ve Risk Yönetimi",
+              "body": "Antigravity gibi agent destekli araçlarda güvenli kullanım çok önemlidir. Çünkü bu araçlar dosyalara, terminale, tarayıcıya ve proje ortamına dokunabilen iş akışlarıyla kullanılabilir. Kapsam: Canlı projede doğrudan deneme yapmamak; API key, şifre ve gizli bilgileri paylaşmamak; Her kod değişikliğini incelemek; Test yapmadan yayına almamak."
+            },
+            {
+              "title": "Verimli Antigravity Kullanım Prensipleri",
+              "body": "Antigravity’den daha iyi sonuç almak için geliştiricilerin doğru çalışma prensiplerini öğrenmesi gerekir. Bu prensipler aracı daha güvenilir ve üretken hale getirir. Kapsam: Önce analiz ve plan istemek; Küçük görevlerle çalışmak; Git üzerinden değişiklikleri kontrol etmek; Test komutlarını çalıştırmak."
+            },
+            {
+              "title": "Antigravity ile AI Agent Çalışma Rehberi Oluşturma",
+              "body": "Eğitim sonunda şirket içinde kullanılabilecek temel bir AI agent çalışma rehberi hazırlanabilir. Bu rehber, geliştiricilerin Antigravity ile daha kontrollü çalışmasına yardımcı olur."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Antigravity Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç katılımcıların yazılım seviyesi, kullanılan teknolojiler, proje yapısı, ekip ihtiyacı ve eğitim hedefleri değerlendirilerek başlar. Ardından temel kullanım, AI agent mantığı, proje üzerinden uygulama, terminal, tarayıcı, Git, test, güvenli kullanım ve ekip içi yol haritası planlanır.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Katılımcıların yazılım seviyesi, kullanılan teknolojiler, proje yapısı, ekip ihtiyacı ve eğitim hedefleri değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Eğitim Planı Hazırlığı",
+              "body": "Antigravity’nin hangi alanlarda kullanılacağı belirlenir. Kod analizi, görev planlama, terminal, tarayıcı testi, Git, refactoring veya web projeleri gibi başlıklar seçilir."
+            },
+            {
+              "n": 3,
+              "title": "Temel Kullanım ve AI Agent Mantığı",
+              "body": "Antigravity temel kullanımı, agent-first çalışma mantığı, görev tanımı, proje bağlamı ve güvenli başlangıç adımları anlatılır."
+            },
+            {
+              "n": 4,
+              "title": "Uygulamalı Proje Çalışması",
+              "body": "Örnek proje veya şirketin uygun gördüğü test projesi üzerinden kod tabanı analizi, dosya düzenleme, hata çözme ve test süreçleri uygulanır."
+            },
+            {
+              "n": 5,
+              "title": "Terminal, Tarayıcı ve Test Süreçleri",
+              "body": "Terminal komutları, tarayıcı kontrolleri, test senaryoları ve doğrulama adımları uygulamalı şekilde gösterilir."
+            },
+            {
+              "n": 6,
+              "title": "Git ve Değişiklik Kontrolü",
+              "body": "Değişikliklerin nasıl izleneceği, diff kontrolü, commit mesajı, branch mantığı ve geri alma stratejileri anlatılır."
+            },
+            {
+              "n": 7,
+              "title": "Güvenli Kullanım Kuralları",
+              "body": "Gizli bilgiler, canlı ortam, dosya silme riski, terminal komutları, insan kontrolü ve ekip standartları detaylı şekilde ele alınır."
+            },
+            {
+              "n": 8,
+              "title": "Ekip İçin Yol Haritası",
+              "body": "Eğitim sonunda Antigravity’nin ekip içinde nasıl, hangi kurallarla ve hangi projelerde kullanılacağına dair pratik yol haritası hazırlanır."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Antigravity Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Yazılım ekibi AI agent destekli geliştirme mantığını öğrenir",
+            "Proje dosyalarını analiz etme süreci hızlanabilir",
+            "Yeni özellik geliştirme süreci daha planlı ilerleyebilir",
+            "Bug tespiti ve hata çözümü daha sistemli hale gelebilir",
+            "Terminal komutlarında güvenli kullanım farkındalığı artar",
+            "Tarayıcı ve test süreçleri daha düzenli takip edilir",
+            "Git iş akışı korunur",
+            "Kod değişiklikleri daha kontrollü incelenir",
+            "Refactoring çalışmaları daha planlı yürütülür",
+            "Dokümantasyon hazırlama süreci desteklenir",
+            "Canlı projelerde risk yönetimi daha bilinçli yapılır",
+            "Ekip içinde ortak AI agent kullanım standardı oluşur",
+            "Yazılım geliştirme süreçlerinde verimlilik artabilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Antigravity Kullanımında Sık Yapılan Hatalar",
+          "items": [
+            "Proje bağlamı vermeden görev başlatmak",
+            "Tek seferde çok büyük değişiklik istemek",
+            "Agent’ın yaptığı değişiklikleri kontrol etmemek",
+            "Terminal komutlarını anlamadan çalıştırmak",
+            "Git diff incelemeden ilerlemek",
+            "Test çalıştırmadan kodu kabul etmek",
+            "Canlı projede doğrudan deneme yapmak",
+            "Dosya silme ve taşıma işlemlerinde kontrolsüz davranmak",
+            "Gizli bilgileri paylaşmak",
+            "API key veya şifreleri korumamak",
+            "Kod standartlarını belirtmemek",
+            "Tarayıcıda kontrol yapmamak",
+            "Agent çıktısını uzman kontrolü olmadan doğru kabul etmek",
+            "Ekip içinde kullanım kuralı oluşturmamak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Antigravity Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Antigravity eğitimi, yapay zeka, yazılım geliştirme ve dijital dönüşüm süreçleriyle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Antigravity Eğitimi, AI Agent Yazılım Geliştirme ve Agentic Coding Eğitimi",
+          "body": [
+            "Antigravity eğitimi; Google Antigravity eğitimi, Antigravity kullanım eğitimi, Antigravity AI coding eğitimi, AI agent yazılım geliştirme eğitimi, Agentic coding eğitimi, yapay zeka kodlama eğitimi, AI kod editörü eğitimi, Antigravity terminal kullanımı, Antigravity Git eğitimi, Antigravity web geliştirme, Antigravity proje analizi, Antigravity kod düzenleme, Antigravity bug fixing, Antigravity test ve doğrulama, kurumsal Antigravity eğitimi ve yazılım ekipleri için Antigravity konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Antigravity eğitimi nedir?",
+          "body": [
+            "Antigravity eğitimi; yazılımcıların ve teknik ekiplerin Antigravity gibi AI agent destekli geliştirme ortamlarını proje analizi, görev planlama, kod düzenleme, hata ayıklama, terminal kullanımı, tarayıcı kontrolü, Git iş akışı, test, doğrulama, dokümantasyon ve güvenli yazılım geliştirme süreçlerinde doğru ve kontrollü şekilde kullanmasını öğreten uygulamalı eğitimdir. {{appName}}, Antigravity eğitimini şirketlerin yazılım ekiplerine, proje yapılarına ve teknik ihtiyaçlarına göre planlar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Antigravity Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "Antigravity eğitimi kimler için uygundur? +",
+              "a": "Antigravity eğitimi; yazılım geliştiriciler, web geliştiriciler, teknik ekipler, yazılım ajansları, startup ekipleri, şirket içi yazılım ekipleri ve AI agent destekli geliştirme süreçlerini öğrenmek isteyen kişiler için uygundur."
+            },
+            {
+              "q": "Antigravity eğitimi uygulamalı mı yapılır? +",
+              "a": "Evet. Eğitim örnek proje veya uygun test projesi üzerinden uygulamalı şekilde yapılabilir. Proje analizi, görev planlama, kod düzenleme, terminal, tarayıcı kontrolü, Git ve test süreçleri pratik örneklerle anlatılabilir."
+            },
+            {
+              "q": "Antigravity ile hangi işler yapılabilir? +",
+              "a": "Antigravity; kod tabanı analizi, görev planlama, dosya düzenleme, hata araştırma, refactoring, terminal komutları, tarayıcı kontrolü, test süreci, Git değişikliklerini yorumlama ve dokümantasyon hazırlama gibi alanlarda destek sağlayabilir."
+            },
+            {
+              "q": "Antigravity yazılımcının yerine geçer mi? +",
+              "a": "Hayır. Antigravity yazılımcının yerine geçmez. Yazılımcıya destek olan bir araçtır. Kodun doğruluğu, güvenliği, test edilmesi ve yayın sorumluluğu geliştirici ve teknik ekipte kalmalıdır."
+            },
+            {
+              "q": "Antigravity kullanırken güvenlik önemli mi? +",
+              "a": "Evet. Terminal komutları, dosya düzenleme, gizli bilgiler, API key, şifreler, müşteri verileri ve canlı projeler konusunda dikkatli kullanılmalıdır. Eğitimde güvenli kullanım kuralları özellikle anlatılır."
+            },
+            {
+              "q": "Antigravity ile Git süreçleri öğrenilebilir mi? +",
+              "a": "Evet. Git durumunu kontrol etme, değişiklikleri inceleme, commit mesajı hazırlama, diff yorumlama, branch mantığı ve geri alma stratejileri eğitimde ele alınabilir."
+            },
+            {
+              "q": "Antigravity ile hata ayıklama yapılabilir mi? +",
+              "a": "Evet. Hata mesajları, log çıktıları, tarayıcı konsol hataları ve ilgili dosyalar üzerinden olası nedenler analiz edilebilir. Ancak önerilen çözümler geliştirici tarafından kontrol edilmelidir."
+            },
+            {
+              "q": "Antigravity web projelerinde kullanılabilir mi? +",
+              "a": "Evet. HTML, CSS, JavaScript, PHP, React, Laravel, WordPress veya özel web projelerinde proje analizi, kod düzenleme, hata ayıklama ve test süreçlerinde destek alınabilir."
+            },
+            {
+              "q": "Eğitim şirketimize özel hazırlanabilir mi? +",
+              "a": "Evet. Eğitim şirketinizin kullandığı teknolojiye, proje yapısına, ekip seviyesine ve ihtiyaçlarına göre özelleştirilebilir."
+            },
+            {
+              "q": "Antigravity eğitimi online mı yapılır? +",
+              "a": "Eğitim ihtiyaca göre online veya yüz yüze planlanabilir. Katılımcı sayısı, teknik seviye, şirket lokasyonu ve uygulama kapsamına göre uygun model belirlenebilir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Antigravity’yi Rastgele Kod Yazdırılan Bir Araç Olarak Kullanmayalım",
+        "body": "Yazılım geliştirme süreçlerinde Antigravity kullanmak istiyor ama AI agent mantığı, proje analizi, terminal, tarayıcı kontrolü, Git, test, kod düzenleme ve güvenli kullanım konusunda nereden başlayacağınızı bilmiyorsanız {{appName}} ile iletişime geçin. Antigravity Eğitimi ile yazılım ekibinizin AI agent destekli geliştirme araçlarını daha kontrollü, güvenli ve verimli kullanmasını sağlayalım.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

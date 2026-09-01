@@ -1,0 +1,375 @@
+{
+  "slug": "mail-marketing-egitimi",
+  "category": "egitim",
+  "module": "training",
+  "order": 90,
+  "icon": "Mail",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Mail Marketing Eğitimi | B2B E-Posta Pazarlama, Soğuk Mail, Takip ve CRM Eğitimi",
+        "description": "Mail marketing eğitimi ile B2B e-posta pazarlama, hedef müşteri listesi, kurumsal mail metni, İngilizce tanıtım maili, takip mesajları, spam algısından kaçınma, ölçümleme ve CRM müşteri takibi süreçlerini uygulamalı olarak öğretiyoruz.",
+        "ogTitle": "Mail Marketing Eğitimi | {{appName}}",
+        "ogDescription": "B2B e-posta pazarlama, soğuk mail, İngilizce tanıtım maili, takip mesajları, spam algısından kaçınma, LinkedIn, telefon araması ve CRM müşteri takibini öğrenin."
+      },
+      "hero": {
+        "eyebrow": "Pazarlama Eğitimi",
+        "title": "Mail Marketing Eğitimi",
+        "lead": "Yurt içi veya yurt dışı potansiyel müşterilere e-posta göndermek istiyor ama doğru hedef listeyi nasıl hazırlayacağınızı, profesyonel mail metnini nasıl yazacağınızı, takip sürecini nasıl yöneteceğinizi ve spam algısından nasıl kaçınacağınızı bilmiyor musunuz? Mail marketing, doğru kullanıldığında B2B satış, ihracat müşteri bulma, fuar sonrası takip, LinkedIn bağlantıları, telefon aramaları ve CRM müşteri yönetimi süreçlerini destekleyen güçlü bir iletişim kanalıdır. {{appName}} olarak satış ekiplerine, ihracat ekiplerine, şirket sahiplerine, KOBİ’lere, üretici firmalara ve B2B müşteri bulmak isteyen işletmelere uygulamalı mail marketing eğitimi sunuyoruz. Amacımız, mail marketing sürecini rastgele toplu e-posta gönderimi olmaktan çıkarıp; doğru hedef kitle, profesyonel içerik, kişiselleştirilmiş iletişim, düzenli takip, telefon araması, LinkedIn desteği ve CRM kayıt sistemiyle çalışan ölçülebilir bir B2B müşteri geliştirme kanalına dönüştürmektir.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Mail Marketing Eğitimi Nedir?",
+          "body": [
+            "Mail marketing eğitimi, şirketlerin potansiyel müşterilere profesyonel, hedefli, ölçülebilir ve takip edilebilir e-posta iletişimi kurmasını öğreten uygulamalı eğitimdir.",
+            "Bu eğitimde amaç yalnızca e-posta gönderme aracı kullanmayı göstermek değildir. Asıl amaç, hedef müşteri listesinin nasıl oluşturulacağını, doğru kişilere nasıl ulaşılacağını, kurumsal mail metninin nasıl yazılacağını, İngilizce B2B tanıtım mailinin nasıl hazırlanacağını, takip mesajlarının nasıl planlanacağını, cevapların nasıl sınıflandırılacağını ve tüm sürecin CRM üzerinden nasıl yönetileceğini öğretmektir.",
+            "{{appName}}, mail marketing eğitimini teorik anlatım yerine gerçek sektör, gerçek ürün, gerçek hedef müşteri ve uygulamalı metin hazırlama çalışmalarıyla planlar.",
+            "E-postayı ölçülebilir bir B2B müşteri geliştirme kanalına dönüştürün",
+            "Hedef liste, karar verici kişi, konu başlığı, Türkçe ve İngilizce mail metni, takip mesajı, telefon araması, LinkedIn desteği ve CRM takibiyle mail marketing sürecinizi daha profesyonel hale getirin."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Mail Marketing Eğitimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Mail marketing yalnızca çok sayıda adrese aynı mesajı göndermek değildir. Hedef kitle doğru seçilmezse, metin profesyonel hazırlanmazsa, konu başlığı zayıf olursa, gönderim dili güven vermezse ve takip süreci CRM ile yönetilmezse geri dönüş almak zorlaşır.",
+            "Eğitimde B2B e-posta pazarlama, hedef müşteri listesi, karar verici kişi belirleme, kurumsal e-posta altyapısı, konu başlığı, Türkçe ve İngilizce tanıtım maili, takip maili, cevap sınıflandırma, telefon araması, LinkedIn desteği, CRM müşteri takibi, spam algısından kaçınma ve mevzuat farkındalığı uygulamalı olarak ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Mail Marketing Neden Önemlidir?",
+          "body": [
+            "B2B satışta ve ihracat müşteri bulma sürecinde potansiyel müşteriye ilk ulaşım kanallarından biri e-postadır. Doğru hazırlanmış bir e-posta, firmanızın kendini kısa, profesyonel ve güven veren şekilde tanıtmasını sağlayabilir.",
+            "Yanlış mail marketing çalışmaları ise spam algısına, marka güveni kaybına, yanlış kişilere ulaşmaya, zayıf geri dönüşlere ve takip edilemeyen satış fırsatlarına neden olabilir.",
+            "Mail marketing doğru kullanıldığında şu alanlarda destek sağlayabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Eğitim Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, e-postayı rastgele gönderim aracı olarak değil, B2B satış ve ihracat müşteri bulma sürecinin profesyonel bir parçası olarak kullanmak isteyen herkes için uygundur.",
+          "items": [
+            {
+              "title": "B2B Müşteri Bulmak İsteyen Şirketler",
+              "body": "Hedef firma listesi, karar verici kişi ve profesyonel mail metniyle yeni müşteri geliştirmek isteyen şirketler için uygundur."
+            },
+            {
+              "title": "İhracat ve Dış Ticaret Ekipleri",
+              "body": "Yurt dışı alıcılara ulaşmak, İngilizce tanıtım maili hazırlamak ve müşterileri CRM’de takip etmek isteyen ekipler için planlanabilir."
+            },
+            {
+              "title": "Satış ve İş Geliştirme Ekipleri",
+              "body": "Soğuk mail, takip maili, telefon araması ve LinkedIn desteğiyle satış sürecini güçlendirmek isteyen ekipler için uygundur."
+            },
+            {
+              "title": "KOBİ’ler ve Üretici Firmalar",
+              "body": "Ürünlerini veya hizmetlerini yurt içi ve yurt dışı kurumsal alıcılara tanıtmak isteyen işletmeler için uygundur."
+            },
+            {
+              "title": "Fuar Sonrası Takip Yapan Firmalar",
+              "body": "Fuar bağlantılarını mail, telefon, LinkedIn ve CRM üzerinden düzenli takip etmek isteyen firmalar için uygundur."
+            },
+            {
+              "title": "Danışmanlık ve Hizmet Firmaları",
+              "body": "Kurumsal satış yapan danışmanlık, hizmet, yazılım ve teknoloji şirketleri için planlanabilir."
+            },
+            {
+              "title": "LinkedIn ile Birlikte Çalışmak İsteyen Ekipler",
+              "body": "Mail gönderilen firmalardaki karar verici kişileri LinkedIn üzerinden destekli takip etmek isteyen ekipler için uygundur."
+            },
+            {
+              "title": "CRM ile Müşteri Takibi Yapmak İsteyenler",
+              "body": "Mail gönderimi, cevap durumu, teklif talebi, arama sonucu ve takip tarihlerini CRM’de yönetmek isteyen işletmeler için uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Mail Marketing Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "Mail marketing eğitimi, şirketin sektörüne, hedef müşterisine, hedef ülkesine ve satış modeline göre özelleştirilebilir. Genel olarak mail marketing temel mantığı, B2B e-posta pazarlama yaklaşımı, hedef müşteri listesi hazırlama, karar verici kişi belirleme, kurumsal e-posta adresi kullanımı, konu başlığı, Türkçe ve İngilizce tanıtım maili, kısa ve profesyonel mail metni, takip maili, cevap sınıflandırma, mail sonrası telefon araması, LinkedIn desteği, CRM takibi, gönderim takvimi, performans ölçümü, spam algısından kaçınma, gizlilik ve mevzuat farkındalığı ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Mail Marketing Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Bu başlıklar satış, ihracat, fuar takibi, LinkedIn çalışmaları veya B2B müşteri bulma hedeflerine göre planlanabilir.",
+          "items": [
+            {
+              "title": "Mail Marketing Temel Mantığı",
+              "body": "Mail marketing, yalnızca e-posta göndermek değil; doğru kişiye, doğru mesajı, doğru zamanda, doğru takip sistemiyle iletme sürecidir. Kapsam: Mail marketing ve B2B mail marketing nedir?; Toplu mail ile hedefli mail çalışması arasındaki fark; E-posta sonrası takip neden önemlidir?; LinkedIn, telefon araması ve CRM ile nasıl desteklenir?."
+            },
+            {
+              "title": "B2B Mail Marketing Yaklaşımı",
+              "body": "B2B mail marketingde amaç indirim duyurusu yapmak değil; doğru firmalara profesyonel tanıtım yapmak, iş birliği fırsatı oluşturmak ve satış görüşmesi başlatmaktır. Kapsam: Hedef firma ve karar verici kişi seçimi; Kısa, net ve profesyonel mesaj; Firma tanıtımı, ürün açıklaması ve katalog yönlendirmesi; Takip süreci ve CRM kaydı."
+            },
+            {
+              "title": "Hedef Müşteri Listesi Hazırlama",
+              "body": "Mail marketing çalışmasının başarısı büyük ölçüde hedef listenin kalitesine bağlıdır. Yanlış firmalara veya ilgisiz kişilere gönderilen e-postalar geri dönüş sağlamaz. Kapsam: Hedef ülke, sektör, firma tipi ve ürün uyumu; İthalatçı, distribütör, toptancı ve kurumsal alıcı profili; Kurumsal e-posta, web sitesi, LinkedIn ve telefon bilgisi; CRM kayıt alanları ve öncelik seviyesi."
+            },
+            {
+              "title": "Karar Verici Kişi Belirleme",
+              "body": "B2B mail marketingde e-postanın doğru kişiye gitmesi çok önemlidir. Hangi kişinin hedefleneceği satılan ürün veya hizmete göre belirlenmelidir. Kapsam: Satın alma müdürü, procurement manager ve purchasing manager; Sourcing manager, import manager ve general manager; Company owner, founder ve managing director; Business development, category, product ve supply chain manager."
+            },
+            {
+              "title": "Kurumsal E-Posta Altyapısı ve Güven",
+              "body": "Mail marketing çalışmasında gönderici e-posta adresinin kurumsal ve güven verici olması önemlidir. Ücretsiz veya kişisel e-posta adresleriyle yapılan profesyonel B2B çalışmalar zayıf algı oluşturabilir. Kapsam: Alan adına bağlı e-posta kullanımı; Profesyonel imza, web sitesi, telefon ve adres bilgisi; E-posta güvenilirliği ve gönderim yoğunluğu; Kurumsal dil standardı."
+            },
+            {
+              "title": "Konu Başlığı Hazırlama",
+              "body": "E-postanın açılıp açılmamasında konu başlığı önemli rol oynar. Konu başlığı kısa, net ve alıcının ilgisine uygun olmalıdır. Kapsam: Kısa, sade, yanıltıcı olmayan başlık kullanımı; Abartılı satış dili ve spam kelimelerden kaçınma; Alıcının sektörüne uygun ifade kullanma; Hedef ülke, sektör ve alıcı tipine göre özelleştirme."
+            },
+            {
+              "title": "İlk Tanıtım Maili Hazırlama",
+              "body": "İlk tanıtım maili kısa, açık ve profesyonel olmalıdır. İlk mailde şirketin tüm detaylarını anlatmaya çalışmak yerine, ilgiyi oluşturacak net bir tanıtım yapılmalıdır. Kapsam: Kısa selamlama, firma tanıtımı ve ürün açıklaması; Hedef sektör, değer önerisi ve web sitesi yönlendirmesi; Görüşme veya teklif çağrısı; Kısa kapanış ve profesyonel imza."
+            },
+            {
+              "title": "İngilizce Tanıtım Maili Yazma",
+              "body": "İhracat ve yurt dışı B2B satışta İngilizce tanıtım maili büyük önem taşır. İngilizce mail profesyonel, sade ve anlaşılır olmalıdır. Kapsam: Kısa açılış, firma tanıtımı ve ürün grubu açıklaması; Üretim veya tedarik kabiliyeti; Katalog, web sitesi ve teklif çağrısı; Doğal, sade ve profesyonel İngilizce kullanımı."
+            },
+            {
+              "title": "Ürün veya Hizmet Tanıtımını Net Yazma",
+              "body": "Mail marketingde en büyük hatalardan biri ürün veya hizmeti net anlatamamaktır. Alıcı, maili okuduğunda ne sunduğunuzu hızlıca anlamalıdır. Kapsam: Ne satıyorsunuz ve kimlere hizmet veriyorsunuz?; Ürün veya hizmet hangi sorunu çözüyor?; Toptan satış, B2B iş birliği veya ihracat uygunluğu; Alıcı sizden ne talep edebilir?."
+            },
+            {
+              "title": "Katalog ve Web Sitesi Yönlendirmesi",
+              "body": "Mail marketingde alıcıya güven vermek için web sitesi, katalog veya ürün sayfası yönlendirmesi yapılabilir. Ancak ek dosya kullanımı ve bağlantı paylaşımı dikkatli planlanmalıdır. Kapsam: Kurumsal web sitesi ve İngilizce ürün sayfası; PDF katalog, B2B platform profili ve LinkedIn şirket sayfası; Referans, sertifika ve hakkımızda sayfası; Mail mesajını destekleyen dijital görünüm."
+            },
+            {
+              "title": "Takip Maili Hazırlama",
+              "body": "İlk mailden sonra takip yapılmazsa birçok fırsat kaybolabilir. Ancak takip maili kısa, nazik ve profesyonel olmalıdır. Kapsam: Önceki maili kısa hatırlatma; Ürün veya hizmeti bir cümleyle tekrar açıklama; Katalog, web sitesi, görüşme veya teklif yönlendirmesi; Uygun kişiye yönlendirme talebi ve nazik kapanış."
+            },
+            {
+              "title": "Cevap Veren Müşterileri Sınıflandırma",
+              "body": "Mail marketing çalışmasında gelen cevaplar doğru sınıflandırılmalıdır. Her cevap satış fırsatı olmayabilir, ancak her cevap CRM’de kayıt altına alınmalıdır. Kapsam: İlgili, teklif isteyen, katalog isteyen veya numune isteyen müşteri; Daha sonra görüşmek isteyen veya farklı departmana yönlendiren kişi; Uygun olmayan firma veya yanlış hedef firma; Telefonla aranacak ve tekrar takip edilecek müşteri."
+            },
+            {
+              "title": "Mail Sonrası Telefon Araması",
+              "body": "Mail marketing tek başına bırakılmamalıdır. Özellikle ilgili görünen veya mail gönderilen firmalar telefonla takip edilebilir. Kapsam: Firma bilgisi, mail tarihi ve ilgili kişi kontrolü; Kısa konuşma metni ve ürün özeti hazırlama; Görüşme amacı ve CRM kaydı oluşturma; Arama sonucu ve takip tarihi belirleme."
+            },
+            {
+              "title": "LinkedIn ile Mail Marketingi Destekleme",
+              "body": "Mail marketing çalışmaları LinkedIn ile desteklenebilir. Mail gönderilen firmalardaki karar verici kişiler LinkedIn üzerinden araştırılabilir ve profesyonel bağlantı kurulabilir. Kapsam: Mail gönderilen firmaları LinkedIn’de araştırma; Satın alma müdürü ve karar verici kişi bulma; Mail sonrası kısa LinkedIn mesajı yazma; Mail ve LinkedIn cevaplarını birlikte değerlendirme."
+            },
+            {
+              "title": "CRM ile Mail Marketing Takibi",
+              "body": "Mail marketing çalışmasında CRM kullanımı çok önemlidir. Kimlere mail gönderildi, kim cevap verdi, kim teklif istedi, kim aranacak ve kim tekrar takip edilecek gibi bilgiler kayıt altına alınmalıdır. Kapsam: Firma, ülke, sektör, kişi, unvan ve e-posta kaydı; Mail gönderim tarihi, konusu ve cevap durumu; Teklif, katalog, arama sonucu ve takip tarihi; Satış temsilcisi, satış aşaması ve sonraki aksiyon."
+            },
+            {
+              "title": "Gönderim Takvimi Planlama",
+              "body": "Mail marketing çalışmaları düzensiz yapılmamalıdır. Hangi listeye ne zaman mail gönderileceği, ne zaman takip yapılacağı ve hangi müşterilerin tekrar aranacağı planlanmalıdır. Kapsam: Hedef müşteri listesi ve gönderim tarihi; Mail konusu, metin versiyonu ve takip maili tarihi; Telefon araması ve LinkedIn bağlantı tarihi; CRM notları ve sonraki kampanya planı."
+            },
+            {
+              "title": "Mail Marketing Performans Takibi",
+              "body": "Mail marketing çalışmasında başarı yalnızca gönderilen mail sayısıyla ölçülmez. Önemli olan doğru kişilere ulaşılıp ulaşılmadığı, cevap alınıp alınmadığı ve satış sürecine kaç müşteri adayının eklendiğidir. Kapsam: Gönderilen mail, geçersiz e-posta, açılma ve cevap oranı; Olumlu cevap, teklif isteyen ve katalog isteyen müşteri sayısı; Telefon aramasına ve LinkedIn takibine aktarılan kişiler; CRM’e eklenen müşteri adayları ve satış fırsatları."
+            },
+            {
+              "title": "Spam Algısından Kaçınma",
+              "body": "Spam gibi görünen e-postalar alıcı tarafından dikkate alınmaz ve marka güveni zedelenebilir. Bu nedenle hedef liste, konu başlığı, metin dili, gönderim sıklığı ve takip mesajları dikkatli planlanmalıdır. Kapsam: Doğru hedef kitleye gönderim yapmak; Abartılı satış dili, yanıltıcı bilgi ve uzun metinlerden kaçınmak; Kurumsal imza, web sitesi ve iletişim bilgisi eklemek; Gönderim sıklığını ve takip maili tonunu kontrol etmek."
+            },
+            {
+              "title": "Gizlilik, İzin ve Mevzuat Farkındalığı",
+              "body": "Mail marketing yapılırken gizlilik, kişisel veri, ticari iletişim ve hedef ülke mevzuatı dikkate alınmalıdır. Her ülkenin e-posta iletişimi ve ticari iletişim kuralları farklı olabilir. Kapsam: Kişisel veri ve izinli iletişim farkındalığı; Hedef ülke kurallarını araştırma gerekliliği; Alıcıya iletişimden çıkma imkânı sunma; Kimlik, şirket bilgisi ve profesyonel etik."
+            },
+            {
+              "title": "İngilizce Mail Marketingde Dikkat Edilecek Noktalar",
+              "body": "Yurt dışı müşterilere gönderilen maillerde dil, ton ve kültürel farkındalık önemlidir. İngilizce mail kısa, anlaşılır ve profesyonel olmalıdır. Kapsam: Basit, net ve doğal cümleler kullanmak; Ürün veya hizmeti açık anlatmak; Katalog, web sitesi ve teklif çağrısını sade tutmak; Otomatik çeviri gibi görünen metinlerden kaçınmak."
+            },
+            {
+              "title": "Yapay Zeka ile Mail Marketing Metni Hazırlama",
+              "body": "Yapay zeka araçları mail marketing metni hazırlama, konu başlığı üretme, takip maili yazma ve İngilizce metinleri düzenleme süreçlerinde destek sağlayabilir. Ancak çıkan metinler mutlaka kontrol edilmelidir. Kapsam: Konu başlığı alternatifi ve ilk tanıtım maili taslağı; Takip maili, cevap taslağı ve İngilizce metin düzenleme; Hedef sektöre göre farklı mail versiyonları hazırlama; Telefon araması konuşma metni oluşturma."
+            },
+            {
+              "title": "Mail Marketingde Sık Yapılan Hatalar",
+              "body": "Mail marketing sürecinde bazı hatalar geri dönüş oranını düşürebilir ve marka algısını zayıflatabilir. {{appName}}, bu hataları azaltmak için mail marketing eğitimini hedef liste, profesyonel metin, takip, LinkedIn, telefon araması, CRM ve gizlilik farkındalığıyla birlikte planlar."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Mail Marketing Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketin sektörü, ürünleri, hedef ülkeleri, hedef müşteri profili, mevcut e-posta çalışmaları ve eğitim ihtiyacı değerlendirilerek başlar. Ardından hedef müşteri profili, liste ve veri yapısı, mail metni hazırlama, gönderim ve takip planı, CRM takip yapısı, performans değerlendirme ve uygulanabilir yol haritası ile ilerler.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Şirketin sektörü, ürünleri, hedef ülkeleri, hedef müşteri profili, mevcut e-posta çalışmaları ve eğitim ihtiyacı değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Hedef Müşteri Profili Belirleme",
+              "body": "Hangi firmalara, hangi ülkelere, hangi sektörlere ve hangi karar verici kişilere ulaşılacağı netleştirilir."
+            },
+            {
+              "n": 3,
+              "title": "Liste ve Veri Yapısı Planlama",
+              "body": "Hedef müşteri listesinde hangi bilgilerin yer alacağı, CRM alanları ve takip yapısı belirlenir."
+            },
+            {
+              "n": 4,
+              "title": "Mail Metni Hazırlama",
+              "body": "Türkçe veya İngilizce ilk tanıtım maili, konu başlığı, takip maili ve cevap şablonları hazırlanır."
+            },
+            {
+              "n": 5,
+              "title": "Gönderim ve Takip Planı",
+              "body": "Mail gönderim takvimi, takip maili, telefon araması, LinkedIn bağlantısı ve CRM kayıt süreci planlanır."
+            },
+            {
+              "n": 6,
+              "title": "CRM Takip Yapısı",
+              "body": "Mail gönderilen firmaların, cevap veren kişilerin, teklif isteyen müşterilerin ve takip tarihinin CRM’de nasıl yönetileceği anlatılır."
+            },
+            {
+              "n": 7,
+              "title": "Performans Değerlendirme",
+              "body": "Açılma oranı, cevap oranı, olumlu dönüşler, teklif talepleri ve satış fırsatları değerlendirilir."
+            },
+            {
+              "n": 8,
+              "title": "Yol Haritası",
+              "body": "Eğitim sonunda şirketin mail marketing sürecini daha düzenli yürütmesi için uygulanabilir yol haritası hazırlanır."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Mail Marketing Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "B2B e-posta iletişimi daha profesyonel hale gelir",
+            "Hedef müşteri listesi daha doğru hazırlanır",
+            "Karar verici kişilere ulaşma farkındalığı artar",
+            "Konu başlığı ve mail metinleri güçlenir",
+            "İngilizce tanıtım mailleri daha profesyonel hazırlanır",
+            "Takip maili süreci düzenli hale gelir",
+            "Mail sonrası telefon araması daha planlı yapılır",
+            "LinkedIn ile destekleyici takip kurulabilir",
+            "CRM müşteri takibi daha düzenli yapılır",
+            "Cevap veren müşteriler daha doğru sınıflandırılır",
+            "Satış ekibi zamanını daha doğru firmalara harcar",
+            "Spam algısından kaçınma farkındalığı gelişir",
+            "Mevzuat ve gizlilik konularında dikkat artar",
+            "Mail marketing çalışmaları ölçülebilir hale gelir",
+            "İhracat müşteri bulma süreci desteklenir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Mail Marketingde Sık Yapılan Hatalar",
+          "items": [
+            "Hedef liste hazırlamadan mail göndermek",
+            "İlgisiz firmalara ulaşmaya çalışmak",
+            "Yanlış kişilere mail göndermek",
+            "Konu başlığını zayıf hazırlamak",
+            "Çok uzun tanıtım metni yazmak",
+            "Herkese aynı maili göndermek",
+            "İngilizce metni otomatik çeviri gibi hazırlamak",
+            "Web sitesi veya katalog yönlendirmesi yapmamak",
+            "Kurumsal imza kullanmamak",
+            "Cevap veren müşterileri sınıflandırmamak",
+            "Takip maili göndermemek",
+            "Telefon aramasıyla desteklememek",
+            "LinkedIn ile takip yapmamak",
+            "CRM kaydı tutmamak",
+            "Mevzuat ve izin konularını dikkate almamak",
+            "Spam algısı oluşturacak gönderim yapmak",
+            "Sadece gönderim sayısını başarı sanmak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Mail Marketing Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Mail marketing eğitimi, B2B satış, ihracat müşteri bulma, LinkedIn ve CRM süreçleriyle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Mail Marketing Eğitimi, B2B E-Posta Pazarlama ve Soğuk Mail Eğitimi",
+          "body": [
+            "Mail marketing eğitimi; e-posta pazarlama eğitimi, B2B mail marketing eğitimi, soğuk mail eğitimi, B2B e-posta eğitimi, ihracat mail marketing eğitimi, İngilizce tanıtım maili eğitimi, kurumsal e-posta pazarlama eğitimi, mail kampanyası eğitimi, e-posta takip eğitimi, mail marketing CRM takibi, LinkedIn ve mail marketing eğitimi, satış maili yazma eğitimi, ihracat tanıtım maili hazırlama, B2B müşteri bulma mail eğitimi, mail konu başlığı eğitimi, takip maili hazırlama, soğuk e-posta yazma, kurumsal mail yazma eğitimi ve e-posta ile müşteri bulma eğitimi konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Mail marketing eğitimi nedir?",
+          "body": [
+            "Mail marketing eğitimi; B2B müşteri bulma, ihracat müşteri iletişimi, hedef müşteri listesi hazırlama, kurumsal e-posta metni yazma, İngilizce tanıtım maili oluşturma, konu başlığı hazırlama, takip maili yazma, spam algısından kaçınma, gizlilik ve mevzuat farkındalığı, mail sonrası telefon araması, LinkedIn desteği ve CRM müşteri takibi süreçlerini uygulamalı olarak öğreten eğitimdir. {{appName}}, satış ekiplerine, ihracat ekiplerine ve B2B müşteri bulmak isteyen şirketlere mail marketing eğitimi sunar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Mail Marketing Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "Mail marketing eğitimi kimler için uygundur? +",
+              "a": "Mail marketing eğitimi; B2B müşteri bulmak isteyen şirketler, ihracat ekipleri, satış ekipleri, iş geliştirme ekipleri, KOBİ’ler, üretici firmalar ve profesyonel e-posta iletişimi kurmak isteyen işletmeler için uygundur."
+            },
+            {
+              "q": "Eğitimde İngilizce tanıtım maili hazırlanıyor mu? +",
+              "a": "Evet. Şirketin ürünlerine, sektörüne ve hedef ülkesine göre İngilizce tanıtım maili, takip maili ve cevap şablonları hazırlanabilir."
+            },
+            {
+              "q": "B2B müşteri listesi hazırlama anlatılıyor mu? +",
+              "a": "Evet. Hedef ülke, sektör, firma tipi, karar verici kişi, kurumsal e-posta adresi, telefon, LinkedIn profili ve CRM alanlarıyla hedef müşteri listesi oluşturma mantığı anlatılır."
+            },
+            {
+              "q": "Mail marketing ile ihracat müşterisi bulunabilir mi? +",
+              "a": "Mail marketing, doğru hedef liste, profesyonel metin, takip maili, telefon araması, LinkedIn desteği ve CRM takibiyle ihracat müşteri bulma sürecini destekleyebilir. Ancak satış garantisi vermez."
+            },
+            {
+              "q": "Spam algısından kaçınma anlatılıyor mu? +",
+              "a": "Evet. Konu başlığı, mail metni, gönderim sıklığı, hedef liste, kurumsal imza, kişiselleştirme, takip mesajı ve mevzuat farkındalığı gibi konular eğitimde anlatılır."
+            },
+            {
+              "q": "Mail sonrası telefon araması eğitime dahil mi? +",
+              "a": "Evet. Mail gönderilen firmaların nasıl aranacağı, kısa konuşma metni, arama öncesi hazırlık, görüşme notu ve CRM takip süreci anlatılabilir."
+            },
+            {
+              "q": "LinkedIn ile mail marketing birlikte kullanılabilir mi? +",
+              "a": "Evet. Mail gönderilen firmalardaki karar verici kişiler LinkedIn üzerinden araştırılabilir, bağlantı kurulabilir ve mail sonrası takip süreci LinkedIn ile desteklenebilir."
+            },
+            {
+              "q": "CRM ile mail marketing takibi yapılabilir mi? +",
+              "a": "Evet. Mail gönderim tarihi, cevap durumu, teklif isteği, katalog gönderimi, telefon araması, takip tarihi ve satış aşaması CRM üzerinden takip edilebilir."
+            },
+            {
+              "q": "Eğitim şirketimize özel hazırlanabilir mi? +",
+              "a": "Evet. Eğitim şirketinizin sektörü, ürünleri, hedef ülkeleri, hedef müşteri profili ve satış sürecine göre özelleştirilebilir."
+            },
+            {
+              "q": "Mail marketing eğitimi satış garantisi verir mi? +",
+              "a": "Hayır. Eğitim satış garantisi vermez. Ancak hedef liste, profesyonel mail metni, takip süreci, LinkedIn desteği ve CRM kullanımıyla B2B iletişim sürecinizi daha düzenli hale getirmenize yardımcı olur."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Mail Marketingi Rastgele Toplu Gönderim Süreci Olmaktan Çıkaralım",
+        "body": "Mail marketing yapmak istiyor ama doğru hedef listeyi hazırlayamıyor, profesyonel mail metni yazamıyor, İngilizce tanıtım maili oluşturamıyor veya gönderdiğiniz mailleri satış takibine dönüştüremiyorsanız {{appName}} ile iletişime geçin. Mail Marketing Eğitimi ile hedef müşteri listenizi nasıl hazırlayacağınızı, kurumsal ve İngilizce mail metinlerini nasıl yazacağınızı, takip maili sürecini nasıl yöneteceğinizi, telefon araması ve LinkedIn ile nasıl destekleyeceğinizi ve tüm süreci CRM üzerinden nasıl takip edeceğinizi uygulamalı olarak öğrenin.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

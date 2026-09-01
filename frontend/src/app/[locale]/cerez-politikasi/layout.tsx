@@ -20,7 +20,7 @@ export async function generateMetadata({
 
   const pageTitle =
     readUiText(ui, 'ui_cookie_policy_meta_title') ||
-    readUiText(ui, 'ui_cookie_policy_fallback_title', 'Cookie Policy');
+    readUiText(ui, 'ui_cookie_policy_fallback_title', 'Çerez Politikası');
   const pageDescription =
     readUiText(ui, 'ui_cookie_policy_meta_description') ||
     readUiText(ui, 'ui_cookie_policy_page_description', '');

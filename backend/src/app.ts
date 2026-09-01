@@ -8,8 +8,10 @@ import type { FastifyInstance } from 'fastify';
 
 import authPlugin from './plugins/authPlugin';
 import mysqlPlugin from '@/plugins/mysql';
+import redisPlugin from '@/plugins/redis';
 import sentryPlugin from '@/plugins/sentry';
 import swaggerPlugin from '@/plugins/swagger';
+import tenantContextPlugin from '@/plugins/tenantContext';
 import { env } from '@/core/env';
 import { registerErrorHandlers } from '@/core/error';
 import { loggerConfig } from '@/core/logger';
@@ -21,6 +23,7 @@ import { registerChurnJob } from '@/jobs/churn.job';
 import { registerReportJob } from '@/jobs/report.job';
 import { registerLeadMachineJobs } from '@/jobs/lead-machine.job';
 import { registerMarketplaceJob } from '@/jobs/marketplace.job';
+import { registerEntitlementsExpiryJob } from '@/jobs/entitlements-expiry.job';
 
 export async function createApp() {
   const { default: buildFastify } =
@@ -32,7 +35,7 @@ export async function createApp() {
     origin: parseCorsOrigins(env.CORS_ORIGIN),
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization', 'Prefer', 'Accept', 'Accept-Language', 'x-skip-auth', 'Range'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'Prefer', 'Accept', 'Accept-Language', 'x-skip-auth', 'X-Tenant', 'Range'],
     exposedHeaders: ['x-total-count', 'content-range', 'range'],
   });
 
@@ -57,7 +60,9 @@ export async function createApp() {
   });
 
   await app.register(authPlugin);
+  await app.register(tenantContextPlugin);
   await app.register(mysqlPlugin);
+  await app.register(redisPlugin);
   await app.register(sentryPlugin);
   await app.register(swaggerPlugin);
 
@@ -69,9 +74,17 @@ export async function createApp() {
   let storageSettings: Awaited<ReturnType<typeof getStorageSettings>> | null = null;
   try { storageSettings = await getStorageSettings(); } catch { /* ignore */ }
 
+  const uploadsPrefix = pickUploadsPrefix(storageSettings?.localBaseUrl);
+  app.addHook('onRequest', async (req, reply) => {
+    const pathname = req.url.split('?', 1)[0] || '';
+    if (pathname.startsWith(`${uploadsPrefix}user-docs-`)) {
+      return reply.code(404).send({ message: 'not_found' });
+    }
+  });
+
   await app.register(fastifyStatic, {
     root: pickUploadsRoot(storageSettings?.localRoot),
-    prefix: pickUploadsPrefix(storageSettings?.localBaseUrl),
+    prefix: uploadsPrefix,
     decorateReply: false,
   });
 
@@ -84,6 +97,14 @@ export async function createApp() {
     },
   );
 
+  app.removeContentTypeParser('application/json');
+  app.addContentTypeParser('application/json', { parseAs: 'buffer' }, (req, body, done) => {
+    const rawBody = Buffer.isBuffer(body) ? body : Buffer.from(body);
+    req.rawBody = rawBody;
+    try { done(null, JSON.parse(rawBody.toString('utf8'))); }
+    catch (error) { done(error as Error, undefined); }
+  });
+
   await app.register(requestLoggerPlugin);
   await registerAllRoutes(app);
   registerErrorHandlers(app);
@@ -91,6 +112,7 @@ export async function createApp() {
   registerReportJob(app);
   registerLeadMachineJobs(app);
   registerMarketplaceJob(app);
+  registerEntitlementsExpiryJob(app);
 
   return app;
 }

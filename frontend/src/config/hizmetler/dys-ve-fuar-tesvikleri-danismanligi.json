@@ -1,0 +1,165 @@
+{
+  "slug": "dys-ve-fuar-tesvikleri-danismanligi",
+  "category": "ihracat-musteri-bulma",
+  "module": "service",
+  "order": 110,
+  "icon": "HandCoins",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "DYS ve Fuar Teşvikleri Danışmanlığı | Yurt İçi ve Yurt Dışı Fuar Destekleri",
+        "description": "İhracatçı firmalar için DYS kayıt, fuar teşvikleri, yurt içi ve yurt dışı fuar destek başvuruları, evrak kontrolü ve başvuru takip süreçlerinde danışmanlık hizmeti sunuyoruz.",
+        "ogTitle": "DYS ve Fuar Teşvikleri Danışmanlığı | {{appName}}",
+        "ogDescription": "DYS kayıt, fuar destek uygunluk kontrolü, evrak hazırlığı, başvuru süreci ve eksik belge takibi konularında danışmanlık hizmeti sunuyoruz."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "DYS ve Fuar Teşvikleri Danışmanlığı",
+        "lead": "Fuar desteklerinden yararlanmak için başvuru süreci doğru planlanmalıdır. Yurt içi ve yurt dışı fuarlara katılan şirketler için devlet destekleri önemli bir avantaj sağlayabilir. Ancak DYS kayıt süreci, destek uygunluk kontrolü, evrak hazırlığı, başvuru adımları ve eksik belge takibi dikkatli şekilde yönetilmelidir. {{appName}} olarak ihracatçı firmalara DYS ve fuar teşvikleri konusunda danışmanlık desteği sunuyoruz. Fuar öncesi hazırlık, destek uygunluk değerlendirmesi, gerekli evrakların kontrolü, DYS başvuru süreci ve başvuru sonrası takip aşamalarında şirketinizin yanında oluyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "DYS ve Fuar Teşvikleri Danışmanlığı Nedir?",
+          "body": [
+            "DYS ve fuar teşvikleri danışmanlığı, şirketlerin yurt içi ve yurt dışı fuar katılımları için devlet desteklerinden yararlanma sürecinde profesyonel başvuru, belge hazırlığı ve takip desteği almasını sağlayan hizmettir.",
+            "Fuar teşvikleri süreci yalnızca başvuru formu doldurmaktan ibaret değildir. Firmanın destekten yararlanıp yararlanamayacağı, fuarın destek kapsamında olup olmadığı, harcama belgelerinin uygunluğu, ödeme belgelerinin doğruluğu, başvuru süresi ve DYS üzerinden yapılacak işlemler dikkatli şekilde değerlendirilmelidir.",
+            "{{appName}} olarak şirketlerin bu süreci daha planlı, düzenli ve kontrollü yönetebilmesi için danışmanlık hizmeti sunuyoruz.",
+            "Fuar destek sürecinizi daha düzenli yönetin: DYS kayıt kontrolü, destek uygunluk değerlendirmesi, evrak listesi, fatura ve ödeme belgeleri, DYS başvuru adımları, eksik belge takibi ve firma teşvik dosyası tek bir süreç olarak ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "DYS Nedir?",
+          "body": [
+            "DYS, ihracat destekleri ve bazı devlet destek başvurularının elektronik ortamda yürütüldüğü Destek Yönetim Sistemi’dir.",
+            "Şirketlerin destek başvurularını yapabilmesi için sistemde kayıtlı olması, yetkili kullanıcılarının tanımlanması ve gerekli başvuru adımlarının doğru şekilde ilerletilmesi gerekir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Fuar Teşvikleri Nedir?",
+          "body": [
+            "Fuar teşvikleri, şirketlerin belirli şartları taşıyan yurt içi veya yurt dışı fuarlara katılım süreçlerinde bazı giderlerinin desteklenmesine yönelik devlet destekleridir.",
+            "Fuar destekleri; fuarın niteliğine, destek kapsamına, başvuru şartlarına, firma uygunluğuna, harcama belgelerine ve mevzuatta belirtilen kriterlere göre değerlendirilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Bu hizmet, fuarlara katılan veya katılmayı planlayan ihracat odaklı şirketler için uygundur.",
+          "items": [
+            { "title": "Yurt Dışı Fuarlara Katılacak Firmalar", "body": "Yurt dışı fuar desteklerinden yararlanmak isteyen ihracatçı firmalar için uygundur." },
+            { "title": "Yurt İçi Fuar Desteği Arayanlar", "body": "Yurt içi fuar desteklerinden yararlanmak isteyen şirketlere destek sağlar." },
+            { "title": "İlk Kez DYS Başvurusu Yapacaklar", "body": "DYS kayıt ve yetkilendirme sürecinde desteğe ihtiyaç duyan işletmeler için uygundur." },
+            { "title": "Fuar Uygunluğunu Kontrol Etmek İsteyenler", "body": "Fuara katılmadan önce destek uygunluğunu değerlendirmek isteyen şirketlere uygundur." },
+            { "title": "Fuar Sonrası Başvuru Yapacaklar", "body": "Fatura, ödeme ve katılım belgeleriyle başvuru sürecini düzenli yürütmek isteyen firmalara destek olur." },
+            { "title": "Evrak Kontrolü Desteği Arayanlar", "body": "Belge hazırlığı ve başvuru dosyası kontrolü konusunda destek almak isteyen firmalar için uygundur." },
+            { "title": "KOBİ’ler", "body": "İhracat destekleri süreçlerini daha düzenli takip etmek isteyen KOBİ’lere uygundur." },
+            { "title": "Fuarı Satış Stratejisine Bağlamak İsteyenler", "body": "Fuar katılımını ihracat müşteri bulma stratejisiyle birlikte planlamak isteyen şirketlere uygundur." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "DYS ve Fuar Teşvikleri Sürecinde Neler Yapıyoruz?",
+          "intro": "DYS ve fuar teşvikleri danışmanlığı kapsamında şirketin ihtiyacına göre farklı aşamalarda destek sağlanabilir.",
+          "items": [
+            "DYS kayıt ve yetki kontrolü: firma DYS’ye kayıtlı mı, yetkili kullanıcı tanımlı mı, kullanıcı erişimi aktif mi ve başvuru yapılacak destek türü sistemde seçilebiliyor mu kontrol edilir",
+            "Fuar destek uygunluk değerlendirmesi: fuar destek kapsamında mı, katılım türü başvuru için uygun mu, hangi gider kalemleri destek kapsamında ve başvuru süresi ne zaman başlar/biter değerlendirilir",
+            "Fuar öncesi hazırlık süreci: fuar ve organizatör bilgileri kontrol edilir, katılım sözleşmesi incelenir, fatura/ödeme belgeleri için kontrol listesi oluşturulur ve DYS başvuru takvimi planlanır",
+            "Gerekli evrak listesi hazırlığı: katılım sözleşmesi, fuar faturaları, ödeme belgeleri, banka dekontları, katılım belgesi, stand bilgileri ve DYS ek dokümanları belirlenir",
+            "Fatura ve ödeme belgelerinin kontrolü: fatura firma adına mı, tarih/açıklama uygun mu, ödeme belgesi faturayla uyumlu mu ve tutar/para birimi/okunabilirlik doğru mu kontrol edilir",
+            "Katılım belgelerinin kontrolü: fuar katılım belgesi, stand bilgileri, katılım tarihleri, organizatör yazıları ve firma görselleri/destekleyici dokümanlar incelenir",
+            "DYS başvuru süreci desteği: başvuru türünün seçilmesi, firma ve fuar bilgilerinin kontrolü, harcama/ödeme belgelerinin yüklenmesi ve başvuru sonrası durum takibi yapılır",
+            "Eksik belge ve revize süreçlerinin takibi: DYS bildirimleri kontrol edilir, eksik belge talepleri incelenir, revize belgeler sisteme yüklenir ve dosya sonuçlanana kadar izlenir",
+            "Firma teşvik dosyası oluşturma: firma DYS ve yetkili kullanıcı bilgileri, katılınan fuarlar ve sözleşmeler, faturalar, ödeme/başvuru belgeleri ve destek sonuçları düzenli tutulur",
+            "Fuar destekleri ile ihracat stratejisini birleştirme: hedef müşteri listesi hazırlama, mail marketing ile görüşme talebi, İngilizce katalog/tanıtım metinleri ve fuar sonrası takip planı oluşturulur"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Fuar Öncesi, Fuar Sırası ve Fuar Sonrası Destek",
+          "intro": "Fuar destek süreci yalnızca başvuru anından oluşmaz. Fuar öncesi hazırlık, fuar sırası kayıtlar ve fuar sonrası belge takibi birlikte planlanmalıdır.",
+          "items": [
+            "Hazırlık ve planlama: fuar destek uygunluğu kontrol edilir, evrak listesi hazırlanır, DYS süreci planlanır ve şirketin fuara hazırlığı gözden geçirilir",
+            "Kayıt ve belge düzeni: katılım belgeleri, görseller, firma tanıtımı ve müşteri görüşmeleri için gerekli kayıtların düzenli tutulması önerilir",
+            "Başvuru ve takip: fatura, ödeme, katılım belgeleri ve diğer dokümanlar kontrol edilir; DYS başvurusu hazırlanır, eksik belge süreçleri takip edilir ve başvuru durumu izlenir"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "DYS ve Fuar Teşvikleri Sürecimiz Nasıl İlerler?",
+          "intro": "Ön görüşmeden başvuru sonrası eksik belge takibine kadar süreç adım adım planlanır. Başvurunun hangi aşamada olduğu ve yapılması gereken işlemler düzenli şekilde takip edilir.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Firmanızın fuar planı, ihracat hedefi, DYS durumu ve destek ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Uygunluk Analizi", "body": "Fuarın, firmanın ve başvuru sürecinin destek şartlarına uygunluğu incelenir." },
+            { "n": 3, "title": "Evrak Listesi Hazırlığı", "body": "Başvuru için gerekli olabilecek evraklar belirlenir ve firma için kontrol listesi oluşturulur." },
+            { "n": 4, "title": "Belge Kontrolü", "body": "Fatura, ödeme, katılım ve destekleyici belgeler başvuru öncesinde kontrol edilir." },
+            { "n": 5, "title": "DYS Başvuru Desteği", "body": "DYS üzerinden başvuru sürecinde gerekli alanlar ve belge yükleme adımları takip edilir." },
+            { "n": 6, "title": "Eksik Belge Takibi", "body": "Başvuru sonrası eksik belge veya revize talebi olması halinde süreç takip edilir." },
+            { "n": 7, "title": "Süreç Raporlama", "body": "Başvurunun hangi aşamada olduğu ve yapılması gereken işlemler düzenli şekilde raporlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "DYS ve Fuar Teşvikleri Danışmanlığı Hizmetinin Avantajları",
+          "items": [
+            "DYS süreci daha düzenli takip edilir",
+            "Başvuru için gerekli belgeler önceden planlanır",
+            "Fuar destek uygunluğu değerlendirilir",
+            "Fatura ve ödeme belgeleri kontrol edilir",
+            "Eksik belge riski azaltılır",
+            "Başvuru takvimi daha iyi yönetilir",
+            "Firma teşvik dosyası oluşturulur",
+            "Fuar destek süreci ihracat stratejisiyle birlikte ele alınır",
+            "Şirketin zaman kaybı azalır",
+            "Başvuru süreci daha profesyonel hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "DYS ve Fuar Teşviklerinde Sık Yapılan Hatalar",
+          "items": [
+            "Fuar destek uygunluğunu önceden kontrol etmemek",
+            "DYS kayıt ve yetki işlemlerini son dakikaya bırakmak",
+            "Faturaları yanlış firma adına düzenletmek",
+            "Ödeme belgelerini eksik saklamak",
+            "Katılım belgelerini zamanında almamak",
+            "Başvuru sürelerini kaçırmak",
+            "Belgeleri sisteme eksik yüklemek",
+            "Fatura ve ödeme belgelerini eşleştirmemek",
+            "Eksik belge bildirimlerini geç fark etmek",
+            "Fuar katılımını ihracat müşteri bulma stratejisiyle birleştirmemek"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "DYS ve Fuar Teşvikleri Hakkında Merak Edilenler",
+          "items": [
+            { "q": "DYS ve fuar teşvikleri danışmanlığı kimler için uygundur?", "a": "Bu hizmet; yurt içi veya yurt dışı fuarlara katılan, fuar desteklerinden yararlanmak isteyen, DYS başvurusu yapacak veya destek evraklarını düzenli hazırlamak isteyen şirketler için uygundur." },
+            { "q": "DYS kaydı konusunda destek veriyor musunuz?", "a": "Evet. Firmanın DYS kayıt durumu, kullanıcı yetkileri ve başvuruya hazır olup olmadığı konusunda kontrol ve yönlendirme desteği sağlanabilir." },
+            { "q": "Fuarın destek kapsamında olup olmadığını kontrol ediyor musunuz?", "a": "Evet. Katılmak istediğiniz fuarın destek uygunluğu ve başvuru süreci mevzuat ve güncel listeye göre değerlendirilmelidir. Bu konuda ön kontrol desteği verilebilir." },
+            { "q": "Fuar öncesi danışmanlık veriyor musunuz?", "a": "Evet. Fuar öncesinde destek uygunluğu, evrak listesi, ödeme planı, katılım belgeleri ve başvuru takvimi konusunda hazırlık yapılabilir." },
+            { "q": "Fuar sonrası başvuru sürecini takip ediyor musunuz?", "a": "Evet. Fuar sonrası fatura, ödeme, katılım belgeleri ve gerekli evraklar kontrol edilerek DYS başvuru sürecinde destek sağlanabilir." },
+            { "q": "Evrakları siz mi hazırlıyorsunuz?", "a": "Firma tarafından sağlanan belgeler kontrol edilir, eksikler belirlenir ve başvuru dosyasının düzenli hale getirilmesine destek olunur. Resmi belgeler ilgili kurum, organizatör veya firma tarafından temin edilir." },
+            { "q": "Eksik belge talebi gelirse destek oluyor musunuz?", "a": "Evet. Başvuru sonrası eksik belge veya revize talebi gelirse, talep incelenir ve gerekli belgelerin hazırlanması veya sisteme yüklenmesi sürecinde destek verilir." },
+            { "q": "Destek tutarı veya ödeme garantisi veriyor musunuz?", "a": "Hayır. Destek tutarı, uygunluk ve ödeme durumu ilgili mevzuat, kurum incelemesi ve başvuru şartlarına göre belirlenir. Danışmanlık hizmeti başvurunun düzenli hazırlanmasına ve sürecin takip edilmesine yardımcı olur." },
+            { "q": "DYS ve fuar teşvikleri ihracat stratejisiyle birlikte planlanabilir mi?", "a": "Evet. Fuar katılımı, hedef müşteri araştırması, mail marketing, LinkedIn çalışmaları ve fuar sonrası müşteri takibiyle birlikte planlandığında daha verimli bir ihracat stratejisine dönüşebilir." },
+            { "q": "İlk kez fuara katılacak firmalar için uygun mu?", "a": "Evet. İlk kez fuara katılacak firmalar için DYS, evrak hazırlığı, destek uygunluk kontrolü ve başvuru süreci konusunda danışmanlık almak faydalı olabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Fuar Destek Sürecinizi Birlikte Planlayalım",
+        "body": "Yurt içi veya yurt dışı fuar desteklerinden yararlanmak, DYS başvuru sürecinizi daha düzenli yönetmek ve evrak hazırlığında hata riskini azaltmak istiyorsanız {{appName}} ile iletişime geçin. Fuar öncesi hazırlıktan başvuru sonrası eksik belge takibine kadar sürecinizi birlikte planlayalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

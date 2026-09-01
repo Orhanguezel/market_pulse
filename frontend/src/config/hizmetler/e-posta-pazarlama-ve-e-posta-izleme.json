@@ -1,0 +1,181 @@
+{
+  "slug": "e-posta-pazarlama-ve-e-posta-izleme",
+  "category": "mail-outreach",
+  "module": "outreach",
+  "order": 10,
+  "icon": "Mail",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "E-posta Pazarlama ve E-posta İzleme | CRM ile Mail Marketing Takibi ve Satış Dönüşümü",
+        "description": "E-posta pazarlama kampanyalarınızı CRM ile yönetin. Gönderilen mailleri, cevap veren müşterileri, teklif isteyen firmaları, takip tarihlerini ve satışa dönüşen fırsatları tek merkezden izleyin.",
+        "ogTitle": "E-posta Pazarlama ve E-posta İzleme | {{appName}}",
+        "ogDescription": "E-posta kampanyalarınızı CRM’e bağlayın, cevap veren firmaları satış sürecine alın ve teklif isteyen müşterileri düzenli takip edin."
+      },
+      "hero": {
+        "eyebrow": "Mail & Telefon İletişimi",
+        "title": "E-posta Pazarlama ve E-posta İzleme",
+        "lead": "E-posta gönderiyorsunuz ama hangi firma cevap verdi, hangi müşteri teklif istedi ve hangi firmaya tekrar dönüş yapılmalı net göremiyor musunuz? Birçok şirket mail marketing çalışması yapar ancak asıl değer gönderimde değil, takip sürecindedir. {{appName}} E-posta Pazarlama ve E-posta İzleme sistemi ile e-posta kampanyalarınızı CRM sürecine bağlayabilir; gönderilen mailleri, müşteri cevaplarını, teklif taleplerini, takip maillerini, telefon araması gereken firmaları ve satışa dönüşen fırsatları tek merkezden yönetebilirsiniz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "E-posta Pazarlama ve E-posta İzleme Nedir?",
+          "body": [
+            "E-posta pazarlama; potansiyel veya mevcut müşterilere ürün, hizmet, kampanya, teklif, tanıtım veya iş birliği mesajlarının profesyonel e-posta yoluyla iletilmesidir.",
+            "E-posta izleme ise bu sürecin yalnızca gönderim olarak kalmamasını sağlar. Hangi müşteriye hangi mail gönderildi, kim cevap verdi, kim teklif istedi, kim daha sonra takip edilmeli ve hangi kampanya satış fırsatı oluşturdu gibi bilgiler CRM sistemiyle takip edilir.",
+            "{{appName}} yaklaşımında e-posta pazarlama yalnızca toplu mail göndermek değildir. Amaç, doğru hedef kitleye doğru mesajla ulaşmak, gelen cevapları sınıflandırmak, ilgilenen firmaları satış sürecine almak ve müşteri takibini ölçülebilir hale getirmektir.",
+            "Gönderilen mailler, cevap veren firmalar, teklif isteyen müşteriler, telefon araması gereken kişiler, takip tarihleri ve satış fırsatları CRM üzerinden düzenli şekilde yönetilebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "E-posta Göndermek Yeterli Değildir, Takip Etmek Gerekir",
+          "body": [
+            "Birçok şirket binlerce firmaya e-posta gönderir ancak sonuç alamadığını düşünür. Aslında sorun çoğu zaman e-posta gönderiminde değil, gönderim sonrası takip sisteminin olmamasındadır.",
+            "E-posta pazarlama çalışmasının satışa katkı sağlaması için cevapların, teklif taleplerinin, takip maillerinin ve satış görevlerinin düzenli şekilde yönetilmesi gerekir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "E-posta gönderiyor ama dönüşleri düzenli takip edemiyorsanız, bu hizmet doğrudan sizin ihtiyacınıza yöneliktir.",
+          "items": [
+            { "title": "B2B Satış Yapan Şirketler", "body": "B2B müşteri adaylarını e-posta ve CRM ile düzenli takip etmek isteyen firmalar için uygundur." },
+            { "title": "İhracat Müşteri Bulan Firmalar", "body": "Yurt dışı alıcılara tanıtım maili gönderen ihracatçılar için uygundur." },
+            { "title": "Mail Marketing Takibi İsteyenler", "body": "Cevap veren ve teklif isteyen firmaları satış ekibine aktarmak isteyen işletmelere destek olur." },
+            { "title": "CRM ile Müşteri Takibini Güçlendirmek İsteyenler", "body": "E-posta cevaplarını CRM sürecine bağlamak isteyen şirketler için uygundur." },
+            { "title": "Konşimento Verisi Kullanan İhracatçılar", "body": "Konşimento verileriyle bulunan alıcı firmalara hedefli e-posta süreci planlayabilir." },
+            { "title": "LinkedIn ve Sales Navigator Kullananlar", "body": "LinkedIn çalışmalarını e-posta takip sistemiyle desteklemek isteyen ekipler için uygundur." },
+            { "title": "Fuar Öncesi ve Sonrası İletişim Yapanlar", "body": "Fuar görüşmelerini e-posta ve CRM takip sistemine bağlamak isteyen firmalara uygundur." },
+            { "title": "Teklif İsteyen Firmaları Takip Etmek İsteyen KOBİ’ler", "body": "Teklif isteyen potansiyel müşterilerin kaybolmasını önlemek isteyen KOBİ’ler için uygundur." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "E-posta Pazarlama Sürecinde Neler Yapıyoruz?",
+          "intro": "{{appName}} olarak e-posta pazarlama sürecini satış odaklı bir CRM sistemiyle birlikte planlıyoruz.",
+          "items": [
+            { "title": "Hedef Kitle ve Müşteri Listesi Hazırlığı", "body": "Başarılı bir e-posta pazarlama çalışmasının ilk adımı doğru hedef kitledir. Yanlış firmalara gönderilen e-postalar zaman kaybına neden olur. Mevcut müşteri veritabanı, web sitesi formları, fuar görüşmeleri, LinkedIn bağlantıları, Sales Navigator, B2B platform, konşimento verileri ve GTİP / HS kodu / ürün adına göre ithalatçı araştırmaları değerlendirilir." },
+            { "title": "Müşteri Segmentasyonu", "body": "Her müşteriye aynı e-postayı göndermek doğru sonuç vermeyebilir. Hedef liste ülke, sektör ve firma türü; ithalatçı, distribütör, toptancı veya perakendeci; mevcut veya potansiyel müşteri ve ürün grubuna göre segmentlere ayrılır." },
+            { "title": "E-posta Metni Hazırlama", "body": "E-posta pazarlama metni kısa, net, profesyonel ve alıcıya değer sunan bir yapıda olmalıdır. Kısa giriş, ürün veya hizmetin alıcı için faydası, kalite / kapasite / sektör bilgisi ve teklif veya görüşme çağrısı bir arada kurgulanır." },
+            { "title": "Konu Başlığı Hazırlama", "body": "E-posta konu başlığı, alıcının maili açıp açmamasını etkileyen önemli bir unsurdur. Kısa, net, ürünü doğru anlatan, aşırı reklam dili kullanmayan ve hedef ülke ile sektöre uyarlanabilir başlıklar hazırlanır." },
+            { "title": "Takip Maili Kurgusu", "body": "Birçok potansiyel müşteri ilk e-postaya hemen cevap vermez. İlk tanıtım maili, kısa hatırlatma maili, ürün veya hizmet odaklı ikinci mesaj, teklif / görüşme talebi maili ve daha sonra tekrar iletişime geçilecek firma listesi kurgulanır." },
+            { "title": "Gönderim Planı", "body": "Hangi listeye hangi mesaj gönderilecek, hangi takip maili ne zaman gönderilecek, cevaplar kim tarafından takip edilecek ve kampanya sonuçları nasıl raporlanacak sorularına göre bir gönderim planı oluşturulur." },
+            { "title": "E-posta Cevaplarının Sınıflandırılması", "body": "Gelen cevapların doğru sınıflandırılması en değerli alanlardan biridir. Teklif / ürün detayı / numune isteyen firmalar, distribütörlük veya iş birliği görüşmesi isteyenler, daha sonra takip edilecek firmalar ve olumsuz dönüşler ile otomatik cevaplar ayrıştırılır." },
+            { "title": "CRM ile E-posta Takibi", "body": "E-posta pazarlama çalışmaları CRM ile birlikte yürütüldüğünde hiçbir müşteri cevabı dağınık e-posta kutularında kaybolmaz. Firma adı, ilgili kişi, e-posta, ülke, sektör, gönderilen kampanya, cevap durumu, ilgi seviyesi, satış temsilcisi, takip tarihi ve satış aşaması kayıt altına alınır." },
+            { "title": "E-posta İzleme ve Performans Ölçümü", "body": "E-posta izleme, kampanyaların genel performansını ölçmek için kullanılır. Gönderilen ve ulaşmayan e-posta sayısı, cevap veren ve teklif isteyen firma sayısı, satışa dönüşen müşteriler ve kampanya / ülke / sektör bazlı dönüşüm oranları takip edilir." },
+            { "title": "Satış Ekibine Görev Atama", "body": "Cevap veren firmaların satış ekibine hızlı şekilde aktarılması gerekir. Teklif isteyen firmayı ara, ürün detay maili gönder, numune veya fiyat teklifi hazırla, takip maili ve tekrar arama görevi oluştur gibi aksiyonlar atanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "E-posta Pazarlama ile İhracat Müşteri Bulma",
+          "intro": "İhracat yapmak isteyen şirketler için e-posta pazarlama önemli bir müşteri bulma aracıdır. Ancak doğru hedefleme, profesyonel İngilizce metin, takip ve CRM yönetimiyle desteklenmelidir.",
+          "items": [
+            "Yurt dışı alıcı firma listeleri",
+            "Konşimento ve GTİP / HS kodu bazlı listeler",
+            "İngilizce tanıtım ve takip mailleri",
+            "Teklif, numune ve proforma sürecine alınacak müşteriler"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "E-posta Pazarlama ile B2B Satış Süreci",
+          "intro": "B2B satışta karar süreci çoğu zaman tek bir e-posta ile tamamlanmaz. Bu nedenle e-posta pazarlama; takip maili, telefon araması, teklif yönetimi ve CRM müşteri adayı kaydıyla desteklenmelidir.",
+          "items": [
+            "Doğru firma listesi ve doğru ilgili kişi",
+            "Profesyonel e-posta metni",
+            "Takip maili ve telefon araması desteği",
+            "Kampanya performans analizi ve düzenli raporlama"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Mevzuata ve Profesyonel İletişime Uygun Yaklaşım",
+          "intro": "E-posta pazarlama yapılırken profesyonel iletişim dili, hedefli gönderim ve ilgili mevzuata uygunluk önemlidir. Amaç rastgele, rahatsız edici veya ilgisiz toplu gönderimler yapmak değildir.",
+          "items": [
+            "Doğru hedef kitleye ulaşma",
+            "Ticari ilişki kurma amacıyla profesyonel iletişim",
+            "Hedef ülke ve alıcı tipine göre değerlendirme",
+            "Geçerli ticari elektronik ileti kurallarını dikkate alma"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "E-posta Pazarlama ve E-posta İzlemenin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "E-posta kampanyaları daha düzenli yönetilir",
+            "Gönderilen mailler kayıt altına alınır",
+            "Cevap veren firmalar satış sürecine aktarılır",
+            "Teklif isteyen müşteriler unutulmaz",
+            "Takip mailleri planlı şekilde ilerler",
+            "Telefon araması gereken firmalar belirlenir",
+            "Kampanya performansı ölçülebilir hale gelir",
+            "Mail marketing çalışmaları CRM ile bağlantılı yürütülür",
+            "İhracat müşteri bulma süreci güçlenir",
+            "Satış ekibine net görevler atanır"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "E-posta Pazarlamada Sık Yapılan Hatalar",
+          "items": [
+            "Hedef kitleyi doğru belirlememek",
+            "Aynı metni herkese göndermek",
+            "Çok uzun ve karmaşık e-posta metinleri kullanmak",
+            "Yanıltıcı konu başlıkları yazmak",
+            "Takip maili planı yapmamak",
+            "Cevap veren firmaları CRM’e aktarmamak",
+            "Teklif isteyen müşterilere geç dönüş yapmak",
+            "Telefon araması gereken firmaları belirlememek",
+            "Kampanya sonuçlarını ölçmemek",
+            "E-posta pazarlamayı sadece toplu gönderim olarak görmek"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "E-posta Pazarlama ve İzleme Süreci Nasıl İlerler?",
+          "intro": "E-posta pazarlama süreci hedef müşteri listesinden başlar; mesaj metni, gönderim planı, CRM takip yapısı, satış ekibine aktarım ve performans analiziyle devam eder.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin ürünleri, hedef müşteri profili, mevcut müşteri listesi, satış süreci ve CRM ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Hedef Liste Planı", "body": "Hangi ülke, sektör, firma tipi veya müşteri grubuna ulaşılacağı belirlenir." },
+            { "n": 3, "title": "E-posta Metni Hazırlığı", "body": "Tanıtım maili, takip mailleri ve gerekli mesaj şablonları hazırlanır." },
+            { "n": 4, "title": "Gönderim Planı", "body": "Hangi listeye, hangi mesajın, hangi zaman aralığında gönderileceği planlanır." },
+            { "n": 5, "title": "CRM Takip Yapısı", "body": "Cevap veren, teklif isteyen, telefonla aranacak ve takip edilecek firmalar için CRM yapısı oluşturulur." },
+            { "n": 6, "title": "Satış Ekibine Aktarım", "body": "İlgilenen firmalar satış temsilcilerine görev olarak atanır." },
+            { "n": 7, "title": "Performans Analizi", "body": "Kampanya dönüşleri, teklif talepleri, takipler ve satış fırsatları raporlanır." },
+            { "n": 8, "title": "İyileştirme", "body": "Konu başlıkları, mesaj metinleri, hedef listeler ve takip süreçleri performansa göre geliştirilir." }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "E-posta Pazarlama ve E-posta İzleme Hakkında Merak Edilenler",
+          "items": [
+            { "q": "E-posta pazarlama kimler için uygundur?", "a": "E-posta pazarlama; B2B satış yapan, ihracat müşteri bulmak isteyen, mevcut müşteri kitlesine düzenli ulaşmak isteyen ve potansiyel müşterilerini CRM ile takip etmek isteyen şirketler için uygundur." },
+            { "q": "Mail marketing ile e-posta pazarlama aynı şey midir?", "a": "Evet. Mail marketing, e-posta pazarlamanın yaygın kullanılan İngilizce karşılığıdır. Her ikisi de müşterilere e-posta yoluyla profesyonel iletişim kurma sürecini ifade eder." },
+            { "q": "E-posta izleme ne işe yarar?", "a": "E-posta izleme, kampanyadan sonra hangi firmaların cevap verdiğini, hangilerinin teklif istediğini, hangi müşterilerin takip edilmesi gerektiğini ve hangi kampanyanın satış fırsatı oluşturduğunu görmeye yardımcı olur." },
+            { "q": "CRM ile e-posta pazarlama takip edilebilir mi?", "a": "Evet. Gönderilen mailler, cevap veren firmalar, teklif talepleri, takip tarihleri ve satış temsilcisi görevleri CRM üzerinden takip edilebilir." },
+            { "q": "İhracat için e-posta pazarlama yapılabilir mi?", "a": "Evet. Yurt dışı alıcı firma listelerine, ithalatçılara, distribütörlere veya hedef müşteri gruplarına yönelik profesyonel İngilizce e-posta pazarlama çalışmaları yapılabilir." },
+            { "q": "Konşimento verileriyle bulunan firmalara e-posta gönderimi planlanabilir mi?", "a": "Evet. Konşimento verileri, GTİP / HS kodu veya ürün adına göre belirlenen potansiyel alıcı firmalar için hedefli e-posta pazarlama süreci planlanabilir." },
+            { "q": "Takip mailleri hazırlanıyor mu?", "a": "Evet. İlk tanıtım mailinden sonra gönderilecek profesyonel takip mailleri hazırlanabilir." },
+            { "q": "Cevap veren firmalar satış ekibine atanabilir mi?", "a": "Evet. Cevap veren, teklif isteyen veya telefonla aranması gereken firmalar CRM üzerinden ilgili satış temsilcisine atanabilir." },
+            { "q": "E-posta pazarlama kesin müşteri getirir mi?", "a": "E-posta pazarlama kesin müşteri garantisi vermez. Ancak doğru hedef liste, profesyonel mesaj, düzenli takip ve CRM bağlantılı satış süreciyle potansiyel müşteri oluşturma ihtimali artırılabilir." },
+            { "q": "E-posta pazarlama yaparken mevzuat dikkate alınmalı mı?", "a": "Evet. E-posta pazarlama çalışmalarında hedef ülke, alıcı tipi ve ilgili ticari elektronik ileti kuralları dikkate alınmalıdır. Bu nedenle süreç profesyonel ve hedefli şekilde planlanmalıdır." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "E-posta Pazarlama Sürecinizi Satışa Dönüşen Bir Sisteme Çevirelim",
+        "body": "E-posta gönderiyor ama dönüşleri düzenli takip edemiyorsanız, potansiyel müşterilerinizin bir kısmını fark etmeden kaybediyor olabilirsiniz. {{appName}} E-posta Pazarlama ve E-posta İzleme sistemi ile kampanyalarınızı CRM’e bağlayın, cevap veren firmaları satış sürecine alın ve teklif isteyen müşterileri kaçırmayın.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

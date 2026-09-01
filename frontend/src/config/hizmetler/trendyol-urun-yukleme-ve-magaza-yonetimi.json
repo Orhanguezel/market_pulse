@@ -1,0 +1,183 @@
+{
+  "slug": "trendyol-urun-yukleme-ve-magaza-yonetimi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 160,
+  "icon": "Upload",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Trendyol Ürün Yükleme ve Mağaza Yönetimi | Ürün Listeleme, Stok, Fiyat ve Sipariş Takibi",
+        "description": "Trendyol mağazanız için ürün yükleme, kategori seçimi, ürün başlığı, açıklama, görsel, varyant, stok, fiyat, sipariş, kampanya ve mağaza yönetimi süreçlerinde destek sunuyoruz.",
+        "ogTitle": "Trendyol Ürün Yükleme ve Mağaza Yönetimi | {{appName}}",
+        "ogDescription": "Trendyol mağazanız için ürün yükleme, kategori, başlık, açıklama, görsel, barkod, varyant, stok, fiyat, sipariş ve mağaza yönetimi desteği alın."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "Trendyol Ürün Yükleme ve Mağaza Yönetimi",
+        "lead": "Trendyol mağazanıza ürün yüklemek, ürünleri doğru kategoride yayınlamak, stokları güncellemek, fiyatları kontrol etmek ve mağazayı düzenli yönetmek için zaman bulamıyor musunuz? Trendyol’da satış yapabilmek için ürünlerin doğru şekilde yayına alınması gerekir. Ancak ürün yükleme süreci yalnızca ürün adı ve fiyat girmekten ibaret değildir. Kategori seçimi, ürün başlığı, açıklama, görsel, barkod, varyant, stok, kargo bilgisi, fiyatlandırma, kampanya uygunluğu ve mağaza takibi birlikte düşünülmelidir. {{appName}} olarak Trendyol mağazası olan veya Trendyol’da satışa başlamak isteyen işletmelere ürün yükleme ve mağaza yönetimi desteği sunuyoruz. Ürünlerinizi daha düzenli yayına alıyor, mağazanızın ürün, stok, fiyat, sipariş, müşteri soruları ve kampanya süreçlerini daha takip edilebilir hale getirmenize yardımcı oluyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Trendyol Ürün Yükleme ve Mağaza Yönetimi Nedir?",
+          "body": [
+            "Trendyol ürün yükleme ve mağaza yönetimi, Trendyol satıcı hesabında ürünlerin doğru bilgilerle yayına alınması, ürün sayfalarının düzenlenmesi, stok ve fiyat bilgilerinin takip edilmesi, siparişlerin kontrol edilmesi, müşteri sorularının cevaplanması ve mağaza performansının düzenli izlenmesi sürecidir.",
+            "Bu hizmet yalnızca ürün ekleme işlemi değildir. Ürünlerin pazaryeri satışına uygun şekilde hazırlanması ve mağazanın günlük operasyonlarının takip edilmesi gerekir.",
+            "{{appName}}, Trendyol ürün yükleme ve mağaza yönetimi sürecini işletmenizin ürün yapısına ve satış hedeflerine göre planlar.",
+            "Amacımız, Trendyol mağazanızın dağınık ilerlemesini önlemek ve ürünlerinizi pazaryeri satışına uygun, düzenli ve yönetilebilir bir yapıya kavuşturmaktır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol’da Ürün Yükleme Neden Önemlidir?",
+          "body": [
+            "Trendyol’da ürün yükleme süreci satış performansını doğrudan etkileyebilir. Çünkü müşteri ürünü satın almadan önce başlık, görsel, açıklama, fiyat, yorum, kategori ve kargo bilgilerine bakar.",
+            "Ürün yanlış kategoriye yüklenirse doğru müşteriye ulaşmak zorlaşır. Ürün başlığı eksikse müşteri ürünü anlamayabilir. Açıklama yetersizse müşteri soru sorar veya üründen vazgeçer. Görseller zayıfsa güven azalır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Mağazanızda ürün yükleme ve yönetim süreci zaman alıyorsa, bu hizmet operasyon yükünüzü azaltmaya ve mağaza sürecinizi daha düzenli yürütmeye yardımcı olur.",
+          "items": [
+            { "title": "Trendyol’da Satışa Başlamak İsteyen İşletmeler", "body": "Ürünlerini pazaryerine doğru şekilde hazırlamak isteyen işletmeler için uygundur." },
+            { "title": "Mağazası Açılmış Ama Ürünleri Yüklenmemiş Firmalar", "body": "Mağaza açılışından sonra ürün yükleme ve yayına alma süreci planlanabilir." },
+            { "title": "Çok Sayıda Ürün Yüklemek İsteyen Şirketler", "body": "Ürün bilgileri düzenlenerek toplu ve planlı yükleme süreci oluşturulabilir." },
+            { "title": "Mevcut Ürün Sayfalarını Düzenlemek İsteyenler", "body": "Başlık, açıklama, kategori, görsel, fiyat ve stok alanları gözden geçirilebilir." },
+            { "title": "Varyantlı Ürünleri Olan Firmalar", "body": "Renk, beden, ölçü, model, paket veya adet seçenekleri doğru yapılandırılabilir." },
+            { "title": "Stok ve Fiyat Takibini Düzenlemek İsteyenler", "body": "Stok, fiyat, kampanya fiyatı ve kârlılık takibi daha kontrollü yapılabilir." },
+            { "title": "E-ticaret Ekibi Olmayan KOBİ’ler", "body": "Pazaryeri operasyonunda dışarıdan düzenli destek almak isteyen işletmelere uygundur." },
+            { "title": "Üretici ve Marka Sahipleri", "body": "Ürünlerini Trendyol’da daha profesyonel sunmak isteyen üretici markalar için uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol Ürün Yükleme Kapsamında Neler Yapıyoruz?",
+          "body": [
+            "Trendyol ürün yükleme süreci, ürün tipine, kategoriye ve mağaza ihtiyacına göre planlanabilir. Ürün bilgileri düzenlenir, kategori ve varyant yapısı belirlenir, stok ve fiyat bilgileri kontrol edilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Trendyol Ürün Yükleme ve Mağaza Yönetiminde Hangi Alanlar Takip Edilir?",
+          "intro": "Ürün yükleme süreci; ürün bilgisi, kategori, başlık, açıklama, görsel, barkod, varyant, stok, fiyat, yayın kontrolü ve mağaza yönetimiyle birlikte planlanmalıdır.",
+          "items": [
+            { "title": "Ürün Bilgilerinin Hazırlanması", "body": "Ürün yükleme sürecinin ilk adımı ürün bilgilerinin düzenlenmesidir. Eksik veya dağınık ürün bilgileri yükleme sürecini zorlaştırır. Ürün adı, marka, model ve açıklama bilgileri; ürün özellikleri, ölçü, renk, beden ve varyant bilgisi; barkod, stok, satış fiyatı ve kargo bilgisi; ürün görselleri, paket içeriği, garanti veya kullanım bilgisi." },
+            { "title": "Kategori Seçimi", "body": "Trendyol’da doğru kategori seçimi ürünün doğru müşteriye ulaşması açısından önemlidir. Yanlış kategori, ürün görünürlüğünü ve satış performansını olumsuz etkileyebilir. Ürün tipi, kullanım alanı ve müşterinin arama şekli; rakip ürünlerin kategorisi ve ürün özellikleri; ana kategori ve alt kategori uyumu; kategoriye özel zorunlu alanlar ve pazaryeri kuralları." },
+            { "title": "Ürün Başlığı Hazırlama", "body": "Ürün başlığı müşterinin ürünü hızlı anlamasını sağlamalıdır. Çok kısa, eksik veya karmaşık başlıklar müşteri kararını zorlaştırabilir. Marka adı, ürün adı ve model bilgisi; ölçü, boyut, renk, adet veya set bilgisi; kullanım alanı ve temel ürün özelliği; yanıltıcı ifadelerden ve gereksiz kelime tekrarından kaçınma." },
+            { "title": "Ürün Açıklaması Hazırlama", "body": "Ürün açıklaması müşterinin ürünü anlamasını, özelliklerini görmesini ve satın alma kararını daha rahat vermesini sağlar. Ürün ne işe yarar ve hangi alanlarda kullanılır? Ürün özellikleri, ölçü, renk, beden veya materyal bilgisi; paket içeriği, kullanım talimatı, bakım veya saklama bilgisi; müşterinin sık sorabileceği bilgilerin açıklanması." },
+            { "title": "Ürün Görsellerinin Kontrolü", "body": "Trendyol’da görseller ürün satışında çok önemlidir. Müşteri ürünü görsel üzerinden değerlendirir. Ana ürün görseli ve ek ürün görselleri; ürünün farklı açılardan gösterimi ve ambalaj görseli; kullanım, ölçü, detay ve varyant görselleri; görsel çözünürlüğü, fon düzeni ve ürünle uyum kontrolü." },
+            { "title": "Barkod ve Varyant Yönetimi", "body": "Özellikle renk, beden, ölçü, model veya paket seçeneği bulunan ürünlerde varyant yapısı doğru kurulmalıdır. Barkod bilgisi, renk, beden, ölçü ve model seçeneği; paket veya adet seçeneği, varyant görseli; varyant stok miktarı ve varyant fiyatı; varyant açıklama uyumu ve yanlış seçim riskinin azaltılması." },
+            { "title": "Stok ve Fiyat Bilgisi Girişi", "body": "Ürün yükleme sırasında stok ve fiyat bilgileri doğru girilmelidir. Yanlış fiyat veya stok hatası mağaza operasyonunda ciddi sorun oluşturabilir. Ürün stok miktarı ve varyant bazlı stok; satış fiyatı, kampanya fiyatı ve kârlılık kontrolü; kargo, paketleme ve komisyon maliyeti etkisi; rakip fiyat durumu, minimum satış fiyatı ve güncelleme ihtiyacı." },
+            { "title": "Ürün Yayına Alma ve Kontrol", "body": "Ürün bilgileri girildikten sonra ürünün yayına alınması ve yayındaki durumunun kontrol edilmesi gerekir. Ürün bilgileri eksiksiz mi? Kategori, görsel, fiyat ve stok bilgisi doğru mu? Varyantlar çalışıyor mu ve ürün yayına alındı mı? Eksik bilgi uyarısı veya onay süreci var mı?" },
+            { "title": "Yayındaki Ürünleri Güncelleme", "body": "Trendyol mağazasında ürünler yayına alındıktan sonra süreç bitmez. Ürün bilgilerinin düzenli güncellenmesi gerekir. Ürün açıklaması, ürün başlığı ve görseller; stok miktarı, fiyat bilgisi ve kampanya fiyatı; varyant bilgileri, kategori veya özellik bilgileri; müşteri sorularına göre ek bilgilerin ürün sayfasına eklenmesi." },
+            { "title": "Trendyol Mağaza Yönetimi", "body": "Ürün yükleme ile birlikte mağazanın genel yönetimi de takip edilmelidir. Çünkü satış süreci ürün yayınıyla sınırlı değildir. Satıcı paneli, sipariş, kargo ve stok kontrolü; fiyat güncelleme, müşteri soruları ve iade talepleri; kampanya, reklam ve satış raporları; mağaza performansı, rakip ve kategori takibi." },
+            { "title": "Sipariş ve Kargo Takibi", "body": "Trendyol mağazasında siparişlerin zamanında takip edilmesi gerekir. Siparişler gecikirse müşteri memnuniyeti ve mağaza performansı olumsuz etkilenebilir. Yeni siparişler ve hazırlanan siparişler; kargoya verilecek ürünler ve teslim durumu; geciken siparişler, eksik ürün riski ve yanlış ürün gönderimi; paketleme durumu, müşteri bilgilendirme ve iade gelen siparişler." },
+            { "title": "Müşteri Soruları ve Cevap Yönetimi", "body": "Trendyol’da müşteriler ürünle ilgili soru sorabilir. Bu sorulara hızlı, doğru ve profesyonel cevap verilmelidir. Ürün ölçüsü, renk, beden ve stok durumu; kargo süresi, paket içeriği ve kullanım alanı; teknik özellikler, iade, değişim ve garanti bilgisi; sık gelen soruların ürün açıklamasına eklenmesi." },
+            { "title": "Kampanya ve Reklam Süreci", "body": "Trendyol’da kampanya ve reklam süreçleri mağaza yönetiminin önemli parçalarıdır. Ancak bu süreçler kârlılık hesabı yapılmadan yönetilmemelidir. Kampanyaya uygun ürünler ve indirim oranı; stok yeterliliği ve kârlılık etkisi; reklam verilecek ürünler, reklam bütçesi ve performansı; tıklama, satış ilişkisi ve bütçe kontrolü." },
+            { "title": "Satış Raporları ve Performans Takibi", "body": "Trendyol mağazasında satış raporları düzenli incelenmelidir. Raporlar, hangi ürünlerin daha iyi sattığını ve hangi alanlarda iyileştirme gerektiğini gösterir. Toplam satış, ürün bazlı satış ve en çok satan ürünler; az satan ürünler, iade oranları ve kampanya performansı; reklam performansı, stok hareketleri ve kategori performansı; fiyat değişim etkisi, müşteri soruları ve mağaza performansı." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Trendyol Ürün Yükleme ve Mağaza Yönetimi Süreci Nasıl İlerler?",
+          "intro": "Süreç ürün sayınız, ürün kategorileriniz, mağaza durumunuz, mevcut eksikleriniz ve yönetim ihtiyacınız değerlendirilerek başlar. Ardından ürün bilgileri hazırlanır, kategori ve varyant yapısı planlanır, ürünler yüklenir, yayın kontrolü yapılır ve mağaza yönetimi başlatılır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Ürün sayınız, ürün kategorileriniz, mağaza durumunuz, mevcut eksikleriniz ve yönetim ihtiyacınız değerlendirilir." },
+            { "n": 2, "title": "Ürün Bilgilerinin Hazırlanması", "body": "Ürün adları, açıklamalar, görseller, barkodlar, stoklar, fiyatlar ve varyant bilgileri düzenlenir." },
+            { "n": 3, "title": "Kategori ve Ürün Yapısı Planlanır", "body": "Ürünlerin hangi kategorilerde ve hangi varyant yapısıyla yayına alınacağı belirlenir." },
+            { "n": 4, "title": "Ürün Yükleme İşlemleri Yapılır", "body": "Ürün bilgileri Trendyol satıcı paneline girilir, görseller eklenir, stok ve fiyat bilgileri düzenlenir." },
+            { "n": 5, "title": "Yayın Kontrolü Yapılır", "body": "Ürünlerin yayında olup olmadığı, eksik bilgi uyarıları ve müşteri tarafındaki görünümü kontrol edilir." },
+            { "n": 6, "title": "Mağaza Yönetimi Başlatılır", "body": "Sipariş, stok, fiyat, müşteri soruları, kampanya ve reklam süreçleri düzenli takip edilir." },
+            { "n": 7, "title": "Raporlama Yapılır", "body": "Satış, ürün performansı, stok, reklam, kampanya ve mağaza durumu düzenli olarak değerlendirilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Trendyol Ürün Yükleme ve Mağaza Yönetiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Ürünleriniz daha düzenli yayına alınır",
+            "Kategori hataları azaltılabilir",
+            "Ürün başlıkları ve açıklamaları daha anlaşılır hale gelir",
+            "Görseller daha kontrollü kullanılır",
+            "Varyant ve stok yapısı daha düzenli yönetilir",
+            "Fiyatlandırma ve kârlılık daha dikkatli takip edilir",
+            "Sipariş süreçleri daha kontrollü ilerler",
+            "Müşteri soruları daha düzenli cevaplanır",
+            "Kampanya ve reklam kararları daha bilinçli verilir",
+            "Satış raporları düzenli incelenir",
+            "Mağaza yönetimi kişisel takibe bağlı kalmaz",
+            "Pazaryeri operasyonunuz daha profesyonel hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Trendyol Ürün Yükleme Sürecinde Sık Yapılan Hatalar",
+          "items": [
+            "Yanlış kategori seçmek",
+            "Eksik ürün başlığı yazmak",
+            "Ürün açıklamasını yetersiz bırakmak",
+            "Yanlış görsel kullanmak",
+            "Varyantları hatalı oluşturmak",
+            "Barkod bilgilerini karıştırmak",
+            "Stokları yanlış girmek",
+            "Fiyatlandırma yaparken maliyetleri dikkate almamak",
+            "Ürün yayına alındıktan sonra kontrol etmemek",
+            "Müşteri sorularından gelen bilgileri açıklamaya eklememek",
+            "Kampanyaya uygun olmayan ürünleri dahil etmek",
+            "Satış raporlarını takip etmemek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol Ürün Yükleme ve Mağaza Yönetimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Bu hizmet, e-ticaret ve pazaryeri yönetimi sürecinin parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol Ürün Yükleme, Ürün Listeleme, Stok, Fiyat ve Pazaryeri Yönetimi",
+          "body": [
+            "Trendyol ürün yükleme ve mağaza yönetimi; Trendyol ürün listeleme, Trendyol ürün girişi, Trendyol ürün açıklaması hazırlama, Trendyol kategori seçimi, barkod ve varyant yönetimi, stok yönetimi, fiyat yönetimi, sipariş takibi, kampanya yönetimi, reklam takibi ve e-ticaret ürün yükleme süreçleri için planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Trendyol ürün yükleme ve mağaza yönetimi nedir?",
+          "body": [
+            "Trendyol ürün yükleme ve mağaza yönetimi; Trendyol satıcı hesabında ürünlerin doğru kategori, başlık, açıklama, görsel, barkod, varyant, stok ve fiyat bilgileriyle yayına alınması; ardından sipariş, kargo, müşteri soruları, kampanya, reklam, stok ve satış raporlarının düzenli şekilde takip edilmesi hizmetidir. {{appName}}, Trendyol mağazası olan işletmelerin ürün yükleme ve pazaryeri operasyonlarını daha planlı, düzenli ve profesyonel şekilde yönetmesine yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Trendyol Ürün Yükleme ve Mağaza Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Trendyol ürün yükleme hizmeti kimler için uygundur?", "a": "Bu hizmet; Trendyol mağazası olan, ürünlerini düzenli yüklemek isteyen, çok sayıda ürünü bulunan veya ürün bilgilerini profesyonel şekilde yayına almak isteyen işletmeler için uygundur." },
+            { "q": "Trendyol mağazamı sizinle yönetebilir miyim?", "a": "Evet. Ürün yükleme, stok, fiyat, sipariş, müşteri soruları, kampanya, reklam ve satış raporları süreçlerinde mağaza yönetimi desteği alınabilir." },
+            { "q": "Ürün açıklamalarını hazırlıyor musunuz?", "a": "Evet. Ürün özelliklerine göre müşterinin anlayabileceği sade, açıklayıcı ve pazaryeri satışına uygun ürün açıklamaları hazırlanabilir." },
+            { "q": "Ürün görsellerini düzenliyor musunuz?", "a": "Görsellerin uygunluğu, eksikleri ve ürünle uyumu kontrol edilebilir. Gerekli durumlarda işletmeden ek görsel talep edilebilir veya görsel düzenleme ihtiyacı belirlenebilir." },
+            { "q": "Varyantlı ürün yükleme yapılabilir mi?", "a": "Evet. Renk, beden, ölçü, model, paket veya adet seçeneği olan ürünler için varyant yapısı oluşturulabilir." },
+            { "q": "Stok ve fiyat takibi yapılıyor mu?", "a": "Evet. Ürün ve varyant bazlı stoklar, fiyatlar, kampanya fiyatları ve kârlılık değerlendirmeleri takip edilebilir." },
+            { "q": "Sipariş ve kargo süreci takip ediliyor mu?", "a": "Evet. Sipariş hazırlık, kargo teslim, gecikme, iade ve iptal süreçleri mağaza yönetimi kapsamında takip edilebilir." },
+            { "q": "Trendyol kampanya ve reklam takibi yapılır mı?", "a": "Evet. Kampanya uygunluğu, stok, fiyat, kârlılık, reklam bütçesi ve reklam performansı mağaza yönetimi kapsamında değerlendirilebilir." },
+            { "q": "Bu hizmet satış garantisi verir mi?", "a": "Hayır. Ürün yükleme ve mağaza yönetimi satış garantisi vermez. Ancak ürünlerin daha düzenli yayına alınmasına ve mağaza operasyonunun daha profesyonel yönetilmesine yardımcı olur." },
+            { "q": "Mevcut ürünlerimi düzenleyebilir misiniz?", "a": "Evet. Mevcut Trendyol ürünleriniz başlık, açıklama, görsel, kategori, stok, fiyat ve varyant yapısı açısından incelenerek düzenleme ihtiyacı belirlenebilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Trendyol Ürünlerinizi Daha Düzenli Yayına Alalım, Mağazanızı Profesyonel Şekilde Yönetelim",
+        "body": "Trendyol mağazanızda ürün yükleme, stok, fiyat, sipariş, müşteri soruları ve kampanya süreçleri dağınık ilerliyorsa pazaryeri satış fırsatlarını kaçırıyor olabilirsiniz. {{appName}} Trendyol Ürün Yükleme ve Mağaza Yönetimi hizmeti ile ürünlerinizi daha düzenli yayına alalım, mağazanızın günlük operasyonlarını takip edelim ve Trendyol satış sürecinizi daha profesyonel hale getirelim.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

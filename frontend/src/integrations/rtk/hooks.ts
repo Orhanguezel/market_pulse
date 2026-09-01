@@ -9,6 +9,7 @@ export * from './public/auth.endpoints';
 // Public content
 export * from './public/reviews.public.endpoints';
 export * from './public/storage_public.endpoints';
+export * from './public/storage_user.endpoints';
 export * from './public/kvkk.endpoints';
 export * from './public/custom_pages.endpoints';
 export * from './public/sliders.endpoints';
@@ -29,6 +30,7 @@ export * from './public/profiles.endpoints';
 export * from './public/user_roles.endpoints';
 export * from './public/health.endpoints';
 export * from './public/geocode.endpoints';
+export * from './public/entitlements.endpoints';
 
 // Subscriptions / orders
 export * from './public/subscriptions.endpoints';
@@ -36,3 +38,10 @@ export * from './public/orders.endpoints';
 
 // Amazon scan (public SaaS)
 export * from './public/amazon_scan.endpoints';
+export * from './public/decision-maker.endpoints';
+export * from './public/lead-machine.endpoints';
+export * from './public/outreach.endpoints';
+export * from './public/mail-accounts.endpoints';
+export * from './public/market.endpoints';
+export * from './public/crm.endpoints';
+export * from './public/workspace.endpoints';

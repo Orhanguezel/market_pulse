@@ -16,15 +16,19 @@ import {
   ClipboardCheck,
   Clock,
   Code2,
+  Columns3,
   Database,
+  Grid3X3,
   FileSearch,
   Flame,
+  Globe2,
   HardDrive,
   Mail,
   MapPin,
   Radar,
   ScanLine,
   Search,
+  Send,
   Settings,
   SlidersHorizontal,
   UserCheck,
@@ -70,28 +74,37 @@ export type AdminNavItemKey =
   | 'storage'
   | 'db'
   | 'external_db'
+  | 'tenants'
+  | 'modules'
+  | 'platform_settings'
   | 'audit'
   | 'profile'
   | 'market_pulse'
   | 'market_targets'
   | 'market_leads'
   | 'market_lead_candidates'
+  | 'market_decision_makers'
   | 'market_lead_scan'
   | 'market_lead_amazon'
   | 'market_lead_b2b'
+  | 'market_lead_customs'
   | 'market_lead_fair'
   | 'market_lead_fair_day'
   | 'market_lead_icp'
   | 'market_lead_outreach'
   | 'market_outreach_campaigns'
+  | 'market_lead_bulk_lists'
   | 'market_lead_learning'
   | 'market_signals'
   | 'market_reports'
   | 'market_test_center'
   | 'market_developer_notes'
-  | 'market_docs';
+  | 'market_docs'
+  | 'crm_pipeline'
+  | 'crm_accounts'
+  | 'crm_contacts';
 
-export type AdminNavGroupKey = 'general' | 'system' | 'market';
+export type AdminNavGroupKey = 'general' | 'system' | 'market' | 'crm';
 
 export type AdminNavConfigItem = {
   key: AdminNavItemKey;
@@ -128,6 +141,9 @@ export const adminNavConfig: AdminNavConfigGroup[] = [
     items: [
       { key: 'notifications', url: '/admin/notifications', icon: Bell, badgeKey: 'notifications_unread' },
       { key: 'site_settings', url: '/admin/site-settings', icon: Settings },
+      { key: 'tenants', url: '/admin/tenants', icon: Building2 },
+      { key: 'modules', url: '/admin/modules', icon: Grid3X3 },
+      { key: 'platform_settings', url: '/admin/platform-settings', icon: Globe2 },
       { key: 'storage', url: '/admin/storage', icon: HardDrive, developerOnly: true },
       { key: 'db', url: '/admin/db', icon: Database, developerOnly: true },
       { key: 'external_db', url: '/admin/external-db', icon: Database, developerOnly: true },
@@ -143,12 +159,15 @@ export const adminNavConfig: AdminNavConfigGroup[] = [
       { key: 'market_leads',            url: '/admin/market/leads',                       icon: Users },
       { key: 'market_lead_scan',        url: '/admin/market/lead-machine/scan',          icon: ScanLine },
       { key: 'market_lead_candidates',  url: '/admin/market/lead-machine/candidates',     icon: Flame, badgeKey: 'lead_candidates_pending' },
+      { key: 'market_decision_makers',   url: '/admin/market/lead-machine/decision-makers', icon: Search },
       { key: 'market_lead_amazon',      url: '/admin/market/lead-machine/amazon',         icon: Search, developerOnly: true },
       { key: 'market_lead_b2b',         url: '/admin/market/lead-machine/b2b',            icon: Building2, developerOnly: true },
+      { key: 'market_lead_customs',     url: '/admin/market/lead-machine/customs',        icon: Database },
       { key: 'market_lead_fair',        url: '/admin/market/lead-machine/fair',           icon: MapPin, developerOnly: true },
       { key: 'market_lead_fair_day',    url: '/admin/market/lead-machine/fair-day',       icon: CalendarDays },
       { key: 'market_lead_outreach',    url: '/admin/market/lead-machine/outreach',       icon: Mail },
       { key: 'market_outreach_campaigns', url: '/admin/market/lead-machine/outreach-campaigns', icon: Settings },
+      { key: 'market_lead_bulk_lists',  url: '/admin/market/lead-machine/outreach/lists',  icon: Send },
       { key: 'market_lead_learning',    url: '/admin/market/lead-machine/learning',       icon: Brain },
       { key: 'market_targets',          url: '/admin/market/targets',                     icon: Building2 },
       { key: 'market_signals',          url: '/admin/market/signals',                     icon: Activity },
@@ -156,6 +175,15 @@ export const adminNavConfig: AdminNavConfigGroup[] = [
       { key: 'market_test_center',      url: '/admin/market/test-center',                 icon: ClipboardCheck, developerOnly: true },
       { key: 'market_developer_notes',  url: '/admin/market/developer-notes',             icon: Code2,          developerOnly: true },
       { key: 'market_docs',             url: '/admin/market/docs',                        icon: BookOpenText,   developerOnly: true },
+    ],
+  },
+  {
+    id: 4,
+    key: 'crm',
+    items: [
+      { key: 'crm_pipeline', url: '/admin/crm/pipeline', icon: Columns3 },
+      { key: 'crm_accounts', url: '/admin/crm/accounts', icon: Building2 },
+      { key: 'crm_contacts', url: '/admin/crm/contacts', icon: Users },
     ],
   },
 ];
@@ -174,32 +202,42 @@ const FALLBACK_TITLES: Record<AdminNavItemKey, string> = {
   storage: 'Dosya Yöneticisi',
   db: 'Veritabanı',
   external_db: 'Harici Veritabanları',
+  tenants: 'Tenant Yönetimi',
+  modules: 'Modüller',
+  platform_settings: 'Platform Ayarları',
   audit: 'Denetim Kayıtları',
   profile: 'Profil',
   market_pulse:            'Ana Ekran',
   market_targets:          'Hedef Firmalar',
   market_leads:            'Lead Pipeline',
   market_lead_candidates:  'Lead Adayları',
+  market_decision_makers:  'Karar Vericiler',
   market_lead_scan:        'Lead Tarama',
   market_lead_amazon:      'Amazon Arama',
   market_lead_b2b:         'B2B Arama',
+  market_lead_customs:     'Gümrük Verisi',
   market_lead_fair:        'Fuar Tarama',
   market_lead_fair_day:    'Fuar Günü',
   market_lead_icp:         'ICP Profilleri',
   market_lead_outreach:    'Outreach Taslakları',
   market_outreach_campaigns: 'Outreach Kampanyaları',
+  market_lead_bulk_lists:  'Toplu Liste',
   market_lead_learning:    'Öğrenme Raporu',
   market_signals:          'Sinyaller',
   market_reports:          'Raporlar',
   market_test_center:      'Test Merkezi',
   market_developer_notes:  'Yazılımcı Notları',
   market_docs:             'Dokümantasyon',
+  crm_pipeline:            'CRM Pipeline',
+  crm_accounts:            'Hesaplar',
+  crm_contacts:            'Kontaklar',
 };
 
 const FALLBACK_LABELS: Record<AdminNavGroupKey, string> = {
   general: 'Genel',
   system: 'Sistem',
   market: 'Market Pulse',
+  crm: 'CRM',
 };
 
 function buildGroupItems(

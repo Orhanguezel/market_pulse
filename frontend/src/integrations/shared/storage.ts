@@ -18,6 +18,10 @@ export type StorageAsset = {
   metadata: StorageMeta;
   created_at: string;
   updated_at: string;
+  user_id?: string | null;
+  provider?: string;
+  provider_resource_type?: string | null;
+  provider_format?: string | null;
 };
 
 export type ApiStorageAsset = Omit<

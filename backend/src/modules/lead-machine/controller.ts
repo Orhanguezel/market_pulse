@@ -1,8 +1,12 @@
-import type { FastifyReply, RouteHandler } from 'fastify';
+import type { FastifyReply, FastifyRequest, RouteHandler } from 'fastify';
 import { pool } from '@/db/client';
+import { runWithTenant, runWithTenantAndUser, getRequestTenantKey } from '@/core/tenant-context';
+import { getActiveTenantKey, getActiveUserId, getRequiredTenantKey, getRequiredUserId } from '@/modules/_shared';
+import { checkAndConsumeDailyUsage, type DailyUsageType } from '@/modules/public-api/quota.repository';
 import { approveCandidateToMarketLead } from './_shared/candidate.helpers';
 import {
   createSearchJob,
+  deleteSearchJob,
   getCandidate,
   getSearchJob,
   insertCandidate,
@@ -17,9 +21,18 @@ import { runAmazonJob } from './amazon/amazon.job';
 import { getLatestAmazonRiskReport, getAmazonScanProducts } from './amazon/risk-report.service';
 import { rescoreForJob } from './amazon/rescore.service';
 import { runB2bJob } from './b2b/b2b.job';
+import { runCustomsJob } from './customs/customs.job';
+import {
+  createCustomsEntity,
+  deleteCustomsEntity,
+  getCustomsIntelligenceSummary,
+  listCustomsEntities,
+  listCustomsEvidence,
+  type CustomsAliasMatchType,
+  type CustomsEntityType,
+} from './customs/customs-intelligence.repository';
 import { runFairJob } from './fair/fair.job';
 import { generateFairBriefingPdf, listFairBriefingCandidateIdsForDay } from './fair/briefing.service';
-import { buildGenericFairRunnerParams } from './fair/fair.runner';
 import {
   createIcpProfile,
   deleteIcpProfile,
@@ -28,8 +41,12 @@ import {
   updateIcpProfile,
 } from './icp/icp.repository';
 import { enrichCandidate, listCandidateEnrichment } from './enrichment/enrichment.service';
+import { enrichCandidateDecisionMakers } from './decision-maker/candidate-enrichment.service';
 import {
+  createLinkedInSequence,
+  generateLinkedInTemplates,
   generateOutreachEmail,
+  listLinkedInSequence,
   listOutreachDrafts,
   sendOutreachDraft,
   trackOutreachOpen,
@@ -69,17 +86,49 @@ function runInBackground(task: Promise<unknown>) {
 }
 
 function queueCandidateEnrichment(candidateId: string) {
-  setTimeout(() => runInBackground(enrichCandidate(candidateId)), 0);
+  // Tenant'i request context'inde yakala; setTimeout + fire-and-forget ALS store'u kaybeder.
+  const tenantKey = getRequestTenantKey();
+  const userId = getActiveUserId();
+  setTimeout(() => runInBackground(
+    tenantKey && userId
+      ? runWithTenantAndUser(tenantKey, userId, () => enrichCandidate(candidateId))
+      : tenantKey ? runWithTenant(tenantKey, () => enrichCandidate(candidateId)) : enrichCandidate(candidateId),
+  ), 0);
+}
+
+function callbackTenantKey(body: Record<string, unknown>): string | null {
+  return typeof body.tenant_key === 'string' && /^[a-z0-9_-]{1,64}$/i.test(body.tenant_key) ? body.tenant_key : null;
+}
+
+/**
+ * Owner-scope, route kaydindaki `config.leadMachineScope` bayragindan okunur.
+ * (URL string'ine bakmak — !url.includes('/admin/') — mount prefix degisirse
+ * sessizce tenant-geneli veriye dusuyordu.) Bayrak yoksa admin/tenant-geneli kabul edilir.
+ */
+function isUserRoute(req: FastifyRequest): boolean {
+  return req.routeOptions?.config?.leadMachineScope === 'user';
+}
+
+function ownerUserIdForRoute(req: FastifyRequest): string | null {
+  return isUserRoute(req) ? getRequiredUserId() : null;
+}
+
+async function consumeDailyUsageForRoute(req: FastifyRequest, usageType: DailyUsageType, amount = 1) {
+  if (!isUserRoute(req)) return null;
+  const result = await checkAndConsumeDailyUsage(getRequiredUserId(), usageType, amount);
+  return result.allowed ? null : result;
 }
 
 export const listLeadCandidates: RouteHandler<{ Querystring: unknown }> = async (req, reply) => {
   const q = asRecord(req.query);
   const limit = Math.min(100, Math.max(1, Number(q.limit ?? 25)));
   const page = Math.max(1, Number(q.page ?? 1));
+  const ownerUserId = ownerUserIdForRoute(req);
   const result = await listCandidates({
     channel: typeof q.channel === 'string' ? q.channel : undefined,
     status: typeof q.status === 'string' ? q.status : undefined,
     jobId: typeof q.job_id === 'string' ? q.job_id : undefined,
+    ownerUserId,
     limit,
     offset: (page - 1) * limit,
   });
@@ -102,83 +151,166 @@ export const reviewCandidate: RouteHandler<{ Params: { id: string }; Body: unkno
     typeof body.reject_reason === 'string' ? body.reject_reason : null,
     null,
     rejectTags?.length ? rejectTags : null,
+    ownerUserIdForRoute(req),
   );
   if (!candidate) return reply.code(404).send({ error: { message: 'not_found' } });
   if (status === 'approved' || status === 'favorite') queueCandidateEnrichment(req.params.id);
   return candidate;
 };
 
+export const reviewCandidatesBulk: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  const ids = Array.isArray(body.candidate_ids)
+    ? [...new Set(body.candidate_ids.filter((id): id is string => typeof id === 'string' && id.length > 0))].slice(0, 500)
+    : [];
+  const action = body.action;
+  const status: CandidateStatus | null = action === 'approve' ? 'approved'
+    : action === 'reject' ? 'rejected'
+    : action === 'favorite' ? 'favorite'
+    : null;
+  if (!ids.length || !status) return reply.code(400).send({ error: { message: 'invalid_bulk_review' } });
+
+  const tenantKey = await getActiveTenantKey();
+  const ownerUserId = ownerUserIdForRoute(req);
+  const placeholders = ids.map(() => '?').join(',');
+  const where = [`tenant_key = ?`, `id IN (${placeholders})`];
+  const values: unknown[] = [
+    status,
+    typeof body.reject_reason === 'string' ? body.reject_reason : null,
+    getActiveUserId() ?? null,
+    tenantKey,
+    ...ids,
+  ];
+  if (ownerUserId) { where.push('owner_user_id = ?'); values.push(ownerUserId); }
+  const connection = await pool.getConnection();
+  try {
+    await connection.beginTransaction();
+    const [result] = await connection.execute(
+      `UPDATE lead_candidates SET status = ?, reject_reason = ?, reviewed_by = ?, reviewed_at = CURRENT_TIMESTAMP WHERE ${where.join(' AND ')}`,
+      values as never[],
+    );
+    await connection.commit();
+    return { updated: Number((result as { affectedRows?: number }).affectedRows ?? 0) };
+  } catch (error) {
+    await connection.rollback();
+    throw error;
+  } finally {
+    connection.release();
+  }
+};
+
 export const approveToLead: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const candidate = await getCandidate(req.params.id);
+  const candidate = await getCandidate(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
   if (!candidate) return reply.code(404).send({ error: { message: 'not_found' } });
   const lead = await approveCandidateToMarketLead(candidate);
-  await updateCandidateReview(req.params.id, 'approved');
+  await updateCandidateReview(req.params.id, 'approved', null, null, null, ownerUserIdForRoute(req));
   queueCandidateEnrichment(req.params.id);
   return reply.code(201).send(lead);
+};
+
+export const createLeadCandidate: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  const name = typeof body.name === 'string' ? body.name.trim() : '';
+  if (!name) return reply.code(400).send({ error: { message: 'name_required' } });
+  const userId = getRequiredUserId();
+  const channel = typeof body.channel === 'string' ? body.channel as LeadChannel : 'icp_match';
+  const icpId = typeof body.icp_id === 'string' ? body.icp_id : null;
+  const jobId = typeof body.job_id === 'string'
+    ? body.job_id
+    : (await createSearchJob(channel, { source: 'manual' }, icpId, userId))?.id;
+  if (!jobId) return reply.code(500).send({ error: { message: 'job_create_failed' } });
+  const id = await insertCandidate({
+    jobId,
+    channel,
+    icpId,
+    name,
+    website: typeof body.website === 'string' ? body.website : null,
+    country: typeof body.country === 'string' ? body.country : null,
+    city: typeof body.city === 'string' ? body.city : null,
+    phone: typeof body.phone === 'string' ? body.phone : null,
+    email: typeof body.email === 'string' ? body.email : null,
+    contactName: typeof body.contact_name === 'string' ? body.contact_name : null,
+    rawData: body.raw_data ?? body,
+    aiSummary: typeof body.ai_summary === 'string' ? body.ai_summary : null,
+    leadScore: typeof body.lead_score === 'number' ? body.lead_score : null,
+    decision: typeof body.decision === 'string' ? body.decision : null,
+    ownerUserId: userId,
+  });
+  const candidate = await getCandidate(id);
+  return reply.code(201).send(candidate);
 };
 
 export const scraperCallback: RouteHandler<{ Body: unknown }> = async (req, reply) => {
   const raw = req.headers['x-scraper-signature'] ?? req.headers['x-signature'];
   const signature = Array.isArray(raw) ? raw[0] : raw;
-  const rawBody = JSON.stringify(req.body ?? {});
-  if (!verifyScraperWebhook(Buffer.from(rawBody), signature, process.env.SCRAPER_CALLBACK_SECRET ?? '')) {
+  if (!req.rawBody || !verifyScraperWebhook(req.rawBody, signature, process.env.SCRAPER_CALLBACK_SECRET ?? '')) {
     return reply.code(401).send({ error: { message: 'invalid_signature' } });
   }
   const body = asRecord(req.body);
   const jobId = typeof body.job_id === 'string' ? body.job_id : '';
   if (!jobId) return reply.code(400).send({ error: { message: 'missing_job_id' } });
-  const job = await getSearchJob(jobId);
-  if (!job) return reply.code(404).send({ error: { message: 'job_not_found' } });
-  let inserted = 0;
-  const result = asRecord(body.result);
-  const candidates = Array.isArray(result.candidates) ? result.candidates : [];
-  for (const item of candidates) {
-    const candidate = asRecord(item);
-    if (typeof candidate.name !== 'string') continue;
-    await insertCandidate({
-      jobId,
-      channel: job.channel,
-      icpId: job.icp_id,
-      name: candidate.name,
-      website: typeof candidate.website === 'string' ? candidate.website : null,
-      country: typeof candidate.country === 'string' ? candidate.country : null,
-      city: typeof candidate.city === 'string' ? candidate.city : null,
-      phone: typeof candidate.phone === 'string' ? candidate.phone : null,
-      email: typeof candidate.email === 'string' ? candidate.email : null,
-      contactName: typeof candidate.contact_name === 'string' ? candidate.contact_name : null,
-      rawData: candidate.raw_data ?? candidate,
-      aiSummary: typeof candidate.ai_summary === 'string' ? candidate.ai_summary : null,
-      leadScore: typeof candidate.lead_score === 'number' ? candidate.lead_score : 0,
+  const handle = async () => {
+    const job = await getSearchJob(jobId);
+    if (!job) return reply.code(404).send({ error: { message: 'job_not_found' } });
+    let inserted = 0;
+    const result = asRecord(body.result);
+    const candidates = Array.isArray(result.candidates) ? result.candidates : [];
+    for (const item of candidates) {
+      const candidate = asRecord(item);
+      if (typeof candidate.name !== 'string') continue;
+      await insertCandidate({
+        jobId,
+        channel: job.channel,
+        icpId: job.icp_id,
+        name: candidate.name,
+        website: typeof candidate.website === 'string' ? candidate.website : null,
+        country: typeof candidate.country === 'string' ? candidate.country : null,
+        city: typeof candidate.city === 'string' ? candidate.city : null,
+        phone: typeof candidate.phone === 'string' ? candidate.phone : null,
+        email: typeof candidate.email === 'string' ? candidate.email : null,
+        contactName: typeof candidate.contact_name === 'string' ? candidate.contact_name : null,
+        rawData: candidate.raw_data ?? candidate,
+        aiSummary: typeof candidate.ai_summary === 'string' ? candidate.ai_summary : null,
+        leadScore: typeof candidate.lead_score === 'number' ? candidate.lead_score : 0,
+        ownerUserId: job.owner_user_id,
+      });
+      inserted += 1;
+    }
+    await updateSearchJob(jobId, {
+      status: body.status === 'failed' ? 'failed' : body.status === 'completed' || body.status === 'done' ? 'done' : 'running',
+      resultCount: inserted || undefined,
+      errorMsg: typeof body.error === 'string' ? body.error : null,
+      finished: body.status === 'completed' || body.status === 'done' || body.status === 'failed',
     });
-    inserted += 1;
-  }
-  await updateSearchJob(jobId, {
-    status: body.status === 'failed' ? 'failed' : body.status === 'completed' ? 'done' : 'running',
-    resultCount: inserted || undefined,
-    errorMsg: typeof body.error === 'string' ? body.error : null,
-    finished: body.status === 'completed' || body.status === 'failed',
-  });
-  return { ok: true, inserted };
+    return { ok: true, inserted };
+  };
+  const tenantKey = callbackTenantKey(body);
+  if (!tenantKey) return reply.code(400).send({ error: { message: 'invalid_tenant' } });
+  const [tenantRows] = await pool.execute('SELECT tenant_key FROM tenants WHERE tenant_key = ? AND status = ? LIMIT 1', [tenantKey, 'active']);
+  if (!(tenantRows as Array<{ tenant_key: string }>).length) return reply.code(403).send({ error: { message: 'tenant_not_allowed' } });
+  return runWithTenant(tenantKey, handle);
 };
 
 export const rejectionPatterns: RouteHandler = async () => {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
     `SELECT channel, LOWER(TRIM(reject_reason)) AS pattern, COUNT(*) AS count, MAX(reviewed_at) AS last_seen
      FROM lead_candidates
-     WHERE status = 'rejected' AND reject_reason IS NOT NULL AND reject_reason <> ''
+     WHERE tenant_key = ? AND status = 'rejected' AND reject_reason IS NOT NULL AND reject_reason <> ''
      GROUP BY channel, LOWER(TRIM(reject_reason))
      ORDER BY count DESC
      LIMIT 50`,
+    [tenantKey],
   );
   return rows;
 };
 
 export const aggregateRejectionPatternsHandler: RouteHandler = async () => aggregateRejectionPatterns();
 
-export const listIcp: RouteHandler = async () => listIcpProfiles();
+export const listIcp: RouteHandler = async (req) => listIcpProfiles(ownerUserIdForRoute(req));
 
 export const getIcp: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const profile = await getIcpProfile(req.params.id);
+  const profile = await getIcpProfile(req.params.id, ownerUserIdForRoute(req));
   if (!profile) return reply.code(404).send({ error: { message: 'not_found' } });
   return profile;
 };
@@ -195,14 +327,16 @@ export const updateIcp: RouteHandler<{ Params: { id: string }; Body: unknown }> 
     name: typeof body.name === 'string' ? body.name : undefined,
     definition: body.definition,
     is_active: typeof body.is_active === 'boolean' ? body.is_active : undefined,
-  });
+  }, ownerUserIdForRoute(req));
   if (!profile) return reply.code(404).send({ error: { message: 'not_found' } });
   return profile;
 };
 
-export const deleteIcp: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+export const deleteIcp: RouteHandler<{ Params: { id: string }; Querystring: { force?: string } }> = async (req, reply) => {
+  const force = req.query?.force === 'true' || req.query?.force === '1';
   try {
-    await deleteIcpProfile(req.params.id);
+    const deleted = await deleteIcpProfile(req.params.id, ownerUserIdForRoute(req), force);
+    if (!deleted) return reply.code(404).send({ error: { message: 'not_found' } });
     return reply.code(204).send();
   } catch (e) {
     if (e instanceof Error && 'statusCode' in e) return reply.code(Number((e as Error & { statusCode: number }).statusCode)).send({ error: { message: e.message } });
@@ -211,35 +345,65 @@ export const deleteIcp: RouteHandler<{ Params: { id: string } }> = async (req, r
 };
 
 async function createAndRunJob(channel: LeadChannel, body: Record<string, unknown>) {
+  // Aktif tenant'i request context'inde YAKALA ve background job'u runWithTenant ile sar.
+  // runInBackground (fire-and-forget) request lifecycle'i disina ciktigindan, enterWith ile
+  // set edilen ALS store background devamlarina tasinmiyordu -> getActiveTenantKey() env
+  // TENANT_KEY'e dusup lead'ler yanlis tenant'a (deploy default) yaziliyordu. runWithTenant
+  // (AsyncLocalStorage.run) yeni scope acip tum await zincirine dogru tenant'i tasir.
+  const tenantKey = getRequiredTenantKey(); // switcher zorunlu: tenant secilmeden tarama baslamaz
   const icpId = typeof body.icp_id === 'string' ? body.icp_id : null;
-  const job = await createSearchJob(channel, body, icpId);
+  const ownerUserId = getActiveUserId() ?? null;
+  if (icpId && ownerUserId && !await getIcpProfile(icpId, ownerUserId)) {
+    const error = new Error('ICP_NOT_FOUND') as Error & { statusCode: number };
+    error.statusCode = 404;
+    throw error;
+  }
+  const job = await createSearchJob(channel, body, icpId, ownerUserId);
   if (!job) throw new Error('JOB_CREATE_FAILED');
-  if (channel === 'amazon') runInBackground(runAmazonJob(job.id));
-  if (channel === 'b2b_directory') runInBackground(runB2bJob(job.id));
-  if (channel === 'trade_fair') runInBackground(runFairJob(job.id));
+  const jobOwnerUserId = job.owner_user_id;
+  const runJob = (task: () => Promise<unknown>) => jobOwnerUserId
+    ? runWithTenantAndUser(tenantKey, jobOwnerUserId, task)
+    : runWithTenant(tenantKey, task);
+  if (channel === 'amazon') runInBackground(runJob(() => runAmazonJob(job.id)));
+  if (channel === 'b2b_directory') runInBackground(runJob(() => runB2bJob(job.id)));
+  if (channel === 'trade_fair') runInBackground(runJob(() => runFairJob(job.id)));
+  if (channel === 'customs') runInBackground(runJob(() => runCustomsJob(job.id)));
   return job;
 }
 
-export const startAmazonJob: RouteHandler<{ Body: unknown }> = async (req, reply) => reply.code(201).send(await createAndRunJob('amazon', asRecord(req.body)));
+export const startAmazonJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const quota = await consumeDailyUsageForRoute(req, 'lead_job');
+  if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
+  return reply.code(201).send(await createAndRunJob('amazon', asRecord(req.body)));
+};
 export const startAmazonScan: RouteHandler<{ Body: unknown }> = async (req, reply) => {
   const body = asRecord(req.body);
   if (typeof body.keyword !== 'string' || !body.keyword.trim()) {
     return reply.code(400).send({ error: { message: 'keyword_required' } });
   }
+  const quota = await consumeDailyUsageForRoute(req, 'lead_job');
+  if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
   return reply.code(201).send(await createAndRunJob('amazon', {
     ...body,
     keyword: body.keyword.trim(),
     marketplace: typeof body.marketplace === 'string' ? body.marketplace : 'com',
   }));
 };
-export const listAmazonJobs: RouteHandler = async () => {
+export const listAmazonJobs: RouteHandler = async (req) => {
+  const tenantKey = await getActiveTenantKey();
+  // SIZINTIYDI: owner filtresi yoktu — kullanici baska kullanicinin Amazon islerini
+  // goruyordu (ve silemiyordu, cunku DELETE owner-scope'lu → 404).
+  const ownerUserId = ownerUserIdForRoute(req);
+  const ownerClause = ownerUserId ? ' AND lsj.owner_user_id = ?' : '';
+  const values: unknown[] = ownerUserId ? [tenantKey, ownerUserId] : [tenantKey];
   const [rows] = await pool.execute(
     `SELECT lsj.*, ars.decision, ars.composite_score, ars.data_points
      FROM lead_search_jobs lsj
-     LEFT JOIN amazon_risk_scores ars ON ars.job_id = lsj.id
-     WHERE lsj.channel = 'amazon'
+     LEFT JOIN amazon_risk_scores ars ON ars.tenant_key = lsj.tenant_key AND ars.job_id = lsj.id
+     WHERE lsj.tenant_key = ? AND lsj.channel = 'amazon'${ownerClause}
      ORDER BY lsj.created_at DESC
-     LIMIT 100`
+     LIMIT 100`,
+    values as never[],
   );
   return (rows as any[]).map(row => {
     const job = parseJsonField(row, 'params');
@@ -254,35 +418,145 @@ export const listAmazonJobs: RouteHandler = async () => {
   });
 };
 export const getAmazonJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const job = await getSearchJob(req.params.id);
+  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
   if (!job || job.channel !== 'amazon') return reply.code(404).send({ error: { message: 'not_found' } });
   return job;
 };
 
 export const getAmazonScan: RouteHandler<{ Params: { jobId: string } }> = async (req, reply) => {
-  const [rows] = await pool.execute('SELECT * FROM amazon_scan_jobs WHERE id = ? LIMIT 1', [req.params.jobId]);
+  const tenantKey = await getActiveTenantKey();
+  const ownerUserId = ownerUserIdForRoute(req);
+
+  // amazon_scan_jobs'ta owner_user_id kolonu yok; satir ana is kaydiyla AYNI id'yi
+  // tasiyor, o yuzden sahiplik lead_search_jobs uzerinden dogrulanir (IDOR kapandi).
+  const [rows] = ownerUserId
+    ? await pool.execute(
+        `SELECT asj.* FROM amazon_scan_jobs asj
+           JOIN lead_search_jobs lsj ON lsj.tenant_key = asj.tenant_key AND lsj.id = asj.id
+          WHERE asj.tenant_key = ? AND asj.id = ? AND lsj.owner_user_id = ? LIMIT 1`,
+        [tenantKey, req.params.jobId, ownerUserId],
+      )
+    : await pool.execute(
+        'SELECT * FROM amazon_scan_jobs WHERE tenant_key = ? AND id = ? LIMIT 1',
+        [tenantKey, req.params.jobId],
+      );
   const row = (rows as Record<string, unknown>[])[0];
   if (!row) return reply.code(404).send({ error: { message: 'not_found' } });
   return row;
 };
 
-export const startB2bJob: RouteHandler<{ Body: unknown }> = async (req, reply) => reply.code(201).send(await createAndRunJob('b2b_directory', asRecord(req.body)));
-export const listB2bJobs: RouteHandler = async () => listSearchJobs('b2b_directory');
-
-export const startFairJob: RouteHandler<{ Body: unknown }> = async (req, reply) => reply.code(201).send(await createAndRunJob('trade_fair', asRecord(req.body)));
-export const listFairJobs: RouteHandler = async () => listSearchJobs('trade_fair');
-export const fairSuggestions: RouteHandler = async () => [];
-export const startGenericFairRunner: RouteHandler<{ Body: unknown }> = async (req, reply) => {
-  try {
-    return reply.code(201).send(await createAndRunJob('trade_fair', { ...buildGenericFairRunnerParams(asRecord(req.body)) }));
-  } catch (e) {
-    if (e instanceof Error && (e.message === 'FAIR_URL_REQUIRED' || e.message === 'ICP_ID_REQUIRED')) {
-      return reply.code(400).send({ error: { message: e.message.toLowerCase() } });
-    }
-    throw e;
-  }
+export const startB2bJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const quota = await consumeDailyUsageForRoute(req, 'lead_job');
+  if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
+  return reply.code(201).send(await createAndRunJob('b2b_directory', asRecord(req.body)));
+};
+export const listB2bJobs: RouteHandler = async (req) => listSearchJobs('b2b_directory', { ownerUserId: ownerUserIdForRoute(req) });
+export const getB2bJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
+  if (!job || job.channel !== 'b2b_directory') return reply.code(404).send({ error: { message: 'not_found' } });
+  return job;
 };
 
+export const startCustomsJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const quota = await consumeDailyUsageForRoute(req, 'lead_job');
+  if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
+  return reply.code(201).send(await createAndRunJob('customs', asRecord(req.body)));
+};
+export const listCustomsJobs: RouteHandler = async (req) => listSearchJobs('customs', { ownerUserId: ownerUserIdForRoute(req) });
+export const getCustomsJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
+  if (!job || job.channel !== 'customs') return reply.code(404).send({ error: { message: 'not_found' } });
+  return job;
+};
+
+function customsFilters(value: unknown) {
+  const query = asRecord(value);
+  const date = (key: string) => typeof query[key] === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(query[key] as string)
+    ? String(query[key])
+    : undefined;
+  return {
+    hsPrefix: typeof query.hs_prefix === 'string' ? query.hs_prefix.trim().slice(0, 20) : undefined,
+    dateFrom: date('date_from'),
+    dateTo: date('date_to'),
+  };
+}
+
+export const listCustomsTrackedEntities: RouteHandler = async () => {
+  return listCustomsEntities(await getActiveTenantKey());
+};
+
+export const createCustomsTrackedEntity: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  const entityType: CustomsEntityType | null = body.entity_type === 'own' || body.entity_type === 'competitor'
+    ? body.entity_type
+    : null;
+  const name = typeof body.name === 'string' ? body.name.trim() : '';
+  if (!entityType || !name) return reply.code(400).send({ error: { message: 'name_and_entity_type_required' } });
+  const aliases = Array.isArray(body.aliases)
+    ? body.aliases.flatMap((value) => {
+      if (typeof value === 'string' && value.trim()) return [{ alias: value.trim(), matchType: 'exact' as const }];
+      const item = asRecord(value);
+      const alias = typeof item.alias === 'string' ? item.alias.trim() : '';
+      const matchType: CustomsAliasMatchType = item.match_type === 'prefix' ? 'prefix' : 'exact';
+      return alias ? [{ alias, matchType }] : [];
+    })
+    : [];
+  const entity = await createCustomsEntity(await getActiveTenantKey(), {
+    entityType,
+    name,
+    country: typeof body.country === 'string' ? body.country : null,
+    aliases,
+  });
+  return reply.code(201).send(entity);
+};
+
+export const deleteCustomsTrackedEntity: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const deleted = await deleteCustomsEntity(await getActiveTenantKey(), req.params.id);
+  return deleted ? reply.code(204).send() : reply.code(404).send({ error: { message: 'not_found' } });
+};
+
+export const customsIntelligenceSummary: RouteHandler<{ Querystring: unknown }> = async (req) => {
+  return getCustomsIntelligenceSummary(await getActiveTenantKey(), customsFilters(req.query));
+};
+
+export const customsIntelligenceEvidence: RouteHandler<{ Params: { entityId: string }; Querystring: unknown }> = async (req, reply) => {
+  const query = asRecord(req.query);
+  const page = Math.max(1, Number(query.page ?? 1));
+  const limit = Math.min(100, Math.max(1, Number(query.limit ?? 25)));
+  const result = await listCustomsEvidence(await getActiveTenantKey(), req.params.entityId, {
+    ...customsFilters(query),
+    limit,
+    offset: (page - 1) * limit,
+  });
+  if (!result) return reply.code(404).send({ error: { message: 'not_found' } });
+  reply.header('x-total-count', String(result.count));
+  return result;
+};
+
+export const startFairJob: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const quota = await consumeDailyUsageForRoute(req, 'lead_job');
+  if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
+  return reply.code(201).send(await createAndRunJob('trade_fair', asRecord(req.body)));
+};
+export const listFairJobs: RouteHandler = async (req) => listSearchJobs('trade_fair', { ownerUserId: ownerUserIdForRoute(req) });
+export const getFairJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const job = await getSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
+  if (!job || job.channel !== 'trade_fair') return reply.code(404).send({ error: { message: 'not_found' } });
+  return job;
+};
+export const deleteLeadJob: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  try {
+    const deleted = await deleteSearchJob(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
+    if (!deleted) return reply.code(404).send({ error: { message: 'not_found' } });
+    return reply.code(204).send();
+  } catch (error) {
+    if (error instanceof Error && error.message === 'JOB_ACTIVE') {
+      return reply.code(409).send({ error: { message: 'job_active' } });
+    }
+    throw error;
+  }
+};
+export const fairSuggestions: RouteHandler = async () => [];
 function pdfReply(reply: FastifyReply, pdf: Buffer, filename: string) {
   return reply
     .header('Content-Type', 'application/pdf')
@@ -328,10 +602,65 @@ export const enrichBatch: RouteHandler<{ Body: unknown }> = async (req, reply) =
   return { queued: selected.length };
 };
 
-export const generateOutreach: RouteHandler<{ Params: { candidateId: string } }> = async (req, reply) => reply.code(201).send(await generateOutreachEmail(req.params.candidateId));
+export const enrichDecisionMakersBatch: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  const candidateIds = Array.isArray(body.candidate_ids)
+    ? body.candidate_ids.filter((id): id is string => typeof id === 'string' && id.trim().length > 0)
+    : undefined;
+  const titles = Array.isArray(body.titles)
+    ? body.titles.filter((title): title is string => typeof title === 'string' && title.trim().length > 0)
+    : undefined;
+  return enrichCandidateDecisionMakers({
+    candidate_ids: candidateIds,
+    job_id: typeof body.job_id === 'string' ? body.job_id : null,
+    icp_id: typeof body.icp_id === 'string' ? body.icp_id : null,
+    titles,
+    limit: Number(body.limit ?? 50),
+  });
+};
+
+export const generateOutreach: RouteHandler<{ Params: { candidateId: string } }> = async (req, reply) => reply.code(201).send(await generateOutreachEmail(req.params.candidateId, {
+  ownerUserId: ownerUserIdForRoute(req),
+}));
+export const generateLinkedInTemplatesHandler: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  try {
+    return reply.code(201).send(await generateLinkedInTemplates({
+      candidateId: typeof body.candidate_id === 'string' ? body.candidate_id : undefined,
+      context: asRecord(body.context),
+      language: typeof body.language === 'string' ? body.language : undefined,
+    }));
+  } catch (e) {
+    if (e instanceof Error && e.message === 'CANDIDATE_NOT_FOUND') return reply.code(404).send({ error: { message: 'not_found' } });
+    if (e instanceof Error && e.message === 'LINKEDIN_CONTEXT_REQUIRED') return reply.code(400).send({ error: { message: 'context_required' } });
+    throw e;
+  }
+};
+export const createLinkedInSequenceHandler: RouteHandler<{ Body: unknown }> = async (req, reply) => {
+  const body = asRecord(req.body);
+  try {
+    return reply.code(201).send(await createLinkedInSequence({
+      candidateId: typeof body.candidate_id === 'string' ? body.candidate_id : undefined,
+      context: asRecord(body.context),
+      language: typeof body.language === 'string' ? body.language : undefined,
+    }));
+  } catch (e) {
+    if (e instanceof Error && e.message === 'CANDIDATE_NOT_FOUND') return reply.code(404).send({ error: { message: 'not_found' } });
+    if (e instanceof Error && e.message === 'LINKEDIN_CONTEXT_REQUIRED') return reply.code(400).send({ error: { message: 'context_required' } });
+    throw e;
+  }
+};
+export const listLinkedInSequenceHandler: RouteHandler<{ Querystring: unknown }> = async (req) => {
+  const q = asRecord(req.query);
+  return listLinkedInSequence(typeof q.candidate_id === 'string' ? q.candidate_id : undefined);
+};
 export const listDrafts: RouteHandler<{ Querystring: unknown }> = async (req) => {
   const q = asRecord(req.query);
-  return listOutreachDrafts(typeof q.candidate_id === 'string' ? q.candidate_id : undefined, typeof q.market_lead_id === 'string' ? q.market_lead_id : undefined);
+  return listOutreachDrafts(
+    typeof q.candidate_id === 'string' ? q.candidate_id : undefined,
+    typeof q.market_lead_id === 'string' ? q.market_lead_id : undefined,
+    ownerUserIdForRoute(req),
+  );
 };
 export const updateDraft: RouteHandler<{ Params: { id: string }; Body: unknown }> = async (req, reply) => {
   const body = asRecord(req.body);
@@ -348,6 +677,8 @@ export const updateDraft: RouteHandler<{ Params: { id: string }; Body: unknown }
 export const sendDraft: RouteHandler<{ Params: { id: string }; Body: unknown }> = async (req, reply) => {
   const body = asRecord(req.body);
   try {
+    const quota = await consumeDailyUsageForRoute(req, 'email_send');
+    if (quota) return reply.code(429).send({ error: { message: 'daily_limit_reached', usage_type: quota.usage_type, plan: quota.quota.plan, daily_limit: quota.quota.daily_limit } });
     return await sendOutreachDraft(req.params.id, typeof body.to === 'string' ? body.to : null);
   } catch (e) {
     if (e instanceof Error && e.message === 'DRAFT_NOT_FOUND') {
@@ -371,7 +702,7 @@ export const openTrackingPixel: RouteHandler<{ Params: { id: string } }> = async
 };
 
 export const getLeadCandidate: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  const candidate = await getCandidate(req.params.id);
+  const candidate = await getCandidate(req.params.id, { ownerUserId: ownerUserIdForRoute(req) });
   if (!candidate) return reply.code(404).send({ error: { message: 'not_found' } });
   return candidate;
 };
@@ -417,8 +748,10 @@ export const getAmazonScanProductsList: RouteHandler<{ Params: { jobId: string }
 };
 
 export const getKeepaUsage: RouteHandler = async () => {
+  const tenantKey = await getActiveTenantKey();
   const [todayRows] = await pool.execute(
-    `SELECT budget_date, token_budget, tokens_used FROM amazon_keepa_daily_budget WHERE budget_date = CURDATE() LIMIT 1`,
+    `SELECT budget_date, token_budget, tokens_used FROM amazon_keepa_daily_budget WHERE tenant_key = ? AND budget_date = CURDATE() LIMIT 1`,
+    [tenantKey],
   );
   const todayRow = (todayRows as Array<{ budget_date: string; token_budget: string | number; tokens_used: string | number }>)[0] ?? null;
   const today = todayRow ? {
@@ -429,7 +762,8 @@ export const getKeepaUsage: RouteHandler = async () => {
   } : null;
 
   const [historyRows] = await pool.execute(
-    `SELECT budget_date, token_budget, tokens_used FROM amazon_keepa_daily_budget ORDER BY budget_date DESC LIMIT 7`,
+    `SELECT budget_date, token_budget, tokens_used FROM amazon_keepa_daily_budget WHERE tenant_key = ? ORDER BY budget_date DESC LIMIT 7`,
+    [tenantKey],
   );
   const history = (historyRows as Array<{ budget_date: string; token_budget: string | number; tokens_used: string | number }>).map(r => ({
     budget_date: String(r.budget_date).slice(0, 10),
@@ -442,7 +776,9 @@ export const getKeepaUsage: RouteHandler = async () => {
        SUM(status = 'pending')                                    AS pending,
        SUM(status = 'done' AND DATE(processed_at) = CURDATE())   AS done_today,
        SUM(status = 'failed')                                     AS failed_total
-     FROM amazon_keepa_queue`,
+     FROM amazon_keepa_queue
+     WHERE tenant_key = ?`,
+    [tenantKey],
   );
   const q = (queueRows as Array<{ pending: string | number | null; done_today: string | number | null; failed_total: string | number | null }>)[0] ?? {};
   const queue = {
@@ -460,7 +796,7 @@ export const feedbackApprovedStats: RouteHandler = async () => getApprovedStats(
 export const listRules: RouteHandler<{ Querystring: unknown }> = async (req) => {
   const q = asRecord(req.query);
   const icpId = typeof q.icp_id === 'string' ? q.icp_id : undefined;
-  return listScanRules(icpId);
+  return listScanRules(icpId, ownerUserIdForRoute(req));
 };
 
 export const createRule: RouteHandler<{ Body: unknown }> = async (req, reply) => {
@@ -474,12 +810,13 @@ export const createRule: RouteHandler<{ Body: unknown }> = async (req, reply) =>
     rule_type: typeof body.rule_type === 'string' ? body.rule_type : 'exclude_reject_tag',
     value: body.value.trim(),
     label: typeof body.label === 'string' ? body.label : null,
+    owner_user_id: ownerUserIdForRoute(req),
   });
   return reply.code(201).send(rule);
 };
 
 export const deleteRule: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
-  await deleteScanRule(req.params.id);
+  await deleteScanRule(req.params.id, ownerUserIdForRoute(req));
   return reply.code(204).send();
 };
 
@@ -533,9 +870,10 @@ export const deleteSavedSearchHandler: RouteHandler<{ Params: { id: string } }> 
 };
 
 export const runSavedSearchHandler: RouteHandler<{ Params: { id: string } }> = async (req, reply) => {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
-    'SELECT * FROM amazon_saved_searches WHERE id = ?',
-    [req.params.id],
+    'SELECT * FROM amazon_saved_searches WHERE tenant_key = ? AND id = ?',
+    [tenantKey, req.params.id],
   ) as [Array<{ keyword: string; marketplace: string }>, unknown];
   const saved = rows[0];
   if (!saved) return reply.code(404).send({ error: { message: 'not_found' } });

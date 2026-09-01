@@ -1,0 +1,351 @@
+{
+  "slug": "kurumsal-egitim-paketi",
+  "category": "egitim",
+  "module": "training",
+  "order": 50,
+  "icon": "GraduationCap",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Kurumsal Eğitim Paketi | Yapay Zeka, ChatGPT, CRM, LinkedIn, İhracat ve E-Ticaret Eğitimleri",
+        "description": "Kurumsal Eğitim Paketi ile şirketlere özel yapay zeka, ChatGPT, Claude Code, Gemini, Antigravity, CRM, LinkedIn, ihracat, e-ticaret, pazaryeri, mail marketing ve şirket yönetimi eğitimleri sunuyoruz.",
+        "ogTitle": "Kurumsal Eğitim Paketi | {{appName}}",
+        "ogDescription": "Şirketlere özel yapay zeka, ChatGPT, Claude Code, Gemini, Antigravity, CRM, LinkedIn, ihracat, e-ticaret, pazaryeri, mail marketing ve şirket yönetimi eğitimleri."
+      },
+      "hero": {
+        "eyebrow": "Kurumsal Eğitim",
+        "title": "Kurumsal Eğitim Paketi",
+        "lead": "Şirketinizin ekipleri yapay zeka araçlarını, CRM sistemlerini, LinkedIn’i, ihracat müşteri bulma yöntemlerini, e-ticaret ve pazaryeri süreçlerini, mail marketing çalışmalarını veya şirket yönetimi disiplinini daha bilinçli kullanmaya mı ihtiyaç duyuyor? Günümüzde işletmelerin yalnızca iyi ürün veya hizmet sunması yeterli değildir. Ekiplerin dijital araçları doğru kullanması, müşteri takibini sistemli yapması, yapay zekadan verimli yararlanması, LinkedIn ve mail marketing ile profesyonel iletişim kurması, ihracat süreçlerini anlaması, e-ticaret kanallarını yönetmesi ve şirket içi işleyişi daha düzenli hale getirmesi gerekir. Kurumsal Eğitim Paketi, şirketlerin kendi ekiplerine özel olarak planlanan, uygulamalı ve iş odaklı eğitimlerden oluşur. {{appName}} olarak şirketlere; yapay zeka, ChatGPT, Claude Code, Gemini, Antigravity, LinkedIn, LinkedIn Sales Navigator, CRM, ihracat, e-ticaret, pazaryeri, mail marketing, şirket yönetimi ve dijital dönüşüm konularında kurumsal eğitim desteği sunuyoruz. Amacımız, eğitimleri genel teorik anlatım olmaktan çıkarıp şirketinizin gerçek işi, sektörü, ekibi, müşteri yapısı ve hedefleri üzerinden uygulanabilir bilgiye dönüştürmektir.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Kurumsal Eğitim Paketi Nedir?",
+          "body": [
+            "Kurumsal Eğitim Paketi, şirketlerin çalışanlarına, yöneticilerine, satış ekiplerine, ihracat ekiplerine, pazarlama ekiplerine, e-ticaret ekiplerine ve yönetici adaylarına özel olarak hazırlanan uygulamalı eğitim paketidir.",
+            "Bu paket kapsamında eğitimler şirketin sektörüne, hedeflerine, çalışan seviyesine ve ihtiyaç duyduğu konu başlıklarına göre planlanır. Kurumsal Eğitim Paketi yalnızca bilgi aktarımı yapmayı hedeflemez. Asıl amaç, ekiplerin öğrendiği bilgileri günlük işlerinde kullanabilmesini sağlamaktır.",
+            "{{appName}}, kurumsal eğitim paketini şirketin ihtiyacına göre tek eğitim, çoklu eğitim programı veya dönemsel eğitim planı olarak hazırlayabilir.",
+            "Eğitimi sadece anlatım olmaktan çıkarın",
+            "Şirketinizin gerçek ürünleri, müşteri profili, satış süreci, ihracat hedefi, CRM yapısı ve dijital araç kullanım ihtiyacına göre uygulanabilir eğitim programı oluşturun."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Kurumsal Eğitim Paketi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Kurumsal eğitim, sadece bir konu başlığının anlatılması değildir. Şirketin ekip yapısı, mevcut bilgi seviyesi, kullandığı araçlar, satış modeli, ihracat hedefleri ve günlük iş süreçleri birlikte değerlendirilmelidir.",
+            "Bu paket, ekiplerinin öğrendiklerini günlük işe aktarmasını ve şirket içinde daha ortak bir çalışma dili oluşmasını isteyen işletmeler için planlanır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden Kurumsal Eğitim Paketi Gerekir?",
+          "body": [
+            "Birçok şirket dijital araçları, CRM sistemlerini, yapay zeka çözümlerini, LinkedIn’i, e-ticaret platformlarını ve ihracat müşteri bulma yöntemlerini kullanmak ister. Ancak ekipler bu araçları doğru öğrenmediğinde süreçler verimsiz kalabilir.",
+            "Kurumsal Eğitim Paketi, bu sorunları azaltmak ve ekiplerin iş süreçlerinde daha bilinçli çalışmasını sağlamak için hazırlanmıştır.",
+            "Kurumsal eğitim eksik olduğunda sık yaşanan sorunlar:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Paket Kimler İçin Uygundur?",
+          "intro": "Bu paket, ekiplerinin bilgi seviyesini artırmak ve iş süreçlerini daha sistemli hale getirmek isteyen tüm şirketler için uygundur.",
+          "items": [
+            {
+              "title": "Şirket Sahipleri ve Yöneticiler",
+              "body": "Dijital araçları, raporlama yapısını, ekip yönetimini ve şirket içi takip kültürünü güçlendirmek isteyen yöneticiler için uygundur."
+            },
+            {
+              "title": "Satış ve İş Geliştirme Ekipleri",
+              "body": "CRM, LinkedIn, Sales Navigator, mail marketing ve müşteri takip sürecini daha bilinçli kullanmak isteyen ekipler için planlanabilir."
+            },
+            {
+              "title": "İhracat ve Dış Ticaret Ekipleri",
+              "body": "İhracat, müşteri bulma, teklif, proforma, LinkedIn, mail marketing ve CRM takibini öğrenmek isteyen ekipler için uygundur."
+            },
+            {
+              "title": "Pazarlama ve E-Ticaret Ekipleri",
+              "body": "E-ticaret, pazaryeri, ürün açıklaması, yapay zeka, içerik ve müşteri iletişimi konularında gelişmek isteyen ekipler için uygundur."
+            },
+            {
+              "title": "CRM Kullanıcıları",
+              "body": "CRM’i sadece kayıt sistemi olarak değil, görev, takip, teklif, satış aşaması ve raporlama aracı olarak kullanmak isteyen ekipler için uygundur."
+            },
+            {
+              "title": "KOBİ’ler ve Üretici Firmalar",
+              "body": "Kurumsal bilgi seviyesini artırmak, satış ve ihracat süreçlerini daha sistemli yönetmek isteyen KOBİ ve üretici firmalar için planlanabilir."
+            },
+            {
+              "title": "Dijital Dönüşüm Sürecindeki İşletmeler",
+              "body": "Yapay zeka, CRM, LinkedIn, raporlama, görev takibi ve dijital iş akışlarını kurumsal kültüre dahil etmek isteyen şirketler için uygundur."
+            },
+            {
+              "title": "Yapay Zeka Kullanmak İsteyen Ekipler",
+              "body": "ChatGPT, Gemini, Claude Code, Antigravity ve farklı yapay zeka araçlarını iş süreçlerinde bilinçli kullanmak isteyen ekipler için uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Kurumsal Eğitim Paketinde Neler Var?",
+          "body": [
+            "Kurumsal Eğitim Paketi şirketin ihtiyacına göre farklı eğitim başlıklarından oluşabilir. Eğitimler şirketin sektörüne ve ihtiyaç duyduğu önceliklere göre birleştirilebilir.",
+            "Genel olarak yapay zeka, ChatGPT, Claude Code, Gemini, Antigravity, LinkedIn, LinkedIn Sales Navigator, CRM, ihracat, mail marketing, e-ticaret, pazaryeri, şirket yönetimi, satış yönetimi ve dijital dönüşüm eğitimleri planlanabilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Kurumsal Eğitim Paketinde Hangi Eğitimler Planlanabilir?",
+          "intro": "Aşağıdaki eğitim başlıkları şirketin sektörü, ekip seviyesi, hedefleri ve günlük iş akışına göre özelleştirilebilir.",
+          "items": [
+            {
+              "title": "Şirketlere Özel Yapay Zeka Eğitimi",
+              "body": "Yapay zeka araçları şirketlerde birçok iş sürecini destekleyebilir. Ancak doğru kullanılmadığında yüzeysel kalır veya yanlış sonuçlar üretebilir. Kapsam: Departmanlara göre yapay zeka kullanımı; Satış, pazarlama, ihracat ve e-ticaret ekipleri için yapay zeka; E-posta, teklif, müşteri cevapları ve iç doküman hazırlama; Yapay zeka çıktısını kontrol etme ve veri gizliliği farkındalığı."
+            },
+            {
+              "title": "ChatGPT Eğitimi",
+              "body": "ChatGPT, şirketlerde içerik hazırlama, müşteri iletişimi, raporlama, satış metinleri, eğitim dokümanları ve günlük iş akışlarında destek sağlayabilir. Kapsam: ChatGPT nedir ve iş süreçlerinde nasıl kullanılır?; Doğru prompt yazma ve çıktı kontrolü; Satış e-postası, ihracat maili ve müşteri cevapları hazırlama; Toplantı notu, rapor, ürün açıklaması ve CRM notlarını düzenleme."
+            },
+            {
+              "title": "Claude Code Eğitimi",
+              "body": "Claude Code eğitimi, yazılım geliştirme, kod analizi, proje dosyalarını anlama, hata ayıklama ve teknik ekiplerin verimliliğini artırma amacıyla planlanabilir. Kapsam: Kod dosyalarını ve proje yapısını analiz etme; Hata tespiti, kod düzenleme ve dokümantasyon hazırlama; Yeni özellik planlama ve teknik görev listesi çıkarma; Yapay zeka ile yazılım geliştirmede kontrol disiplinleri."
+            },
+            {
+              "title": "Gemini Eğitimi",
+              "body": "Gemini eğitimi, Google ekosistemiyle çalışan, araştırma, içerik, doküman, veri ve günlük iş süreçlerinde yapay zeka desteğini kullanmak isteyen ekipler için planlanabilir. Kapsam: Araştırma, bilgi toplama ve metin düzenleme; İş dokümanı, e-posta, sunum ve toplantı hazırlığı; İçerik fikri, ürün açıklaması ve pazarlama metni oluşturma; Yapay zeka araçlarını karşılaştırmalı kullanma."
+            },
+            {
+              "title": "Antigravity Eğitimi",
+              "body": "Antigravity eğitimi, yazılım geliştirme, web projesi oluşturma, kod düzenleme, sayfa yapısı geliştirme ve yapay zeka destekli geliştirme süreçlerini öğrenmek isteyen ekipler için planlanabilir. Kapsam: Proje açma, dosya yapısı anlama ve kod dosyalarını inceleme; Web sayfası düzenleme, hata tespiti ve düzeltme yaklaşımı; PHP, HTML, CSS ve JavaScript dosyalarıyla çalışma; Teknik olmayan kullanıcılar için yapay zeka destekli geliştirme mantığı."
+            },
+            {
+              "title": "LinkedIn Eğitimi",
+              "body": "LinkedIn, şirketler ve profesyoneller için kurumsal görünürlük, bağlantı kurma ve B2B iletişim açısından önemli bir platformdur. Kapsam: LinkedIn profil düzenleme ve şirket sayfası kullanımı; Profesyonel ağ oluşturma, hedef sektör ve kişi araştırması; Bağlantı talebi, ilk iletişim ve içerik paylaşım mantığı; LinkedIn’de spam algısından kaçınma ve CRM ile takip süreci."
+            },
+            {
+              "title": "LinkedIn Sales Navigator Eğitimi",
+              "body": "LinkedIn Sales Navigator, B2B müşteri araştırması yapmak isteyen satış ve ihracat ekipleri için güçlü bir araştırma aracı olabilir. Kapsam: Hedef ülke, sektör, firma büyüklüğü ve unvan filtreleme; Satın alma müdürü, ithalat ve tedarik sorumlusu araştırması; Firma listesi oluşturma, lead kaydetme ve hesap takibi; Mail marketing ve CRM’e aktarılacak bilgileri belirleme."
+            },
+            {
+              "title": "LinkedIn ile Müşteri Bulma Eğitimi",
+              "body": "LinkedIn ile müşteri bulma eğitimi, B2B satış ve ihracat müşteri bulma süreçlerinde doğru firmalara ve karar verici kişilere ulaşmayı öğretir. Kapsam: Hedef müşteri profili, ülke ve sektör seçimi; Firma araştırması ve karar verici kişi bulma; Bağlantı mesajı, tanıtım mesajı ve takip mesajı oluşturma; LinkedIn, mail marketing, telefon araması ve CRM bağlantısı."
+            },
+            {
+              "title": "CRM Eğitimi",
+              "body": "CRM eğitimi, müşteri takibini daha düzenli yapmak isteyen satış ekipleri ve yöneticiler için önemlidir. CRM kurulsa bile ekip doğru kullanmazsa sistem verimli çalışmaz. Kapsam: CRM nedir, müşteri kaydı nasıl açılır?; Müşteri adayı, satış aşaması ve teklif takibi nasıl yapılır?; Görev, aktivite, takip tarihi ve görüşme notu nasıl kullanılır?; Yönetici CRM üzerinden hangi raporları takip etmelidir?."
+            },
+            {
+              "title": "İhracat Eğitimi",
+              "body": "İhracat eğitimi, şirketlerin yurt dışına satış sürecini daha bilinçli yönetmesini sağlar. Eğitim, ihracata yeni başlayacak veya mevcut sürecini geliştirmek isteyen şirketler için planlanabilir. Kapsam: İhracatın temel mantığı ve şirketi ihracata hazırlama; Hedef pazar, B2B müşteri bulma ve GTİP / HS kodu kullanımı; İngilizce tanıtım maili, teklif ve proforma hazırlama; Teslim şekilleri, ödeme şekilleri, nakliye, gümrük evrakları ve CRM takibi."
+            },
+            {
+              "title": "Mail Marketing Eğitimi",
+              "body": "Mail marketing eğitimi, B2B müşteri bulma ve ihracat satış süreçlerinde profesyonel e-posta iletişimi kurmak isteyen ekipler için hazırlanabilir. Kapsam: Hedef müşteri listesi ve kurumsal e-posta kullanımı; Konu başlığı, ilk tanıtım maili ve takip maili hazırlama; Spam algısından kaçınma, gizlilik ve mevzuat farkındalığı; Mail sonrası telefon, LinkedIn ve CRM ile takip yapısı."
+            },
+            {
+              "title": "E-Ticaret ve Pazaryeri Eğitimi",
+              "body": "E-ticaret ve pazaryeri eğitimi, ürünlerini dijital kanallarda satmak isteyen işletmeler için planlanabilir. Kapsam: E-ticaretin temel mantığı ve doğru pazaryeri seçimi; Trendyol, Amazon, Etsy, eBay ve B2B platformlarda ürün yayınlama; Ürün başlığı, açıklaması, görsel kalitesi ve pazaryeri SEO; Fiyatlandırma, stok, sipariş, müşteri mesajları, iade ve raporlama."
+            },
+            {
+              "title": "Şirket Yönetim Eğitimi",
+              "body": "Şirket yönetim eğitimi, işletme sahipleri, yöneticiler ve ekip liderleri için organizasyon, süreç, ekip, satış ve raporlama kültürünü güçlendirmeyi amaçlar. Kapsam: Organizasyon yapısı, görev ve sorumluluk dağılımı; Ekip, süreç, satış, toplantı ve raporlama yönetimi; Hedef ve performans takibi, delegasyon ve zaman yönetimi; Dijital dönüşüm ve yapay zeka ile yönetim süreçleri."
+            },
+            {
+              "title": "Şirketlere Özel Eğitim Programı Hazırlama",
+              "body": "Kurumsal Eğitim Paketi kapsamında eğitimler standart anlatım olarak değil, şirketin ihtiyacına göre planlanır. Kapsam: Şirketin sektörü, çalışan sayısı ve katılımcı profili; Eğitim hedefi, mevcut bilgi seviyesi ve departman ihtiyaçları; Satış, ihracat, e-ticaret ve dijital dönüşüm hedefleri; Online veya yüz yüze eğitim modeli ve uygulamalı çalışma ihtiyacı."
+            },
+            {
+              "title": "Uygulamalı Eğitim Yaklaşımı",
+              "body": "Kurumsal eğitimlerde yalnızca slayt anlatımı yeterli olmayabilir. Katılımcıların eğitim sırasında gerçek örnekler üzerinde çalışması daha faydalıdır. Kapsam: Şirket ürünlerine göre örnek mail yazma; Gerçek müşteri profiline göre LinkedIn araması yapma; CRM satış aşaması ve müşteri takip yapısı oluşturma; ChatGPT ile iş süreci, rapor, ürün açıklaması ve görev listesi hazırlama."
+            },
+            {
+              "title": "Eğitim Sonrası Yol Haritası",
+              "body": "Eğitim sonunda şirketin öğrendiklerini uygulayabilmesi için yol haritası hazırlanabilir. Bu yol haritası, eğitim sonrası uygulama sürecinin daha düzenli ilerlemesini sağlar. Kapsam: Hangi araçlar kullanılacak ve hangi departman başlatacak?; CRM kullanım kuralları ve yapay zeka kullanım alanları nasıl olacak?; LinkedIn, mail marketing, ihracat ve e-ticaret çalışmaları hangi sırayla yapılacak?; Haftalık takip planı ve yönetici raporları nasıl kontrol edilecek?."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Bu Paket Neleri Kapsamaz?",
+          "body": [
+            "Kurumsal Eğitim Paketi, şirket ekiplerine bilgi, uygulama ve yol haritası sunmak için hazırlanır. Aşağıdaki çalışmalar ihtiyaç halinde ilgili paket veya hizmetlerle ayrıca planlanabilir."
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Kurumsal Eğitim Paketi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketin sektörü, ekip yapısı, eğitim ihtiyacı, hedefleri ve mevcut bilgi seviyesi değerlendirilerek başlar. Ardından eğitim ihtiyaç analizi, program hazırlığı, materyal planı, uygulamalı eğitim, soru-cevap ve eğitim sonrası yol haritası adımlarıyla ilerler.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Şirketin sektörü, ekip yapısı, eğitim ihtiyacı, hedefleri ve mevcut bilgi seviyesi değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Eğitim İhtiyaç Analizi",
+              "body": "Yapay zeka, CRM, LinkedIn, ihracat, e-ticaret, mail marketing veya şirket yönetimi alanlarından hangilerinin öncelikli olduğu belirlenir."
+            },
+            {
+              "n": 3,
+              "title": "Eğitim Programı Hazırlığı",
+              "body": "Katılımcı profiline ve şirket hedeflerine göre eğitim başlıkları, süre, yöntem ve uygulama örnekleri planlanır."
+            },
+            {
+              "n": 4,
+              "title": "Eğitim Materyali Hazırlığı",
+              "body": "Eğitim konusu doğrultusunda anlatım başlıkları, örnek senaryolar, uygulama çalışmaları ve kontrol listeleri hazırlanabilir."
+            },
+            {
+              "n": 5,
+              "title": "Uygulamalı Eğitim",
+              "body": "Eğitim online veya yüz yüze şekilde gerçekleştirilebilir. Katılımcılar şirketin gerçek iş süreçlerine uygun örneklerle çalışabilir."
+            },
+            {
+              "n": 6,
+              "title": "Soru-Cevap ve Uygulama Değerlendirmesi",
+              "body": "Katılımcıların kendi görevleriyle ilgili soruları cevaplanır ve uygulama örnekleri birlikte değerlendirilir."
+            },
+            {
+              "n": 7,
+              "title": "Eğitim Sonrası Yol Haritası",
+              "body": "Eğitim sonunda şirketin öğrendiklerini uygulayabilmesi için önerilen adımlar belirlenir."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Kurumsal Eğitim Paketinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Ekiplerin bilgi seviyesi yükselir",
+            "Yapay zeka araçları daha bilinçli kullanılır",
+            "ChatGPT ve benzeri araçlar iş süreçlerine uyarlanabilir",
+            "CRM kullanım disiplini güçlenir",
+            "Satış ve müşteri takibi daha düzenli yapılabilir",
+            "LinkedIn ile B2B müşteri bulma becerisi gelişir",
+            "Mail marketing süreci daha profesyonel planlanabilir",
+            "İhracat süreci ekipler tarafından daha iyi anlaşılır",
+            "E-ticaret ve pazaryeri süreçleri daha düzenli yönetilebilir",
+            "Yöneticiler raporlama ve takip kültürünü güçlendirebilir",
+            "Eğitim şirketin gerçek ihtiyaçlarına göre uyarlanır",
+            "Uygulamalı örneklerle öğrenme kolaylaşır",
+            "Departmanlar arası ortak dil oluşur",
+            "Dijital dönüşüm süreci desteklenir",
+            "Eğitim sonrası uygulanabilir yol haritası oluşturulabilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Kurumsal Eğitimlerde Sık Yapılan Hatalar",
+          "items": [
+            "Eğitimi şirket ihtiyacına göre planlamamak",
+            "Katılımcı seviyesini dikkate almamak",
+            "Sadece teorik anlatımla sınırlı kalmak",
+            "Uygulama yaptırmamak",
+            "Eğitim sonrası yol haritası oluşturmamak",
+            "Yapay zeka eğitimini sadece araç tanıtımı sanmak",
+            "CRM eğitiminde şirketin satış sürecini dikkate almamak",
+            "LinkedIn eğitiminde hedef müşteri profili belirlememek",
+            "Mail marketing eğitiminde spam algısını dikkate almamak",
+            "İhracat eğitiminde müşteri bulma ve operasyonu birlikte anlatmamak",
+            "E-ticaret eğitiminde fiyat, stok ve operasyonu ihmal etmek",
+            "Yönetici eğitimi sonrası takip sistemi kurmamak",
+            "Eğitimi tek seferlik etkinlik gibi görmek",
+            "Öğrenilenleri günlük işe aktarmamak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Hangi Paketlerle Birlikte Alınabilir?",
+          "body": [
+            "Kurumsal Eğitim Paketi, diğer paketlerle birlikte planlanabilir. Örneğin şirket CRM Kurulum Paketi aldıysa, satış ekibi için CRM eğitimi ayrıca Kurumsal Eğitim Paketi kapsamında planlanabilir. İhracata başlayacak şirketlerde ise İhracat Eğitimi, LinkedIn Eğitimi ve Mail Marketing Eğitimi birlikte değerlendirilebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Kurumsal Eğitim Paketi, Yapay Zeka, ChatGPT, CRM, LinkedIn, İhracat ve E-Ticaret Eğitimleri",
+          "body": [
+            "Kurumsal eğitim paketi; şirketlere özel eğitim, yapay zeka eğitimi, şirketlere özel yapay zeka eğitimi, ChatGPT eğitimi, Claude Code eğitimi, Gemini eğitimi, Antigravity eğitimi, LinkedIn eğitimi, LinkedIn Sales Navigator eğitimi, LinkedIn ile müşteri bulma eğitimi, CRM eğitimi, ihracat eğitimi, mail marketing eğitimi, e-ticaret eğitimi, pazaryeri eğitimi, şirket yönetim eğitimi, satış ekibi eğitimi, KOBİ kurumsal eğitim ve dijital dönüşüm eğitimi konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Kurumsal Eğitim Paketi nedir?",
+          "body": [
+            "Kurumsal Eğitim Paketi; şirketlerin ekiplerine özel olarak planlanan yapay zeka, ChatGPT, Claude Code, Gemini, Antigravity, LinkedIn, LinkedIn Sales Navigator, CRM, ihracat, mail marketing, e-ticaret, pazaryeri ve şirket yönetimi eğitimlerini kapsayan uygulamalı eğitim paketidir. {{appName}}, bu pakette eğitimleri şirketin sektörü, çalışan profili, dijital dönüşüm hedefi, satış süreci, ihracat hedefi ve ekip ihtiyaçlarına göre özelleştirerek uygulanabilir yol haritası oluşturur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Kurumsal Eğitim Paketi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "Kurumsal Eğitim Paketi kimler için uygundur? +",
+              "a": "Bu paket; şirket sahipleri, yöneticiler, satış ekipleri, ihracat ekipleri, pazarlama ekipleri, e-ticaret ekipleri, CRM kullanıcıları, iş geliştirme ekipleri ve dijital dönüşüm sürecindeki işletmeler için uygundur."
+            },
+            {
+              "q": "Eğitimler şirketimize özel hazırlanabilir mi? +",
+              "a": "Evet. Eğitimler şirketinizin sektörü, ekip yapısı, mevcut bilgi seviyesi, kullandığı araçlar ve hedeflerine göre özelleştirilebilir."
+            },
+            {
+              "q": "Hangi eğitim başlıkları veriliyor? +",
+              "a": "Yapay zeka, ChatGPT, Claude Code, Gemini, Antigravity, LinkedIn, LinkedIn Sales Navigator, CRM, ihracat, mail marketing, e-ticaret, pazaryeri ve şirket yönetimi eğitimleri planlanabilir."
+            },
+            {
+              "q": "Eğitim online mı yapılır? +",
+              "a": "Eğitim ihtiyaca göre online veya yüz yüze planlanabilir. Katılımcı sayısı, eğitim kapsamı ve şirketin lokasyonuna göre uygun model belirlenebilir."
+            },
+            {
+              "q": "Eğitim uygulamalı mı yapılır? +",
+              "a": "Evet. Eğitimler şirketin ürünleri, müşteri profili, satış süreci, CRM yapısı veya dijital araç kullanım ihtiyacına göre uygulamalı örneklerle yapılabilir."
+            },
+            {
+              "q": "Yapay zeka eğitimi sadece ChatGPT’yi mi kapsar? +",
+              "a": "Hayır. İhtiyaca göre ChatGPT, Gemini, Claude Code, Antigravity ve farklı yapay zeka araçlarının iş süreçlerinde kullanım mantığı anlatılabilir."
+            },
+            {
+              "q": "CRM eğitimi ekibimize verilebilir mi? +",
+              "a": "Evet. Satış ekibine ve yöneticilere müşteri kaydı, satış aşaması, teklif takibi, görev, takip tarihi, görüşme notu ve raporlama konularında CRM eğitimi verilebilir."
+            },
+            {
+              "q": "LinkedIn ile müşteri bulma eğitimi var mı? +",
+              "a": "Evet. LinkedIn ve LinkedIn Sales Navigator üzerinden hedef firma, karar verici kişi, bağlantı mesajı, takip mesajı ve CRM kayıt süreci anlatılabilir."
+            },
+            {
+              "q": "Eğitim sonrası yol haritası hazırlanır mı? +",
+              "a": "Evet. Eğitim sonunda şirketin öğrendiklerini uygulayabilmesi için önerilen adımlar, takip yapısı ve uygulama planı oluşturulabilir."
+            },
+            {
+              "q": "Paket fiyatı var mı? +",
+              "a": "Bu sayfada fiyat verilmez. Eğitim konusu, katılımcı sayısı, eğitim süresi, online veya yüz yüze eğitim modeli ve uygulama kapsamına göre teklif hazırlanır."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Eğitimi Günlük İşe Dönüşen Bir Gelişim Programına Çevirelim",
+        "body": "Ekibiniz yapay zeka araçlarını, CRM sistemlerini, LinkedIn’i, ihracat müşteri bulma yöntemlerini, mail marketing çalışmalarını, e-ticaret ve pazaryeri süreçlerini veya şirket yönetimi disiplinini daha bilinçli kullanmaya ihtiyaç duyuyorsa {{appName}} ile iletişime geçin. Kurumsal Eğitim Paketi ile şirketinizin ihtiyacına özel eğitim programı oluşturalım, ekibinize uygulamalı eğitim verelim ve öğrendiklerini günlük iş süreçlerine aktarabilecekleri pratik bir yol haritası hazırlayalım.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

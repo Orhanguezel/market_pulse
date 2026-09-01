@@ -6,6 +6,7 @@
 // =============================================================
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { getCampaign, type OutreachCampaign } from './campaign.repository';
 
 const AUTO_APPROVE_ACTIONS = ['APPROVE_FAVORITE', 'APPROVE_DIRECT'] as const;
@@ -165,22 +166,25 @@ export interface GenerateDraftsResult {
 }
 
 export async function generateDraftsForCampaign(campaignId: string): Promise<GenerateDraftsResult> {
+  const tenantKey = await getActiveTenantKey();
   const campaign = await getCampaign(campaignId);
   if (!campaign) throw new Error('CAMPAIGN_NOT_FOUND');
 
   const placeholders = AUTO_APPROVE_ACTIONS.map(() => '?').join(',');
-  const params: unknown[] = [...AUTO_APPROVE_ACTIONS];
+  const params: unknown[] = [tenantKey];
 
   let icpFilter = '';
   if (campaign.icp_id) {
     icpFilter = 'AND icp_id = ?';
-    params.unshift(campaign.icp_id);
+    params.push(campaign.icp_id);
   }
+  params.push(...AUTO_APPROVE_ACTIONS);
 
   const sql = `
     SELECT id, name, email, country
       FROM lead_candidates
-     WHERE channel = 'trade_fair'
+     WHERE tenant_key = ?
+       AND channel = 'trade_fair'
        AND status IN ('pending','approved','favorite')
        AND email IS NOT NULL AND email <> ''
        ${icpFilter}
@@ -201,8 +205,8 @@ export async function generateDraftsForCampaign(campaignId: string): Promise<Gen
     }
 
     const [existing] = await pool.execute(
-      'SELECT id FROM lead_outreach_drafts WHERE candidate_id = ? AND campaign_id = ? LIMIT 1',
-      [c.id, campaign.id],
+      'SELECT id FROM lead_outreach_drafts WHERE tenant_key = ? AND candidate_id = ? AND campaign_id = ? LIMIT 1',
+      [tenantKey, c.id, campaign.id],
     );
     if ((existing as unknown[]).length > 0) {
       skipped += 1;
@@ -210,8 +214,8 @@ export async function generateDraftsForCampaign(campaignId: string): Promise<Gen
     }
 
     await pool.execute(
-      'UPDATE lead_candidates SET status = ?, reviewed_at = NOW() WHERE id = ?',
-      ['approved', c.id],
+      'UPDATE lead_candidates SET status = ?, reviewed_at = NOW() WHERE tenant_key = ? AND id = ?',
+      ['approved', tenantKey, c.id],
     );
     approved += 1;
 
@@ -221,8 +225,8 @@ export async function generateDraftsForCampaign(campaignId: string): Promise<Gen
     const body = buildBody(campaign, lang, c.country || '', firstName);
 
     await pool.execute(
-      'INSERT INTO lead_outreach_drafts (id, candidate_id, campaign_id, subject, body, ai_model, status) VALUES (?, ?, ?, ?, ?, ?, ?)',
-      [randomUUID(), c.id, campaign.id, subject, body, 'template-v1', 'draft'],
+      'INSERT INTO lead_outreach_drafts (id, tenant_key, candidate_id, campaign_id, subject, body, ai_model, status) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
+      [randomUUID(), tenantKey, c.id, campaign.id, subject, body, 'template-v1', 'draft'],
     );
     drafted += 1;
   }

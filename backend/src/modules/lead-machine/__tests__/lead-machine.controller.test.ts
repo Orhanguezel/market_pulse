@@ -1,6 +1,7 @@
 import { beforeEach, describe, expect, mock, test } from 'bun:test';
 import { createDbMock } from '../../market/__tests__/helpers/mock-db';
 import { callHandler } from '../../market/__tests__/helpers/reply';
+import { runWithTenant } from '@/core/tenant-context';
 
 const dbMock = createDbMock();
 const scrape = mock(() => Promise.resolve({ data: {} }));
@@ -11,6 +12,8 @@ mock.module('@/db/client', () => ({
   db: dbMock.db,
   pool: dbMock.pool,
 }));
+
+mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'avrasya' } }));
 
 mock.module('@/modules/lead-machine/_shared/scraper.client', () => ({
   scrape,
@@ -34,10 +37,10 @@ function job(overrides: Record<string, unknown> = {}) {
     channel: 'amazon',
     status: 'pending',
     icp_id: null,
-    params: '{"keyword":"paspas"}',
+    params: '{"keyword":"oto aksesuar"}',
     result_count: 0,
     error_msg: null,
-    created_by: null,
+    owner_user_id: null,
     created_at: now,
     started_at: null,
     finished_at: null,
@@ -105,7 +108,7 @@ describe('lead machine controller candidates', () => {
       body: { action: 'reject', reject_reason: 'wrong_segment' },
     });
 
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['rejected', 'wrong_segment', null, null, 'candidate-1']);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['rejected', 'wrong_segment', null, null, 'avrasya', 'candidate-1']);
     expect(result).toEqual(expect.objectContaining({
       status: 'rejected',
       reject_reason: 'wrong_segment',
@@ -145,12 +148,13 @@ describe('lead machine controller scraper callback and jobs', () => {
   });
 
   test('imports candidates from scraper callback', async () => {
+    dbMock.queuePoolExecute([{ tenant_key: 'avrasya' }]);
     dbMock.queuePoolExecute([job()]);
 
     const { result } = await callHandler(controller.scraperCallback, {
       headers: { 'x-scraper-signature': 'ok' },
       body: {
-        job_id: 'job-1',
+        job_id: 'job-1', tenant_key: 'avrasya',
         status: 'completed',
         result: {
           candidates: [
@@ -163,14 +167,39 @@ describe('lead machine controller scraper callback and jobs', () => {
 
     expect(result).toEqual({ ok: true, inserted: 1 });
     expect(dbMock.poolExecutions.some((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'))).toBe(true);
-    expect(dbMock.poolExecutions.at(-1)?.sql).toContain('UPDATE lead_search_jobs SET status = ?, result_count = ?, error_msg = ?, finished_at = CURRENT_TIMESTAMP WHERE id = ?');
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, null, 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.sql).toContain('UPDATE lead_search_jobs SET status = ?, result_count = ?, error_msg = ?, finished_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_key = ?');
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, null, 'job-1', 'avrasya']);
+  });
+
+  test('uses scraper callback tenant key for job lookup and writes', async () => {
+    dbMock.queuePoolExecute([{ tenant_key: 'vistaseeds' }]);
+    dbMock.queuePoolExecute([job()]);
+
+    const { result } = await callHandler(controller.scraperCallback, {
+      headers: { 'x-scraper-signature': 'ok' },
+      body: {
+        job_id: 'job-1',
+        tenant_key: 'vistaseeds',
+        status: 'done',
+        result: {
+          candidates: [
+            { name: 'Vista Buyer', website: 'https://vista.example', lead_score: 6 },
+          ],
+        },
+      },
+    });
+
+    expect(result).toEqual({ ok: true, inserted: 1 });
+    expect(dbMock.poolExecutions[1]?.values).toEqual(['vistaseeds', 'job-1']);
+    const insert = dbMock.poolExecutions.find((entry) => entry.sql.startsWith('INSERT INTO lead_candidates'));
+    expect(insert?.values).toEqual(expect.arrayContaining(['vistaseeds', 'job-1', 'amazon', 'Vista Buyer']));
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['done', 1, null, 'job-1', 'vistaseeds']);
   });
 
   test('rejects scraper callback without job id', async () => {
     const { state } = await callHandler(controller.scraperCallback, {
       headers: { 'x-scraper-signature': 'ok' },
-      body: { result: {} },
+      body: { tenant_key: 'avrasya', result: {} },
     });
 
     expect(state.statusCode).toBe(400);
@@ -178,11 +207,12 @@ describe('lead machine controller scraper callback and jobs', () => {
   });
 
   test('returns 404 when scraper callback job is missing', async () => {
+    dbMock.queuePoolExecute([{ tenant_key: 'avrasya' }]);
     dbMock.queuePoolExecute([]);
 
     const { state } = await callHandler(controller.scraperCallback, {
       headers: { 'x-scraper-signature': 'ok' },
-      body: { job_id: 'missing', result: {} },
+      body: { job_id: 'missing', tenant_key: 'avrasya', result: {} },
     });
 
     expect(state.statusCode).toBe(404);
@@ -190,39 +220,40 @@ describe('lead machine controller scraper callback and jobs', () => {
   });
 
   test('marks scraper callback job failed', async () => {
+    dbMock.queuePoolExecute([{ tenant_key: 'avrasya' }]);
     dbMock.queuePoolExecute([job()]);
 
     const { result } = await callHandler(controller.scraperCallback, {
       headers: { 'x-scraper-signature': 'ok' },
-      body: { job_id: 'job-1', status: 'failed', error: 'SCRAPER_DOWN', result: { candidates: [] } },
+      body: { job_id: 'job-1', tenant_key: 'avrasya', status: 'failed', error: 'SCRAPER_DOWN', result: { candidates: [] } },
     });
 
     expect(result).toEqual({ ok: true, inserted: 0 });
-    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'SCRAPER_DOWN', 'job-1']);
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['failed', 'SCRAPER_DOWN', 'job-1', 'avrasya']);
   });
 
   test('starts amazon job and returns created job', async () => {
     dbMock.queuePoolExecute([job()]);
 
-    const { state } = await callHandler(controller.startAmazonJob, {
-      body: { keyword: 'paspas', marketplace: 'de' },
-    });
+    const { state } = await runWithTenant('avrasya', () => callHandler(controller.startAmazonJob, {
+      body: { keyword: 'oto aksesuar', marketplace: 'de' },
+    }));
 
     expect(state.statusCode).toBe(201);
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('INSERT INTO lead_search_jobs');
     expect(state.payload).toEqual(expect.objectContaining({
       id: 'job-1',
       channel: 'amazon',
-      params: { keyword: 'paspas' },
+      params: { keyword: 'oto aksesuar' },
     }));
   });
 
   test('starts b2b and fair jobs', async () => {
     dbMock.queuePoolExecute([job({ channel: 'b2b_directory', params: '{"source":"google_maps"}' })]);
 
-    let response = await callHandler(controller.startB2bJob, {
+    let response = await runWithTenant('avrasya', () => callHandler(controller.startB2bJob, {
       body: { source: 'google_maps' },
-    });
+    }));
 
     expect(response.state.statusCode).toBe(201);
     expect(response.state.payload).toEqual(expect.objectContaining({ channel: 'b2b_directory' }));
@@ -230,9 +261,9 @@ describe('lead machine controller scraper callback and jobs', () => {
     dbMock.reset();
     dbMock.queuePoolExecute([job({ channel: 'trade_fair', params: '{"fair_name":"Automechanika"}' })]);
 
-    response = await callHandler(controller.startFairJob, {
+    response = await runWithTenant('avrasya', () => callHandler(controller.startFairJob, {
       body: { fair_name: 'Automechanika' },
-    });
+    }));
 
     expect(response.state.statusCode).toBe(201);
     expect(response.state.payload).toEqual(expect.objectContaining({ channel: 'trade_fair' }));
@@ -252,7 +283,7 @@ describe('lead machine controller scraper callback and jobs', () => {
     dbMock.queuePoolExecute([{
       id: 'risk-1',
       job_id: 'job-1',
-      keyword: 'paspas',
+      keyword: 'oto aksesuar',
       marketplace: 'de',
       data_points: 47,
       category_risk_score: '7.2',
@@ -267,13 +298,13 @@ describe('lead machine controller scraper callback and jobs', () => {
     ]);
 
     const { result } = await callHandler(controller.getAmazonRiskScores, {
-      params: { keyword: encodeURIComponent('paspas') },
+      params: { keyword: encodeURIComponent('oto aksesuar') },
       query: { marketplace: 'de' },
     });
 
     expect(dbMock.poolExecutions.some((entry) => entry.sql.includes('FROM amazon_risk_scores'))).toBe(true);
     expect(result).toEqual(expect.objectContaining({
-      keyword: 'paspas',
+      keyword: 'oto aksesuar',
       data_points: 47,
       composite_score: 6.6,
       decision: 'DIKKATLI_OL',
@@ -307,7 +338,7 @@ describe('lead machine controller enrichment and competitor endpoints', () => {
       body: { candidate_ids: 'not-array' },
     });
 
-    expect(result).toEqual([]);
+    expect(result).toEqual({ queued: 0 });
   });
 
   test('batch enrichment caps candidate ids at 50', async () => {
@@ -320,9 +351,7 @@ describe('lead machine controller enrichment and competitor endpoints', () => {
       body: { candidate_ids: ids },
     });
 
-    expect(Array.isArray(result)).toBe(true);
-    expect((result as unknown[])).toHaveLength(50);
-    expect(dbMock.poolExecutions.filter((entry) => entry.sql.startsWith('INSERT INTO lead_enrichment'))).toHaveLength(50);
+    expect(result).toEqual({ queued: 50 });
   });
 
   test('competitor scan requires url', async () => {
@@ -366,9 +395,9 @@ describe('lead machine controller icp endpoints', () => {
       updated_at: now,
     }]);
 
-    const { state } = await callHandler(controller.createIcp, {
+    const { state } = await runWithTenant('avrasya', () => callHandler(controller.createIcp, {
       body: { name: 'ICP A', definition: {}, is_active: true },
-    });
+    }));
 
     expect(state.statusCode).toBe(201);
     expect(state.payload).toEqual(expect.objectContaining({ id: 'icp-1', name: 'ICP A', definition: {} }));

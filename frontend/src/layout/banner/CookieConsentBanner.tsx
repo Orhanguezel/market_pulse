@@ -141,6 +141,7 @@ function parseCookieConsentSetting(value: unknown): CookieConsentDb | null {
 
 export default function CookieConsentBanner() {
   const locale = useLocaleShort();
+  const isTr = locale === 'tr';
   const { ui } = useUiSection('ui_cookie', locale as any);
 
   const { data: consentSettingRaw, isLoading: isConsentLoading } = useGetSiteSettingByKeyQuery({
@@ -197,7 +198,10 @@ export default function CookieConsentBanner() {
     setReady(true);
   }, [isConsentLoading, enabled, keys, defaultAnalytics]);
 
-  const policyHref = useMemo(() => localizePath(locale as any, '/cookie-policy'), [locale]);
+  const policyHref = useMemo(
+    () => localizePath(locale as any, isTr ? '/cerez-politikasi' : '/cookie-policy'),
+    [isTr, locale],
+  );
 
   const onRejectAll = useCallback(() => {
     const next: ConsentState = { necessary: true, analytics: false };
@@ -244,29 +248,32 @@ export default function CookieConsentBanner() {
   }
 
   const titleText =
-    (consentSetting?.texts?.title ?? '').trim() || ui('cc_banner_title', 'Cookie Preferences');
+    (consentSetting?.texts?.title ?? '').trim() ||
+    ui('cc_banner_title', isTr ? 'Çerez Tercihleri' : 'Cookie Preferences');
 
   const descText =
     (consentSetting?.texts?.description ?? '').trim() ||
     ui(
       'cc_banner_desc',
-      'We use cookies to ensure the site works properly and to optionally analyze traffic. You can manage your preferences.',
+      isTr
+        ? 'Sitenin doğru çalışması ve isteğe bağlı trafik analizi için çerezler kullanıyoruz. Tercihlerinizi yönetebilirsiniz.'
+        : 'We use cookies to ensure the site works properly and to optionally analyze traffic. You can manage your preferences.',
     );
 
-  const policyLabel = ui('cc_banner_link_policy', 'Cookie Policy');
+  const policyLabel = ui('cc_banner_link_policy', isTr ? 'Çerez Politikası' : 'Cookie Policy');
 
-  const btnSettings = ui('cc_banner_btn_settings', 'Cookie Settings');
-  const btnReject = ui('cc_banner_btn_reject', 'Reject All');
-  const btnAccept = ui('cc_banner_btn_accept', 'Accept All');
+  const btnSettings = ui('cc_banner_btn_settings', isTr ? 'Çerez Ayarları' : 'Cookie Settings');
+  const btnReject = ui('cc_banner_btn_reject', isTr ? 'Tümünü Reddet' : 'Reject All');
+  const btnAccept = ui('cc_banner_btn_accept', isTr ? 'Tümünü Kabul Et' : 'Accept All');
 
-  const ariaClose = ui('cc_banner_aria_close', 'Close');
+  const ariaClose = ui('cc_banner_aria_close', isTr ? 'Kapat' : 'Close');
 
   return (
     <>
       <div
         className={`fixed ${position === 'top' ? 'top-0' : 'bottom-0'} left-0 right-0 z-[10040] p-4`}
         role="region"
-        aria-label={ui('cc_banner_aria_region', 'Cookie consent')}
+        aria-label={ui('cc_banner_aria_region', isTr ? 'Çerez onayı' : 'Cookie consent')}
       >
         <div className="mx-auto max-w-5xl rounded-2xl bg-bg-card/95 backdrop-blur-md border border-border-light shadow-medium p-5 sm:p-6 relative">
           <button

@@ -1,0 +1,361 @@
+{
+  "slug": "linkedin-sales-navigator-egitimi",
+  "category": "egitim",
+  "module": "training",
+  "order": 80,
+  "icon": "Linkedin",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "LinkedIn Sales Navigator Eğitimi | B2B Müşteri Bulma, Lead Listesi ve Karar Verici Kişi Araştırması",
+        "description": "LinkedIn Sales Navigator eğitimi ile B2B müşteri bulma, gelişmiş arama filtreleri, karar verici kişi araştırması, lead listesi oluşturma, hesap takibi, mesajlaşma ve CRM müşteri takip süreçlerini uygulamalı olarak öğretiyoruz.",
+        "ogTitle": "LinkedIn Sales Navigator Eğitimi | {{appName}}",
+        "ogDescription": "Sales Navigator ile B2B müşteri bulma, gelişmiş arama filtreleri, lead ve account listeleri, mesajlaşma, InMail ve CRM takip süreçlerini uygulamalı öğrenin."
+      },
+      "hero": {
+        "eyebrow": "LinkedIn Eğitimi",
+        "title": "LinkedIn Sales Navigator Eğitimi",
+        "lead": "LinkedIn Sales Navigator kullanmak istiyor ama doğru hedef firmaları bulma, karar verici kişilere ulaşma, gelişmiş filtreleri kullanma, lead listeleri oluşturma, alıcı hesaplarını takip etme ve müşteri adaylarını CRM’e aktarma sürecinde nereden başlayacağınızı bilmiyor musunuz? Sales Navigator, B2B satış ekipleri, ihracat firmaları, danışmanlık şirketleri, üreticiler ve iş geliştirme ekipleri için güçlü bir müşteri araştırma aracıdır. Ancak bu araçtan verim almak için yalnızca abonelik almak yeterli değildir. Doğru hedef pazar, doğru sektör, doğru unvan, doğru şirket tipi, doğru mesajlaşma ve düzenli CRM takibi gerekir. {{appName}} olarak şirketlere, satış ekiplerine, ihracat ekiplerine, iş geliştirme uzmanlarına ve B2B müşteri bulmak isteyen işletmelere uygulamalı LinkedIn Sales Navigator eğitimi sunuyoruz. Amacımız, Sales Navigator’ı yalnızca kişi arama aracı olarak değil; hedef müşteri araştırması, karar verici kişi bulma, lead listesi oluşturma, hesap takibi, mesajlaşma, mail marketing desteği, telefon araması hazırlığı ve CRM müşteri takibiyle birlikte çalışan profesyonel bir B2B satış kanalına dönüştürmektir.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "LinkedIn Sales Navigator Eğitimi Nedir?",
+          "body": [
+            "LinkedIn Sales Navigator eğitimi, Sales Navigator’ın B2B müşteri bulma, hedef firma araştırması, karar verici kişi tespiti, gelişmiş arama filtreleri, lead listesi oluşturma, hesap takibi, mesajlaşma ve CRM müşteri takip süreçlerinde doğru kullanılmasını öğreten uygulamalı eğitimdir.",
+            "Bu eğitimde amaç yalnızca Sales Navigator ekranlarını göstermek değildir. Asıl amaç, katılımcıların kendi sektörüne ve hedef pazarına uygun müşteri araştırması yapmayı, doğru firmaları bulmayı, doğru kişileri tespit etmeyi, listeleri düzenlemeyi, mesajlaşma sürecini profesyonel yürütmeyi ve bulunan müşteri adaylarını satış sürecine aktarmayı öğrenmesidir.",
+            "{{appName}}, Sales Navigator eğitimini teorik anlatım yerine gerçek sektör, gerçek hedef müşteri ve uygulamalı arama senaryolarıyla planlar.",
+            "Sales Navigator’ı profesyonel bir B2B araştırma kanalına dönüştürün",
+            "Hedef müşteri profili, gelişmiş filtreler, lead ve account listeleri, karar verici kişi araştırması, mesajlaşma ve CRM takibiyle Sales Navigator kullanımınızı satış sürecine bağlayın."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn Sales Navigator Eğitimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Sales Navigator’dan verim almak için hedef ülke, sektör, unvan, şirket büyüklüğü, karar verici kişi ve satış süreci birlikte planlanmalıdır. Aksi halde aramalar dağınık kalır ve bulunan kişiler satış takibine dönüşmeyebilir.",
+            "Eğitimde Sales Navigator’ın gelişmiş kişi ve şirket arama filtreleri, lead ve account mantığı, karar verici kişi araştırması, mesajlaşma, InMail, mail marketing desteği, telefon araması hazırlığı ve CRM müşteri takibi süreçlerinde nasıl kullanılacağı uygulamalı olarak ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Sales Navigator Neden B2B Müşteri Bulma İçin Önemlidir?",
+          "body": [
+            "B2B satışta doğru kişiye ulaşmak çoğu zaman ürün veya hizmet kadar önemlidir. Yanlış kişiye gönderilen e-posta, yanlış unvana yapılan bağlantı talebi veya ilgisiz firmalara yapılan satış çalışması zaman kaybına neden olur.",
+            "Sales Navigator yanlış kullanıldığında da zaman kaybı oluşabilir. Gelişmiş filtreleri bilmeden yapılan aramalar, yanlış hedef kitle, spam gibi görünen mesajlar ve CRM takibi olmayan çalışmalar verimsiz kalabilir.",
+            "Sales Navigator doğru kullanıldığında şu alanlarda destek sağlayabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Eğitim Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, Sales Navigator aboneliği olan veya almayı düşünen ancak aracı doğru satış sürecine dönüştürmek isteyen kişi ve ekipler için uygundur.",
+          "items": [
+            {
+              "title": "B2B Müşteri Bulmak İsteyen Şirketler",
+              "body": "Hedef firmaları ve karar verici kişileri daha sistemli araştırmak isteyen işletmeler için uygundur."
+            },
+            {
+              "title": "İhracat ve Dış Ticaret Ekipleri",
+              "body": "Yurt dışı alıcı firmalara, ithalatçılara, distribütörlere ve satın alma yetkililerine ulaşmak isteyen ekipler için uygundur."
+            },
+            {
+              "title": "Satış Ekipleri",
+              "body": "Lead listesi, account listesi, mesajlaşma ve CRM takip sürecini daha düzenli kurmak isteyen satış ekipleri için uygundur."
+            },
+            {
+              "title": "İş Geliştirme Uzmanları",
+              "body": "Yeni pazar, yeni firma ve yeni karar verici kişi araştırması yapmak isteyen iş geliştirme ekipleri için planlanabilir."
+            },
+            {
+              "title": "KOBİ’ler ve Üretici Firmalar",
+              "body": "B2B satış ve ihracat müşteri araştırmasını daha profesyonel hale getirmek isteyen firmalara uygundur."
+            },
+            {
+              "title": "Danışmanlık ve Hizmet Şirketleri",
+              "body": "Karar verici kişilere ve hedef şirketlere ulaşmak isteyen hizmet satışı yapan ekipler için uygundur."
+            },
+            {
+              "title": "B2B SaaS ve Yazılım Şirketleri",
+              "body": "Teknoloji, yazılım ve SaaS ürünleri için hedef müşteri araştırması yapmak isteyen ekipler için planlanabilir."
+            },
+            {
+              "title": "Fuar Öncesi ve Sonrası Takip Yapan Firmalar",
+              "body": "Fuar öncesinde hedef kişi araştırması, fuar sonrasında ise takip mesajı ve CRM kaydı yapmak isteyen firmalara uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn Sales Navigator Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "Sales Navigator eğitimi, şirketin sektörüne, hedef pazarına ve satış modeline göre özelleştirilebilir. Genel olarak Sales Navigator temel kullanım mantığı, LinkedIn ve Sales Navigator farkı, hedef müşteri profili oluşturma, hedef ülke ve sektör belirleme, gelişmiş kişi ve şirket arama filtreleri, lead arama, account arama, karar verici kişi araştırması, lead listesi, account listesi, kayıtlı aramalar, mesajlaşma, InMail, CRM müşteri takibi, mail marketing ve telefon araması öncesi hazırlık konuları ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "LinkedIn Sales Navigator Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Eğitim modülleri satış, ihracat, pazarlama veya iş geliştirme ihtiyacına göre planlanır.",
+          "items": [
+            {
+              "title": "Sales Navigator Temel Kullanımı",
+              "body": "Eğitimin ilk bölümünde Sales Navigator’ın temel kullanım mantığı anlatılır. Katılımcıların aracı yalnızca kişi arama alanı olarak değil, B2B satış araştırması ve müşteri takip sistemi olarak görmesi hedeflenir. Kapsam: Sales Navigator nedir ve kimler için uygundur?; LinkedIn’den farkı nedir?; Lead ve account mantığı nedir?; CRM ile nasıl birlikte düşünülmelidir?."
+            },
+            {
+              "title": "Hedef Müşteri Profili Oluşturma",
+              "body": "Sales Navigator’da başarılı arama yapmanın ilk adımı hedef müşteri profilini netleştirmektir. Hedef müşteri belli değilse yapılan aramalar dağınık ve verimsiz olur. Kapsam: Hangi ülkelere ve sektörlere ulaşmak istiyoruz?; Hangi şirket büyüklüğü bize uygun?; Ürün veya hizmetimizi kim satın alır?; Distribütör, toptancı, üretici veya ithalatçı profili nasıl ayrılır?."
+            },
+            {
+              "title": "Hedef Ülke ve Sektör Belirleme",
+              "body": "İhracat ve B2B satış çalışmalarında hedef ülke ve sektör seçimi çok önemlidir. Sales Navigator kullanırken hangi pazara, hangi sektöre ve hangi firma tipine ulaşmak istediğinizi net bilmeniz gerekir. Kapsam: Hedef ülkeler, bölgeler ve sektörler; Firma büyüklüğü ve şirket türü; Ürün veya hizmet uyumu; Pazara giriş önceliği."
+            },
+            {
+              "title": "Gelişmiş Kişi Arama Filtreleri",
+              "body": "Sales Navigator’ın en önemli alanlarından biri gelişmiş kişi arama filtreleridir. Bu filtreler sayesinde doğru unvan, sektör, ülke, şirket, kıdem seviyesi ve ilgi alanlarına göre potansiyel karar vericiler araştırılabilir. Kapsam: Unvan, ülke, sektör ve şirket adı; Kıdem seviyesi, departman ve fonksiyon; Anahtar kelime, bağlantı derecesi ve profil dili; LinkedIn aktivitesi ve iş değişikliği sinyalleri."
+            },
+            {
+              "title": "Gelişmiş Şirket Arama Filtreleri",
+              "body": "Sales Navigator yalnızca kişi bulmak için değil, hedef şirketleri araştırmak için de kullanılmalıdır. Özellikle ihracat ve B2B satışta önce firma listesi, sonra karar verici kişi listesi oluşturmak daha sistemli bir yaklaşımdır. Kapsam: Şirket adı, ülke, bölge ve sektör; Çalışan sayısı ve şirket tipi; Benzer şirketler ve hedef hesap listesi; İthalatçı veya distribütör olma ihtimali."
+            },
+            {
+              "title": "Lead ve Account Mantığı",
+              "body": "Sales Navigator’da lead ve account kavramlarını doğru anlamak gerekir. Lead, iletişim kurulabilecek kişi; account ise hedeflenen şirket veya firma hesabı olarak düşünülebilir. Kapsam: Hedef şirket listesi ve şirket içindeki karar vericiler; Satın alma, ithalat ve ihracat yetkilileri; Bağlantı ve mesaj durumu; CRM kayıt durumu, takip tarihi ve satış aşaması."
+            },
+            {
+              "title": "Karar Verici Kişi Araştırması",
+              "body": "B2B satışta doğru kişiye ulaşmak çok önemlidir. Sales Navigator, karar verici kişilerin bulunması için kullanılabilir. Kapsam: Satın alma müdürü, procurement manager ve sourcing manager; Import manager, general manager ve company owner; Business development, category ve product manager; Supply chain, operations, e-commerce ve marketing manager."
+            },
+            {
+              "title": "İhracat Müşteri Bulma İçin Sales Navigator Kullanımı",
+              "body": "Sales Navigator, ihracat müşteri bulma sürecinde destekleyici bir araç olarak kullanılabilir. Özellikle yurt dışındaki ithalatçılar, distribütörler, toptancılar, satın alma ekipleri ve şirket yöneticileri araştırılabilir. Kapsam: Hedef ülkedeki firmaları araştırma; İthalatçı, distribütör ve toptancı firmaları bulma; Fuar öncesi ve sonrası bağlantı kurma; Mail marketing sonrası LinkedIn takibi yapma."
+            },
+            {
+              "title": "Lead Listesi Oluşturma",
+              "body": "Sales Navigator’da bulunan potansiyel kişiler düzenli lead listelerine aktarılmalıdır. Aksi halde bulunan kişiler unutulabilir ve takip süreci dağınık kalır. Kapsam: Kişi adı, unvan, şirket adı, ülke ve sektör; Bağlantı durumu, ilk mesaj durumu ve cevap durumu; İlgilendiği ürün veya hizmet ve takip tarihi; CRM aktarım durumu ve satış aşaması."
+            },
+            {
+              "title": "Account Listesi Oluşturma",
+              "body": "Account listesi, hedef şirketlerin düzenli takip edilmesini sağlar. Özellikle B2B satış ve ihracatta şirket bazlı takip yapmak çok önemlidir. Kapsam: Şirket adı, ülke, sektör ve şirket büyüklüğü; Web sitesi ve LinkedIn şirket profili; Hedef ürün uyumu ve karar vericiler; Teklif durumu, CRM kayıt durumu ve takip tarihi."
+            },
+            {
+              "title": "Kayıtlı Aramalar ve Takip Süreci",
+              "body": "Sales Navigator’da belirli arama kriterleri düzenli takip edilebilir. Hedef ülke, sektör, unvan veya şirket tipine göre yapılan aramalar daha sonra tekrar kullanılabilir. Kapsam: Yeni karar vericileri ve hedef pazardaki yeni kişileri takip etmek; Belirli unvanları ve sektörleri izlemek; Haftalık lead çalışması yapmak; Fuar veya mail marketing kampanyası öncesi liste hazırlamak."
+            },
+            {
+              "title": "Sales Navigator Uyarıları ve Alıcı Sinyalleri",
+              "body": "Sales Navigator, hedef kişiler ve şirketlerle ilgili bazı güncellemeleri takip etmeye yardımcı olabilir. Bu sinyaller satış iletişimi için fırsat oluşturabilir. Kapsam: İş değişikliği ve şirket güncellemeleri; Yeni paylaşım yapan kişiler; Ortak bağlantılar ve hedef hesap aktiviteleri; İletişim için uygun zamanlama ihtimali."
+            },
+            {
+              "title": "Bağlantı Talebi Hazırlama",
+              "body": "Sales Navigator ile bulunan kişilere LinkedIn üzerinden bağlantı talebi gönderirken dikkatli olunmalıdır. Bağlantı talebi kısa, profesyonel ve kişiye uygun hazırlanmalıdır. Kapsam: Kısa ve kişiye özel görünmeli; Hemen satış yapmamalı; Ortak sektör veya ilgi alanı kullanılmalı; Spam gibi görünmemeli."
+            },
+            {
+              "title": "İlk Mesaj ve Takip Mesajları",
+              "body": "Bağlantı kabul edildikten sonra gönderilecek ilk mesaj çok önemlidir. İlk mesajda doğrudan satış baskısı yapmak yerine kısa, net ve güven veren bir iletişim kurulmalıdır. Kapsam: Kısa teşekkür ve kendini tanıtma; Sektöre uygun kısa açıklama; Web sitesi veya katalog yönlendirmesi; Planlı ve saygılı takip mesajları."
+            },
+            {
+              "title": "InMail Kullanım Mantığı",
+              "body": "Sales Navigator planına göre InMail veya benzeri doğrudan mesajlaşma imkanları kullanılabilir. Ancak bu özelliklerin etkili olması için mesajın doğru kişiye, doğru içerikle ve doğru zamanda gönderilmesi gerekir. Kapsam: Konu başlığı net olmalı; Mesaj kısa ve kişiye özel olmalı; Görüşme veya cevap çağrısı net olmalı; Spam algısı oluşturulmamalı."
+            },
+            {
+              "title": "Mail Marketing ile Sales Navigator Kullanımı",
+              "body": "Sales Navigator, mail marketing çalışmalarını güçlendirebilir. E-posta gönderilecek firmalar LinkedIn üzerinden araştırılabilir, karar verici kişiler bulunabilir ve mail sonrası takip süreci LinkedIn ile desteklenebilir. Kapsam: Hedef firma listesinin LinkedIn’de araştırılması; Karar verici kişi ve satın alma müdürü tespiti; Mail sonrası bağlantı talebi gönderme; E-posta ve LinkedIn cevaplarını birlikte takip etme."
+            },
+            {
+              "title": "Telefon Araması Öncesi Sales Navigator Kullanımı",
+              "body": "Telefon araması yapmadan önce hedef kişinin ve firmanın LinkedIn üzerinden incelenmesi satış görüşmesini daha hazırlıklı hale getirebilir. Kapsam: Kişinin unvanı, şirketi ve görev alanı; Şirket sektörü, ülkesi ve büyüklüğü; Son paylaşımlar ve ortak bağlantılar; Görüşmede kullanılabilecek giriş cümlesi ve CRM notu."
+            },
+            {
+              "title": "CRM ile Sales Navigator Müşteri Takibi",
+              "body": "Sales Navigator’dan bulunan kişiler CRM’e aktarılmadığında takip süreci dağınık kalır. Hangi kişi bulundu, kime mesaj atıldı, kim cevap verdi, kim teklif istedi ve kim tekrar aranacak gibi bilgiler kayıt altına alınmalıdır. Kapsam: Kişi adı, unvan, şirket adı, ülke ve sektör; LinkedIn profil bağlantısı ve Sales Navigator kaynak bilgisi; İlk mesaj tarihi, cevap durumu ve teklif durumu; Takip tarihi, satış temsilcisi, satış aşaması ve sonraki aksiyon."
+            },
+            {
+              "title": "Sales Navigator Performans Takibi",
+              "body": "Sales Navigator çalışmalarında başarı yalnızca bulunan kişi sayısıyla ölçülmemelidir. Önemli olan doğru kişilerin bulunması, iletişim kurulması ve satış sürecine alınmasıdır. Kapsam: Oluşturulan lead ve account listeleri; Bağlantı talebi sayısı ve kabul oranı; İlk mesaj gönderim sayısı ve cevap oranı; CRM’e eklenen müşteri adayları ve satış fırsatına dönüşen leadler."
+            },
+            {
+              "title": "Sales Navigator’da Profesyonel İletişim Kuralları",
+              "body": "Sales Navigator ile bulunan kişilere ulaşırken profesyonel iletişim kuralları korunmalıdır. Yanlış mesajlaşma, spam algısı ve aşırı ısrarcı takip süreci markaya zarar verebilir. Kapsam: Kısa ve net mesaj yazmak; Kişiye özel yaklaşım kullanmak; Hemen satış baskısı yapmamak; CRM notlarını düzenli tutmak."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "LinkedIn Sales Navigator Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketin sektörü, hedef ülkeleri, hedef müşteri profili, mevcut LinkedIn kullanımı ve Sales Navigator eğitim ihtiyacı değerlendirilerek başlar. Ardından hedef müşteri profili belirleme, temel kullanım eğitimi, uygulamalı arama çalışması, lead ve account listesi hazırlama, mesajlaşma, CRM takip süreci ve günlük, haftalık, aylık kullanım yol haritası oluşturulur.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Şirketin sektörü, hedef ülkeleri, hedef müşteri profili, mevcut LinkedIn kullanımı ve Sales Navigator eğitim ihtiyacı değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Hedef Müşteri Profili Belirleme",
+              "body": "Hangi firmalara, hangi ülkelere, hangi sektörlere ve hangi unvanlara ulaşılacağı netleştirilir."
+            },
+            {
+              "n": 3,
+              "title": "Sales Navigator Temel Kullanım Eğitimi",
+              "body": "Araç arayüzü, lead ve account mantığı, gelişmiş filtreler, kayıtlı aramalar ve listeler anlatılır."
+            },
+            {
+              "n": 4,
+              "title": "Uygulamalı Arama Çalışması",
+              "body": "Katılımcıların kendi sektörleri üzerinden hedef firma ve karar verici kişi aramaları yapılır."
+            },
+            {
+              "n": 5,
+              "title": "Lead ve Account Listesi Hazırlama",
+              "body": "Bulunan kişiler ve firmalar listelenir, önceliklendirilir ve satış takibine uygun hale getirilir."
+            },
+            {
+              "n": 6,
+              "title": "Mesajlaşma ve Takip Eğitimi",
+              "body": "Bağlantı mesajı, ilk mesaj, takip mesajı, InMail mantığı ve görüşme talebi örnekleri hazırlanır."
+            },
+            {
+              "n": 7,
+              "title": "CRM Takip Süreci",
+              "body": "Sales Navigator’dan bulunan müşteri adaylarının CRM’e nasıl aktarılacağı ve nasıl takip edileceği anlatılır."
+            },
+            {
+              "n": 8,
+              "title": "Yol Haritası",
+              "body": "Eğitim sonunda günlük, haftalık ve aylık Sales Navigator kullanım planı hazırlanır."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "LinkedIn Sales Navigator Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Hedef müşteri araştırması daha sistemli yapılır",
+            "Doğru şirketler ve doğru kişiler daha kolay tespit edilir",
+            "Karar verici kişilere ulaşma becerisi gelişir",
+            "Satış ekibi gelişmiş filtreleri daha bilinçli kullanır",
+            "Lead ve account listeleri düzenli oluşturulur",
+            "İhracat müşteri bulma süreci desteklenir",
+            "Mail marketing çalışmaları LinkedIn ile güçlendirilir",
+            "Telefon araması öncesi kişi ve firma analizi yapılabilir",
+            "Mesajlaşma süreci daha profesyonel hale gelir",
+            "CRM müşteri takibi daha düzenli yapılır",
+            "Satış ekibi zamanını daha doğru kişilere harcar",
+            "B2B satış süreci daha ölçülebilir hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "LinkedIn Sales Navigator Kullanımında Sık Yapılan Hatalar",
+          "items": [
+            "Hedef müşteri profili oluşturmadan arama yapmak",
+            "Yanlış ülke veya sektör filtreleri kullanmak",
+            "Yanlış unvanlara ulaşmaya çalışmak",
+            "Lead ve account ayrımını bilmemek",
+            "Bulunan kişileri listelememek",
+            "Kayıtlı aramaları takip etmemek",
+            "Aynı mesajı herkese göndermek",
+            "Bağlantı kabul edilir edilmez satış mesajı göndermek",
+            "Çok uzun mesajlar yazmak",
+            "InMail’i plansız kullanmak",
+            "CRM takibi yapmamak",
+            "Mail marketing ile LinkedIn’i birlikte planlamamak",
+            "Telefon araması öncesi kişi araştırması yapmamak",
+            "Spam algısı oluşturmak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn Sales Navigator Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "LinkedIn Sales Navigator eğitimi, B2B satış, ihracat müşteri bulma ve CRM süreçleriyle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn Sales Navigator Eğitimi, B2B Müşteri Bulma ve Lead Listesi Oluşturma",
+          "body": [
+            "LinkedIn Sales Navigator eğitimi; Sales Navigator kullanımı, Sales Navigator B2B müşteri bulma, Sales Navigator lead listesi oluşturma, Sales Navigator account listesi, LinkedIn karar verici kişi bulma, LinkedIn satın alma müdürü bulma, Sales Navigator ihracat müşteri bulma, LinkedIn ithalatçı firma bulma, LinkedIn distribütör bulma, Sales Navigator gelişmiş arama filtreleri, LinkedIn B2B satış eğitimi, Sales Navigator CRM müşteri takibi ve LinkedIn lead generation eğitimi konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "LinkedIn Sales Navigator eğitimi nedir?",
+          "body": [
+            "LinkedIn Sales Navigator eğitimi; Sales Navigator’ın B2B müşteri bulma, hedef firma araştırması, gelişmiş arama filtreleri, karar verici kişi tespiti, lead listesi oluşturma, account listesi hazırlama, bağlantı kurma, mesajlaşma, InMail kullanımı, mail marketing desteği, telefon araması hazırlığı ve CRM müşteri takibi süreçlerinde nasıl kullanılacağını öğreten uygulamalı eğitimdir. {{appName}}, satış ekiplerine, ihracat ekiplerine ve B2B müşteri bulmak isteyen şirketlere Sales Navigator eğitimi sunar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "LinkedIn Sales Navigator Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "LinkedIn Sales Navigator eğitimi kimler için uygundur? +",
+              "a": "Bu eğitim; B2B müşteri bulmak isteyen satış ekipleri, ihracat ekipleri, iş geliştirme uzmanları, şirket sahipleri, KOBİ’ler, üretici firmalar ve LinkedIn üzerinden karar verici kişilere ulaşmak isteyen işletmeler için uygundur."
+            },
+            {
+              "q": "Sales Navigator ile B2B müşteri bulunabilir mi? +",
+              "a": "Sales Navigator, doğru hedefleme ve profesyonel takip süreciyle B2B müşteri araştırması için güçlü bir destek aracıdır. Ancak satış garantisi vermez. Doğru liste, doğru mesaj, CRM takibi ve düzenli iletişim gerekir."
+            },
+            {
+              "q": "Sales Navigator ile ihracat müşterisi bulunabilir mi? +",
+              "a": "Evet. Hedef ülkelerdeki ithalatçılar, distribütörler, toptancılar, satın alma müdürleri ve karar verici kişiler Sales Navigator üzerinden araştırılabilir. Bu süreç mail marketing, telefon aramaları ve CRM takibiyle birlikte planlanabilir."
+            },
+            {
+              "q": "Eğitimde gelişmiş arama filtreleri anlatılıyor mu? +",
+              "a": "Evet. Kişi ve şirket arama filtreleri, ülke, sektör, unvan, şirket büyüklüğü, kıdem seviyesi, bağlantı derecesi ve anahtar kelime kullanımı uygulamalı olarak anlatılabilir."
+            },
+            {
+              "q": "Lead listesi ve account listesi oluşturma öğretiliyor mu? +",
+              "a": "Evet. Sales Navigator üzerinde hedef kişi listeleri ve hedef firma listeleri oluşturma, bu listeleri önceliklendirme ve CRM ile takip etme süreci eğitimde anlatılır."
+            },
+            {
+              "q": "Satın alma müdürü veya ithalat müdürü bulmak mümkün mü? +",
+              "a": "Evet. Doğru unvan, sektör, ülke ve şirket filtreleriyle satın alma müdürü, ithalat müdürü, sourcing manager, procurement manager ve benzeri karar verici profiller araştırılabilir."
+            },
+            {
+              "q": "Sales Navigator mesajlaşma eğitimi veriliyor mu? +",
+              "a": "Evet. Bağlantı talebi, ilk mesaj, takip mesajı, görüşme talebi ve InMail kullanım mantığı profesyonel B2B iletişim diliyle anlatılabilir."
+            },
+            {
+              "q": "Sales Navigator CRM ile birlikte kullanılabilir mi? +",
+              "a": "Evet. Sales Navigator’dan bulunan kişiler ve şirketler CRM üzerinde kişi adı, unvan, firma, ülke, mesaj durumu, cevap durumu, teklif durumu ve takip tarihi gibi bilgilerle takip edilebilir."
+            },
+            {
+              "q": "Sales Navigator satış garantisi verir mi? +",
+              "a": "Hayır. Sales Navigator satış garantisi vermez. Ancak doğru hedef müşteri araştırması, karar verici kişi bulma, mesajlaşma ve CRM takip süreciyle B2B satış çalışmalarını daha düzenli hale getirmeye yardımcı olur."
+            },
+            {
+              "q": "Eğitim şirketimize özel hazırlanabilir mi? +",
+              "a": "Evet. Eğitim şirketinizin sektörü, hedef ülkeleri, ürünleri, hedef müşteri profili, satış süreci ve ekip yapısına göre özelleştirilebilir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Sales Navigator’ı Sadece Kişi Arama Aracı Olarak Bırakmayalım",
+        "body": "Sales Navigator aboneliğiniz var ama doğru hedef firmaları bulamıyor, karar verici kişilere ulaşamıyor, lead listesi oluşturamıyor veya bulduğunuz kişileri satış sürecine bağlayamıyorsanız bu araçtan yeterince verim alamıyor olabilirsiniz. {{appName}} LinkedIn Sales Navigator Eğitimi ile hedef müşteri profilinizi belirleyelim, doğru filtrelerle firma ve kişi araştırması yapalım, karar verici kişileri bulalım, lead ve account listeleri oluşturalım, mesajlaşma sürecinizi planlayalım ve müşteri adaylarını CRM üzerinden takip edilebilir hale getirelim.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

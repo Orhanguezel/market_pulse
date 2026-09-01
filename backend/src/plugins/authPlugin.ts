@@ -1,7 +1,15 @@
 import fp from 'fastify-plugin';
 import type { FastifyPluginAsync } from 'fastify';
+import { enterUser } from '@/core/tenant-context';
 
 type RouteAuthConfig = { auth?: boolean };
+
+function readUserId(user: unknown): string | undefined {
+  if (typeof user !== 'object' || user === null || Array.isArray(user)) return undefined;
+  const record = user as Record<string, unknown>;
+  const sub = record.sub ?? record.id;
+  return sub ? String(sub) : undefined;
+}
 
 const authPlugin: FastifyPluginAsync = async (app) => {
   app.addHook('onRequest', async (req, reply) => {
@@ -19,6 +27,8 @@ const authPlugin: FastifyPluginAsync = async (app) => {
 
     try {
       await req.jwtVerify();
+      const userId = readUserId(req.user);
+      if (userId) enterUser(userId);
     } catch {
       return reply.code(401).send({ error: { message: 'invalid_token' } });
     }

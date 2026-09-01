@@ -1,0 +1,137 @@
+<!doctype html><html lang="tr"><head><meta charset="utf-8"><link rel="stylesheet" href="_base.css">
+<style>
+.layout{ display:grid; grid-template-columns:1fr 384px; gap:18px; height:100%;}
+.panel{ padding:20px 22px;}
+.panel h3{ font-size:15px; font-weight:700; display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;}
+.runbtn{ background:var(--teal); color:#fff; border:none; padding:8px 14px; border-radius:9px; font-size:12.5px; font-weight:600; display:flex; align-items:center; gap:6px;}
+/* jobs */
+.job{ display:flex; align-items:center; gap:14px; padding:15px 0; border-bottom:1px solid var(--line);}
+.job:last-child{border-bottom:none;}
+.job .ji{ width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.job .jn{ font-size:14px; font-weight:600;}
+.job .js{ font-size:12px; color:var(--ink2); margin-top:2px;}
+.job .prog{ flex:1; max-width:200px;}
+.job .pbar{ height:7px; background:var(--line); border-radius:5px; overflow:hidden;}
+.job .pbar i{ display:block; height:100%; border-radius:5px;}
+.job .pn{ font-size:11px; color:var(--ink2); margin-top:5px; display:flex; justify-content:space-between;}
+.jstate{ font-size:11.5px; font-weight:600; padding:4px 11px; border-radius:20px; display:flex; align-items:center; gap:6px; white-space:nowrap;}
+.spin{ width:9px;height:9px;border-radius:50%;border:2px solid currentColor;border-right-color:transparent;display:inline-block;}
+/* results table */
+.tbl{ width:100%; border-collapse:collapse; margin-top:6px;}
+.tbl th{ text-align:left; font-size:11px; color:var(--ink3); font-weight:600; text-transform:uppercase; letter-spacing:.6px; padding:10px 12px; border-bottom:1px solid var(--line);}
+.tbl td{ padding:13px 12px; border-bottom:1px solid var(--line); font-size:13px;}
+.tbl tr:last-child td{ border-bottom:none;}
+.tbl .firm{ font-weight:600;}
+.tbl .firm small{ display:block; color:var(--ink2); font-weight:400; font-size:11.5px; margin-top:1px;}
+.scoremini{ font-weight:700; font-size:14px;}
+.srcbadge{ font-size:10.5px; font-weight:600; padding:2px 9px; border-radius:6px;}
+/* right rail: scraper stats */
+.rail{ display:flex; flex-direction:column; gap:18px;}
+.stat{ display:flex; align-items:center; gap:13px; padding:13px 0; border-bottom:1px solid var(--line);}
+.stat:last-child{border-bottom:none;}
+.stat .si{ width:36px;height:36px;border-radius:9px;display:flex;align-items:center;justify-content:center;}
+.stat .sv{ font-size:20px; font-weight:700; letter-spacing:-.5px;}
+.stat .sl{ font-size:12px; color:var(--ink2);}
+.donut{ display:flex; align-items:center; gap:18px; margin-top:6px;}
+.legend{ font-size:12.5px;}
+.legend div{ display:flex; align-items:center; gap:8px; padding:5px 0;}
+.legend .sw{ width:11px;height:11px;border-radius:3px;}
+.legend b{ margin-left:auto; font-weight:700;}
+</style></head>
+<body><div class="app">
+<aside class="side">
+  <div class="brand"><div class="logo"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></div><div><b>MarketPulse</b><span>Market Intelligence</span></div></div>
+  <nav class="nav">
+    <div class="navlbl">Genel</div>
+    <a href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>Panel</a>
+    <a href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12h4l3 8 4-16 3 8h4"/></svg></span>Pazar Sinyalleri<span class="badge">12</span></a>
+    <a href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></span>Churn Riski</a>
+    <div class="navlbl">Lead Machine</div>
+    <a href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/></svg></span>Lead Pipeline</a>
+    <a class="on" href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></span>Keşif & Tarama</a>
+    <a href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg></span>Outreach</a>
+    <div class="navlbl">Sistem</div>
+    <a href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></svg></span>Raporlar</a>
+    <a href="#"><span class="ic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-2.82 1.17V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 8 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 14H4.5a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 6 8.6"/></svg></span>Ayarlar</a>
+  </nav>
+  <div class="side-foot"><div class="av">AP</div><div><b>Avrasya Paspas</b><small>Promat · Pilot</small></div></div>
+</aside>
+<div class="main">
+  <header class="top">
+    <div><h1>Keşif & Tarama</h1></div>
+    <div class="crumb">Scraper motoru · 3 kanal aktif</div>
+    <div class="search"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg>Sektör, anahtar kelime…</div>
+    <div class="tbtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5a6b7d" stroke-width="2"><path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/></svg><span class="dot"></span></div>
+  </header>
+  <div class="content">
+    <div class="layout">
+      <div style="display:flex;flex-direction:column;gap:18px;min-height:0;">
+        <div class="card panel">
+          <h3>Aktif Tarama İşleri <button class="runbtn"><svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.4"><path d="M5 3l14 9-14 9z"/></svg>Yeni Tarama</button></h3>
+          <div class="job">
+            <div class="ji" style="background:#fff7ed"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#ea580c" stroke-width="2"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg></div>
+            <div style="flex:1"><div class="jn">Amazon Satıcı Tarama</div><div class="js">Kategori: Oto aksesuar · AI yorum analizi</div></div>
+            <div class="prog"><div class="pbar"><i style="width:68%;background:var(--teal)"></i></div><div class="pn"><span>312 / 460 satıcı</span><span>%68</span></div></div>
+            <span class="jstate" style="background:var(--teal-soft);color:var(--teal)"><span class="spin"></span>Çalışıyor</span>
+          </div>
+          <div class="job">
+            <div class="ji" style="background:#eff6ff"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><path d="M9 22V12h6v10"/></svg></div>
+            <div style="flex:1"><div class="jn">B2B Dizin Tarama</div><div class="js">Europages · Kompass · Google Maps</div></div>
+            <div class="prog"><div class="pbar"><i style="width:41%;background:var(--teal)"></i></div><div class="pn"><span>188 / 460 firma</span><span>%41</span></div></div>
+            <span class="jstate" style="background:var(--teal-soft);color:var(--teal)"><span class="spin"></span>Çalışıyor</span>
+          </div>
+          <div class="job">
+            <div class="ji" style="background:#f5f3ff"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#7c3aed" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="M4 9h16M9 4v16"/></svg></div>
+            <div style="flex:1"><div class="jn">Fuar Katılımcı Tarama</div><div class="js">Automechanika 2026 · 10times intent</div></div>
+            <div class="prog"><div class="pbar"><i style="width:100%;background:var(--green)"></i></div><div class="pn"><span>94 katılımcı bulundu</span><span>%100</span></div></div>
+            <span class="jstate" style="background:var(--green-s);color:var(--green)"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="3"><path d="M20 6 9 17l-5-5"/></svg>Tamamlandı</span>
+          </div>
+        </div>
+        <div class="card panel" style="flex:1;min-height:0;">
+          <h3>Son Bulunan Adaylar <span style="font-size:12px;color:var(--teal);font-weight:600;">594 aday · ICP eşleşti</span></h3>
+          <table class="tbl">
+            <thead><tr><th>Firma</th><th>Kanal</th><th>ICP Skor</th><th>Sinyal</th><th>Enrichment</th></tr></thead>
+            <tbody>
+              <tr><td class="firm">Demir Kauçuk San.<small>Kocaeli · Oto yan sanayi</small></td><td><span class="srcbadge" style="background:#ffedd5;color:#c2410c">Amazon</span></td><td><span class="scoremini" style="color:var(--green)">91</span></td><td><span class="pill" style="background:var(--green-s);color:var(--green)">Yüksek hacim</span></td><td><span class="pill" style="background:var(--teal-soft);color:var(--teal)">Apollo ✓ 2 kişi</span></td></tr>
+              <tr><td class="firm">Polat Sanayi A.Ş.<small>Ankara · Metal işleme</small></td><td><span class="srcbadge" style="background:#e0f2fe;color:#0369a1">B2B</span></td><td><span class="scoremini" style="color:var(--green)">88</span></td><td><span class="pill" style="background:var(--amber-s);color:var(--amber)">İhracat ilanı</span></td><td><span class="pill" style="background:var(--teal-soft);color:var(--teal)">Apollo ✓ 3 kişi</span></td></tr>
+              <tr><td class="firm">Efe Makina<small>Bursa · Makina imalat</small></td><td><span class="srcbadge" style="background:#e0f2fe;color:#0369a1">B2B</span></td><td><span class="scoremini" style="color:var(--green)">84</span></td><td><span class="pill" style="background:var(--green-s);color:var(--green)">Pain eşleşti</span></td><td><span class="pill" style="background:var(--slate-s);color:var(--slate)">Aranıyor…</span></td></tr>
+              <tr><td class="firm">Akın Otomotiv<small>Konya · Distribütör</small></td><td><span class="srcbadge" style="background:#ede9fe;color:#6d28d9">Fuar</span></td><td><span class="scoremini" style="color:var(--amber)">64</span></td><td><span class="pill" style="background:var(--amber-s);color:var(--amber)">Stand B4.21</span></td><td><span class="pill" style="background:var(--teal-soft);color:var(--teal)">Apollo ✓ 1 kişi</span></td></tr>
+              <tr><td class="firm">Güneş Kimya<small>İzmir · Kimya</small></td><td><span class="srcbadge" style="background:#ffedd5;color:#c2410c">Amazon</span></td><td><span class="scoremini" style="color:var(--teal)">72</span></td><td><span class="pill" style="background:var(--slate-s);color:var(--slate)">4,3★ inceleme</span></td><td><span class="pill" style="background:var(--teal-soft);color:var(--teal)">Apollo ✓ 2 kişi</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <!-- right rail -->
+      <div class="rail">
+        <div class="card panel">
+          <h3>Bu Hafta</h3>
+          <div class="stat"><div class="si" style="background:var(--teal-soft)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0d9488" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg></div><div><div class="sv">594</div><div class="sl">Taranan firma</div></div></div>
+          <div class="stat"><div class="si" style="background:var(--green-s)"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#16a34a" stroke-width="2"><path d="M20 6 9 17l-5-5"/></svg></div><div><div class="sv">137</div><div class="sl">ICP eşleşen aday</div></div></div>
+          <div class="stat"><div class="si" style="background:#e0f2fe"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0284c7" stroke-width="2"><path d="M4 4h16v16H4z"/><path d="m22 6-10 7L2 6"/></svg></div><div><div class="sv">86</div><div class="sl">Email bulundu</div></div></div>
+        </div>
+        <div class="card panel">
+          <h3>Kanal Dağılımı</h3>
+          <div class="donut">
+            <svg width="120" height="120" viewBox="0 0 42 42">
+              <circle cx="21" cy="21" r="15.9" fill="none" stroke="#f1f5f9" stroke-width="7"/>
+              <circle cx="21" cy="21" r="15.9" fill="none" stroke="#ea580c" stroke-width="7" stroke-dasharray="44 56" stroke-dashoffset="25"/>
+              <circle cx="21" cy="21" r="15.9" fill="none" stroke="#0284c7" stroke-width="7" stroke-dasharray="38 62" stroke-dashoffset="-19"/>
+              <circle cx="21" cy="21" r="15.9" fill="none" stroke="#7c3aed" stroke-width="7" stroke-dasharray="18 82" stroke-dashoffset="-57"/>
+            </svg>
+            <div class="legend" style="flex:1">
+              <div><span class="sw" style="background:#ea580c"></span>Amazon <b>44%</b></div>
+              <div><span class="sw" style="background:#0284c7"></span>B2B Dizin <b>38%</b></div>
+              <div><span class="sw" style="background:#7c3aed"></span>Fuar <b>18%</b></div>
+            </div>
+          </div>
+        </div>
+        <div class="card panel" style="background:linear-gradient(135deg,#0e2436,#13304a);color:#cfe3ec;border:none;">
+          <h3 style="color:#fff;">scraper-service</h3>
+          <div style="display:flex;align-items:center;gap:9px;margin-top:10px;font-size:13px;"><span class="dot" style="background:#34d399;width:9px;height:9px;box-shadow:0 0 0 4px rgba(52,211,153,.2)"></span>Bağlı · Python motoru sağlıklı</div>
+          <div style="font-size:12px;color:#8fb0c4;margin-top:12px;line-height:1.6;">Site değişikliği, fiyat farkı ve sosyal aktivite sinyalleri otomatik üretiliyor. Son senkron: 6 dk önce.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+</div></body></html>

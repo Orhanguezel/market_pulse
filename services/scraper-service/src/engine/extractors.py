@@ -2,7 +2,7 @@ import hashlib
 import json
 import re
 from typing import Any
-from urllib.parse import urljoin, urlparse
+from urllib.parse import parse_qs, unquote, urljoin, urlparse
 
 from scrapling.parser import Selector
 
@@ -277,6 +277,39 @@ def _listing_from_node(node: Any, final_url: str) -> dict[str, Any] | None:
     }
 
 
+def _external_company_link(node: Any, final_url: str) -> str | None:
+    base_host = (urlparse(final_url).netloc or "").lower()
+    for link in node.css("a[href]"):
+        href = _attrs(link).get("href")
+        if not href:
+            continue
+        raw_href = str(href).strip()
+        if raw_href.startswith(("mailto:", "tel:", "#")):
+            continue
+        absolute = urljoin(final_url, raw_href)
+        parsed = urlparse(absolute)
+        host = (parsed.netloc or "").lower()
+        if not host:
+            continue
+
+        query = parse_qs(parsed.query)
+        redirect_target = (
+            query.get("url", [None])[0]
+            or query.get("u", [None])[0]
+            or query.get("target", [None])[0]
+        )
+        if redirect_target:
+            decoded = unquote(str(redirect_target))
+            decoded_host = (urlparse(decoded).netloc or "").lower()
+            if decoded_host and "europages." not in decoded_host:
+                return decoded
+
+        if host == base_host or "europages." in host:
+            continue
+        return absolute
+    return None
+
+
 def extract_directory_listing(html: str, url: str, response: Any) -> dict[str, Any]:
     sel = Selector(html or "", url=url)
     final_url = getattr(response, "url", url) or url
@@ -297,14 +330,19 @@ def extract_directory_listing(html: str, url: str, response: Any) -> dict[str, A
                 continue
             seen.add(key)
             href = anchor.css('::attr(href)').get()
+            card = anchor.xpath('ancestor::*[contains(@class, "company") or contains(@class, "card") or contains(@class, "supplier") or contains(@class, "result")][1]')
+            card_node = card.first if card else anchor
+            profile_url = urljoin(final_url, href) if href else final_url
+            description = str(card_node.get_all_text(separator=" ", strip=True))[:1000] if card_node else None
+            contact = _extract_contact(description or "")
             companies.append({
                 "name": name,
-                "website": urljoin(final_url, href) if href else None,
-                "description": None,
-                "email": None,
-                "phone": None,
+                "website": _external_company_link(card_node, final_url) if card_node else None,
+                "description": description,
+                "email": contact["emails"][0] if contact["emails"] else None,
+                "phone": contact["phones"][0] if contact["phones"] else None,
                 "address": None,
-                "source_url": urljoin(final_url, href) if href else final_url,
+                "source_url": profile_url,
             })
         if companies:
             return {

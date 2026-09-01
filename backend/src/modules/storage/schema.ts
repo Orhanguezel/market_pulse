@@ -13,7 +13,7 @@ import {
 } from "drizzle-orm/mysql-core";
 import { sql } from "drizzle-orm";
 
-/** storage_assets — tenantsiz (Cloudinary destekli) */
+/** storage_assets — admin global görünüm; kullanıcı varlıkları user_id + özel bucket ile scope edilir. */
 export const storageAssets = mysqlTable(
   "storage_assets",
   {
@@ -52,6 +52,8 @@ export const storageAssets = mysqlTable(
   (t) => ({
     uniq_bucket_path: uniqueIndex("uniq_bucket_path").on(t.bucket, t.path),
     idx_bucket: index("idx_storage_bucket").on(t.bucket),
+    idx_user: index("idx_storage_user").on(t.user_id),
+    idx_user_bucket: index("idx_storage_user_bucket").on(t.user_id, t.bucket),
     idx_folder: index("idx_storage_folder").on(t.folder),
     idx_created: index("idx_storage_created").on(t.created_at),
     idx_provider_pubid: index("idx_provider_pubid").on(t.provider_public_id),

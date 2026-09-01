@@ -1,0 +1,168 @@
+{
+  "slug": "ihracat-egitimi",
+  "category": "ihracat-musteri-bulma",
+  "module": "service",
+  "order": 120,
+  "icon": "GraduationCap",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "İhracat Eğitimi | Dış Ticaret, Müşteri Bulma, Teklif, Operasyon ve B2B Satış Eğitimi",
+        "description": "İhracat eğitimi ile şirketlere dış ticaret süreci, ihracata hazırlık, hedef pazar, B2B müşteri bulma, teklif, proforma, ödeme, lojistik, gümrük evrakları ve müşteri takibi konularında uygulamalı eğitim sunuyoruz.",
+        "ogTitle": "İhracat Eğitimi | {{appName}}",
+        "ogDescription": "İhracata hazırlık, hedef pazar, B2B müşteri bulma, teklif, proforma, teslim şekilleri, ödeme, lojistik, gümrük evrakları ve CRM müşteri takibi süreçlerini öğrenin."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "İhracat Eğitimi",
+        "lead": "İhracat yapmak istiyor ama nereden başlayacağınızı, hangi belgelerin gerektiğini, yurt dışı müşterilere nasıl ulaşacağınızı, teklif ve proforma sürecini nasıl yöneteceğinizi bilmiyor musunuz? İhracat yalnızca ürününüzü yurt dışına göndermek değildir. Doğru ürün hazırlığı, hedef pazar seçimi, fiyatlandırma, İngilizce tanıtım, web sitesi, B2B müşteri bulma, mail marketing, LinkedIn, teklif hazırlama, ödeme takibi, lojistik, gümrük evrakları ve müşteri iletişimi birlikte yönetilmelidir. {{appName}} olarak ihracata başlamak isteyen şirketlere, KOBİ’lere, üretici firmalara, satış ekiplerine ve dış ticaret departmanı kurmak isteyen işletmelere uygulamalı ihracat eğitimi sunuyoruz. Amacımız, ihracat sürecini karmaşık ve bilinmez olmaktan çıkarıp; şirketinizin ürününü, müşterisini, teklifini, operasyonunu ve takip sürecini daha sistemli yönetebileceği pratik bir yol haritası oluşturmaktır.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "İhracat Eğitimi Nedir?",
+          "body": [
+            "İhracat eğitimi, şirketlerin yurt dışına satış yapabilmesi için ihtiyaç duyduğu dış ticaret bilgisi, müşteri bulma yöntemleri, teklif hazırlığı, ödeme süreci, lojistik, gümrük evrakları, teslim şekilleri, müşteri iletişimi ve operasyon yönetimi konularını uygulamalı olarak öğreten eğitimdir.",
+            "Bu eğitimde amaç yalnızca teorik dış ticaret bilgisi vermek değildir. Asıl amaç, şirketin kendi ürünleri, hedef ülkeleri, mevcut satış yapısı ve ihracat hedefleri üzerinden uygulanabilir bir ihracat yaklaşımı oluşturmaktır.",
+            "{{appName}}, ihracat eğitimini şirketlerin gerçek ihtiyaçlarına göre uygulamalı ve anlaşılır şekilde planlar.",
+            "İhracatı rastgele deneme olmaktan çıkarın: hedef pazar, müşteri bulma, İngilizce iletişim, teklif, proforma, teslim ve ödeme şekilleri, lojistik, gümrük evrakları ve CRM takibiyle ihracat sürecinizi daha planlı hale getirin."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "İhracat Eğitimi Neden Önemlidir?",
+          "body": [
+            "Birçok firma kaliteli ürüne sahip olmasına rağmen ihracata hazırlık eksikliği, yanlış müşteri hedefleme, zayıf İngilizce iletişim, eksik teklif yapısı, yetersiz takip ve operasyon bilgisizliği nedeniyle yurt dışı satış sürecinde zorlanır.",
+            "İhracat eğitimi, şirketin bu süreci daha bilinçli, planlı ve kontrollü yürütmesine yardımcı olur."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Eğitim Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, ihracatı rastgele deneme yerine planlı bir satış ve operasyon süreci olarak yürütmek isteyen tüm işletmeler için uygundur.",
+          "items": [
+            { "title": "İhracata Başlamak İsteyen Üretici Firmalar", "body": "Ürününü yurt dışına satmak isteyen ama sürecin hazırlık, müşteri bulma ve operasyon adımlarını öğrenmek isteyen üreticiler için uygundur." },
+            { "title": "KOBİ’ler ve Şirket Sahipleri", "body": "İhracat sürecini temel seviyeden anlamak ve şirketini yurt dışı satışa hazırlamak isteyen işletmeler için planlanabilir." },
+            { "title": "Satış ve Dış Ticaret Ekipleri", "body": "Müşteri bulma, teklif hazırlama, takip ve operasyon süreçlerini daha düzenli yürütmek isteyen ekipler için uygundur." },
+            { "title": "Dış Ticaret Departmanı Kurmak İsteyen İşletmeler", "body": "İhracat sürecini kişisel denemeler yerine departman ve sistem mantığıyla yürütmek isteyen şirketler için uygundur." },
+            { "title": "Yurt Dışı Müşteri Bulmak İsteyen Firmalar", "body": "B2B platform, konşimento verileri, LinkedIn, mail marketing ve telefon takibi yöntemlerini öğrenmek isteyen firmalara uygundur." },
+            { "title": "İlk İhracatını Yapmak İsteyen Firmalar", "body": "İlk ihracat sürecinde teklif, ödeme, teslim şekli, nakliye ve evrak adımlarını öğrenmek isteyen firmalar için uygundur." },
+            { "title": "B2B ve E-Ticaret Platformlarında Satış Yapmak İsteyenler", "body": "Alibaba, TradeWheel, Go4WorldBusiness, Europages ve farklı B2B kanalları kullanmak isteyen işletmeler için uygundur." },
+            { "title": "Fuar Sürecini İhracat Stratejisine Bağlamak İsteyenler", "body": "Fuar öncesi hedefleme ve fuar sonrası CRM takibi yapmak isteyen firmalar için planlanabilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "İhracat Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Eğitim başlıkları şirketin ihtiyacına göre daraltılabilir veya detaylandırılabilir.",
+          "items": [
+            "İhracatın temel mantığı: ihracat nedir ve hangi aşamalardan oluşur, yurt dışı müşteri neye dikkat eder, şirket hangi konularda hazır olmalı ve satış/operasyon nasıl birlikte yürütülür",
+            "Şirketi ihracata hazırlama: İngilizce firma profili, ürün açıklamaları, web sitesi, görseller, katalog, teklif/proforma, fiyatlandırma yapısı ve CRM müşteri takip yapısı",
+            "Ürün ve fiyat hazırlığı: ürün adı, teknik özellikler, ambalaj bilgileri, MOQ, üretim kapasitesi, para birimi/navlun/teslim şekline göre fiyat, teklif geçerliliği ve numune süreci",
+            "Hedef pazar seçimi: hangi ülkelerde talep olabilir, rakipler hangi ülkelere satış yapıyor, lojistik maliyetleri uygun mu ve öncelikli pazar nasıl seçilir",
+            "Rakip ve pazar araştırması: rakip firmalar ve aktif oldukları ülkeler, rakip web siteleri ve B2B görünümleri, fiyat seviyesi, ürün sunumu, sertifika ve müşteri segmentleri",
+            "İhracat müşteri bulma yöntemleri: konşimento verileri ve GTİP / HS kodu araştırması, B2B platformlar, ürün adına göre ithalatçı bulma, LinkedIn, Sales Navigator, mail marketing ve fuar listeleri",
+            "Konşimento verileri ile müşteri bulma: alıcı/satıcı firma, ürün açıklaması, GTİP / HS kodu, sevkiyat ve varış ülkesi, miktar, tutar, sevkiyat tarihi ve ithalat sıklığı ile potansiyel müşteri değerlendirmesi",
+            "GTİP / HS koduna göre müşteri araştırması: ürün için doğru kod nasıl araştırılır, kod müşteri bulmada nasıl kullanılır, yanlış kodla araştırmanın riski ve listenin CRM’e aktarımı",
+            "B2B platformlarda ihracat müşterisi bulma: doğru platform/kategori/ürün yükleme mantığı, İngilizce ürün başlığı ve açıklama, MOQ, ambalaj, görsel ve Alibaba/TradeWheel/Go4WorldBusiness/Europages kullanımı",
+            "LinkedIn ile ihracat müşterisi bulma: hedef ülke/sektör/firma araştırması, karar verici kişi ve satın alma müdürü bulma, İngilizce ilk mesaj/takip mesajı ve mail marketing sonrası LinkedIn takibi",
+            "Mail marketing ile ihracat müşterisine ulaşma: hedef müşteri listesi ve kurumsal e-posta adresleri, İngilizce tanıtım maili ve kısa profesyonel metin, katalog/web sitesi/takip planı ve cevap veren müşterileri CRM’de sınıflandırma",
+            "Telefon aramaları ile müşteri takibi: arama öncesi firma ve karar verici kişi araştırması, kısa konuşma metni ve İngilizce görüşme hazırlığı, görüşme notu, tekrar arama tarihi ve CRM’e arama sonucu işleme",
+            "İngilizce tanıtım maili hazırlama: kısa selamlama ve firma tanıtımı, ürün/hizmet açıklaması, web sitesi/katalog/teklif yönlendirmesi, kısa ve net kapanış ile imza bilgileri",
+            "Teklif ve proforma hazırlama: satıcı/alıcı/ürün açıklaması ve GTİP / HS kodu, miktar/birim fiyat/toplam tutar/para birimi, teslim/ödeme şekli ve teslim süresi, banka bilgileri, geçerlilik, imza ve kaşe alanı",
+            "Teslim şekilleri: EXW, FCA, FOB, CFR, CIF, DAP ve DDP mantığı, teslim şeklinin fiyatlandırmaya etkisi, nakliye/sigorta/gümrük sorumluluğu ve teklifte teslim şeklinin yazımı",
+            "Ödeme şekilleri: peşin ödeme, kısmi ön ödeme, bakiye ödeme, mal/vesaik mukabili, akreditifli ödeme, sevkiyat öncesi ödeme takibi ve ödeme şartlarının proformada gösterilmesi",
+            "Nakliye ve lojistik süreci: kara/deniz/hava yolu, parsiyel/komple/konteyner taşımacılığı, navlun teklifi, yükleme planı, teslim adresi kontrolü ve müşteriye sevkiyat bilgisi verme",
+            "Gümrük evrakları: proforma/commercial invoice, packing list, konşimento veya taşıma belgesi, menşe şahadetnamesi, ATR, EUR.1 ve ürün/ülkeye özel belgeler",
+            "İhracat operasyon yönetimi: sipariş bilgileri, proforma ve ödeme takibi, ürün hazırlık/ambalaj/nakliye planı, gümrük evrakları, yükleme, müşteri bilgilendirme, teslimat teyidi ve tekrar sipariş potansiyeli",
+            "CRM ile ihracat müşteri takibi: firma/ülke/sektör/ilgili kişi/kaynak bilgisi, mail gönderim tarihi, cevap ve teklif durumu, proforma, arama sonucu, takip tarihi, satış aşaması ve sonraki aksiyon",
+            "Fuar öncesi ve fuar sonrası ihracat çalışmaları: katılımcı firmaları araştırma ve hedef müşteri listesi, LinkedIn bağlantı ve görüşme talebi, fuar sonrası teşekkür maili/teklif/telefon takibi ve CRM kaydı",
+            "İhracatta sık yapılan hatalar: ihracata hazırlık yapmadan müşteri aramak, herkese aynı tanıtım mailini göndermek, teklif/proforma bilgilerini eksik yazmak ve teklif sonrası müşteriyi takip etmemek"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "İhracat Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketin sektörü, ürünleri, ihracat tecrübesi, hedef ülkeleri, mevcut müşteri bulma yöntemleri ve eğitim ihtiyacı değerlendirilerek başlar. Ardından ihtiyaç analizi, eğitim planlama, uygulamalı müşteri bulma, teklif ve operasyon çalışması, CRM takip yapısı ve uygulanabilir yol haritası ile ilerler.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketin sektörü, ürünleri, ihracat tecrübesi, hedef ülkeleri, mevcut müşteri bulma yöntemleri ve eğitim ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "İhtiyaç Analizi", "body": "Şirketin ihracata hazırlık durumu, İngilizce içerikleri, web sitesi, teklif yapısı, müşteri takip sistemi ve operasyon bilgisi incelenir." },
+            { "n": 3, "title": "Eğitim İçeriği Planlama", "body": "Eğitim; ihracata giriş, müşteri bulma, operasyon, CRM, mail marketing, LinkedIn veya B2B platform odaklı planlanabilir." },
+            { "n": 4, "title": "Uygulamalı Eğitim", "body": "Şirketin kendi ürünleri ve hedef pazarı üzerinden müşteri bulma, mail yazımı, teklif hazırlığı ve takip örnekleri yapılır." },
+            { "n": 5, "title": "Müşteri Bulma Çalışması", "body": "Hedef ülke, sektör, firma tipi, karar verici kişi, B2B platform ve LinkedIn araştırma yöntemleri uygulamalı anlatılır." },
+            { "n": 6, "title": "Teklif ve Operasyon Çalışması", "body": "Proforma, ödeme, teslim şekli, nakliye, gümrük evrakları ve müşteri bilgilendirme süreci örneklerle açıklanır." },
+            { "n": 7, "title": "CRM Takip Yapısı", "body": "İhracat müşteri adaylarının CRM üzerinde nasıl takip edileceği ve satış sürecinin nasıl yönetileceği gösterilir." },
+            { "n": 8, "title": "Yol Haritası", "body": "Eğitim sonunda şirketin ihracat sürecini başlatması veya geliştirmesi için uygulanabilir bir yol haritası hazırlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "İhracat Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "İhracat süreci daha anlaşılır hale gelir",
+            "Şirketin ihracata hazırlık eksikleri belirlenir",
+            "Hedef pazar seçimi daha bilinçli yapılır",
+            "Yurt dışı müşteri bulma yöntemleri öğrenilir",
+            "B2B platformlar daha doğru değerlendirilir",
+            "LinkedIn ve mail marketing daha profesyonel kullanılır",
+            "İngilizce müşteri iletişimi güçlenir",
+            "Teklif ve proforma süreci daha düzenli hazırlanır",
+            "Teslim ve ödeme şekilleri daha iyi anlaşılır",
+            "Nakliye ve gümrük evrakları konusunda farkındalık artar",
+            "Müşteri takibi CRM ile daha düzenli yapılır",
+            "Satış ve operasyon süreci birlikte yönetilir",
+            "Fuar öncesi ve sonrası takip planı oluşturulur",
+            "İhracat çalışmaları daha sistemli hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "İhracatta Sık Yapılan Hatalar",
+          "items": [
+            "İhracata hazırlık yapmadan müşteri aramak",
+            "İngilizce web sitesi olmadan yurt dışı müşteriye ulaşmaya çalışmak",
+            "Ürün açıklamalarını zayıf hazırlamak",
+            "Yanlış hedef pazara odaklanmak",
+            "Herkese aynı tanıtım mailini göndermek",
+            "LinkedIn’de spam gibi görünen mesajlar kullanmak",
+            "Teklif ve proforma bilgilerini eksik yazmak",
+            "Teslim şekillerini yanlış yorumlamak",
+            "Ödeme riskini doğru değerlendirmemek",
+            "Nakliye sürecini son dakikaya bırakmak",
+            "Gümrük evraklarını eksik hazırlamak",
+            "Müşteri takibini CRM ile yapmamak",
+            "Teklif sonrası müşteriyi takip etmemek",
+            "Fuar sonrası iletişimi ihmal etmek"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "İhracat Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "İhracat eğitimi kimler için uygundur?", "a": "İhracat eğitimi; ihracata başlamak isteyen üretici firmalar, KOBİ’ler, şirket sahipleri, satış ekipleri, dış ticaret çalışanları ve yurt dışı müşteri bulmak isteyen işletmeler için uygundur." },
+            { "q": "Eğitim şirketimize özel hazırlanabilir mi?", "a": "Evet. Eğitim şirketinizin ürünlerine, sektörüne, hedef ülkelerine, mevcut ihracat seviyesine ve ihtiyaçlarına göre özelleştirilebilir." },
+            { "q": "İhracata yeni başlayan firmalar için uygun mu?", "a": "Evet. İlk kez ihracat yapacak firmalar için ihracata hazırlık, müşteri bulma, teklif, ödeme, lojistik ve evrak süreçleri temel seviyeden anlatılabilir." },
+            { "q": "Eğitimde müşteri bulma yöntemleri anlatılıyor mu?", "a": "Evet. Konşimento verileri, GTİP / HS kodu, ürün adına göre ithalatçı firma bulma, LinkedIn, B2B platformlar, mail marketing, telefon aramaları ve fuar takibi eğitimde anlatılabilir." },
+            { "q": "LinkedIn ile ihracat müşterisi bulma öğretiliyor mu?", "a": "Evet. LinkedIn üzerinden hedef firma, karar verici kişi, satın alma müdürü, ithalat sorumlusu ve distribütör araştırması uygulamalı olarak anlatılabilir." },
+            { "q": "Mail marketing eğitimi dahil mi?", "a": "İhracat eğitimi kapsamında mail marketing mantığı, İngilizce tanıtım maili, takip mesajı, müşteri listesi ve CRM takibi temel olarak anlatılabilir. Daha detaylı çalışma için ayrıca mail marketing eğitimi planlanabilir." },
+            { "q": "Teklif ve proforma hazırlama anlatılıyor mu?", "a": "Evet. İhracatta teklif, proforma invoice, ödeme şartı, teslim şekli, ürün bilgisi, miktar, fiyat, ambalaj ve geçerlilik süresi gibi alanlar uygulamalı şekilde anlatılır." },
+            { "q": "Teslim şekilleri ve ödeme şekilleri eğitimde var mı?", "a": "Evet. EXW, FOB, CFR, CIF, DAP, DDP gibi teslim şekilleri ile peşin ödeme, mal mukabili, vesaik mukabili ve akreditif gibi ödeme yöntemleri temel düzeyde anlatılabilir." },
+            { "q": "Gümrük evrakları anlatılıyor mu?", "a": "Evet. Proforma, commercial invoice, packing list, konşimento, menşe belgesi, ATR, EUR.1 ve ürün veya ülkeye göre değişebilecek belgeler hakkında genel bilgilendirme yapılabilir." },
+            { "q": "İhracat eğitimi satış garantisi verir mi?", "a": "Hayır. İhracat eğitimi satış garantisi vermez. Ancak şirketin ihracat sürecini daha bilinçli, planlı ve takip edilebilir şekilde yürütmesine yardımcı olur." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "İhracatı Planlı, Takip Edilebilir ve Sürdürülebilir Hale Getirelim",
+        "body": "İhracat yapmak istiyor ama hedef pazar, müşteri bulma, teklif, ödeme, lojistik, evrak ve müşteri takibi süreçlerinde nereden başlayacağınızı bilmiyorsanız {{appName}} ile iletişime geçin. İhracat Eğitimi ile şirketinizi ihracata hazırlayalım, yurt dışı müşteri bulma yöntemlerini öğretelim, teklif ve proforma sürecinizi düzenleyelim, operasyon adımlarınızı anlatalım ve müşteri takip sisteminizi daha profesyonel hale getirelim.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

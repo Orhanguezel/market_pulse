@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 420 88" role="img" aria-labelledby="title desc">
+  <title id="title">İhracat Radarı</title>
+  <desc id="desc">Radar ve yön oku biçimli İhracat Radarı logosu</desc>
+  <g fill="none" stroke="#1e40af" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="44" cy="44" r="34" stroke-width="5"/>
+    <circle cx="44" cy="44" r="22" stroke-width="3" opacity=".55"/>
+    <circle cx="44" cy="44" r="10" stroke-width="3" opacity=".35"/>
+    <path d="M44 44 67 21" stroke-width="5"/>
+    <path d="m61 20 8-1-1 8" stroke="#0f766e" stroke-width="5"/>
+    <circle cx="44" cy="44" r="4.5" fill="#0f766e" stroke="none"/>
+  </g>
+  <text x="94" y="39" fill="#0f172a" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700">İHRACAT</text>
+  <text x="94" y="68" fill="#1e40af" font-family="Arial, Helvetica, sans-serif" font-size="29" font-weight="700">RADARI</text>
+</svg>

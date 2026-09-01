@@ -118,6 +118,16 @@ function guessExt(mime?: string): string {
   if (m === "image/png") return ".png";
   if (m === "image/webp") return ".webp";
   if (m === "image/gif") return ".gif";
+  if (m === "application/pdf") return ".pdf";
+  if (m === "text/plain") return ".txt";
+  if (m === "text/csv") return ".csv";
+  if (m === "application/zip") return ".zip";
+  if (m === "application/msword") return ".doc";
+  if (m === "application/vnd.openxmlformats-officedocument.wordprocessingml.document") return ".docx";
+  if (m === "application/vnd.ms-excel") return ".xls";
+  if (m === "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet") return ".xlsx";
+  if (m === "application/vnd.ms-powerpoint") return ".ppt";
+  if (m === "application/vnd.openxmlformats-officedocument.presentationml.presentation") return ".pptx";
   return "";
 }
 
@@ -182,7 +192,7 @@ async function uploadLocal(cfg: Cfg, buffer: Buffer, opts: UpOpts): Promise<Uplo
     width: null,
     height: null,
     format: ext ? ext.replace(".", "") : null,
-    resource_type: "image",
+    resource_type: opts.mime?.startsWith('image/') ? 'image' : opts.mime?.startsWith('video/') ? 'video' : 'raw',
     version: null,
     etag: null,
   };

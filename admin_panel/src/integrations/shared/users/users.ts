@@ -47,7 +47,11 @@ export type AdminUserRaw = {
 
   role?: UserRoleName | string | null;
   roles?: Array<UserRoleName | string> | string | null;
+
+  tenants?: Array<{ tenant_key: string; role: string }> | null;
 };
+
+export type AdminUserTenant = { tenant_key: string; role: string };
 
 export type AdminUserView = {
   id: string;
@@ -63,6 +67,8 @@ export type AdminUserView = {
   last_sign_in_at: string | null;
 
   roles: UserRoleName[];
+
+  tenants: AdminUserTenant[];
 };
 
 export type AdminUsersListParams = {

@@ -1,0 +1,200 @@
+{
+  "slug": "amazon-egitimi-ve-hesap-yonetimi",
+  "category": "e-ticaret-pazaryeri",
+  "module": "ecommerce",
+  "order": 20,
+  "icon": "ShoppingCart",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Amazon Eğitimi ve Hesap Yönetimi | Ürün Listeleme, Mağaza Yönetimi ve Satış Süreci",
+        "description": "Amazon’da satış yapmak isteyen işletmeler için hesap açma, ürün listeleme, ürün açıklaması, fiyatlandırma, stok, sipariş, reklam, mağaza yönetimi ve satış analizi konularında eğitim ve hesap yönetimi desteği sunuyoruz.",
+        "ogTitle": "Amazon Eğitimi ve Hesap Yönetimi | {{appName}}",
+        "ogDescription": "Amazon’da hesap açılışı, ürün listeleme, ürün içeriği, anahtar kelime, fiyatlandırma, stok, sipariş, reklam ve hesap yönetimi süreçleri için eğitim ve destek alın."
+      },
+      "hero": {
+        "eyebrow": "E-Ticaret & Pazaryeri",
+        "title": "Amazon Eğitimi ve Hesap Yönetimi",
+        "lead": "Amazon’da satış yapmak istiyor ama hesap açma, ürün listeleme, kategori seçimi, fiyatlandırma, stok, sipariş, reklam, içerik ve mağaza yönetimi süreçlerinde nereden başlayacağınızı bilmiyor musunuz? Amazon’da başarılı satış yapmak yalnızca ürün yüklemekten ibaret değildir. Ürün başlığı, açıklama, görseller, anahtar kelimeler, kategori seçimi, fiyatlandırma, stok yönetimi, sipariş takibi, müşteri iletişimi, reklam bütçesi ve hesap sağlığı birlikte yönetilmelidir. {{appName}} olarak Amazon’da satış yapmak isteyen işletmelere, üreticilere, markalara ve e-ticaret ekiplerine Amazon eğitimi ve hesap yönetimi desteği sunuyoruz. Amacımız, Amazon satış sürecinizi daha bilinçli planlamanıza ve pazaryeri operasyonunuzu daha profesyonel hale getirmenize yardımcı olmaktır.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Amazon Eğitimi ve Hesap Yönetimi Nedir?",
+          "body": [
+            "Amazon eğitimi ve hesap yönetimi, Amazon’da satış yapmak isteyen kişi ve işletmelerin hesap açılışı, ürün listeleme, ürün sayfası hazırlığı, stok, fiyat, sipariş, reklam, müşteri iletişimi ve satış performansı süreçlerini öğrenmesini ve daha düzenli yönetmesini sağlayan hizmettir.",
+            "Amazon, dünya genelinde kullanılan büyük bir pazaryeridir. Ancak bu platformda satış yaparken her ürün, her ülke, her kategori ve her hesap yapısı aynı şekilde ilerlemez. Bu nedenle Amazon süreci dikkatli planlanmalıdır.",
+            "{{appName}}, Amazon sürecini yalnızca teknik panel kullanımı olarak değil, e-ticaret ve pazaryeri satış operasyonu olarak ele alır.",
+            "Amazon satış sürecinizi daha planlı ve ölçülebilir yönetin: Hesap açılışı, ürün listeleme, içerik hazırlığı, reklam, stok, sipariş ve satış raporları birlikte yönetildiğinde Amazon operasyonunuz daha düzenli ve takip edilebilir hale gelir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Amazon Eğitimi ve Hesap Yönetimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Amazon’da satış sürecine başlamadan önce ürün, pazar, hesap yapısı, kategori, içerik, fiyatlandırma, stok, reklam ve hesap sağlığı birlikte değerlendirilmelidir.",
+            "Bu çalışma, Amazon sürecinizi dağınık denemeler yerine planlı bir pazaryeri operasyonuna dönüştürmeyi hedefler."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Amazon’da Satış Yapmak Neden Planlı Yönetilmelidir?",
+          "body": [
+            "Amazon’da mağaza açmak veya ürün yüklemek tek başına yeterli değildir. Satış yapılacak ülke, ürün kategorisi, ürün içeriği, fiyatlandırma, rekabet, stok, kargo, reklam ve hesap kuralları birlikte değerlendirilmelidir.",
+            "Plansız Amazon yönetimi; yanlış ürün seçimi, hatalı kategori, zayıf içerik, verimsiz reklam harcaması, stok sorunları ve hesap performansı problemlerine neden olabilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Amazon’da satış yapmak istiyor ama nereden başlayacağınızı bilmiyorsanız, bu hizmet süreci daha planlı yönetmenize yardımcı olur.",
+          "items": [
+            { "title": "Amazon’da Satışa Başlamak İsteyen Girişimciler", "body": "Amazon satış sürecini temelden öğrenmek isteyen girişimciler için uygundur." },
+            { "title": "Üretici Firmalar", "body": "Ürünlerini Amazon’da veya yurt dışı pazarlarda satmak isteyen üreticiler için planlanabilir." },
+            { "title": "Markalar ve KOBİ’ler", "body": "Amazon mağazasını daha düzenli yönetmek isteyen marka sahipleri ve KOBİ’ler için uygundur." },
+            { "title": "Mevcut Amazon Hesabı Olan İşletmeler", "body": "Mevcut hesabını düzenli yönetemeyen işletmeler için analiz ve yönetim desteği verilebilir." },
+            { "title": "Ürün Listeleme Desteği İsteyenler", "body": "Ürün başlığı, açıklama, madde işaretleri, görsel ve anahtar kelime alanlarında destek alınabilir." },
+            { "title": "Amazon Reklamlarını Anlamak İsteyen Satıcılar", "body": "Reklam bütçesi, ürün seçimi, anahtar kelime ve performans takibi öğrenilebilir." },
+            { "title": "E-ticaret Ekibini Eğitmek İsteyen Şirketler", "body": "Şirket içi e-ticaret ve operasyon ekipleri için Amazon eğitimi planlanabilir." },
+            { "title": "Amazon Sürecini İhracatla Birleştirmek İsteyenler", "body": "Amazon satış sürecini ihracat ve e-ticaret stratejisiyle birlikte değerlendirmek isteyen firmalara uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Amazon Eğitimi Kapsamında Hangi Konular Anlatılır?",
+          "body": [
+            "Amazon eğitimi işletmenin ihtiyacına göre planlanabilir. Genel olarak pazaryeri mantığı, hesap açılışı, panel kullanımı, ürün listeleme, içerik, anahtar kelime, fiyatlandırma, stok, sipariş, reklam, hesap sağlığı ve raporlama başlıkları birlikte ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Amazon Hesap Yönetimi Kapsamında Neler Yapıyoruz?",
+          "body": [
+            "Amazon hesap yönetimi hizmeti, mağazanızın ihtiyacına göre farklı alanlarda planlanabilir. Amaç, Amazon hesabınızın dağınık şekilde ilerlemesini önlemek ve satış sürecinizi daha düzenli yönetilebilir hale getirmektir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Amazon Eğitimi ve Hesap Yönetiminde Hangi Alanlar İncelenir?",
+          "intro": "Amazon süreci; pazaryeri mantığı, hesap açılışı, ürün seçimi, ürün listeleme, içerik, anahtar kelime, fiyatlandırma, stok, sipariş, reklam, hesap sağlığı ve raporlama alanlarıyla birlikte planlanır.",
+          "items": [
+            { "title": "Amazon Pazaryeri Mantığını Anlama", "body": "Amazon’da satışa başlamadan önce platformun nasıl çalıştığını anlamak gerekir. Ürün listeleme, müşteri arama davranışı, rekabet, fiyatlandırma, yorumlar ve mağaza performansı birlikte değerlendirilir. Amazon pazaryeri yapısı ve satıcı hesabı mantığı; ürün listeleme sistemi, kategori ve ürün sayfası yapısı; müşteri arama davranışı, rekabet ve fiyat karşılaştırması; ürün yorumları, hesap performansı ve operasyon takibi ele alınır." },
+            { "title": "Amazon Hesap Açılış Süreci", "body": "Amazon’da satış yapmak için satıcı hesabı oluşturulması ve gerekli bilgilerin doğru hazırlanması gerekir. Hesap açılışında ülke, kategori ve ürün yapısına göre farklı gereklilikler oluşabilir. Satıcı hesabı açılış mantığı ve gerekli işletme bilgileri; hesap türü, satış yapılacak ülke veya pazar seçimi; mağaza adı, ödeme, banka, vergi ve şirket bilgileri; hesap doğrulama süreci ve açılış sonrası kontroller değerlendirilir." },
+            { "title": "Amazon Satıcı Paneli Kullanımı", "body": "Amazon satıcı paneli; ürünlerin, siparişlerin, stokların, reklamların, müşteri mesajlarının ve raporların yönetildiği ana alandır. Ana kontrol paneli, ürün yönetimi ve stok yönetimi; sipariş yönetimi, müşteri mesajları ve performans bildirimleri; reklam alanları, raporlama ekranları ve fiyat bölümleri; hesap sağlığı alanları, mağaza ayarları ve uyarılar incelenir." },
+            { "title": "Ürün Araştırması ve Ürün Seçimi", "body": "Amazon’da her ürün aynı satış potansiyeline sahip değildir. Ürün seçimi yapılırken rekabet, fiyat, kargo, stok, maliyet, talep ve kategori yapısı birlikte değerlendirilmelidir. Ürün talebi, rakip sayısı ve fiyat aralığı; kâr potansiyeli, kargo ve paketleme uygunluğu; ürün ağırlığı, hacmi, kategori zorluğu ve stok yönetimi; sezonluk talep, yorum seviyesi ve marka farklılaşması ele alınır." },
+            { "title": "Amazon Ürün Listeleme", "body": "Amazon’da ürün listeleme süreci dikkatli hazırlanmalıdır. Ürün sayfası müşteriye ürünü anlatan en önemli alandır. Ürün adı, kategori seçimi ve marka bilgisi; ürün açıklaması, madde işaretleri ve anahtar kelimeler; ürün görselleri, varyant yapısı, fiyat ve stok bilgisi; kargo, teslimat, ürün kimliği, barkod ve teknik özellikler hazırlanır." },
+            { "title": "Ürün Başlığı Hazırlama", "body": "Amazon’da ürün başlığı müşterinin ürünü ilk gördüğü alanlardan biridir. Başlık hem ürünü açıklamalı hem de gereksiz kelime kalabalığından kaçınmalıdır. Marka adı, ürün adı, model veya seri bilgisi; ölçü, boyut, renk, adet veya set bilgisi; kullanım alanı, temel ürün özelliği ve uyumluluk bilgisi; kategori kuralları ve müşteri arama davranışıyla uyum dikkate alınır." },
+            { "title": "Ürün Açıklaması ve Madde İşaretleri", "body": "Amazon ürün sayfasında açıklama ve madde işaretleri müşterinin satın alma kararını etkileyen önemli alanlardır. Metinler sade, net, müşteri odaklı ve güven veren şekilde hazırlanmalıdır. Ürünün temel özellikleri, kullanım alanları ve teknik detaylar; malzeme, içerik, ölçü, kapasite ve paket bilgisi; ürünün faydaları ve müşteri sorularına cevap olacak bilgiler; bakım, kullanım talimatları ve ayırt edici yönler ele alınır." },
+            { "title": "Anahtar Kelime ve Arama Terimi Planlaması", "body": "Amazon’da müşteriler ürünleri arama yoluyla bulur. Bu nedenle ürünle ilgili anahtar kelimelerin doğru planlanması gerekir. Ürün adı, alternatif ürün adları ve müşteri arama ifadeleri; teknik terimler, kullanım alanı kelimeleri ve kategori ifadeleri; rakip ürünlerde kullanılan ifadeler; uzun kuyruklu anahtar kelimeler ve hedef pazar diline uygun kelimeler planlanır." },
+            { "title": "Ürün Görselleri ve İçerik Kalitesi", "body": "Amazon’da ürün görselleri müşteri güveni açısından çok önemlidir. Görseller ürünün ne olduğunu, nasıl kullanıldığını ve ne sunduğunu açık şekilde göstermelidir. Ana ürün görseli, ek ürün görselleri ve kullanım görselleri; ölçü, detay, paket içeriği ve varyant görselleri; fon, kalite kontrolü ve ürünle görsel uyumu; yanıltıcı görsel riskinin azaltılması ele alınır." },
+            { "title": "Fiyatlandırma ve Kârlılık Hesabı", "body": "Amazon’da fiyatlandırma yapılırken ürün maliyeti, komisyon, kargo, reklam, paketleme, iade riski ve kur farkı gibi unsurlar birlikte değerlendirilmelidir. Ürün maliyeti, platform komisyonları ve kargo maliyeti; depolama, operasyon, reklam ve paketleme maliyetleri; iade riski, rakip fiyatları ve minimum satış fiyatı; kârlı satış fiyatı, promosyon, indirim ve kur etkisi değerlendirilir." },
+            { "title": "Stok Yönetimi", "body": "Amazon’da stok yönetimi düzenli yapılmalıdır. Stok bitmesi, fazla stok, yanlış stok girişi veya tedarik gecikmesi satış performansını olumsuz etkileyebilir. Ürün stok miktarı, azalan stoklar ve stok biten ürünler; varyant bazlı stok ve satış hızına göre stok planı; kampanya öncesi stok hazırlığı ve tedarik planlaması; sezonluk stok yönetimi ve stok güncelleme rutini ele alınır." },
+            { "title": "Sipariş, Kargo ve Teslimat Süreci", "body": "Amazon hesap yönetiminde siparişlerin doğru takip edilmesi gerekir. Sipariş, kargo ve teslimat süreci müşteri memnuniyetini doğrudan etkiler. Yeni siparişler, hazırlanacak siparişler ve kargo bilgileri; teslimat süreleri, geciken siparişler ve iptal riskleri; iade talepleri, müşteri bilgilendirme ve yanlış ürün riski; sipariş sonrası müşteri memnuniyeti takip edilir." },
+            { "title": "Amazon Reklam Yönetimine Giriş", "body": "Amazon’da reklam, ürün görünürlüğünü artırmak için kullanılabilir. Ancak reklam bütçesi plansız kullanılmamalıdır. Reklam verilecek ürün seçimi ve anahtar kelime yapısı; günlük bütçe, tıklama ve satış ilişkisi; reklam maliyeti, reklam sonrası kârlılık ve ürün sayfası kalitesi; kampanya performansı, durdurulması gereken reklamlar ve geliştirilecek ürünler ele alınır." },
+            { "title": "Hesap Sağlığı ve Performans Takibi", "body": "Amazon’da hesap sağlığı, mağazanın sürdürülebilir çalışması açısından önemlidir. Performans uyarıları ve müşteri memnuniyeti alanları düzenli kontrol edilmelidir. Hesap bildirimleri, performans uyarıları ve sipariş iptalleri; geciken gönderimler, müşteri mesajları ve iade oranları; ürün şikayetleri, stok sorunları ve mağaza performansı; politika, kategori uyarıları ve satış raporları izlenir." },
+            { "title": "Satış Raporları ve Performans Analizi", "body": "Amazon’da satış yapan işletmelerin düzenli raporlama yapması gerekir. Raporlar hangi ürünlerin iyi performans gösterdiğini ve hangi alanların iyileştirilmesi gerektiğini ortaya koyar." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Amazon Eğitimi ve Hesap Yönetimi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketinizin ürünleri, hedef pazarı, Amazon deneyimi, mevcut hesap durumu ve satış hedefleri değerlendirilerek başlar. İhtiyacınıza göre eğitim, hesap yönetimi veya ikisinin birlikte yürütüleceği bir plan oluşturulur.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin ürünleri, hedef pazarı, Amazon deneyimi, mevcut hesap durumu ve satış hedefleri değerlendirilir." },
+            { "n": 2, "title": "Eğitim veya Yönetim Planı Hazırlığı", "body": "İhtiyacınıza göre Amazon eğitimi, hesap yönetimi veya ikisinin birlikte yürütüleceği bir plan oluşturulur." },
+            { "n": 3, "title": "Hesap ve Ürün Analizi", "body": "Mevcut hesap, ürünler, kategori yapısı, fiyatlandırma, stok, içerik ve görseller değerlendirilir." },
+            { "n": 4, "title": "Ürün Listeleme ve İçerik Planı", "body": "Ürün başlığı, açıklama, madde işaretleri, anahtar kelimeler, görseller ve fiyat yapısı planlanır." },
+            { "n": 5, "title": "Operasyon ve Stok Takibi", "body": "Stok, sipariş, kargo, müşteri mesajları ve performans takibi için operasyon düzeni oluşturulur." },
+            { "n": 6, "title": "Reklam ve Satış Analizi", "body": "Reklam, satış raporları, ürün performansı ve kârlılık değerlendirmeleri yapılır." },
+            { "n": 7, "title": "Düzenli Raporlama", "body": "Amazon hesabınızın ürün, satış, stok, reklam ve performans durumu düzenli olarak raporlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Amazon Eğitimi ve Hesap Yönetiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Amazon satış sürecini daha bilinçli öğrenirsiniz",
+            "Hesap açılış ve ürün listeleme adımlarını daha net anlarsınız",
+            "Ürün sayfalarınızı daha düzenli hazırlayabilirsiniz",
+            "Anahtar kelime ve içerik yapısını daha doğru planlayabilirsiniz",
+            "Fiyatlandırma ve kârlılık hesabını daha dikkatli yapabilirsiniz",
+            "Stok ve sipariş sürecini daha kontrollü yönetebilirsiniz",
+            "Reklam bütçenizi daha bilinçli kullanabilirsiniz",
+            "Hesap sağlığını ve performansı düzenli takip edebilirsiniz",
+            "Satış raporlarını daha doğru okuyabilirsiniz",
+            "Pazaryeri operasyonunuzu daha profesyonel hale getirebilirsiniz",
+            "E-ticaret ekibinizin Amazon bilgisini artırabilirsiniz",
+            "Amazon satış sürecinizi ihracat hedeflerinizle ilişkilendirebilirsiniz"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Amazon’da Sık Yapılan Hatalar",
+          "items": [
+            "Ürün seçimini araştırmadan yapmak",
+            "Hesap açılış sürecini plansız ilerletmek",
+            "Yanlış kategori seçmek",
+            "Ürün başlığını eksik veya karmaşık yazmak",
+            "Ürün açıklamalarını yetersiz bırakmak",
+            "Anahtar kelime çalışması yapmamak",
+            "Görselleri yeterince profesyonel hazırlamamak",
+            "Kârlılık hesabı yapmadan fiyat belirlemek",
+            "Stok takibini ihmal etmek",
+            "Sipariş ve teslimat süreçlerini düzenli yönetmemek",
+            "Reklam bütçesini plansız kullanmak",
+            "Hesap sağlığı uyarılarını takip etmemek",
+            "Satış raporlarını analiz etmemek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Amazon Eğitimi ve Hesap Yönetimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Amazon eğitimi ve hesap yönetimi, e-ticaret ve pazaryeri yönetimi sürecinin parçası olarak farklı hizmetlerle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Amazon Eğitimi, Hesap Yönetimi, Ürün Listeleme ve Reklam Yönetimi",
+          "body": [
+            "Amazon eğitimi ve hesap yönetimi; Amazon mağaza yönetimi, Amazon satıcı hesabı yönetimi, ürün listeleme, ürün yükleme, ürün açıklaması hazırlama, anahtar kelime araştırması, reklam yönetimi, stok yönetimi, sipariş yönetimi, hesap sağlığı ve satış raporu analizi süreçleri için planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Amazon eğitimi ve hesap yönetimi nedir?",
+          "body": [
+            "Amazon eğitimi ve hesap yönetimi; Amazon’da satış yapmak isteyen işletmeler için hesap açılışı, satıcı paneli kullanımı, ürün listeleme, ürün başlığı, açıklama, anahtar kelime, görsel, fiyatlandırma, stok, sipariş, reklam, hesap sağlığı ve satış raporu süreçlerinin öğrenilmesi ve düzenli yönetilmesi hizmetidir. {{appName}}, Amazon satış sürecini daha planlı, kontrollü ve profesyonel hale getirmek isteyen şirketlere eğitim ve hesap yönetimi desteği sunar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Amazon Eğitimi ve Hesap Yönetimi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Amazon eğitimi kimler için uygundur?", "a": "Amazon eğitimi; Amazon’da satışa başlamak isteyen girişimciler, üretici firmalar, markalar, KOBİ’ler ve e-ticaret ekipleri için uygundur." },
+            { "q": "Amazon hesap yönetimi hizmeti veriyor musunuz?", "a": "Evet. Amazon satıcı hesabı, ürün listeleme, stok, fiyat, sipariş, reklam, müşteri mesajları, hesap sağlığı ve satış raporları konularında hesap yönetimi desteği verilebilir." },
+            { "q": "Amazon’da ürün listeleme desteği sunuyor musunuz?", "a": "Evet. Ürün başlığı, açıklama, madde işaretleri, anahtar kelime, görsel, fiyat, stok ve kategori bilgileriyle ürün listeleme sürecinde destek sağlanabilir." },
+            { "q": "Amazon reklam yönetimi anlatılıyor mu?", "a": "Evet. Amazon reklam mantığı, bütçe planlama, ürün seçimi, anahtar kelime, reklam performansı ve kârlılık değerlendirmesi eğitim veya yönetim sürecinde ele alınabilir." },
+            { "q": "Amazon’da satış garantisi veriyor musunuz?", "a": "Hayır. Amazon eğitimi ve hesap yönetimi satış garantisi vermez. Ancak hesabın, ürünlerin ve satış sürecinin daha düzenli yönetilmesine yardımcı olur." },
+            { "q": "Mevcut Amazon hesabım analiz edilebilir mi?", "a": "Evet. Mevcut hesabınız ürün, içerik, fiyat, stok, reklam, satış raporu ve hesap performansı açısından analiz edilebilir." },
+            { "q": "Amazon ürün açıklamalarını hazırlıyor musunuz?", "a": "Evet. Ürün özelliklerine, hedef pazara ve müşteri arama davranışına göre ürün başlığı, madde işaretleri ve açıklama metinleri hazırlanabilir." },
+            { "q": "Amazon’da hangi ülkeye satış yapmalıyım?", "a": "Bu konu ürün, hedef pazar, rekabet, lojistik, kârlılık ve hesap yapısına göre değerlendirilmelidir. Eğitim veya danışmanlık sürecinde hedef pazar analizi yapılabilir." },
+            { "q": "Amazon eğitimi uygulamalı mı yapılır?", "a": "Evet. Eğitim işletmenizin ürünleri, hedef pazarı ve mevcut hesap durumu üzerinden uygulamalı şekilde planlanabilir." },
+            { "q": "Amazon hesap yönetimi hangi hizmetlerle birlikte alınabilir?", "a": "Amazon hesap yönetimi; e-ticaret eğitimi, ürün içerik hazırlığı, pazaryeri yönetimi, CRM takibi, ihracata yönelik web sitesi hazırlığı ve B2B müşteri bulma çalışmalarıyla birlikte planlanabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Amazon Satış Sürecinizi Daha Planlı ve Profesyonel Hale Getirelim",
+        "body": "Amazon’da satış yapmak istiyor ama hesap açılışı, ürün listeleme, fiyatlandırma, stok, reklam ve hesap yönetimi süreçlerini nasıl yürüteceğinizi bilmiyorsanız {{appName}} ile iletişime geçin. Amazon satış sürecinizi birlikte planlayalım, ürünlerinizi daha düzenli yayına alalım ve hesabınızı daha profesyonel bir pazaryeri operasyonuna dönüştürelim.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

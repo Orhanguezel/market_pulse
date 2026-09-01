@@ -3,6 +3,7 @@
 
 export { registerStorage } from './router';
 export { registerStorageAdmin } from './admin.routes';
+export { registerStorageUser } from './user.routes';
 
 export {
   publicServe,
@@ -44,6 +45,11 @@ export {
   repoDeleteManyByIds,
   repoListFolders,
   repoIsDup,
+  repoListUserAssets,
+  repoGetUserAsset,
+  repoUpdateUserAsset,
+  repoDeleteUserAsset,
+  repoListUserFolders,
 } from './repository';
 export {
   buildStorageWhere,

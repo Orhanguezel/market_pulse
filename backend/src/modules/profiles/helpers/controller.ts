@@ -23,6 +23,16 @@ export function buildProfilePatch(input: ProfileUpsertInput): Partial<ProfileIns
   if (input.city !== undefined) set.city = input.city;
   if (input.country !== undefined) set.country = input.country;
   if (input.postal_code !== undefined) set.postal_code = input.postal_code;
+  if (input.sender_enabled !== undefined) set.sender_enabled = input.sender_enabled ? 1 : 0;
+  if (input.sender_name !== undefined) set.sender_name = input.sender_name || null;
+  if (input.sender_email !== undefined) set.sender_email = input.sender_email || null;
+  if (input.sender_smtp_host !== undefined) set.sender_smtp_host = input.sender_smtp_host || null;
+  if (input.sender_smtp_port !== undefined) set.sender_smtp_port = input.sender_smtp_port || null;
+  if (input.sender_smtp_username !== undefined) set.sender_smtp_username = input.sender_smtp_username || null;
+  if (input.sender_smtp_secure !== undefined) set.sender_smtp_secure = input.sender_smtp_secure === null ? null : input.sender_smtp_secure ? 1 : 0;
+  if (input.sender_smtp_password !== undefined && input.sender_smtp_password !== null && input.sender_smtp_password !== '') {
+    set.sender_smtp_password = input.sender_smtp_password;
+  }
 
   return set;
 }

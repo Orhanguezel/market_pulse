@@ -1,0 +1,207 @@
+{
+  "slug": "satis-sureci-analizi",
+  "category": "crm-satis",
+  "module": "crm",
+  "order": 100,
+  "icon": "BarChart3",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Satış Süreci Analizi | CRM ile Satış Performansı, Teklif ve Müşteri Takip Analizi",
+        "description": "Satış sürecinizde nerede müşteri kaybettiğinizi, hangi tekliflerin satışa dönüştüğünü, hangi satış temsilcisinin daha verimli çalıştığını ve hangi kanalların daha fazla müşteri getirdiğini CRM analizleriyle görün.",
+        "ogTitle": "Satış Süreci Analizi | {{appName}}",
+        "ogDescription": "CRM verilerinizle müşteri adaylarını, teklifleri, satış temsilcisi performansını, açık fırsatları ve kaybedilen satış nedenlerini analiz edin."
+      },
+      "hero": {
+        "eyebrow": "CRM ve Satış",
+        "title": "Satış Süreci Analizi",
+        "lead": "Satış ekibiniz çalışıyor, teklifler gönderiliyor, müşteriler aranıyor; ancak satışlar neden beklediğiniz seviyeye çıkmıyor? Birçok şirkette sorun satış yapılmaması değildir. Asıl sorun, satış sürecinin ölçülmemesidir. Hangi müşteri nerede kaybediliyor, hangi teklif neden kapanmıyor, hangi satış temsilcisi daha iyi performans gösteriyor ve hangi kampanya gerçekten müşteri getiriyor sorularına net cevap verilemiyorsa satış süreci yönetilemez. {{appName}} Satış Süreci Analizi ile CRM verilerinizi kullanarak satış sürecinizi görünür hale getiriyoruz. Müşteri adaylarından tekliflere, telefon aramalarından siparişlere, kaybedilen fırsatlardan satış temsilcisi performansına kadar tüm süreci analiz ediyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Kurulum süreci nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Satış Süreci Analizi Nedir?",
+          "body": [
+            "Satış süreci analizi, bir şirketin müşteri adayı oluşturma, ilk iletişim, teklif gönderme, takip, pazarlık, sipariş ve satış sonrası süreçlerini verilerle inceleme çalışmasıdır.",
+            "Bu analiz sayesinde şirketiniz satış sürecindeki güçlü ve zayıf noktaları görebilir. Satışın yalnızca sonucuna değil, satışa giden yolun tamamına bakılır.",
+            "{{appName}} Satış Süreci Analizi, satış sürecinizi görünür, ölçülebilir ve geliştirilebilir hale getirir.",
+            "Satışlarınızı tahminlerle değil, verilerle yönetin: Müşteri kaynakları, lead kalitesi, ilk dönüş süresi, telefon aramaları, teklifler, satış hunisi, kaybedilen fırsatlar ve açık satış potansiyeli CRM verileriyle analiz edilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Satış Süreci Analizi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Satış süreci analizi, yöneticilerin ve satış ekiplerinin kararlarını tahminle değil, gerçek satış verileriyle almasını sağlar.",
+            "Hangi müşteri kaynaklarının daha iyi çalıştığı, hangi tekliflerin satışa dönüştüğü, hangi temsilcinin daha verimli olduğu ve hangi aşamada müşteri kaybedildiği netleşir."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Satış Sürecini Ölçmeden Büyüme Sağlanamaz",
+          "intro": "Bir şirketin daha fazla satış yapabilmesi için yalnızca daha fazla müşteri araması yeterli değildir. Satış sürecinin hangi noktalarda aksadığını bilmek gerekir. Satış süreci analiz edilmediğinde satış geliri şansa, kişisel takibe ve tahmine bağlı kalır. Düzenli analiz, şirketin aynı hataları tekrar etmesini önler. Satış süreci analiz edilmediğinde yaşanabilecek problemler:",
+          "items": [
+            "Hangi kampanyanın işe yaradığı bilinmez",
+            "Müşteri adaylarına geç dönüş yapılır",
+            "Teklifler takip edilmez",
+            "Satış ekibinin gerçek performansı ölçülemez",
+            "Kaybedilen müşterilerin nedeni bilinmez",
+            "Yöneticiler satış tahminini doğru yapamaz",
+            "Açık fırsatlar net görünmez",
+            "Aynı hatalar tekrar tekrar yapılır"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Satış sürecinizde “çok çalışıyoruz ama sonuç alamıyoruz” diyorsanız, önce analiz edilmesi gereken noktalar var demektir.",
+          "items": [
+            { "title": "Satışlarını Artırmak İsteyen Şirketler", "body": "Nerede sorun yaşadığını bilmeyen işletmeler için uygundur." },
+            { "title": "CRM Kullanan İşletmeler", "body": "CRM verilerini analiz edemeyen şirketlere raporlama yapısı sağlar." },
+            { "title": "Satış Ekibi Bulunan KOBİ’ler", "body": "Satış temsilcisi performansını ölçmek isteyen KOBİ’ler için uygundur." },
+            { "title": "Teklif Gönderip Dönüş Alamayanlar", "body": "Tekliften siparişe dönüşüm oranını artırmak isteyen firmalara destek olur." },
+            { "title": "Web, LinkedIn ve Fuardan Lead Alanlar", "body": "Müşteri kaynaklarını analiz etmek isteyen şirketler için uygundur." },
+            { "title": "İhracat Müşteri Bulma Süreci Yürütenler", "body": "Ülke, ürün, GTİP ve kampanya bazlı ihracat performansını ölçebilir." },
+            { "title": "B2B Satış Yapan Firmalar", "body": "Uzun satış süreçlerini, açık fırsatları ve satış hunisini analiz eder." },
+            { "title": "Gerçekçi Satış Tahmini Yapmak İsteyenler", "body": "Açık fırsat ve beklenen sipariş analizleriyle planlama yapmaya yardımcı olur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Satış Süreci Analizi ile Hangi Alanları İnceliyoruz?",
+          "body": [
+            "Satış süreci analizi, satışın yalnızca son sonucuna bakmaz. Sürecin tamamını inceler. Bu analizler sayesinde satış sürecinizin hangi bölümünde iyileştirme yapılması gerektiği netleşir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Satış Süreci Analizinde Hangi Başlıklar Değerlendirilir?",
+          "intro": "CRM verileri doğru kurgulandığında müşteri adayından siparişe kadar satış sürecinin her aşaması analiz edilebilir.",
+          "items": [
+            { "title": "Müşteri Adayı Kaynak Analizi", "body": "Satış sürecinin ilk noktası müşteri adayıdır. Ancak her müşteri adayı aynı değerde değildir. Bazı kanallar çok sayıda lead getirir ama satışa dönüşmez. Web sitesi teklif formları ve Google aramaları, mail marketing kampanyaları, LinkedIn, Sales Navigator ve fuar görüşmeleri, B2B platform, konşimento verisi ve referans kaynakları incelenir." },
+            { "title": "Lead Kalitesi Analizi", "body": "Çok fazla müşteri adayı almak her zaman iyi sonuç anlamına gelmez. Önemli olan doğru müşteri adaylarını satış sürecine almaktır. Lead gerçekten hedef müşteri mi, satın alma yetkisi ve bütçesi var mı, firma gerçek alıcı mı yoksa sadece fiyat araştırması mı yapıyor ve siparişe dönüşme potansiyeli nedir gibi sorular değerlendirilir." },
+            { "title": "İlk İletişim Süresi Analizi", "body": "Müşteri adayına ne kadar hızlı dönüş yapıldığı satış ihtimalini etkiler. Geç dönüş yapılan müşteriler başka firmalara yönelebilir. Lead ne zaman geldi, satış ekibi ne zaman dönüş yaptı, ilk dönüş telefonla mı e-postayla mı yapıldı ve ilk temas sonrası takip tarihi oluşturuldu mu incelenir." },
+            { "title": "Telefon Araması Performans Analizi", "body": "Telefon aramaları özellikle B2B satış ve ihracat müşteri bulma süreçlerinde önemli bir rol oynar. Ancak aramaların sonucu kayıt altına alınmıyorsa performans ölçülemez. Kaç müşteri arandı ve kaçına ulaşıldı, hangi temsilci kaç arama yaptı, kaç firma teklif istedi ve hangi ülke veya sektörde telefon dönüşleri daha iyi analiz edilir." },
+            { "title": "Teklif Performans Analizi", "body": "Teklifler satış sürecinin en kritik aşamalarından biridir. Ancak sadece teklif göndermek yeterli değildir; tekliflerin sonucu analiz edilmelidir. Kaç teklif gönderildi, tekliflerin toplam değeri nedir, hangi teklifler siparişe dönüştü veya kaybedildi ve tekliften siparişe dönüşüm oranı nedir incelenir." },
+            { "title": "Satış Hunisi Analizi", "body": "Satış hunisi, müşteri adayının ilk temastan siparişe kadar geçtiği aşamaları gösterir. Bu analiz, satış sürecinin tıkanan noktalarını ortaya çıkarır. Hangi aşamada en fazla müşteri kaybediliyor, ilk iletişimden teklife geçiş oranı nedir, tekliften siparişe dönüşüm oranı nedir ve satış süreci ortalama kaç gün sürüyor değerlendirilir." },
+            { "title": "Satış Temsilcisi Performans Analizi", "body": "Satış ekibinin performansı yalnızca kaç satış yaptığıyla ölçülmemelidir. Sürecin tamamı değerlendirilmelidir. Atanan müşteri adayı ve yapılan arama sayısı, gönderilen teklif sayısı, tekliften satışa dönüşüm oranı ile açık fırsat, kapanan satış ve geciken görevler incelenir." },
+            { "title": "Ürün ve Hizmet Bazlı Satış Analizi", "body": "Her ürün veya hizmet aynı satış performansını göstermez. Bazı ürünler daha fazla talep alır, bazıları ise çok teklif almasına rağmen satışa dönüşmez. En çok hangi ürün için talep geliyor, hangi ürün daha yüksek dönüşüm sağlıyor, hangi ürünlerde fiyat itirazı fazla ve hangi ürünler ihracat için daha uygun görünüyor analiz edilir." },
+            { "title": "Kaybedilen Fırsat Analizi", "body": "Kaybedilen satış fırsatları şirket için önemli bilgi kaynağıdır. Doğru analiz edilirse satış süreci güçlenir. Fiyat yüksek bulundu veya rakip tercih edildi, teklif geç gönderildi veya takip yapılmadı, teslim süresi veya ödeme şartı uygun olmadı, yanlış hedef müşteri veya ilgili kişiye ulaşılamadı gibi nedenler değerlendirilir." },
+            { "title": "Satış Tahmini ve Açık Fırsat Analizi", "body": "Yöneticiler için en önemli konulardan biri önümüzdeki dönemde ne kadar satış yapılabileceğini görebilmektir. Açık fırsat sayısı ve toplam değeri, kapanma ihtimali yüksek teklifler, bu ay sonuçlanması beklenen fırsatlar ile riskli fırsatlar ve takip edilmesi gereken müşteriler analiz edilir." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Satış Süreci Analizi ile İhracat Satışları Nasıl Güçlendirilir?",
+          "intro": "İhracat müşteri bulma sürecinde çok sayıda firma, ülke, e-posta, telefon araması ve teklif aynı anda yürütülür. Bu süreç analiz edilmezse hangi pazarın gerçekten sonuç verdiği anlaşılamaz.",
+          "items": [
+            "Hangi ülkelerden daha fazla dönüş alınıyor?",
+            "Hangi GTİP / HS kodu daha doğru müşteri listesi oluşturuyor?",
+            "Konşimento verilerinden gelen firmalar ne kadar kaliteli?",
+            "Hangi ülkelerde tekliften siparişe dönüşüm daha yüksek?",
+            "Hangi alıcı firmalar tekrar takip edilmeli?"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Satış Süreci Analizi ile Mail Marketing Performansı Nasıl Ölçülür?",
+          "intro": "Mail marketing yalnızca e-posta göndermek değildir. Sonuçları analiz edilmediğinde hangi kampanyanın işe yaradığı bilinmez.",
+          "items": [
+            "Kaç firmaya mail gönderildi?",
+            "Kaç firma cevap verdi veya teklif istedi?",
+            "Hangi konu başlığı daha iyi dönüş aldı?",
+            "Hangi ülke veya sektör daha fazla cevap verdi?",
+            "Kampanyadan ne kadar açık teklif ve sipariş oluştu?"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM ile Satış Performansı ve Raporlama Altyapısı",
+          "body": [
+            "Satış süreci analizi; CRM satış analizi, satış performans analizi, satış hunisi analizi, müşteri adayı analizi, lead kaynak analizi, B2B satış analizi, ihracat satış analizi, mail marketing performans analizi ve açık fırsat analizi için kullanılabilir."
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Satış Süreci Analizinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Satış sürecindeki kayıp noktalar görünür hale gelir",
+            "Müşteri adaylarının kalitesi ölçülür",
+            "Satış ekibinin performansı netleşir",
+            "Tekliften siparişe dönüşüm oranı takip edilir",
+            "Açık fırsatlar ve bekleyen teklifler görünür olur",
+            "Kaybedilen satışların nedenleri analiz edilir",
+            "Mail marketing ve LinkedIn çalışmalarının etkisi ölçülür",
+            "İhracat müşteri bulma süreci daha verimli yönetilir",
+            "Ürün ve hizmet bazlı satış performansı görülür",
+            "Yönetici kararları veriye dayalı hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Satış Süreci Analizinde Sık Yapılan Hatalar",
+          "items": [
+            "Sadece toplam satış tutarına bakmak",
+            "Müşteri adayı kaynaklarını ölçmemek",
+            "Tekliften satışa dönüşüm oranını takip etmemek",
+            "Kaybedilen fırsat nedenlerini yazmamak",
+            "Satış temsilcisi performansını sadece ciroyla değerlendirmek",
+            "Mail marketing dönüşlerini analiz etmemek",
+            "İhracat müşteri bulma çalışmalarını ülke bazlı ölçmemek",
+            "Açık fırsatların toplam değerini bilmemek",
+            "CRM verilerini düzenli güncellememek",
+            "Raporları yöneticinin karar alacağı şekilde tasarlamamak"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Satış Süreci Analizi Kurulum Süreci Nasıl İlerler?",
+          "intro": "Satış süreci analizi, mevcut satış yapınızın ve müşteri kaynaklarınızın değerlendirilmesiyle başlar. Ardından CRM üzerinde ölçülecek veriler, satış aşamaları ve yönetici raporları kurgulanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin satış süreci, müşteri kaynakları, satış ekibi yapısı, teklif takibi ve mevcut raporlama düzeni değerlendirilir." },
+            { "n": 2, "title": "Veri Kaynaklarının Belirlenmesi", "body": "Web sitesi, mail marketing, LinkedIn, fuar, B2B platform, telefon aramaları, teklif kayıtları ve CRM verileri incelenir." },
+            { "n": 3, "title": "Satış Aşamalarının Tanımlanması", "body": "Müşteri adayından siparişe kadar olan satış aşamaları netleştirilir." },
+            { "n": 4, "title": "Ölçülecek KPI’ların Belirlenmesi", "body": "Lead sayısı, teklif sayısı, dönüşüm oranı, açık fırsat değeri, kaybedilen fırsatlar ve satış temsilcisi performansı gibi metrikler belirlenir." },
+            { "n": 5, "title": "CRM Raporlama Yapısının Kurulması", "body": "Yönetici ve satış ekibi için gerekli analiz ekranları hazırlanır." },
+            { "n": 6, "title": "Ekip Kullanım Eğitimi", "body": "Satış ekibine verileri nasıl gireceği, yöneticilere ise raporları nasıl okuyacağı anlatılır." },
+            { "n": 7, "title": "Düzenli Analiz ve İyileştirme", "body": "Satış verileri belirli periyotlarla incelenir ve iyileştirme alanları belirlenir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Satış süreci analizi nedir?",
+          "body": [
+            "Satış süreci analizi; müşteri adaylarının hangi kanallardan geldiğini, satış ekibinin nasıl performans gösterdiğini, tekliflerin ne kadarının siparişe dönüştüğünü, müşterilerin hangi aşamada kaybedildiğini ve satış sürecindeki açık fırsatların ne durumda olduğunu CRM verileriyle inceleme sürecidir. {{appName}}, şirketlerin satış süreçlerini ölçülebilir hale getirerek daha doğru karar almasına yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Satış Süreci Analizi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Satış süreci analizi kimler için uygundur?", "a": "Satış süreci analizi; satış ekibi bulunan, düzenli teklif gönderen, müşteri adaylarını takip eden ve satış performansını verilerle görmek isteyen tüm şirketler için uygundur." },
+            { "q": "Satış süreci analizi ne işe yarar?", "a": "Satış süreci analizi, şirketin satışta nerede müşteri kaybettiğini, hangi tekliflerin satışa dönüştüğünü, hangi kanalların daha iyi müşteri getirdiğini ve satış ekibinin performansını gösterir." },
+            { "q": "CRM ile satış analizi yapılabilir mi?", "a": "Evet. CRM üzerinden müşteri adayları, teklifler, telefon aramaları, satış aşamaları, açık fırsatlar, kaybedilen fırsatlar ve satış temsilcisi performansı analiz edilebilir." },
+            { "q": "Tekliften satışa dönüşüm oranı takip edilebilir mi?", "a": "Evet. Gönderilen tekliflerin kaçının siparişe dönüştüğü CRM üzerinden takip edilebilir." },
+            { "q": "Satış ekibi performansı ölçülebilir mi?", "a": "Evet. Satış temsilcilerinin müşteri adayı sayısı, arama sayısı, teklif sayısı, kapanan satışları, açık fırsatları ve görev performansları raporlanabilir." },
+            { "q": "Kaybedilen müşterilerin nedeni analiz edilebilir mi?", "a": "Evet. Kaybedilen fırsatlar fiyat, rakip, geç dönüş, yanlış hedef müşteri, teslim süresi veya takip eksikliği gibi nedenlere göre analiz edilebilir." },
+            { "q": "Mail marketing performansı ölçülebilir mi?", "a": "Evet. Mail gönderilen firma sayısı, cevap veren firma sayısı, teklif isteyen müşteriler ve satışa dönüşen fırsatlar analiz edilebilir." },
+            { "q": "İhracat satış süreci analiz edilebilir mi?", "a": "Evet. Ülke bazlı müşteri dönüşleri, GTİP / HS koduna göre müşteri listeleri, konşimento verileri, mail marketing, telefon aramaları ve ihracat teklifleri analiz edilebilir." },
+            { "q": "Satış analizi satışları artırır mı?", "a": "Satış analizi doğrudan satış garantisi vermez; ancak satış sürecindeki sorunları görünür hale getirir, takip disiplinini artırır ve satış stratejisinin daha doğru yönetilmesine yardımcı olur." },
+            { "q": "Satış süreci analizine nereden başlamak gerekir?", "a": "İlk adım mevcut satış sürecinin ve müşteri kaynaklarının analiz edilmesidir. Ardından CRM üzerinde satış aşamaları, teklif takibi, müşteri kaynakları ve performans raporları oluşturulmalıdır." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Satış Sürecinizi Birlikte Analiz Edelim",
+        "body": "Satış ekibiniz çalışıyor ama satışların neden beklenen seviyeye çıkmadığını net göremiyorsanız, sorun satış çabasında değil; ölçüm ve takip sisteminde olabilir. {{appName}} Satış Süreci Analizi ile müşteri adaylarınızı, tekliflerinizi, satış ekibinizi, kaybedilen fırsatlarınızı ve açık satış potansiyelinizi görünür hale getirin.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

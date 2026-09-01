@@ -1,5 +1,6 @@
 CREATE TABLE IF NOT EXISTS market_test_runs (
   id CHAR(36) PRIMARY KEY,
+  tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya',
   suite VARCHAR(100) NOT NULL,
   title VARCHAR(255) NOT NULL,
   command VARCHAR(500) NULL,
@@ -11,6 +12,7 @@ CREATE TABLE IF NOT EXISTS market_test_runs (
   risk_note TEXT NULL,
   created_by VARCHAR(255) NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  INDEX idx_market_test_runs_tenant (tenant_key),
   INDEX idx_market_test_runs_suite (suite),
   INDEX idx_market_test_runs_status (status),
   INDEX idx_market_test_runs_created_at (created_at)
@@ -18,6 +20,7 @@ CREATE TABLE IF NOT EXISTS market_test_runs (
 
 CREATE TABLE IF NOT EXISTS market_developer_notes (
   id CHAR(36) PRIMARY KEY,
+  tenant_key VARCHAR(64) NOT NULL DEFAULT 'avrasya',
   subject VARCHAR(255) NOT NULL,
   body TEXT NOT NULL,
   priority VARCHAR(30) NOT NULL DEFAULT 'normal',
@@ -27,6 +30,7 @@ CREATE TABLE IF NOT EXISTS market_developer_notes (
   created_by VARCHAR(255) NULL,
   created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  INDEX idx_market_developer_notes_tenant (tenant_key),
   INDEX idx_market_developer_notes_status (status),
   INDEX idx_market_developer_notes_priority (priority),
   INDEX idx_market_developer_notes_page_path (page_path),

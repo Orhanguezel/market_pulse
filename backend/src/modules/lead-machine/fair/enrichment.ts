@@ -208,7 +208,7 @@ export function recommend(
     return {
       action: 'APPROVE_WITH_REVIEW',
       badge: '🟡 Kontrol et, onayla',
-      reasoning: 'Mail sahsi ama kategori uyumu net değil. Web sitesinde paspas/aksesuar/distribütör sinyali ara.',
+      reasoning: 'Mail sahsi ama kategori uyumu net değil. Web sitesinde oto aksesuar/aksesuar/distribütör sinyali ara.',
     };
   }
 

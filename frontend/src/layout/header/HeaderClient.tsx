@@ -95,8 +95,25 @@ const HeaderClient: React.FC<HeaderClientProps> = ({ brand, locale: localeProp, 
   // kullanılır. RTK Query çağrısı yok — server/client farkını tamamen ortadan kaldırır.
   // (Menü değişiklikleri admin'den sayfa yenilenmesiyle yansır; revalidate: 60sn.)
   const headerMenuItems: MenuItemWithChildren[] = useMemo(() => {
+    // "Hizmetler" statik nav girişi — DB menüsünde yoksa güvenli şekilde eklenir.
+    const hizmetlerItem: MenuItemWithChildren = {
+      id: 'static-hizmetler',
+      url: '/hizmetler',
+      title: locale === 'de' ? 'Leistungen' : locale === 'en' ? 'Services' : 'Hizmetler',
+    } as MenuItemWithChildren;
+
+    const ensureHizmetler = (list: MenuItemWithChildren[]): MenuItemWithChildren[] => {
+      const exists = list.some(
+        (m) => String((m as any)?.url || '').replace(/^\/+|\/+$/g, '') === 'hizmetler',
+      );
+      return exists ? list : [...list, hizmetlerItem];
+    };
+
     if (initialMenuItems && initialMenuItems.length > 0) {
-      return initialMenuItems.slice().sort((a, b) => ((a as any)?.order_num ?? 0) - ((b as any)?.order_num ?? 0)) as MenuItemWithChildren[];
+      const sorted = initialMenuItems
+        .slice()
+        .sort((a, b) => ((a as any)?.order_num ?? 0) - ((b as any)?.order_num ?? 0)) as MenuItemWithChildren[];
+      return ensureHizmetler(sorted);
     }
     // initialMenuItems boş ise (SSR fetch başarısız) — varsayılan linkleri locale'e göre üret
     const mapItem = (m: FallbackMenuItem): MenuItemWithChildren => ({
@@ -107,7 +124,7 @@ const HeaderClient: React.FC<HeaderClientProps> = ({ brand, locale: localeProp, 
         ? { children: m.children.map(mapItem) as MenuItemWithChildren[] }
         : {}),
     } as MenuItemWithChildren);
-    return FALLBACK_MENU.map(mapItem);
+    return ensureHizmetler(FALLBACK_MENU.map(mapItem));
   }, [locale, initialMenuItems]);
 
   useEffect(() => {

@@ -1,0 +1,176 @@
+{
+  "slug": "mail-marketing-kampanyasi-hazirlama",
+  "category": "mail-outreach",
+  "module": "outreach",
+  "order": 20,
+  "icon": "Send",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Mail Marketing Kampanyası Hazırlama | İhracat ve B2B Müşteri Bulma E-posta Kampanyası",
+        "description": "İhracat ve B2B satış için hedef alıcı firma listesi, İngilizce e-posta metni, konu başlığı, takip maili, CRM kayıt yapısı ve kampanya takip süreci hazırlıyoruz.",
+        "ogTitle": "Mail Marketing Kampanyası Hazırlama | {{appName}}",
+        "ogDescription": "İhracat ve B2B satış için hedef alıcı firma listesi, İngilizce tanıtım maili, konu başlığı, takip mailleri ve CRM takip yapısı hazırlıyoruz."
+      },
+      "hero": {
+        "eyebrow": "Mail & Telefon İletişimi",
+        "title": "Mail Marketing Kampanyası Hazırlama",
+        "lead": "Yurt dışı alıcı firmalara e-posta göndermek istiyor ama hangi firmaya, hangi mesajla, hangi sırayla ve nasıl takip yaparak ulaşacağınızı bilmiyor musunuz? Mail marketing, doğru hazırlandığında ihracat ve B2B satış için güçlü bir müşteri bulma kanalı olabilir. {{appName}} olarak ihracat ve B2B satış için hedefli mail marketing kampanyaları hazırlıyoruz: alıcı firma listesi, karar verici kişi araştırması, kurumsal e-posta listesi, İngilizce tanıtım metni, konu başlığı, takip mailleri, CRM takip yapısı ve kampanya raporlama sürecini birlikte planlıyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Mail Marketing Kampanyası Hazırlama Nedir?",
+          "body": [
+            "Mail marketing kampanyası hazırlama, belirli bir ürün, hizmet, hedef ülke veya müşteri grubuna yönelik profesyonel e-posta iletişim süreci planlama çalışmasıdır.",
+            "Bu süreç yalnızca e-posta metni yazmaktan ibaret değildir. Başarılı bir B2B mail marketing kampanyasında hedef firma listesi, doğru kişi veya departman bilgisi, konu başlığı, mesaj dili, takip maili, CRM kayıt yapısı ve satış ekibi takip planı birlikte düşünülmelidir.",
+            "{{appName}}, mail marketing kampanyasını ihracat müşteri bulma ve B2B satış sürecinin ölçülebilir bir parçası olarak planlar.",
+            "E-posta kampanyalarınızı sadece gönderim faaliyeti olmaktan çıkarıp hedefleme, mesaj, takip, CRM ve raporlama yapısıyla satış fırsatı oluşturabilecek profesyonel bir müşteri bulma sistemine dönüştürüyoruz."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Mail Marketing Neden Sadece Mail Göndermek Değildir?",
+          "body": [
+            "Kampanya başlamadan önce hedef ülke, firma tipi, ürün, mesaj dili, konu başlığı, takip maili ve CRM kayıt yapısı netleştirilmelidir. Bu hazırlık yapılmadan gönderilen e-postalar düşük dönüş oranına, yanlış hedeflemeye ve takip kaybına neden olabilir.",
+            "Birçok şirket mail marketing çalışmasını yalnızca “listeye e-posta gönderme” olarak görür. Oysa gerçek sonuç gönderimden sonra başlar.",
+            "Hedef doğru değilse, mesaj zayıfsa, konu başlığı dikkat çekmiyorsa, firma listesi temiz değilse ve cevap veren müşteriler takip edilmiyorsa kampanya satışa katkı sağlamaz."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Yurt dışı alıcı firmalara ulaşmak istiyor ama nereden başlayacağınızı bilmiyorsanız, mail marketing kampanyası profesyonel bir başlangıç olabilir.",
+          "items": [
+            { "title": "İhracat Yapmak İsteyen Üreticiler", "body": "Yurt dışı alıcı firmalara profesyonel tanıtım yapmak isteyen üreticiler için uygundur." },
+            { "title": "Yurt Dışı Müşteri Arayan KOBİ’ler", "body": "Hedef ülke, firma ve e-posta kampanyası planı oluşturmak isteyen işletmeler için uygundur." },
+            { "title": "B2B Satış Yapan Şirketler", "body": "Kurumsal alıcılara, distribütörlere ve satın alma departmanlarına ulaşmak isteyen firmalara uygundur." },
+            { "title": "Konşimento Verileriyle Liste Oluşturanlar", "body": "Gerçek ithalatçı firma listelerini e-posta kampanyasına dönüştürebilir." },
+            { "title": "GTİP / HS Koduna Göre Müşteri Arayanlar", "body": "Ürün grubuna göre hazırlanan alıcı listesi kampanya sistemine bağlanabilir." },
+            { "title": "Fuar Öncesi Tanıtım Yapmak İsteyenler", "body": "Fuar öncesi hedef alıcı firmalara profesyonel e-posta gönderim planı hazırlanabilir." },
+            { "title": "LinkedIn Sürecini E-posta ile Desteklemek İsteyenler", "body": "LinkedIn ve Sales Navigator çalışmalarını mail marketing ile güçlendirebilir." },
+            { "title": "CRM ile Kampanya Takibi Yapmak İsteyenler", "body": "Cevap veren, teklif isteyen ve takip edilecek firmalar CRM üzerinden yönetilebilir." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Mail Marketing Kampanyasında Hangi Alanlar Planlanır?",
+          "intro": "{{appName}}, kampanya sürecini hedef kitle, liste, mesaj, takip, CRM ve satış dönüşümü açısından bütünsel şekilde planlar.",
+          "items": [
+            { "title": "Hedef Müşteri Profilinin Belirlenmesi", "body": "Kampanyanın başarısı hedef müşteri profilinin doğruluğuna bağlıdır. Ürün / hizmet, hedef ülke ve sektör değerlendirilir; ithalatçı, distribütör, toptancı veya üretici ayrımı yapılır; satın alma müdürü, genel müdür veya ithalat sorumlusu hedefi ve teklif / numune / distribütörlük görüşmesi hedefi netleştirilir." },
+            { "title": "Alıcı Firma Listesi Hazırlama", "body": "Liste kalitesizse e-posta metni ne kadar iyi olursa olsun sonuç zayıf olur. Konşimento verileri ve GTİP / HS koduna göre alıcı listesi, ürün adına göre ithalatçı araştırması, 190+ ülke alıcı firma verileri ve B2B platform profilleri, fuar katılımcı listeleri, LinkedIn ve Sales Navigator araştırmaları kullanılır." },
+            { "title": "Liste Temizliği ve Segmentasyon", "body": "Hazırlanan firma listesi doğrudan gönderime alınmamalıdır. Firma adı, ülke, web sitesi ve ürün ilgisi kontrol edilir; tekrar eden kayıtlar ve alakasız firmalar ayıklanır; ithalatçı / distribütör / üretici / toptancı ayrımı yapılır; öncelik seviyesi ve iletişim dili belirlenir." },
+            { "title": "Kurumsal Mail Adresi ve Departman Araştırması", "body": "Doğru firmayı bulmak kadar doğru e-posta adresini bulmak da önemlidir. Genel kurumsal e-posta, satın alma / ithalat / procurement / purchasing departmanı, supplier application e-postası, firma iletişim formu, B2B platform mesaj kanalı ve telefonla departman doğrulama değerlendirilir." },
+            { "title": "Karar Verici Kişi Araştırması", "body": "Bazı kampanyalarda genel kurumsal mail adresi yeterli olmayabilir. Satın alma müdürü, ithalat sorumlusu, dış ticaret sorumlusu, procurement / purchasing / import manager, supply chain / sourcing / category manager, buyer, general manager ve business development manager araştırılır." },
+            { "title": "E-posta Konu Başlığı Hazırlama", "body": "Konu başlığı, alıcının e-postayı açıp açmamasını etkileyen ilk alandır. Yanıltıcı ve aşırı reklam dili içermeyen, ürün veya faydayı net anlatan, B2B iletişim diline uygun ve spam algısı oluşturmayan başlıklar hazırlanır." },
+            { "title": "Profesyonel E-posta Metni Hazırlama", "body": "Mail marketing metni kısa, net, güven veren ve alıcıya değer sunan yapıda olmalıdır. Kısa selamlama ve net firma tanıtımı, ürün / hizmetin açık anlatımı, alıcı firma için olası fayda ve güven unsurları, teklif veya görüşme çağrısı ve profesyonel kapanış kurgulanır." },
+            { "title": "İngilizce Mail Marketing Metni Hazırlama", "body": "Yurt dışı alıcı firmalara ulaşırken İngilizce e-posta metni profesyonel görünmelidir. Net ve sade İngilizce cümleler, ürün / hizmet / fayda açık anlatımı, gereksiz uzun firma tanıtımından kaçınma ve profesyonel B2B ton korunur." },
+            { "title": "Takip Maili Senaryosu Hazırlama", "body": "Birçok müşteri ilk e-postaya hemen cevap vermez. İlk tanıtım maili ve kısa hatırlatma maili, ürün / hizmet odaklı ikinci mesaj, katalog veya web sitesi yönlendirmesi, görüşme talebi, son takip maili ve tekrar iletişim listesi planlanır." },
+            { "title": "CRM ile Kampanya Takibi", "body": "Cevap veren firmalar e-posta kutusunda kalmamalı, satış sürecine alınmalıdır. Firma adı, ülke, ilgili kişi, e-posta, kampanya adı, gönderim tarihi, cevap durumu, ilgi seviyesi, teklif / numune talebi, takip tarihi, satış temsilcisi ve siparişe dönüşme durumu kayıt altına alınır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Mail Marketing Kampanyası ile İhracat Müşteri Bulma",
+          "intro": "İhracat müşteri bulma sürecinde mail marketing, doğru alıcı firma listesiyle birlikte kullanıldığında güçlü bir iletişim kanalı olabilir.",
+          "items": [
+            "Hedef ülke seçimi ve alıcı firma listesi",
+            "İthalatçı ve distribütör araştırması",
+            "GTİP / HS kodu bazlı müşteri listesi",
+            "Ürün adına göre ithalatçı listesi",
+            "Kurumsal mail adresi ve satın alma müdürü araştırması",
+            "İngilizce tanıtım maili ve İngilizce takip maili",
+            "Teklif, proforma, telefon araması ve LinkedIn bağlantı çalışması"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Mail Marketing ve Telefon Araması Birlikte Kullanılmalı mı?",
+          "intro": "Evet. Bazı durumlarda mail marketing tek başına yeterli olmayabilir. Özellikle yüksek potansiyelli alıcı firmalar için telefon araması ve LinkedIn takibi kampanyayı güçlendirebilir.",
+          "items": [
+            "Tanıtım maili gönderilir",
+            "Birkaç gün sonra takip maili planlanır",
+            "Yüksek potansiyelli firmalar telefonla aranır",
+            "Doğru departman veya kişi teyit edilir",
+            "Teklif isteyen firmalar CRM’e aktarılır",
+            "LinkedIn üzerinden karar verici kişiye bağlantı gönderilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Mail Marketing Kampanyası Hazırlamanın Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Yurt dışı alıcı firmalara daha profesyonel ulaşabilirsiniz",
+            "Doğru hedef kitleye uygun mesaj hazırlayabilirsiniz",
+            "İngilizce tanıtım mailinizi daha güven veren hale getirebilirsiniz",
+            "Konu başlığı ve takip maili yapınızı planlayabilirsiniz",
+            "Mail marketing çalışmalarınızı CRM’e bağlayabilirsiniz",
+            "Cevap veren firmaları satış sürecine alabilirsiniz",
+            "Teklif isteyen müşterileri kaçırmazsınız",
+            "Telefon araması yapılacak firmaları belirleyebilirsiniz",
+            "LinkedIn takibiyle kampanyayı güçlendirebilirsiniz",
+            "İhracat müşteri bulma sürecinizi ölçülebilir hale getirebilirsiniz"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Mail Marketing Kampanyalarında Sık Yapılan Hatalar",
+          "items": [
+            "Rastgele firma listelerine mail göndermek",
+            "Hedef ülke ve sektör belirlememek",
+            "Aynı metni tüm firmalara göndermek",
+            "Uzun ve karmaşık e-posta metni kullanmak",
+            "Yanıltıcı veya aşırı reklam kokan konu başlığı yazmak",
+            "Karar verici kişi araştırması yapmamak",
+            "Kurumsal e-posta adreslerini kontrol etmemek",
+            "Takip maili planı oluşturmamak",
+            "Cevap veren firmaları CRM’e aktarmamak",
+            "Kampanya sonucunu ölçmemek"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Mail Marketing Kampanyası Hazırlama Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketinizin ürünü, hedef pazarı, mevcut müşteri listesi, ihracat hedefi ve satış süreci değerlendirilerek başlar. Ardından hedef kitle, liste, e-posta metni, takip mailleri, CRM yapısı ve raporlama sistemi hazırlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin ürünü, hedef pazarı, mevcut müşteri listesi, ihracat hedefi ve satış süreci değerlendirilir." },
+            { "n": 2, "title": "Hedef Kitle Belirleme", "body": "Hangi ülke, sektör, firma tipi ve karar verici kişilere ulaşılacağı netleştirilir." },
+            { "n": 3, "title": "Alıcı Firma Listesi Hazırlığı", "body": "Konşimento verileri, GTİP / HS kodu, ürün adı, LinkedIn, B2B platformlar veya mevcut listeler üzerinden hedef firmalar hazırlanır." },
+            { "n": 4, "title": "Mail Adresi ve Kişi Araştırması", "body": "Kurumsal e-posta adresleri, satın alma departmanları, ithalat sorumluları ve ilgili karar verici profiller araştırılır." },
+            { "n": 5, "title": "E-posta Metni Hazırlığı", "body": "Tanıtım maili, konu başlığı, takip maili ve gerekiyorsa İngilizce mesaj metinleri hazırlanır." },
+            { "n": 6, "title": "Segmentasyon ve Gönderim Planı", "body": "Liste ülke, sektör, ürün grubu ve öncelik seviyesine göre ayrılır. Kampanya gönderim planı oluşturulur." },
+            { "n": 7, "title": "CRM Takip Yapısı", "body": "Cevap veren, teklif isteyen, telefonla aranacak ve takip edilecek firmalar için CRM yapısı hazırlanır." },
+            { "n": 8, "title": "Raporlama ve İyileştirme", "body": "Kampanya dönüşleri analiz edilir. Konu başlığı, mesaj, hedef liste ve takip süreci performansa göre geliştirilir." }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Mail Marketing Kampanyası Hazırlama Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Mail marketing kampanyası hazırlama kimler için uygundur?", "a": "Bu hizmet; ihracat yapmak isteyen üretici firmalar, B2B satış yapan şirketler, yurt dışı alıcı firmalara ulaşmak isteyen KOBİ’ler ve profesyonel e-posta kampanyası hazırlamak isteyen işletmeler için uygundur." },
+            { "q": "Mail marketing ile ihracat müşterisi bulunabilir mi?", "a": "Mail marketing doğru hedef liste, profesyonel mesaj, takip maili, telefon araması ve CRM takibiyle desteklendiğinde ihracat müşteri bulma sürecine katkı sağlayabilir. Ancak kesin müşteri garantisi vermez." },
+            { "q": "İngilizce tanıtım maili hazırlıyor musunuz?", "a": "Evet. Ürün, sektör, hedef ülke ve müşteri profiline göre İngilizce tanıtım maili, takip maili ve B2B satış mesajları hazırlanabilir." },
+            { "q": "Mail gönderilecek firma listesini siz hazırlıyor musunuz?", "a": "Evet. Konşimento verileri, GTİP / HS kodu, ürün adı, 190+ ülke alıcı firma verileri, LinkedIn veya B2B platform araştırmalarıyla hedef firma listesi hazırlanabilir." },
+            { "q": "Kurumsal mail adresleri araştırılıyor mu?", "a": "Evet. Firma web sitesi, departman iletişimleri, B2B platformlar, LinkedIn ve açık kaynaklar üzerinden kurumsal e-posta adresleri araştırılabilir." },
+            { "q": "Satın alma müdürlerine yönelik kampanya hazırlanabilir mi?", "a": "Evet. Procurement manager, purchasing manager, import manager, satın alma müdürü ve ilgili karar verici kişi profillerine yönelik B2B mail marketing mesajları hazırlanabilir." },
+            { "q": "Takip maili hazırlanıyor mu?", "a": "Evet. İlk tanıtım mailinden sonra gönderilecek kısa hatırlatma, ürün bilgisi, görüşme talebi veya teklif odaklı takip mailleri hazırlanabilir." },
+            { "q": "Cevap veren firmalar nasıl takip edilir?", "a": "Cevap veren firmalar CRM sistemine alınabilir. Teklif isteyenler, telefonla aranacak firmalar, numune talep edenler ve daha sonra takip edilecek müşteriler sınıflandırılabilir." },
+            { "q": "Mail marketing kesin satış getirir mi?", "a": "Hayır. Mail marketing kesin satış garantisi vermez. Ancak doğru hedefleme, profesyonel mesaj ve düzenli takip ile satış fırsatı oluşturma ihtimalini artırabilir." },
+            { "q": "Mail marketing yaparken mevzuat dikkate alınmalı mı?", "a": "Evet. Hedef ülkenin ticari elektronik ileti kuralları, profesyonel iletişim ilkeleri ve veri güvenliği dikkate alınmalıdır. Kampanyalar rastgele ve rahatsız edici gönderimler yerine hedefli B2B iletişim olarak planlanmalıdır." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "E-posta Kampanyanızı Ölçülebilir Bir İhracat Müşteri Bulma Sistemine Dönüştürelim",
+        "body": "Yurt dışı alıcı firmalara ulaşmak istiyor ama doğru listeyi, doğru mesajı ve doğru takip planını oluşturamıyorsanız mail marketing kampanyanız başlamadan zayıflıyor olabilir. {{appName}} Mail Marketing Kampanyası Hazırlama hizmeti ile hedef alıcı firma listenizi, İngilizce tanıtım mailinizi, takip mesajlarınızı ve CRM satış takip yapınızı birlikte hazırlayalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

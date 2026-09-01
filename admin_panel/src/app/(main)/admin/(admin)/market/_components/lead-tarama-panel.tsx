@@ -2,7 +2,7 @@
 
 import * as React from 'react';
 import { useRouter } from 'next/navigation';
-import { Building2, CalendarDays, MapPin, Play, Search, ShoppingCart } from 'lucide-react';
+import { Building2, CalendarDays, Database, MapPin, Play, Search, ShoppingCart, UserRoundSearch } from 'lucide-react';
 import { toast } from 'sonner';
 
 import { Button } from '@/components/ui/button';
@@ -20,11 +20,12 @@ import {
   useListIcpProfilesQuery,
   useStartAmazonScanMutation,
   useStartB2bJobMutation,
+  useStartCustomsJobMutation,
   useStartFairJobMutation,
 } from '@/integrations/hooks';
 import { cn } from '@/lib/utils';
 
-type Source = 'b2b' | 'fair' | 'amazon';
+type Source = 'b2b' | 'fair' | 'amazon' | 'customs' | 'decision_maker';
 
 const SOURCES: { value: Source; label: string; description: string; icon: React.ReactNode; color: string }[] = [
   {
@@ -48,6 +49,8 @@ const SOURCES: { value: Source; label: string; description: string; icon: React.
     icon: <ShoppingCart className="size-8" />,
     color: 'border-orange-400/40 bg-orange-400/5 hover:border-orange-400/60 hover:bg-orange-400/10 data-[active=true]:border-orange-400 data-[active=true]:bg-orange-400/15',
   },
+  { value: 'customs', label: 'Gümrük', description: 'HS/GTİP kodu veya ürün adıyla ithalatçı firmaları bulun', icon: <Database className="size-8" />, color: 'border-emerald-400/40 bg-emerald-400/5 hover:border-emerald-400/60 data-[active=true]:border-emerald-400 data-[active=true]:bg-emerald-400/15' },
+  { value: 'decision_maker', label: 'Karar Verici', description: 'Firma havuzundan yetkili kişi ve iletişim bilgisi bulun', icon: <UserRoundSearch className="size-8" />, color: 'border-cyan-400/40 bg-cyan-400/5 hover:border-cyan-400/60 data-[active=true]:border-cyan-400 data-[active=true]:bg-cyan-400/15' },
 ];
 
 const B2B_SOURCES = [
@@ -70,6 +73,7 @@ export default function LeadTaramaPanel() {
   const [startB2b, b2bState] = useStartB2bJobMutation();
   const [startFair, fairState] = useStartFairJobMutation();
   const [startAmazon, amazonState] = useStartAmazonScanMutation();
+  const [startCustoms, customsState] = useStartCustomsJobMutation();
 
   const [source, setSource] = React.useState<Source | null>(null);
   const [icpId, setIcpId] = React.useState('');
@@ -89,6 +93,9 @@ export default function LeadTaramaPanel() {
   const [keyword, setKeyword] = React.useState('');
   const [marketplace, setMarketplace] = React.useState('de');
   const [amazonLimit, setAmazonLimit] = React.useState(20);
+  const [hsPrefix, setHsPrefix] = React.useState('');
+  const [productQuery, setProductQuery] = React.useState('');
+  const [customsCountry, setCustomsCountry] = React.useState('ALL');
 
   // When ICP is selected, pre-fill search query hints
   React.useEffect(() => {
@@ -108,7 +115,7 @@ export default function LeadTaramaPanel() {
     if (!icpId && icps?.[0]?.id) setIcpId(icps[0].id);
   }, [icpId, icps]);
 
-  const isBusy = b2bState.isLoading || fairState.isLoading || amazonState.isLoading;
+  const isBusy = b2bState.isLoading || fairState.isLoading || amazonState.isLoading || customsState.isLoading;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -130,6 +137,13 @@ export default function LeadTaramaPanel() {
         const job = await startAmazon({ keyword: keyword.trim(), marketplace, limit: amazonLimit }).unwrap();
         toast.success('Amazon taraması başladı');
         router.push(`/admin/market/lead-machine/amazon?job_id=${job.id}`);
+      } else if (source === 'customs') {
+        if (!hsPrefix.trim() && !productQuery.trim()) { toast.error('HS/GTİP veya ürün sorgusu gerekli'); return; }
+        const job = await startCustoms({ hs_prefix: hsPrefix.trim() || undefined, product_query: productQuery.trim() || undefined, buyer_country: customsCountry === 'ALL' ? undefined : customsCountry, icp_id: icpId || undefined, limit: b2bLimit }).unwrap();
+        toast.success('Gümrük taraması başladı');
+        router.push(`/admin/market/lead-machine/candidates?channel=customs&job_id=${job.id}`);
+      } else {
+        router.push('/admin/market/lead-machine/decision-makers');
       }
     } catch {
       toast.error('Tarama başlatılamadı');
@@ -152,7 +166,7 @@ export default function LeadTaramaPanel() {
       {/* Step 1 — Kaynak Seçimi */}
       <div className="space-y-3">
         <p className="text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Adım 1 — Kaynak Seçin</p>
-        <div className="grid gap-4 sm:grid-cols-3">
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-5">
           {SOURCES.map((s) => (
             <button
               key={s.value}
@@ -303,6 +317,16 @@ export default function LeadTaramaPanel() {
                     </div>
                   </div>
                 )}
+
+                {source === 'customs' && (
+                  <div className="grid gap-4 lg:grid-cols-[180px_1fr_160px_auto] lg:items-end">
+                    <div className="space-y-2"><Label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">HS/GTİP</Label><Input value={hsPrefix} onChange={(e) => setHsPrefix(e.target.value)} placeholder="8708" className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text" /></div>
+                    <div className="space-y-2"><Label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Ürün sorgusu</Label><Input value={productQuery} onChange={(e) => setProductQuery(e.target.value)} className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text" /></div>
+                    <div className="space-y-2"><Label className="ml-1 text-[10px] font-bold uppercase tracking-[0.2em] text-gm-muted">Alıcı ülke</Label><Select value={customsCountry} onValueChange={setCustomsCountry}><SelectTrigger className="h-12 rounded-2xl border-gm-border-soft bg-gm-surface/40 text-gm-text"><SelectValue /></SelectTrigger><SelectContent><SelectItem value="ALL">Tümü</SelectItem>{COUNTRIES.map((country) => <SelectItem key={country} value={country}>{country}</SelectItem>)}</SelectContent></Select></div>
+                  </div>
+                )}
+
+                {source === 'decision_maker' && <p className="text-sm text-gm-muted">Devam ettiğinizde karar verici arama ekranına yönlendirileceksiniz.</p>}
 
                 <div className="flex justify-end pt-2">
                   <Button

@@ -1,16 +1,12 @@
-<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
-  <rect width="32" height="32" rx="6" fill="#FFF5F3"/>
-  
-  <g transform="translate(16, 16)" stroke="#D88D7E" stroke-width="1.5" fill="none">
-    <circle cx="0" cy="0" r="12"/>
-    <circle cx="0" cy="0" r="5"/>
-    <circle cx="4" cy="0" r="5"/>
-    <circle cx="-4" cy="0" r="5"/>
-    <circle cx="2" cy="3.5" r="5"/>
-    <circle cx="-2" cy="3.5" r="5"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="title">
+  <title id="title">İhracat Radarı</title>
+  <rect width="64" height="64" rx="14" fill="#1e40af"/>
+  <g fill="none" stroke="#ffffff" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="32" cy="32" r="23" stroke-width="4"/>
+    <circle cx="32" cy="32" r="14" stroke-width="2.5" opacity=".65"/>
+    <circle cx="32" cy="32" r="6" stroke-width="2" opacity=".45"/>
+    <path d="m32 32 16-16" stroke-width="4"/>
+    <path d="m43 15 6-1-1 6" stroke="#5eead4" stroke-width="4"/>
+    <circle cx="32" cy="32" r="3.5" fill="#5eead4" stroke="none"/>
   </g>
-  
-  <!-- Hands hint -->
-  <path d="M 6 22 Q 8 20 10 22" stroke="#F4BDB3" stroke-width="1.5" fill="none"/>
-  <path d="M 26 22 Q 24 20 22 22" stroke="#F4BDB3" stroke-width="1.5" fill="none"/>
 </svg>

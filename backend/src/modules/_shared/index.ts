@@ -69,6 +69,8 @@ export {
 export { formatAdminUserRow } from './admin.helpers';
 
 export { publicUrlOf, pageToOffset } from './repo-helpers';
+export { andTenant, andTenantOwner, getActiveTenantKey, getActiveUserId, getRequiredTenantKey, getRequiredUserId, ownerScopeForUrl, ownerScopeForRequest, tenantPredicate, tenantValues, tenantWhereSql } from './tenant-scope';
+export { encryptAes256Gcm, decryptAes256Gcm } from './crypto';
 
 export { trimImageBuffer, maybeTrimUploadBuffer, shouldAutoTrim } from './image-trim';
 export type { TrimOptions } from './image-trim';

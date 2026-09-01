@@ -1,0 +1,189 @@
+{
+  "slug": "satin-alma-muduru-ve-karar-verici-kisi-bulma",
+  "category": "ihracat-musteri-bulma",
+  "module": "discover-customs",
+  "order": 50,
+  "icon": "UserSearch",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Satın Alma Müdürü ve Karar Verici Kişi Bulma | B2B İhracat Lead Araştırması",
+        "description": "Yurt dışı alıcı firmalarda satın alma müdürü, ithalat sorumlusu, procurement manager, import manager ve karar verici kişileri kurumsal kaynaklar üzerinden araştırarak B2B satış ve ihracat müşteri bulma sürecinizi güçlendiriyoruz.",
+        "ogTitle": "Satın Alma Müdürü ve Karar Verici Kişi Bulma | {{appName}}",
+        "ogDescription": "Yurt dışı alıcı firmalarda doğru satın alma, ithalat, procurement, purchasing ve karar verici kişi profillerini araştırarak B2B iletişim listenizi hazırlayın."
+      },
+      "hero": {
+        "eyebrow": "İhracat Müşteri Bulma",
+        "title": "Satın Alma Müdürü ve Karar Verici Kişi Bulma",
+        "lead": "Yurt dışı alıcı firmaları buluyorsunuz ama doğru kişiye ulaşamadığınız için cevap alamıyor musunuz? İhracat ve B2B satışta yalnızca firma adı bulmak çoğu zaman yeterli değildir. Asıl önemli olan, o firmada satın alma kararını etkileyen kişiye, ilgili departmana veya doğru kurumsal iletişim kanalına ulaşabilmektir. {{appName}} olarak yurt dışı alıcı firmalarda satın alma müdürü, ithalat sorumlusu, procurement manager, purchasing manager, import manager, supply chain manager, kategori yöneticisi ve karar verici kişilerin araştırılması konusunda B2B lead research desteği sunuyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Satın Alma Müdürü ve Karar Verici Kişi Bulma Nedir?",
+          "body": [
+            "Satın alma müdürü ve karar verici kişi bulma, B2B satış ve ihracat müşteri bulma sürecinde hedef alıcı firmalarda ilgili departmanların, yetkili kişilerin ve kurumsal iletişim kanallarının araştırılmasıdır.",
+            "Bir firma ürününüzü ithal ediyor olabilir. Ancak o firmaya genel bilgi e-postası göndermek her zaman yeterli sonuç vermez. Çünkü doğru kişi satın alma müdürü, ithalat sorumlusu, kategori yöneticisi, tedarik zinciri yöneticisi, genel müdür veya iş geliştirme sorumlusu olabilir.",
+            "{{appName}}, bu süreci kurumsal ve profesyonel kaynaklar üzerinden araştırarak satış ekibinizin daha doğru kişilere ulaşmasına yardımcı olur.",
+            "Firma bulmak yetmez, doğru kişiye ulaşmak gerekir: Satış mesajınızın doğru departmana, doğru unvana ve doğru kişi profiline ulaşması; mail marketing, telefon araması, LinkedIn bağlantısı ve CRM takibi açısından süreci daha verimli hale getirir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "B2B Satışta Hangi Soruların Cevabı Önemlidir?",
+          "body": [
+            "Alıcı firmayı bulduktan sonra satış sürecini başlatan asıl konu, firmanın içinde hangi kişinin veya departmanın ürününüzle ilgilendiğini anlamaktır.",
+            "Bu nedenle karar verici kişi araştırması, yalnızca isim bulma çalışması değil; firma içindeki satın alma, ithalat, tedarik ve karar alma yapısını anlamaya yönelik bir B2B iletişim hazırlığıdır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Firma Bulmak Yetmez, Doğru Kişiye Ulaşmak Gerekir",
+          "body": [
+            "İhracat müşteri bulma çalışmalarında birçok şirket alıcı firma listesi oluşturur. Ancak liste hazırlandıktan sonra en büyük sorun başlar: “Bu firmada kime ulaşacağız?”",
+            "Genel info e-posta adreslerine gönderilen mesajlar bazen ilgili kişiye ulaşmayabilir. Satın alma departmanı yerine yanlış kişiye gönderilen e-postalar yanıtsız kalabilir. LinkedIn üzerinden doğru kişi belirlenmeden yapılan bağlantı çalışmaları zaman kaybettirebilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Hedef firmaları bulduğunuz halde doğru kişiye ulaşamıyorsanız, bu hizmet satış sürecinizin eksik kalan tarafını tamamlar.",
+          "items": [
+            { "title": "İhracat Müşteri Bulma Çalışması Yapanlar", "body": "Yurt dışı alıcı firmalarda doğru karar verici profiline ulaşmak isteyen ihracatçılar için uygundur." },
+            { "title": "Yurt Dışı Alıcı Firma Listesi Hazırlayanlar", "body": "Firma listesini kişi ve departman bilgisiyle daha kullanışlı hale getirmek isteyen firmalara uygundur." },
+            { "title": "Konşimento Verisi Kullanan İhracatçılar", "body": "İthalatçı firma listesini satın alma ve ithalat departmanı bilgileriyle güçlendirebilir." },
+            { "title": "GTİP / HS Koduna Göre Müşteri Bulanlar", "body": "Ürün grubuna göre bulunan firmalarda ilgili satın alma ve ithalat kişileri araştırılabilir." },
+            { "title": "Mail Marketing Dönüşlerini Artırmak İsteyenler", "body": "Mesajların doğru kişi profiline gönderilmesi için hedefli liste hazırlanabilir." },
+            { "title": "LinkedIn ve Sales Navigator Kullananlar", "body": "Hedef firmalarda çalışan ilgili kişi profilleri ve unvanları araştırılabilir." },
+            { "title": "Telefon Araması Yapacak Satış Ekipleri", "body": "Satış ekibinin hangi departmanı arayacağı daha net belirlenebilir." },
+            { "title": "CRM Kişi Yönetimi Kurmak İsteyen KOBİ’ler", "body": "Firma, kişi, unvan, departman ve takip kayıtları CRM üzerinde düzenlenebilir." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Satın Alma Müdürü ve Karar Verici Kişi Araştırmasında Hangi Alanlar İncelenir?",
+          "intro": "Amaç yalnızca kişi adı bulmak değildir. Doğru firma, doğru departman, doğru unvan, doğru kurumsal iletişim kanalı ve CRM takip yapısı birlikte planlanmalıdır.",
+          "items": [
+            { "title": "Hedef Firma Listesinin Hazırlanması", "body": "Firma listesi ne kadar doğru hazırlanırsa karar verici kişi araştırması da o kadar verimli olur: konşimento verileri ve GTİP / HS koduna göre alıcı firmalar; ürün adına göre ithalatçı firmalar ve 190+ ülke alıcı firma verileri; B2B platformlardan gelen firmalar ve fuar katılımcı listeleri; LinkedIn hedef firma listeleri ve mevcut müşteri verileri." },
+            { "title": "Firma Web Sitesi İncelemesi", "body": "Birçok firma iletişim, departman, ekip veya yönetim bilgilerini kendi sitesinde paylaşır: Contact, About us, Team ve Management sayfaları; Procurement, purchasing veya import department bilgileri; kurumsal e-posta adresleri, telefon ve santral bilgileri; distribütör veya tedarikçi başvuru sayfaları." },
+            { "title": "LinkedIn ve Sales Navigator Araştırması", "body": "Bilgilerin güncel ve firma ile bağlantılı olup olmadığı dikkatli değerlendirilir: satın alma, procurement, purchasing ve import rolleri; supply chain, category, sourcing ve business development rolleri; hedef firmada çalışıp çalışmadığı; güncel pozisyon, departman ve firma bağlantısı." },
+            { "title": "Unvan ve Departman Bazlı Arama", "body": "Her firmada aynı unvan kullanılmaz; farklı unvan varyasyonlarıyla arama yapılır: purchasing manager, procurement manager, import manager; import specialist, supply chain manager, sourcing manager; buyer, senior buyer, international buyer; head of procurement, purchasing director, general manager." },
+            { "title": "Kurumsal E-posta Yapısı Araştırması", "body": "Doğrudan kişi e-postası paylaşılmasa da kurumsal e-posta yapısı değerlendirilir: genel kurumsal e-posta adresi; satın alma, ithalat ve tedarikçi başvuru e-postası; departman bazlı e-posta adresleri ve firma e-posta formatı; iletişim formu, santral yönlendirmesi ve B2B platform mesajlaşma kanalı." },
+            { "title": "Telefon ile Departman Doğrulama", "body": "Özellikle yüksek potansiyelli firmalarda kurumsal telefon görüşmesi etkilidir: satın alma departmanı var mı; ithalat departmanı hangi birime bağlı; ürün grubu için kimle görüşülmeli; tedarikçi teklifleri hangi e-posta adresine gönderilmeli." },
+            { "title": "Karar Verici Kişi Listesi Hazırlama", "body": "Satış ekibinin kullanabileceği düzenli liste hazırlanır: firma adı, ülke, web sitesi ve ilgili kişi adı; görev unvanı, departman ve LinkedIn profili; kurumsal e-posta veya departman e-postası; iletişim kaynağı, ürün ilgisi, öncelik seviyesi ve takip notu." },
+            { "title": "Kişi ve Firma Eşleştirme", "body": "Aynı firmada birden fazla ilgili kişi olabilir: firma kaydı ve ilgili kişi kaydı; kişinin firmadaki görevi ve departman bilgisi; karar verici olup olmadığı ve satın alma sürecindeki rolü; ilk iletişim tarihi, son görüşme notu ve takip tarihi." },
+            { "title": "Mail Marketing İçin Kişi Segmentasyonu", "body": "Kişinin rolüne göre iletişim dili değişmelidir: satın alma müdürleri ve ithalat sorumluları; genel müdürler, kategori yöneticileri ve tedarik zinciri yöneticileri; iş geliştirme sorumluları ve distribütör yöneticileri; fuar görüşmesi yapılan veya daha önce cevap veren kişiler." },
+            { "title": "CRM ile Takip Süreci", "body": "Bulunan kişiler CRM üzerinde takip edilmelidir: firma adı, kişi adı, unvan, departman, e-posta ve telefon; LinkedIn profili, mail gönderim durumu ve bağlantı durumu; telefon araması sonucu, teklif talebi ve numune talebi; takip tarihi, satış temsilcisi ve satış aşaması." }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Satın Alma Müdürü ve Karar Verici Kişi Bulma Süreci Nasıl İlerler?",
+          "intro": "Süreç hedef firma listesinin değerlendirilmesiyle başlar. Ardından hedef kişi profili, kurumsal kaynaklar, departman yapısı, iletişim kanalları, CRM aktarımı ve takip planı birlikte kurgulanır.",
+          "steps": [
+            { "n": 1, "title": "Hedef Firma Listesi Alınır", "body": "Alıcı firma listesi, sektör listesi, konşimento verisi, GTİP / HS kodu listesi veya ürün adına göre bulunan firma listesi değerlendirilir." },
+            { "n": 2, "title": "Hedef Kişi Profili Belirlenir", "body": "Satın alma müdürü, ithalat sorumlusu, procurement manager, import manager, genel müdür veya farklı bir karar verici profil netleştirilir." },
+            { "n": 3, "title": "Kurumsal Kaynaklar İncelenir", "body": "Firma web sitesi, iletişim sayfaları, ekip bilgileri, LinkedIn, Sales Navigator ve açık kaynaklar araştırılır." },
+            { "n": 4, "title": "Departman ve Unvan Araştırması Yapılır", "body": "Firma yapısına göre satın alma, ithalat, tedarik zinciri, kategori yönetimi veya iş geliştirme departmanları incelenir." },
+            { "n": 5, "title": "İletişim Kanalları Belirlenir", "body": "Kurumsal e-posta, departman e-postası, telefon, LinkedIn profili veya iletişim formu gibi kanallar düzenlenir." },
+            { "n": 6, "title": "Liste Hazırlanır", "body": "Firma adı, kişi adı, unvan, ülke, iletişim kanalı, kaynak ve takip notlarıyla birlikte düzenli liste oluşturulur." },
+            { "n": 7, "title": "CRM’e Aktarım Planlanır", "body": "Kişi ve firma kayıtları CRM sistemine aktarılır. Satış temsilcisi, takip tarihi ve iletişim durumu belirlenir." },
+            { "n": 8, "title": "Mail Marketing ve Telefon Takibi Başlatılır", "body": "İlgili kişilere uygun mesajla ulaşmak için mail marketing, LinkedIn bağlantı çalışması veya telefon araması süreci planlanır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Karar Verici Kişi Araştırması Hangi Çalışmalarla Birleştirilebilir?",
+          "intro": "Karar verici kişi araştırması tek başına değil, ihracat ve B2B satış sürecinin parçası olarak yürütülmelidir.",
+          "items": [
+            "Konşimento verileriyle alıcı firma bulma",
+            "GTİP / HS koduna göre müşteri bulma",
+            "Ürün adına göre ithalatçı firma bulma",
+            "190+ ülke alıcı firma verileri",
+            "Mail marketing kampanyası hazırlama",
+            "Telefon aramaları ile müşteri takibi",
+            "LinkedIn ve Sales Navigator çalışmaları",
+            "CRM müşteri adayı yönetimi ve teklif takibi",
+            "Fuar öncesi hedef kişi listesi ve fuar sonrası takip"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Profesyonel ve Mevzuata Uygun Yaklaşım",
+          "intro": "Karar verici kişi araştırması yapılırken profesyonel iletişim ve veri güvenliği önemlidir. Amaç kişisel, gizli veya izinsiz veri toplamak değil; firmaların açık ve kurumsal iletişim kanallarını analiz ederek B2B satış sürecinde doğru departmana ve doğru kişi profiline ulaşmaktır.",
+          "items": [
+            "Kişisel ve hassas veriler dikkatsiz kullanılmamalıdır",
+            "Kurumsal iletişim kanalları tercih edilmelidir",
+            "E-posta ve telefon iletişimi profesyonel yapılmalıdır",
+            "Hedef ülkenin ticari iletişim kuralları dikkate alınmalıdır",
+            "LinkedIn mesajları rahatsız edici olmamalıdır",
+            "Her kişiye aynı standart mesaj gönderilmemelidir",
+            "Firma ve kişi bilgileri CRM’de düzenli ve güvenli tutulmalıdır"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Karar Verici Kişi Bulmanın Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Hedef firmalarda doğru kişilere ulaşma ihtimaliniz artar",
+            "Satış mesajları daha ilgili departmanlara gönderilir",
+            "Mail marketing çalışmaları daha hedefli hale gelir",
+            "Telefon aramaları daha verimli planlanır",
+            "LinkedIn bağlantı çalışmaları daha doğru yapılır",
+            "Satış ekibi zamanını yanlış kişilerle kaybetmez",
+            "Alıcı firma listeleri daha kullanışlı hale gelir",
+            "CRM’de firma ve kişi ilişkisi daha düzenli takip edilir",
+            "Teklif isteyen kişilere hızlı dönüş yapılır",
+            "Fuar öncesi görüşme listeleri daha profesyonel hazırlanır",
+            "İhracat müşteri bulma süreci daha sistemli ilerler",
+            "B2B satış sürecinde iletişim kalitesi artar"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Karar Verici Kişi Araştırmasında Sık Yapılan Hatalar",
+          "items": [
+            "Sadece genel info e-posta adresine güvenmek",
+            "Firma içindeki doğru departmanı araştırmamak",
+            "LinkedIn’de güncel olmayan profilleri kullanmak",
+            "Yanlış unvanlarla arama yapmak",
+            "Satın alma yerine alakasız kişilere ulaşmak",
+            "Kişi ve firma ilişkisini CRM’de düzenli tutmamak",
+            "Her kişiye aynı mesajı göndermek",
+            "Telefonla departman doğrulaması yapmamak",
+            "Kurumsal iletişim yerine kişisel iletişime odaklanmak",
+            "Hedef ülkenin iletişim kurallarını dikkate almamak",
+            "Listeyi satış süreciyle birleştirmemek"
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Satın Alma Müdürü ve Karar Verici Kişi Bulma Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Satın alma müdürü ve karar verici kişi bulma kimler için uygundur?", "a": "Bu hizmet; B2B satış yapan, ihracat müşteri bulmak isteyen, yurt dışı alıcı firmalara ulaşmaya çalışan ve satış mesajlarını doğru kişilere göndermek isteyen şirketler için uygundur." },
+            { "q": "Alıcı firma bulduktan sonra doğru kişiyi bulmak neden önemlidir?", "a": "Çünkü genel firma iletişimine gönderilen mesajlar her zaman ilgili kişiye ulaşmayabilir. Doğru satın alma, ithalat veya tedarik zinciri sorumlusuna ulaşmak satış sürecini daha verimli hale getirir." },
+            { "q": "Hangi unvanlar araştırılabilir?", "a": "Satın alma müdürü, ithalat sorumlusu, procurement manager, purchasing manager, import manager, supply chain manager, sourcing manager, category manager, buyer, senior buyer ve genel müdür gibi unvanlar araştırılabilir." },
+            { "q": "LinkedIn üzerinden karar verici kişi bulunabilir mi?", "a": "Evet. LinkedIn ve Sales Navigator üzerinden hedef firmalarda çalışan ilgili kişi ve departman profilleri araştırılabilir. Ancak bilgilerin güncel ve firma ile bağlantılı olup olmadığı dikkatli kontrol edilmelidir." },
+            { "q": "Kurumsal e-posta bilgileri araştırılabilir mi?", "a": "Evet. Firma web sitesi, departman iletişim sayfaları, kurumsal e-posta yapısı ve açık kaynaklar üzerinden profesyonel iletişim kanalları araştırılabilir." },
+            { "q": "Kişisel telefon veya özel e-posta bilgisi mi bulunuyor?", "a": "Hayır. Amaç kişisel veya özel verileri toplamak değildir. Çalışma kurumsal iletişim kanalları, açık kaynaklar ve B2B satışa uygun profesyonel iletişim bilgileri üzerinden yürütülmelidir." },
+            { "q": "Karar verici kişi listesi mail marketing için kullanılabilir mi?", "a": "Evet. Liste unvan, ülke, firma türü ve ürün ilgisine göre segmentlere ayrılarak profesyonel mail marketing çalışmaları için kullanılabilir." },
+            { "q": "Telefon araması için departman bilgisi bulunabilir mi?", "a": "Evet. Firma santrali, kurumsal iletişim sayfası veya açık kaynaklardan satın alma, ithalat veya tedarik departmanına ulaşmak için bilgiler araştırılabilir." },
+            { "q": "Bulunan kişiler CRM’e aktarılabilir mi?", "a": "Evet. Firma adı, kişi adı, unvan, departman, e-posta, telefon, LinkedIn profili, iletişim durumu ve takip tarihi gibi bilgiler CRM’e aktarılabilir." },
+            { "q": "Bu çalışma kesin müşteri getirir mi?", "a": "Hayır. Karar verici kişi araştırması kesin müşteri garantisi vermez. Ancak doğru kişiye ulaşma ihtimalini artırır ve satış ekibinin daha hedefli iletişim kurmasına yardımcı olur." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Doğru Firmaya, Doğru Kişiye ve Doğru Mesajla Ulaşın",
+        "body": "Alıcı firma listeniz var ama doğru kişiye ulaşamadığınız için cevap alamıyorsanız, satış süreciniz eksik kalıyor olabilir. {{appName}} Satın Alma Müdürü ve Karar Verici Kişi Bulma hizmeti ile hedef firmalarda doğru departmanları, ilgili unvanları ve kurumsal iletişim kanallarını birlikte araştıralım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

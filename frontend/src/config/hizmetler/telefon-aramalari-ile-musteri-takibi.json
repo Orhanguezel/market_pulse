@@ -1,0 +1,167 @@
+{
+  "slug": "telefon-aramalari-ile-musteri-takibi",
+  "category": "mail-outreach",
+  "module": "outreach",
+  "order": 40,
+  "icon": "Phone",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Telefon Aramaları ile Müşteri Takibi | İhracat ve B2B Satış İçin Profesyonel Arama Süreci",
+        "description": "İhracat ve B2B satışta yurt dışı alıcı firmaların telefonla aranması, doğru departman ve karar verici kişinin bulunması, mail marketing sonrası takip, teklif süreci ve CRM kayıt yönetimi için profesyonel destek sunuyoruz.",
+        "ogTitle": "Telefon Aramaları ile Müşteri Takibi | {{appName}}",
+        "ogDescription": "Yurt dışı alıcı firmaları telefonla takip edin; doğru departman, karar verici kişi, teklif ihtiyacı ve CRM satış sürecini profesyonel şekilde yönetin."
+      },
+      "hero": {
+        "eyebrow": "Mail & Telefon İletişimi",
+        "title": "Telefon Aramaları ile Müşteri Takibi",
+        "lead": "Yurt dışı alıcı firmalara mail gönderiyor, LinkedIn üzerinden bağlantı kuruyor veya ithalatçı firma listeleri hazırlıyorsunuz ama bu firmaları düzenli şekilde takip edemiyor musunuz? İhracat ve B2B satışta yalnızca firma listesi oluşturmak veya e-posta göndermek çoğu zaman yeterli değildir. {{appName}} olarak telefon aramaları ile müşteri takibi sürecinizi profesyonel şekilde planlıyoruz: mail marketing sonrası aramalar, yurt dışı alıcı firma takibi, karar verici kişi doğrulama, teklif sonrası müşteri araması, fuar öncesi ve sonrası telefon takibi, görüşme notları ve CRM satış süreci yönetimi konularında destek sağlıyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Süreç nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Telefon Aramaları ile Müşteri Takibi Nedir?",
+          "body": [
+            "Telefon aramaları ile müşteri takibi, potansiyel müşterilerin profesyonel şekilde aranarak doğru kişi, doğru departman, ilgi durumu, teklif ihtiyacı ve sonraki takip adımlarının belirlenmesi sürecidir.",
+            "Bu hizmet; ihracat müşteri bulma, B2B satış, mail marketing, LinkedIn bağlantı çalışmaları, fuar görüşmeleri ve teklif takibi süreçlerinin devamı olarak uygulanabilir.",
+            "{{appName}}, telefon aramalarını rastgele arama faaliyeti olarak değil, satışa bağlanan düzenli bir müşteri takip sistemi olarak ele alır.",
+            "Potansiyel müşteri listeleriniz sadece Excel dosyasında kalmamalı. Profesyonel telefon takibi ile doğru departman, doğru kişi, ilgi durumu ve sonraki satış aksiyonu netleşir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden Telefon Takibi Yapılmalıdır?",
+          "body": [
+            "Birçok şirket yurt dışı alıcı firmalara mail gönderir ancak sonrasında takip yapmaz. Bu durumda potansiyel müşterilerin önemli bir kısmı cevapsız kalabilir.",
+            "Bazı firmalar e-postayı görmemiş olabilir, bazı e-postalar yanlış departmana gitmiş olabilir veya doğru kişi ancak telefonla yönlendirme yapılarak bulunabilir. Telefon takibi bu boşluğu kapatır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Elinizde müşteri listesi var ama bu listeyi satış görüşmesine çeviremiyorsanız, telefon takibi süreciniz eksik kalıyor olabilir.",
+          "items": [
+            { "title": "İhracat Müşteri Bulma Çalışması Yapan Üreticiler", "body": "Yurt dışı alıcı firma listelerini gerçek görüşmelere dönüştürmek isteyen üreticiler için uygundur." },
+            { "title": "Yurt Dışı Alıcı Firma Listesi Bulunan Şirketler", "body": "Hazır listelerin doğru departman, kişi ve ilgi durumuna göre takip edilmesini sağlar." },
+            { "title": "Konşimento Verileriyle Firma Bulan İşletmeler", "body": "Gerçek ithalatçı firmalar telefonla aranarak satış sürecine alınabilir." },
+            { "title": "GTİP / HS Koduna Göre Liste Hazırlayanlar", "body": "Ürün koduna göre bulunan alıcı firmalar arama önceliğine göre sınıflandırılabilir." },
+            { "title": "Mail Marketing Sonrası Takip İsteyenler", "body": "Gönderilen e-postaların doğru kişiye ulaşıp ulaşmadığı telefonla teyit edilebilir." },
+            { "title": "LinkedIn ve Sales Navigator Kullanan Ekipler", "body": "LinkedIn üzerinden bulunan kişiler satış sürecine telefon takibiyle alınabilir." },
+            { "title": "Fuar Öncesi ve Sonrası Takip Yapacak Firmalar", "body": "Fuar randevuları, görüşme notları ve teklif ihtiyaçları telefonla takip edilebilir." },
+            { "title": "CRM Arama Kayıtlarını Düzenlemek İsteyenler", "body": "Arama sonuçları, ilgi seviyesi ve tekrar arama tarihleri CRM içinde düzenlenebilir." }
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Telefon Aramaları ile Müşteri Takibinde Hangi Alanlar Planlanır?",
+          "intro": "Telefon aramaları; hedef liste, arama amacı, konuşma senaryosu, doğru departman, karar verici kişi, teklif takibi, görüşme notları ve CRM kayıt yapısı ile birlikte planlanmalıdır.",
+          "items": [
+            { "title": "Hedef Firma Listesinin Hazırlanması", "body": "Telefon araması yapmadan önce aranacak firmaların doğru belirlenmesi gerekir. Konşimento verileri ve GTİP / HS koduna göre alıcı listeleri, ürün adına göre ithalatçı listeleri, 190+ ülke alıcı firma verileri, mail marketing cevapları, LinkedIn listeleri ve fuar katılımcı listeleri değerlendirilir." },
+            { "title": "Arama Amacının Belirlenmesi", "body": "Her telefon aramasının amacı aynı değildir. Doğru departmanı veya satın alma müdürünü bulmak, mailin ulaşıp ulaşmadığını teyit etmek, ürünle ilgilenip ilgilenmediklerini öğrenmek ve teklif / numune / ileri tarihli görüşme talebi almak hedeflenir." },
+            { "title": "Telefon Görüşme Senaryosu Hazırlama", "body": "Hazırlıksız aramalar marka algısını zayıflatabilir. Kısa selamlama, firma tanıtımı, arama nedeni, daha önce gönderilen e-postaya referans, doğru departman / ilgili kişi / e-posta teyidi ile tekrar arama tarihi ve saygılı kapanış içeren bir rehber hazırlanır." },
+            { "title": "Doğru Departmanı Bulma", "body": "Genel santral, info e-posta adresi veya yanlış departman üzerinden ilerlemek çoğu zaman sonuç vermez. Satın alma / ithalat / tedarik zinciri, procurement / purchasing / kategori yönetimi, iş geliştirme / operasyon / tedarikçi başvuru birimi ve genel müdürlük tespit edilir." },
+            { "title": "Karar Verici Kişi Doğrulama", "body": "Yurt dışı alıcı firmalarda satın alma süreci her zaman aynı kişi tarafından yönetilmez. Satın alma müdürü / ithalat sorumlusu / buyer kim, ürün grubundan kim sorumlu, tedarikçi teklifleri kime gönderilmeli ve genel mi departman e-postası mı kullanılmalı sorularına yanıt aranır." },
+            { "title": "Mail Marketing Sonrası Telefon Takibi", "body": "Mail marketing kampanyası sonrası telefon araması yapılması kampanyanın etkisini artırabilir. Gönderilen e-posta ulaştı mı, doğru kişiye mi gönderildi, firma ürün / hizmetle ilgileniyor mu ve e-posta hangi adrese tekrar gönderilmeli sorgulanır." },
+            { "title": "Teklif Sonrası Telefon Takibi", "body": "Teklif gönderildikten sonra müşterinin karar süreci takip edilmelidir. Teklif ulaştı mı, fiyat / ürün / ödeme / teslim süresiyle ilgili soru var mı, revize teklif / numune / teknik doküman gerekiyor mu ve karar süreci ne zaman tamamlanacak izlenir." },
+            { "title": "Fuar Öncesi ve Fuar Sonrası Telefon Takibi", "body": "Fuar öncesi aramalar randevu oluşturmayı, fuar sonrası aramalar görüşülen firmaları satış sürecine aktarmayı kolaylaştırır. Stant görüşmesi randevusu, ürün ilgisini önceden ölçme, görüşme hatırlatma ve teklif / katalog / numune / teknik doküman ihtiyacı takip edilir." },
+            { "title": "LinkedIn Sonrası Telefon Takibi", "body": "LinkedIn üzerinden bağlantı kurulan veya mesajlaşılan kişiler telefon aramasıyla da takip edilebilir. Bağlantı kuruldu mu, kişi doğru departmanda mı, firma ürün / hizmetle ilgileniyor mu ve toplantı veya teklif süreci planlanabilir mi değerlendirilir." },
+            { "title": "CRM ile Telefon Arama Takibi", "body": "Telefon aramaları CRM’e işlenmezse süreç ölçülemez. Firma adı, ülke, ilgili kişi, unvan, telefon, e-posta, arama tarihi, arayan kişi, görüşme sonucu, teklif / numune talebi, tekrar arama tarihi, ilgi seviyesi, satış aşaması ve sonraki aksiyon kayıt altına alınır." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Yurt Dışı Telefon Aramalarında Nelere Dikkat Edilmelidir?",
+          "intro": "Yurt dışı firmalara telefon araması yaparken profesyonel iletişim, saat farkı, dil kullanımı ve kültürel yaklaşım önemlidir.",
+          "items": [
+            "Hedef ülkenin çalışma saatleri ve saat farkı dikkate alınmalı",
+            "Kısa, net ve profesyonel konuşulmalı",
+            "İngilizce veya uygun dilde iletişim kurulmalı",
+            "Aşırı satış baskısı yapılmamalı",
+            "Karşı tarafın zamanı saygıyla yönetilmeli",
+            "Görüşme notu hemen kaydedilmeli",
+            "Tekrar arama tarihi net belirlenmeli"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Telefon Aramaları ile Müşteri Takibinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Mail marketing kampanyaları daha güçlü hale gelir",
+            "Doğru departman ve kişi bilgisi teyit edilebilir",
+            "Teklif isteyen firmalar daha hızlı belirlenir",
+            "Satış ekibi sıcak müşterilere odaklanır",
+            "Ulaşılamayan firmalar tekrar takip listesine alınır",
+            "Yanlış hedef firmalar ayıklanır",
+            "Fuar görüşmeleri satış sürecine aktarılır",
+            "LinkedIn bağlantıları telefonla desteklenir",
+            "CRM arama kayıtları oluşturulur",
+            "Açık teklifler daha düzenli takip edilir",
+            "İhracat müşteri bulma süreci daha ölçülebilir olur",
+            "Yurt dışı müşteri iletişimi daha profesyonel hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Telefon Aramalarında Sık Yapılan Hatalar",
+          "items": [
+            "Hazırlıksız arama yapmak",
+            "Yanlış firmaları aramak",
+            "Arama amacını net belirlememek",
+            "Çok uzun ve baskıcı konuşmak",
+            "Doğru departmanı sormamak",
+            "Karar verici kişiyi teyit etmemek",
+            "Görüşme notu almamak",
+            "Tekrar arama tarihi belirlememek",
+            "CRM’e kayıt girmemek",
+            "Mail marketing ile bağlantı kurmamak",
+            "Teklif sonrası takip yapmamak",
+            "Saat farkını dikkate almamak",
+            "Arama sonuçlarını raporlamamak"
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Telefon Aramaları ile Müşteri Takibi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketinizin ürünü, hedef ülkeleri, müşteri profili, mevcut alıcı firma listesi ve satış hedefleri değerlendirilerek başlar. Ardından arama listesi, arama senaryosu, CRM takip yapısı ve raporlama sistemi hazırlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin ürünü, hedef ülkeleri, müşteri profili, mevcut alıcı firma listesi ve satış hedefleri değerlendirilir." },
+            { "n": 2, "title": "Arama Listesi Hazırlığı", "body": "Konşimento verileri, GTİP / HS kodu, ürün adı, mail marketing cevapları, LinkedIn veya fuar listeleri üzerinden aranacak firmalar belirlenir." },
+            { "n": 3, "title": "Liste Önceliklendirme", "body": "Firmalar ülke, ürün ilgisi, ithalat geçmişi, cevap durumu ve satış potansiyeline göre önceliklendirilir." },
+            { "n": 4, "title": "Arama Senaryosu Hazırlığı", "body": "Kısa tanıtım, doğru departman sorusu, e-posta teyidi, teklif yönlendirmesi ve takip adımları için konuşma rehberi hazırlanır." },
+            { "n": 5, "title": "Telefon Görüşmeleri", "body": "Firmalar profesyonel şekilde aranır. Doğru kişi, doğru departman, ilgi durumu ve sonraki aksiyonlar belirlenir." },
+            { "n": 6, "title": "Görüşme Notlarının Kaydedilmesi", "body": "Her arama sonucu görüşme notu, ilgi seviyesi, teklif talebi ve tekrar arama tarihiyle birlikte kayıt altına alınır." },
+            { "n": 7, "title": "CRM Takip Yapısı", "body": "Teklif isteyenler, sıcak müşteriler, tekrar aranacak firmalar ve olumsuz dönüşler CRM sisteminde sınıflandırılır." },
+            { "n": 8, "title": "Satış Ekibine Aktarım ve Raporlama", "body": "İlgilenen firmalar satış temsilcilerine atanır. Kaç firma arandı, kaçına ulaşıldı ve kaç satış fırsatı oluştu raporlanır." }
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Telefon Aramaları ile Müşteri Takibi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Telefon aramaları ile müşteri takibi kimler için uygundur?", "a": "Bu hizmet; ihracat müşteri bulma çalışması yapan, mail marketing kampanyaları yürüten, yurt dışı alıcı firma listesi bulunan ve potansiyel müşterileri telefonla takip etmek isteyen şirketler için uygundur." },
+            { "q": "Yurt dışı firmalar telefonla aranabilir mi?", "a": "Evet. Yurt dışı firmalar profesyonel, saygılı ve hedef ülkenin çalışma saatleri dikkate alınarak aranabilir. Arama amacı doğru departmanı bulmak, gönderilen e-postayı teyit etmek veya teklif sürecini takip etmek olabilir." },
+            { "q": "Telefon aramalarında hangi kişiler hedeflenir?", "a": "Satın alma müdürü, ithalat sorumlusu, procurement manager, purchasing manager, import manager, tedarik zinciri yöneticisi, kategori yöneticisi veya ilgili departmanlar hedeflenebilir." },
+            { "q": "Mail marketing sonrası telefon araması yapılmalı mı?", "a": "Evet. Özellikle yüksek potansiyelli firmalarda mail marketing sonrası telefon araması yapmak, e-postanın doğru kişiye ulaşıp ulaşmadığını ve firmanın ilgisini anlamaya yardımcı olabilir." },
+            { "q": "Teklif sonrası telefon takibi yapılabilir mi?", "a": "Evet. Teklif gönderildikten sonra müşterinin teklifi inceleyip incelemediği, revize isteyip istemediği, karar süreci ve tekrar takip tarihi telefonla öğrenilebilir." },
+            { "q": "Fuar sonrası telefon takibi yapılabilir mi?", "a": "Evet. Fuar sonrası görüşülen firmalar aranarak teklif ihtiyacı, numune talebi, ürün ilgisi ve tekrar görüşme tarihi takip edilebilir." },
+            { "q": "LinkedIn bağlantıları telefonla takip edilebilir mi?", "a": "Evet. LinkedIn üzerinden bağlantı kurulan veya mesajlaşılan kişiler, uygun ve profesyonel şekilde telefonla takip edilebilir." },
+            { "q": "Telefon aramaları CRM’e işlenebilir mi?", "a": "Evet. Firma adı, kişi adı, arama tarihi, görüşme sonucu, teklif talebi, tekrar arama tarihi, ilgi seviyesi ve satış aşaması CRM’e işlenebilir." },
+            { "q": "Telefon araması kesin müşteri getirir mi?", "a": "Hayır. Telefon araması kesin müşteri garantisi vermez. Ancak doğru firmalara ulaşmayı, ilgili kişiyi bulmayı, teklif isteyen müşterileri ayırmayı ve satış sürecini hızlandırmayı destekler." },
+            { "q": "Telefon aramaları için konuşma metni hazırlanıyor mu?", "a": "Evet. Arama amacı, hedef ülke, ürün, firma tipi ve karar verici kişiye göre kısa ve profesyonel telefon görüşme senaryosu hazırlanabilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Potansiyel Müşterileri Sadece Listede Bırakmayalım, Profesyonel Telefon Takibiyle Satış Sürecine Taşıyalım",
+        "body": "Yurt dışı alıcı firma listeniz, mail marketing kampanyanız veya LinkedIn bağlantılarınız varsa ama bu müşterileri düzenli telefon takibine alamıyorsanız satış fırsatlarını kaçırıyor olabilirsiniz. {{appName}} Telefon Aramaları ile Müşteri Takibi hizmeti ile arama listenizi, konuşma senaryonuzu, CRM takip yapınızı ve satış süreci raporlamanızı birlikte hazırlayalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

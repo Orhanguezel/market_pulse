@@ -1,0 +1,204 @@
+{
+  "slug": "rollere-gore-crm",
+  "category": "crm-satis",
+  "module": "crm",
+  "order": 60,
+  "icon": "UserCog",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Rollere Göre CRM | Satış Ekibi, Şirket Sahibi, Proje Yöneticisi, Destek Ekibi ve Mali Müşavirler İçin CRM",
+        "description": "Satış ekipleri, şirket sahipleri, proje yöneticileri, destek ekipleri, mali müşavirler, tasarım ekipleri ve işletmeler için role özel CRM yapısı kurarak müşteri takibi, görev yönetimi, teklif, satış ve raporlama süreçlerinizi düzenli hale getiriyoruz.",
+        "ogTitle": "Rollere Göre CRM | {{appName}}",
+        "ogDescription": "Satış ekibi, şirket sahibi, proje yöneticisi, destek ekibi, mali müşavir, tasarım ekibi, ihracat sorumlusu ve operasyon ekibi için role özel CRM yapısı kurun."
+      },
+      "hero": {
+        "eyebrow": "CRM ve Satış",
+        "title": "Rollere Göre CRM",
+        "lead": "Şirketinizde herkes CRM’i aynı amaçla kullanmaz. Satış ekibi müşteri ve teklif takibi ister, şirket sahibi rapor görmek ister, destek ekibi müşteri taleplerini yönetmek ister, proje yöneticisi görevleri takip etmek ister, mali müşavir müşteri dosyalarını düzenli görmek ister. {{appName}} Rollere Göre CRM hizmeti ile şirketinizdeki farklı kullanıcı rollerine göre CRM yapısı planlıyoruz. Satış ekibi, proje yöneticisi, destek ekibi, şirket sahibi, mali müşavir, tasarım ekibi, müşteri adayı yöneticisi ve operasyon sorumluları için görev, yetki, takip ve raporlama alanlarını ayrı ayrı kurguluyoruz.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Kurulum süreci nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Rollere Göre CRM Nedir?",
+          "body": [
+            "Rollere göre CRM, şirket içinde farklı görevlerde çalışan kullanıcıların CRM sistemini kendi sorumluluklarına uygun şekilde kullanmasını sağlayan müşteri ilişkileri yönetimi yapısıdır.",
+            "Bir satış temsilcisinin CRM’den beklentisi ile şirket sahibinin beklentisi aynı değildir. Satış temsilcisi müşteri adaylarını, aramaları, teklifleri ve takip tarihlerini görmek ister. Şirket sahibi açık fırsatları, satış performansını, kaybedilen müşterileri ve ekip raporlarını görmek ister.",
+            "{{appName}} olarak CRM sisteminizi yalnızca teknik olarak kurmakla kalmıyor; şirketinizde hangi kullanıcının hangi bilgiye ihtiyaç duyduğunu, hangi görevleri yöneteceğini ve hangi raporları görmesi gerektiğini analiz ederek role özel CRM yapısı oluşturuyoruz.",
+            "Her kullanıcı yalnızca ihtiyacı olan CRM alanlarını görsün: Satış temsilcisi müşteri ve takip ekranına odaklanırken, yönetici raporları görebilir, destek ekibi talepleri takip edebilir, operasyon ekibi siparişe dönüşen kayıtları yönetebilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden Her Kullanıcı İçin Aynı CRM Ekranı Yeterli Değildir?",
+          "body": [
+            "Bir şirkette tüm kullanıcıların aynı ekranı görmesi çoğu zaman verimsizlik oluşturur. Satış temsilcisi gereksiz yönetici raporlarıyla uğraşmamalı, destek ekibi satış fırsatı detaylarında kaybolmamalı, yönetici ise günlük notlar arasında boğulmadan genel tabloyu görebilmelidir.",
+            "Rollere göre CRM yapısı bu sorunları azaltır. Her kullanıcı kendi görevine uygun ekran, takip alanı, yetki ve raporla çalışır.",
+            "Yanlış kurgulanmış CRM yapısı şu sorunlara neden olabilir:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Hizmet Kimler İçin Uygundur?",
+          "intro": "Şirketinizde CRM’i birden fazla kişi veya ekip kullanacaksa, sistem mutlaka rollere göre planlanmalıdır.",
+          "items": [
+            { "title": "CRM’i Ekip İçinde Verimli Kullandırmak İsteyenler", "body": "Kullanıcıların CRM’i günlük iş akışına uygun şekilde kullanmasını sağlar." },
+            { "title": "Satış, Destek ve Yönetimi Aynı Sistemde Buluşturmak İsteyenler", "body": "Farklı ekiplerin aynı müşteri verisi üzerinde kontrollü çalışmasına yardımcı olur." },
+            { "title": "Kullanıcı Yetkilerini Düzenlemek İsteyenler", "body": "Hangi kullanıcının hangi bilgiyi göreceği role göre planlanabilir." },
+            { "title": "Şirket Sahibi İçin Raporlama Ekranı İsteyenler", "body": "Yöneticilerin satış, ekip, teklif ve kampanya performansını daha net görmesini sağlar." },
+            { "title": "Satış Temsilcileri İçin Sade CRM İsteyenler", "body": "Satış ekibinin müşteri, arama, teklif ve takip görevlerine odaklanmasını sağlar." },
+            { "title": "Proje ve Görev Takibi Yapmak İsteyenler", "body": "Proje yöneticileri için teslim tarihi, revize, müşteri onayı ve görev takibi oluşturulabilir." },
+            { "title": "Destek ve Müşteri Hizmetlerini CRM’e Almak İsteyenler", "body": "Destek kayıtları, şikayetler, talepler ve memnuniyet notları düzenli takip edilir." },
+            { "title": "B2B Satış Yapan KOBİ’ler", "body": "Farklı kullanıcı rollerinin müşteri ve satış sürecini birlikte yönetmesine destek olur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Rollere Göre CRM ile Hangi Kullanıcılar İçin Yapı Kurulabilir?",
+          "body": [
+            "CRM sisteminde şirketinizin yapısına göre farklı kullanıcı rolleri tanımlanabilir. Her rol için CRM’de görünecek alanlar, görevler, takip süreçleri, yetkiler ve raporlar ayrı ayrı planlanabilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Farklı Roller CRM İçinde Hangi Süreçleri Yönetebilir?",
+          "intro": "{{appName}}, her kullanıcı rolünün CRM içinde hangi alanları göreceğini, hangi görevleri yapacağını ve hangi raporlarla çalışacağını şirket yapınıza göre planlar.",
+          "items": [
+            { "title": "Satış Ekiplerine Yönelik CRM", "body": "Satış ekipleri CRM sisteminin en aktif kullanıcılarıdır. Bu nedenle satış temsilcileri için CRM ekranı sade, hızlı ve takip odaklı olmalıdır. Müşteri adayı listesi ve atanmış müşteriler; telefon araması görevleri ve teklif gönderim durumu; teklif sonrası takip tarihi ve görüşme notları; satış aşamaları, açık fırsatlar ve geciken görevler." },
+            { "title": "Satış Müdürü İçin CRM", "body": "Satış müdürü yalnızca müşteri listesi görmek istemez. Ekibin performansını, açık fırsatları, teklifleri ve geciken takipleri yönetmek ister. Satış temsilcisi performansı ve açık teklif raporu; açık fırsat değeri ve tekliften siparişe dönüşüm oranı; geciken müşteri takipleri ve günlük aktivite raporları; kaybedilen fırsat nedenleri ve haftalık satış özeti." },
+            { "title": "Şirket Sahipleri İçin CRM", "body": "Şirket sahipleri ve üst yöneticiler CRM’de detayların içinde kaybolmak istemez. Onlar için önemli olan şirketin satış, müşteri, teklif, kampanya ve ekip performansını net görmektir. Toplam müşteri adayı sayısı ve açık satış fırsatları; bu ay gönderilen teklifler ve bekleyen tekliflerin toplam değeri; satış temsilcisi, kampanya ve ihracat müşteri bulma raporları; satış tahmini, gelir potansiyeli ve yönetici özet ekranı." },
+            { "title": "Proje Yöneticileri İçin CRM", "body": "Proje yöneticileri için CRM yalnızca müşteri kaydı değil; görev, teslim tarihi, proje aşaması ve müşteri iletişimi takip sistemidir. Müşteri proje kayıtları, başlangıç ve teslim tarihi; proje aşamaları, sorumlu ekip üyeleri ve toplantı notları; onay bekleyen işler, revize talepleri ve görev tamamlanma durumu; müşteri dosyaları, geciken işler ve proje sonrası memnuniyet." },
+            { "title": "Müşteri Adayı Yönetimi İçin CRM", "body": "Müşteri adayı yönetiminden sorumlu kişiler için CRM’de en önemli konu gelen potansiyel müşterilerin doğru sınıflandırılması ve satış ekibine aktarılmasıdır. Yeni müşteri adayları, lead kaynağı ve web sitesi formları; mail marketing, LinkedIn, B2B platform ve fuar dönüşleri; konşimento verileri, GTİP / HS kodu ve lead kalitesi; satış temsilcisine atama, ilk iletişim ve takip tarihi." },
+            { "title": "Destek Ekibi İçin CRM", "body": "Destek ekibi için CRM, müşteri taleplerini, şikayetleri, destek süreçlerini ve çözüm durumlarını takip etmek için kullanılabilir. Müşteri destek talepleri ve açık destek kayıtları; şikayet türleri, talep önceliği ve sorumlu destek personeli; çözüm süresi, destek notları ve tekrar eden sorunlar; kapanan destek talepleri ve müşteri memnuniyeti notları." },
+            { "title": "Müşteri Hizmetleri İçin CRM", "body": "Müşteri hizmetleri ekibi, satış öncesi ve satış sonrası müşteri iletişimini düzenli yönetmelidir. Müşteri iletişim geçmişi ve gelen müşteri talepleri; telefon görüşme kayıtları, e-posta cevapları ve form talepleri; şikayet, bilgi talebi, geri dönüş bekleyen müşteriler ve takip tarihleri; satış ekibine aktarılacak talepler ve memnuniyet görüşmeleri." },
+            { "title": "Mali Müşavirler İçin CRM", "body": "Mali müşavirler, muhasebe ofisleri ve finansal danışmanlık hizmeti veren işletmeler için CRM; müşteri dosyalarını, dönemsel görevleri, belge taleplerini ve müşteri iletişimini düzenlemek için kullanılabilir. Müşteri firma kayıtları ve yetkili kişi bilgileri; vergi dönemi hatırlatmaları, belge talep süreçleri ve eksik evrak takibi; sözleşme, hizmet bilgileri ve dönemsel görevler; beyanname takip notları, ödeme takibi ve yeni hizmet fırsatları." },
+            { "title": "Kişi Yönetimi İçin CRM", "body": "Bazı şirketlerde müşteri yalnızca firma olarak değil, ilgili kişiler üzerinden yönetilir. Satın alma müdürü, genel müdür, proje sorumlusu veya karar verici kişi bilgileri önemlidir. Kişi adı, görev unvanı, firma ve departman; e-posta adresi, telefon numarası ve LinkedIn profili; karar verici olup olmadığı ve satın alma sürecindeki rolü; görüşme geçmişi, takip tarihi, ilgilendiği ürün veya hizmet." },
+            { "title": "İşletmeler İçin CRM", "body": "İşletmeler için CRM, müşteri bilgilerini, satışları, teklifleri, görevleri, destek taleplerini ve raporları tek merkezde toplamak için kullanılır. Müşteri kayıtları, müşteri adayları ve satış fırsatları; teklif ve sipariş takibi, görev yönetimi ve telefon aramaları; e-posta iletişimleri, kampanya takibi ve satış sonrası destek; müşteri memnuniyeti, ekip performansı ve yönetici raporları." },
+            { "title": "Tasarım Ekipleri İçin CRM", "body": "Tasarım, reklam, marka, web tasarım, grafik tasarım ve kreatif hizmet ekipleri için CRM; proje, müşteri, revize ve teslim süreçlerini takip etmek için kullanılabilir. Müşteri brief kayıtları, tasarım talebi ve teklif süreci; proje başlangıç tarihi, teslim tarihi ve revize talepleri; müşteri onayları, dosya teslim notları ve sorumlu tasarımcı; proje aşaması, ek hizmet talepleri ve tekrar iş fırsatları." },
+            { "title": "İhracat Sorumluları İçin CRM", "body": "İhracat sorumluları için CRM, yurt dışı müşteri bulma, mail marketing, telefon araması, teklif, proforma, numune ve sevkiyat süreçlerini tek merkezde takip etmek için kullanılabilir. Yurt dışı alıcı firma kayıtları ve ülke bazlı müşteri listeleri; GTİP / HS kodu, konşimento verisi ve satın alma yetkilisi bilgileri; mail marketing gönderimleri, telefon araması notları ve İngilizce teklif talepleri; numune, proforma, ödeme, nakliye, sevkiyat ve fuar sonrası takip." },
+            { "title": "Operasyon Sorumluları İçin CRM", "body": "Operasyon sorumluları için CRM, satıştan sonra başlayan teslim, hazırlık, ödeme, sevkiyat, hizmet üretimi veya proje yürütme süreçlerini takip etmek için kullanılabilir. Siparişe dönüşen teklifler ve müşteri talepleri; ürün veya hizmet kapsamı, teslim tarihi ve hazırlık durumu; ödeme durumu, operasyon görevleri ve nakliye bilgisi; müşteri bilgilendirme notları, geciken işler ve operasyon tamamlandı durumu." },
+            { "title": "Yönetici ve Raporlama Kullanıcıları İçin CRM", "body": "Bazı kullanıcılar CRM’de günlük işlem yapmak yerine rapor ve genel durumu görmek ister. Bu kullanıcılar için özel yönetici ekranları oluşturulabilir. Toplam müşteri adayı, kaynak bazlı lead raporu ve açık teklifler; açık fırsatlar, satış tahmini, kazanılan ve kaybedilen satışlar; satış temsilcisi performansı, kampanya sonuçları ve geciken görevler; ülke, sektör, ürün bazlı fırsatlar ve ekip performansı." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Rollere Göre Kullanıcı Yetkileri",
+          "intro": "Rollere göre CRM yapısında kullanıcı yetkileri çok önemlidir. Her kullanıcının tüm müşteri bilgilerini, fiyatları, raporları veya görevleri görmesi gerekmeyebilir.",
+          "items": [
+            "Satış temsilcisi yalnızca kendi müşterilerini görebilir",
+            "Satış müdürü tüm ekibin müşterilerini görebilir",
+            "Yönetici tüm raporlara erişebilir",
+            "Destek ekibi yalnızca destek taleplerini görebilir",
+            "Operasyon ekibi siparişe dönüşen kayıtları görebilir",
+            "Mali müşavir müşteri dosyası ve dönemsel görevleri görebilir",
+            "Pazarlama ekibi kampanya ve lead kaynaklarını görebilir",
+            "Bazı kullanıcılar fiyat veya teklif bilgilerini göremeyebilir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "CRM Görev ve Sorumlulukları Nasıl Belirlenir?",
+          "intro": "CRM sisteminden verim alınması için her rolün görev ve sorumluluğu net olmalıdır. Bu soruların cevabı netleştiğinde CRM sistemi daha düzenli çalışır.",
+          "items": [
+            "Müşteri adayını kim kaydedecek?",
+            "İlk iletişimi kim yapacak?",
+            "Teklifi kim hazırlayacak?",
+            "Teklif sonrası takibi kim yapacak?",
+            "Cevap veren müşteriyi kim sınıflandıracak?",
+            "Siparişe dönüşen fırsatı kim operasyona aktaracak?",
+            "Müşteri destek taleplerini kim takip edecek?",
+            "Yönetici hangi raporları inceleyecek?"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Rollere Göre CRM Hizmetinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Her kullanıcı kendi işine uygun CRM ekranı kullanır",
+            "Ekiplerin CRM’i benimsemesi kolaylaşır",
+            "Görev ve sorumluluklar netleşir",
+            "Satış ekibi müşteri takibini daha düzenli yapar",
+            "Yönetici daha anlamlı raporlar alır",
+            "Destek ve operasyon süreçleri satıştan kopmaz",
+            "Kullanıcı yetkileri daha güvenli hale gelir",
+            "Müşteri bilgileri kişilere değil, şirkete ait olur",
+            "Ekipler arası bilgi kopukluğu azalır",
+            "CRM sistemi daha kullanılabilir hale gelir"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Rollere Göre CRM Kurulumunda Sık Yapılan Hatalar",
+          "items": [
+            "Tüm kullanıcılara aynı ekranı göstermek",
+            "Kullanıcı yetkilerini baştan planlamamak",
+            "Satış, destek ve operasyon rollerini karıştırmak",
+            "Şirket sahibine gereksiz detaylarla dolu ekran sunmak",
+            "Satış temsilcisine fazla karmaşık alanlar vermek",
+            "Destek ekibini CRM sürecine dahil etmemek",
+            "Görev ve sorumlulukları yazılı hale getirmemek",
+            "Raporlama kullanıcılarını unutmak",
+            "Ekip eğitimi vermeden CRM kullanımına geçmek",
+            "CRM’i şirketin gerçek rol yapısına göre düzenlememek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Kullanıcı Yetkileri, Görev Yönetimi ve Role Özel CRM Ekranları",
+          "body": [
+            "Rollere göre CRM; satış ekipleri için CRM, şirket sahipleri için CRM, proje yöneticileri için CRM, destek ekibi için CRM, mali müşavirler için CRM, tasarım ekipleri için CRM, CRM kullanıcı yetkileri ve yönetici CRM raporları için kullanılabilir."
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Rollere Göre CRM Kurulum Süreci Nasıl İlerler?",
+          "intro": "Rollere göre CRM kurulumu; şirketinizin ekip yapısı, kullanıcı rolleri, satış süreci, müşteri takip ihtiyacı ve mevcut CRM kullanımı değerlendirilerek planlanır.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketinizin ekip yapısı, kullanıcı rolleri, satış süreci, müşteri takip ihtiyacı ve mevcut CRM kullanımı değerlendirilir." },
+            { "n": 2, "title": "Rol Analizi", "body": "CRM’i kimlerin kullanacağı, hangi bilgileri göreceği ve hangi görevlerden sorumlu olacağı belirlenir." },
+            { "n": 3, "title": "Kullanıcı Yetkilerinin Planlanması", "body": "Her rol için görünürlük, veri erişimi, görev alanı ve raporlama yetkileri planlanır." },
+            { "n": 4, "title": "Rol Bazlı CRM Ekranları", "body": "Satış temsilcisi, yönetici, destek ekibi, operasyon sorumlusu veya proje yöneticisi gibi kullanıcılar için uygun ekran yapısı oluşturulur." },
+            { "n": 5, "title": "Görev ve İş Akışı Yapısı", "body": "Her rolün hangi görevleri oluşturacağı, takip edeceği veya tamamlayacağı belirlenir." },
+            { "n": 6, "title": "Raporlama Yapısı", "body": "Şirket sahibi, satış müdürü, proje yöneticisi ve ekip liderleri için ihtiyaç duyulan raporlar hazırlanır." },
+            { "n": 7, "title": "Ekip Eğitimi", "body": "Her kullanıcı grubuna kendi rolüne uygun CRM kullanım eğitimi verilir." },
+            { "n": 8, "title": "Test ve İyileştirme", "body": "Sistem kullanıldıkça kullanıcı geri bildirimleri alınır ve CRM yapısı daha verimli hale getirilir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Rollere göre CRM nedir?",
+          "body": [
+            "Rollere göre CRM; satış temsilcisi, satış müdürü, şirket sahibi, proje yöneticisi, destek ekibi, müşteri hizmetleri, mali müşavir, tasarım ekibi, ihracat sorumlusu, operasyon sorumlusu ve yönetici gibi farklı kullanıcıların CRM sistemini kendi görev, yetki, takip ve raporlama ihtiyaçlarına göre kullanmasını sağlayan CRM yapısıdır. {{appName}}, şirketlerde her rol için uygun CRM ekranı, görev yapısı, kullanıcı yetkisi ve raporlama düzeni oluşturur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Rollere Göre CRM Hakkında Merak Edilenler",
+          "items": [
+            { "q": "Rollere göre CRM kimler için uygundur?", "a": "Rollere göre CRM; CRM sistemini birden fazla ekip veya kullanıcıyla kullanmak isteyen, satış, destek, operasyon, yönetim ve proje ekiplerini aynı sistemde düzenlemek isteyen şirketler için uygundur." },
+            { "q": "CRM’de kullanıcı rolleri tanımlanabilir mi?", "a": "Evet. Satış temsilcisi, satış müdürü, yönetici, destek ekibi, operasyon sorumlusu, proje yöneticisi ve diğer kullanıcılar için farklı roller tanımlanabilir." },
+            { "q": "Satış ekibi için ayrı CRM ekranı oluşturulabilir mi?", "a": "Evet. Satış ekibi için müşteri adayları, telefon aramaları, teklifler, takip tarihleri ve satış fırsatlarını gösteren sade bir CRM ekranı planlanabilir." },
+            { "q": "Şirket sahibi CRM’de hangi bilgileri görmelidir?", "a": "Şirket sahibi genellikle açık fırsatlar, teklif raporları, satış performansı, kampanya sonuçları, kaybedilen müşteriler ve ekip performansını gösteren yönetici raporlarını görmelidir." },
+            { "q": "Destek ekibi CRM kullanabilir mi?", "a": "Evet. Destek ekibi müşteri taleplerini, şikayetleri, çözüm durumlarını, destek notlarını ve müşteri memnuniyeti takiplerini CRM üzerinden yönetebilir." },
+            { "q": "Proje yöneticileri CRM’den nasıl faydalanır?", "a": "Proje yöneticileri müşteri projelerini, görevleri, teslim tarihlerini, revize taleplerini, müşteri onaylarını ve proje notlarını CRM üzerinden takip edebilir." },
+            { "q": "Mali müşavirler için CRM kullanılabilir mi?", "a": "Evet. Mali müşavirler müşteri firma kayıtları, belge talepleri, dönemsel görevler, eksik evrak takibi ve müşteri iletişim notlarını CRM ile düzenli yönetebilir." },
+            { "q": "Kullanıcı yetkileri sınırlandırılabilir mi?", "a": "Evet. Her kullanıcının hangi müşteri, teklif, görev, rapor veya fiyat bilgilerini görebileceği role göre sınırlandırılabilir." },
+            { "q": "Her kullanıcı aynı CRM ekranını mı görür?", "a": "Hayır. Doğru kurgulanmış CRM yapısında kullanıcılar kendi görevlerine uygun ekranları ve raporları görür." },
+            { "q": "Rollere göre CRM kurulurken eğitim veriyor musunuz?", "a": "Evet. Her kullanıcı grubuna kendi rolüne uygun CRM kullanımı, görev takibi ve raporlama eğitimi verilebilir." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Her Kullanıcı CRM’de Ne Yapacağını Bilsin",
+        "body": "CRM sisteminiz varsa ama ekipleriniz sistemi düzenli kullanmıyorsa sorun yazılımda değil, rol ve görev yapısının doğru kurgulanmamış olmasında olabilir. {{appName}} Rollere Göre CRM hizmeti ile satış ekibi, yönetici, destek ekibi, proje yöneticisi, mali müşavir, tasarım ekibi, ihracat sorumlusu ve operasyon ekibi için doğru CRM kullanım yapısını birlikte oluşturalım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

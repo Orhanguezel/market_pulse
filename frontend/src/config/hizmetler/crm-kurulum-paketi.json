@@ -1,0 +1,213 @@
+{
+  "slug": "crm-kurulum-paketi",
+  "category": "crm-satis",
+  "module": "crm",
+  "order": 40,
+  "icon": "PackageCheck",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "CRM Kurulum Paketi | Satış Süreci, Müşteri Adayı, Teklif, Takip ve Raporlama Sistemi Kurulumu",
+        "description": "CRM Kurulum Paketi ile şirketiniz için müşteri adayı yönetimi, satış süreci, teklif takibi, görevler, ekip yönetimi, CRM iş akışları, raporlama ve müşteri takip sistemini kuruyoruz.",
+        "ogTitle": "CRM Kurulum Paketi | {{appName}}",
+        "ogDescription": "Müşteri adayı, satış süreci, teklif takibi, görevler, ekip yönetimi, CRM iş akışları, raporlama ve müşteri takip sistemi kurulumu."
+      },
+      "hero": {
+        "eyebrow": "CRM ve Satış",
+        "title": "CRM Kurulum Paketi",
+        "lead": "Müşteri bilgileriniz Excel dosyalarında, WhatsApp konuşmalarında, telefon rehberlerinde veya çalışanların kişisel notlarında mı kalıyor? Satış ekibiniz kiminle görüştüğünü, kime teklif gönderdiğini, hangi müşterinin tekrar aranacağını ve hangi satış fırsatının hangi aşamada olduğunu düzenli takip edemiyor mu? CRM Kurulum Paketi, şirketinizde müşteri adaylarını, satış sürecini, teklifleri, siparişleri, takip tarihlerini, ekip görevlerini ve raporlamayı daha düzenli yönetebilmeniz için hazırlanmıştır.",
+        "primaryCTA": { "label": "Teklif Al", "href": "/teklif-al" },
+        "secondaryCTA": { "label": "Kurulum süreci nasıl ilerler?", "href": "#surec" }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "CRM Kurulum Paketi Nedir?",
+          "body": [
+            "CRM Kurulum Paketi, şirketlerin müşteri ilişkilerini, satış fırsatlarını, müşteri adaylarını, teklif süreçlerini, takip tarihlerini, ekip görevlerini ve raporlamalarını daha düzenli yönetebilmesi için hazırlanan kurulum ve yapılandırma paketidir.",
+            "Bu paket yalnızca CRM yazılımının teknik olarak açılmasını ifade etmez. Asıl amaç, şirketin satış ve müşteri takip sürecine uygun bir CRM yapısı kurmak, hangi bilgilerin kayıt altına alınacağını belirlemek, satış aşamalarını oluşturmak, ekiplerin nasıl kullanacağını planlamak ve yönetici raporlamasını düzenlemektir.",
+            "{{appName}}, CRM kurulumunu şirketin sektörüne, satış modeline, ekip yapısına ve müşteri takip ihtiyacına göre planlar.",
+            "Müşteri adayları, satış aşamaları, teklif takibi, görevler, hatırlatmalar, ekip performansı ve yönetici raporlarını tek sistemde daha düzenli yönetin."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM Kurulum Paketi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "CRM kurulumu yalnızca müşteri listesi oluşturmak değildir. Şirketin satış süreci, müşteri adayları, teklif takibi, görevler, ekip yapısı, raporlama ve müşteri geçmişi birlikte planlanmalıdır.",
+            "Bu paket, müşteri takibini Excel’den veya kişisel notlardan çıkarıp şirketin ortak satış sistemine taşımak isteyen firmalar için planlanır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Neden CRM Kurulum Paketi Gerekir?",
+          "body": [
+            "Birçok şirkette müşteri bilgileri dağınık şekilde tutulur. Satış temsilcisi kendi notunu tutar, yönetici bazı müşterileri telefonla takip eder, teklifler farklı dosyalarda kalır, müşteri geçmişi unutulur ve satış fırsatları zamanında takip edilmediği için kaybedilebilir.",
+            "CRM Kurulum Paketi, bu dağınıklığı azaltmak ve şirket içinde ortak müşteri takip sistemi oluşturmak için hazırlanmıştır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Paket Kimler İçin Uygundur?",
+          "intro": "Bu paket, satış ve müşteri takip sürecini daha ölçülebilir, düzenli ve yönetilebilir hale getirmek isteyen şirketler için uygundur.",
+          "items": [
+            { "title": "Müşteri Takibini Excel ile Yapan Şirketler", "body": "Müşteri bilgilerini dağınık Excel dosyalarından çıkarıp merkezi CRM yapısına taşımak isteyen firmalar için uygundur." },
+            { "title": "Satış Ekibi Olan İşletmeler", "body": "Satış temsilcilerinin müşteri, görev, teklif ve takip süreçlerini düzenli görmek isteyen işletmeler için planlanabilir." },
+            { "title": "B2B Müşteri Adayı Takip Eden Firmalar", "body": "B2B lead, karar verici kişi, mail, LinkedIn, arama ve teklif aşamalarını CRM’de izlemek isteyen şirketler için uygundur." },
+            { "title": "İhracat Müşteri Bulma Çalışması Yapanlar", "body": "Ülke, GTİP / HS kodu, teklif para birimi, teslim şekli, ödeme ve sevkiyat alanlarını takip etmek isteyen ihracatçılar için uygundur." },
+            { "title": "Mail Marketing ve LinkedIn Çalışması Yapan Firmalar", "body": "Mail marketing ve LinkedIn kaynaklı müşteri adaylarını CRM’e bağlamak isteyen işletmeler için uygundur." },
+            { "title": "Teklif ve Sipariş Sürecini Düzenlemek İsteyenler", "body": "Teklif tarihi, teklif durumu, takip tarihi, sipariş ve satış sonrası aşamaları kontrol etmek isteyen şirketler için uygundur." },
+            { "title": "Satış Performansını Takip Etmek İsteyen Yöneticiler", "body": "Satış temsilcisi performansı, teklif dönüş oranı, geciken görevler ve satış panosu isteyen yöneticiler için uygundur." },
+            { "title": "Dijital Dönüşüme CRM ile Başlamak İsteyen KOBİ’ler", "body": "Şirket müşteri hafızasını çalışanların kişisel notlarından çıkarıp kurumsal yapıya taşımak isteyen KOBİ’ler için uygundur." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM Kurulum Paketinde Neler Var?",
+          "body": [
+            "CRM Kurulum Paketi, şirketin ihtiyacına göre farklı kapsamlarla planlanabilir. Çalışmalar satış modeline, sektörüne, ekip yapısına ve müşteri takip ihtiyacına göre özelleştirilebilir.",
+            "Genel olarak mevcut satış süreci analizi, CRM ihtiyaç analizi, müşteri veri alanları, müşteri adayı kayıt yapısı, satış aşamaları, teklif takibi, sipariş takip alanları, görevler, hatırlatmalar, performans alanları, raporlama, CRM iş akışları ve temel kullanıcı eğitimi planlanabilir."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "CRM Kurulum Paketinde Hangi Alanlar Çalışılır?",
+          "intro": "Aşağıdaki başlıklar şirketin satış yapısına, kullanıcı sayısına ve raporlama ihtiyacına göre planlanır.",
+          "items": [
+            { "title": "Mevcut Satış Süreci Analizi", "body": "CRM kurulumuna başlamadan önce şirketin mevcut satış süreci analiz edilir. Çünkü her şirketin müşteri bulma, teklif verme, takip ve satış kapama yapısı farklıdır. Müşteri adayları nereden geliyor? Müşteriler nasıl kayıt altına alınıyor? Teklif sonrası takip yapılıyor mu? Yönetici satış sürecini nasıl kontrol ediyor?" },
+            { "title": "CRM İhtiyaç Analizi", "body": "CRM kurulumu her şirket için aynı şekilde yapılmamalıdır. Önce şirketin hangi alanlarda CRM’e ihtiyaç duyduğu belirlenmelidir. Müşteri adayı yönetimi ve mevcut müşteri takibi, satış fırsatları, teklif süreci ve sipariş süreci, telefon aramaları, e-posta iletişimi ve LinkedIn bağlantıları, satış raporları, yönetici panosu ve hatırlatma ihtiyacı değerlendirilir." },
+            { "title": "Müşteri Veri Alanlarının Belirlenmesi", "body": "CRM sisteminin doğru çalışması için müşteri bilgilerinin hangi alanlarda tutulacağı netleştirilmelidir. Eksik veya fazla alanlar kullanıcıların CRM’i verimli kullanmasını zorlaştırabilir. Firma adı, yetkili kişi, unvan, e-posta ve telefon; ülke, şehir, sektör, web sitesi ve LinkedIn profili; müşteri kaynağı, ilgilendiği ürün veya hizmet; öncelik seviyesi, takip tarihi, satış temsilcisi ve satış aşaması belirlenir." },
+            { "title": "Müşteri Adayı Yönetimi", "body": "Müşteri adayları doğru yönetilmediğinde satış fırsatları kaybolabilir. CRM üzerinde müşteri adaylarının nereden geldiği, hangi ürünle ilgilendiği ve hangi aşamada olduğu net şekilde takip edilmelidir. Yeni müşteri adayı ve ilk iletişim; bilgi gönderildi, teklif istendi ve teklif hazırlandı; takip edilecek, görüşme planlandı ve olumlu müşteri; satışa dönüşen müşteri, kaybedilen müşteri ve sonradan takip edilecek aşamaları izlenir." },
+            { "title": "Satış Aşamalarının Oluşturulması", "body": "CRM sisteminin en önemli alanlarından biri satış aşamalarıdır. Satış süreci net aşamalara ayrıldığında yönetici hangi müşterinin hangi durumda olduğunu kolayca görebilir. Yeni lead, ilk temas ve ilgili müşteri; ihtiyaç analizi ve teklif hazırlanıyor; teklif gönderildi, teklif takipte ve pazarlık aşaması; sipariş bekleniyor, satış gerçekleşti, satış kaybedildi aşamaları oluşturulur." },
+            { "title": "Teklif Takip Süreci", "body": "Teklif gönderilen müşterilerin düzenli takip edilmesi gerekir. Birçok satış fırsatı, teklif sonrası takip yapılmadığı için kaybedilir. Teklif numarası, teklif tarihi ve teklif tutarı; para birimi, teklif dosyası ve teklif durumu; takip tarihi, müşteri cevabı ve revize talebi; kabul edilen teklif, kaybedilen teklif ve kayıp nedeni takip edilir." },
+            { "title": "Sipariş Takip Yapısı", "body": "Teklif satışa dönüştüğünde sipariş sürecinin de düzenli takip edilmesi gerekir. CRM veya satış takip sistemi sipariş aşamalarını da içerebilir. Sipariş numarası, müşteri firma ve sipariş tarihi; ürün veya hizmet bilgisi, sipariş tutarı ve ödeme durumu; üretim, teslim, sevkiyat ve fatura durumu; müşteri bilgilendirme notları ve satış sonrası takip tarihi izlenir." },
+            { "title": "İhracat Müşteri Takibi İçin CRM Yapısı", "body": "İhracat yapan şirketler için CRM yapısı yurt içi satıştan farklı alanlar içerebilir. Ülke, dil, teslim şekli, ödeme şekli, teklif para birimi ve sevkiyat bilgileri ayrıca takip edilmelidir. Hedef ülke, alıcı firma tipi, ilgili kişi ve unvan; GTİP / HS kodu, ilgilendiği ürün ve mail gönderim tarihi; LinkedIn bağlantı durumu, telefon araması sonucu ve teklif para birimi; teslim şekli, ödeme şekli, proforma, nakliye, evrak ve sevkiyat durumu çalışılır." },
+            { "title": "B2B Müşteri Bulma Süreci İçin CRM Alanları", "body": "B2B müşteri bulma çalışmalarında bulunan firmalar ve kişiler CRM’e aktarılmalıdır. Aksi halde araştırılan firmalar zamanla dağınık listelerde kaybolabilir. Firma adı, ülke, sektör, firma tipi ve web sitesi; LinkedIn şirket sayfası, karar verici kişi, unvan, e-posta ve telefon; kaynak, ürün ilgisi, öncelik seviyesi ve mail durumu; LinkedIn, arama, cevap, teklif, satış aşaması ve sonraki aksiyon alanları planlanır." },
+            { "title": "Ekip ve Kullanıcı Yapısı", "body": "CRM kurulurken hangi kullanıcıların hangi alanlara erişeceği ve hangi görevlerden sorumlu olacağı planlanmalıdır. Yönetici kullanıcılar ve satış temsilcileri; dış ticaret, operasyon, muhasebe veya finans kullanıcıları; sadece görüntüleme yetkisi olan kullanıcılar; yetki, erişim sınırları ve takip görevlerinden sorumlu kişiler tanımlanır." },
+            { "title": "Görev ve Aktivite Takibi", "body": "CRM sadece müşteri kaydı tutmak için değil, görev ve aktivite takibi için de kullanılmalıdır. Satış ekibi hangi müşteriye tekrar dönüş yapılacağını CRM üzerinden görebilmelidir. Arama görevi, e-posta gönderimi ve teklif takip görevi; toplantı planı, LinkedIn bağlantı görevi ve belge gönderimi; tekrar arama tarihi ve satış sonrası takip; müşteri memnuniyeti kontrolü ve yönetici onay görevi oluşturulur." },
+            { "title": "Takip Tarihi ve Hatırlatma Mantığı", "body": "CRM’in en önemli avantajlarından biri müşterilerin unutulmasını engellemesidir. Takip tarihi ve hatırlatma mantığı kurulmadığında CRM yalnızca veri deposuna dönüşür. İlk iletişim tarihi, son görüşme tarihi ve sonraki takip tarihi; aranacak müşteri, mail atılacak müşteri ve teklif takip tarihi; sipariş, ödeme ve satış sonrası takip tarihi; geciken görevler, bugün yapılacak işler ve haftalık takip listesi kurulur." },
+            { "title": "E-Posta, Telefon ve Görüşme Notları", "body": "Müşteriyle yapılan her iletişim CRM’e işlenmelidir. Böylece farklı ekip üyeleri aynı müşteri geçmişini görebilir. Gönderilen e-postalar, gelen cevaplar ve telefon görüşme notları; LinkedIn mesaj notları, toplantı notları ve teklif görüşmeleri; fiyat pazarlığı, müşteri talepleri ve şikayet/memnuniyet notları; dosya ve belge ekleri, satış sonrası notlar ve sonraki aksiyon kayıt altına alınır." },
+            { "title": "Satış Temsilcisi Performans Takibi", "body": "CRM yöneticilere satış ekibinin performansını daha net görme imkânı sağlar. Ancak bunun için doğru alanların ve raporların kurulması gerekir. Yeni müşteri adayı ve iletişim kurulan müşteri sayısı; gönderilen teklif, kazanılan satış ve kaybedilen satış sayısı; takip edilen müşteri, geciken görev, arama ve e-posta sayısı; teklif dönüş oranı, satış tutarı ve satış aşamasındaki fırsatlar izlenir." },
+            { "title": "Yönetici Raporları ve Satış Panosu", "body": "CRM kurulumunda yöneticilerin takip edeceği raporlar belirlenmelidir. Raporlama olmadan CRM yalnızca kayıt sistemi olarak kalır. Toplam müşteri adayı, yeni lead ve aktif satış fırsatları; gönderilen teklifler, teklif tutarları ve teklif dönüş oranı; satış temsilcisi performansı ve geciken takipler; ülke, sektör, ürün bazlı dağılımlar ve haftalık/aylık satış raporu planlanır." },
+            { "title": "CRM İş Akışları", "body": "CRM iş akışları, tekrar eden satış ve takip süreçlerinin daha düzenli yürütülmesine yardımcı olabilir. Her şirketin iş akışı farklı olduğu için öncelikle süreçler netleştirilmelidir. Yeni müşteri adayı geldiğinde satış temsilcisine görev atanması; teklif gönderildikten sonra takip tarihi oluşturulması; belirli süre cevap gelmezse hatırlatma görevi açılması; satış kaybedilirse kayıp nedeni girilmesi gibi akışlar kurgulanır." },
+            { "title": "E-Posta Pazarlama ve E-Posta İzleme Yapısı", "body": "CRM sistemi e-posta pazarlama ve e-posta izleme süreçleriyle birlikte kullanıldığında müşteri iletişimi daha düzenli takip edilebilir. Mail kampanya listeleri ve müşteri segmentleri; gönderim tarihi, mail konusu ve cevap durumu; takip maili tarihi, katalog gönderimi ve teklif yönlendirmesi; mail sonrası telefon araması, LinkedIn takibi ve kampanya kaynak alanı çalışılır." },
+            { "title": "CRM Kampanya Yönetimi", "body": "CRM, sadece bireysel müşteri takibi için değil, kampanya yönetimi için de kullanılabilir. Mail marketing, fuar sonrası takip, LinkedIn çalışmaları ve ürün tanıtımları CRM kampanyalarıyla izlenebilir. Kampanya adı, hedef müşteri listesi ve kampanya tarihi; gönderilen mail, cevap veren müşteri ve telefonla ulaşılan kişi sayısı; teklif isteyen müşteri ve satışa dönüşen müşteri sayısı; takip edilecek kişiler, kampanya notları ve sonuç raporu yönetilir." },
+            { "title": "Yapay Zekâlı CRM Kullanım Mantığı", "body": "Yapay zekâ destekli CRM yaklaşımı, satış ve müşteri takip süreçlerini daha hızlı analiz etmeye yardımcı olabilir. Ancak yapay zekâ çıktıları insan kontrolünden geçirilmelidir. Müşteri notlarını özetleme ve takip mesajı taslağı hazırlama; teklif sonrası e-posta metni oluşturma; satış raporu özeti, geciken işler ve yönetici özeti hazırlama; kampanya metni ve satış fırsatı sınıflandırma desteği sağlanır." },
+            { "title": "Temel CRM Kullanıcı Eğitimi", "body": "CRM kurulumunun başarılı olması için kullanıcıların sistemi nasıl kullanacağını öğrenmesi gerekir. Sadece CRM kurmak yeterli değildir; ekiplerin günlük iş akışına dahil edilmesi gerekir. Müşteri kaydı oluşturma ve yeni lead ekleme; satış aşaması güncelleme ve teklif kaydı girme; takip tarihi, görev, görüşme notu ve dosya ekleme; müşteri arama, filtreleme, rapor görüntüleme ve geciken görev takibi anlatılır." },
+            { "title": "CRM Kullanım Disiplini ve Şirket İçi Kurallar", "body": "CRM sisteminin çalışması için şirket içinde kullanım kuralları belirlenmelidir. Herkes farklı şekilde kayıt girerse sistem zamanla düzensiz hale gelir." }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Bu Paket Neleri Kapsamaz?",
+          "body": [
+            "CRM Kurulum Paketi, şirketin CRM yapısını planlamak, kurmak ve satış süreçlerine uygun hale getirmek için hazırlanır. Aşağıdaki çalışmalar ihtiyaç halinde ayrıca projelendirilir."
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "CRM Kurulum Paketi Süreci Nasıl İlerler?",
+          "intro": "Süreç şirketin sektörü, satış modeli, müşteri takip yöntemi, ekip yapısı ve CRM ihtiyacı değerlendirilerek başlar. Ardından mevcut süreç analizi, CRM yapısı planlama, kurulum ve yapılandırma, ekip yetkileri, raporlama, kullanıcı eğitimi ve kullanım yol haritası ile ilerler.",
+          "steps": [
+            { "n": 1, "title": "Ön Görüşme", "body": "Şirketin sektörü, satış modeli, müşteri takip yöntemi, ekip yapısı ve CRM ihtiyacı değerlendirilir." },
+            { "n": 2, "title": "Mevcut Süreç Analizi", "body": "Müşteri bilgileri, satış aşamaları, teklif süreci, görev takibi, raporlama ve mevcut veri yapısı incelenir." },
+            { "n": 3, "title": "CRM Yapısı Planlama", "body": "Müşteri alanları, satış aşamaları, teklif süreci, görevler, kullanıcılar ve raporlar planlanır." },
+            { "n": 4, "title": "Kurulum ve Yapılandırma", "body": "CRM sistemi şirketin ihtiyacına göre yapılandırılır. Müşteri kayıt alanları, satış aşamaları ve takip yapısı oluşturulur." },
+            { "n": 5, "title": "Ekip ve Yetki Tanımları", "body": "Kullanıcılar, ekipler, görev sorumlulukları ve erişim yapısı belirlenir." },
+            { "n": 6, "title": "Raporlama ve Yönetici Panosu", "body": "Satış raporları, teklif raporları, müşteri adayı raporları ve yönetici takip alanları planlanır." },
+            { "n": 7, "title": "Kullanıcı Eğitimi", "body": "Satış ekibi ve yöneticilere CRM’in günlük kullanım mantığı anlatılır." },
+            { "n": 8, "title": "Kullanım Yol Haritası", "body": "CRM’in günlük, haftalık ve aylık olarak nasıl kullanılacağına dair şirket içi yol haritası oluşturulur." }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "CRM Kurulum Paketinin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Müşteri bilgileri tek merkezde toplanır",
+            "Satış süreci daha düzenli takip edilir",
+            "Müşteri adayları kaybolmaz",
+            "Teklifler ve takip tarihleri daha net izlenir",
+            "Satış ekibi görevlerini daha düzenli yönetir",
+            "Yönetici satış performansını daha kolay görür",
+            "Ekip içinde müşteri geçmişi ortak hale gelir",
+            "Excel, WhatsApp ve kişisel notlara bağımlılık azalır",
+            "İhracat ve B2B müşteri bulma süreçleri CRM’e bağlanır",
+            "Mail marketing ve LinkedIn çalışmaları daha ölçülebilir hale gelir",
+            "Teklif ve sipariş süreçleri daha sistemli ilerler",
+            "Satış raporları daha düzenli hazırlanır",
+            "Geciken takipler daha kolay fark edilir",
+            "Şirketin müşteri hafızası güçlenir",
+            "Dijital dönüşüm sürecine sağlam bir başlangıç yapılır"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "CRM Kurulumunda Sık Yapılan Hatalar",
+          "items": [
+            "CRM’i sadece müşteri listesi olarak görmek",
+            "Satış sürecini analiz etmeden kurulum yapmak",
+            "Çok fazla gereksiz alan oluşturmak",
+            "Zorunlu alanları belirlememek",
+            "Satış aşamalarını şirket yapısına göre düzenlememek",
+            "Takip tarihi ve görev mantığını kurmamak",
+            "Teklif sürecini CRM’e bağlamamak",
+            "Kullanıcılara eğitim vermemek",
+            "Yönetici raporlarını oluşturmamak",
+            "CRM kullanım kuralları belirlememek",
+            "Eski Excel düzenini aynen CRM’e taşımak",
+            "Veri temizliği yapmadan sistemi doldurmak",
+            "Ekiplerin CRM kullanmasını takip etmemek",
+            "Raporlamayı ihmal etmek",
+            "CRM’i şirket kültürüne dahil etmemek"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Hangi Paketlerle Birlikte Alınabilir?",
+          "body": [
+            "CRM Kurulum Paketi, diğer paketlerle birlikte planlanabilir. Özellikle B2B Müşteri Bulma Paketi ve Dış Ticaret Departmanı Paketi ile birlikte kullanıldığında CRM, müşteri adaylarının ve ihracat satış sürecinin düzenli takip edilmesini sağlar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM Kurulum Paketi, Satış CRM Kurulumu ve Müşteri Takip Sistemi",
+          "body": [
+            "CRM kurulum paketi; CRM kurulumu, CRM danışmanlığı, CRM yapılandırma, satış CRM kurulumu, müşteri takip sistemi kurulumu, müşteri adayı yönetimi CRM, teklif takip CRM, satış süreci CRM kurulumu, B2B CRM kurulumu, ihracat CRM kurulumu, KOBİ CRM paketi, CRM iş akışları kurulumu, CRM raporlama sistemi, CRM satış panosu, satış ekibi CRM yönetimi, CRM müşteri takip sistemi, e-posta pazarlama CRM, LinkedIn müşteri takibi CRM ve CRM dijital dönüşüm paketi konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "CRM Kurulum Paketi nedir?",
+          "body": [
+            "CRM Kurulum Paketi; şirketlerin müşteri adaylarını, satış sürecini, teklifleri, siparişleri, takip tarihlerini, ekip görevlerini, mail marketing ve LinkedIn kaynaklı müşteri adaylarını, ihracat müşteri takibini ve satış raporlarını tek sistemde yönetebilmesi için CRM yapısının kurulması, müşteri alanlarının belirlenmesi, satış aşamalarının oluşturulması, görev ve takip mantığının yapılandırılması, raporlama alanlarının hazırlanması ve kullanıcı eğitiminin verilmesini kapsayan pakettir. {{appName}}, CRM Kurulum Paketi ile şirketlerin müşteri takibini kişisel notlardan çıkarıp ölçülebilir satış sistemine dönüştürmesine yardımcı olur."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "CRM Kurulum Paketi Hakkında Merak Edilenler",
+          "items": [
+            { "q": "CRM Kurulum Paketi kimler için uygundur?", "a": "Bu paket; müşteri takibini Excel, WhatsApp, telefon rehberi veya kişisel notlarla yapan şirketler, satış ekipleri, B2B firmalar, ihracat yapan işletmeler ve müşteri adaylarını düzenli takip etmek isteyen KOBİ’ler için uygundur." },
+            { "q": "CRM kurulumu sadece yazılım açmak mıdır?", "a": "Hayır. CRM kurulumu yalnızca yazılım açmak değildir. Satış sürecinin analiz edilmesi, müşteri alanlarının belirlenmesi, satış aşamalarının kurulması, görev ve takip yapısının oluşturulması, raporların hazırlanması ve ekibin eğitilmesi gerekir." },
+            { "q": "Satış aşamaları şirketimize göre düzenlenir mi?", "a": "Evet. Yeni müşteri adayı, ilk temas, teklif, takip, pazarlık, sipariş, satış kazandı veya satış kaybedildi gibi aşamalar şirketinizin satış modeline göre özelleştirilebilir." },
+            { "q": "Teklif takibi CRM’e eklenebilir mi?", "a": "Evet. Teklif tarihi, teklif tutarı, teklif durumu, takip tarihi, revize talebi ve teklif sonucu CRM üzerinde takip edilebilir." },
+            { "q": "İhracat müşteri takibi için CRM kurulabilir mi?", "a": "Evet. Hedef ülke, GTİP / HS kodu, ürün ilgisi, mail gönderim tarihi, LinkedIn durumu, teklif para birimi, teslim şekli, ödeme durumu ve sevkiyat bilgileri gibi alanlarla ihracat CRM yapısı kurulabilir." },
+            { "q": "B2B müşteri bulma çalışmaları CRM’e aktarılabilir mi?", "a": "Evet. Hedef firmalar, karar verici kişiler, kurumsal e-posta adresleri, LinkedIn profilleri, mail durumu, arama sonucu ve takip tarihi CRM üzerinde yönetilebilir." },
+            { "q": "CRM kullanıcı eğitimi veriliyor mu?", "a": "Evet. Satış ekibi ve yöneticilere müşteri kaydı, satış aşaması, teklif takibi, görev oluşturma, görüşme notu, rapor görüntüleme ve takip tarihi kullanımı anlatılabilir." },
+            { "q": "CRM raporları hazırlanıyor mu?", "a": "Evet. Müşteri adayı raporu, teklif raporu, satış temsilcisi performansı, geciken görevler, ülke bazlı müşteri dağılımı ve satış panosu gibi raporlar planlanabilir." },
+            { "q": "Eski Excel listelerimiz CRM’e aktarılabilir mi?", "a": "Excel listeleri incelenerek CRM’e aktarılabilecek alanlar belirlenebilir. Büyük veri temizliği veya kapsamlı veri aktarımı ayrıca değerlendirilmelidir." },
+            { "q": "Paket fiyatı var mı?", "a": "Bu sayfada fiyat verilmez. Şirketin kullanıcı sayısı, satış süreci, veri yapısı, ihtiyaç duyulan CRM alanları, raporlama kapsamı ve eğitim ihtiyacına göre teklif hazırlanır." }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Müşteri Takibinizi Kişisel Hafızadan Şirket Sistemine Taşıyın",
+        "body": "Müşteri bilgileriniz Excel dosyalarında, WhatsApp konuşmalarında, telefon rehberlerinde veya çalışanların kişisel notlarında dağınık şekilde duruyorsa satış fırsatlarınızı düzenli takip etmek zorlaşır. {{appName}} CRM Kurulum Paketi ile müşteri adaylarınızı, satış sürecinizi, tekliflerinizi, takip tarihlerinizi, ekip görevlerinizi ve raporlarınızı tek sistemde yönetebileceğiniz CRM yapısını birlikte kuralım.",
+        "button": { "label": "Teklif Al", "href": "/teklif-al" }
+      }
+    },
+    "en": { "needs_translation": true },
+    "de": { "needs_translation": true }
+  }
+}

@@ -16,7 +16,7 @@ import {
   Table, TableBody, TableCell, TableHead, TableHeader, TableRow,
 } from '@/components/ui/table';
 import {
-  useSyncPaspasTargetsMutation,
+  useSyncErpTargetsMutation,
   useBulkImportTargetsMutation,
   useLazyDownloadImportTemplateQuery,
   type BulkImportRow,
@@ -32,15 +32,15 @@ interface Props {
 type SyncMode = 'all' | 'customers' | 'dealers';
 type ConflictMode = 'skip' | 'update';
 
-// ─── Sekme 1: Paspas DB Senkronizasyon ──────────────────────────────────────
+// ─── Sekme 1: ERP Senkronizasyon ────────────────────────────────────────────
 
-function PaspasSyncTab({ onSuccess }: { onSuccess: () => void }) {
+function ErpSyncTab({ onSuccess }: { onSuccess: () => void }) {
   const [mode, setMode] = React.useState<SyncMode>('all');
-  const [syncPaspas, { isLoading }] = useSyncPaspasTargetsMutation();
+  const [syncErp, { isLoading }] = useSyncErpTargetsMutation();
 
   const handleSync = async () => {
     try {
-      const result = await syncPaspas({ mode }).unwrap();
+      const result = await syncErp({ mode }).unwrap();
       toast.success(result.message);
       onSuccess();
     } catch {
@@ -51,7 +51,7 @@ function PaspasSyncTab({ onSuccess }: { onSuccess: () => void }) {
   return (
     <div className="space-y-5">
       <p className="text-sm text-muted-foreground">
-        Paspas ERP veritabanındaki tüm aktif müşteri ve bayileri Market Pulse hedef tablosuna çeker.
+        ERP veritabanındaki tüm aktif müşteri ve bayileri Market Pulse hedef tablosuna çeker.
         Mevcut kayıtlarda yalnızca ad, telefon ve kategori güncellenir; el ile girilen alanlar korunur.
       </p>
 
@@ -270,14 +270,14 @@ export default function BulkImportDialog({ open, onClose, onSuccess }: Props) {
           <DialogTitle>Hedefleri İçe Aktar</DialogTitle>
         </DialogHeader>
 
-        <Tabs defaultValue="paspas">
+        <Tabs defaultValue="erp">
           <TabsList className="mb-4 w-full">
-            <TabsTrigger value="paspas" className="flex-1">Paspas DB&apos;den Çek</TabsTrigger>
+            <TabsTrigger value="erp" className="flex-1">ERP&apos;den Çek</TabsTrigger>
             <TabsTrigger value="file" className="flex-1">Dosyadan Yükle</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="paspas">
-            <PaspasSyncTab onSuccess={handleSuccess} />
+          <TabsContent value="erp">
+            <ErpSyncTab onSuccess={handleSuccess} />
           </TabsContent>
 
           <TabsContent value="file">

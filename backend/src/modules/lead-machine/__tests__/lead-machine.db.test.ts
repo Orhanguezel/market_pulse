@@ -8,6 +8,8 @@ mock.module('@/db/client', () => ({
   pool: dbMock.pool,
 }));
 
+mock.module('@/core/env', () => ({ env: { TENANT_KEY: 'avrasya' } }));
+
 const leadDb = await import('../_shared/db');
 
 const now = '2026-05-08 10:00:00';
@@ -22,10 +24,10 @@ function job(overrides: Record<string, unknown> = {}) {
     channel: 'amazon',
     status: 'pending',
     icp_id: null,
-    params: '{"keyword":"paspas"}',
+    params: '{"keyword":"oto aksesuar"}',
     result_count: 0,
     error_msg: null,
-    created_by: null,
+    owner_user_id: null,
     created_at: now,
     started_at: null,
     finished_at: null,
@@ -62,20 +64,21 @@ describe('lead machine db jobs', () => {
   test('creates and fetches a search job with parsed params', async () => {
     dbMock.queuePoolExecute([job()]);
 
-    const result = await leadDb.createSearchJob('amazon', { keyword: 'paspas' }, null, 'user-1');
+    const result = await leadDb.createSearchJob('amazon', { keyword: 'oto aksesuar' }, null, 'user-1');
 
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('INSERT INTO lead_search_jobs');
     expect(dbMock.poolExecutions[0]?.values).toEqual([
       expect.any(String),
+      'avrasya',
       'amazon',
       'pending',
       null,
-      '{"keyword":"paspas"}',
+      '{"keyword":"oto aksesuar"}',
       'user-1',
     ]);
     expect(result).toEqual(expect.objectContaining({
       id: 'job-1',
-      params: { keyword: 'paspas' },
+      params: { keyword: 'oto aksesuar' },
     }));
   });
 
@@ -84,7 +87,7 @@ describe('lead machine db jobs', () => {
 
     const result = await leadDb.getSearchJob('job-2');
 
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['job-2']);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'job-2']);
     expect(result).toEqual(expect.objectContaining({
       id: 'job-2',
       params: { source: 'europages' },
@@ -99,7 +102,7 @@ describe('lead machine db jobs', () => {
 
     const result = await leadDb.listSearchJobs('amazon');
 
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['amazon']);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'amazon']);
     expect(result).toHaveLength(2);
     expect(result[1]?.params).toEqual({ keyword: 'oto' });
   });
@@ -113,8 +116,24 @@ describe('lead machine db jobs', () => {
       finished: true,
     });
 
-    expect(dbMock.poolExecutions[0]?.sql).toContain('UPDATE lead_search_jobs SET status = ?, result_count = ?, error_msg = ?, started_at = CURRENT_TIMESTAMP, finished_at = CURRENT_TIMESTAMP WHERE id = ?');
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['done', 5, null, 'job-1']);
+    expect(dbMock.poolExecutions[0]?.sql).toContain('UPDATE lead_search_jobs SET status = ?, result_count = ?, error_msg = ?, started_at = CURRENT_TIMESTAMP, finished_at = CURRENT_TIMESTAMP WHERE id = ? AND tenant_key = ?');
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['done', 5, null, 'job-1', 'avrasya']);
+  });
+
+  test('deletes a completed owned job and its dependent results transactionally', async () => {
+    dbMock.queuePoolExecute([job({ status: 'done', owner_user_id: 'user-1' })]);
+
+    const deleted = await leadDb.deleteSearchJob('job-1', { ownerUserId: 'user-1' });
+
+    expect(deleted).toBe(true);
+    expect(dbMock.poolExecutions.some((entry) => entry.sql.startsWith('DELETE FROM lead_candidates'))).toBe(true);
+    expect(dbMock.poolExecutions.at(-1)?.sql).toContain('DELETE FROM lead_search_jobs WHERE tenant_key = ? AND id = ? AND owner_user_id = ?');
+    expect(dbMock.poolExecutions.at(-1)?.values).toEqual(['avrasya', 'job-1', 'user-1']);
+  });
+
+  test('refuses to delete an active job', async () => {
+    dbMock.queuePoolExecute([job({ status: 'running', owner_user_id: 'user-1' })]);
+    expect(leadDb.deleteSearchJob('job-1', { ownerUserId: 'user-1' })).rejects.toThrow('JOB_ACTIVE');
   });
 });
 
@@ -140,6 +159,8 @@ describe('lead machine db candidates', () => {
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('INSERT INTO lead_candidates');
     expect(dbMock.poolExecutions[0]?.values).toEqual([
       expect.any(String),
+      'avrasya',
+      null,
       'job-1',
       'amazon',
       'icp-1',
@@ -180,8 +201,8 @@ describe('lead machine db candidates', () => {
       offset: 0,
     });
 
-    expect(dbMock.poolExecutions[0]?.sql).toContain('WHERE channel = ? AND status = ? AND job_id = ?');
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['amazon', 'pending', 'job-1']);
+    expect(dbMock.poolExecutions[0]?.sql).toContain('WHERE tenant_key = ? AND channel = ? AND status = ? AND job_id = ?');
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['avrasya', 'amazon', 'pending', 'job-1']);
     expect(result.count).toBe(1);
     expect(result.rows[0]?.raw_data).toEqual({ seller_url: 'https://amazon.example/seller' });
   });
@@ -196,7 +217,7 @@ describe('lead machine db candidates', () => {
     const result = await leadDb.updateCandidateReview('candidate-1', 'rejected', 'wrong_segment', 'user-1');
 
     expect(dbMock.poolExecutions[0]?.sql).toStartWith('UPDATE lead_candidates SET status = ?');
-    expect(dbMock.poolExecutions[0]?.values).toEqual(['rejected', 'wrong_segment', 'user-1', 'candidate-1']);
+    expect(dbMock.poolExecutions[0]?.values).toEqual(['rejected', 'wrong_segment', null, 'user-1', 'avrasya', 'candidate-1']);
     expect(result).toEqual(expect.objectContaining({
       status: 'rejected',
       reject_reason: 'wrong_segment',

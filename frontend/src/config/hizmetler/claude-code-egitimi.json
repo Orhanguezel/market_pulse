@@ -1,0 +1,349 @@
+{
+  "slug": "claude-code-egitimi",
+  "category": "egitim",
+  "module": "training",
+  "order": 30,
+  "icon": "Bot",
+  "image": "/pictures/bg/isletmeni-yonet.webp",
+  "locales": {
+    "tr": {
+      "seo": {
+        "title": "Claude Code Eğitimi | Yazılım Geliştirme, Kod Analizi, Terminal ve AI Kod Asistanı Kullanımı",
+        "description": "Claude Code eğitimi ile yazılımcılara ve teknik ekiplere kod tabanı analizi, dosya düzenleme, terminal kullanımı, hata ayıklama, Git iş akışı, proje geliştirme ve yapay zeka destekli yazılım süreçlerini uygulamalı olarak öğretiyoruz.",
+        "ogTitle": "Claude Code Eğitimi | {{appName}}",
+        "ogDescription": "Claude Code ile kod tabanı analizi, dosya düzenleme, terminal, Git, hata ayıklama, refactoring, test, dokümantasyon ve güvenli AI kodlama süreçlerini uygulamalı öğrenin."
+      },
+      "hero": {
+        "eyebrow": "Yapay Zeka Eğitimi",
+        "title": "Claude Code Eğitimi",
+        "lead": "Yazılım geliştirme süreçlerinde yapay zekadan daha fazla verim almak istiyor ama Claude Code’u proje dosyalarınız, terminal, Git, hata ayıklama, kod analizi ve geliştirme süreçlerinde nasıl kullanacağınızı bilmiyor musunuz? Claude Code, yazılımcılar ve teknik ekipler için kod tabanıyla daha etkileşimli çalışmayı sağlayan yapay zeka destekli kodlama araçlarından biridir. Doğru kullanıldığında proje dosyalarını anlamaya, kod düzenlemeye, hata araştırmaya, terminal komutlarıyla çalışmaya, refactoring planlamaya, Git süreçlerini takip etmeye ve geliştirme işlerini daha sistemli yürütmeye yardımcı olabilir. {{appName}} olarak yazılımcılar, teknik ekipler, girişimler, yazılım ajansları ve şirket içi dijital dönüşüm ekipleri için Claude Code eğitimi sunuyoruz. Amacımız, Claude Code’u rastgele kod yazdırılan bir araç olmaktan çıkarıp; proje anlama, kod düzenleme, hata çözme, dokümantasyon, terminal ve Git iş akışlarını destekleyen kontrollü bir yazılım geliştirme yardımcısına dönüştürmektir.",
+        "primaryCTA": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        },
+        "secondaryCTA": {
+          "label": "Süreç nasıl ilerler?",
+          "href": "#surec"
+        }
+      },
+      "sections": [
+        {
+          "type": "richText",
+          "heading": "Claude Code Eğitimi Nedir?",
+          "body": [
+            "Claude Code eğitimi, yazılımcıların ve teknik ekiplerin Claude Code’u yazılım geliştirme süreçlerinde doğru, güvenli ve verimli şekilde kullanmasını öğretmek için hazırlanan uygulamalı yapay zeka kodlama eğitimidir.",
+            "Bu eğitimde amaç yalnızca Claude Code’un nasıl kurulacağını veya nasıl komut alacağını göstermek değildir. Asıl amaç, katılımcıların Claude Code ile proje dosyalarını nasıl analiz edeceğini, kod değişikliklerini nasıl planlayacağını, hata ayıklama sürecini nasıl yöneteceğini, terminal komutlarını nasıl güvenli çalıştıracağını ve yapılan değişiklikleri nasıl kontrol edeceğini öğrenmesidir.",
+            "{{appName}}, Claude Code eğitimini teorik anlatım yerine gerçek proje senaryoları ve uygulamalı yazılım geliştirme örnekleri üzerinden planlar.",
+            "Claude Code’u kontrollü bir yazılım geliştirme yardımcısına dönüştürün",
+            "Proje bağlamı verme, küçük görevlerle ilerleme, kod değişikliklerini kontrol etme, Git diff inceleme, test çalıştırma ve güvenli terminal kullanımıyla Claude Code’dan daha verimli sonuç alabilirsiniz."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Claude Code Eğitimi Hangi Sorulara Cevap Verir?",
+          "body": [
+            "Claude Code’dan verim almak için yalnızca “şu kodu yaz” demek yeterli değildir. Proje bağlamını doğru vermek, yapılacak işi adımlara bölmek, dosya yapısını anlatmak, güvenli komut kullanımını bilmek ve yapılan değişiklikleri kontrol etmek gerekir.",
+            "Eğitimde Claude Code’un yazılım geliştirme, kod analizi, terminal kullanımı, hata ayıklama, refactoring, Git, test ve dokümantasyon süreçlerinde nasıl kullanılabileceği uygulamalı olarak ele alınır."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Claude Code Neden Yazılım Ekipleri İçin Önemlidir?",
+          "body": [
+            "Yapay zeka destekli kodlama araçları yazılım geliştirme süreçlerini değiştirmeye başlamıştır. Ancak bu araçlardan verim almak, yalnızca araca kod yazdırmakla mümkün değildir.",
+            "Yazılım ekipleri için önemli olan; yapay zekayı kontrollü, denetlenebilir ve proje standartlarına uygun şekilde kullanmaktır. Claude Code öneri ve hız kazandırabilir; nihai teknik karar, kod inceleme ve yayın sorumluluğu geliştirici ve ekipte kalmalıdır.",
+            "Claude Code doğru kullanıldığında şu alanlarda destek sağlar:"
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Bu Eğitim Kimler İçin Uygundur?",
+          "intro": "Bu eğitim, kodla çalışan ve yapay zekayı yazılım geliştirme sürecine doğru şekilde dahil etmek isteyen teknik ekipler için uygundur.",
+          "items": [
+            {
+              "title": "Yazılım Geliştiriciler",
+              "body": "Claude Code’u kod analizi, dosya düzenleme ve hata çözme süreçlerinde kullanmak isteyen geliştiriciler için uygundur."
+            },
+            {
+              "title": "Frontend, Backend ve Full-stack Ekipler",
+              "body": "PHP, JavaScript, Python veya farklı dillerle çalışan teknik ekipler için planlanabilir."
+            },
+            {
+              "title": "Web Sitesi Geliştiren Ekipler",
+              "body": "HTML, CSS, JavaScript, PHP, React, Laravel, WordPress veya özel yazılım projelerinde çalışan ekipler için uygundur."
+            },
+            {
+              "title": "Şirket İçi Yazılım Ekipleri",
+              "body": "Claude Code kullanımını ekip içinde standartlaştırmak isteyen şirketler için uygundur."
+            },
+            {
+              "title": "Yazılım Ajansları",
+              "body": "Farklı müşteri projelerinde yapay zeka destekli kodlama araçlarını kontrollü kullanmak isteyen ajanslar için planlanabilir."
+            },
+            {
+              "title": "Startup ve SaaS Ekipleri",
+              "body": "Ürün geliştirme, hata çözme ve teknik dokümantasyon süreçlerini hızlandırmak isteyen ekipler için uygundur."
+            },
+            {
+              "title": "Teknik Proje Yöneticileri",
+              "body": "Kod değişikliklerini, Git akışını ve ekip senaryolarını daha iyi takip etmek isteyen teknik yöneticiler için uygundur."
+            },
+            {
+              "title": "Kod Tabanı Olan İşletmeler",
+              "body": "Mevcut yazılım projelerini geliştirmek ve ekip içinde AI kodlama kültürü oluşturmak isteyen firmalar için uygundur."
+            }
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Claude Code Eğitiminde Hangi Konular Anlatılır?",
+          "body": [
+            "Claude Code eğitimi, katılımcıların seviyesine ve şirketin teknik yapısına göre planlanabilir. Genel olarak Claude Code kullanım mantığı, kurulum, terminal, proje klasörüyle çalışma, kod tabanı analizi, dosya düzenleme, yeni özellik geliştirme, bug tespiti, refactoring, test, Git, dokümantasyon, proje talimatları, güvenli kullanım ve ekip içi standartlar ele alınır."
+          ]
+        },
+        {
+          "type": "cards",
+          "heading": "Claude Code Eğitiminde Hangi Alanlar İncelenir?",
+          "intro": "Eğitim modülleri şirketin teknolojisine, proje yapısına ve ekip seviyesine göre özelleştirilebilir. Aşağıdaki yapı, Claude Code’u yazılım geliştirme sürecine kontrollü ve güvenli şekilde dahil etmek için planlanmıştır.",
+          "items": [
+            {
+              "title": "Claude Code Temel Kullanımı",
+              "body": "Eğitimin ilk bölümünde Claude Code’un temel kullanım mantığı anlatılır. Katılımcılar Claude Code’un klasik sohbet araçlarından farklı olarak kod tabanı ve geliştirme ortamıyla daha yakın çalışabildiğini öğrenir. Kapsam: Claude Code ne işe yarar?; Hangi yazılım süreçlerinde kullanılabilir?; Terminal mantığı nedir?; Geliştirici kontrolü neden önemlidir?."
+            },
+            {
+              "title": "Kurulum ve Çalışma Ortamı Hazırlığı",
+              "body": "Claude Code’u kullanmadan önce çalışma ortamının doğru hazırlanması gerekir. Geliştiricinin terminal, proje klasörü, sürüm kontrol sistemi ve gerekli erişim ayarlarını bilmesi önemlidir. Kapsam: Terminal ortamı ve proje klasörü seçimi; Kod editörü ile çalışma; Yetki ve erişim kontrolleri; Test projesi üzerinde uygulama."
+            },
+            {
+              "title": "Proje Dosyalarını ve Kod Tabanını Anlama",
+              "body": "Claude Code’un en önemli kullanım alanlarından biri mevcut kod tabanını anlamaktır. Özellikle devralınan projelerde dosya yapısını, bileşenleri, fonksiyonları ve iş akışlarını çözmek zaman alabilir. Kapsam: Proje klasör yapısını analiz etme; Önemli dosyaları belirleme; Fonksiyonların görevini açıklatma; Proje mimarisi hakkında özet alma."
+            },
+            {
+              "title": "Claude Code ile Dosya Düzenleme",
+              "body": "Claude Code, proje dosyaları üzerinde düzenleme önerileri oluşturabilir. Ancak dosya düzenleme süreci kontrollü ilerlemelidir. Kapsam: Hangi dosyanın düzenleneceği nasıl belirtilir?; Küçük ve kontrollü değişiklik nasıl istenir?; Kod farkı nasıl incelenir?; Değişiklik sonrası test nasıl yapılır?."
+            },
+            {
+              "title": "Yeni Özellik Geliştirme Süreçlerinde Claude Code Kullanımı",
+              "body": "Claude Code, yeni özellik geliştirme süreçlerinde planlama ve uygulama desteği sağlayabilir. Ancak yeni özellik doğrudan kodlatılmadan önce kapsam netleştirilmelidir. Kapsam: İstenen özelliğin tanımlanması; Hangi dosyaların etkileneceğinin belirlenmesi; Geliştirme planı oluşturulması; Canlıya almadan önce kontrol listesi oluşturulması."
+            },
+            {
+              "title": "Bug Tespiti ve Hata Ayıklama",
+              "body": "Yazılım geliştirme süreçlerinde hata bulmak zaman alabilir. Claude Code, hata mesajlarını analiz etmek, olası nedenleri sıralamak ve çözüm adımları önermek için kullanılabilir. Kapsam: Hata mesajını analiz etme; Log çıktısını yorumlama; İlgili dosyaları bulma; Kök neden analizi yapma."
+            },
+            {
+              "title": "Refactoring ve Kod İyileştirme",
+              "body": "Claude Code, mevcut kodu daha okunabilir, daha düzenli ve daha sürdürülebilir hale getirmek için refactoring süreçlerinde destek sağlayabilir. Kapsam: Uzun fonksiyonları parçalama; Tekrar eden kodları azaltma; Değişken ve fonksiyon isimlerini iyileştirme; Refactoring sonrası test planı hazırlama."
+            },
+            {
+              "title": "Test ve Doğrulama Süreçleri",
+              "body": "Claude Code ile yapılan değişikliklerin mutlaka test edilmesi gerekir. Kod çalışıyor gibi görünse bile beklenmeyen yan etkiler oluşabilir. Kapsam: Test komutları nasıl çalıştırılır?; Hangi testler öncelikli yapılmalıdır?; Test başarısız olursa nasıl ilerlenir?; Canlıya almadan önce hangi kontroller yapılmalıdır?."
+            },
+            {
+              "title": "Terminal Komutları ile Çalışma",
+              "body": "Claude Code terminal üzerinden komut çalıştırma süreçlerinde destek verebilir. Ancak terminal komutları dikkatli kullanılmalıdır. Kapsam: Komutun ne yaptığını anlama; Tehlikeli komutları fark etme; Test, build ve Git komutları; Komut çıktısını yorumlama."
+            },
+            {
+              "title": "Git İş Akışlarında Claude Code Kullanımı",
+              "body": "Claude Code, değişiklikleri anlamak, commit mesajı hazırlamak, branch mantığını açıklamak ve pull request hazırlığına destek olmak için kullanılabilir. Kapsam: Git durumunu kontrol etme; Diff çıktısını yorumlama; Commit mesajı taslağı hazırlama; Pull request açıklaması oluşturma."
+            },
+            {
+              "title": "Kod İnceleme ve Kalite Kontrol",
+              "body": "Claude Code, kod inceleme sürecinde destekleyici bir yardımcı olarak kullanılabilir. Kodun okunabilirliği, güvenlik riski, performans etkisi ve standartlara uygunluğu değerlendirilebilir. Kapsam: Değişen kodları açıklatma; Riskli alanları belirleme; Güvenlik ve performans etkisini değerlendirme; Test eksiklerini belirleme."
+            },
+            {
+              "title": "Dokümantasyon Hazırlama",
+              "body": "Yazılım projelerinde dokümantasyon çoğu zaman ihmal edilir. Claude Code, koddan yola çıkarak teknik doküman ve kurulum rehberi hazırlamaya yardımcı olabilir. Kapsam: README taslağı oluşturma; Kurulum adımlarını yazma; API kullanım notları oluşturma; Değişiklik özetleri hazırlama."
+            },
+            {
+              "title": "CLAUDE.md ve Proje Talimatları",
+              "body": "Claude Code gibi araçlarda proje bağlamı ve çalışma kuralları önemlidir. Geliştiriciler, araca proje hakkında tutarlı bilgiler vererek daha doğru sonuçlar alabilir. Kapsam: Proje amacı ve kullanılan teknolojiler; Dosya yapısı ve kodlama standartları; Çalıştırma ve test komutları; Yasaklı veya dikkat edilecek işlemler."
+            },
+            {
+              "title": "Web Projelerinde Claude Code Kullanımı",
+              "body": "Claude Code, HTML, CSS, JavaScript, PHP, React, Laravel, WordPress veya özel yazılım projelerinde destek sağlayabilir. Kapsam: HTML, CSS ve responsive sorunları inceleme; JavaScript hata ayıklama; PHP dosyalarını inceleme; Header, footer ve component yapılarını anlama."
+            },
+            {
+              "title": "Şirket İçi Yazılım Ekiplerinde Claude Code Kullanımı",
+              "body": "Şirket içinde yazılım ekibi olan firmalar için Claude Code kullanımı belirli standartlarla yönetilmelidir. Her geliştiricinin farklı şekilde kullanması yerine ortak kurallar oluşturulmalıdır. Kapsam: Hangi projelerde kullanılacak?; Kimler kullanacak?; Hangi komutlar yasaklanacak?; Kod değişiklikleri nasıl kontrol edilecek?."
+            },
+            {
+              "title": "Güvenli Kullanım ve Risk Yönetimi",
+              "body": "Claude Code gibi kodla ve terminalle çalışan araçlarda güvenli kullanım çok önemlidir. Yanlış yönlendirme veya kontrolsüz komutlar projeye zarar verebilir. Kapsam: Canlı projede doğrudan değişiklik yapmamak; API key, şifre ve veritabanı bilgilerini korumak; Git ile değişiklikleri takip etmek; Test yapmadan yayınlamamak."
+            },
+            {
+              "title": "Claude Code ile Verimli Çalışma Prensipleri",
+              "body": "Claude Code’dan daha iyi sonuç almak için geliştiricilerin doğru çalışma prensiplerini öğrenmesi gerekir."
+            }
+          ]
+        },
+        {
+          "type": "steps",
+          "id": "surec",
+          "heading": "Claude Code Eğitimi Süreci Nasıl İlerler?",
+          "intro": "Süreç katılımcıların yazılım seviyesi, kullanılan teknolojiler, proje yapısı, ekip ihtiyacı ve eğitim hedefleri değerlendirilerek başlar. Ardından temel kullanım, kurulum, proje üzerinden uygulama, Git, test, güvenli kullanım, ekip senaryoları ve kullanım yol haritası planlanır.",
+          "steps": [
+            {
+              "n": 1,
+              "title": "Ön Görüşme",
+              "body": "Katılımcıların yazılım seviyesi, kullanılan teknolojiler, proje yapısı, ekip ihtiyacı ve eğitim hedefleri değerlendirilir."
+            },
+            {
+              "n": 2,
+              "title": "Eğitim Planı Hazırlığı",
+              "body": "Kod analizi, hata ayıklama, refactoring, Git, test veya web projeleri gibi hangi başlıklara odaklanılacağı belirlenir."
+            },
+            {
+              "n": 3,
+              "title": "Temel Kullanım ve Kurulum",
+              "body": "Claude Code’un temel kullanım mantığı, çalışma ortamı, terminal yaklaşımı ve güvenli başlangıç adımları anlatılır."
+            },
+            {
+              "n": 4,
+              "title": "Proje Üzerinden Uygulama",
+              "body": "Örnek proje veya şirketin uygun gördüğü test projesi üzerinden kod tabanı analizi, dosya düzenleme ve hata çözme çalışmaları yapılır."
+            },
+            {
+              "n": 5,
+              "title": "Git ve Test Süreçleri",
+              "body": "Değişikliklerin nasıl izleneceği, commit mesajları, diff kontrolü, test komutları ve doğrulama adımları gösterilir."
+            },
+            {
+              "n": 6,
+              "title": "Güvenli Kullanım Kuralları",
+              "body": "Gizli bilgiler, canlı ortam, terminal komutları, dosya silme riski, insan kontrolü ve ekip standartları anlatılır."
+            },
+            {
+              "n": 7,
+              "title": "Ekip Senaryoları",
+              "body": "Katılımcıların kendi iş süreçlerine uygun kullanım senaryoları hazırlanır."
+            },
+            {
+              "n": 8,
+              "title": "Yol Haritası",
+              "body": "Eğitim sonunda Claude Code’un ekip içinde nasıl ve hangi kurallarla kullanılacağına dair pratik yol haritası oluşturulur."
+            }
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Claude Code Eğitiminin Şirketinize Sağladığı Avantajlar",
+          "items": [
+            "Yazılım ekibi yapay zeka destekli geliştirme süreçlerini daha bilinçli kullanır",
+            "Kod tabanını analiz etme süreci hızlanabilir",
+            "Hata ayıklama ve çözüm araştırması daha sistemli hale gelebilir",
+            "Refactoring çalışmaları daha planlı yürütülebilir",
+            "Git ve test süreçleri daha dikkatli takip edilir",
+            "Dokümantasyon hazırlama süreci desteklenir",
+            "Yeni geliştiricilerin projeyi anlaması kolaylaşabilir",
+            "Kod inceleme süreçlerine yardımcı olacak kontrol listeleri oluşturulabilir",
+            "Terminal komutlarında güvenli kullanım farkındalığı artar",
+            "Ekip içinde ortak Claude Code kullanım standardı oluşur",
+            "Yapay zeka destekli kodlama sürecinde riskler daha iyi yönetilir",
+            "Teknik ekipler daha verimli çalışma alışkanlığı kazanır"
+          ]
+        },
+        {
+          "type": "bullets",
+          "heading": "Claude Code Kullanımında Sık Yapılan Hatalar",
+          "items": [
+            "Proje bağlamı vermeden kod değişikliği istemek",
+            "Tek seferde çok büyük değişiklik yaptırmak",
+            "Yapılan değişiklikleri kontrol etmemek",
+            "Test çalıştırmadan kodu kullanmak",
+            "Git diff incelemeden ilerlemek",
+            "Terminal komutlarını anlamadan çalıştırmak",
+            "Canlı projede doğrudan deneme yapmak",
+            "Gizli bilgileri paylaşmak",
+            "API key veya şifreleri korumamak",
+            "Hata mesajını eksik vermek",
+            "Kod standartlarını belirtmemek",
+            "Claude Code çıktısını uzman kontrolü olmadan kabul etmek",
+            "Refactoring sonrası yan etkileri test etmemek",
+            "Ekip içinde kullanım kuralı oluşturmamak"
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Claude Code Eğitimi Hangi Hizmetlerle Birlikte Alınabilir?",
+          "body": [
+            "Claude Code eğitimi, yapay zeka, yazılım ve dijital dönüşüm süreçleriyle birlikte planlanabilir."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Claude Code Eğitimi, AI Kodlama Eğitimi ve Yapay Zeka Destekli Yazılım Geliştirme",
+          "body": [
+            "Claude Code eğitimi; Claude Code kullanım eğitimi, Claude Code kursu, Claude Code ile yazılım geliştirme, AI kodlama eğitimi, yapay zeka kodlama eğitimi, Agentic coding eğitimi, Claude Code terminal kullanımı, Claude Code Git eğitimi, Claude Code refactoring, Claude Code bug fixing, Claude Code hata ayıklama, Claude Code proje analizi, kurumsal Claude Code eğitimi ve yazılım ekipleri için Claude Code eğitimi konularını kapsar."
+          ]
+        },
+        {
+          "type": "richText",
+          "heading": "Claude Code eğitimi nedir?",
+          "body": [
+            "Claude Code eğitimi; yazılımcıların ve teknik ekiplerin Claude Code’u kod tabanı analizi, dosya düzenleme, hata ayıklama, refactoring, terminal komutları, Git iş akışı, test süreçleri, dokümantasyon ve proje geliştirme çalışmalarında doğru, güvenli ve kontrollü şekilde kullanmasını öğreten uygulamalı yapay zeka kodlama eğitimidir. {{appName}}, Claude Code eğitimini yazılım ekiplerinin proje yapısına, teknoloji kullanımına ve iş hedeflerine göre planlar."
+          ]
+        },
+        {
+          "type": "faq",
+          "heading": "Claude Code Eğitimi Hakkında Merak Edilenler",
+          "items": [
+            {
+              "q": "Claude Code eğitimi kimler için uygundur? +",
+              "a": "Claude Code eğitimi; yazılım geliştiriciler, teknik ekipler, web geliştiriciler, yazılım ajansları, startup ekipleri, şirket içi yazılım ekipleri ve yapay zeka destekli kodlama süreçlerini öğrenmek isteyen kişiler için uygundur."
+            },
+            {
+              "q": "Claude Code eğitimi uygulamalı mı yapılır? +",
+              "a": "Evet. Eğitim örnek proje veya uygun test projesi üzerinden uygulamalı şekilde yapılabilir. Kod analizi, dosya düzenleme, hata ayıklama, Git ve test süreçleri pratik örneklerle anlatılabilir."
+            },
+            {
+              "q": "Claude Code ile hangi işler yapılabilir? +",
+              "a": "Claude Code; kod tabanı analizi, dosya düzenleme, hata araştırma, refactoring planlama, terminal komutlarıyla çalışma, test süreci, Git değişikliklerini yorumlama ve dokümantasyon hazırlama gibi alanlarda destek sağlayabilir."
+            },
+            {
+              "q": "Claude Code yazılımcının yerine geçer mi? +",
+              "a": "Hayır. Claude Code yazılımcının yerine geçmez. Yazılımcıya destek olan bir araçtır. Kodun doğruluğu, güvenliği, test edilmesi ve yayın sorumluluğu geliştirici ve teknik ekipte kalmalıdır."
+            },
+            {
+              "q": "Claude Code kullanırken güvenlik önemli mi? +",
+              "a": "Evet. Terminal komutları, dosya düzenleme, gizli bilgiler, API key, şifreler, müşteri verileri ve canlı projeler konusunda dikkatli kullanılmalıdır. Eğitimde güvenli kullanım kuralları özellikle anlatılır."
+            },
+            {
+              "q": "Claude Code ile Git süreçleri öğrenilebilir mi? +",
+              "a": "Evet. Git durumunu kontrol etme, değişiklikleri inceleme, commit mesajı hazırlama, diff yorumlama ve pull request açıklaması oluşturma gibi süreçler eğitimde ele alınabilir."
+            },
+            {
+              "q": "Claude Code ile hata ayıklama yapılabilir mi? +",
+              "a": "Evet. Hata mesajları, log çıktıları ve ilgili dosyalar üzerinden olası nedenler analiz edilebilir. Ancak önerilen çözümler geliştirici tarafından kontrol edilmelidir."
+            },
+            {
+              "q": "Claude Code ile web projelerinde çalışılabilir mi? +",
+              "a": "Evet. HTML, CSS, JavaScript, PHP, React, Laravel, WordPress veya özel web projelerinde kod analizi, düzenleme, hata ayıklama ve iyileştirme çalışmaları yapılabilir."
+            },
+            {
+              "q": "Eğitim şirketimize özel hazırlanabilir mi? +",
+              "a": "Evet. Eğitim şirketinizin kullandığı teknolojiye, proje yapısına, ekip seviyesine ve ihtiyaçlarına göre özelleştirilebilir."
+            },
+            {
+              "q": "Claude Code eğitimi online mı yapılır? +",
+              "a": "Eğitim ihtiyaca göre online veya yüz yüze planlanabilir. Katılımcı sayısı, teknik seviye, şirket lokasyonu ve uygulama kapsamına göre uygun model belirlenebilir."
+            }
+          ]
+        }
+      ],
+      "closingCTA": {
+        "heading": "Claude Code’u Rastgele Kod Yazdırılan Bir Araç Olarak Kullanmayalım",
+        "body": "Yazılım geliştirme süreçlerinde Claude Code kullanmak istiyor ama proje dosyaları, terminal, Git, hata ayıklama, refactoring ve güvenli kullanım konusunda nereden başlayacağınızı bilmiyorsanız {{appName}} ile iletişime geçin. Claude Code Eğitimi ile yazılım ekibinizin yapay zeka destekli kodlama araçlarını daha kontrollü, güvenli ve verimli kullanmasını sağlayalım.",
+        "button": {
+          "label": "Teklif Al",
+          "href": "/teklif-al"
+        }
+      }
+    },
+    "en": {
+      "needs_translation": true
+    },
+    "de": {
+      "needs_translation": true
+    }
+  }
+}

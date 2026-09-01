@@ -1,7 +1,9 @@
 import { getIcpProfile } from '../icp/icp.repository';
+import { getActiveTenantKey, getActiveUserId } from '@/modules/_shared';
+import { pool } from '@/db/client';
 import { insertCandidate, updateSearchJob, getSearchJob } from '../_shared/db';
 import { matchesIcp } from '../b2b/icp.matcher';
-import { scrapeExhibitorDetail, scrapeOfficialExhibitorList, type RawExhibitor } from './fair.scraper';
+import { isMesseFrankfurtUrl, scrapeExhibitorDetail, scrapeOfficialExhibitorList, type RawExhibitor } from './fair.scraper';
 import { isNeighborBooth, parseBooth } from './booth';
 import { buildSummary, classifyMail, computeKeywordOverlap, computeScore, recommend } from './enrichment';
 
@@ -78,21 +80,36 @@ async function mapWithConcurrency<T, R>(
 }
 
 export async function runFairJob(jobId: string) {
-  const job = await getSearchJob(jobId);
+  const ownerUserId = getActiveUserId() ?? null;
+  const tenantKey = getActiveTenantKey();
+  const job = await getSearchJob(jobId, { ownerUserId });
   if (!job) throw new Error('JOB_NOT_FOUND');
   const params = job.params as FairJobParams;
   await updateSearchJob(jobId, { status: 'running', started: true, errorMsg: null });
   try {
-    const icp = params.icp_id ? await getIcpProfile(params.icp_id) : null;
+    const icp = params.icp_id ? await getIcpProfile(params.icp_id, ownerUserId) : null;
     const hostKeywords = extractHostKeywords(icp?.definition);
+    const [existingRows] = await pool.execute(
+      `SELECT name, JSON_UNQUOTE(JSON_EXTRACT(raw_data, '$.exhibitor.detail_url')) AS detail_url
+         FROM lead_candidates
+        WHERE tenant_key = ? AND job_id = ?${ownerUserId ? ' AND owner_user_id = ?' : ''}`,
+      [tenantKey, jobId, ...(ownerUserId ? [ownerUserId] : [])],
+    );
+    const existing = existingRows as Array<{ name: string; detail_url: string | null }>;
+    const existingDetailUrls = new Set(existing.map((row) => row.detail_url).filter((url): url is string => Boolean(url)));
+    const existingNames = new Set(existing.map((row) => row.name.trim().toLocaleLowerCase('en')));
     const exhibitors = await scrapeOfficialExhibitorList(params.fair_url ?? '', {
       halls: params.hall_filters,
       maxPages: params.max_pages,
       maxExhibitors: params.max_exhibitors,
     });
     const detailConcurrency = Math.min(2, Math.max(1, Math.floor(params.detail_concurrency ?? 2)));
+    // Messe public search API zaten e-posta, telefon, website, salon/stand,
+    // aciklama ve urun etiketlerini dondurur. Her katilimcinin HTML detayini
+    // tekrar scrape etmek hem gereksiz hem de scraper rate limitini tetikler.
+    const listDataIsComplete = isMesseFrankfurtUrl(params.fair_url ?? '');
     const detailErrors: Array<{ url: string; name: string; error: string }> = [];
-    let count = 0;
+    let count = existing.length;
 
     const matchAndInsert = async (exhibitor: RawExhibitor) => {
       const boothGrid = parseBooth(exhibitor.booth_number ?? exhibitor.hall ?? null);
@@ -175,12 +192,17 @@ export async function runFairJob(jobId: string) {
         leadScore: finalScore,
       });
       count += 1;
+      existingNames.add(exhibitor.name.trim().toLocaleLowerCase('en'));
+      if (exhibitor.detail_url) existingDetailUrls.add(exhibitor.detail_url);
+      if (count % 10 === 0) await updateSearchJob(jobId, { resultCount: count });
     };
 
     await mapWithConcurrency(exhibitors, detailConcurrency, async (listedExhibitor) => {
       const detailUrl = listedExhibitor.detail_url;
+      const normalizedName = listedExhibitor.name.trim().toLocaleLowerCase('en');
+      if ((detailUrl && existingDetailUrls.has(detailUrl)) || existingNames.has(normalizedName)) return;
       let enriched: RawExhibitor = listedExhibitor;
-      if (detailUrl) {
+      if (detailUrl && !listDataIsComplete) {
         try {
           const detail = await scrapeExhibitorDetail(detailUrl);
           enriched = {

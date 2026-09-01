@@ -1,6 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
 import { env } from '@/core/env';
+import { getActiveTenantKey } from '@/modules/_shared';
 import { getCandidate } from '../_shared/db';
 import { scrape, type LeadPageData } from '../_shared/scraper.client';
 
@@ -82,7 +83,7 @@ function extractDecisionMakersFromText(text: string, sourceUrl: string): Decisio
   return results;
 }
 
-function rankEmail(email: string): number {
+export function rankEmail(email: string): number {
   const local = email.split('@')[0]?.toLowerCase() ?? '';
   if (/^[a-z]+\.[a-z]+$/.test(local)) return 5;         // firstname.lastname
   if (/^[a-z]\.[a-z]+$/.test(local)) return 4;          // f.lastname
@@ -93,7 +94,7 @@ function rankEmail(email: string): number {
   return 0;
 }
 
-function pickBestEmail(emails: string[]): string | null {
+export function pickBestEmail(emails: string[]): string | null {
   if (!emails.length) return null;
   const sorted = [...new Set(emails.map((e) => e.toLowerCase()))]
     .filter((e) => /@/.test(e) && !/no-?reply|do-?not-?reply|abuse@|postmaster@|webmaster@/i.test(e))
@@ -101,7 +102,7 @@ function pickBestEmail(emails: string[]): string | null {
   return sorted[0] ?? null;
 }
 
-interface DeepScrapeResult {
+export interface DeepScrapeResult {
   emails: string[];
   phones: string[];
   decisionMakers: DecisionMakerCandidate[];
@@ -109,11 +110,11 @@ interface DeepScrapeResult {
   pages_failed: string[];
 }
 
-function hasPersonalEmail(emails: string[]): boolean {
+export function hasPersonalEmail(emails: string[]): boolean {
   return emails.some((e) => rankEmail(e) >= 4);
 }
 
-async function deepScrapeContactInfo(websiteUrl: string): Promise<DeepScrapeResult> {
+export async function deepScrapeContactInfo(websiteUrl: string): Promise<DeepScrapeResult> {
   const out: DeepScrapeResult = { emails: [], phones: [], decisionMakers: [], pages_visited: [], pages_failed: [] };
   const baseUrl = websiteUrl.replace(/\/+$/, '');
   const seen = new Set<string>();
@@ -185,6 +186,7 @@ function normalizeApolloDecisionMaker(payload: unknown) {
 }
 
 export async function enrichCandidate(candidateId: string) {
+  const tenantKey = await getActiveTenantKey();
   const candidate = await getCandidate(candidateId);
   if (!candidate) throw new Error('CANDIDATE_NOT_FOUND');
   const domain = domainFromUrl(candidate.website);
@@ -229,17 +231,18 @@ export async function enrichCandidate(candidateId: string) {
 
   const id = randomUUID();
   await pool.execute(
-    `INSERT INTO lead_enrichment (id, candidate_id, decision_maker, source_vendor)
-     VALUES (?, ?, ?, ?)`,
-    [id, candidateId, JSON.stringify(decisionMaker), sourceVendor],
+    `INSERT INTO lead_enrichment (id, tenant_key, candidate_id, decision_maker, source_vendor)
+     VALUES (?, ?, ?, ?, ?)`,
+    [id, tenantKey, candidateId, JSON.stringify(decisionMaker), sourceVendor],
   );
   return { id, candidateId, decisionMaker, sourceVendor };
 }
 
 export async function listCandidateEnrichment(candidateId: string) {
+  const tenantKey = await getActiveTenantKey();
   const [rows] = await pool.execute(
-    'SELECT * FROM lead_enrichment WHERE candidate_id = ? ORDER BY enriched_at DESC LIMIT 10',
-    [candidateId],
+    'SELECT * FROM lead_enrichment WHERE tenant_key = ? AND candidate_id = ? ORDER BY enriched_at DESC LIMIT 10',
+    [tenantKey, candidateId],
   );
   return (rows as Array<Record<string, unknown>>).map((row) => {
     const decisionMaker = row.decision_maker;

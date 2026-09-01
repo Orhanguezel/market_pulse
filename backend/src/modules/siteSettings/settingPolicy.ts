@@ -55,6 +55,9 @@ export const GLOBAL_ONLY_KEYS = new Set<string>([
   'google_client_id',
   'google_client_secret',
 
+  // google maps / places (B2B firma bulma)
+  'google_maps_api_key',
+
   // storage
   'storage_driver',
   'storage_local_root',

@@ -17,7 +17,7 @@ const FALLBACK_BLOG_POSTS = {
       title: 'Amazon kategorisine girmeden önce sorulması gereken 5 soru',
       slug: 'amazon-kategori-giris-sorulari',
       summary: 'Rekabetin yoğun olduğu bir kategoriye girmeden önce risk skorunu yorumlamak için pratik bir çerçeve.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-30T09:00:00.000Z',
     },
     {
@@ -33,7 +33,7 @@ const FALLBACK_BLOG_POSTS = {
       title: 'SKU kaos skoru ne anlama gelir?',
       slug: 'sku-kaos-skoru-aciklamasi',
       summary: 'Bir kategorideki ürün çeşitliliği ve yoğunluğu, pazar girişinin ne kadar zor olacağını belirler.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-16T09:00:00.000Z',
     },
     {
@@ -41,7 +41,7 @@ const FALLBACK_BLOG_POSTS = {
       title: 'Amazon DE, UK ve US pazarları arasındaki temel farklar',
       slug: 'amazon-de-uk-us-karsilastirma',
       summary: 'Her marketplace için rekabet yoğunluğu, marka hakimiyeti ve fiyat dinamikleri farklıdır.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-09T09:00:00.000Z',
     },
     {
@@ -49,7 +49,7 @@ const FALLBACK_BLOG_POSTS = {
       title: 'Brand reliability skoru: marka hakimiyetini nasıl ölçeriz?',
       slug: 'brand-reliability-skoru',
       summary: 'Güçlü markaların hakim olduğu kategoriler, yeni satıcılar için daha yüksek risk taşır.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-02T09:00:00.000Z',
     },
   ],
@@ -59,7 +59,7 @@ const FALLBACK_BLOG_POSTS = {
       title: '5 questions to ask before entering an Amazon category',
       slug: 'amazon-category-entry-questions',
       summary: 'A practical framework for interpreting risk scores before committing to a competitive category.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-30T09:00:00.000Z',
     },
     {
@@ -75,7 +75,7 @@ const FALLBACK_BLOG_POSTS = {
       title: 'What does SKU chaos score mean?',
       slug: 'sku-chaos-score-explained',
       summary: 'Product density and variety in a category determines how difficult market entry will be.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-16T09:00:00.000Z',
     },
     {
@@ -83,7 +83,7 @@ const FALLBACK_BLOG_POSTS = {
       title: 'Key differences between Amazon DE, UK, and US',
       slug: 'amazon-de-uk-us-comparison',
       summary: 'Competition intensity, brand dominance, and pricing dynamics vary significantly across marketplaces.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-09T09:00:00.000Z',
     },
     {
@@ -91,7 +91,7 @@ const FALLBACK_BLOG_POSTS = {
       title: 'Brand reliability score: how we measure brand dominance',
       slug: 'brand-reliability-score',
       summary: 'Categories dominated by strong brands carry higher risk for new sellers entering the market.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-02T09:00:00.000Z',
     },
   ],
@@ -101,7 +101,7 @@ const FALLBACK_BLOG_POSTS = {
       title: '5 Fragen vor dem Einstieg in eine Amazon-Kategorie',
       slug: 'amazon-kategorie-einstieg-fragen',
       summary: 'Ein praktischer Rahmen zum Interpretieren von Risiko-Scores vor der Entscheidung für eine wettbewerbsintensive Kategorie.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-30T09:00:00.000Z',
     },
     {
@@ -117,7 +117,7 @@ const FALLBACK_BLOG_POSTS = {
       title: 'Was bedeutet der SKU-Chaos-Score?',
       slug: 'sku-chaos-score-erklaert',
       summary: 'Produktdichte und -vielfalt in einer Kategorie bestimmen, wie schwierig der Markteinstieg sein wird.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-16T09:00:00.000Z',
     },
     {
@@ -125,7 +125,7 @@ const FALLBACK_BLOG_POSTS = {
       title: 'Hauptunterschiede zwischen Amazon DE, UK und US',
       slug: 'amazon-de-uk-us-vergleich',
       summary: 'Wettbewerbsintensität, Markendominanz und Preisdynamiken unterscheiden sich je nach Marktplatz erheblich.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-09T09:00:00.000Z',
     },
     {
@@ -133,14 +133,14 @@ const FALLBACK_BLOG_POSTS = {
       title: 'Brand-Reliability-Score: Wie wir Markendominanz messen',
       slug: 'brand-reliability-score-erklaert',
       summary: 'Von starken Marken dominierte Kategorien tragen für neue Verkäufer ein höheres Einstiegsrisiko.',
-      featured_image: '/img/hero-bg.png',
+      featured_image: '/support_ai.webp',
       created_at: '2026-04-02T09:00:00.000Z',
     },
   ],
 };
 
 function normalizeBlogImage(src: string): string {
-  return src || '/img/hero-bg.png';
+  return src || '/support_ai.webp';
 }
 
 const BlogPageContent: React.FC = () => {

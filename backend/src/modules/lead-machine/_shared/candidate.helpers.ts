@@ -1,5 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { pool } from '@/db/client';
+import { getActiveTenantKey } from '@/modules/_shared';
 import type { LeadCandidate } from './db';
 
 export function candidateToMarketLead(candidate: LeadCandidate) {
@@ -23,13 +24,15 @@ export function candidateToMarketLead(candidate: LeadCandidate) {
 }
 
 export async function approveCandidateToMarketLead(candidate: LeadCandidate) {
+  const tenantKey = await getActiveTenantKey();
   const lead = candidateToMarketLead(candidate);
   await pool.execute(
     `INSERT INTO market_leads
-      (id, name, category, source, status, priority, score, website, phone, email, contact_name, city, district, notes, assigned_to)
-     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      (id, tenant_key, name, category, source, status, priority, score, website, phone, email, contact_name, city, district, notes, assigned_to)
+     VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
     [
       lead.id,
+      tenantKey,
       lead.name,
       lead.category,
       lead.source,
